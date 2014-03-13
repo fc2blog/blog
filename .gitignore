@@ -1,0 +1,5 @@
+/app/temp/blog_template/*
+/app/temp/debug_html/*
+/app/temp/log/*
+/public/uploads/[0-9a-zA-Z]
+/public/config.php

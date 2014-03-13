@@ -1,0 +1,92 @@
+@charset "utf-8";
+/* -------------------------------------------------
+	-Index-
+	1.Reset
+	2.Element
+	3.Headline
+	4.Cler fix
+	5.for MacIE
+-------------------------------------------------- */
+
+/* =================================================
+	1.Reset
+================================================= */
+
+html,body,div,
+dl,dt,dd,ul,ol,li,
+h1,h2,h3,h4,h5,h6,
+pre,form,fieldset,input,textarea,
+blockquote,th,td,p{
+	margin:0;
+	padding:0;
+}
+
+/* =================================================
+	2.Element
+================================================= */
+body{
+	width:100%;
+	text-align:center;
+	line-height:1.4;
+	font-size:82%;		/* 13px */
+}
+body,input {
+	font-family:"メイリオ", Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "ＭＳ Ｐゴシック", sans-serif;
+}
+input[type="text"] {
+	font-family: "ＭＳ Ｐゴシック", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Osaka", sans-serif;
+}
+/* Modern browser */
+html>/**/body {font-size:13px;}
+
+a{
+	text-decoration:none;
+	/*\*/
+	overflow:hidden;	/* for Fx */
+	/**/
+}
+
+img,a img{border:none;}
+ul, ol, li, dl, dt, dd{list-style:none;}
+table{border:0;}
+th,td{padding:0;}
+th{font-weight:normal;}
+input,select,textarea{padding:2px;}
+fieldset{border:none;}
+pre{font-family:monospace;}
+
+/* =================================================
+	3.Headline
+================================================= */
+h1{font-size:170%;}		/* 22px */
+h2{font-size:131%;}		/* 17px */
+h3{font-size:116%;}		/* 15px */
+h4{font-size:108%;}		/* 14px */
+h5,
+h6{font-size:100%;}		/* 13px */
+
+/* =================================================
+	4.Cler fix
+================================================= */
+.clear:after {
+	content:"";
+	display:block;
+	overflow:hidden;
+	clear:both;
+	height:0;
+}
+/*\*/
+* html .clear{
+	overflow:visible;
+	height:1%;
+}
+/**/
+
+/* =================================================
+	5.for MacIE
+================================================= */
+/*\*//*/
+textarea, select, input {
+	font-family:Osaka;
+}
+/**/

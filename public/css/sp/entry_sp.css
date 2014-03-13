@@ -1,0 +1,30 @@
+#sys-add-tags{}
+  #sys-add-tags > li{
+    border: 1px solid #c8c8c8;
+    border-radius: 5px;
+    padding: 8px;
+    margin: 3px;
+    display: inline-block;
+    background-color: #f4f4f4;
+    box-shadow: 1px 1px 1px rgba(1,1,1,0.3);
+  }
+    #sys-add-tags > li > span{
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+#add-tag-line{
+  border: 1px solid #c8c8c8;
+}
+
+#sys-use-well-tags{}
+  #sys-use-well-tags > li{
+    border: 1px solid #c8c8c8;
+    border-radius: 5px;
+    padding: 8px;
+    margin: 3px;
+    display: inline-block;
+    background-color: #f4f4f4;
+    box-shadow: 1px 1px 1px rgba(1,1,1,0.3);
+  }
+

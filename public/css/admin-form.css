@@ -1,0 +1,109 @@
+form.admin-form
+{
+  margin: 5px auto;
+  padding: 0 4px;
+}
+
+  .form-radio-list
+  {
+    list-style: none;
+    padding: 0;
+    margin: 5px;
+  }
+    .form-radio-list > li{
+      display: inline;
+      margin: 5px;
+    }
+
+/* User Tag Add */
+#sys-add-tags{
+  margin: 10px;
+  padding: 0;
+}
+  #sys-add-tags > li{
+    display: inline-block;
+    margin: 3px;
+  }
+    #sys-add-tags > li > span.ui-icon{
+      display: inline-block;
+      cursor: pointer;
+    }
+
+#sys-use-well-tags{
+  margin: 10px;
+  padding: 0;
+}
+  #sys-use-well-tags > li{
+    display: inline-block;
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 3px;
+  }
+
+
+/* Entry Form */
+#sys-entry-form{}
+  #sys-entry-form input[name="entry[title]"]
+  {
+    width: 500px;
+  }
+  #sys-entry-form textarea[name="entry[body]"]
+  {
+    height: 200px;
+  }
+
+.add-editor-menu
+{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Entry Form Add Media */
+#sys-add-media-dialog
+{
+  display: none;
+}
+#sys-add-media-search
+{
+  text-align: center;
+}
+.sys-form-add-media
+{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+  .sys-form-add-media > li
+  {
+    display: inline-block;
+    margin: 10px;
+    width: 150px;
+    vertical-align: top;
+    text-align: center;
+    margin: 5px;
+    padding: 5px;
+  }
+  .sys-form-add-media > li.selected
+  {
+    border: 2px solid #fcc;
+    margin: 3px;
+    background-color: #ffc;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+  }
+    .sys-form-add-media > li img
+    {
+      width: 140px;
+      max-height: 140px;
+      border: 2px solid #fff;
+      box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+    }
+
+
+
+
+/* common */
+.no-title .ui-dialog-titlebar
+{
+  display: none;
+}

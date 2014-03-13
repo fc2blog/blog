@@ -1,0 +1,49 @@
+<?php if (count($files)): ?>
+
+<div class="form_contents">
+  <div class="btn">
+    <button type="button" class="btn_contents positive touch" onclick="addMedia.add();"><i class="positive_add_icon btn_icon"></i><?php echo __('Add'); ?></button>
+  </div>
+</div>
+
+  <ul class="sys-form-add-media file_table">
+    <?php foreach($files as $file): ?>
+    <li class="file_table_cell">
+      <label for="sys-form-add-media-check-<?php echo $file['id']; ?>">
+        <img src="<?php echo App::getUserFilePath($file, false); ?>" />
+        <span class="img_name"><?php echo th($file['name'], 10); ?></span>
+      </label>
+      <p>
+        <input type="checkbox" id="sys-form-add-media-check-<?php echo $file['id']; ?>"/>
+        <label for="sys-form-add-media-check-<?php echo $file['id']; ?>">
+          <?php echo th($file['name'], 10); ?>
+        </label>
+      </p>
+    </li>
+    <?php endforeach; ?>
+  </ul>
+
+  <!-- paging -->
+  <div class="page">
+    <div class="btn_area">
+      <p class="page_num"><span class="page_num_inner"><?php echo $paging['page']+1; ?> / <?php echo $paging['max_page']; ?></span></p>
+      <ul class="pager btn_contents">
+        <?php if($paging['is_prev']): ?>
+          <li><a onclick="addMedia.load({page: <?php echo $paging['page']-1; ?>, keyword: '<?php echo ue($request->get('keyword')); ?>'})"><?php echo __('Previous page'); ?></a></li>
+        <?php else: ?>
+          <li><span><?php echo __('Previous page'); ?></span></li>
+        <?php endif; ?>
+        <?php if($paging['is_next']): ?>
+          <li><a onclick="addMedia.load({page: <?php echo $paging['page']+1; ?>, keyword: '<?php echo ue($request->get('keyword')); ?>'})"><?php echo __('Next page'); ?></a></li>
+        <?php else: ?>
+          <li><span><?php echo __('Next page'); ?></span></li>
+        <?php endif; ?>
+      </ul>
+    </div>
+  </div>
+
+<?php else: ?>
+
+  <p>対象のファイルは存在しません</p>
+
+<?php endif; ?>

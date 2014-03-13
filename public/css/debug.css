@@ -1,0 +1,91 @@
+body{
+  background-color: #fff;
+  margin: 10px;
+}
+
+h2.debug-url{
+  font-size: medium;
+  font-weight: normal;
+  border-left: 3px solid #000;
+  background-color: #ccc;
+}
+pre.debug-url-params{
+  border: 1px solid #000;
+}
+
+table.debug-logs{
+  border: 1px solid #000;
+  border-collapse: collapse;
+  width: 100%;
+}
+  table.debug-logs > tbody > tr{
+    border: 1px solid #000;
+  }
+    table.debug-logs > tbody > tr.log{
+      background-color: #eee;
+    }
+    table.debug-logs > tbody > tr.system{}
+    table.debug-logs > tbody > tr.sql{
+      background-color: #ddf;
+    }
+    table.debug-logs > tbody > tr.error{
+      border: 2px solid #f00;
+      color: #f00;
+      background-color: #fdd;
+    }
+    table.debug-logs > tbody > tr > th{
+      border: 1px solid #000;
+      font-weight: normal;
+    }
+    table.debug-logs > tbody > tr > td{
+      border: 1px solid #000;
+      position: relative;
+    }
+      table.debug-logs > tbody > tr > td.time,
+      table.debug-logs > tbody > tr > td.memory{
+        font-size: small;
+        text-align: right;
+      }
+        table.debug-logs > tbody > tr > td > p.info{
+          font-size: small;
+          margin: 5px;
+        }
+          table.debug-logs > tbody > tr > td > p.info:before{
+            content: 'CSS未定義';
+            position: absolute;
+            right:3px;
+            top: 3px;
+            border: 1px solid #000;
+            padding: 3px;
+            font-size: x-small;
+          }
+            table.debug-logs > tbody > tr.log > td > p.info:before{
+              content: 'LOG';
+              background-color: #ddd;
+            }
+            table.debug-logs > tbody > tr.system > td > p.info:before{
+              content: 'SYSTEM';
+              background-color: #fdf;
+            }
+            table.debug-logs > tbody > tr.sql > td > p.info:before{
+              content: 'SQL';
+              background-color: #eef;
+            }
+            table.debug-logs > tbody > tr.error > td > p.info:before{
+              content: 'ERROR';
+              font-weight: bold;
+              color: #f00;
+              background-color: #ffa;
+              border: 2px solid #f00;
+            }
+        table.debug-logs > tbody > tr > td > p.log{
+          font-size: medium;
+          margin: 10px;
+        }
+        table.debug-logs > tbody > tr > td > pre.log{
+          background-color: #fff;
+          font-size: small;
+          border: 1px solid #333;
+          margin: 10px;
+        }
+

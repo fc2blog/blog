@@ -1,0 +1,16 @@
+.checkbox_list label, .category_list p {
+	display: block;
+	padding: 10px 0 10px 5px;
+}
+.checkbox_list li, .category_list li { border-top: 1px solid #eee; }
+.checkbox_list li ul, .category_list li ul { margin-top: -1px; }
+.checkbox_list input[type="checkbox"] { visibility: visible; }
+.checkbox_list li li, .category_list li li {
+	margin-left: 0.5em;
+	padding-left: 0.5em;
+	border-left: 2px solid #eee;
+}
+.category_list p a {
+	color: #04c;
+	display: block;
+}

@@ -1,0 +1,2352 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-13 05:45+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: shell/../model/tags_model.php:62
+msgid "Tag with the same name already exists"
+msgstr "既に同名のタグが存在しています"
+
+#: shell/../model/blog_templates_model.php:80
+#: shell/../model/blog_plugins_model.php:158
+msgid ""
+"There may be a problem with the template or plug-in, installed in the blog."
+msgstr ""
+"ブログに設置されたプラグイン、またはテンプレートに問題がある可能性がありま"
+"す。"
+
+#: shell/../model/blog_settings_model.php:97
+msgid "Displayed as it is"
+msgstr "すぐに表示"
+
+#: shell/../model/blog_settings_model.php:98
+msgid "I check the comments"
+msgstr "コメントを確認後表示"
+
+#: shell/../model/blog_settings_model.php:104
+msgid "View \"This comment is awaiting moderation\" and"
+msgstr "「このコメントは管理者の承認待ちです」と表示"
+
+#: shell/../model/blog_settings_model.php:105
+#: shell/../model/blog_settings_model.php:112
+msgid "Do not show"
+msgstr "表示しない"
+
+#: shell/../model/blog_settings_model.php:111
+#: shell/../view/admin/blog_plugins/index.html:25
+msgid "Display"
+msgstr "表示する"
+
+#: shell/../model/blog_settings_model.php:118
+msgid "Not save"
+msgstr "記録しない"
+
+#: shell/../model/blog_settings_model.php:119
+msgid "Record"
+msgstr "記録する"
+
+#: shell/../model/blog_settings_model.php:125
+msgid "Do not use"
+msgstr "使用しない"
+
+#: shell/../model/blog_settings_model.php:126
+msgid "CAPTCHA to Use"
+msgstr "画像認証を使用する"
+
+#: shell/../model/blog_settings_model.php:132
+#: shell/../model/blog_settings_model.php:147
+#: shell/../model/categories_model.php:88
+msgid "Oldest First"
+msgstr "古い順"
+
+#: shell/../model/blog_settings_model.php:133
+#: shell/../model/blog_settings_model.php:146
+#: shell/../model/categories_model.php:87
+msgid "Latest order"
+msgstr "新しい順"
+
+#: shell/../model/blog_settings_model.php:139
+msgid "Quote"
+msgstr "引用する"
+
+#: shell/../model/blog_settings_model.php:140
+msgid "Do not quote"
+msgstr "引用しない"
+
+#: shell/../model/blog_settings_model.php:153
+#: shell/../view/admin/layouts/default_sp.html:113
+#: shell/../view/admin/layouts/default.html:92
+#: shell/../view/admin/common/notice_sp.html:11
+#: shell/../view/admin/common/notice.html:1
+msgid "Notice"
+msgstr "お知らせ"
+
+#: shell/../model/blog_settings_model.php:154
+#: shell/../view/admin/layouts/default_sp.html:115
+#: shell/../view/admin/layouts/default.html:94
+#: shell/../view/admin/common/notice_sp.html:5
+msgid "New article"
+msgstr "新しく記事を書く"
+
+#: shell/../model/categories_model.php:77
+msgid "Same name exists in the same hierarchy"
+msgstr "同一階層に同じ名前が存在しています"
+
+#: shell/../model/blogs_model.php:30
+msgid "Please Be sure to set the password if you want to private"
+msgstr "非公開にする場合 パスワードの設定は必ず行ってください"
+
+#: shell/../model/blogs_model.php:42 shell/../model/validate.php:146
+msgid "Is already in use"
+msgstr "既に使用されています"
+
+#: shell/../model/blogs_model.php:99
+msgid "Public"
+msgstr "公開"
+
+#: shell/../model/blogs_model.php:100
+msgid "Private"
+msgstr "非公開"
+
+#: shell/../model/blogs_model.php:245
+msgid "Unclassified"
+msgstr "未分類"
+
+#: shell/../model/blog_plugins_model.php:97
+msgid "Flush left"
+msgstr "左寄せ"
+
+#: shell/../model/blog_plugins_model.php:98
+msgid "Center justification"
+msgstr "中央寄せ"
+
+#: shell/../model/blog_plugins_model.php:99
+msgid "Right justification"
+msgstr "右寄せ"
+
+#: shell/../model/blog_plugins_model.php:110
+#: shell/../model/blog_plugins_model.php:122
+msgid "Nothing"
+msgstr "無し"
+
+#: shell/../model/blog_plugins_model.php:111
+msgid "Red"
+msgstr "赤"
+
+#: shell/../model/blog_plugins_model.php:112
+msgid "Green"
+msgstr "緑"
+
+#: shell/../model/blog_plugins_model.php:113
+msgid "Blue"
+msgstr "青"
+
+#: shell/../model/blog_plugins_model.php:114
+msgid "Purple"
+msgstr "紫"
+
+#: shell/../model/blog_plugins_model.php:115
+msgid "Pink"
+msgstr "ピンク"
+
+#: shell/../model/blog_plugins_model.php:116
+msgid "Orange"
+msgstr "オレンジ"
+
+#: shell/../model/blog_plugins_model.php:117
+msgid "Navy"
+msgstr "ネイビー"
+
+#: shell/../model/blog_plugins_model.php:118
+msgid "Gray"
+msgstr "グレイ"
+
+#: shell/../model/entries_model.php:76
+msgid "Publication"
+msgstr "公開"
+
+#: shell/../model/entries_model.php:77
+msgid "Draft"
+msgstr "下書き"
+
+#: shell/../model/entries_model.php:78
+msgid "Password Protection"
+msgstr "パスワード保護"
+
+#: shell/../model/entries_model.php:79
+msgid "Limited time offer"
+msgstr "期間限定"
+
+#: shell/../model/entries_model.php:80
+msgid "Reservations Posts"
+msgstr "予約投稿"
+
+#: shell/../model/entries_model.php:87
+msgid "Be accepted"
+msgstr "受け付ける"
+
+#: shell/../model/entries_model.php:88
+msgid "Reject"
+msgstr "受け付けない"
+
+#: shell/../model/entries_model.php:95
+msgid "I do automatic line feed"
+msgstr "自動改行"
+
+#: shell/../model/entries_model.php:96
+msgid "HTML tags only a new line"
+msgstr "HTMLタグのみ"
+
+#: shell/../model/model.php:277 shell/../model/model.php:279
+msgid " page"
+msgstr "ページ"
+
+#: shell/../model/validate.php:19
+msgid "Please be sure to input"
+msgstr "必ず入力してください"
+
+#: shell/../model/validate.php:34
+msgid "Please enter a number"
+msgstr "数字を入力してください"
+
+#: shell/../model/validate.php:45
+msgid "Please enter alphanumeric"
+msgstr "半角英数を入力してください"
+
+#: shell/../model/validate.php:58
+#, php-format
+msgid "Please enter at %d characters or less"
+msgstr "%d文字以下を入力してください"
+
+#: shell/../model/validate.php:72
+#, php-format
+msgid "Please enter at %d characters or more"
+msgstr "%d文字以上を入力してください"
+
+#: shell/../model/validate.php:86
+#, php-format
+msgid "Please enter a value of %d or less"
+msgstr "%d以下の値を入力してください"
+
+#: shell/../model/validate.php:100
+#, php-format
+msgid "Please enter a value of %d or more"
+msgstr "%d以上の値を入力してください"
+
+#: shell/../model/validate.php:111
+msgid "Please enter the date and time"
+msgstr "日時を入力してください"
+
+#: shell/../model/validate.php:124
+msgid "Please enter your e-mail address"
+msgstr "メールアドレスを入力してください"
+
+#: shell/../model/validate.php:135
+msgid "Please enter the URL"
+msgstr "URLを入力してください"
+
+#: shell/../model/validate.php:161
+msgid "Value that does not exist has been entered"
+msgstr "存在しない値が入力されています"
+
+#: shell/../model/validate.php:177
+msgid "Please upload a file"
+msgstr "ファイルを選択してください"
+
+#: shell/../model/validate.php:181 shell/../model/validate.php:208
+msgid "File size is too large"
+msgstr "ファイルサイズが大きすぎます"
+
+#: shell/../model/validate.php:184
+msgid "I failed to file upload"
+msgstr "アップロードに失敗しました"
+
+#: shell/../model/validate.php:199
+msgid "It was not possible to determine the mime type of the file"
+msgstr "このファイルのMIMEタイプを判断することはできませんでした"
+
+#: shell/../model/validate.php:202
+msgid "File format is different"
+msgstr "ファイル形式が違います"
+
+#: shell/../model/comments_model.php:31
+#: shell/../view/admin/comments/ajax_reply.html:34
+#: shell/../view/admin/comments/index.html:65
+#: shell/../view/admin/comments/index.html:148
+#: shell/../view/admin/comments/index.html:173
+#: shell/../view/admin/comments/index.html:174
+#: shell/../view/admin/comments/reply_sp.html:13
+#: shell/../view/admin/comments/reply.html:36
+msgid "Published"
+msgstr "公開済み"
+
+#: shell/../model/comments_model.php:32
+#: shell/../view/admin/comments/ajax_reply.html:36
+#: shell/../view/admin/comments/reply_sp.html:15
+#: shell/../view/admin/comments/reply.html:38
+msgid "Approval pending"
+msgstr "承認待ち"
+
+#: shell/../model/comments_model.php:33
+#: shell/../view/admin/comments/ajax_reply.html:38
+#: shell/../view/admin/comments/index.html:69
+#: shell/../view/admin/comments/reply_sp.html:17
+#: shell/../view/admin/comments/reply.html:40
+msgid "Only exposed administrator"
+msgstr "管理者のみ公開"
+
+#: shell/../model/comments_model.php:40
+msgid "Public comment"
+msgstr "公開コメント"
+
+#: shell/../model/comments_model.php:41
+msgid "Secret comments to the management people"
+msgstr "管理人への秘密コメント"
+
+#: shell/../model/comments_model.php:48
+#: shell/../view/admin/comments/index.html:74
+#: shell/../view/admin/comments/index_sp.html:37
+msgid "Not yet read"
+msgstr "未読"
+
+#: shell/../model/comments_model.php:49
+msgid "Already read"
+msgstr "既読"
+
+#: shell/../model/comments_model.php:50
+#: shell/../view/admin/comments/index.html:80
+#: shell/../view/admin/comments/index.html:116
+#: shell/../view/admin/comments/index_sp.html:43
+msgid "Answered"
+msgstr "返信済み"
+
+#: shell/../model/comments_model.php:158
+msgid "No password is registered"
+msgstr "パスワードが登録されておりません"
+
+#: shell/../model/comments_model.php:163
+#: shell/../controller/user/entries_controller.php:601
+msgid "The password is incorrect!"
+msgstr "パスワードが違います"
+
+#: shell/../model/files_model.php:60 shell/../model/files_model.php:88
+msgid "Please upload an image file"
+msgstr "画像ファイルを選択してください"
+
+#: shell/../model/files_model.php:102
+msgid "Extension and the original file is different"
+msgstr "元のファイルと拡張子が異なっています"
+
+#: shell/../config/app.php:37
+msgid "PC"
+msgstr "PC"
+
+#: shell/../config/app.php:38
+msgid "Mobile phone"
+msgstr "携帯"
+
+#: shell/../config/app.php:39
+msgid "Smartphone"
+msgstr "スマートフォン"
+
+#: shell/../config/app.php:40
+msgid "Tablet"
+msgstr "タブレット"
+
+#: shell/../config/app.php:148 shell/../config/app.php:149
+#: shell/../config/app.php:150 shell/../config/app.php:151
+#: shell/../config/app.php:152 shell/../config/app.php:153
+#: shell/../config/app.php:217 shell/../config/app.php:218
+#: shell/../config/app.php:219 shell/../config/app.php:220
+#: shell/../config/app.php:221 shell/../config/app.php:222
+#: shell/../config/app.php:240 shell/../config/app.php:241
+#: shell/../config/app.php:242 shell/../config/app.php:243
+#: shell/../config/app.php:244 shell/../config/app.php:245
+#: shell/../config/app.php:246 shell/../config/app.php:252
+#: shell/../view/admin/files/ajax_index.html:3
+#: shell/../view/admin/entries/index.html:4
+#: shell/../view/admin/comments/index.html:4
+#: shell/../view/admin/tags/index.html:4
+msgid " results"
+msgstr "件"
+
+#: shell/../view/user/common/error404_sp.html:1
+#: shell/../view/admin/common/error404_sp.html:1
+msgid "404 Not Found."
+msgstr "404 Not Found."
+
+#: shell/../view/user/entries/comment_edit_sp.html:2
+#: shell/../view/user/entries/comment_edit.html:1
+msgid "I edit a comment"
+msgstr "コメントの編集"
+
+#: shell/../view/user/entries/comment_edit_sp.html:13
+#: shell/../view/user/entries/comment_edit.html:11
+#: shell/../view/user/entries/comment_regist_sp.html:13
+#: shell/../view/user/entries/comment_regist.html:11
+#: shell/../view/admin/files/ajax_index.html:28
+#: shell/../view/admin/blog_templates/fc2_index.html:8
+#: shell/../view/admin/blog_templates/fc2_view_sp.html:18
+#: shell/../locale/define.php:28
+msgid "Name"
+msgstr "名前"
+
+#: shell/../view/user/entries/comment_edit_sp.html:20
+#: shell/../view/user/entries/comment_edit.html:16
+#: shell/../view/user/entries/comment_regist_sp.html:20
+#: shell/../view/user/entries/comment_regist.html:16
+#: shell/../view/admin/entries/index.html:34
+#: shell/../view/admin/entries/form.html:5
+#: shell/../view/admin/entries/form_sp.html:70
+#: shell/../view/admin/comments/ajax_reply.html:11
+#: shell/../view/admin/comments/reply.html:13 shell/../locale/define.php:27
+msgid "Title"
+msgstr "タイトル"
+
+#: shell/../view/user/entries/comment_edit_sp.html:27
+#: shell/../view/user/entries/comment_edit.html:21
+#: shell/../view/user/entries/comment_regist_sp.html:27
+#: shell/../view/user/entries/comment_regist.html:21
+msgid "E-mail"
+msgstr "メールアドレス"
+
+#: shell/../view/user/entries/comment_edit_sp.html:41
+#: shell/../view/user/entries/comment_edit.html:31
+#: shell/../view/user/entries/comment_regist_sp.html:41
+#: shell/../view/user/entries/comment_regist.html:31
+#: shell/../view/admin/entries/index.html:38
+#: shell/../view/admin/comments/reply_sp.html:1
+msgid "Comment"
+msgstr "コメント"
+
+#: shell/../view/user/entries/comment_edit_sp.html:48
+#: shell/../view/user/entries/comment_edit.html:36
+#: shell/../view/user/entries/comment_regist_sp.html:48
+#: shell/../view/user/entries/comment_regist.html:36
+#: shell/../view/admin/users/login.html:15
+#: shell/../view/admin/users/register.html:15
+#: shell/../view/admin/users/login_sp.html:11
+#: shell/../view/admin/users/register_sp.html:12
+#: shell/../view/admin/common/install_user.html:16
+#: shell/../view/admin/common/install.html:117
+msgid "Password"
+msgstr "パスワード"
+
+#: shell/../view/user/entries/comment_edit_sp.html:55
+#: shell/../view/user/entries/comment_edit.html:41
+#: shell/../view/user/entries/comment_regist_sp.html:55
+#: shell/../view/user/entries/comment_regist.html:41
+msgid "Secret"
+msgstr "秘密"
+
+#: shell/../view/user/entries/comment_edit_sp.html:63
+#: shell/../view/user/entries/comment_edit.html:47
+#: shell/../view/user/entries/comment_regist_sp.html:63
+#: shell/../view/user/entries/comment_regist.html:47
+msgid "Authentication keyword"
+msgstr "認証キーワード"
+
+#: shell/../view/user/entries/comment_edit_sp.html:66
+#: shell/../view/user/entries/comment_edit.html:50
+#: shell/../view/user/entries/comment_regist_sp.html:66
+#: shell/../view/user/entries/comment_regist.html:50
+msgid "Update authentication image"
+msgstr "認証用画像の更新"
+
+#: shell/../view/user/entries/comment_edit_sp.html:67
+#: shell/../view/user/entries/comment_edit.html:52
+#: shell/../view/user/entries/comment_regist_sp.html:67
+#: shell/../view/user/entries/comment_regist.html:52
+msgid "Please enter the numbers written on the image"
+msgstr "画像に書かれた数字を入力してください"
+
+#: shell/../view/user/entries/comment_edit_sp.html:74
+#: shell/../view/user/entries/comment_edit.html:58
+#: shell/../view/admin/files/edit_sp.html:32
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:50
+#: shell/../view/admin/blog_settings/etc_edit.html:18
+#: shell/../view/admin/blog_settings/entry_edit.html:37
+#: shell/../view/admin/blog_settings/entry_edit_sp.html:30
+#: shell/../view/admin/blog_settings/etc_edit_sp.html:15
+#: shell/../view/admin/blog_settings/comment_edit.html:68
+#: shell/../view/admin/users/edit_sp.html:20
+#: shell/../view/admin/users/edit.html:25
+#: shell/../view/admin/categories/edit_sp.html:25
+#: shell/../view/admin/categories/edit.html:33
+#: shell/../view/admin/blog_plugins/register.html:29
+#: shell/../view/admin/blog_plugins/index.html:40
+#: shell/../view/admin/blog_plugins/edit_sp.html:50
+#: shell/../view/admin/blog_plugins/edit.html:51
+#: shell/../view/admin/blog_templates/edit.html:25
+#: shell/../view/admin/comments/ajax_reply.html:62
+#: shell/../view/admin/comments/reply_sp.html:61
+#: shell/../view/admin/comments/reply.html:70
+#: shell/../view/admin/tags/edit_sp.html:14
+#: shell/../view/admin/tags/edit.html:19
+#: shell/../view/admin/blogs/edit_sp.html:40
+#: shell/../view/admin/blogs/edit.html:53
+msgid "Update"
+msgstr "更新"
+
+#: shell/../view/user/entries/blog_password_sp.html:2
+#: shell/../view/user/entries/blog_password.html:5
+msgid "Password authentication"
+msgstr "パスワード認証"
+
+#: shell/../view/user/entries/blog_password_sp.html:8
+#: shell/../view/user/entries/blog_password.html:7
+msgid "Enter the password manager has set is required to view"
+msgstr "閲覧するには管理人が設定したパスワードの入力が必要です"
+
+#: shell/../view/user/entries/blog_password_sp.html:12
+#: shell/../view/user/entries/blog_password.html:15
+msgid "View password"
+msgstr "閲覧パスワード"
+
+#: shell/../view/user/entries/blog_password_sp.html:20
+#: shell/../view/user/entries/blog_password.html:18
+msgid "I see the blog"
+msgstr "ブログを見る"
+
+#: shell/../view/user/entries/comment_regist_sp.html:2
+#: shell/../view/user/entries/comment_regist.html:1
+msgid "I will post a comment"
+msgstr "コメントを投稿する"
+
+#: shell/../view/user/entries/comment_regist_sp.html:74
+#: shell/../view/user/entries/comment_regist.html:58
+msgid "Post"
+msgstr "投稿"
+
+#: shell/../view/user/blogs/index.html:1
+#: shell/../view/admin/layouts/default_sp.html:145
+#: shell/../view/admin/layouts/default.html:116
+#: shell/../view/admin/blogs/index.html:1
+#: shell/../view/admin/blogs/index_sp.html:1
+msgid "List of blogs"
+msgstr "ブログ一覧"
+
+#: shell/../view/admin/layouts/default_sp.html:114
+#: shell/../view/admin/layouts/default.html:93
+#: shell/../view/admin/users/index.html:20
+#: shell/../view/admin/common/notice_sp.html:7
+#: shell/../view/admin/blogs/index.html:18
+msgid "Checking the blog"
+msgstr "ブログの確認"
+
+#: shell/../view/admin/layouts/default_sp.html:116
+#: shell/../view/admin/layouts/default.html:95
+#: shell/../view/admin/common/notice_sp.html:6
+#: shell/../view/admin/entries/index.html:1
+#: shell/../view/admin/entries/index_sp.html:1
+msgid "List of articles"
+msgstr "記事一覧"
+
+#: shell/../view/admin/layouts/default_sp.html:117
+#: shell/../view/admin/layouts/default.html:96
+#: shell/../view/admin/comments/index.html:1
+#: shell/../view/admin/comments/index_sp.html:1
+msgid "List of comments"
+msgstr "コメント一覧"
+
+#: shell/../view/admin/layouts/default_sp.html:118
+#: shell/../view/admin/layouts/default.html:97
+#: shell/../view/admin/files/upload.html:16
+#: shell/../view/admin/files/edit.html:19
+msgid "Upload file"
+msgstr "ファイルアップロード"
+
+#: shell/../view/admin/layouts/default_sp.html:121
+#: shell/../view/admin/layouts/default.html:102
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:5
+#: shell/../view/admin/blog_settings/entry_edit_sp.html:5
+#: shell/../view/admin/blog_settings/etc_edit_sp.html:5
+#: shell/../view/admin/users/edit_sp.html:5
+#: shell/../view/admin/blog_plugins/index_sp.html:56
+#: shell/../view/admin/blog_plugins/index_sp.html:61
+#: shell/../view/admin/blogs/edit_sp.html:5
+msgid "Setting"
+msgstr "設定"
+
+#: shell/../view/admin/layouts/default_sp.html:122
+#: shell/../view/admin/layouts/default.html:104
+#: shell/../view/admin/blog_templates/index.html:1
+#: shell/../view/admin/blog_templates/index_sp.html:1
+msgid "Template management"
+msgstr "テンプレート管理"
+
+#: shell/../view/admin/layouts/default_sp.html:123
+#: shell/../view/admin/layouts/default.html:105
+#: shell/../view/admin/blog_plugins/create.html:3
+#: shell/../view/admin/blog_plugins/register.html:3
+#: shell/../view/admin/blog_plugins/index.html:1
+#: shell/../view/admin/blog_plugins/plugin_search.html:8
+#: shell/../view/admin/blog_plugins/index_sp.html:3
+msgid "Plugin management"
+msgstr "プラグイン管理"
+
+#: shell/../view/admin/layouts/default_sp.html:124
+#: shell/../view/admin/layouts/default.html:106
+#: shell/../view/admin/categories/create.html:1
+#: shell/../view/admin/categories/create_sp.html:3
+msgid "Category management"
+msgstr "カテゴリー管理"
+
+#: shell/../view/admin/layouts/default_sp.html:125
+#: shell/../view/admin/layouts/default.html:107
+#: shell/../view/admin/tags/index.html:1
+#: shell/../view/admin/tags/index_sp.html:1
+msgid "List of tags"
+msgstr "タグ一覧"
+
+#: shell/../view/admin/layouts/default_sp.html:126
+#: shell/../view/admin/layouts/default.html:108
+#: shell/../view/admin/blog_settings/tab_sp.html:3
+#: shell/../view/admin/blog_settings/tab.html:3
+#: shell/../view/admin/blogs/edit_sp.html:1
+#: shell/../view/admin/blogs/edit.html:1
+msgid "Blog setting"
+msgstr "ブログ設定"
+
+#: shell/../view/admin/layouts/default_sp.html:134
+#: shell/../view/admin/layouts/default.html:137
+#: shell/../view/admin/users/register.html:1
+#: shell/../view/admin/users/register_sp.html:1
+msgid "User registration"
+msgstr "ユーザー登録"
+
+#: shell/../view/admin/layouts/default_sp.html:136
+#: shell/../view/admin/layouts/default.html:139
+#: shell/../view/admin/users/login.html:1
+#: shell/../view/admin/users/login.html:23
+#: shell/../view/admin/users/login_sp.html:1
+#: shell/../view/admin/users/login_sp.html:17
+#: shell/../view/admin/common/installed.html:5
+msgid "Login"
+msgstr "ログイン"
+
+#: shell/../view/admin/layouts/default_sp.html:144
+#: shell/../view/admin/layouts/default.html:114
+#: shell/../view/admin/layouts/default.html:134
+msgid "User Menu"
+msgstr "ユーザーメニュー"
+
+#: shell/../view/admin/layouts/default_sp.html:146
+#: shell/../view/admin/layouts/default.html:117
+#: shell/../view/admin/users/tab_sp.html:3
+#: shell/../view/admin/users/edit_sp.html:1
+#: shell/../view/admin/users/tab.html:3 shell/../view/admin/users/edit.html:1
+msgid "User setting"
+msgstr "ユーザー設定"
+
+#: shell/../view/admin/layouts/default_sp.html:147
+#: shell/../view/admin/layouts/default.html:118
+msgid "Logout"
+msgstr "ログアウト"
+
+#: shell/../view/admin/layouts/default_sp.html:152
+#: shell/../view/admin/layouts/default.html:49
+#: shell/../view/admin/users/register.html:29
+#: shell/../view/admin/users/index.html:11
+#: shell/../view/admin/users/register_sp.html:22
+#: shell/../view/admin/common/install_user.html:30
+#: shell/../view/admin/blogs/create.html:15
+#: shell/../view/admin/blogs/edit_sp.html:9
+#: shell/../view/admin/blogs/create_sp.html:11
+#: shell/../view/admin/blogs/edit.html:10
+msgid "Blog name"
+msgstr "ブログ名"
+
+#: shell/../view/admin/layouts/default_sp.html:157
+#: shell/../view/admin/layouts/default.html:56
+#: shell/../view/admin/blogs/index.html:3
+#: shell/../view/admin/blogs/index_sp.html:4
+msgid "Create a new blog"
+msgstr "ブログの新規作成"
+
+#: shell/../view/admin/layouts/default.html:90 shell/../locale/define.php:39
+msgid "Home"
+msgstr "ホーム"
+
+#: shell/../view/admin/files/upload_sp.html:1
+#: shell/../view/admin/files/upload.html:1
+msgid "File upload"
+msgstr "ファイルアップロード"
+
+#: shell/../view/admin/files/upload_sp.html:11
+#: shell/../view/admin/files/ajax_index.html:16
+#: shell/../view/admin/entries/editor_js.html:24
+#: shell/../view/admin/entries/index.html:20
+#: shell/../view/admin/entries/editor_js_sp.html:17
+#: shell/../view/admin/entries/index_sp.html:8
+#: shell/../view/admin/comments/index.html:20
+#: shell/../view/admin/comments/index_sp.html:9
+#: shell/../view/admin/tags/index.html:17
+#: shell/../view/admin/tags/index_sp.html:11
+msgid "Search"
+msgstr "検索"
+
+#: shell/../view/admin/files/upload_sp.html:23
+#: shell/../view/admin/files/edit_sp.html:22
+#: shell/../view/admin/files/upload.html:20
+#: shell/../view/admin/files/edit.html:23
+msgid "File selection"
+msgstr "ファイル選択"
+
+#: shell/../view/admin/files/upload_sp.html:33
+#: shell/../view/admin/files/upload.html:25
+#: shell/../view/admin/files/edit.html:28
+msgid "Upload"
+msgstr "アップロード"
+
+#: shell/../view/admin/files/upload_sp.html:38
+msgid "File List"
+msgstr "ファイル一覧"
+
+#: shell/../view/admin/files/upload_sp.html:53
+#: shell/../view/admin/files/ajax_index.html:50
+msgid "The target file does not exist"
+msgstr "対象のファイルは存在しません"
+
+#: shell/../view/admin/files/edit_sp.html:1
+msgid "Details of file"
+msgstr "ファイル詳細"
+
+#: shell/../view/admin/files/edit_sp.html:2
+msgid "Checking file "
+msgstr "ファイルの確認"
+
+#: shell/../view/admin/files/edit_sp.html:7
+msgid "Information in the file"
+msgstr "ファイルの情報"
+
+#: shell/../view/admin/files/edit_sp.html:13
+#: shell/../view/admin/files/edit.html:1
+msgid "Edit File"
+msgstr "ファイルの編集"
+
+#: shell/../view/admin/files/edit_sp.html:39
+#: shell/../view/admin/categories/edit_sp.html:34
+#: shell/../view/admin/blog_plugins/edit_sp.html:55
+#: shell/../view/admin/blog_templates/fc2_view_sp.html:25
+#: shell/../view/admin/comments/reply_sp.html:46
+#: shell/../view/admin/tags/edit_sp.html:22
+msgid "I Back to List"
+msgstr "一覧に戻る"
+
+#: shell/../view/admin/files/edit_sp.html:40
+#: shell/../view/admin/files/ajax_index.html:46
+#: shell/../view/admin/files/ajax_index.html:82
+#: shell/../view/admin/blog_plugins/index.html:43
+#: shell/../view/admin/blog_plugins/edit_sp.html:64
+#: shell/../view/admin/blog_plugins/plugin_search.html:40
+#: shell/../view/admin/entries/index.html:62
+#: shell/../view/admin/entries/index.html:71
+#: shell/../view/admin/entries/edit_sp.html:15
+#: shell/../view/admin/blog_templates/index.html:42
+#: shell/../view/admin/blog_templates/index_sp.html:52
+#: shell/../view/admin/comments/ajax_reply.html:76
+#: shell/../view/admin/comments/index.html:84
+#: shell/../view/admin/comments/index.html:92
+#: shell/../view/admin/comments/reply_sp.html:47
+#: shell/../view/admin/comments/reply.html:84
+#: shell/../view/admin/tags/index.html:41
+#: shell/../view/admin/tags/index.html:50
+#: shell/../view/admin/tags/edit_sp.html:32
+msgid "Are you sure you want to delete?"
+msgstr "削除してもよろしいですか？"
+
+#: shell/../view/admin/files/edit_sp.html:40
+#: shell/../view/admin/files/ajax_index.html:30
+#: shell/../view/admin/files/ajax_index.html:46
+#: shell/../view/admin/categories/create.html:65
+#: shell/../view/admin/categories/edit_sp.html:39
+#: shell/../view/admin/blog_plugins/index.html:27
+#: shell/../view/admin/blog_plugins/index.html:43
+#: shell/../view/admin/blog_plugins/index.html:105
+#: shell/../view/admin/blog_plugins/edit_sp.html:64
+#: shell/../view/admin/blog_plugins/plugin_search.html:20
+#: shell/../view/admin/blog_plugins/plugin_search.html:40
+#: shell/../view/admin/entries/index.html:39
+#: shell/../view/admin/entries/index.html:62
+#: shell/../view/admin/entries/edit_sp.html:15
+#: shell/../view/admin/blog_templates/index.html:17
+#: shell/../view/admin/blog_templates/index.html:42
+#: shell/../view/admin/blog_templates/index_sp.html:38
+#: shell/../view/admin/comments/ajax_reply.html:76
+#: shell/../view/admin/comments/index.html:38
+#: shell/../view/admin/comments/index.html:84
+#: shell/../view/admin/comments/reply_sp.html:47
+#: shell/../view/admin/comments/reply.html:84
+#: shell/../view/admin/tags/index.html:31
+#: shell/../view/admin/tags/index.html:41
+#: shell/../view/admin/tags/edit_sp.html:32
+#: shell/../view/admin/blogs/delete_sp.html:22
+#: shell/../view/admin/blogs/delete.html:17 shell/../locale/define.php:36
+msgid "Delete"
+msgstr "削除"
+
+#: shell/../view/admin/files/ajax_index.html:3
+msgid "File search"
+msgstr "ファイル検索"
+
+#: shell/../view/admin/files/ajax_index.html:3
+#: shell/../view/admin/entries/index.html:4
+#: shell/../view/admin/comments/index.html:4
+#: shell/../view/admin/tags/index.html:4
+msgid "Hits"
+msgstr "該当"
+
+#: shell/../view/admin/files/ajax_index.html:7
+msgid "You can search to match the conditions file."
+msgstr "ファイルを条件に合わせて検索できます。"
+
+#: shell/../view/admin/files/ajax_index.html:27
+#: shell/../view/admin/entries/index.html:33
+#: shell/../view/admin/comments/index.html:34
+msgid "Date"
+msgstr "日付"
+
+#: shell/../view/admin/files/ajax_index.html:29
+#: shell/../view/admin/files/ajax_index.html:45
+#: shell/../view/admin/entries/index.html:36
+#: shell/../view/admin/entries/index.html:53
+#: shell/../view/admin/tags/index.html:30
+#: shell/../view/admin/tags/index.html:40 shell/../locale/define.php:26
+msgid "Edit"
+msgstr "編集"
+
+#: shell/../view/admin/files/ajax_index.html:55
+#: shell/../view/admin/entries/index.html:71
+#: shell/../view/admin/comments/index.html:92
+#: shell/../view/admin/tags/index.html:50
+msgid "Remove what you have selected"
+msgstr "選択したものを全て削除する"
+
+#: shell/../view/admin/blog_settings/tab_sp.html:6
+#: shell/../view/admin/blog_settings/entry_edit.html:1
+#: shell/../view/admin/blog_settings/entry_edit_sp.html:1
+#: shell/../view/admin/blog_settings/tab.html:6
+msgid "Article setting"
+msgstr "記事設定"
+
+#: shell/../view/admin/blog_settings/tab_sp.html:9
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:1
+#: shell/../view/admin/blog_settings/comment_edit.html:1
+#: shell/../view/admin/blog_settings/tab.html:9
+msgid "Comments Settings"
+msgstr "コメント設定"
+
+#: shell/../view/admin/blog_settings/tab_sp.html:12
+#: shell/../view/admin/blog_settings/etc_edit.html:1
+#: shell/../view/admin/blog_settings/etc_edit_sp.html:1
+#: shell/../view/admin/blog_settings/tab.html:12
+msgid "Other Settings"
+msgstr "その他の設定"
+
+#: shell/../view/admin/blog_settings/tab_sp.html:15
+#: shell/../view/admin/blog_settings/tab.html:15
+#: shell/../view/admin/blogs/delete_sp.html:1
+#: shell/../view/admin/blogs/delete.html:1
+msgid "Blog Delete"
+msgstr "ブログ削除"
+
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:9
+#: shell/../view/admin/blog_settings/comment_edit.html:10
+msgid "Approval settings"
+msgstr "承認設定"
+
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:14
+#: shell/../view/admin/blog_settings/comment_edit.html:17
+msgid "Display awaiting message"
+msgstr "承認中メッセージ"
+
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:19
+#: shell/../view/admin/blog_settings/comment_edit.html:24
+msgid "Display private comment"
+msgstr "非公開コメントの表示"
+
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:24
+#: shell/../view/admin/blog_settings/comment_edit.html:31
+msgid "Sender information"
+msgstr "コメンテーターの情報"
+
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:29
+#: shell/../view/admin/blog_settings/comment_edit.html:39
+msgid "Comment confirmation setting"
+msgstr "コメント確認の設定"
+
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:34
+#: shell/../view/admin/blog_settings/comment_edit.html:46
+msgid "Display the latest comments"
+msgstr "最新コメントの表示数"
+
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:39
+#: shell/../view/admin/blog_settings/comment_edit.html:53
+msgid "Display order of comments"
+msgstr "コメントの表示順"
+
+#: shell/../view/admin/blog_settings/comment_edit_sp.html:44
+#: shell/../view/admin/blog_settings/comment_edit.html:60
+msgid "Quotes Comments"
+msgstr "コメント引用"
+
+#: shell/../view/admin/blog_settings/etc_edit.html:10
+#: shell/../view/admin/blog_settings/etc_edit_sp.html:9
+msgid "Initial display page"
+msgstr "初期表示ページ"
+
+#: shell/../view/admin/blog_settings/entry_edit.html:10
+#: shell/../view/admin/blog_settings/entry_edit_sp.html:9
+msgid "Display the latest entries"
+msgstr "最新記事の表示数"
+
+#: shell/../view/admin/blog_settings/entry_edit.html:17
+#: shell/../view/admin/blog_settings/entry_edit_sp.html:14
+msgid "Display the number of articles, display order"
+msgstr "記事の表示数、表示順"
+
+#: shell/../view/admin/blog_settings/entry_edit.html:27
+#: shell/../view/admin/blog_settings/entry_edit_sp.html:22
+msgid "Password of the article view"
+msgstr "記事閲覧パスワード"
+
+#: shell/../view/admin/blog_settings/entry_edit.html:28
+#: shell/../view/admin/blog_settings/entry_edit_sp.html:23
+msgid "It is adapted to the password is not set at the time of the article"
+msgstr "記事のパスワード未設定時に適応されます"
+
+#: shell/../view/admin/blog_settings/comment_edit.html:33
+msgid "Save sender's information into Cookie?"
+msgstr "コメンテーターの情報をクッキーに"
+
+#: shell/../view/admin/users/tab_sp.html:6
+#: shell/../view/admin/users/withdrawal.html:1
+#: shell/../view/admin/users/withdrawal_sp.html:1
+#: shell/../view/admin/users/tab.html:6
+msgid "Withdrawal process"
+msgstr "退会処理"
+
+#: shell/../view/admin/users/withdrawal.html:10
+#: shell/../view/admin/users/withdrawal_sp.html:5
+#: shell/../view/admin/users/withdrawal_sp.html:15
+msgid "Unsubscribe confirmation"
+msgstr "退会確認"
+
+#: shell/../view/admin/users/withdrawal.html:13
+msgid "Unsubscribe"
+msgstr "退会する"
+
+#: shell/../view/admin/users/withdrawal.html:18
+#: shell/../view/admin/users/withdrawal_sp.html:22
+msgid "Withdrawal"
+msgstr "退会"
+
+#: shell/../view/admin/users/withdrawal.html:30
+msgid "Please check the box \"unsubscribe\""
+msgstr "「退会する」をチェックしてください"
+
+#: shell/../view/admin/users/withdrawal.html:33
+#: shell/../view/admin/users/withdrawal_sp.html:35
+msgid ""
+"Can not be undone if you unsubscribe. Are you sure you want to unsubscribe "
+"really?"
+msgstr "退会すると元には戻せませんが本当に退会してよろしいですか？"
+
+#: shell/../view/admin/users/login.html:8
+#: shell/../view/admin/users/register.html:8
+#: shell/../view/admin/users/login_sp.html:6
+#: shell/../view/admin/users/register_sp.html:7
+#: shell/../view/admin/common/install_user.html:9
+msgid "Login ID"
+msgstr "ログインID"
+
+#: shell/../view/admin/users/register.html:22
+#: shell/../view/admin/users/index.html:10
+#: shell/../view/admin/users/register_sp.html:17
+#: shell/../view/admin/common/install_user.html:23
+#: shell/../view/admin/blogs/create.html:8
+#: shell/../view/admin/blogs/index.html:8
+#: shell/../view/admin/blogs/create_sp.html:6
+#: shell/../view/admin/blogs/index_sp.html:7
+msgid "Blog ID"
+msgstr "ブログID"
+
+#: shell/../view/admin/users/register.html:36
+#: shell/../view/admin/users/index.html:12
+#: shell/../view/admin/users/register_sp.html:27
+#: shell/../view/admin/common/install_user.html:37
+#: shell/../view/admin/blogs/create.html:22
+#: shell/../view/admin/blogs/edit_sp.html:19
+#: shell/../view/admin/blogs/create_sp.html:16
+#: shell/../view/admin/blogs/edit.html:24
+msgid "Nickname"
+msgstr "ニックネーム"
+
+#: shell/../view/admin/users/register.html:44
+#: shell/../view/admin/users/register_sp.html:33
+#: shell/../view/admin/common/install_user.html:45
+#: shell/../view/admin/blog_plugins/register.html:29
+#: shell/../view/admin/blog_plugins/index.html:40
+#: shell/../view/admin/blogs/create.html:30
+#: shell/../view/admin/blogs/create_sp.html:22
+msgid "Register"
+msgstr "登録する"
+
+#: shell/../view/admin/users/index.html:1
+msgid "List of users"
+msgstr "ユーザー一覧"
+
+#: shell/../view/admin/users/withdrawal_sp.html:8
+msgid ""
+"If you want to unsubscribe, please tap the \"Withdrawal\" button and check "
+"the \"Unsubscribe confirmation\"."
+msgstr ""
+"退会する場合は、「退会確認」にチェックを入れ「退会」ボタンをタップしてくださ"
+"い。"
+
+#: shell/../view/admin/users/withdrawal_sp.html:32
+msgid "Please check the box \"Unsubscribe confirmation\""
+msgstr "「退会確認」をチェックしてください"
+
+#: shell/../view/admin/users/edit_sp.html:9
+#: shell/../view/admin/users/edit.html:10
+msgid "Change Password"
+msgstr "パスワードの変更"
+
+#: shell/../view/admin/users/edit_sp.html:14
+#: shell/../view/admin/users/edit.html:17
+msgid "Blog ID at login"
+msgstr "ログイン後の表示ブログ"
+
+#: shell/../view/admin/common/install_user.html:1
+msgid "Administrator registration"
+msgstr "管理者登録"
+
+#: shell/../view/admin/common/notice_sp.html:22
+#: shell/../view/admin/common/notice.html:12
+#, php-format
+msgid "There %d reviews unread comments"
+msgstr "%d件の未読コメントがあります"
+
+#: shell/../view/admin/common/notice_sp.html:33
+#: shell/../view/admin/common/notice.html:23
+#, php-format
+msgid "There %d reviews unapproved comment"
+msgstr "%d件の未承認コメントがあります"
+
+#: shell/../view/admin/common/notice_sp.html:38
+#: shell/../view/admin/common/notice.html:28
+msgid "There is no notice"
+msgstr "お知らせはありません"
+
+#: shell/../view/admin/common/paging_sp.html:22
+#: shell/../view/admin/common/paging_sp.html:24
+#: shell/../view/admin/entries/ajax_media_load_sp.html:32
+#: shell/../view/admin/entries/ajax_media_load_sp.html:34
+#: shell/../locale/define.php:43
+msgid "Previous page"
+msgstr "前のページ"
+
+#: shell/../view/admin/common/paging_sp.html:28
+#: shell/../view/admin/common/paging_sp.html:30
+#: shell/../view/admin/entries/ajax_media_load_sp.html:37
+#: shell/../view/admin/entries/ajax_media_load_sp.html:39
+#: shell/../locale/define.php:44
+msgid "Next page"
+msgstr "次のページ"
+
+#: shell/../view/admin/common/install.html:1
+msgid "Environment Check"
+msgstr "環境チェック"
+
+#: shell/../view/admin/common/install.html:48
+msgid "Write access to the temporary directory"
+msgstr "テンポラリーディレクトリへの書き込み権限"
+
+#: shell/../view/admin/common/install.html:54
+#: shell/../view/admin/common/install.html:66
+msgid "Please perform a writable set for the above folder"
+msgstr "上記フォルダに対して書き込み可能な設定をおこなってください"
+
+#: shell/../view/admin/common/install.html:60
+msgid "Write access to the upload directory"
+msgstr "アップロードディレクトリへの書き込み権限"
+
+#: shell/../view/admin/common/install.html:72
+msgid "Check connection library with MySQL"
+msgstr "MySQLとの接続ライブラリチェック"
+
+#: shell/../view/admin/common/install.html:78
+msgid "Please enable pdo or mysqli"
+msgstr "mysqli または pdoを有効にしてください"
+
+#: shell/../view/admin/common/install.html:94
+msgid "Check connection to the MySQL"
+msgstr "MySQLとの接続チェック"
+
+#: shell/../view/admin/common/install.html:101
+msgid "Can not connect to DB"
+msgstr "DBに接続できません"
+
+#: shell/../view/admin/common/install.html:102
+msgid "Please check and there is no problem in the following setting"
+msgstr "下記設定で問題ないかお確かめください"
+
+#: shell/../view/admin/common/install.html:103
+msgid "Please change each item of config.php If you are different"
+msgstr "違う場合はconfig.phpの各項目を変更してください"
+
+#: shell/../view/admin/common/install.html:109
+msgid "Host name"
+msgstr "ホスト名"
+
+#: shell/../view/admin/common/install.html:113
+msgid "User name"
+msgstr "ユーザー名"
+
+#: shell/../view/admin/common/install.html:121
+msgid "Database name"
+msgstr "データベース名"
+
+#: shell/../view/admin/common/install.html:130
+msgid "Character code check of MySQL"
+msgstr "MySQLの文字コードチェック"
+
+#: shell/../view/admin/common/install.html:137
+msgid ""
+"You can not use the character code of UTF8MB4 because the version of MySQL "
+"is older"
+msgstr "MySQLのバージョンが古いためUTF8MB4の文字コードが使用できません"
+
+#: shell/../view/admin/common/install.html:138
+msgid "Please change to UTF8 DB_CHARSET"
+msgstr "DB_CHARSETをUTF8に変更してください"
+
+#: shell/../view/admin/common/install.html:139
+#: shell/../view/admin/common/install.html:156
+#: shell/../view/admin/common/install.html:172
+msgid "Example"
+msgstr "例"
+
+#: shell/../view/admin/common/install.html:147
+msgid "Check the configuration of the domain"
+msgstr "ドメインの設定をチェック"
+
+#: shell/../view/admin/common/install.html:154
+msgid "Domain is set to the current domain"
+msgstr "現在ドメインにdomainが設定されています"
+
+#: shell/../view/admin/common/install.html:155
+msgid "Please change to the appropriate domain"
+msgstr "適切なドメインに変更してください"
+
+#: shell/../view/admin/common/install.html:163
+msgid "Check the configuration of the salt value"
+msgstr "salt値の設定をチェック"
+
+#: shell/../view/admin/common/install.html:170
+msgid ""
+"Salt value for password check (random character string) is still in the "
+"initial string"
+msgstr "パスワードチェック用のsalt値(ランダム文字列)が初期文字列のままです"
+
+#: shell/../view/admin/common/install.html:171
+msgid "Please change to a string of alphanumeric which is not easily predicted"
+msgstr "予測されにくい英数の文字列に変更してください"
+
+#: shell/../view/admin/common/install.html:179
+msgid "Check the configuration of the GD library"
+msgstr "GDライブラリの設定をチェック"
+
+#: shell/../view/admin/common/install.html:186
+msgid "GD library does not have installed"
+msgstr "GDライブラリがインストールされておりません"
+
+#: shell/../view/admin/common/install.html:187
+msgid "Though it is possible to proceed with the installation of the blog"
+msgstr "ブログのインストールを進めることはできますが"
+
+#: shell/../view/admin/common/install.html:188
+msgid "Until you install the GD library"
+msgstr "GDライブラリをインストールするまで"
+
+#: shell/../view/admin/common/install.html:189
+msgid "You can not use the ability to create a thumbnail image"
+msgstr "サムネイル画像を作成する機能は使用できません"
+
+#: shell/../view/admin/common/install.html:199
+msgid "Install"
+msgstr "インストール"
+
+#: shell/../view/admin/common/installed.html:1
+msgid "Installation complete"
+msgstr "インストール完了"
+
+#: shell/../view/admin/common/installed.html:3
+msgid "The installation was completed"
+msgstr "インストールは完了いたしました"
+
+#: shell/../view/admin/common/installed.html:4
+msgid "Please log from the following"
+msgstr "下記よりログインしてください"
+
+#: shell/../view/admin/common/installed.html:6
+msgid ""
+"In addition, please delete admin / install.php because it is unnecessary"
+msgstr "またadmin/install.phpは不要ですので削除してください"
+
+#: shell/../view/admin/categories/create.html:4
+#: shell/../view/admin/categories/create_sp.html:5
+msgid "Add category"
+msgstr "カテゴリー追加"
+
+#: shell/../view/admin/categories/create.html:10
+#: shell/../view/admin/categories/edit_sp.html:9
+#: shell/../view/admin/categories/ajax_add.html:52
+#: shell/../view/admin/categories/ajax_add_sp.html:52
+#: shell/../view/admin/categories/create_sp.html:9
+#: shell/../view/admin/categories/edit.html:11
+msgid "Parent category"
+msgstr "親カテゴリー"
+
+#: shell/../view/admin/categories/create.html:17
+#: shell/../view/admin/categories/edit_sp.html:14
+#: shell/../view/admin/categories/ajax_add.html:61
+#: shell/../view/admin/categories/ajax_add.html:63
+#: shell/../view/admin/categories/ajax_add_sp.html:61
+#: shell/../view/admin/categories/ajax_add_sp.html:62
+#: shell/../view/admin/categories/create_sp.html:14
+#: shell/../view/admin/categories/edit.html:18
+#: shell/../view/admin/entries/index.html:13
+#: shell/../view/admin/entries/index_sp.html:11
+msgid "Category name"
+msgstr "カテゴリー名"
+
+#: shell/../view/admin/categories/create.html:24
+#: shell/../view/admin/categories/edit_sp.html:19
+#: shell/../view/admin/categories/create_sp.html:19
+#: shell/../view/admin/categories/edit.html:25
+msgid "Sort by category"
+msgstr "カテゴリーの表示順"
+
+#: shell/../view/admin/categories/create.html:32
+#: shell/../view/admin/categories/ajax_add.html:64
+#: shell/../view/admin/categories/ajax_add.html:184
+#: shell/../view/admin/categories/ajax_add_sp.html:64
+#: shell/../view/admin/categories/ajax_add_sp.html:181
+#: shell/../view/admin/categories/create_sp.html:25
+#: shell/../view/admin/blog_plugins/create.html:52
+#: shell/../view/admin/blog_plugins/plugin_search_sp.html:11
+#: shell/../view/admin/blog_plugins/plugin_search_sp.html:17
+#: shell/../view/admin/entries/editor_js.html:211
+#: shell/../view/admin/entries/ajax_media_load_sp.html:5
+#: shell/../view/admin/entries/form.html:37
+#: shell/../view/admin/entries/editor_js_sp.html:164
+#: shell/../view/admin/entries/form_sp.html:181
+#: shell/../view/admin/blog_templates/create.html:26
+msgid "Add"
+msgstr "追加"
+
+#: shell/../view/admin/categories/create.html:43
+#: shell/../view/admin/categories/ajax_add.html:12
+#: shell/../view/admin/categories/ajax_add_sp.html:11
+#: shell/../view/admin/categories/create_sp.html:33
+msgid "Categories"
+msgstr "カテゴリー一覧"
+
+#: shell/../view/admin/categories/create.html:65
+#: shell/../view/admin/categories/edit_sp.html:39
+msgid ""
+"If the child category exists\\nRemove all along with the child category, but "
+"do you really want?"
+msgstr ""
+"子カテゴリーが存在する場合\\n子カテゴリーと一緒に全て削除しますがよろしいです"
+"か？"
+
+#: shell/../view/admin/categories/edit_sp.html:1
+#: shell/../view/admin/categories/edit.html:1
+msgid "I edit a category"
+msgstr "カテゴリーの編集"
+
+#: shell/../view/admin/categories/edit_sp.html:3
+msgid "Edit category"
+msgstr "カテゴリー編集"
+
+#: shell/../view/admin/categories/ajax_add.html:49
+#: shell/../view/admin/categories/ajax_add_sp.html:50
+msgid "Category add"
+msgstr "カテゴリー追加"
+
+#: shell/../view/admin/categories/ajax_add.html:55
+#: shell/../view/admin/categories/ajax_add_sp.html:54
+msgid "Not selected"
+msgstr "選択しない"
+
+#: shell/../view/admin/categories/ajax_add.html:159
+#: shell/../view/admin/categories/ajax_add_sp.html:156
+msgid "Please enter the category name"
+msgstr "カテゴリー名を入力してください"
+
+#: shell/../view/admin/blog_plugins/create.html:1
+msgid "I want to create a plugin"
+msgstr "プラグイン作成"
+
+#: shell/../view/admin/blog_plugins/create.html:17
+#: shell/../view/admin/blog_plugins/register.html:13
+#: shell/../view/admin/blog_plugins/index.html:24
+#: shell/../view/admin/blog_plugins/edit_sp.html:13
+#: shell/../view/admin/blog_plugins/plugin_search.html:16
+#: shell/../view/admin/blog_plugins/edit.html:14
+msgid "Plugin name"
+msgstr "プラグイン名"
+
+#: shell/../view/admin/blog_plugins/create.html:24
+#: shell/../view/admin/blog_plugins/edit_sp.html:20
+#: shell/../view/admin/blog_plugins/edit.html:21
+msgid "Character color setting of title statement"
+msgstr "タイトル文の文字色、文字位置"
+
+#: shell/../view/admin/blog_plugins/create.html:33
+#: shell/../view/admin/blog_plugins/edit_sp.html:29
+#: shell/../view/admin/blog_plugins/edit.html:30
+msgid "Character color setting of content statement"
+msgstr "コンテンツの文字色、文字位置"
+
+#: shell/../view/admin/blog_plugins/create.html:53
+#: shell/../view/admin/blog_plugins/plugin_search_sp.html:18
+#: shell/../view/admin/blog_plugins/edit_sp.html:51
+#: shell/../view/admin/blog_plugins/plugin_search.html:19
+#: shell/../view/admin/blog_plugins/plugin_search.html:36
+#: shell/../view/admin/blog_plugins/edit.html:52
+#: shell/../view/admin/entries/form.html:101
+#: shell/../view/admin/entries/form_sp.html:196
+#: shell/../view/admin/blog_templates/fc2_index.html:12
+#: shell/../view/admin/blog_templates/fc2_view_sp.html:12
+#: shell/../view/admin/blog_templates/create.html:27
+#: shell/../view/admin/blog_templates/index.html:16
+#: shell/../view/admin/blog_templates/index.html:36
+#: shell/../view/admin/blog_templates/fc2_index_sp.html:13
+#: shell/../view/admin/blog_templates/edit.html:26
+msgid "Preview"
+msgstr "プレビュー"
+
+#: shell/../view/admin/blog_plugins/register.html:1
+msgid "Registration of plug-in"
+msgstr "プラグインの登録"
+
+#: shell/../view/admin/blog_plugins/register.html:20
+#: shell/../view/admin/blog_plugins/plugin_search.html:17
+msgid "Description"
+msgstr "説明"
+
+#: shell/../view/admin/blog_plugins/plugin_search_sp.html:1
+#: shell/../view/admin/blog_plugins/plugin_search.html:1
+msgid "Plugin search"
+msgstr "プラグイン検索"
+
+#: shell/../view/admin/blog_plugins/index.html:15
+#: shell/../view/admin/blog_plugins/index.html:58
+#: shell/../view/admin/blog_plugins/index_sp.html:29
+#: shell/../view/admin/entries/form_sp.html:170
+msgid "Category"
+msgstr "カテゴリー"
+
+#: shell/../view/admin/blog_plugins/index.html:17
+#: shell/../view/admin/blog_plugins/index_sp.html:48
+msgid "Official Plugin Search"
+msgstr "公式プラグイン検索"
+
+#: shell/../view/admin/blog_plugins/index.html:18
+#: shell/../view/admin/blog_plugins/index_sp.html:49
+msgid "Share Plugin Search"
+msgstr "共有プラグイン検索"
+
+#: shell/../view/admin/blog_plugins/index.html:19
+msgid "Plugin Creation"
+msgstr "プラグインを作成する"
+
+#: shell/../view/admin/blog_plugins/index.html:26
+msgid "Share plugin"
+msgstr "共有プラグイン"
+
+#: shell/../view/admin/blog_plugins/index.html:51
+msgid "Sort"
+msgstr "並べ替え"
+
+#: shell/../view/admin/blog_plugins/index.html:71
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: shell/../view/admin/blog_plugins/index.html:72
+msgid "Completion"
+msgstr "完了"
+
+#: shell/../view/admin/blog_plugins/index.html:125
+#: shell/../view/admin/blog_plugins/index_sp.html:255
+#: shell/../view/admin/blog_plugins/index_sp.html:272
+#: shell/../view/admin/comments/ajax_reply.html:69
+msgid "Is communicating ..."
+msgstr "通信中です..."
+
+#: shell/../view/admin/blog_plugins/edit_sp.html:1
+#: shell/../view/admin/blog_plugins/edit.html:1
+msgid "I want to edit the plugin"
+msgstr "プラグインを編集する"
+
+#: shell/../view/admin/blog_plugins/edit_sp.html:38
+#: shell/../view/admin/blog_plugins/edit.html:39
+msgid "Remodeling of the plug-in"
+msgstr "プラグインの改造"
+
+#: shell/../view/admin/blog_plugins/edit_sp.html:40
+#: shell/../view/admin/blog_plugins/edit.html:41
+msgid "I will do the editing of [HTML]. (For advanced users)"
+msgstr "【HTMLの編集】を行います。（上級者向け）"
+
+#: shell/../view/admin/blog_plugins/edit_sp.html:61
+msgid "Delete plugin"
+msgstr "プラグイン削除"
+
+#: shell/../view/admin/blog_plugins/plugin_search.html:18
+#: shell/../view/admin/blog_plugins/plugin_search.html:33
+#: shell/../view/admin/blog_templates/fc2_index.html:13
+#: shell/../view/admin/blog_templates/fc2_view_sp.html:15
+#: shell/../view/admin/blog_templates/fc2_view_sp.html:28
+#: shell/../view/admin/blog_templates/fc2_index_sp.html:14
+msgid "Download"
+msgstr "ダウンロード"
+
+#: shell/../view/admin/blog_plugins/index_sp.html:18
+msgid "Settings of the plug-in"
+msgstr "プラグインの設定"
+
+#: shell/../view/admin/blog_plugins/index_sp.html:22
+msgid "Advanced setting"
+msgstr "詳細設定"
+
+#: shell/../view/admin/blog_plugins/index_sp.html:23
+msgid "Display Settings"
+msgstr "表示設定"
+
+#: shell/../view/admin/blog_plugins/index_sp.html:24
+msgid "Sorting"
+msgstr "並べ替え"
+
+#: shell/../view/admin/blog_plugins/index_sp.html:35
+#: shell/../view/admin/blog_plugins/index_sp.html:237
+msgid "Show"
+msgstr "表示"
+
+#: shell/../view/admin/blog_plugins/index_sp.html:35
+#: shell/../view/admin/blog_plugins/index_sp.html:237
+msgid "Hide"
+msgstr "非表示"
+
+#: shell/../view/admin/blog_plugins/index_sp.html:44
+msgid "Plug-in is not set"
+msgstr "プラグインは未設定です"
+
+#: shell/../view/admin/blog_plugins/index_sp.html:152
+msgid ""
+"Display settings you have changed will return to the original Are you sure?"
+msgstr "変更した表示設定が元に戻りますがよろしいですか？"
+
+#: shell/../view/admin/blog_plugins/index_sp.html:163
+msgid ""
+"The sort order that you have changed will return to the original Are you "
+"sure?"
+msgstr "変更した並び順が元に戻りますがよろしいですか？"
+
+#: shell/../view/admin/entries/create.html:1
+#: shell/../view/admin/entries/create_sp.html:1
+msgid "Write a new entry"
+msgstr "新しく記事を書く"
+
+#: shell/../view/admin/entries/editor_js.html:20
+#: shell/../view/admin/entries/editor_js.html:204
+#: shell/../view/admin/entries/editor_js_sp.html:11
+#: shell/../view/admin/entries/editor_js_sp.html:157
+msgid "Add Media"
+msgstr "メディアを追加"
+
+#: shell/../view/admin/entries/index.html:4
+msgid "Entry search"
+msgstr "記事検索"
+
+#: shell/../view/admin/entries/index.html:8
+msgid "You can search in accordance with the conditions of past articles."
+msgstr "過去の記事を条件に合わせて検索できます。"
+
+#: shell/../view/admin/entries/index.html:14
+#: shell/../view/admin/entries/index_sp.html:12
+#: shell/../view/admin/tags/index.html:16
+#: shell/../view/admin/tags/index.html:28
+#: shell/../view/admin/tags/edit_sp.html:10
+#: shell/../view/admin/tags/index_sp.html:10
+#: shell/../view/admin/tags/edit.html:11
+msgid "Tag name"
+msgstr "タグ名"
+
+#: shell/../view/admin/entries/index.html:15
+#: shell/../view/admin/entries/index_sp.html:13
+#: shell/../view/admin/comments/ajax_reply.html:31
+#: shell/../view/admin/comments/index.html:14
+#: shell/../view/admin/comments/reply_sp.html:10
+#: shell/../view/admin/comments/index_sp.html:13
+#: shell/../view/admin/comments/reply.html:33
+msgid "Public state"
+msgstr "公開状態"
+
+#: shell/../view/admin/entries/index.html:35
+#: shell/../view/admin/entries/form.html:14
+#: shell/../view/admin/entries/form_sp.html:78
+#: shell/../view/admin/entries/form_sp.html:85
+#: shell/../view/admin/comments/ajax_reply.html:15
+#: shell/../view/admin/comments/index.html:36
+#: shell/../view/admin/comments/reply.html:17 shell/../locale/define.php:30
+msgid "Body"
+msgstr "本文"
+
+#: shell/../view/admin/entries/index.html:37
+#: shell/../view/admin/comments/index.html:37
+msgid "State"
+msgstr "状態"
+
+#: shell/../view/admin/entries/form.html:20
+#: shell/../view/admin/entries/form_sp.html:81
+#: shell/../view/admin/entries/form_sp.html:90
+msgid "Edit a postscript"
+msgstr "追記"
+
+#: shell/../view/admin/entries/form.html:20
+#: shell/../view/admin/entries/form.html:26
+msgid "Click to open/close"
+msgstr "クリックで開閉します"
+
+#: shell/../view/admin/entries/form.html:26
+#: shell/../view/admin/entries/form_sp.html:95
+msgid "Entry settings"
+msgstr "記事の設定"
+
+#: shell/../view/admin/entries/form.html:34
+#: shell/../view/admin/entries/form_sp.html:176
+msgid "User tags"
+msgstr "ユーザータグ"
+
+#: shell/../view/admin/entries/form.html:51
+#: shell/../view/admin/entries/form_sp.html:116
+msgid "Date and time"
+msgstr "日付"
+
+#: shell/../view/admin/entries/form.html:54
+msgid "Date and time of submission will be set when it is not input"
+msgstr "未入力の時は投稿時の日時が設定されます"
+
+#: shell/../view/admin/entries/form.html:59
+#: shell/../view/admin/entries/form_sp.html:98
+msgid "Post type"
+msgstr "記事の設定"
+
+#: shell/../view/admin/entries/form.html:66
+#: shell/../view/admin/entries/form_sp.html:105
+msgid "Set Password"
+msgstr "パスワード設定"
+
+#: shell/../view/admin/entries/form.html:71
+#: shell/../view/admin/entries/form_sp.html:108
+msgid "They are authenticated with a password of the entire If empty"
+msgstr "未入力の場合は全体のパスワードで認証されます"
+
+#: shell/../view/admin/entries/form.html:72
+#: shell/../view/admin/entries/form_sp.html:109
+msgid "Passwords in the whole place"
+msgstr "全体のパスワード設定はコチラ"
+
+#: shell/../view/admin/entries/form.html:82
+#: shell/../view/admin/entries/form_sp.html:161
+msgid "New paragraph"
+msgstr "改行の扱い"
+
+#: shell/../view/admin/entries/form.html:89
+#: shell/../view/admin/entries/form_sp.html:152
+msgid "Accept comments"
+msgstr "コメント受付"
+
+#: shell/../view/admin/entries/form.html:100
+#: shell/../view/admin/entries/form_sp.html:195
+msgid "Save this entry"
+msgstr "記事を保存"
+
+#: shell/../view/admin/entries/edit_sp.html:1
+#: shell/../view/admin/entries/edit.html:1
+msgid "Edit this entry."
+msgstr "記事の編集"
+
+#: shell/../view/admin/entries/edit_sp.html:12
+msgid "Delete entry"
+msgstr "記事を削除する"
+
+#: shell/../view/admin/entries/form_sp.html:71
+msgid "Article Title"
+msgstr "記事タイトル"
+
+#: shell/../view/admin/entries/form_sp.html:122
+msgid "Date and time when saving"
+msgstr "保存時の日時"
+
+#: shell/../view/admin/entries/form_sp.html:126
+msgid "Specify the date and time"
+msgstr "日時を指定"
+
+#: shell/../view/admin/entries/form_sp.html:136
+msgid "Year"
+msgstr "年"
+
+#: shell/../view/admin/entries/form_sp.html:137
+msgid "Month"
+msgstr "月"
+
+#: shell/../view/admin/entries/form_sp.html:138
+msgid "Day"
+msgstr "日"
+
+#: shell/../view/admin/entries/form_sp.html:141
+msgid "Hour"
+msgstr "時"
+
+#: shell/../view/admin/entries/form_sp.html:142
+msgid "Minute"
+msgstr "分"
+
+#: shell/../view/admin/entries/form_sp.html:143
+msgid "Second"
+msgstr "秒"
+
+#: shell/../view/admin/blog_templates/fc2_index.html:1
+#: shell/../view/admin/blog_templates/fc2_index_sp.html:1
+msgid "FC2 Template list"
+msgstr "FC2 テンプレート一覧"
+
+#: shell/../view/admin/blog_templates/fc2_index.html:10
+#: shell/../view/admin/blog_templates/fc2_view_sp.html:20
+#: shell/../view/admin/blog_templates/fc2_index_sp.html:12
+#: shell/../view/admin/comments/reply_sp.html:8
+msgid "Summary"
+msgstr "概要"
+
+#: shell/../view/admin/blog_templates/fc2_index.html:18
+#: shell/../view/admin/blog_templates/fc2_index_sp.html:18
+msgid "FC2 template can not be found"
+msgstr "FC2テンプレートが見つかりません"
+
+#: shell/../view/admin/blog_templates/fc2_view_sp.html:1
+msgid "FC2 Template detail"
+msgstr "FC2 テンプレート詳細"
+
+#: shell/../view/admin/blog_templates/create.html:1
+msgid "I want to create a template"
+msgstr "テンプレートを作成する"
+
+#: shell/../view/admin/blog_templates/create.html:9
+#: shell/../view/admin/blog_templates/index.html:14
+#: shell/../view/admin/blog_templates/edit.html:8
+msgid "Template name"
+msgstr "テンプレート名"
+
+#: shell/../view/admin/blog_templates/index.html:8
+#: shell/../view/admin/blog_templates/index_sp.html:18
+msgid "Template Search"
+msgstr "テンプレート検索"
+
+#: shell/../view/admin/blog_templates/index.html:9
+msgid "Template Creation"
+msgstr "テンプレートを作成する"
+
+#: shell/../view/admin/blog_templates/index.html:15
+msgid "Usage state"
+msgstr "使用状態"
+
+#: shell/../view/admin/blog_templates/index.html:28
+#: shell/../view/admin/blog_templates/index_sp.html:29
+msgid "Applying"
+msgstr "適用中"
+
+#: shell/../view/admin/blog_templates/index.html:32
+#: shell/../view/admin/blog_templates/index_sp.html:63
+msgid "Are you sure you want to apply this template?"
+msgstr "このテンプレートを適用しますか？"
+
+#: shell/../view/admin/blog_templates/index.html:32
+#: shell/../view/admin/blog_templates/index_sp.html:39
+msgid "Apply"
+msgstr "適用"
+
+#: shell/../view/admin/blog_templates/index_sp.html:49
+msgid "Please select the template you want to delete"
+msgstr "削除するテンプレートを選択してください"
+
+#: shell/../view/admin/blog_templates/index_sp.html:60
+msgid "Please select the template to apply"
+msgstr "適用するテンプレートを選択してください"
+
+#: shell/../view/admin/blog_templates/edit.html:1
+msgid "I want to edit the template"
+msgstr "テンプレートを編集する"
+
+#: shell/../view/admin/comments/ajax_reply.html:3
+#: shell/../view/admin/comments/reply_sp.html:34
+#: shell/../view/admin/comments/reply.html:5
+msgid "Article name"
+msgstr "記事名"
+
+#: shell/../view/admin/comments/ajax_reply.html:7
+#: shell/../view/admin/comments/index.html:35
+#: shell/../view/admin/comments/reply_sp.html:24
+#: shell/../view/admin/comments/reply.html:9
+msgid "Contributor"
+msgstr "投稿者"
+
+#: shell/../view/admin/comments/ajax_reply.html:20
+#: shell/../view/admin/comments/reply_sp.html:27
+#: shell/../view/admin/comments/reply.html:22 shell/../locale/define.php:29
+msgid "E-mail address"
+msgstr "メールアドレス"
+
+#: shell/../view/admin/comments/ajax_reply.html:36
+#: shell/../view/admin/comments/index.html:67
+#: shell/../view/admin/comments/reply.html:59
+msgid "Approval"
+msgstr "承認する"
+
+#: shell/../view/admin/comments/ajax_reply.html:43
+#: shell/../view/admin/comments/reply.html:45
+msgid "Updated date"
+msgstr "更新日時"
+
+#: shell/../view/admin/comments/ajax_reply.html:48
+#: shell/../view/admin/comments/reply_sp.html:21
+#: shell/../view/admin/comments/reply.html:50
+msgid "Response time"
+msgstr "返答日時"
+
+#: shell/../view/admin/comments/ajax_reply.html:64
+#: shell/../view/admin/comments/reply_sp.html:1
+#: shell/../view/admin/comments/reply_sp.html:63
+#: shell/../view/admin/comments/reply.html:72
+msgid "Reply"
+msgstr "返信"
+
+#: shell/../view/admin/comments/ajax_reply.html:66
+#: shell/../view/admin/comments/reply_sp.html:65
+#: shell/../view/admin/comments/reply.html:74
+msgid "When you press the reply button, the message will be approved"
+msgstr "返信ボタンを押すと、メッセージが承認されます"
+
+#: shell/../view/admin/comments/ajax_reply.html:73
+#: shell/../view/admin/comments/reply.html:81
+msgid "Delete Comment"
+msgstr "コメントを削除する"
+
+#: shell/../view/admin/comments/ajax_reply.html:75
+#: shell/../view/admin/comments/reply.html:83
+msgid "You can delete a comment by pressing the button below."
+msgstr "以下のボタンを押すとコメントを削除することができます。"
+
+#: shell/../view/admin/comments/index.html:4
+msgid "Comment search"
+msgstr "コメント検索"
+
+#: shell/../view/admin/comments/index.html:8
+msgid "You can search in accordance with the conditions of the past comments."
+msgstr "過去のコメントを条件に合わせて検索できます。"
+
+#: shell/../view/admin/comments/index.html:15
+#: shell/../view/admin/comments/index_sp.html:14
+msgid "Reply state"
+msgstr "返信状態"
+
+#: shell/../view/admin/comments/index.html:33
+#: shell/../view/admin/comments/index.html:50
+msgid "Article"
+msgstr "記事"
+
+#: shell/../view/admin/comments/index.html:51
+msgid "Narrowing"
+msgstr "絞込"
+
+#: shell/../view/admin/comments/index.html:59
+msgid "New"
+msgstr "New"
+
+#: shell/../view/admin/comments/index.html:60
+msgid "I see the comment"
+msgstr "コメントを見る"
+
+#: shell/../view/admin/comments/index.html:77
+#: shell/../view/admin/comments/index.html:111
+#: shell/../view/admin/comments/index_sp.html:40
+msgid "Reply not"
+msgstr "返信不可"
+
+#: shell/../view/admin/comments/index.html:77
+#: shell/../view/admin/comments/index.html:111
+#: shell/../view/admin/comments/index_sp.html:40
+msgid "Unanswered"
+msgstr "未返信"
+
+#: shell/../view/admin/comments/index.html:98
+msgid "Reply Comments"
+msgstr "コメントに返信する"
+
+#: shell/../view/admin/comments/index.html:162
+#: shell/../view/admin/comments/reply_sp.html:42
+#: shell/../view/admin/comments/reply.html:59
+msgid "Are you sure you want to be approved?"
+msgstr "承認してもよろしいですか？"
+
+#: shell/../view/admin/comments/reply_sp.html:3
+#: shell/../view/admin/comments/reply.html:1
+msgid "Details of comment"
+msgstr "コメント詳細"
+
+#: shell/../view/admin/comments/reply_sp.html:42
+#: shell/../view/admin/comments/reply.html:57
+msgid "I moderate comments"
+msgstr "コメントの承認"
+
+#: shell/../view/admin/comments/reply_sp.html:53
+#: shell/../view/admin/comments/reply.html:63
+msgid "I will reply to comments"
+msgstr "コメントに返信する"
+
+#: shell/../view/admin/comments/index_sp.html:29
+msgid "No title"
+msgstr "タイトル無し"
+
+#: shell/../view/admin/comments/index_sp.html:32
+msgid "Unknown"
+msgstr "Unknown"
+
+#: shell/../view/admin/tags/index.html:4
+msgid "Tag search"
+msgstr "タグ検索"
+
+#: shell/../view/admin/tags/index.html:8
+msgid "I can search by tag name"
+msgstr "タグ名で検索できます"
+
+#: shell/../view/admin/tags/index.html:29
+msgid "Entry count"
+msgstr "記事数"
+
+#: shell/../view/admin/tags/edit_sp.html:1
+#: shell/../view/admin/tags/edit.html:1
+msgid "I want to edit tags"
+msgstr "タグを編集する"
+
+#: shell/../view/admin/tags/edit_sp.html:3
+msgid "Edit tag"
+msgstr "タグ編集"
+
+#: shell/../view/admin/tags/edit_sp.html:25
+msgid "Check the article"
+msgstr "記事の確認"
+
+#: shell/../view/admin/tags/edit_sp.html:29
+msgid "Delete tag"
+msgstr "タグ削除"
+
+#: shell/../view/admin/blogs/create.html:1
+#: shell/../view/admin/blogs/create_sp.html:1
+msgid "New registration of the blog"
+msgstr "ブログの新規登録"
+
+#: shell/../view/admin/blogs/index.html:9
+msgid "I choose the blog"
+msgstr "ブログを選択する"
+
+#: shell/../view/admin/blogs/edit_sp.html:14
+#: shell/../view/admin/blogs/edit.html:17
+msgid "Blog Description"
+msgstr "ブログの説明"
+
+#: shell/../view/admin/blogs/edit_sp.html:24
+#: shell/../view/admin/blogs/edit.html:31
+msgid "Visibility Blog"
+msgstr "ブログの公開設定"
+
+#: shell/../view/admin/blogs/edit_sp.html:29
+#: shell/../view/admin/blogs/edit.html:38
+msgid "View password blog"
+msgstr "ブログの閲覧パスワード"
+
+#: shell/../view/admin/blogs/edit_sp.html:34
+#: shell/../view/admin/blogs/edit.html:45
+msgid "Time zone"
+msgstr "タイムゾーン"
+
+#: shell/../view/admin/blogs/delete_sp.html:5
+#: shell/../view/admin/blogs/delete_sp.html:15
+#: shell/../view/admin/blogs/delete.html:9
+msgid "Delete confirmation"
+msgstr "削除確認"
+
+#: shell/../view/admin/blogs/delete_sp.html:8
+msgid ""
+"If you want to delete the blog, please tap the \"Delete\" button Check the "
+"\"Delete confirmation\"."
+msgstr ""
+"ブログを削除する場合は、「削除確認」にチェックを入れ「削除」ボタンをタップし"
+"てください。"
+
+#: shell/../view/admin/blogs/delete_sp.html:33
+msgid "Please check the box \"Delete confirmation\""
+msgstr "「削除確認」をチェックしてください"
+
+#: shell/../view/admin/blogs/delete_sp.html:36
+#: shell/../view/admin/blogs/delete.html:32
+msgid ""
+"Can not be undone if you remove, but Are you sure you want to delete really?"
+msgstr "削除すると元には戻せませんが本当に削除してよろしいですか？"
+
+#: shell/../view/admin/blogs/delete.html:12
+msgid "Remove"
+msgstr "削除する"
+
+#: shell/../view/admin/blogs/delete.html:29
+msgid "Please check the box \"Remove\""
+msgstr "「削除する」をチェックしてください"
+
+#: shell/../controller/admin/files_controller.php:83
+msgid "I have completed the upload of files"
+msgstr "ファイルのアップロードが完了しました"
+
+#: shell/../controller/admin/files_controller.php:89
+#: shell/../controller/admin/files_controller.php:191
+#: shell/../controller/admin/blogs_controller.php:63
+#: shell/../controller/admin/blogs_controller.php:99
+#: shell/../controller/admin/blog_templates_controller.php:120
+#: shell/../controller/admin/blog_templates_controller.php:160
+#: shell/../controller/admin/common_controller.php:185
+#: shell/../controller/admin/users_controller.php:69
+#: shell/../controller/admin/users_controller.php:103
+#: shell/../controller/admin/users_controller.php:159
+#: shell/../controller/admin/comments_controller.php:193
+#: shell/../controller/admin/entries_controller.php:117
+#: shell/../controller/admin/entries_controller.php:172
+#: shell/../controller/admin/blog_plugins_controller.php:114
+#: shell/../controller/admin/blog_plugins_controller.php:153
+#: shell/../controller/admin/blog_plugins_controller.php:230
+#: shell/../controller/admin/blog_settings_controller.php:78
+#: shell/../controller/admin/categories_controller.php:52
+#: shell/../controller/admin/categories_controller.php:93
+#: shell/../controller/admin/tags_controller.php:104
+msgid "Input error exists"
+msgstr "入力エラーがあります"
+
+#: shell/../controller/admin/files_controller.php:181
+msgid "I have updated the file"
+msgstr "ファイルを更新しました"
+
+#: shell/../controller/admin/files_controller.php:210
+msgid "I removed the file"
+msgstr "ファイルを削除しました"
+
+#: shell/../controller/admin/files_controller.php:212
+#: shell/../controller/admin/comments_controller.php:254
+#: shell/../controller/admin/tags_controller.php:120
+msgid "I failed to remove"
+msgstr "削除に失敗しました"
+
+#: shell/../controller/admin/blogs_controller.php:57
+msgid "I created a blog"
+msgstr "ブログを作成しました"
+
+#: shell/../controller/admin/blogs_controller.php:93
+msgid "I updated a blog"
+msgstr "ブログを更新しました"
+
+#: shell/../controller/admin/blogs_controller.php:145
+msgid "I removed the blog"
+msgstr "ブログを削除しました"
+
+#: shell/../controller/admin/admin_controller.php:42
+msgid "Please select a blog"
+msgstr "ブログを選択してください"
+
+#: shell/../controller/admin/blog_templates_controller.php:114
+msgid "I created a template"
+msgstr "テンプレートを作成しました"
+
+#: shell/../controller/admin/blog_templates_controller.php:154
+msgid "I have updated the template"
+msgstr "テンプレートを更新しました"
+
+#: shell/../controller/admin/blog_templates_controller.php:177
+msgid "Template to be used can not be found"
+msgstr "使用するテンプレートが見つかりません"
+
+#: shell/../controller/admin/blog_templates_controller.php:184
+msgid "I switch the template"
+msgstr "テンプレートを切り替えました"
+
+#: shell/../controller/admin/blog_templates_controller.php:206
+msgid "Template does not exist"
+msgstr "テンプレートが存在しません"
+
+#: shell/../controller/admin/blog_templates_controller.php:225
+msgid "I downloaded the template"
+msgstr "テンプレートをダウンロードしました"
+
+#: shell/../controller/admin/blog_templates_controller.php:231
+msgid "There is a flaw in the template to be downloaded"
+msgstr "ダウンロードしたテンプレートに問題がありました"
+
+#: shell/../controller/admin/blog_templates_controller.php:250
+msgid "You can not delete a template in use"
+msgstr "使用中のテンプレートは削除できません"
+
+#: shell/../controller/admin/blog_templates_controller.php:262
+msgid "I removed the template"
+msgstr "テンプレートを削除しました"
+
+#: shell/../controller/admin/common_controller.php:174
+#: shell/../controller/admin/users_controller.php:58
+msgid "User registration is completed"
+msgstr "ユーザー登録完了"
+
+#: shell/../controller/admin/common_controller.php:180
+#: shell/../controller/admin/users_controller.php:64
+msgid "I failed to register"
+msgstr "登録に失敗しました"
+
+#: shell/../controller/admin/users_controller.php:97
+msgid "Update User Information"
+msgstr "ユーザー情報更新"
+
+#: shell/../controller/admin/users_controller.php:121
+msgid "Was completed withdrawal"
+msgstr "退会完了"
+
+#: shell/../controller/admin/users_controller.php:157
+msgid "Login ID or password is incorrect"
+msgstr "ログインIDまたはパスワードが違います"
+
+#: shell/../controller/admin/comments_controller.php:105
+msgid "I approved a comment"
+msgstr "コメントを承認しました"
+
+#: shell/../controller/admin/comments_controller.php:130
+msgid "Comments subject to approval does not exist"
+msgstr "承認対象のコメントが存在しません"
+
+#: shell/../controller/admin/comments_controller.php:181
+msgid "I did reply to comment "
+msgstr "コメントに返信しました"
+
+#: shell/../controller/admin/comments_controller.php:252
+msgid "I removed the comment"
+msgstr "コメントを削除しました"
+
+#: shell/../controller/admin/entries_controller.php:111
+msgid "I created a entry"
+msgstr "記事を作成しました"
+
+#: shell/../controller/admin/entries_controller.php:166
+msgid "I have updated the entry"
+msgstr "記事を更新しました"
+
+#: shell/../controller/admin/entries_controller.php:185
+msgid "I removed the entry"
+msgstr "記事を削除しました"
+
+#: shell/../controller/admin/blog_plugins_controller.php:108
+#: shell/../controller/admin/blog_plugins_controller.php:285
+msgid "I created a plugin"
+msgstr "プラグインを作成しました"
+
+#: shell/../controller/admin/blog_plugins_controller.php:147
+msgid "I have updated the plugin"
+msgstr "プラグインを更新しました"
+
+#: shell/../controller/admin/blog_plugins_controller.php:177
+#: shell/../controller/admin/blog_plugins_controller.php:253
+msgid "I removed the plugin"
+msgstr "プラグインを削除しました"
+
+#: shell/../controller/admin/blog_plugins_controller.php:222
+msgid "I have registered the plug-in"
+msgstr "プラグインを登録しました"
+
+#: shell/../controller/admin/blog_plugins_controller.php:224
+msgid "I failed to register the plug-in"
+msgstr "プラグインの登録に失敗しました"
+
+#: shell/../controller/admin/blog_plugins_controller.php:269
+msgid "Plugin does not exist"
+msgstr "プラグインが存在しません"
+
+#: shell/../controller/admin/blog_plugins_controller.php:289
+msgid "I failed to download the plug-in"
+msgstr "プラグインのダウンロードに失敗しました"
+
+#: shell/../controller/admin/blog_plugins_controller.php:308
+msgid "I have completed the sorting"
+msgstr "並べ替えを行いました"
+
+#: shell/../controller/admin/blog_plugins_controller.php:329
+msgid "I changed the display settings"
+msgstr "表示設定を変更しました"
+
+#: shell/../controller/admin/blog_settings_controller.php:72
+msgid "I have updated the configuration information of the blog"
+msgstr "ブログの設定情報を更新しました"
+
+#: shell/../controller/admin/categories_controller.php:28
+msgid "Exceeded the maximum number of registered category"
+msgstr "登録できるカテゴリーの最大数を超えました"
+
+#: shell/../controller/admin/categories_controller.php:46
+msgid "I added a category"
+msgstr "カテゴリーを追加しました"
+
+#: shell/../controller/admin/categories_controller.php:87
+msgid "I have updated the category"
+msgstr "カテゴリーを更新しました"
+
+#: shell/../controller/admin/categories_controller.php:121
+msgid "I removed the category"
+msgstr "カテゴリーを削除しました"
+
+#: shell/../controller/admin/tags_controller.php:92
+msgid "I have updated the tag"
+msgstr "タグを更新しました"
+
+#: shell/../controller/admin/tags_controller.php:118
+msgid "I removed the tag"
+msgstr "タグを削除しました"
+
+#: shell/../controller/app_controller.php:81
+msgid "Token authentication is invalid"
+msgstr "認証に失敗しました"
+
+#: shell/../locale/define.php:8
+msgid "Sun"
+msgstr "日"
+
+#: shell/../locale/define.php:9
+msgid "Mon"
+msgstr "月"
+
+#: shell/../locale/define.php:10
+msgid "Tue"
+msgstr "火"
+
+#: shell/../locale/define.php:11
+msgid "Wed"
+msgstr "水"
+
+#: shell/../locale/define.php:12
+msgid "Thu"
+msgstr "木"
+
+#: shell/../locale/define.php:13
+msgid "Fri"
+msgstr "金"
+
+#: shell/../locale/define.php:14
+msgid "Sat"
+msgstr "土"
+
+#: shell/../locale/define.php:17
+msgid "FC2 BLOG"
+msgstr "FC2ブログ"
+
+#: shell/../locale/define.php:18
+msgid "Read more"
+msgstr "続きを読む"
+
+#: shell/../locale/define.php:19
+msgid "Theme"
+msgstr "テーマ"
+
+#: shell/../locale/define.php:20
+msgid "Genre"
+msgstr "ジャンル"
+
+#: shell/../locale/define.php:21
+msgid "Trackbacks"
+msgstr "トラックバック"
+
+#: shell/../locale/define.php:22
+msgid "Comments"
+msgstr "コメント"
+
+#: shell/../locale/define.php:23
+msgid "Entry Absolute link"
+msgstr "このエントリーの固定リンク"
+
+#: shell/../locale/define.php:24
+msgid "Entry category"
+msgstr "このエントリーのカテゴリ"
+
+#: shell/../locale/define.php:25
+msgid "View category list"
+msgstr "このカテゴリ一覧を見る"
+
+#: shell/../locale/define.php:31
+msgid "Post a comment"
+msgstr "コメントの投稿"
+
+#: shell/../locale/define.php:32
+msgid "Private message"
+msgstr "非公開コメント"
+
+#: shell/../locale/define.php:33
+msgid "Only the blog author may view the message."
+msgstr "管理者にだけ表示を許可する"
+
+#: shell/../locale/define.php:34
+msgid "Edit password"
+msgstr "パスワード"
+
+#: shell/../locale/define.php:35
+msgid "Send"
+msgstr "送信"
+
+#: shell/../locale/define.php:37
+msgid "Edit a comment"
+msgstr "コメントの編集"
+
+#: shell/../locale/define.php:38
+msgid "Use trackback for this entry."
+msgstr "この記事にトラックバックする(FC2ブログユーザー)"
+
+#: shell/../locale/define.php:40
+msgid "Index"
+msgstr "インデックス"
+
+#: shell/../locale/define.php:41
+msgid "First entry"
+msgstr "最初の記事"
+
+#: shell/../locale/define.php:42
+msgid "Search entries"
+msgstr "記事検索"
+
+#: shell/../locale/define.php:45
+msgid "Previous entry"
+msgstr "前の記事"
+
+#: shell/../locale/define.php:46
+msgid "Next entry"
+msgstr "次の記事"
+
+#: shell/../locale/define.php:47
+msgid "Top of page"
+msgstr "このページのトップへ"
+
+#~ msgid "Private comment"
+#~ msgstr "非公開コメント"
+
+#~ msgid "Edit plugin"
+#~ msgstr "プラグイン編集"
+
+#~ msgid "Edit this file."
+#~ msgstr "ファイルの編集"
+
+#~ msgid "Device type"
+#~ msgstr "デバイスタイプ"
+
+#~ msgid "Template in use can not change the device type"
+#~ msgstr "使用中のテンプレートはデバイスタイプを変更できません"
+
+#~ msgid "Are you sure you want to apply this plugin?"
+#~ msgstr "このプラグインを適用しますか？"
+
+#~ msgid "There is no additional plug-ins already"
+#~ msgstr "追加済みのプラグインはありません"
+
+#~ msgid "Are you sure you want to register the plug-in?"
+#~ msgstr "このプラグインを登録してもよろしいですか？"
+
+#~ msgid "I failed to add category"
+#~ msgstr "カテゴリーの追加に失敗しました"
+
+#~ msgid "The number of start and end tags is different"
+#~ msgstr "開始タグと終了タグの個数が異なっています"
+
+#~ msgid "The number of start tag"
+#~ msgstr "開始タグの個数"
+
+#~ msgid "The number of end tag"
+#~ msgstr "終了タグの個数"
+
+#~ msgid "Delete category"
+#~ msgstr "カテゴリー削除"
+
+#~ msgid "During use"
+#~ msgstr "使用中"
+
+#~ msgid "Use"
+#~ msgstr "使用する"
+
+#~ msgid "You will use this template, but do you want?"
+#~ msgstr "このテンプレートを使用しますか？"
+
+#~ msgid "I want to save in a cookie"
+#~ msgstr "保存時にクッキーに記録する"
+
+#~ msgid "Africa"
+#~ msgstr "アフリカ"
+
+#~ msgid "America"
+#~ msgstr "アメリカ"
+
+#~ msgid "Asia"
+#~ msgstr "アジア"
+
+#~ msgid "Atlantic"
+#~ msgstr "大西洋"
+
+#~ msgid "Indian"
+#~ msgstr "インディアン"
+
+#~ msgid "Argentina Buenos_Aires"
+#~ msgstr "アルゼンチン ブエノスアイレス"
+
+#~ msgid "Singapore"
+#~ msgstr "シンガポール"
+
+#~ msgid "Tokyo"
+#~ msgstr "東京"
+
+#~ msgid "Cape_Verde"
+#~ msgstr "カーボベルデ"
+
+#~ msgid "Melbourne"
+#~ msgstr "メルボルン"
+
+#~ msgid "Athens"
+#~ msgstr "アテネ"
+
+#~ msgid "Moscow"
+#~ msgstr "モスクワ"
+
+#~ msgid "Midway"
+#~ msgstr "ミッドウェー島"

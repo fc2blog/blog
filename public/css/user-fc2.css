@@ -1,0 +1,38 @@
+body > footer { clear: both; }
+
+/* common */
+table.horizon-table
+{
+  width: 98%;
+  margin: 5px auto;
+  border: 1px solid #666;
+  border-collapse:collapse;
+}
+
+table.horizon-table tr:nth-child(even) { background-color: #fafafa; }
+table.horizon-table tr:nth-child(odd) { background-color: #ffffff; }
+table.horizon-table th {
+	background-color: #eee;
+	border: 1px solid #666;
+	text-align:center;
+}
+table.horizon-table td {
+	border: 1px solid #666;
+	text-align:center;
+}
+
+/* Blog list */
+.blog_list { margin: 0 0 20px; }
+.blog_list li {
+	list-style-type: square;
+	list-style-position: inside;
+	margin-bottom: 5px;
+}
+.blog_list a {
+	display: block;
+	padding: 1px 0 1px 5px;
+}
+.blog_list a:hover {
+	text-decoration: none;
+	background-color:#eee;
+}
