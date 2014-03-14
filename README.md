@@ -1,29 +1,29 @@
 blog
 ====
 
-オープンソースのブログ  
+Open Source Blog
 
-#### 動作環境  
-* PHP 5.2.17以上  
-* MySQL 5.1以上  
+#### Operating Environment
+* PHP 5.2.17 or higher
+* MySQL 5.1 or higher
 
 
-#### インストール方法
+#### Installation
 
-1. git又はzipをダウンロードして解凍しサーバーに設置してください  
+1. Download the .git or .zip file, and extract it to the server.  
 app  
-public[公開ディレクトリ]  
-  
-2. 設定ファイルの名称を変更しDBやサーバーの情報を書き込んでください  
+public [public directory]  
+　  
+2. Change the name of the settings file, and store the DB or Server information.  
 public/config.php.sample -> public/config.php  
 　  
-※ appディレクトリがpublicディレクトリと同階層に存在しない場合は  
-config.php内の下記部分に関してパスを合わせる必要があります  
+ *If the app directory does not exist on the same level as the public directory,  
+you will need to amend the path from the following area in the config.php file.  
 require(dirname(__FILE__) . '/../app/core/bootstrap.php');  
-  
-3. インストール画面にアクセスしてください  
-ドメイン/admin/install.php  
-  
-4. 画面に従いインストールを完了してください  
-  
-5. インストール完了後はadmin/install.phpは不要なので削除してください
+　  
+3. Access the Installation Screen  
+[DOMAIN]/admin/install.php  
+　  
+4. Follow the instructions and complete installation.  
+　  
+5. Once installation is complete, admin/install.php will no longer be necessary. Please delete it.
