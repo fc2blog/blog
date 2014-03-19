@@ -110,8 +110,8 @@ class CommonController extends UserController
     }
 
     // サムネイル出力処理
-    include(Config::get('LIB_DIR') . 'SimpleImage.php');
-    $image = new SimpleImage();
+    include(Config::get('LIB_DIR') . 'ThumbnailImageMaker.php');
+    $image = new ThumbnailImageMaker();
     $image->load($file_path);
     switch ($whs) {
       default:
