@@ -112,18 +112,31 @@ class CommonController extends UserController
     // サムネイル出力処理
     include(Config::get('LIB_DIR') . 'ThumbnailImageMaker.php');
     $image = new ThumbnailImageMaker();
-    $image->load($file_path);
+    $load_result = $image->load($file_path);
+    if($load_result!==true){
+        Debug::log('Load image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+        return $this->error404();
+    }
     switch ($whs) {
       default:
         $whs = '';
-        $image->resize($size, $size, false);
+        $resize_result = $image->resize($size, $size, false);
         break;
-      case 'w': $image->resizeToWidth($size, false);  break;
-      case 'h': $image->resizeToHeight($size, false); break;
+      case 'w': $resize_result = $image->resizeToWidth($size, false);  break;
+      case 'h': $resize_result = $image->resizeToHeight($size, false); break;
     }
+    if($resize_result!==true){
+      Debug::log('Resize thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+      return $this->error404();
+    }
+
     preg_match('{^(.*?)\.(png|gif|jpe?g)$}', $file_path, $matches);
     $save_file = $matches[1] . '_' . $whs . $size . '.' . $matches[2];
-    $image->save($save_file, $image->image_type, 90);
+    $save_result = $image->save($save_file, $image->image_type, 90);
+    if($save_result!==true){
+      Debug::log('Save thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+      return $this->error404();
+    }
     chmod($save_file, 0777);
 
     // 作成したファイルへリダイレクト
