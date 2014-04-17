@@ -395,7 +395,7 @@
     </div>
     <!--/plugin-->
     <div id="footer_inner">
-      <p class="powered">Powered by <%template_fc2blog></p>
+      <p class="powered">Powered by <a href="http://blog.fc2.com"><%template_fc2blog></a></p>
       <!--Don't delete--><p class="ad"><%ad> <%ad2></p>
       <p class="copyright">Copyright &copy; <%blog_name> All Rights Reserved.</p>
     </div><!-- /footer_inner -->

@@ -27,3 +27,5 @@ require(dirname(__FILE__) . '/../app/core/bootstrap.php');
 4. Follow the instructions and complete installation.  
 　  
 5. Once installation is complete, admin/install.php will no longer be necessary. Please delete it.
+
+*Do not remove the link to FC2 in the template.

@@ -300,7 +300,7 @@
     </div>
     <p class="copyright">Copyright (c) <%blog_name></p>
     <div class="powered">
-      Powered by FC2 Blog
+      Powered by <a href="http://blog.fc2.com"><%template_fc2blog></a>
     </div>
   </div>
 <%ad_overlay>
