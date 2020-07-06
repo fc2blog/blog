@@ -169,7 +169,7 @@ class MySqliWrap implements DBInterface{
         default:
           $type = "string";
         case 'boolean': case 'integer': case 'double': case 'string':
-          $types .= $type{0};
+          $types .= $type[0];
       }
     }
     return $types;

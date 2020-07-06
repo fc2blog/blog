@@ -76,13 +76,13 @@ class CaptchaImage
       if ($this->hirakana_mode) {
         //描画文字
         if(mt_rand(0,1)) {
-          $char = $hirakana[ $tmp_str{$i} ];//ひらかな
+          $char = $hirakana[ $tmp_str[$i] ];//ひらかな
         }  else {
-          $char = $katakana[ $tmp_str{$i} ];//カタカナ
+          $char = $katakana[ $tmp_str[$i] ];//カタカナ
         }
       }  else {
         //日本語は使わず数字だけの場合
-        $char = $tmp_str{$i};
+        $char = $tmp_str[$i];
       }
 
       $angle = mt_rand( -10, 10 );// 角度
