@@ -108,7 +108,7 @@ class PluginsModel extends Model
     foreach ($plugins as $plugin) {
       $plugin['list'] = '';
       $plugin['attribute'] = '{}';
-      $plugin['created_at'] = $plugins['updated_at'] = date('Y-m-d H:i:s');
+      $plugin['created_at'] = $plugin['updated_at'] = date('Y-m-d H:i:s');
       $this->insert($plugin);
     }
   }
