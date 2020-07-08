@@ -255,6 +255,7 @@ class BlogPluginsModel extends Model
   {
     $values['updated_at'] = $values['created_at'] = date('Y-m-d H:i:s');
     $values['plugin_order'] = $this->getNextPluginOrder($values['blog_id'], $values['device_type'], $values['category']);
+    $values['list'] = '';
     $id = parent::insert($values, $options);
     if ($id) {
       // プラグインのPHPファイル作成
