@@ -99,7 +99,7 @@ $(function(){
     $.ajax({
       url: '<?php echo Html::url(array('controller'=>'Files', 'action'=>'ajax_delete')); ?>',
       type: 'POST',
-      data: {id: ids, sig: <?php echo Session::get('sig'); ?>},
+      data: {id: ids, sig: '<?php echo Session::get('sig'); ?>'},
       dataType: 'json',
       success: function(json){
         // 削除完了後検索処理を実行
