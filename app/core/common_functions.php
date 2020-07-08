@@ -156,4 +156,14 @@ function setLanguage($lang=null, $file='messages'){
   textdomain($file);
 }
 
-
+/**
+ * 引数がcount関数で数えられる値かどうかを調べる
+ * ※PHP7.2よりcount関数の引数に数えられない値が指定された場合、E_WARNINGが発生
+ * ※PHP7.3より本関数は追加されている
+ */
+if (!function_exists('is_countable')) {
+    function is_countable ($var)
+    {
+        return (is_array($var) || $var instanceof Countable);
+    }
+}

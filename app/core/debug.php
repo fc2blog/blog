@@ -16,7 +16,10 @@ class Debug{
       // echoでデバッグ文を表示
       case 1:
         echo $msg;
-        if (count($params)) {
+        if (
+            is_countable($params)
+            && count($params)
+        ) {
           echo '<pre>';
           var_dump($params);
           echo '</pre>';
@@ -47,7 +50,11 @@ class Debug{
       // echoでデバッグ文を表示
       case 4:
         echo $msg . "\n";
-        if (count($params) && !empty($params)) {
+        if (
+            is_countable($params)
+            && count($params)
+            && !empty($params)
+        ) {
           var_dump($params);
           echo "\n";
         }
