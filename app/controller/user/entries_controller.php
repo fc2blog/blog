@@ -431,7 +431,7 @@ class EntriesController extends UserController
     }
     $entry['tags'] = array();
     $tags = $request->get('entry_tags');
-    if (count($tags)) {
+    if (is_countable($tags) && count($tags)) {
       foreach ($tags as $tag) {
         $entry['tags'][] = array(
           'id'      => 0,
