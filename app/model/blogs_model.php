@@ -359,5 +359,25 @@ class BlogsModel extends Model
     return true;
   }
 
+  /**
+   * 指定したテンプレートIDが指定したブログIDのデバイステンプレートとして適用されているか判定する
+   * @param $template_id
+   * @param $blog_id
+   * @param $device_type
+   * @return bool
+   */
+  public function isAppliedTemplate($template_id, $blog_id, $device_type): bool
+  {
+    $blog_template_column = Config::get("BLOG_TEMPLATE_COLUMN.{$device_type}");
+    $blogs = $this->findById($blog_id);
+
+    $isAppliedTemplate = (
+      isset($blogs[$blog_template_column]) &&
+      $blogs[$blog_template_column] == $template_id
+    );
+
+    return $isAppliedTemplate;
+  }
+
 }
 
