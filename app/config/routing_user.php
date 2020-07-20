@@ -23,7 +23,7 @@ if (isset($paths[0]) && !$request->isArgs($argsa)) {
 }
 
 // 記事詳細
-if (strpos($query, 'no=')===0) {
+if (strpos($query, 'no=')===0 && $request->isGet()) {
   $request->set($argsa, 'view');
   $request->set('id', $request->get('no'));
 }
