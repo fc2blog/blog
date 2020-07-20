@@ -36,7 +36,7 @@ if (!empty($comments)) {
       $comments[$key]['hour'], $comments[$key]['minute'], $comments[$key]['second'], $comments[$key]['youbi']
       ) = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['updated_at'])));
     $comments[$key]['wayoubi'] = __($comments[$key]['youbi']);
-    $comments[$key]['body'] = nl2br($value['body']);
+    $comments[$key]['body'] = $value['body'];
 
     list($comments[$key]['reply_year'], $comments[$key]['reply_month'], $comments[$key]['reply_day'],
       $comments[$key]['reply_hour'], $comments[$key]['reply_minute'], $comments[$key]['reply_second'], $comments[$key]['reply_youbi']

@@ -220,7 +220,7 @@ PHP
   // コメント一覧
   '<%comment_no>'        => '<?php if(isset($comment[\'id\'])) echo $comment[\'id\']; ?>',
   '<%comment_title>'     => '<?php if(isset($comment[\'title\'])) echo h($comment[\'title\']); ?>',
-  '<%comment_body>'      => '<?php if(isset($comment[\'body\'])) echo h($comment[\'body\']); ?>',
+  '<%comment_body>'      => '<?php if(isset($comment[\'body\'])) echo nl2br(h($comment[\'body\'])); ?>',
   '<%comment_year>'      => '<?php if(isset($comment[\'year\'])) echo $comment[\'year\']; ?>',
   '<%comment_month>'     => '<?php if(isset($comment[\'month\'])) echo $comment[\'month\']; ?>',
   '<%comment_day>'       => '<?php if(isset($comment[\'day\'])) echo $comment[\'day\']; ?>',
