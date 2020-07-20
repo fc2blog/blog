@@ -160,7 +160,7 @@ CREATE TABLE `comments` (
   `body` text NOT NULL,
   `mail` text,
   `url` text,
-  `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `open_status` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `reply_body` text,
   `reply_status` tinyint(4) unsigned NOT NULL DEFAULT '1',
