@@ -29,3 +29,9 @@ require(dirname(__FILE__) . '/../app/core/bootstrap.php');
 5. Once installation is complete, admin/install.php will no longer be necessary. Please delete it.
 
 *Do not remove the link to FC2 in the template.
+
+
+#### development with Docker.
+
+1. `docker-compose up` at repo root directory. wait startup.
+2. open `http://localhost:8080/admin/install.php`
