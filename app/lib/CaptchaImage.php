@@ -10,11 +10,15 @@ class CaptchaImage
   var $passwd;
   var $hirakana_mode;
 
-  //コンスト
+  /**
+   * CaptchaImage constructor.
+   * @param $src_img_size_x 8 以上が必要
+   * @param $src_img_size_y 1 以上が必要
+   * @param $src_passwd
+   * @param bool $hirakana_mode
+   */
   public function __construct($src_img_size_x, $src_img_size_y, $src_passwd, $hirakana_mode = true)
   {
-    mt_srand( crc32( time() . $_SERVER['REMOTE_ADDR'] ) + getmypid()  );
-
     $this->img_size_x = $src_img_size_x;
     $this->img_size_y = $src_img_size_y;
     $this->hirakana_mode = $hirakana_mode;
@@ -22,6 +26,11 @@ class CaptchaImage
     $this->passwd = $src_passwd;
   }
 
+  /**
+   * @param $number
+   * @param bool $mini_mode
+   * @throws Exception
+   */
   public function drawNumber($number, $mini_mode = false) {
     //memo. sjisの書体はサーバー環境によっては使えない
     $arr_fonts = array(
@@ -68,14 +77,14 @@ class CaptchaImage
     imagealphablending($im, true);
 
     //フォント種類
-    $fid = mt_rand(0, count($arr_fonts) - 1);
+    $fid = random_int(0, count($arr_fonts) - 1);
 
-    $cur_x = mt_rand(0, 6);
+    $cur_x = random_int(0, 6);
     $length = strlen($tmp_str);
     for ($i=0; $i < $length; $i++) {
       if ($this->hirakana_mode) {
         //描画文字
-        if(mt_rand(0,1)) {
+        if(random_int(0,1)) {
           $char = $hirakana[ $tmp_str[$i] ];//ひらかな
         }  else {
           $char = $katakana[ $tmp_str[$i] ];//カタカナ
@@ -85,7 +94,7 @@ class CaptchaImage
         $char = $tmp_str[$i];
       }
 
-      $angle = mt_rand( -10, 10 );// 角度
+      $angle = random_int( -10, 10 );// 角度
       $font1 = $arr_fonts[$fid]["path"];
       $code  = $arr_fonts[$fid]["code"];
 
@@ -93,7 +102,7 @@ class CaptchaImage
       if (mb_strlen($char) > 2) {
         $font_size = $arr_fonts[$fid]["min"];
       }  else {
-        $font_size = mt_rand( $arr_fonts[$fid]["min"] * 10, $arr_fonts[$fid]["max"] * 10) / 6;
+        $font_size = random_int( $arr_fonts[$fid]["min"] * 10, $arr_fonts[$fid]["max"] * 10) / 6;
       }
 
       if ($mini_mode) $font_size = $font_size * 0.80;
@@ -110,27 +119,27 @@ class CaptchaImage
       $x1 = $arr_bbox[0] < $arr_bbox[6] ? $arr_bbox[0] : $arr_bbox[6];
       $y1 = $arr_bbox[5] < $arr_bbox[7] ? $arr_bbox[5] : $arr_bbox[7];
       $x2 = $arr_bbox[2] > $arr_bbox[4] ? $arr_bbox[2] : $arr_bbox[4];
-      $y2 = $arr_bbox[1] > $arr_bbox[3] ? $arr_bbox[1] : $arr_bbox[3];
+      $y2 = $arr_bbox[1] > $arr_bbox[3] ? $arr_bbox[1] : $arr_bbox[3]; # TODO この変数は利用されていない
 
       imagettftext($im, $font_size, $angle, ($cur_x - $x1) + 1, (0 - $y1) + 5, $black, $font1, $char);
-      $cur_x += $x2 + mt_rand(0,8);
+      $cur_x += $x2 + random_int(0,8);
       $tmp_pace = ($this->img_size_x / $length) * ($i + 1) ;
-      if ( $tmp_pace > $cur_x ) $cur_x += mt_rand(0, ($tmp_pace - $cur_x));
+      if ( $tmp_pace > $cur_x ) $cur_x += random_int(0, ($tmp_pace - $cur_x));
     }
 
     // 可読性を下げる効果
     $im2=imagecreatetruecolor($this->img_size_x, $this->img_size_y);
 
     // 背景色
-    $bg_r  = mt_rand(200,255);
-    $bg_g  = mt_rand(200,255);
-    $bg_b  = mt_rand(200,255);
+    $bg_r  = random_int(200,255);
+    $bg_g  = random_int(200,255);
+    $bg_b  = random_int(200,255);
     $bg_color = imagecolorallocate($im2, $bg_r, $bg_g, $bg_b);
 
     // フォント色
-    $fg_r  = mt_rand(0,100);
-    $fg_g  = mt_rand(0,100);
-    $fg_b  = mt_rand(0,100);
+    $fg_r  = random_int(0,100);
+    $fg_g  = random_int(0,100);
+    $fg_b  = random_int(0,100);
     $fg_color = imagecolorallocate($im2, $fg_r, $fg_g, $fg_b);
 
     imagefilledrectangle($im2, 0, 0, $this->img_size_x, $this->img_size_y, $bg_color);
@@ -138,18 +147,18 @@ class CaptchaImage
     $center = $this->img_size_x / 2;
 
     // periods
-    $rand1  = mt_rand(750000,1200000)/10000000;
-    $rand2  = mt_rand(750000,1200000)/10000000;
-    $rand3  = mt_rand(750000,1200000)/10000000;
-    $rand4  = mt_rand(750000,1200000)/10000000;
+    $rand1  = random_int(750000,1200000)/10000000;
+    $rand2  = random_int(750000,1200000)/10000000;
+    $rand3  = random_int(750000,1200000)/10000000;
+    $rand4  = random_int(750000,1200000)/10000000;
     // phases
-    $rand5  = mt_rand(0,31415926)/10000000;
-    $rand6  = mt_rand(0,31415926)/10000000;
-    $rand7  = mt_rand(0,31415926)/10000000;
-    $rand8  = mt_rand(0,31415926)/10000000;
+    $rand5  = random_int(0,31415926)/10000000;
+    $rand6  = random_int(0,31415926)/10000000;
+    $rand7  = random_int(0,31415926)/10000000;
+    $rand8  = random_int(0,31415926)/10000000;
     // amplitudes
-    $rand9  = mt_rand(330,420)/110;
-    $rand10 = mt_rand(330,450)/110;
+    $rand9  = random_int(330,420)/110;
+    $rand10 = random_int(330,450)/110;
 
     // 歪み処理
     for ($x = 0; $x < $this->img_size_x; $x++) {
@@ -195,28 +204,35 @@ class CaptchaImage
 
     // 背景のノイズラインの描画
     for ($i=0; $i < 4; $i++) {
-      $col = imagecolorallocate($im2, mt_rand(99,188), mt_rand(99,188), mt_rand(99,188));
-      imageline($im2, mt_rand(4, $this->img_size_x -1), 4, mt_rand(4, $this->img_size_x - 4), $this->img_size_y - 4, $col);
+      $col = imagecolorallocate($im2, random_int(99,188), random_int(99,188), random_int(99,188));
+      imageline($im2, random_int(4, $this->img_size_x -1), 4, random_int(4, $this->img_size_x - 4), $this->img_size_y - 4, $col);
     }
 
     if (!$mini_mode) {//背景色で横ダミーライン
-      imageline($im2, 0, mt_rand(0, ($this->img_size_y - 1)), ($this->img_size_x - 1), mt_rand(0, ($this->img_size_y - 1)), $bg_color);
-      imageline($im2, mt_rand(0,$this->img_size_x -1), 0, mt_rand(0, $this->img_size_x / 2), $this->img_size_y -1, $bg_color);
-      imageline($im2, mt_rand(0,$this->img_size_x /2), 0, mt_rand(0, $this->img_size_x -1) , $this->img_size_y -1, $bg_color);
+      imageline($im2, 0, random_int(0, ($this->img_size_y - 1)), ($this->img_size_x - 1), random_int(0, ($this->img_size_y - 1)), $bg_color);
+      imageline($im2, random_int(0,$this->img_size_x -1), 0, random_int(0, $this->img_size_x / 2), $this->img_size_y -1, $bg_color);
+      imageline($im2, random_int(0,$this->img_size_x /2), 0, random_int(0, $this->img_size_x -1) , $this->img_size_y -1, $bg_color);
     }
 
     // ノイズドット
     for ($i=0; $i < 12; $i++ ) {
-      $col = ImageColorAllocate ($im2, mt_rand(80,220), mt_rand(80,220), mt_rand(80,220) );
+      $col = ImageColorAllocate ($im2, random_int(80,220), random_int(80,220), random_int(80,220) );
       for ($j=0; $j < 12; $j++ ) {
-        imagesetpixel($im2, mt_rand(1,$this->img_size_x), mt_rand(1,$this->img_size_y), $col);
+        imagesetpixel($im2, random_int(1,$this->img_size_x), random_int(1,$this->img_size_y), $col);
       }
     }
 
-    header ("Content-type: image/gif");
+    if(!headers_sent()) { # UnitTestで受け取るため
+      header("Content-type: image/gif");
+    }
+
     imagegif($im2);
-    ob_flush();
-    flush();
+
+    if(!defined("TEST_DONT_FLUSH_OUTPUT_BUFFER")) { # UnitTestで受け取るため
+      ob_flush();
+      flush();
+    }
+
     imagedestroy($im2);
   }
 
