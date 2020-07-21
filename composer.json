@@ -3,7 +3,8 @@
   "description": "オープンソースのブログ",
   "license": "MIT",
   "require": {
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "ext-gd": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.2"
