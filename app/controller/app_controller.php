@@ -65,7 +65,7 @@ abstract class AppController extends Controller
   {
     if ($key===null) {
       // 適当な値をトークンに設定
-      $key = md5(time());
+      $key = App::genRandomStringAlphaNum(32);
     }
     Session::set($name, $key);
   }

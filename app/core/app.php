@@ -400,5 +400,15 @@ class App
     }
     return $str;
   }
-}
 
+  /**
+   * a-zA-Z0-9 範囲から、指定長のランダム文字列を生成する
+   * @param int $length
+   * @return string
+   * @throws Exception
+   */
+  public static function genRandomStringAlphaNum(int $length = 32): string
+  {
+    return static::genRandomString($length, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345679');
+  }
+}
