@@ -184,12 +184,6 @@ class BlogTemplatesModel extends Model
     $values['updated_at'] = $values['created_at'] = date('Y-m-d H:i:s');
     $id = parent::insert($values, $options);
 
-    // コメントの表示タイプをテンプレートから判断
-    $reply_type = strstr($values['html'], '<%comment_reply_body>') ?
-      Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
-    // コメントの表示タイプを更新
-    Model::load('BlogSettings')->updateReplyType($values['device_type'], $reply_type, $values['blog_id']);
-
     return $id;
   }
 
@@ -216,11 +210,14 @@ class BlogTemplatesModel extends Model
     $cssFilePath = self::getCssFilePath($blog_id, $device_type);
     is_file($cssFilePath) && unlink($cssFilePath);
 
-    // コメントの表示タイプをテンプレートから判断
-    $reply_type = strstr($values['html'], '<%comment_reply_body>') ?
-      Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
-    // コメントの表示タイプを更新
-    Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
+    // 適用中のテンプレート取得
+    if (Model::load('Blogs')->isAppliedTemplate($id, $blog_id, $device_type)) {
+      // コメントの表示タイプをテンプレートから判断
+      $reply_type = strstr($values['html'], '<%comment_reply_body>') ?
+          Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+      // コメントの表示タイプを更新
+      Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
+    }
 
     return true;
   }

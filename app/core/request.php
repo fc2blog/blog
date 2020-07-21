@@ -277,4 +277,23 @@ class Request
     }
   }
 
+  /**
+   * リクエストメソッドの判定を行う
+   * @param string $method
+   * @return bool
+   */
+  private function is(string $method): bool
+  {
+    return ($_SERVER["REQUEST_METHOD"] === $method);
+  }
+
+  /**
+   * リクエストメソッドがGETか判定を行う
+   * @return bool
+   */
+  public function isGet(): bool
+  {
+    return $this->is('GET');
+  }
+
 }
