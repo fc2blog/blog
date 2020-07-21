@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: fc2blog-mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: dev_fc2blog
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./docker/mysqld/data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  php:
+    build:
+      context: docker/apache
+      dockerfile: Dockerfile
+    image: php:7.4-apache
+    container_name: fc2blog-apache
+    depends_on:
+      - db
+    working_dir: "/fc2blog/public"
+    volumes:
+      - ./public:/var/www/html
+      - ./app:/var/www/app
+      - ./docker/docker.config.php:/var/www/html/config.php
+    ports:
+      - 8080:80
