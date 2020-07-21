@@ -1,0 +1,16 @@
+{
+  "name": "fc2blog/blog",
+  "description": "オープンソースのブログ",
+  "license": "MIT",
+  "require": {
+    "ext-mbstring": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Fc2blog\\Tests\\": "tests/"
+    }
+  }
+}
