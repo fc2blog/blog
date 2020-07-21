@@ -177,6 +177,10 @@ class BlogTemplatesModel extends Model
   */
   public function insert($values, $options=array())
   {
+    $default_values = [
+      'template_id' => 0,
+    ];
+    $values += $default_values;
     $values['updated_at'] = $values['created_at'] = date('Y-m-d H:i:s');
     $id = parent::insert($values, $options);
 

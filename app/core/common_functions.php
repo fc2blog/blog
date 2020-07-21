@@ -1,17 +1,5 @@
 <?php
 
-// magic_quotes対応
-if (get_magic_quotes_gpc()) {
-  function stripslashes_gpc(&$value)
-  {
-    $value = stripslashes($value);
-  }
-  array_walk_recursive($_GET, 'stripslashes_gpc');
-  array_walk_recursive($_POST, 'stripslashes_gpc');
-  array_walk_recursive($_COOKIE, 'stripslashes_gpc');
-  array_walk_recursive($_REQUEST, 'stripslashes_gpc');
-}
-
 // lcfirst関数補完
 if(function_exists('lcfirst') === false) {
   function lcfirst($str) {
@@ -168,4 +156,14 @@ function setLanguage($lang=null, $file='messages'){
   textdomain($file);
 }
 
-
+/**
+ * 引数がcount関数で数えられる値かどうかを調べる
+ * ※PHP7.2よりcount関数の引数に数えられない値が指定された場合、E_WARNINGが発生
+ * ※PHP7.3より本関数は追加されている
+ */
+if (!function_exists('is_countable')) {
+    function is_countable ($var)
+    {
+        return (is_array($var) || $var instanceof Countable);
+    }
+}
