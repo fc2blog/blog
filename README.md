@@ -4,8 +4,8 @@ blog
 Open Source Blog
 
 #### Operating Environment
-* PHP 5.2.17 or higher
-* MySQL 5.1 or higher
+* PHP 7.3 or higher
+* MySQL 5.5 or higher
 
 
 #### Installation
