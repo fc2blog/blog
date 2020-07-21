@@ -380,11 +380,24 @@ class App
     return false;
   }
 
-  public static function genRandomString($length = 16, $charList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345679_-')
+  /**
+   * 指定の文字配列から、指定長のランダム文字列を生成する
+   * @param int $length 0文字以上の要求文字数
+   * @param string $charList 1文字以上のUTF-8文字列、ただし合成文字はサポートしない
+   * @return string
+   * @throws Exception
+   */
+  public static function genRandomString(int $length = 16, string $charList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345679_-'): string
   {
-    $charList = preg_split("//", $charList, 0, PREG_SPLIT_NO_EMPTY);
-    $str  = '';
-    for ($i = 0; $i < $length; $i++) $str .= $charList[array_rand($charList, 1)];
+    if ($length < 0) throw new InvalidArgumentException('must be $length 0 or more');
+    if (mb_strlen($charList) <= 0) throw new InvalidArgumentException('must be $charList length more than 0');
+
+    $charList = preg_split("//u", $charList, 0, PREG_SPLIT_NO_EMPTY);
+    $charListLen = count($charList);
+    $str = '';
+    for ($i = 0; $i < $length; $i++) {
+      $str .= $charList[random_int(0, $charListLen - 1)];
+    }
     return $str;
   }
 }
