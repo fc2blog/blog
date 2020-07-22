@@ -36,4 +36,4 @@ require(dirname(__FILE__) . '/../app/core/bootstrap.php');
 1. `docker-compose up` at repo root directory. wait startup.
 2. open `http://localhost:8080/admin/install.php`
 
-If you want to use https. edit `public/config.php` (swap `define('DOMAIN'〜`) and open `https://localhost:8480/admin/install.php` .
+If you want to use https. edit `docker/docker.config.php` (swap `define('DOMAIN'〜`) and open `https://localhost:8480/admin/install.php` .
