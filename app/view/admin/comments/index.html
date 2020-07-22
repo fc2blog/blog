@@ -47,7 +47,7 @@
           <input type="hidden" value="<?php echo $comment['reply_status']; ?>" id="sys-reply-status-value-<?php echo $comment['id']; ?>" />
         </td>
         <td class="s_cell center">
-          <a href="http://<?php echo Config::get('DOMAIN_USER'); ?><?php echo App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
+          <a href="//<?php echo Config::get('DOMAIN_USER'); ?><?php echo App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
           <a href="<?php echo Html::url(array('entry_id'=>$comment['entry_id']), true); ?>"><?php echo __('Narrowing'); ?></a>
         </td>
         <td>
