@@ -209,7 +209,7 @@ body { color: #444444; }
   Header
 ================================================= */
 #header {
-  background: #FFFFFF url(http://blog-imgs-43.fc2.com/t/e/m/templates/header_background.png) repeat-x bottom left;  /* ヘッダー背景 */
+  background: #FFFFFF url(https://blog-imgs-43.fc2.com/t/e/m/templates/header_background.png) repeat-x bottom left;  /* ヘッダー背景 */
   border-bottom: 1px solid #cfcfcf;
   -webkit-box-shadow: 0px 1px 1px 0px #CCC;
   -moz-box-shadow: 0px 1px 1px 0px #CCC;
@@ -227,7 +227,7 @@ body { color: #444444; }
 #header h1 {
   margin-bottom: 20px;
   padding-left: 15px;
-  background: url(http://blog-imgs-43.fc2.com/t/e/m/templates/blog_name.png) no-repeat left center; /* ブログタイトル前のアイコン */
+  background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/blog_name.png) no-repeat left center; /* ブログタイトル前のアイコン */
 }
 
 /* =================================================
@@ -235,13 +235,13 @@ body { color: #444444; }
 ================================================= */
 #headermenu {
   height: 39px;
-  background: url(http://blog-imgs-43.fc2.com/t/e/m/templates/headermenu.png) no-repeat -1px 0;
+  background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/headermenu.png) no-repeat -1px 0;
 }
 
 #headermenu .archives {
   float: left;
   width: 105px;
-  background: url(http://blog-imgs-43.fc2.com/t/e/m/templates/headermenu.png) no-repeat 103px 0;
+  background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/headermenu.png) no-repeat 103px 0;
 }
 
 #headermenu .archives a {
@@ -252,7 +252,7 @@ body { color: #444444; }
 }
 
 #headermenu .archives a:hover {
-  background: url(http://blog-imgs-43.fc2.com/t/e/m/templates/headermenu_hover.png) no-repeat bottom left;
+  background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/headermenu_hover.png) no-repeat bottom left;
   background-size: 100% 100%;
 }
 
@@ -272,7 +272,7 @@ body { color: #444444; }
   display: block;
   width: 49px;
   height: 39px;
-  background: url(http://blog-imgs-43.fc2.com/t/e/m/templates/switch_btn.png) no-repeat -1px 0;
+  background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/switch_btn.png) no-repeat -1px 0;
   text-indent: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -313,7 +313,7 @@ body { color: #444444; }
 #main_contents h2.sub_header {
   margin: 0 0 15px;
   padding: 5px 0 5px 35px;
-  background: url(http://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 20px 5px; /* 記事タイトル前のアイコン */
+  background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 20px 5px; /* 記事タイトル前のアイコン */
 }
 
 #main_contents h2.entry_header a,
@@ -329,14 +329,14 @@ body { color: #444444; }
 #main_contents h3.sub_header {
   margin: -15px 0 20px;
   padding: 10px 20px 10px 35px;
-  background: #F4F4F4 url(http://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 15px 10px; /* メインカラムのプラグインタイトル前のアイコン */
+  background: #F4F4F4 url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 15px 10px; /* メインカラムのプラグインタイトル前のアイコン */
   border-bottom: 1px dotted #B5B5B6;
 }
 
 #main_contents h4.sub_title {
   padding: 3px 0 3px 15px;
   margin-bottom: 20px;
-  background: url(http://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat left 2px; /* コメント・TB見出し前のアイコン */
+  background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat left 2px; /* コメント・TB見出し前のアイコン */
 }
 
 /* content style */
@@ -667,7 +667,7 @@ dd.baton_a {
   width: 123px;
   padding-top: 45px;
   padding-bottom: 60px;
-  background: url(http://blog-imgs-43.fc2.com/t/e/m/templates/page_navi.png) no-repeat 0 0;
+  background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/page_navi.png) no-repeat 0 0;
 }
 
 #main_contents .page_navi a:hover { color: #8ADAE6; }
@@ -723,7 +723,7 @@ dd.baton_a {
 ================================================= */
 .p_area .entry_body h2, .p_area .entry_body h3,
 .p_area .entry_body h4, .p_area .entry_body h5 {
-  background: url(http://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 5px 5px;
+  background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 5px 5px;
   margin: 0 0 10px;
   padding: 5px 0 5px 20px;
 }
@@ -764,7 +764,7 @@ dd.baton_a {
 #sidemenu h3 {
   margin: -10px -10px 0;
   padding: 10px 10px 10px 25px;
-  background: #F4F4F4 url(http://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 10px 10px; /* サイドメニュー(プラグイン)のタイトルの背景色、アイコン */
+  background: #F4F4F4 url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 10px 10px; /* サイドメニュー(プラグイン)のタイトルの背景色、アイコン */
   border-top: 1px dotted #B5B5B6;
   border-bottom: 1px dotted #B5B5B6;
 }
@@ -783,7 +783,7 @@ dd.baton_a {
   display: block;
   width: 58px;
   height: 58px;
-  background: #EEEEEE url(http://blog-imgs-43.fc2.com/t/e/m/templates/page_top.png) no-repeat 13px 13px;
+  background: #EEEEEE url(https://blog-imgs-43.fc2.com/t/e/m/templates/page_top.png) no-repeat 13px 13px;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
