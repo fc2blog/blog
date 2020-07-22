@@ -169,7 +169,7 @@ table#db
       <p class="ng">
         <?php echo __('Salt value for password check (random character string) is still in the initial string'); ?><br />
         <?php echo __('Please change to a string of alphanumeric which is not easily predicted'); ?><br />
-        <?php echo __('Example'); ?>) <?php echo md5(time()); ?>
+        <?php echo __('Example'); ?>) <?php echo App::genRandomStringAlphaNum(32); ?>
       </p>
     <?php endif; ?>
   </li>

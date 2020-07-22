@@ -55,7 +55,7 @@ class CommonController extends UserController
     require_once(Config::get('LIB_DIR') . 'CaptchaImage.php');
     $size_x = 200;
     $size_y = 40;
-    $key = rand(1000, 9999);
+    $key = random_int(1000, 9999);
     $this->setToken($key);    // トークン設定
     $isJa = Config::get('LANG')=='ja'; // 日本語以外は数字のみを表示
     $captcha = new CaptchaImage($size_x, $size_y, Config::get('PASSWORD_SALT'), $isJa);
