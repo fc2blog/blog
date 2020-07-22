@@ -28,7 +28,7 @@ class Fc2TemplatesModel extends Model
   */
   public function getListAndPaging($condition)
   {
-    $url = 'http://admin.blog.fc2.com/oss_api.php?action=template_search';
+    $url = 'https://admin.blog.fc2.com/oss_api.php?action=template_search';
     $url .= '&page=' . $condition['page'];
     if (!empty($condition['device'])) {
       $url .= '&device=' . $condition['device'];
@@ -62,7 +62,7 @@ class Fc2TemplatesModel extends Model
   */
   public function findByIdAndDevice($id, $device)
   {
-    $url = 'http://admin.blog.fc2.com/oss_api.php?action=template_view&id=' . $id . '&device=' . $device;
+    $url = 'https://admin.blog.fc2.com/oss_api.php?action=template_view&id=' . $id . '&device=' . $device;
 
     $json = file_get_contents($url);
     $json = json_decode($json, true);
