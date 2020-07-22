@@ -3,6 +3,12 @@
 // (この設定ファイルはDockerによる開発用のファイルです。 *公開サイトには使わないでください* ）
 
 error_reporting(-1);
+ini_set('error_log', 'php://stderr');
+ini_set('log_errors', '1');
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+ini_set('html_errors', '1');
+ini_set('ignore_repeated_errors', '0');
 
 // 直接呼び出された場合は終了
 if (count(get_included_files())==1) {
@@ -21,5 +27,5 @@ define('DOMAIN',        'localhost');           // ドメイン名
 define('PASSWORD_SALT', '7efe3a5b4d111b9e2148e24993c1cfdb'); // 適当な英数字を入力してください
 
 // 設定クラス読み込み
-define('WWW_DIR', dirname(__FILE__) . '/');
+define('WWW_DIR', '/var/www/html/');
 require(dirname(__FILE__) . '/../app/core/bootstrap.php');
