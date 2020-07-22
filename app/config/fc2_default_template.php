@@ -401,7 +401,7 @@
     </div><!-- /footer_inner -->
   </div><!--/footer-->
 </div><!--/container-->
-<script type="text/javascript" src="http://static.fc2.com/share/blog_template/equalbox.js"></script>
-<script type="text/javascript" src="http://static.fc2.com/share/blog_template/jquery.cookie.js"></script>
+<script type="text/javascript" src="https://static.fc2.com/share/blog_template/equalbox.js"></script>
+<script type="text/javascript" src="https://static.fc2.com/share/blog_template/jquery.cookie.js"></script>
 </body>
 </html>
