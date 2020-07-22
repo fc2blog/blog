@@ -16,7 +16,7 @@
 <!--nextpage--><link rel="next" href="<%nextpage_url>" title="<%template_nextpage>" /><!--/nextpage-->
 <!--preventry--><link rel="next" href="<%preventry_url>" title="<%preventry_title>" /><!--/preventry-->
 <!--nextentry--><link rel="prev" href="<%nextentry_url>" title="<%nextentry_title>" /><!--/nextentry-->
-<script type="text/javascript" src="http://static.fc2.com/js/lib/jquery.js"></script>
+<script type="text/javascript" src="https://static.fc2.com/js/lib/jquery.js"></script>
 <script type="text/javascript">
  
  jQuery.noConflict();
