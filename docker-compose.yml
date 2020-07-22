@@ -30,3 +30,4 @@ services:
       - ./docker/docker.config.php:/var/www/html/config.php
     ports:
       - 8080:80
+      - 8480:443
