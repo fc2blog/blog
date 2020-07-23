@@ -96,6 +96,11 @@ class PDOWrap implements DBInterface
 
   /**
    * SQLの実行
+   * @param $sql
+   * @param array $params
+   * @param string $types
+   * @return PDOStatement|mixed 成功時PDOStatement
+   * @throws Exception
    */
   private function query($sql, $params=array(), $types='')
   {
