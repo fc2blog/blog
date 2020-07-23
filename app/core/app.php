@@ -267,6 +267,9 @@ class App
       unset($args[$device_name]);
     }
 
+    // 絶対パスが必要な際に、ブログ毎のSchemaを取得する
+    $schema = ($abs) ? BlogsModel::getSchemaByBlogId($blog_id) : "";
+
     // TOPページの場合
     if (strtolower($controller)=='entries' && strtolower($action)=='index' && !empty($blog_id)) {
       $url = '/';
@@ -284,7 +287,7 @@ class App
       if ($blog_id) {
         $url = '/' . $blog_id . $url;
       }
-      $url = ($abs ? '//' . Config::get('DOMAIN_USER') : '') . $url;
+      $url = ($abs ? $schema . '//' . Config::get('DOMAIN_USER') : '') . $url;
       return $url;
     }
 
@@ -307,7 +310,7 @@ class App
       if ($blog_id) {
         $url = '/' . $blog_id . $url;
       }
-      $url = ($abs ? '//' . Config::get('DOMAIN_USER') : '') . $url;
+      $url = ($abs ? $schema . '//' . Config::get('DOMAIN_USER') : '') . $url;
       return $url;
     }
 
@@ -328,7 +331,7 @@ class App
     if ($blog_id) {
       $url = '/' . $blog_id . $url;
     }
-    $url = ($abs ? '//' . Config::get('DOMAIN_USER') : '') . $url;
+    $url = ($abs ? $schema . '//' . Config::get('DOMAIN_USER') : '') . $url;
     return $url;
   }
 
