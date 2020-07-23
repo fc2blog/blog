@@ -157,29 +157,8 @@ HTML;
 ?>
 PHP
 ,
-  '<%topentry_discription>'        => <<<PHP
-<?php
-  if (isset(\$entry['body'])) {
-    if (!\$self_blog && \$entry['open_status']==Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
-      echo <<<HTML
-<form method="POST">
-  <input type="hidden" name="mode" value="Entries" />
-  <input type="hidden" name="process" value="password" />
-  <input type="hidden" name="id" value="{\$entry['id']}" />
-  <p>
-    このコンテンツはパスワードで保護されています。<br />
-    閲覧するには以下にパスワードを入力してください。
-  </p>
-  <p>パスワード <input type="password" name="password" /><input type="submit" value="送信" /></p>
-</form>
-HTML;
-    } else {
-      echo th(strip_tags(\$entry['body']), 200);
-    }
-  }
-?>
-PHP
-,
+  '<%topentry_discription>'        => getTopentryDiscription(),
+  '<%topentry_description>'        => getTopentryDiscription(),
   '<%topentry_desc>'               => '',
   '<%topentry_link>'               => '<?php if(isset($entry[\'link\'])) echo $entry[\'link\']; ?>',
   '<%topentry_enc_link>'           => '<?php if(isset($entry[\'enc_link\'])) echo $entry[\'enc_link\']; ?>',
@@ -296,18 +275,19 @@ PHP
   '<%spplugin_align>'        => '<?php if(isset($t_plugin[\'contents_align\'])) echo $t_plugin[\'contents_align\']; ?>',
   '<%spplugin_color>'        => '<?php if(isset($t_plugin[\'contents_color\'])) echo $t_plugin[\'contents_color\']; ?>',
   // 最新の記事一覧(プラグイン系)
-  '<%recent_no>'      => '<?php if(isset($t_recent[\'id\'])) echo $t_recent[\'id\']; ?>',
-  '<%recent_title>'   => '<?php if(isset($t_recent[\'title\'])) echo $t_recent[\'title\']; ?>',
-  '<%recent_link>'    => '<?php if(isset($t_recent[\'link\'])) echo $t_recent[\'link\']; ?>',
-  '<%recent_body>'    => '<?php if(isset($t_recent[\'body\'])) echo th($t_recent[\'body\'], 50); ?>',
-  '<%recent_year>'    => '<?php if(isset($t_recent[\'year\'])) echo $t_recent[\'year\']; ?>',
-  '<%recent_month>'   => '<?php if(isset($t_recent[\'month\'])) echo $t_recent[\'month\']; ?>',
-  '<%recent_day>'     => '<?php if(isset($t_recent[\'day\'])) echo $t_recent[\'day\']; ?>',
-  '<%recent_hour>'    => '<?php if(isset($t_recent[\'hour\'])) echo $t_recent[\'hour\']; ?>',
-  '<%recent_minute>'  => '<?php if(isset($t_recent[\'minute\'])) echo $t_recent[\'minute\']; ?>',
-  '<%recent_second>'  => '<?php if(isset($t_recent[\'second\'])) echo $t_recent[\'second\']; ?>',
-  '<%recent_youbi>'   => '<?php if(isset($t_recent[\'youbi\'])) echo $t_recent[\'youbi\']; ?>',
-  '<%recent_wayoubi>' => '<?php if(isset($t_recent[\'wayoubi\'])) echo $t_recent[\'wayoubi\']; ?>',
+  '<%recent_no>'         => '<?php if(isset($t_recent[\'id\'])) echo $t_recent[\'id\']; ?>',
+  '<%recent_title>'      => '<?php if(isset($t_recent[\'title\'])) echo $t_recent[\'title\']; ?>',
+  '<%recent_link>'       => '<?php if(isset($t_recent[\'link\'])) echo $t_recent[\'link\']; ?>',
+  '<%recent_body>'       => '<?php if(isset($t_recent[\'body\'])) echo th($t_recent[\'body\'], 50); ?>',
+  '<%recent_year>'       => '<?php if(isset($t_recent[\'year\'])) echo $t_recent[\'year\']; ?>',
+  '<%recent_month>'      => '<?php if(isset($t_recent[\'month\'])) echo $t_recent[\'month\']; ?>',
+  '<%recent_day>'        => '<?php if(isset($t_recent[\'day\'])) echo $t_recent[\'day\']; ?>',
+  '<%recent_hour>'       => '<?php if(isset($t_recent[\'hour\'])) echo $t_recent[\'hour\']; ?>',
+  '<%recent_minute>'     => '<?php if(isset($t_recent[\'minute\'])) echo $t_recent[\'minute\']; ?>',
+  '<%recent_second>'     => '<?php if(isset($t_recent[\'second\'])) echo $t_recent[\'second\']; ?>',
+  '<%recent_youbi>'      => '<?php if(isset($t_recent[\'youbi\'])) echo $t_recent[\'youbi\']; ?>',
+  '<%recent_wayoubi>'    => '<?php if(isset($t_recent[\'wayoubi\'])) echo $t_recent[\'wayoubi\']; ?>',
+  '<%recent_image_w300>' => '<?php if(!empty($t_recent[\'first_image\'])) echo \'<img src="\' . App::getThumbnailPath($t_recent[\'first_image\'], 300, \'w\') . \'" />\'; ?>',
   // カテゴリー一覧(プラグイン系)
   '<%category_no>'     => '<?php if(!empty($t_category)) echo $t_category[\'id\']; ?>',
   '<%category_number>' => '<?php if(!empty($t_category)) echo $t_category[\'id\']; ?>',
@@ -461,6 +441,32 @@ function getFc2PagingPHP($page_num){
   $html .= 'echo \'<a href="\' . Html::url(array(\'page\'=>$i, \'blog_id\'=>$blog_id), true) . \'">\' . ($i+1) . \'</a>\'; ?>';
   $html .= '<?php endif; ?>';
   return $html;
+}
+
+function getTopentryDiscription(): string
+{
+  return <<<PHP
+<?php
+  if (isset(\$entry['body'])) {
+    if (!\$self_blog && \$entry['open_status']==Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+      echo <<<HTML
+<form method="POST">
+  <input type="hidden" name="mode" value="Entries" />
+  <input type="hidden" name="process" value="password" />
+  <input type="hidden" name="id" value="{\$entry['id']}" />
+  <p>
+    このコンテンツはパスワードで保護されています。<br />
+    閲覧するには以下にパスワードを入力してください。
+  </p>
+  <p>パスワード <input type="password" name="password" /><input type="submit" value="送信" /></p>
+</form>
+HTML;
+    } else {
+      echo th(strip_tags(\$entry['body']), 200);
+    }
+  }
+?>
+PHP;
 }
 
 return $config;
