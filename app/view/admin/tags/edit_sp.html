@@ -22,7 +22,7 @@
       <a class="btn_contents touch" href="<?php if($request->isArgs('back_url')): ?><?php echo $request->get('back_url'); ?><?php else: ?><?php echo Html::url(array('controller'=>'Tags', 'action'=>'index')); ?><?php endif; ?>"><i class="return_icon btn_icon"></i><?php echo __('I Back to List'); ?></a>
     </li>
     <li>
-      <a class="btn_contents touch" href="//<?php echo Config::get('DOMAIN_USER'); ?>/<?php echo Session::get('blog_id'); ?>/?tag=<?php echo ue($tag['name']); ?>" target="_blank"><i class="preview_icon btn_icon"></i><?php echo __('Check the article'); ?></a>
+      <a class="btn_contents touch" href="<?php echo BlogsModel::getSchemaByBlogId(Session::get('blog_id')); ?>//<?php echo Config::get('DOMAIN_USER'); ?>/<?php echo Session::get('blog_id'); ?>/?tag=<?php echo ue($tag['name']); ?>" target="_blank"><i class="preview_icon btn_icon"></i><?php echo __('Check the article'); ?></a>
     </li>
   </ul>
 </div>
