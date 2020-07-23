@@ -1928,6 +1928,18 @@ msgstr ""
 msgid "Time zone"
 msgstr ""
 
+#: shell/..//view/admin/blogs/edit.html:52
+msgid "SSL Enable Mode"
+msgstr ""
+
+#: shell/../model/blogs_model.php:135 shell/../model/blogs_model.php:139
+msgid "Enable"
+msgstr ""
+
+#: shell/../model/blogs_model.php:136 shell/../model/blogs_model.php:138
+msgid "Disable"
+msgstr ""
+
 #: shell/../view/admin/blogs/delete_sp.html:5
 #: shell/../view/admin/blogs/delete_sp.html:15
 #: shell/../view/admin/blogs/delete.html:9
