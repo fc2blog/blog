@@ -29,6 +29,9 @@ class MSDB implements DBInterface{
     return self::$instance;
   }
 
+  /**
+   * @return MySqliWrap|PDOWrap
+   */
   private function getMasterDB(){
     if(!$this->master){
       if (DB_CONNECT_LIB==='PDO') {
@@ -77,6 +80,10 @@ class MSDB implements DBInterface{
     return $this->slave;
   }
 
+  /**
+   * @param bool $isMaster
+   * @return MySqliWrap|PDOWrap
+   */
   public function getDB($isMaster=false){
     // Master/Slave機能のON/OFF
     if(!Config::get('IS_MASTER_SLAVE', true)){
@@ -98,6 +105,10 @@ class MSDB implements DBInterface{
 
   /**
    * 参照系SQL
+   * @param string $sql
+   * @param array $params
+   * @param array $options
+   * @return mixed
    */
   public function find($sql, $params=array(), $options=array()){
     $_options = array(

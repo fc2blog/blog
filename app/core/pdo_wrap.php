@@ -28,6 +28,10 @@ class PDOWrap implements DBInterface
 
   /**
    * 参照系SQL
+   * @param $sql
+   * @param array $params
+   * @param array $options
+   * @return mixed
    */
   public function find($sql, $params=array(), $options=array())
   {
@@ -157,6 +161,11 @@ class PDOWrap implements DBInterface
     }
   }
 
+  /**
+   * @param $stmt
+   * @param $type
+   * @return array|int $typeによって様々な意味の返り値となる
+   */
   public function result($stmt, $type)
   {
     if ($stmt===false) {

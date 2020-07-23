@@ -70,6 +70,7 @@ class BlogsController extends AdminController
   public function edit()
   {
     $request = Request::getInstance();
+    /** @var BlogsModel $blogs_model */
     $blogs_model = Model::load('Blogs');
 
     $blog_id = $this->getBlogId();
