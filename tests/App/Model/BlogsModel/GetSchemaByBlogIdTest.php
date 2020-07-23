@@ -34,8 +34,8 @@ class GetSchemaByBlogIdTest extends TestCase
 
   public function testCorrectSchemaStrings(): void
   {
-    $this->assertEquals('http', BlogsModel::getSchemaByBlogId("testblog"));
-    $this->assertEquals('https', BlogsModel::getSchemaByBlogId("test2blog"));
+    $this->assertEquals('http:', BlogsModel::getSchemaByBlogId("testblog"));
+    $this->assertEquals('https:', BlogsModel::getSchemaByBlogId("test2blog"));
   }
 
   public function testMissingBlogId(): void
