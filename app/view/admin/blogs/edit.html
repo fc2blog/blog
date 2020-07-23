@@ -30,9 +30,9 @@
     <tr>
       <th><?php echo __('Visibility Blog'); ?></th>
       <td>
-        <?php echo Html::input('blog[open_status]', 'select', array('options'=>BlogsModel::getOpenStatusList())); ?>
+          <?php echo Html::input('blog[open_status]', 'select', array('options'=>BlogsModel::getOpenStatusList())); ?>
         <?php if (isset($errors['blog']['open_status'])): ?><p class="error"><?php echo $errors['blog']['open_status']; ?></p><?php endif; ?>
-      </dd>
+      </td>
     </tr>
     <tr>
       <th><?php echo __('View password blog'); ?></th>
@@ -46,7 +46,14 @@
       <td>
         <?php echo Html::input('blog[timezone]', 'select', array('options'=>BlogsModel::getTimezoneList())); ?>
         <?php if (isset($errors['blog']['timezone'])): ?><p class="error"><?php echo $errors['blog']['timezone']; ?></p><?php endif; ?>
-      </dd>
+      </td>
+    </tr>
+    <tr>
+      <th><?php echo __('SSL Enable Mode'); ?></th>
+      <td>
+        <?php echo Html::input('blog[ssl_enable]', 'select', array('options'=>BlogsModel::getSSLEnableSettingList())); ?>
+        <?php if (isset($errors['blog']['ssl_enable'])): ?><p class="error"><?php echo $errors['blog']['ssl_enable']; ?></p><?php endif; ?>
+      </td>
     </tr>
     <tr>
       <td class="form-button" colspan="2">
