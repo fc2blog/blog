@@ -393,5 +393,21 @@ class BlogsModel extends Model
     return $isAppliedTemplate;
   }
 
+  /**
+   * Blog Idをキーとして、そのブログのssl_enable設定からリンク時のSchemaを決定する
+   * @param string $blog_id
+   * @return string
+   */
+  static public function getSchemaByBlogId(string $blog_id){
+    $blogs_model = static::getInstance();
+    $blog_array = $blogs_model->findById($blog_id);
+
+    if(!is_array($blog_array) || !isset($blog_array['ssl_enable'])) {
+      throw new InvalidArgumentException("blog id `{$blog_id}` notfound.");
+    }
+
+    return ($blog_array['ssl_enable'] === Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http' : 'https';
+  }
+
 }
 
