@@ -284,7 +284,7 @@ class App
       if ($blog_id) {
         $url = '/' . $blog_id . $url;
       }
-      $url = ($abs ? 'http://' . Config::get('DOMAIN_USER') : '') . $url;
+      $url = ($abs ? '//' . Config::get('DOMAIN_USER') : '') . $url;
       return $url;
     }
 
@@ -307,7 +307,7 @@ class App
       if ($blog_id) {
         $url = '/' . $blog_id . $url;
       }
-      $url = ($abs ? 'http://' . Config::get('DOMAIN_USER') : '') . $url;
+      $url = ($abs ? '//' . Config::get('DOMAIN_USER') : '') . $url;
       return $url;
     }
 
@@ -328,7 +328,7 @@ class App
     if ($blog_id) {
       $url = '/' . $blog_id . $url;
     }
-    $url = ($abs ? 'http://' . Config::get('DOMAIN_USER') : '') . $url;
+    $url = ($abs ? '//' . Config::get('DOMAIN_USER') : '') . $url;
     return $url;
   }
 

@@ -130,7 +130,7 @@ $(function(){
 
   // プレビュー処理を行う
   $('#sys-entry-form-preview').click(function(){
-    var action = 'http://<?php echo Config::get('DOMAIN_USER'); ?>';
+    var action = '//<?php echo Config::get('DOMAIN_USER'); ?>';
     action    += '<?php echo App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId())); ?>';
     $('#sys-entry-form').prop('action', action);
     $('#sys-entry-form').prop('target', '_preview');

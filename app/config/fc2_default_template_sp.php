@@ -9,10 +9,10 @@
   <meta name="description" content="<%introduction>" />
   <title><%sub_title> - <%blog_name></title>
   <link rel="stylesheet" href="<%css_link>" />
-  <link rel="apple-touch-icon" href="http://static.fc2.com/image/iphone/apple-touch-icon.png" />
-  <script type="text/javascript" src="http://static.fc2.com/js/lib/jquery.js"></script>
-  <script type="text/javascript" src="http://static.fc2.com/js/blog/iphone_resize.js"></script>
-  <script type="text/javascript" src="http://static.fc2.com/js/blog/sp_acc_menu.js"></script>
+  <link rel="apple-touch-icon" href="https://static.fc2.com/image/iphone/apple-touch-icon.png" />
+  <script type="text/javascript" src="https://static.fc2.com/js/lib/jquery.js"></script>
+  <script type="text/javascript" src="https://static.fc2.com/js/blog/iphone_resize.js"></script>
+  <script type="text/javascript" src="https://static.fc2.com/js/blog/sp_acc_menu.js"></script>
   <script type="text/javascript" charset="utf-8">
     <!--android-->
     window.onresize = function(){
@@ -119,7 +119,7 @@
             <%topentry_year>年<%topentry_month>月<%topentry_day>日<%topentry_hour>:<%topentry_minute>&nbsp;
             <a href="<%topentry_category_link>"><%topentry_category></a>
             <!--body_img-->
-            <a href="<%topentry_link>&photo=true<%tail_url>"><img src="http://templates.blog.fc2.com/template/sphone/basic_black/img.gif" alt="写真あり" width="18" height="14" /></a>
+            <a href="<%topentry_link>&photo=true<%tail_url>"><img src="https://templates.blog.fc2.com/template/sphone/basic_black/img.gif" alt="写真あり" width="18" height="14" /></a>
             <!--/body_img-->
           </p>
         </div>

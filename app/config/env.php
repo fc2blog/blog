@@ -64,7 +64,13 @@ $config['DOMAIN_USER']  = $config['DOMAIN'];
 $config['DOMAIN_ADMIN'] = $config['DOMAIN'];
 
 // Sessionのデフォルト有効ドメイン
-$config['SESSION_DEFAULT_DOMAIN'] = $config['DOMAIN'];
+// ポート付きドメインはCookieのDomainに指定できないので、ホスト名と分割する
+if(preg_match("/\A([\w-]+):([0-9]{1,5})\z/u", $config['DOMAIN'], $match)){
+  $session_default_domain = $match[1];
+}else{
+  $session_default_domain = $config['DOMAIN'];
+}
+$config['SESSION_DEFAULT_DOMAIN'] = $session_default_domain;
 
 // SESSIONのID名
 $config['SESSION_NAME'] = 'dojima';

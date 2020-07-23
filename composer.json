@@ -4,7 +4,8 @@
   "license": "MIT",
   "require": {
     "ext-mbstring": "*",
-    "ext-gd": "*"
+    "ext-gd": "*",
+    "ext-gettext": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.2"
@@ -13,5 +14,8 @@
     "psr-4": {
       "Fc2blog\\Tests\\": "tests/"
     }
+  },
+  "scripts": {
+    "test": "phpunit"
   }
 }
