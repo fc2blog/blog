@@ -81,6 +81,9 @@ class BlogsModel extends Model
       'open_status' => array(
         'in_array' => array('values'=>array_keys($this->getOpenStatusList())),
       ),
+      'ssl_enable' => array(
+        'in_array' => array('values'=>array_keys($this->getSSLEnableSettingList())),
+      ),
       'blog_password' => array(
         'maxlength' => array('max' => 50),
         'own'       => array('method' => 'privateCheck'),
@@ -122,6 +125,17 @@ class BlogsModel extends Model
       $timezone[$group][$value] = $label;
     }
     return $timezone;
+  }
+
+  /**
+   * ブログのSSL 有効、無効
+   */
+  public static function getSSLEnableSettingList(): array
+  {
+    return array(
+      Config::get('BLOG.SSL_ENABLE.DISABLE') => __("Disable"),
+      Config::get('BLOG.SSL_ENABLE.ENABLE') => __("Enable"),
+    );
   }
 
   /**

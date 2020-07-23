@@ -99,6 +99,10 @@ $config['BLOG'] = array(
     'PRIVATE'    => 1,  // プライベートモード(パスワード保護)
   ),
   'DEFAULT_LIMIT' => 10,
+  'SSL_ENABLE' => array(
+    'DISABLE' => 0,  // 無効
+    'ENABLE'  => 1,  // 有効
+  ),
 );
 
 // ブログテンプレート

@@ -86,7 +86,7 @@ class BlogsController extends AdminController
     }
 
     // 更新処理
-    $white_list = array('name', 'introduction', 'nickname', 'timezone', 'blog_password', 'open_status');
+    $white_list = array('name', 'introduction', 'nickname', 'timezone', 'blog_password', 'open_status', 'ssl_enable');
     $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, $white_list);
     if (empty($errors['blog'])){
       if ($blogs_model->updateById($blog_data, $blog_id)) {
