@@ -406,7 +406,16 @@ class BlogsModel extends Model
       throw new InvalidArgumentException("blog id `{$blog_id}` notfound.");
     }
 
-    return ($blog_array['ssl_enable'] === Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http' : 'https';
+    return static::getSchemaBySslEnableValue($blog_array['ssl_enable']);
+  }
+
+  /**
+   * Valueをキーとして、そのブログのssl_enable設定からリンク時のSchemaを決定する
+   * @param int $value
+   * @return string
+   */
+  static public function getSchemaBySslEnableValue(int $value){
+    return ($value === Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http:' : 'https:';
   }
 
 }
