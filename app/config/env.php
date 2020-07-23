@@ -24,7 +24,7 @@ $config['SLAVE_DB'] = array(
 
 // -------------------- Debug関連 --------------------//
 // Debug 0 = false 1 = echo 2 = html 3 = link
-$config['DEBUG'] = 0;                  // Debugの表示可否
+$config['DEBUG'] = (defined("THIS_IS_TEST")) ? 4 : 0;                  // Debugの表示可否
 $config['DEBUG_TEMPLATE_VARS'] = 0;    // テンプレートで使用可能な変数の一覧表示
 
 // -------------------- 色々 --------------------//

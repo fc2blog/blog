@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     image: php:7.4-apache
     container_name: fc2blog-apache
+    environment:
+      MYSQL_HOST: "db"
     depends_on:
       - db
     working_dir: "/fc2blog/public"

@@ -7,7 +7,7 @@ ini_set('error_log', 'php://stderr');
 ini_set('log_errors', '1');
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
-ini_set('html_errors', '1');
+ini_set('html_errors', '0');
 ini_set('ignore_repeated_errors', '0');
 
 // 直接呼び出された場合は終了
@@ -16,7 +16,12 @@ if (count(get_included_files())==1) {
 }
 
 // DBの接続情報
-define('DB_HOST',     'db');          // dbのホスト名
+if (getenv("MYSQL_HOST")) {
+  define('DB_HOST', 'db'); // docker apache時
+} else {
+  define('DB_HOST', '127.0.0.1'); // phpunit時
+}
+
 define('DB_USER',     'docker');     // dbのユーザー名
 define('DB_PASSWORD', 'docker');      // dbのパスワード
 define('DB_DATABASE', 'dev_fc2blog'); // dbのデータベース名
