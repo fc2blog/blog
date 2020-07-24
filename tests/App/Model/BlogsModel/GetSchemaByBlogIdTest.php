@@ -5,6 +5,8 @@ namespace Fc2blog\Tests\App\Model\BlogsModel;
 
 use BlogsModel;
 use Config;
+use Fc2blog\Tests\DBHelper;
+use Fc2blog\Tests\LoaderHelper;
 use InvalidArgumentException;
 use Model;
 use PHPUnit\Framework\TestCase;
@@ -13,29 +15,23 @@ class GetSchemaByBlogIdTest extends TestCase
 {
   public function setUp(): void
   {
-    // TODO Make Fixture
-
-    if (file_exists(TEST_APP_DIR . "/../public/config.php")) {
-      require_once(TEST_APP_DIR . "/../public/config.php");
-    } else {
-      require_once(TEST_APP_DIR . "/../docker/docker.config.php");
-    }
-    require_once(TEST_APP_DIR . "/core/bootstrap.php");
+    LoaderHelper::requireBootStrap();
 
     /** @noinspection PhpIncludeInspection */
     require_once(Config::get('MODEL_DIR') . 'model.php');
-
     if (!class_exists(BlogsModel::class)) {
       Model::load('blogs');
     }
+
+    DBHelper::clearDbAndInsertFixture();
 
     parent::setUp();
   }
 
   public function testCorrectSchemaStrings(): void
   {
-    $this->assertEquals('http:', BlogsModel::getSchemaByBlogId("testblog"));
-    $this->assertEquals('https:', BlogsModel::getSchemaByBlogId("test2blog"));
+    $this->assertEquals('https:', BlogsModel::getSchemaByBlogId("testblog1"));
+    $this->assertEquals('http:', BlogsModel::getSchemaByBlogId("testblog2"));
   }
 
   public function testMissingBlogId(): void
@@ -46,7 +42,6 @@ class GetSchemaByBlogIdTest extends TestCase
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
     }
-
   }
 
 }
