@@ -58,15 +58,19 @@ class CommonController extends AdminController
   public function initial()
   {
     $setting = Model::load('BlogSettings')->findByBlogId($this->getBlogId());
-    switch($setting['start_page']){
-      default:
-      case Config::get('BLOG.START_PAGE.NOTICE'):
-        $this->redirect(array('controller'=>'Common', 'action'=>'notice'));
-        break ;
+    if (is_array($setting)) {
+      switch ($setting['start_page']) {
+        default:
+        case Config::get('BLOG.START_PAGE.NOTICE'):
+          $this->redirect(array('controller' => 'Common', 'action' => 'notice'));
+          break;
 
-      case Config::get('BLOG.START_PAGE.ENTRY'):
-        $this->redirect(array('controller'=>'Entries', 'action'=>'create'));
-        break ;
+        case Config::get('BLOG.START_PAGE.ENTRY'):
+          $this->redirect(array('controller' => 'Entries', 'action' => 'create'));
+          break;
+      }
+    } else {
+      $this->redirect(array('controller' => 'Common', 'action' => 'notice'));
     }
   }
 
