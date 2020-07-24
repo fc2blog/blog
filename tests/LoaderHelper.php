@@ -14,6 +14,5 @@ class LoaderHelper extends TestCase
     } else {
       require_once(TEST_APP_DIR . "/../docker/docker.config.php");
     }
-    require_once(TEST_APP_DIR . "/core/bootstrap.php");
   }
 }

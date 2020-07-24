@@ -6,6 +6,6 @@ declare(strict_types=1);
  * 疑似Exit
  * Class PseudoExit
  */
-class PseudoExit extends ErrorException
+class PseudoExit extends Exception
 {
 }
