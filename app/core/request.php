@@ -43,6 +43,11 @@ class Request
     return self::$instance;
   }
 
+  public static function resetInstanceForTesting()
+  {
+    self::$instance = null;
+  }
+
   /**
   * リファラーを返却 存在しない場合は空文字を返却
   */
