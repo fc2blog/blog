@@ -66,14 +66,25 @@ abstract class Controller
   }
 
   /**
+   * リダイレクト
+   * MEMO: Blog idが特定できないときの強制的なSchemaがさだまらない
    * @param $url
    * @param string $hash
-   * @param bool $full_url httpからのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
+   * @param bool $full_url BlogIdが特定できるとき、http(s)://〜からのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
+   * @param string $blog_id
    */
-  protected function redirect($url, $hash='', $full_url=false)
+  protected function redirect($url, $hash = '', bool $full_url = false, string $blog_id = null)
   {
     if (is_array($url)) {
       $url = Html::url($url, false, $full_url);
+
+    } else if ($full_url && is_string($blog_id) && strlen($blog_id) > 0) {
+      $url = BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
+
+    } else if ($full_url && preg_match("|\A/([^/]+)/|u", $url, $match)) {
+      // Blog idをURLから抜き出して利用
+      $url = BlogsModel::getFullHostUrlByBlogId($match[1]) . $url;
+
     }
     $url .= $hash;
 

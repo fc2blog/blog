@@ -94,6 +94,20 @@ class BlogsModel extends Model
   }
 
   /**
+   * Blog idとして適切か？ static::validate()より転写
+   * @param string $blog_id
+   * @return bool
+   */
+  public static function isValidBlogId(string $blog_id)
+  {
+    if (Validate::alphanumeric($blog_id, []) !== true) return false;
+    if (Validate::minlength($blog_id, ['min' => 3]) !== true) return false;
+    if (Validate::maxlength($blog_id, ['max' => 50]) !== true) return false;
+    if (strtolower($blog_id) !== $blog_id) return false;
+    return true;
+  }
+
+  /**
   * ブログの公開状態のリストを取得
   */
   public static function getOpenStatusList()
@@ -398,10 +412,22 @@ class BlogsModel extends Model
    * @param array $blog blog array
    * @return bool
    */
-  static public function isCorrectHttpSchema(array $blog): bool
+  static public function isCorrectHttpSchemaByBlogArray(array $blog): bool
   {
     $is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
     return ($blog['ssl_enable'] === 1 && $is_https) || ($blog['ssl_enable'] === 0 && !$is_https);
+  }
+
+  /**
+   * Blog 設定が今アクセスしているSchemaと一致しているか確認
+   * @param string $blog_id
+   * @return bool
+   */
+  static public function isCorrectHttpSchemaByBlogId(string $blog_id): bool
+  {
+    $is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
+    $schema = static::getSchemaByBlogId($blog_id);
+    return ($schema === ":http" && $is_https) || ($schema === ":https" && !$is_https);
   }
 
   /**
@@ -425,6 +451,7 @@ class BlogsModel extends Model
    * @return string
    */
   static public function getSchemaByBlogId(string $blog_id){
+    if(!static::isValidBlogId($blog_id)) throw new InvalidArgumentException("invalid blog id :{$blog_id}");
     $blogs_model = static::getInstance();
     $blog_array = $blogs_model->findById($blog_id);
 
