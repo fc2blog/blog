@@ -3,3 +3,6 @@
 /app/temp/log/*
 /public/uploads/[0-9a-zA-Z]
 /public/config.php
+/dump_data.sql
+/dump_all.sql
+/dump_schema.sql
