@@ -63,14 +63,12 @@ $config['DOMAIN']  = DOMAIN;
 $config['DOMAIN_USER']  = $config['DOMAIN'];
 $config['DOMAIN_ADMIN'] = $config['DOMAIN'];
 
+// ポート
+$config['HTTP_PORT_STR'] = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
+$config['HTTPS_PORT_STR'] = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
+
 // Sessionのデフォルト有効ドメイン
-// ポート付きドメインはCookieのDomainに指定できないので、ホスト名と分割する
-if(preg_match("/\A([\w-]+):([0-9]{1,5})\z/u", $config['DOMAIN'], $match)){
-  $session_default_domain = $match[1];
-}else{
-  $session_default_domain = $config['DOMAIN'];
-}
-$config['SESSION_DEFAULT_DOMAIN'] = $session_default_domain;
+$config['SESSION_DEFAULT_DOMAIN'] = $config['DOMAIN'];
 
 // SESSIONのID名
 $config['SESSION_NAME'] = 'dojima';

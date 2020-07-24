@@ -13,7 +13,7 @@ class Html
   * URLを作成する
   * TODO:ユーザー側のURL生成時はApp:userURLを使用に置き換え最終的にblog_idの部分を削る
   */
-  public static function url($args=array(), $reused=false){
+  public static function url($args=array(), $reused=false, $full_url=false){
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
       $gets = Request::getInstance()->getGet();;
@@ -81,6 +81,11 @@ class Html
     }
     if ($blog_id) {
       $url = '/' . $blog_id . $url;
+    }
+
+    // フルのURLを取得する（SSL強制リダイレクト用）
+    if ($full_url && !is_null($blog_id)) {
+      $url = BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
     }
     return $url;
   }

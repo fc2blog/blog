@@ -394,6 +394,21 @@ class BlogsModel extends Model
   }
 
   /**
+   * Blog Idをキーとして、そのブログの`http(s)://FQDN(:port)`を生成する
+   * @param string $blog_id
+   * @param null $domain 省略時、Config::get("DOMAIN")
+   * @return string
+   */
+  static public function getFullHostUrlByBlogId(string $blog_id, $domain=null){
+    $schema = static::getSchemaByBlogId($blog_id);
+    if(is_null($domain)) {
+      $domain = Config::get("DOMAIN");
+    }
+    $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+    return $schema . "//" . $domain . $port;
+  }
+
+  /**
    * Blog Idをキーとして、そのブログのssl_enable設定からリンク時のSchemaを決定する
    * @param string $blog_id
    * @return string

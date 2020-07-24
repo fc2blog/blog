@@ -66,12 +66,14 @@ abstract class Controller
   }
 
   /**
-  * リダイレクト処理
-  */
-  protected function redirect($url, $hash='')
+   * @param $url
+   * @param string $hash
+   * @param bool $full_url httpからのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
+   */
+  protected function redirect($url, $hash='', $full_url=false)
   {
     if (is_array($url)) {
-      $url = Html::url($url);
+      $url = Html::url($url, false, $full_url);
     }
     $url .= $hash;
 

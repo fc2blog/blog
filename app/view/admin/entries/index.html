@@ -45,7 +45,7 @@
         <td class="center ss_cell"><input type="checkbox" name="id[]" value="<?php echo $entry['id']; ?>" /></td>
         <td><?php echo df($entry['posted_at'], 'y-m-d'); ?></td>
         <td class="m_cell">
-          <a href="<?php echo BlogsModel::getSchemaByBlogId($this->getBlogId()); ?>//<?php echo Config::get('DOMAIN_USER'); ?><?php echo App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$entry['blog_id'], 'id'=>$entry['id'])); ?>" target="_blank">
+          <a href="<?php echo BlogsModel::getFullHostUrlByBlogId($this->getBlogId(), Config::get('DOMAIN_USER')); ?><?php echo App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$entry['blog_id'], 'id'=>$entry['id'])); ?>" target="_blank">
             <?php echo th($entry['title'], 10); ?>
           </a>
         </td>
