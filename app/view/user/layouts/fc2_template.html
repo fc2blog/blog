@@ -1,6 +1,8 @@
 <?php
 
-header("Content-Type: text/html; charset=UTF-8");
+if(!headers_sent()) {
+  header("Content-Type: text/html; charset=UTF-8");
+}
 
 // FC2のテンプレート用にデータを置き換える
 
