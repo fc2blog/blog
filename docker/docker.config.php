@@ -17,7 +17,7 @@ if (count(get_included_files())==1) {
 
 // DBの接続情報
 if (getenv("MYSQL_HOST")) {
-  define('DB_HOST', 'db'); // docker apache時
+  define('DB_HOST', getenv("MYSQL_HOST")); // docker apache時
 } else {
   define('DB_HOST', '127.0.0.1'); // phpunit時
 }
