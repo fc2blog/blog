@@ -47,7 +47,9 @@ abstract class AdminController extends AppController
 
     // ログイン中でかつブログ選択中の場合ブログ情報を取得し時間設定を行う
     $blog = $this->getBlog($this->getBlogId());
-    date_default_timezone_set($blog['timezone']);
+    if(is_array($blog) && isset($blog['timezone'])) {
+      date_default_timezone_set($blog['timezone']);
+    }
   }
 
   /**
