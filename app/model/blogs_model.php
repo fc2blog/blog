@@ -425,9 +425,9 @@ class BlogsModel extends Model
    */
   static public function isCorrectHttpSchemaByBlogId(string $blog_id): bool
   {
-    $is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
+    $is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on');
     $schema = static::getSchemaByBlogId($blog_id);
-    return ($schema === ":http" && $is_https) || ($schema === ":https" && !$is_https);
+    return ($schema === "http:" && $is_https===false) || ($schema === "https:" && $is_https===true);
   }
 
   /**
