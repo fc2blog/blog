@@ -69,6 +69,13 @@ class EntriesController extends UserController
   }
 
   /**
+   * テスト用ダミーアクション
+   */
+  public function forTest()
+  {
+  }
+
+  /**
   * 検索
   */
   public function search()

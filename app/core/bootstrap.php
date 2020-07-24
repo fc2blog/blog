@@ -19,6 +19,9 @@ Config::read(dirname(__FILE__) . '/../config/dir.php');
 // 環境設定読み込み
 Config::read('env.php');
 
+// 疑似Exitクラスの読み込み（テスト用）
+require_once(Config::get('CORE_DIR') . 'PseudoExit.php');
+
 // リクエストクラスの読み込み
 require_once(Config::get('CORE_DIR') . 'request.php');
 

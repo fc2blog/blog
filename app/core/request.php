@@ -62,7 +62,11 @@ class Request
       // 1:ファイル名 2:コントローラー名 3:メソッド名 4...引数
       echo "コントローラー名、メソッド名が指定されておりません\n";
       echo "cron.php [ControllerName] [MethodName] [...key=value]\n";
-      exit;
+      if(defined("THIS_IS_TEST")){
+        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+      }else{
+        exit;
+      }
     }
     array_shift($argv);
     $className = array_shift($argv);

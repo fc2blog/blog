@@ -72,6 +72,7 @@ abstract class Controller
    * @param string $hash
    * @param bool $full_url BlogIdが特定できるとき、http(s)://〜からのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
    * @param string $blog_id
+   * @throws PseudoExit
    */
   protected function redirect($url, $hash = '', bool $full_url = false, string $blog_id = null)
   {
@@ -92,8 +93,16 @@ abstract class Controller
     Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
     Debug::setSessionLogs();
 
-    header('Location: ' . $url);
-    exit;
+    if(!headers_sent()) {
+      header('Location: ' . $url);
+    }
+    $escaped_url = h($url);
+    echo "redirect to {$escaped_url}";
+    if(defined("THIS_IS_TEST")){
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+    }else{
+      exit;
+    }
   }
 
   /**
