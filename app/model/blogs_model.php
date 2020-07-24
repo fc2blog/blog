@@ -394,6 +394,17 @@ class BlogsModel extends Model
   }
 
   /**
+   * Blog 設定が今アクセスしているSchemaと一致しているか確認
+   * @param array $blog blog array
+   * @return bool
+   */
+  static public function isCorrectHttpSchema(array $blog): bool
+  {
+    $is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
+    return ($blog['ssl_enable'] === 1 && $is_https) || ($blog['ssl_enable'] === 0 && !$is_https);
+  }
+
+  /**
    * Blog Idをキーとして、そのブログの`http(s)://FQDN(:port)`を生成する
    * @param string $blog_id
    * @param null $domain 省略時、Config::get("DOMAIN")
