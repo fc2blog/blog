@@ -99,7 +99,7 @@ abstract class Controller
     $escaped_url = h($url);
     echo "redirect to {$escaped_url}";
     if(defined("THIS_IS_TEST")){
-      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." redirect to {$escaped_url}");
     }else{
       exit;
     }
