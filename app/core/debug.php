@@ -59,6 +59,19 @@ class Debug{
           echo "\n";
         }
         break;
+
+      // error_logへ出力
+      case 5:
+        $str = $msg . "\n";
+        if (
+          is_countable($params)
+          && count($params)
+          && !empty($params)
+        ) {
+          $str .= print_r($params, true);
+        }
+        error_log($str);
+        break;
     }
   }
 
