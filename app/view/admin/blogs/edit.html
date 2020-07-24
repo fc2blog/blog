@@ -30,7 +30,7 @@
     <tr>
       <th><?php echo __('Visibility Blog'); ?></th>
       <td>
-          <?php echo Html::input('blog[open_status]', 'select', array('options'=>BlogsModel::getOpenStatusList())); ?>
+        <?php echo Html::input('blog[open_status]', 'select', array('options'=>BlogsModel::getOpenStatusList())); ?>
         <?php if (isset($errors['blog']['open_status'])): ?><p class="error"><?php echo $errors['blog']['open_status']; ?></p><?php endif; ?>
       </td>
     </tr>
