@@ -34,7 +34,6 @@ class RedirectTest extends TestCase
   public function testTestTargetTest(): void
   {
     $res = $this->execute(static::$testBase . "/phpinfo", true, "GET", [], "test");
-    var_dump($res);
     $this->assertStringContainsString('phpinfo', $res);
   }
 
