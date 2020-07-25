@@ -11,8 +11,6 @@ class UrlTest extends TestCase
   public function setUp(): void
   {
     LoaderHelper::requireBootStrap();
-    require_once(TEST_APP_DIR . "/core/html.php");
-    require_once(TEST_APP_DIR . "/core/app.php");
 
     # 擬似的にアクセスURLをセットする
     $_SERVER['HTTP_USER_AGENT'] = "phpunit";
@@ -25,11 +23,16 @@ class UrlTest extends TestCase
     /** @noinspection PhpFullyQualifiedNameUsageInspection */
     \Request::resetInstanceForTesting();
 
+    \Config::read('user.php', true);
+
     /** @noinspection PhpIncludeInspection */
     require_once(\Config::get('MODEL_DIR') . 'model.php');
     if (!class_exists(\BlogsModel::class)) {
       \Model::load('blogs');
     }
+
+    require_once(TEST_APP_DIR . "/core/html.php");
+    require_once(TEST_APP_DIR . "/core/app.php");
 
     parent::setUp();
   }
@@ -43,10 +46,11 @@ class UrlTest extends TestCase
     $_SERVER['REQUEST_URI'] = "/";
     $_POST = [];
     $url = \Html::url([
-      'controller' => 'test',
+      'controller' => 'user',
       'action' => 'action',
       'blog_id' => 'testblog1'
     ], false, false);
+    echo $url;
     $this->assertStringStartsWith('/', $url);
     $this->assertStringNotContainsString('http', $url);
   }
@@ -60,11 +64,11 @@ class UrlTest extends TestCase
     $_SERVER['REQUEST_URI'] = "/";
     $_POST = [];
     $url = \Html::url([
-      'controller' => 'test',
+      'controller' => 'user',
       'action' => 'action',
       'blog_id' => 'testblog1'
     ], false, true);
+    echo $url;
     $this->assertStringStartsWith('https://', $url);
   }
-
 }
