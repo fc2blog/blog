@@ -15,9 +15,10 @@ trait ClientTrait
    * @param bool $is_https
    * @param string $method
    * @param array $post
+   * @param string $target user,admin,test
    * @return array
    */
-  public static function resolve(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [])
+  public static function resolve(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user")
   {
     LoaderHelper::requireBootStrap();
 
@@ -32,8 +33,16 @@ trait ClientTrait
     /** @noinspection PhpFullyQualifiedNameUsageInspection */
     \Request::resetInstanceForTesting();
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Config::read('user.php');
+    if ($target === "user") {
+      /** @noinspection PhpFullyQualifiedNameUsageInspection */
+      \Config::read('user.php');
+    } else if ($target === "admin") {
+      \Config::read('admin.php');
+    } else if ($target === "test") {
+      \Config::read('test.php');
+    } else {
+      throw new \InvalidArgumentException("target is wrong.");
+    }
 
     [$classFile, $className, $methodName] = getRouting();
 
@@ -43,9 +52,9 @@ trait ClientTrait
     return [$className, $methodName];
   }
 
-  public static function execute(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = []): string
+  public static function execute(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
   {
-    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post);
+    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post, $target);
     ob_start();
     try {
       new $className($methodName); // すべての実行が行われる
@@ -65,9 +74,9 @@ trait ClientTrait
    * @return false|string
    * @throws Exception
    */
-  public static function executeWithShouldExit(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = []): string
+  public static function executeWithShouldExit(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
   {
-    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post);
+    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post, $target);
     try {
       ob_start();
       new $className($methodName);
