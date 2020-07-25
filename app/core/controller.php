@@ -93,13 +93,19 @@ abstract class Controller
     Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
     Debug::setSessionLogs();
 
-    if(!headers_sent()) {
-      header('Location: ' . $url);
+    if(!is_null($blog_id) && $full_url) {
+      $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
+    }else{
+      $status_code = 302;
+    }
+    if (!headers_sent()) {
+      // full url指定時のリダイレクトは、Blogの設定がもつステータスコードを利用する
+      header('Location: ' . $url, true, $status_code);
     }
     $escaped_url = h($url);
-    echo "redirect to {$escaped_url}";
+    echo "redirect to {$escaped_url} status code:{$status_code}";
     if(defined("THIS_IS_TEST")){
-      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." redirect to {$escaped_url}");
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." redirect to {$escaped_url} status code:{$status_code}");
     }else{
       exit;
     }
