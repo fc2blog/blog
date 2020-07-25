@@ -85,7 +85,7 @@ abstract class Controller
     } else if ($full_url && preg_match("|\A/([^/]+)/|u", $url, $match)) {
       // Blog idをURLから抜き出して利用
       $url = BlogsModel::getFullHostUrlByBlogId($match[1]) . $url;
-
+      $blog_id = $match[1];
     }
     $url .= $hash;
 

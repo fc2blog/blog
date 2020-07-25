@@ -58,8 +58,8 @@ UNLOCK TABLES;
 
 LOCK TABLES `blogs` WRITE;
 /*!40000 ALTER TABLE `blogs` DISABLE KEYS */;
-INSERT INTO `blogs` (`id`, `user_id`, `name`, `nickname`, `introduction`, `template_pc_id`, `template_mb_id`, `template_sp_id`, `template_tb_id`, `timezone`, `open_status`, `ssl_enable`, `blog_password`, `last_posted_at`, `created_at`, `updated_at`) VALUES ('testblog1',1,'testblog1','testnick1','',1,2,3,4,'Asia/Tokyo',0,1,'','2020-07-24 12:09:55','2020-07-24 11:48:03','2020-07-24 12:08:11');
-INSERT INTO `blogs` (`id`, `user_id`, `name`, `nickname`, `introduction`, `template_pc_id`, `template_mb_id`, `template_sp_id`, `template_tb_id`, `timezone`, `open_status`, `ssl_enable`, `blog_password`, `last_posted_at`, `created_at`, `updated_at`) VALUES ('testblog2',1,'testblog2','testnick2',NULL,1,2,3,4,'Asia/Tokyo',0,0,NULL,'2020-07-24 12:10:46','2020-07-24 12:09:11','2020-07-24 12:09:11');
+INSERT INTO `blogs` (`id`, `user_id`, `name`, `nickname`, `introduction`, `template_pc_id`, `template_mb_id`, `template_sp_id`, `template_tb_id`, `timezone`, `open_status`, `ssl_enable`, `redirect_status_code`, `blog_password`, `last_posted_at`, `created_at`, `updated_at`) VALUES ('testblog1',1,'testblog1','testnick1','',1,2,3,4,'Asia/Tokyo',0,1,302,'','2020-07-24 12:09:55','2020-07-24 11:48:03','2020-07-24 12:08:11');
+INSERT INTO `blogs` (`id`, `user_id`, `name`, `nickname`, `introduction`, `template_pc_id`, `template_mb_id`, `template_sp_id`, `template_tb_id`, `timezone`, `open_status`, `ssl_enable`, `redirect_status_code`, `blog_password`, `last_posted_at`, `created_at`, `updated_at`) VALUES ('testblog2',1,'testblog2','testnick2',NULL,1,2,3,4,'Asia/Tokyo',0,0,301,NULL,'2020-07-24 12:10:46','2020-07-24 12:09:11','2020-07-24 12:09:11');
 /*!40000 ALTER TABLE `blogs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -183,4 +183,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-24 12:15:19
+-- Dump completed on 2020-07-25 23:34:31
