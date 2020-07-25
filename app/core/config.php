@@ -49,16 +49,19 @@ class Config{
   }
 
   /**
-  * ファイルから環境情報を設定
-  */
-  public static function read($name){
-    if (!empty(self::$read_files[$name])) {
+   * ファイルから環境情報を設定
+   * @param $name
+   * @param bool $force_reload UnitTest内などで再読み込みを強制したい場合に指定
+   */
+  public static function read($name, $force_reload = false)
+  {
+    if (!$force_reload && !empty(self::$read_files[$name])) {
       // 既に読み込み済みのファイルは読み込まない
-      return ;
+      return;
     }
     self::$read_files[$name] = true;
     $configs = include(Config::get('CONFIG_DIR') . $name);
-    foreach($configs as $key => $value){
+    foreach ($configs as $key => $value) {
       self::$config[$key] = $value;
     }
   }
