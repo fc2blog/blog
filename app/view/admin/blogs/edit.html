@@ -56,6 +56,13 @@
       </td>
     </tr>
     <tr>
+      <th><?php echo __('Redirect status code'); ?></th>
+      <td>
+        <?php echo Html::input('blog[redirect_status_code]', 'select', array('options'=>BlogsModel::getRedirectStatusCodeSettingList())); ?>
+        <?php if (isset($errors['blog']['redirect_status_code'])): ?><p class="error"><?php echo $errors['blog']['redirect_status_code']; ?></p><?php endif; ?>
+      </td>
+    </tr>
+    <tr>
       <td class="form-button" colspan="2">
         <input type="submit" value="<?php echo __('Update'); ?>" />
       </td>

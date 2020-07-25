@@ -115,6 +115,7 @@ CREATE TABLE `blogs` (
   `timezone` varchar(50) NOT NULL DEFAULT 'Asia/Tokyo',
   `open_status` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `ssl_enable` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `redirect_status_code` int(11) unsigned NOT NULL DEFAULT 302,
   `blog_password` varchar(50) DEFAULT NULL,
   `last_posted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,

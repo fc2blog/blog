@@ -1912,6 +1912,18 @@ msgstr "有効"
 msgid "Disable"
 msgstr "無効"
 
+#: shell/..//view/admin/blogs/edit.html:59
+msgid "Redirect status code"
+msgstr "リダイレクト設定"
+
+#: shell/..//model/blogs_model.php:164
+msgid "Moved Permanently"
+msgstr "永続的転送"
+
+#: shell/..//model/blogs_model.php:165
+msgid "Found"
+msgstr "一時的転送"
+
 #: shell/../view/admin/blogs/delete_sp.html:5
 #: shell/../view/admin/blogs/delete_sp.html:15
 #: shell/../view/admin/blogs/delete.html:9

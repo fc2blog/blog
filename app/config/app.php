@@ -103,6 +103,10 @@ $config['BLOG'] = array(
     'DISABLE' => 0,  // 無効
     'ENABLE'  => 1,  // 有効
   ),
+  'REDIRECT_STATUS_CODE' => array(
+    'MOVED_PERMANENTLY' => 301,
+    'FOUND'  => 302,
+  ),
 );
 
 // ブログテンプレート

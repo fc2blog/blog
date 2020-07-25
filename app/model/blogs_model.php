@@ -84,6 +84,9 @@ class BlogsModel extends Model
       'ssl_enable' => array(
         'in_array' => array('values'=>array_keys($this->getSSLEnableSettingList())),
       ),
+      'redirect_status_code' => array(
+        'in_array' => array('values'=>array_keys($this->getRedirectStatusCodeSettingList())),
+      ),
       'blog_password' => array(
         'maxlength' => array('max' => 50),
         'own'       => array('method' => 'privateCheck'),
@@ -149,6 +152,17 @@ class BlogsModel extends Model
     return array(
       Config::get('BLOG.SSL_ENABLE.DISABLE') => __("Disable"),
       Config::get('BLOG.SSL_ENABLE.ENABLE') => __("Enable"),
+    );
+  }
+
+  /**
+   * フルURLでリダイレクト時のステータスコード
+   */
+  public static function getRedirectStatusCodeSettingList(): array
+  {
+    return array(
+      Config::get('BLOG.REDIRECT_STATUS_CODE.MOVED_PERMANENTLY') => __("Moved Permanently"),
+      Config::get('BLOG.REDIRECT_STATUS_CODE.FOUND') => __("Found"),
     );
   }
 
@@ -469,6 +483,23 @@ class BlogsModel extends Model
    */
   static public function getSchemaBySslEnableValue(int $value){
     return ($value === Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http:' : 'https:';
+  }
+
+  /**
+   * Blog Idをキーとして、そのブログのssl_enable設定からリンク時のSchemaを決定する
+   * @param string $blog_id
+   * @return int
+   */
+  static public function getRedirectStatusCodeByBlogId(string $blog_id):int{
+    if(!static::isValidBlogId($blog_id)) throw new InvalidArgumentException("invalid blog id :{$blog_id}");
+    $blogs_model = static::getInstance();
+    $blog_array = $blogs_model->findById($blog_id);
+
+    if(!is_array($blog_array) || !isset($blog_array['redirect_status_code'])) {
+      throw new InvalidArgumentException("blog id `{$blog_id}` notfound.");
+    }
+
+    return $blog_array['redirect_status_code'];
   }
 
 }
