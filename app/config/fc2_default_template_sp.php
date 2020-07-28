@@ -101,7 +101,7 @@
         <div class="page_title">
           <h2 style="text-align:<%spplugin_talign>; color:<%spplugin_tcolor>;"><%spplugin_title></h2>
         </div>
-        <div class="plugin_body" style="text-align:<%spplugin_align>;">
+        <div class="plugin_body" style="text-align:<%spplugin_align>; color:<%spplugin_color>;">
           <%spplugin_content>
         </div>
       </div>

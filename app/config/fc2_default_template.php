@@ -356,9 +356,9 @@
         <!--plugin-->
         <!--plugin_third-->
         <div class="content plg">
-          <h3 class="plg_header" style="text-align:<%plugin_third_talign>"><%plugin_third_title></h3>
+          <h3 class="plg_header" style="text-align:<%plugin_third_talign>; color:<%plugin_third_tcolor>"><%plugin_third_title></h3>
           <!--plugin_third_description--><div class="plg_description" style="text-align:<%plugin_third_ialign>"><%plugin_third_description></div><!--/plugin_third_description-->
-          <div class="plg_body" style="text-align:<%plugin_third_align>"><%plugin_third_content></div>
+          <div class="plg_body" style="text-align:<%plugin_third_align>; color:<%plugin_third_color>"><%plugin_third_content></div>
           <!--plugin_third_description2--><div class="plg_footer" style="text-align:<%plugin_third_ialign>"><%plugin_third_description2></div><!--/plugin_third_description2-->
         </div>
         <!--/plugin_third-->
@@ -370,9 +370,9 @@
       <!--plugin-->
       <!--plugin_first-->
       <div class="sidemenu_content plg">
-        <h3 class="plg_header" style="text-align:<%plugin_first_talign>"><%plugin_first_title></h3>
+        <h3 class="plg_header" style="text-align:<%plugin_first_talign>; color:<%plugin_first_tcolor>"><%plugin_first_title></h3>
         <!--plugin_first_description--><div class="plg_description" style="text-align:<%plugin_first_ialign>"><%plugin_first_description></div><!--/plugin_first_description-->
-        <div class="plg_body" style="text-align:<%plugin_first_align>"><%plugin_first_content></div>
+        <div class="plg_body" style="text-align:<%plugin_first_align>; color:<%plugin_first_color>"><%plugin_first_content></div>
         <!--plugin_first_description2--><div class="plg_footer" style="text-align:<%plugin_first_ialign>"><%plugin_first_description2></div><!--/plugin_first_description2-->
       </div>
       <!--/plugin_first-->
@@ -386,9 +386,9 @@
     <div id="footer_plg">
       <!--plugin_second-->
       <div class="footer_content plg">
-        <h3 class="plg_header" style="text-align:<%plugin_second_talign>"><%plugin_second_title></h3>
+        <h3 class="plg_header" style="text-align:<%plugin_second_talign>; color:<%plugin_second_tcolor>"><%plugin_second_title></h3>
         <!--plugin_second_description--><div class="plg_description" style="text-align:<%plugin_second_ialign>"><%plugin_second_description></div><!--/plugin_second_description-->
-        <div class="plg_body" style="text-align:<%plugin_second_align>"><%plugin_second_content></div>
+        <div class="plg_body" style="text-align:<%plugin_second_align>; color:<%plugin_second_color>"><%plugin_second_content></div>
         <!--plugin_second_description2--><div class="plg_footer" style="text-align:<%plugin_second_ialign>"><%plugin_second_description2></div><!--/plugin_second_description2-->
       </div>
       <!--/plugin_second-->
