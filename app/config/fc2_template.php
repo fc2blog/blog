@@ -105,6 +105,8 @@ $config['fc2_template_if'] = array(
 );
 
 $template_vars = array(
+  '<%server_url>' => '<?php echo getServerUrl() . \'/\'; ?>',
+  '<%blog_id>'    => '<?php echo $blog_id; ?>',
   // タイトルリスト一覧
   '<%titlelist_eno>'          => '<?php if(isset($entry[\'id\'])) echo $entry[\'id\']; ?>',
   '<%titlelist_title>'        => '<?php if(isset($entry[\'title\'])) echo $entry[\'title\']; ?>',
