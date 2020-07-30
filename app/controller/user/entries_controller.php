@@ -14,9 +14,19 @@ class EntriesController extends UserController
 
     // ブログ情報取得&設定
     $blog_id = $this->getBlogId();
+    $blog = null;
     if (!$blog_id || !$blog=$this->getBlog($blog_id)) {
       $this->redirect(array('controller'=>'Blogs', 'action'=>'index'));
     }
+
+    // BlogのSSL_Enableの設定と食い違うなら強制リダイレクトする
+    // URL構造そのままでリダイレクトするためにRequestUriを用いているがもっとベターな方法があるかもしれない
+    if(is_string($blog_id) && strlen($blog_id) > 0 && !BlogsModel::isCorrectHttpSchemaByBlogId($blog_id)){
+      $this->redirect($_SERVER['REQUEST_URI'],'',true, $blog_id);
+    }else if(is_array($blog) && !BlogsModel::isCorrectHttpSchemaByBlogArray($blog)){
+      $this->redirect($_SERVER['REQUEST_URI'],'',true, $blog['id']);
+    }
+
     $this->set('blog', $blog);
     $this->set('blog_setting', Model::load('BlogSettings')->findByBlogId($blog_id));
 
@@ -56,6 +66,13 @@ class EntriesController extends UserController
     $pages = $request->get('page') ? array() : array('index_area');
     $this->setEntriesData($options, $pages);
     return $this->fc2template($this->getBlogId());
+  }
+
+  /**
+   * テスト用ダミーアクション
+   */
+  public function forTest()
+  {
   }
 
   /**

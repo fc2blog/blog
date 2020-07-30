@@ -59,6 +59,19 @@ class Debug{
           echo "\n";
         }
         break;
+
+      // error_logへ出力
+      case 5:
+        $str = $msg . "\n";
+        if (
+          is_countable($params)
+          && count($params)
+          && !empty($params)
+        ) {
+          $str .= print_r($params, true);
+        }
+        error_log($str);
+        break;
     }
   }
 
@@ -81,12 +94,17 @@ class Debug{
       self::$logs = self::removeSessionLogs();
 
       // ログの初期値としてURLをログとして追加
-      $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
-      $url .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-      $params = array(
-        'GET' => $_GET,
-        'POST' => $_POST,
-      );
+      if (!defined("THIS_IS_TEST")) {
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+        $url .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $params = array(
+          'GET' => $_GET,
+          'POST' => $_POST,
+        );
+      } else {
+        $url = "UnitTest";
+        $params = [];
+      }
       self::$logs[] = array('msg'=>$url, 'params'=>$params, 'class'=>'url');
     }
   }

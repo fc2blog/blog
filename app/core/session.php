@@ -15,6 +15,9 @@ class Session
     if (self::$isStart) {
       return ;
     }
+    if (headers_sent()) {
+      return;
+    }
     session_set_cookie_params(0 , '/', Config::get('SESSION_DEFAULT_DOMAIN'));
     session_name(Config::get('SESSION_NAME'));
     session_start();

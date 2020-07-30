@@ -92,10 +92,18 @@ abstract class AppController extends Controller
     $key = Request::getInstance()->get('key');
 
     if (!is_file(Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
-      exit;
+      if(defined("THIS_IS_TEST")){
+        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+      }else{
+        exit;
+      }
     }
     include(Config::get('TEMP_DIR') . 'debug_html/' . $key);
-    exit;
+    if(defined("THIS_IS_TEST")){
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+    }else{
+      exit;
+    }
   }
 
 }

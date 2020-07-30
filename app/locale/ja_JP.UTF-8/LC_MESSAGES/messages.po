@@ -1900,6 +1900,30 @@ msgstr "ブログの閲覧パスワード"
 msgid "Time zone"
 msgstr "タイムゾーン"
 
+#: shell/..//view/admin/blogs/edit.html:52
+msgid "SSL Enable Mode"
+msgstr "SSL有効化設定"
+
+#: shell/../model/blogs_model.php:135 shell/../model/blogs_model.php:139
+msgid "Enable"
+msgstr "有効"
+
+#: shell/../model/blogs_model.php:136 shell/../model/blogs_model.php:138
+msgid "Disable"
+msgstr "無効"
+
+#: shell/..//view/admin/blogs/edit.html:59
+msgid "Redirect status code"
+msgstr "リダイレクト設定"
+
+#: shell/..//model/blogs_model.php:164
+msgid "Moved Permanently"
+msgstr "永続的転送"
+
+#: shell/..//model/blogs_model.php:165
+msgid "Found"
+msgstr "一時的転送"
+
 #: shell/../view/admin/blogs/delete_sp.html:5
 #: shell/../view/admin/blogs/delete_sp.html:15
 #: shell/../view/admin/blogs/delete.html:9

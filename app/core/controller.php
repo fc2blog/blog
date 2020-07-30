@@ -4,10 +4,10 @@
 */
 
 require_once(Config::get('CORE_DIR') . 'request.php');  // リクエストクラス
-require(Config::get('MODEL_DIR') . 'model.php');
+require_once(Config::get('MODEL_DIR') . 'model.php');
 
-require(Config::get('CORE_DIR') . 'html.php');    // HTMLの便利関数群
-require(Config::get('CORE_DIR') . 'app.php');  // アプリ用の便利関数群
+require_once(Config::get('CORE_DIR') . 'html.php');    // HTMLの便利関数群
+require_once(Config::get('CORE_DIR') . 'app.php');  // アプリ用の便利関数群
 
 abstract class Controller
 {
@@ -66,12 +66,26 @@ abstract class Controller
   }
 
   /**
-  * リダイレクト処理
-  */
-  protected function redirect($url, $hash='')
+   * リダイレクト
+   * MEMO: Blog idが特定できないときの強制的なSchemaがさだまらない
+   * @param $url
+   * @param string $hash
+   * @param bool $full_url BlogIdが特定できるとき、http(s)://〜からのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
+   * @param string $blog_id
+   * @throws PseudoExit
+   */
+  protected function redirect($url, $hash = '', bool $full_url = false, string $blog_id = null)
   {
     if (is_array($url)) {
-      $url = Html::url($url);
+      $url = Html::url($url, false, $full_url);
+
+    } else if ($full_url && is_string($blog_id) && strlen($blog_id) > 0) {
+      $url = BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
+
+    } else if ($full_url && preg_match("|\A/([^/]+)/|u", $url, $match)) {
+      // Blog idをURLから抜き出して利用
+      $url = BlogsModel::getFullHostUrlByBlogId($match[1]) . $url;
+      $blog_id = $match[1];
     }
     $url .= $hash;
 
@@ -79,8 +93,22 @@ abstract class Controller
     Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
     Debug::setSessionLogs();
 
-    header('Location: ' . $url);
-    exit;
+    if(!is_null($blog_id) && $full_url) {
+      $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
+    }else{
+      $status_code = 302;
+    }
+    if (!headers_sent()) {
+      // full url指定時のリダイレクトは、Blogの設定がもつステータスコードを利用する
+      header('Location: ' . $url, true, $status_code);
+    }
+    $escaped_url = h($url);
+    echo "redirect to {$escaped_url} status code:{$status_code}";
+    if(defined("THIS_IS_TEST")){
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." redirect to {$escaped_url} status code:{$status_code}");
+    }else{
+      exit;
+    }
   }
 
   /**

@@ -15,7 +15,7 @@
     <tr>
       <td><?php echo $blog['id']; ?></td>
       <td><a href="<?php echo Html::url(array('action'=>'choice', 'blog_id'=>$blog['id'])); ?>"><?php echo th($blog['name'], 20); ?></a></td>
-      <td><a href="//<?php echo Config::get('DOMAIN_USER'); ?>/<?php echo $blog['id']; ?>/" target="_blank"><?php echo __('Checking the blog'); ?></a></td>
+      <td><a href="<?php echo BlogsModel::getFullHostUrlByBlogId($blog['id'], Config::get('DOMAIN_USER')); ?>/<?php echo $blog['id']; ?>/" target="_blank"><?php echo __('Checking the blog'); ?></a></td>
     </tr>
     <?php endforeach; ?>
   </tbody>

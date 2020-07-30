@@ -103,7 +103,7 @@ function snakeCase($camel_case)
 * ルーティング用メソッド
 */
 function getRouting(){
-  require_once(Config::get('CONFIG_DIR') . Config::get('ROUTING'));  // ルーティング設定を読み込み
+  require(Config::get('CONFIG_DIR') . Config::get('ROUTING'));  // ルーティング設定を読み込み
 
   $request = Request::getInstance();
 
