@@ -265,7 +265,11 @@ PHP
   '<%plugin_first_color>'         => '<?php if(isset($t_plugin[\'contents_color\'])) echo $t_plugin[\'contents_color\']; ?>',
   '<%plugin_second_color>'        => '<?php if(isset($t_plugin[\'contents_color\'])) echo $t_plugin[\'contents_color\']; ?>',
   '<%plugin_third_color>'         => '<?php if(isset($t_plugin[\'contents_color\'])) echo $t_plugin[\'contents_color\']; ?>',
-  // プラグイン(スマフォ用)
+  '<%plugin_third_ialign>'        => '',
+  '<%plugin_first_ialign>'        => '',
+  '<%plugin_second_ialign>'       => '',
+
+// プラグイン(スマフォ用)
   '<%spplugin_first_no>'     => '<?php if(isset($t_plugin[\'id\'])) echo $t_plugin[\'id\']; ?>',
   '<%spplugin_first_title>'  => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>',
   '<%spplugin_title>'        => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>',
