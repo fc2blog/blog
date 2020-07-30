@@ -3,19 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-13 05:45+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2020-07-30 13:36+0900\n"
+"Last-Translator:  <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: shell/../model/tags_model.php:62
 msgid "Tag with the same name already exists"
@@ -2261,8 +2260,146 @@ msgstr "次の記事"
 msgid "Top of page"
 msgstr "このページのトップへ"
 
-#~ msgid "Private comment"
-#~ msgstr "非公開コメント"
+msgid "utf-8"
+msgstr "utf-8"
+
+msgid "Return to post"
+msgstr "記事本文へもどる"
+
+msgid "Write Comment"
+msgstr "コメントを書く"
+
+msgid "en"
+msgstr "ja"
+
+msgid "Privacy Settings"
+msgstr "公開設定"
+
+msgid "Secret comment to blog author"
+msgstr "管理人への秘密コメント"
+
+msgid "Public Comment"
+msgstr "公開コメント"
+
+msgid "Comment Body"
+msgstr "コメント本文"
+
+msgid "Required"
+msgstr "必須"
+
+msgid "Next"
+msgstr "次へ"
+
+msgid "Prev"
+msgstr "前へ"
+
+msgid "Tell a friend"
+msgstr "友達に教える"
+
+msgid "PC Version"
+msgstr "PCページを表示"
+
+msgid "To Update"
+msgstr "更新する"
+
+msgid "To Delete"
+msgstr "削除する"
+
+msgid "Trackback List"
+msgstr "トラックバック一覧"
+
+msgid "Edit comment"
+msgstr "コメントを編集する"
+
+msgid "Top of Page"
+msgstr "ページトップ"
+
+msgid "To Post"
+msgstr "投稿する"
+
+msgid "Read comments"
+msgstr "コメント一覧"
+
+msgid "Trackback closed"
+msgstr "トラックバッククローズ中"
+
+msgid "Photos"
+msgstr "写真あり"
+
+msgid "Comments closed"
+msgstr "コメントクローズ中"
+
+msgid "PC View"
+msgstr "PCビュー"
+
+msgid "Category (Pattern2)"
+msgstr "カテゴリ"
+
+msgid "Write a<br>Comment"
+msgstr "<span>コメント<br>を書く</span>"
+
+msgid "Last Page"
+msgstr "最後のページ"
+
+msgid "pg /"
+msgstr "ページ／全"
+
+msgid "pgs"
+msgstr "ページ中"
+
+msgid "First Page"
+msgstr "最初のページ"
+
+msgid "Post a Comment"
+msgstr "コメントを投稿する"
+
+msgid "Newest Entry"
+msgstr "最新記事"
+
+msgid "'s Comment List"
+msgstr "のコメント一覧"
+
+msgid "-&gt; Write a Comment"
+msgstr "にコメントを書く"
+
+msgid "Album"
+msgstr "アルバム"
+
+msgid "Load more..."
+msgstr "さらに記事を読み込む..."
+
+msgid "View Comments"
+msgstr "コメントを見る"
+
+msgid "Newest Comment"
+msgstr "最新コメント"
+
+msgid "Monthly Archive"
+msgstr "月別アーカイブ"
+
+msgid "By adding plug-ins you can add more features and functions."
+msgstr "プラグインを設定する事で機能を追加出来ます"
+
+msgid "Next Entry"
+msgstr "次の記事へ"
+
+msgid "Prev Entry"
+msgstr "前の記事へ"
+
+msgid "Private comment"
+msgstr "非公開コメント"
+
+msgid "Date Separator Year"
+msgstr "年"
+
+msgid "Date Separator Month"
+msgstr "月"
+
+msgid "Date Separator Day"
+msgstr "日"
+
+msgid "End Of Name"
+msgstr "さん"
 
 #~ msgid "Edit plugin"
 #~ msgstr "プラグイン編集"
