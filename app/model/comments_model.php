@@ -157,16 +157,18 @@ class CommentsModel extends Model
     if (empty($option['password'])) {
       return __('No password is registered');   // パスワード未登録
     }
-    if (self::passwordHash($value)==$option['password']) {
+    if (hash_equals(self::passwordHash($value), $option['password'])) {
       return true;
     }
     return __('The password is incorrect!');
   }
 
   /**
-  * ユーザーパスワード用のハッシュを作成
-  */
-  public static function passwordHash($password)
+   * ユーザーパスワード用のハッシュを作成
+   * @param string $password
+   * @return string
+   */
+  public static function passwordHash(string $password): string
   {
     return hash('sha256', $password . Config::get('PASSWORD_SALT'));
   }
