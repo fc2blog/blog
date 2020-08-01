@@ -38,6 +38,20 @@ class App
   }
 
   /**
+   * 中央切り抜きのサムネイル画像のパスを返却する
+   * 対象外の場合は元のパスを返却する
+   */
+  public static function getCenterThumbnailPath($url, $width=760, $heght=420, $whs=''){
+    if (empty($url)) {
+      return $url;
+    }
+    if (!preg_match('{(/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]+/file/[0-9]+)\.(png|gif|jpe?g)(\?t=[0-9]+)?$}', $url, $matches)) {
+      return $url;
+    }
+    return $matches[1] . '_' . $whs . $width . '_' . $heght. '.' . $matches[2] . (isset($matches[3]) ? $matches[3] : '');
+  }
+
+  /**
   * ブログIDとIDに紐づくファイルを削除する
   */
   public static function deleteFile($blog_id, $id){

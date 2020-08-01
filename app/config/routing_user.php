@@ -74,4 +74,15 @@ if (preg_match('{/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/fil
   $request->set('size', $matches[4]);
   $request->set('ext', $matches[5]);
 }
+if (preg_match('{/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/file/([0-9]+)_(wh)([0-9]+)_([0-9]+)\.(png|gif|jpe?g)$}', $path, $matches)) {
+  $request->set($argsc, 'common');
+  $request->set($argsa, 'thumbnail');
+  $request->set('blog_id', $matches[1]);
+  $request->set('id', $matches[2]);
+  $request->set('whs', $matches[3]);
+  $request->set('width', $matches[4]);
+  $request->set('height', $matches[5]);
+  $request->set('ext', $matches[6]);
+}
+
 
