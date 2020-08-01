@@ -1,14 +1,16 @@
 <?php
 /**
-* Cookieクラス
-*/
+ * Cookieクラス
+ */
 
-class Cookie{
+class Cookie
+{
 
   /**
-  * クッキーから情報を取得する
-  */
-  public static function get($key, $default=null){
+   * クッキーから情報を取得する
+   */
+  public static function get($key, $default = null)
+  {
     if (isset($_COOKIE[$key])) {
       return $_COOKIE[$key];
     }
@@ -56,7 +58,10 @@ class Cookie{
     $params['domain'] = $domain;
 
     // SSLターミネーションがある環境においては検討が必要
-    if ($secure === true && (isset($_SERVER['https']) && $_SERVER['https'] === "on")) {
+    if ($secure === true) {
+      if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== "on") {
+        throw new InvalidArgumentException("secure=true needs https.");
+      }
       $params['secure'] = true;
     }
 
@@ -80,9 +85,11 @@ class Cookie{
 
     // 不可能な組み合わせを拒否
     if (
-      (isset($params['samesite']) && $params['samesite'] === "None") &&
-      (isset($params['secure']) && $params['secure'] !== true) &&
-      (isset($_SERVER['https']) && $_SERVER['https'] !== "on")
+      $samesite === "None" &&
+      (
+        $secure !== true ||
+        (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== "on")
+      )
     ) {
       throw new InvalidArgumentException("samesite=None needs https.");
     }

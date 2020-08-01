@@ -95,10 +95,30 @@ class SetTest extends TestCase
   public function testSamesiteNoneAndNotSecure(): void
   {
     try {
+      unset($_SERVER['HTTPS']);
+      @Cookie::set("k", "v", time(), "", "", true, false, "None");
+      $this->fail();
+    } catch (InvalidArgumentException $e) {
+      $this->assertTrue(true);
+    }
+
+    try {
+      $_SERVER['HTTPS'] = "on";
       @Cookie::set("k", "v", time(), "", "", false, false, "None");
       $this->fail();
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
+    } finally {
+      unset($_SERVER['HTTPS']);
+    }
+
+    try {
+      $_SERVER['HTTPS'] = "on";
+      @Cookie::set("k", "v", time(), "", "", true, false, "None");
+    } catch (InvalidArgumentException $e) {
+      $this->fail($e->getMessage());
+    } finally {
+      unset($_SERVER['HTTPS']);
     }
   }
 }
