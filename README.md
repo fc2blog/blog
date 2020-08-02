@@ -15,7 +15,7 @@ app
 public [public directory]  
 　  
 2. Change the name of the settings file, and store the DB or Server information.  
-public/config.php.sample -> public/config.php  
+public/config.sample.php -> public/config.php  
 　  
  *If the app directory does not exist on the same level as the public directory,  
 you will need to amend the path from the following area in the config.php file.  

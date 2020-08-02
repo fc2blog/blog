@@ -10,7 +10,7 @@ if (!file_exists('../config.php')) {
 <body>
   config.phpが存在しておりません
   <p class="ng">
-    config.php.sampleをconfig.phpに変更し<br />
+    config.sample.phpをconfig.phpに変更し<br />
     ファイル内に存在するDBの接続情報とサーバーの設定情報を入力してください
   </p>
 </body>
