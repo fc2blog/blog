@@ -370,6 +370,7 @@ PHP
   '<%lastpage_url>'         => '<?php if(!empty($paging) && $paging[\'is_next\']) echo Html::url(array(\'page\'=>$paging[\'max_page\']-1, \'blog_id\'=>$blog_id), true); ?>',
   '<%current_page_num>'     => '<?php if(!empty($paging)) echo $paging[\'page\']+1; ?>',
   '<%total_pages>'          => '<?php if(!empty($paging)) echo $paging[\'max_page\']; ?>',
+  '<%total_num>'            => '<?php if(!empty($paging)) echo $paging[\'count\']; ?>',
   '<%tail_url>'             => '',
   '<%template_pager1>'      => getFc2PagingPHP(1),
   '<%template_pager2>'      => getFc2PagingPHP(2),
