@@ -183,6 +183,7 @@ PHP
   '<%topentry_image>'              => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . $entry[\'first_image\'] . \'" />\'; ?>',
   '<%topentry_image_72>'           => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . App::getThumbnailPath($entry[\'first_image\'], 72) . \'" />\'; ?>',
   '<%topentry_image_w300>'         => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . App::getThumbnailPath($entry[\'first_image\'], 300, \'w\') . \'" />\'; ?>',
+  '<%topentry_image_url>'          => '<?php if(!empty($entry[\'first_image\'])) echo getServerUrl() . $entry[\'first_image\']; ?>',
   '<%topentry_image_url_760x420>'  => '<?php if(!empty($entry[\'first_image\'])) echo App::getCenterThumbnailPath($entry[\'first_image\'], 760, 420, \'wh\'); ?>',
   '<%topentry_comment_num>'        => '<?php if(isset($entry[\'comment_count\'])) echo $entry[\'comment_count\']; ?>',
   // 記事のカテゴリー系
