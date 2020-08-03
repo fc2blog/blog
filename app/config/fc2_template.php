@@ -473,6 +473,7 @@ PHP
   "<%template_goto_preventry>"  => '<?php echo __(\'Prev Entry\'); ?>',
   "<%template_goto_nextentry>"  => '<?php echo __(\'Next Entry\'); ?>',
   "<%template_secret>"          => '<?php echo __(\'Private comment\'); ?>',
+  "<%template_css_text>"        => '<?php if(isset($css_link)) echo file_get_contents(Config::get(\'WWW_DIR\') . substr($css_link, 1)); ?>',
 
   // HTML変換
   'name="mode" value="regist"' => 'name="process" value="comment_regist"',
