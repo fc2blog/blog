@@ -23,6 +23,8 @@ $config['fc2_template_foreach'] = array(
   // カレンダー
   'calendar'      => '<?php if(!isset($t_calendars)) $t_calendars = Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
   'calender'      => '<?php if(!isset($t_calendars)) $t_calendars = Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
+  // タグ
+  'ctag'          => '<?php if (!empty($t_tags)) foreach($t_tags as $t_tag) { ?>',
   // プラグイン系
   'plugin_first'   => '<?php if(!isset($t_plugins_1)) $t_plugins_1=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
   'plugin_second'  => '<?php if(!isset($t_plugins_2)) $t_plugins_2=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), Config::get(\'BLOG_PLUGIN.CATEGORY.SECOND\'), $blog_id); ?><?php if (!empty($t_plugins_2)) foreach($t_plugins_2 as $t_plugin) { ?>',
@@ -43,6 +45,7 @@ $config['fc2_template_if'] = array(
   'not_category_area'  => '<?php if(empty($category_area)) { ?>',
   'tag_area'           => '<?php if(!empty($tag_area)) { ?>',
   'not_tag_area'       => '<?php if(empty($tag_area)) { ?>',
+  'ctag_exists'        => '<?php if(!isset($t_tags)) $t_tags = Model::load(\'Tags\')->getTemplateTags($blog_id); ?><?php if(!empty($t_tags)) { ?>',
   'search_area'        => '<?php if(!empty($search_area)) { ?>',
   'not_search_area'    => '<?php if(empty($search_area)) { ?>',
   'comment_area'       => '<?php if(!empty($comment_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',
@@ -193,6 +196,8 @@ PHP
   // 記事のタグ系
   '<%topentry_tag_list_name>'      => '<?php if(isset($tag[\'name\'])) echo h($tag[\'name\']); ?>',
   '<%topentry_tag_list_parsename>' => '<?php if(isset($tag[\'name\'])) echo ue($tag[\'name\']); ?>',
+  '<%ctag_name>'                   => '<?php if(isset($t_tag[\'name\'])) echo h($t_tag[\'name\']); ?>',
+  '<%ctag_url>'                    => '<?php if(isset($t_tag[\'name\'])) echo $url . \'?tag=\' . ue($t_tag[\'name\']); ?>',
   // 記事一覧のコメント表示
   '<%topentry_comment_list_name>'   => '<?php if(isset($comment[\'name\'])) echo h($comment[\'name\']); ?>',
   '<%topentry_comment_list_title>'  => '<?php if(isset($comment[\'title\'])) echo h($comment[\'title\']); ?>',
