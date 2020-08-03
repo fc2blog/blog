@@ -285,6 +285,8 @@ PHP
   '<%spplugin_content>'      => '<?php if(isset($t_plugin[\'id\'])) include(App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
   '<%spplugin_talign>'       => '<?php if(isset($t_plugin[\'title_align\'])) echo $t_plugin[\'title_align\']; ?>',
   '<%spplugin_tcolor>'       => '<?php if(isset($t_plugin[\'title_color\'])) echo $t_plugin[\'title_color\']; ?>',
+  '<%spplugin_first_talign>' => '<?php if(isset($t_plugin[\'title_align\'])) echo $t_plugin[\'title_align\']; ?>',
+  '<%spplugin_first_tcolor>' => '<?php if(isset($t_plugin[\'title_color\'])) echo $t_plugin[\'title_color\']; ?>',
   '<%spplugin_align>'        => '<?php if(isset($t_plugin[\'contents_align\'])) echo $t_plugin[\'contents_align\']; ?>',
   '<%spplugin_color>'        => '<?php if(isset($t_plugin[\'contents_color\'])) echo $t_plugin[\'contents_color\']; ?>',
   // 最新の記事一覧(プラグイン系)
