@@ -18,7 +18,20 @@ class Session
     if (headers_sent()) {
       return;
     }
-    session_set_cookie_params(0 , '/', Config::get('SESSION_DEFAULT_DOMAIN'));
+
+    $session_cookie_options = [
+      "lifetime" => 0,
+      "path" => "/",
+      "httponly" => true,
+      "samesite" => "Lax" // NOTE: 要件としてhttpサポートがあるため、None属性は指定ができない
+      // NOTE: 要件としてhttpサポートがあるため secure属性は指定ができない
+    ];
+
+    if (strlen(Config::get('SESSION_DEFAULT_DOMAIN')) > 0) {
+      $session_cookie_options['domain'] = Config::get('SESSION_DEFAULT_DOMAIN');
+    }
+
+    session_set_cookie_params($session_cookie_options);
     session_name(Config::get('SESSION_NAME'));
     session_start();
     self::$isStart = true;
@@ -80,7 +93,7 @@ class Session
   {
     $_SESSION = array();
     if (isset($_COOKIE[Config::get('SESSION_NAME')])) {
-      Cookie::set(Config::get('SESSION_NAME'), '', time() - 86400);
+      Cookie::remove(Config::get('SESSION_NAME'), '');
     }
     session_destroy();
   }
