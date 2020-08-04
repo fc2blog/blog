@@ -288,7 +288,9 @@ class BlogTemplatesModel extends Model
     }
 
     // 変数の置き換え
-    return str_replace(Config::get('fc2_template_var_search'), Config::get('fc2_template_var_replace'), $html);
+    $html = str_replace(Config::get('fc2_template_var_search'), Config::get('fc2_template_var_replace'), $html);
+    $html = preg_replace('/<%[0-9a-zA-Z_]+?>/', '', $html);
+    return $html;
   }
 
 }

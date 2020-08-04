@@ -3,19 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-13 05:45+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2020-07-30 17:24+0900\n"
+"Last-Translator:  <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: shell/../model/tags_model.php:62
 msgid "Tag with the same name already exists"
@@ -2313,6 +2312,147 @@ msgstr ""
 #: shell/../locale/define.php:47
 msgid "Top of page"
 msgstr ""
+
+msgid "utf-8"
+msgstr ""
+
+msgid "Return to post"
+msgstr ""
+
+msgid "Write Comment"
+msgstr ""
+
+msgid "en"
+msgstr ""
+
+msgid "Privacy Settings"
+msgstr ""
+
+msgid "Secret comment to blog author"
+msgstr ""
+
+msgid "Public Comment"
+msgstr ""
+
+msgid "Comment Body"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Prev"
+msgstr ""
+
+msgid "Tell a friend"
+msgstr ""
+
+msgid "PC Version"
+msgstr ""
+
+msgid "To Update"
+msgstr "Update"
+
+msgid "To Delete"
+msgstr "Delete"
+
+msgid "Trackback List"
+msgstr "Trackbacks"
+
+msgid "Edit comment"
+msgstr ""
+
+msgid "Top of Page"
+msgstr ""
+
+msgid "To Post"
+msgstr "Post"
+
+msgid "Read comments"
+msgstr ""
+
+msgid "Trackback closed"
+msgstr ""
+
+msgid "Photos"
+msgstr ""
+
+msgid "Comments closed"
+msgstr ""
+
+msgid "PC View"
+msgstr ""
+
+msgid "Category (Pattern2)"
+msgstr "Category"
+
+msgid "Write a<br>Comment"
+msgstr ""
+
+msgid "Last Page"
+msgstr ""
+
+msgid "pg /"
+msgstr ""
+
+msgid "pgs"
+msgstr ""
+
+msgid "First Page"
+msgstr ""
+
+msgid "Post a Comment"
+msgstr ""
+
+msgid "Newest Entry"
+msgstr ""
+
+msgid "'s Comment List"
+msgstr ""
+
+msgid "-&gt; Write a Comment"
+msgstr ""
+
+msgid "Album"
+msgstr ""
+
+msgid "Load more..."
+msgstr ""
+
+msgid "View Comments"
+msgstr ""
+
+msgid "Newest Comment"
+msgstr ""
+
+msgid "Monthly Archive"
+msgstr ""
+
+msgid "By adding plug-ins you can add more features and functions."
+msgstr ""
+
+msgid "Next Entry"
+msgstr ""
+
+msgid "Prev Entry"
+msgstr ""
+
+msgid "Private comment"
+msgstr ""
+
+msgid "Date Separator Year"
+msgstr "/"
+
+msgid "Date Separator Month"
+msgstr "/"
+
+msgid "Date Separator Day"
+msgstr "{%displayNone}"
+
+msgid "End Of Name"
+msgstr "{%displayNone}"
 
 #, fuzzy
 #~ msgid "Edit plugin"

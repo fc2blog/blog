@@ -85,6 +85,36 @@ class ThumbnailImageMaker
         return $this->resize($to_width, $to_height);
     }
 
+    public function resizeToWidthInCenter($to_width, $to_height, $allow_expand = TRUE)
+    {
+      if (!$allow_expand && $to_width >= $this->width && $to_height >= $this->height) return TRUE;
+
+      $new_image = imagecreatetruecolor($to_width, $to_height);
+
+      // 求める画像サイズとの比を求める
+      $width_gap = $this->width / $to_width;
+      $height_gap = $this->height / $to_height;
+
+      // 横より縦の比率が大きい場合は、求める画像サイズより縦長
+      //  => 縦の上下をカット
+      if ($width_gap < $height_gap) {
+        $cut = ceil((($height_gap - $width_gap) * $to_height) / 2);
+        imagecopyresampled($new_image, $this->image_resource, 0, 0, 0, $cut, $to_width, $to_height, $this->width, $this->height - ($cut * 2));
+
+      // 縦より横の比率が大きい場合は、求める画像サイズより横長
+      //  => 横の左右をカット
+      } elseif ($height_gap < $width_gap) {
+        $cut = ceil((($width_gap - $height_gap) * $to_width) / 2);
+        imagecopyresampled($new_image, $this->image_resource, 0, 0, $cut, 0, $to_width, $to_height, $this->width - ($cut * 2), $this->height);
+
+      // 縦横比が同じなら、そのまま縮小
+      } else {
+        imagecopyresampled($new_image, $this->image_resource, 0, 0, 0, 0, $to_width, $to_height, $this->width, $this->height);
+      }
+
+      return $this->setImageResource($new_image);
+    }
+
     function save($filename, $image_type = IMAGETYPE_JPEG, $jpeg_compression = 75)
     {
         if ($image_type === IMAGETYPE_JPEG) {

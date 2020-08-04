@@ -167,3 +167,11 @@ if (!function_exists('is_countable')) {
         return (is_array($var) || $var instanceof Countable);
     }
 }
+
+function getServerUrl()
+{
+  $url  = (empty($_SERVER["HTTPS"])) ? 'http://' : 'https://';
+  $url .= Config::get('DOMAIN');
+
+  return $url;
+}
