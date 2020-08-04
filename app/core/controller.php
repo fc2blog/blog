@@ -9,6 +9,9 @@ require_once(Config::get('MODEL_DIR') . 'model.php');
 require_once(Config::get('CORE_DIR') . 'html.php');    // HTMLの便利関数群
 require_once(Config::get('CORE_DIR') . 'app.php');  // アプリ用の便利関数群
 
+require_once(Config::get('LIB_DIR') . 'WordTag.php');
+
+
 abstract class Controller
 {
 

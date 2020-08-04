@@ -77,7 +77,8 @@ class CommonController extends UserController
     $ext     = $request->get('ext');
     $size    = $request->get('size');
     $whs     = $request->get('whs', 's');
-
+    $width   = $request->get('width');
+    $height  = $request->get('height');
     $file = array(
       'blog_id' => $blog_id,
       'id'      => $id,
@@ -93,12 +94,17 @@ class CommonController extends UserController
       return $this->error404();
     }
 
-    // FC2規定サムネイルサイズ制限(72x72,width=300, 400, 600のみ対応)
+    // FC2規定サムネイルサイズ制限(72x72、width=300, 400, 600、760×420のみ対応)
     switch ($whs) {
       case 'h':
         return $this->error404();
       case 'w':
         if (!in_array($size, array(300, 400, 600))) {
+          return $this->error404();
+        }
+        break;
+      case 'wh':
+        if ($width != 760 || $height != 420) {
           return $this->error404();
         }
         break;
@@ -124,6 +130,9 @@ class CommonController extends UserController
         break;
       case 'w': $resize_result = $image->resizeToWidth($size, false);  break;
       case 'h': $resize_result = $image->resizeToHeight($size, false); break;
+      case 'wh':
+        $resize_result = $image->resizeToWidthInCenter($width, $height,false);
+        break;
     }
     if($resize_result!==true){
       Debug::log('Resize thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
@@ -131,7 +140,11 @@ class CommonController extends UserController
     }
 
     preg_match('{^(.*?)\.(png|gif|jpe?g)$}', $file_path, $matches);
-    $save_file = $matches[1] . '_' . $whs . $size . '.' . $matches[2];
+    if ($whs === 'wh') {
+      $save_file = $matches[1] . '_' . $whs . $width . '_' . $height . '.' . $matches[2];
+    } else {
+      $save_file = $matches[1] . '_' . $whs . $size . '.' . $matches[2];
+    }
     $save_result = $image->save($save_file, $image->image_type, 90);
     if($save_result!==true){
       Debug::log('Save thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
