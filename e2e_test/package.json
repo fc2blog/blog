@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "test": "npm run clear-cache && npx jest",
+    "fmt": "npx prettier --check --write \"./tests/*.ts\"",
     "clear-cache": "npx jest --clearCache",
     "test-enable-head": "NO_HEAD_LESS=1 npx jest",
     "update-libs": "npx npm-check-updates -u"
