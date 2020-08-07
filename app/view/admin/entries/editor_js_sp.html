@@ -5,7 +5,7 @@
   <?php Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-' . Config::get('LANG') . '.js'); ?>
 <?php endif; ?>
 
-<?php Html::addJS('/js/jquery/jquery.cookie.js'); ?>
+<?php Html::addJS('/js/js.cookie.js'); ?>
 
 <!-- メディアを追加する -->
 <div id="sys-add-media-dialog" title="<?php echo __('Add Media'); ?>">
@@ -35,26 +35,27 @@ $(function(){
   var cookie_config = {
     expires: <?php echo Config::get('COOKIE_EXPIRE'); ?>,
     domain: '<?php echo Config::get('COOKIE_DEFAULT_DOMAIN'); ?>',
-    path: '/'
+    path: '/',
+    sameSite: 'Lax'
   };
   $('#sys-accordion-extend').on('click', function(){
     var next = $(this).next();
     if (next.is(':visible')) {
       next.slideUp('fast');
-      $.cookie('js_entry_hide_extend', true, cookie_config);
+      Cookies.set('js_entry_hide_extend', true, cookie_config);
     } else {
       next.slideDown('fast');
-      $.removeCookie('js_entry_hide_extend', cookie_config);
+      Cookies.remove('js_entry_hide_extend', cookie_config);
     }
   });
   $('#sys-accordion-setting').on('click', function(){
     var next = $(this).next();
     if (next.is(':visible')) {
       next.slideUp('fast');
-      $.cookie('js_entry_hide_setting', true, cookie_config);
+      Cookies.set('js_entry_hide_setting', true, cookie_config);
     } else {
       next.slideDown('fast');
-      $.removeCookie('js_entry_hide_setting', cookie_config);
+      Cookies.remove('js_entry_hide_setting', cookie_config);
     }
   });
 
