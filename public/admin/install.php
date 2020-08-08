@@ -1,27 +1,10 @@
 <?php
+// `app`ディレクトリを$app_dir_pathに設定してください
+// Please set actual app directory path to $app_dir_path.
+$app_dir_path = __DIR__ . "/../../app";
 
-// config.phpの存在チェック
-if (!file_exists('../config.php')) {
-  header("Content-Type: text/html; charset=UTF-8");
-  echo <<<HTML
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<body>
-  config.phpが存在しておりません
-  <p class="ng">
-    config.sample.phpをconfig.phpに変更し<br />
-    ファイル内に存在するDBの接続情報とサーバーの設定情報を入力してください
-  </p>
-</body>
-</html>
-HTML;
-  exit;
+if(!file_exists($app_dir_path)){
+  die("please edit public/admin/install.php");
 }
 
-require('../config.php');
-Config::read('admin.php');                           // Admin用の環境設定読み込み
-
-require(Config::get('CONTROLLER_DIR') . 'admin/common_controller.php');
-$controller = new CommonController('install');
-
+require($app_dir_path . "/include/admin_install_include.php");
