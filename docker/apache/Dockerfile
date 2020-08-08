@@ -9,10 +9,10 @@ RUN set -eux \
  && docker-php-ext-configure gd --with-jpeg=/usr --with-freetype=/usr \
  && docker-php-ext-configure opcache --enable-opcache \
  && docker-php-ext-install opcache bcmath pdo_mysql gd exif zip gettext intl \
+ && pecl install xdebug \
+ && docker-php-ext-enable xdebug \
  && rm -rf /tmp/*
 
 RUN a2enmod rewrite \
  && a2enmod ssl \
  && a2ensite default-ssl
-
-
