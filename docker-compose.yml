@@ -23,6 +23,7 @@ services:
     container_name: fc2blog-apache
     environment:
       MYSQL_HOST: "db"
+      DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
     depends_on:
       - db
     working_dir: "/fc2blog/public"

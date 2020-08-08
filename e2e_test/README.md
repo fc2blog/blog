@@ -1,6 +1,6 @@
 # E2E test by puppeteer
 
-## setup
+## Setup
 
 ```
 $ npm ci
@@ -10,9 +10,17 @@ $ cp .env.sample .env
 $ vi .env
 ```
 
-## execute
+## Target fc2blog setup
 
-you need start server before.
+- Start target fc2blog webapp.
+- Run `phpunit` for pseudo data set loading.
+
+> Recommend: use docker.
+>
+> If you run at own apache or other, Set `DEBUG_FORCE_CAPTCHA_KEY=1234` ENV.
+
+
+## Execute e2e test
 
 ```
 # All test execution.
@@ -20,5 +28,12 @@ $ npm run test
 
 # or specify a test.
 $ npx jest test/test.test.js
+```
+
+## Don't forget code format before test code commit.
+
+```
+# format by prettier
+$ npm run fmt
 ```
 
