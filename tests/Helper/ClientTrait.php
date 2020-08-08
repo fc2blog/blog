@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\Helper;
 
+use Config;
 use Exception;
-use Fc2blog\Tests\LoaderHelper;
+use InvalidArgumentException;
 use PseudoExit;
 
 trait ClientTrait
@@ -20,8 +21,6 @@ trait ClientTrait
    */
   public static function resolve(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user")
   {
-    LoaderHelper::requireBootStrap();
-
     # 擬似的にアクセスURLをセットする
     $_SERVER['HTTP_USER_AGENT'] = "phpunit";
     $_SERVER['HTTPS'] = ($is_https) ? "on" : "";
@@ -35,13 +34,13 @@ trait ClientTrait
 
     if ($target === "user") {
       /** @noinspection PhpFullyQualifiedNameUsageInspection */
-      \Config::read('user.php');
+      Config::read('user.php');
     } else if ($target === "admin") {
-      \Config::read('admin.php');
+      Config::read('admin.php');
     } else if ($target === "test") {
-      \Config::read('test.php');
+      Config::read('test.php');
     } else {
-      throw new \InvalidArgumentException("target is wrong.");
+      throw new InvalidArgumentException("target is wrong.");
     }
 
     [$classFile, $className, $methodName] = getRouting();
