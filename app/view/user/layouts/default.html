@@ -4,10 +4,10 @@ if(!headers_sent()){
 }
 ?>
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="<?php echo Config::get('LANG'); ?>">
 <head>
   <meta charset="utf-8">
-  <title>サイト名</title>
+  <title><?php echo h($blog['name']); ?></title>
   <link rel="stylesheet" href="/css/normalize.css" type="text/css" media="all">
   <link rel="stylesheet" href="/css/user-fc2.css" type="text/css" media="all">
   <link rel="stylesheet" href="/css/user-form.css" type="text/css" media="all">
