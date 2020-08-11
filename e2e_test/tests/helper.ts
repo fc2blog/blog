@@ -71,4 +71,14 @@ export class Helper {
             this.page.waitForSelector(selector)
         ]);
     }
+
+    // 画面にPHPのNoticeやWarningエラーがでておらず、</html>まで出力されている
+    async isNotAnyNoticeOrWarningsFinishWithEndHtmlTag(): Promise<boolean> {
+        const whole_text = await this.page.$eval(
+            "html",
+            (elm) => elm.textContent
+        );
+        const whole_html = await this.page.evaluate(() => document.documentElement.outerHTML);
+        return /(Notice: |Warning: )/.exec(whole_text) === null && /<\/html>/.exec(whole_html) !== null;
+    }
 }
