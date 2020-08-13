@@ -18,13 +18,13 @@
   </div>
 
   <h3 class="accordion_head" id="sys-accordion-extend"><?php echo __('Edit a postscript'); ?><span>▼<?php echo __('Click to open/close'); ?></span></h3>
-  <div <?php if(Cookie::get('js_entry_hide_extend')){echo 'style="visibility: hidden;"';} ?>>
+  <div <?php if(\Fc2blog\Cookie::get('js_entry_hide_extend')){echo 'style="visibility: hidden;"';} ?>>
     <?php echo Html::input('entry[extend]', 'textarea', array('id'=>'sys-entry-extend')); ?>
     <?php if (isset($errors['entry']['extend'])): ?><p class="error"><?php echo $errors['entry']['extend']; ?></p><?php endif; ?>
   </div>
 
   <h3 class="accordion_head" id="sys-accordion-setting"><?php echo __('Entry settings'); ?><span>▼<?php echo __('Click to open/close'); ?></span></h3>
-  <div <?php if(Cookie::get('js_entry_hide_setting')){echo 'style="display: none;"';} ?>>
+  <div <?php if(\Fc2blog\Cookie::get('js_entry_hide_setting')){echo 'style="display: none;"';} ?>>
 
     <?php $this->display('Categories/ajax_add.html', array()); ?>
 

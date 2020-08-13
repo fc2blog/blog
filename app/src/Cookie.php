@@ -3,6 +3,10 @@
  * Cookieクラス
  */
 
+namespace Fc2blog;
+
+use InvalidArgumentException;
+
 class Cookie
 {
 

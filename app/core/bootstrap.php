@@ -28,9 +28,6 @@ date_default_timezone_set(\Fc2blog\Config::get('TIMEZONE'));
 // 共通関数群読み込み
 require(\Fc2blog\Config::get('CORE_DIR') . 'common_functions.php');
 
-// Cookieクラス
-require_once(\Fc2blog\Config::get('CORE_DIR') . 'cookie.php');
-
 // Sessionクラス
 require_once(\Fc2blog\Config::get('CORE_DIR') . 'session.php');
 

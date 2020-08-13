@@ -236,9 +236,9 @@ PHP
   '<%comment_reply_youbi>'   => '<?php if(isset($comment[\'reply_youbi\'])) echo $comment[\'reply_youbi\']; ?>',
   '<%comment_reply_wayoubi>' => '<?php if(isset($comment[\'reply_wayoubi\'])) echo $comment[\'reply_wayoubi\']; ?>',
   // コメントのクッキー情報
-  '<%cookie_name>'       => '<?php if(empty($comment_error) && Cookie::get(\'comment_name\')) echo Cookie::get(\'comment_name\'); ?>',
-  '<%cookie_mail>'       => '<?php if(empty($comment_error) && Cookie::get(\'comment_mail\')) echo Cookie::get(\'comment_mail\'); ?>',
-  '<%cookie_url>'        => '<?php if(empty($comment_error) && Cookie::get(\'comment_url\')) echo Cookie::get(\'comment_url\'); ?>',
+  '<%cookie_name>'       => '<?php if(empty($comment_error) && \Fc2blog\Cookie::get(\'comment_name\')) echo \Fc2blog\Cookie::get(\'comment_name\'); ?>',
+  '<%cookie_mail>'       => '<?php if(empty($comment_error) && \Fc2blog\Cookie::get(\'comment_mail\')) echo \Fc2blog\Cookie::get(\'comment_mail\'); ?>',
+  '<%cookie_url>'        => '<?php if(empty($comment_error) && \Fc2blog\Cookie::get(\'comment_url\')) echo \Fc2blog\Cookie::get(\'comment_url\'); ?>',
   // コメント編集
   '<%eno>'              => '<?php if(isset($edit_comment[\'id\'])) echo $edit_comment[\'id\']; ?>',
   '<%edit_name>'        => '<?php if(isset($edit_comment[\'name\'])) echo $edit_comment[\'name\']; ?>',

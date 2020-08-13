@@ -15,7 +15,7 @@ class CommonController extends UserController
     // 言語の設定
     $lang = $request->get('lang');
     if ($language=\Fc2blog\Config::get('LANGUAGES.' . $lang)) {
-      Cookie::set('lang', $lang);
+      \Fc2blog\Cookie::set('lang', $lang);
     }
 
     // 元のURLに戻す
@@ -39,11 +39,11 @@ class CommonController extends UserController
       case 'sp': $device_type = \Fc2blog\Config::get('DEVICE_SP'); break;
       case 'tb': $device_type = \Fc2blog\Config::get('DEVICE_TB'); break;
       default:
-        Cookie::set('device', null);
+        \Fc2blog\Cookie::set('device', null);
         $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId()));
     }
 
-    Cookie::set('device', $device_type);
+    \Fc2blog\Cookie::set('device', $device_type);
     $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId()));
   }
 
