@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ThumbnailImageMaker
  *
@@ -10,6 +9,8 @@
  * @version    v0.0.1
  * @link       https://gist.github.com/uzulla/9645443
  */
+
+namespace Fc2blog\Lib;
 
 class ThumbnailImageMaker
 {

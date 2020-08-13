@@ -52,7 +52,6 @@ class CommonController extends UserController
   */
   public function captcha()
   {
-    require_once(\Fc2blog\Config::get('LIB_DIR') . 'CaptchaImage.php');
     $size_x = 200;
     $size_y = 40;
     // 自動テスト用に"DEBUG_FORCE_CAPTCHA_KEY"環境変数で、Captchaキーの固定機能
@@ -63,7 +62,7 @@ class CommonController extends UserController
     }
     $this->setToken($key);    // トークン設定
     $isJa = \Fc2blog\Config::get('LANG')=='ja'; // 日本語以外は数字のみを表示
-    $captcha = new CaptchaImage($size_x, $size_y, \Fc2blog\Config::get('PASSWORD_SALT'), $isJa);
+    $captcha = new \Fc2blog\Lib\CaptchaImage($size_x, $size_y, \Fc2blog\Config::get('PASSWORD_SALT'), $isJa);
     $captcha->drawNumber($key, true);
 
     \Fc2blog\Config::set('DEBUG', 0);
@@ -121,8 +120,7 @@ class CommonController extends UserController
     }
 
     // サムネイル出力処理
-    include(\Fc2blog\Config::get('LIB_DIR') . 'ThumbnailImageMaker.php');
-    $image = new ThumbnailImageMaker();
+    $image = new \Fc2blog\Lib\ThumbnailImageMaker();
     $load_result = $image->load($file_path);
     if($load_result!==true){
         \Fc2blog\Debug::log('Load image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);

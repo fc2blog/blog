@@ -3,19 +3,12 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Lib\CaptchaImage;
 
-use CaptchaImage;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
 class DrawNumberTest extends TestCase
 {
   private static $test_output_gif_path = __DIR__ . "/test_output.gif";
-
-  public function setUp(): void
-  {
-    require_once(TEST_APP_DIR . "/lib/CaptchaImage.php");
-    parent::setUp();
-  }
 
   /**
    * @param array $params
@@ -24,7 +17,7 @@ class DrawNumberTest extends TestCase
    */
   private function generateGifImage(array $params, bool $mini_mode=true)
   {
-    $captcha = new CaptchaImage($params['size_x'], $params['size_y'], $params['salt'], false);
+    $captcha = new \Fc2blog\Lib\CaptchaImage($params['size_x'], $params['size_y'], $params['salt'], false);
 
     $is_in_ob = ob_get_level() > 0;
     $before_ob = "";
