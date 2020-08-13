@@ -41,7 +41,7 @@
 
 <?php if (!$request->get('category')) : ?>
   <h3><?php echo __('Categories'); ?></h3>
-  <?php $categories = Model::load('Categories')->getList($this->getBlogId()); ?>
+  <?php $categories = \Fc2blog\Model\Model::load('Categories')->getList($this->getBlogId()); ?>
   <ul id="sys-category-list">
     <?php $level = 1; ?>
     <?php foreach($categories as $category): ?>

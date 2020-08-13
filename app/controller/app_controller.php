@@ -47,7 +47,7 @@ abstract class AppController extends Controller
   */
   public function getBlog($blog_id)
   {
-    return Model::load('Blogs')->findById($blog_id);
+    return \Fc2blog\Model\Model::load('Blogs')->findById($blog_id);
   }
 
   /**

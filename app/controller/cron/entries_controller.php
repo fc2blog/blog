@@ -17,7 +17,7 @@ class EntriesController extends CronController
       return ;
     }
 
-    $entriesModel = Model::load('Entries');
+    $entriesModel = \Fc2blog\Model\Model::load('Entries');
 
     // 予約投稿処理
     $entriesModel->updateReservation($blog_id);

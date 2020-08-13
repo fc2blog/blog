@@ -11,25 +11,25 @@ $config['fc2_template_foreach'] = array(
   'category_list' => '<?php if(!empty($entry[\'categories\'])) foreach($entry[\'categories\'] as $category) { ?>',
   'tag_list'      => '<?php if(!empty($entry[\'tags\'])) foreach($entry[\'tags\'] as $tag) { ?>',
   // 最新記事一覧(プラグイン表示用)
-  'recent'        => '<?php if(!isset($t_recents)) $t_recents = Model::load(\'Entries\')->getTemplateRecents($blog_id); ?><?php if (!empty($t_recents)) foreach($t_recents as $t_recent) { ?>',
+  'recent'        => '<?php if(!isset($t_recents)) $t_recents = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateRecents($blog_id); ?><?php if (!empty($t_recents)) foreach($t_recents as $t_recent) { ?>',
   // カテゴリー(プラグイン表示用)
-  'category'      => '<?php if(!isset($t_categories)) $t_categories = Model::load(\'Categories\')->getTemplateCategories($blog_id); ?><?php if (!empty($t_categories)) foreach($t_categories as $t_category) { ?>',
+  'category'      => '<?php if(!isset($t_categories)) $t_categories = \Fc2blog\Model\Model::load(\'Categories\')->getTemplateCategories($blog_id); ?><?php if (!empty($t_categories)) foreach($t_categories as $t_category) { ?>',
   // アーカイブ(プラグイン表示用)
-  'archive'       => '<?php if(!isset($t_archives)) $t_archives = Model::load(\'Entries\')->getArchives($blog_id); ?><?php if (!empty($t_archives)) foreach($t_archives as $t_archive) { ?>',
+  'archive'       => '<?php if(!isset($t_archives)) $t_archives = \Fc2blog\Model\Model::load(\'Entries\')->getArchives($blog_id); ?><?php if (!empty($t_archives)) foreach($t_archives as $t_archive) { ?>',
   // 新着順のコメント
-  'rcomment'      => '<?php if(!isset($t_comments)) $t_comments = Model::load(\'Comments\')->getTemplateRecentCommentList($blog_id); ?><?php if (!empty($t_comments)) foreach($t_comments as $t_comment) { ?>',
+  'rcomment'      => '<?php if(!isset($t_comments)) $t_comments = \Fc2blog\Model\Model::load(\'Comments\')->getTemplateRecentCommentList($blog_id); ?><?php if (!empty($t_comments)) foreach($t_comments as $t_comment) { ?>',
   // カテゴリー
   'category_multi_sub_end' => '<?php if(!empty($t_category) && isset($t_category[\'climb_hierarchy\'])) for($category_index=0;$category_index<$t_category[\'climb_hierarchy\'];$category_index++) { ?>',
   // カレンダー
-  'calendar'      => '<?php if(!isset($t_calendars)) $t_calendars = Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
-  'calender'      => '<?php if(!isset($t_calendars)) $t_calendars = Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
+  'calendar'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
+  'calender'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
   // タグ
   'ctag'          => '<?php if (!empty($t_tags)) foreach($t_tags as $t_tag) { ?>',
   // プラグイン系
-  'plugin_first'   => '<?php if(!isset($t_plugins_1)) $t_plugins_1=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
-  'plugin_second'  => '<?php if(!isset($t_plugins_2)) $t_plugins_2=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.SECOND\'), $blog_id); ?><?php if (!empty($t_plugins_2)) foreach($t_plugins_2 as $t_plugin) { ?>',
-  'plugin_third'   => '<?php if(!isset($t_plugins_3)) $t_plugins_3=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.THIRD\'), $blog_id); ?><?php if (!empty($t_plugins_3)) foreach($t_plugins_3 as $t_plugin) { ?>',
-  'spplugin_first' => '<?php if(!isset($t_plugins_1)) $t_plugins_1=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
+  'plugin_first'   => '<?php if(!isset($t_plugins_1)) $t_plugins_1=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
+  'plugin_second'  => '<?php if(!isset($t_plugins_2)) $t_plugins_2=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.SECOND\'), $blog_id); ?><?php if (!empty($t_plugins_2)) foreach($t_plugins_2 as $t_plugin) { ?>',
+  'plugin_third'   => '<?php if(!isset($t_plugins_3)) $t_plugins_3=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.THIRD\'), $blog_id); ?><?php if (!empty($t_plugins_3)) foreach($t_plugins_3 as $t_plugin) { ?>',
+  'spplugin_first' => '<?php if(!isset($t_plugins_1)) $t_plugins_1=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
 );
 
 // if文の置き換え用
@@ -45,7 +45,7 @@ $config['fc2_template_if'] = array(
   'not_category_area'  => '<?php if(empty($category_area)) { ?>',
   'tag_area'           => '<?php if(!empty($tag_area)) { ?>',
   'not_tag_area'       => '<?php if(empty($tag_area)) { ?>',
-  'ctag_exists'        => '<?php if(!isset($t_tags)) $t_tags = Model::load(\'Tags\')->getTemplateTags($blog_id); ?><?php if(!empty($t_tags)) { ?>',
+  'ctag_exists'        => '<?php if(!isset($t_tags)) $t_tags = \Fc2blog\Model\Model::load(\'Tags\')->getTemplateTags($blog_id); ?><?php if(!empty($t_tags)) { ?>',
   'search_area'        => '<?php if(!empty($search_area)) { ?>',
   'not_search_area'    => '<?php if(empty($search_area)) { ?>',
   'comment_area'       => '<?php if(!empty($comment_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',

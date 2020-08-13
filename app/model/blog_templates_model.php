@@ -1,6 +1,6 @@
 <?php
 
-class BlogTemplatesModel extends Model
+class BlogTemplatesModel extends \Fc2blog\Model\Model
 {
 
   public static $instance = null;
@@ -113,7 +113,7 @@ class BlogTemplatesModel extends Model
 
     if (!$isPreview) {
       // DBからHTMLとCSSを取得
-      $blog_templates_model = Model::load('BlogTemplates');
+      $blog_templates_model = \Fc2blog\Model\Model::load('BlogTemplates');
       $blogTemplate = $blog_templates_model->findByIdAndBlogId($templateId, $blog_id);
       $html = $blogTemplate['html'];
       $css = $blogTemplate['css'];
@@ -211,12 +211,12 @@ class BlogTemplatesModel extends Model
     is_file($cssFilePath) && unlink($cssFilePath);
 
     // 適用中のテンプレート取得
-    if (Model::load('Blogs')->isAppliedTemplate($id, $blog_id, $device_type)) {
+    if (\Fc2blog\Model\Model::load('Blogs')->isAppliedTemplate($id, $blog_id, $device_type)) {
       // コメントの表示タイプをテンプレートから判断
       $reply_type = strstr($values['html'], '<%comment_reply_body>') ?
           \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
       // コメントの表示タイプを更新
-      Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
+      \Fc2blog\Model\Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
     }
 
     return true;

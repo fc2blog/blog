@@ -1,6 +1,6 @@
 <?php
 
-class CommentsModel extends Model
+class CommentsModel extends \Fc2blog\Model\Model
 {
 
   public static $instance = null;
@@ -187,7 +187,7 @@ class CommentsModel extends Model
   public function insertByBlogSetting($data, $blog_setting)
   {
     // Entry記事数増加処理
-    Model::load('Entries')->increaseCommentCount($data['blog_id'], $data['entry_id']);
+    \Fc2blog\Model\Model::load('Entries')->increaseCommentCount($data['blog_id'], $data['entry_id']);
 
     // パスワードの入力が合った場合ハッシュ化
     if (isset($data['password']) && $data['password']!=='') {
@@ -252,7 +252,7 @@ class CommentsModel extends Model
     }
 
     // Entry記事数増加処理
-    Model::load('Entries')->decreaseCommentCount($blog_id, $comment['entry_id']);
+    \Fc2blog\Model\Model::load('Entries')->decreaseCommentCount($blog_id, $comment['entry_id']);
 
     // 記事本体削除
     return parent::deleteByIdAndBlogId($comment_id, $blog_id, $options);
@@ -320,7 +320,7 @@ class CommentsModel extends Model
     $flag_pending = \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING');
     $flag_private = \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE');
 
-    $blog = Model::load('Blogs')->findById($blog_setting['blog_id']);
+    $blog = \Fc2blog\Model\Model::load('Blogs')->findById($blog_setting['blog_id']);
 
     // コメントを追加で表示するかどうか
     $is_add_comment = $blog_setting[\Fc2blog\Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . \Fc2blog\Config::get('DeviceType'))] == \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
@@ -405,7 +405,7 @@ class CommentsModel extends Model
       return array();
     }
     $entry_id = $comment['entry_id'];
-    if (!$entry=Model::load('Entries')->findByIdAndBlogId($entry_id, $blog_id)) {
+    if (!$entry=\Fc2blog\Model\Model::load('Entries')->findByIdAndBlogId($entry_id, $blog_id)) {
       return array();
     }
     $comment['entry_title'] = $entry['title'];
@@ -465,7 +465,7 @@ class CommentsModel extends Model
   public function getTemplateRecentCommentList($blog_id, $limit=0)
   {
     if ($limit==0) {
-      $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+      $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
       $limit = $blog_setting['comment_display_count'];
     }
 

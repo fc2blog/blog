@@ -1,6 +1,6 @@
 <?php
 
-class FilesModel extends Model{
+class FilesModel extends \Fc2blog\Model\Model{
 
   public static $instance = null;
 

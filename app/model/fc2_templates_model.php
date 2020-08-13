@@ -4,7 +4,7 @@
 * データソース元はAPIの予定
 */
 
-class Fc2TemplatesModel extends Model
+class Fc2TemplatesModel extends \Fc2blog\Model\Model
 {
 
   public static $instance = null;

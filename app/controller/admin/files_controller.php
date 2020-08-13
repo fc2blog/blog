@@ -11,7 +11,7 @@ class FilesController extends AdminController
   public function ajax_index()
   {
     $request = \Fc2blog\Request::getInstance();
-    $files_model = Model::load('Files');
+    $files_model = \Fc2blog\Model\Model::load('Files');
 
     $blog_id = $this->getBlogId();
     
@@ -20,7 +20,7 @@ class FilesController extends AdminController
     $params = array($blog_id);
 
     if ($keyword=$request->get('keyword')) {
-      $keyword = Model::escape_wildcard($keyword);
+      $keyword = \Fc2blog\Model\Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND name LIKE ?';
       $params = array_merge($params, array($keyword));
@@ -58,7 +58,7 @@ class FilesController extends AdminController
   public function upload()
   {
     $request = \Fc2blog\Request::getInstance();
-    $files_model = Model::load('Files');
+    $files_model = \Fc2blog\Model\Model::load('Files');
 
     $blog_id = $this->getBlogId();
 
@@ -101,7 +101,7 @@ class FilesController extends AdminController
     $params = array($blog_id);
 
     if ($keyword=$request->get('keyword')) {
-      $keyword = Model::escape_wildcard($keyword);
+      $keyword = \Fc2blog\Model\Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND name LIKE ?';
       $params = array_merge($params, array($keyword));
@@ -136,7 +136,7 @@ class FilesController extends AdminController
   public function edit()
   {
     $request = \Fc2blog\Request::getInstance();
-    $files_model = Model::load('Files');
+    $files_model = \Fc2blog\Model\Model::load('Files');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -206,7 +206,7 @@ class FilesController extends AdminController
 
     if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
       // 削除処理
-      if (Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+      if (\Fc2blog\Model\Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
         $this->setInfoMessage(__('I removed the file'));
       } else {
         $this->setErrorMessage(__('I failed to remove'));
@@ -230,7 +230,7 @@ class FilesController extends AdminController
 
     // 削除処理
     $json = array('status'=>0);
-    if (!Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+    if (!\Fc2blog\Model\Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
       $json = array('status'=>1);
     }
 

@@ -57,7 +57,7 @@ class CommonController extends AdminController
   */
   public function initial()
   {
-    $setting = Model::load('BlogSettings')->findByBlogId($this->getBlogId());
+    $setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($this->getBlogId());
     if (is_array($setting)) {
       switch ($setting['start_page']) {
         default:
@@ -86,7 +86,7 @@ class CommonController extends AdminController
   {
     $blog_id = $this->getBlogId();
 
-    $comments_model = Model::load('Comments');
+    $comments_model = \Fc2blog\Model\Model::load('Comments');
     $this->set('unread_count', $comments_model->getUnreadCount($blog_id));
     $this->set('unapproved_count', $comments_model->getUnapprovedCount($blog_id));
   }
@@ -142,12 +142,12 @@ class CommonController extends AdminController
         \Fc2blog\Model\MSDB::getInstance()->multiExecute($sql);
 
         // 初期公式プラグインを追加
-        Model::load('Plugins')->addInitialOfficialPlugin();
+        \Fc2blog\Model\Model::load('Plugins')->addInitialOfficialPlugin();
 
         $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY') . 'install.php?state=2');
 
       case 2:  // 管理者登録
-        if (Model::load('Users')->isExistAdmin()) {
+        if (\Fc2blog\Model\Model::load('Users')->isExistAdmin()) {
           // 既にユーザー登録完了
           $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY') . 'install.php?state=3');
         }
@@ -164,8 +164,8 @@ class CommonController extends AdminController
       return 'common/install_user.html';
     }
 
-    $users_model = Model::load('Users');
-    $blogs_model = Model::load('Blogs');
+    $users_model = \Fc2blog\Model\Model::load('Users');
+    $blogs_model = \Fc2blog\Model\Model::load('Blogs');
 
     // ユーザーとブログの新規登録処理
     $errors = array();

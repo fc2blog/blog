@@ -19,7 +19,7 @@ class BlogPluginsController extends AdminController
     $request->set('device_type', $device_type);
 
     // デバイス毎に分けられたテンプレート一覧を取得
-    $category_blog_plugins = Model::load('BlogPlugins')->getCategoryPlugins($blog_id, $device_type);
+    $category_blog_plugins = \Fc2blog\Model\Model::load('BlogPlugins')->getCategoryPlugins($blog_id, $device_type);
     $this->set('category_blog_plugins', $category_blog_plugins);
   }
 
@@ -45,7 +45,7 @@ class BlogPluginsController extends AdminController
   private function plugin_search($is_official=true)
   {
     $request = \Fc2blog\Request::getInstance();
-    $plugins_model = Model::load('Plugins');
+    $plugins_model = \Fc2blog\Model\Model::load('Plugins');
 
     // デバイスタイプの取得
     $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
@@ -86,7 +86,7 @@ class BlogPluginsController extends AdminController
   public function create()
   {
     $request = \Fc2blog\Request::getInstance();
-    $blog_plugins_model = Model::load('BlogPlugins');
+    $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     // 初期表示時
     if (!$request->get('blog_plugin') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
@@ -121,7 +121,7 @@ class BlogPluginsController extends AdminController
   public function edit()
   {
     $request = \Fc2blog\Request::getInstance();
-    $blog_plugins_model = Model::load('BlogPlugins');
+    $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -160,7 +160,7 @@ class BlogPluginsController extends AdminController
   public function delete()
   {
     $request = \Fc2blog\Request::getInstance();
-    $blog_plugins_model = Model::load('BlogPlugins');
+    $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -185,13 +185,13 @@ class BlogPluginsController extends AdminController
   public function register()
   {
     $request = \Fc2blog\Request::getInstance();
-    $plugins_model = Model::load('Plugins');
+    $plugins_model = \Fc2blog\Model\Model::load('Plugins');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
 
     // 登録データの取得
-    $blog_plugin = Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id);
+    $blog_plugin = \Fc2blog\Model\Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id);
     if (!$blog_plugin) {
       $this->redirect(array('action'=>'index'));
     }
@@ -218,7 +218,7 @@ class BlogPluginsController extends AdminController
     $errors['plugin'] = $plugins_model->validate($request->get('plugin'), $plugin_data, $white_list);
     if (empty($errors['plugin'])) {
       // 登録処理
-      if (Model::load('Plugins')->register($blog_plugin, $plugin_data, $this->getUserId())) {
+      if (\Fc2blog\Model\Model::load('Plugins')->register($blog_plugin, $plugin_data, $this->getUserId())) {
         $this->setInfoMessage(__('I have registered the plug-in'));
       } else {
         $this->setErrorMessage(__('I failed to register the plug-in'));
@@ -237,7 +237,7 @@ class BlogPluginsController extends AdminController
   public function plugin_delete()
   {
     $request = \Fc2blog\Request::getInstance();
-    $plugins_model = Model::load('Plugins');
+    $plugins_model = \Fc2blog\Model\Model::load('Plugins');
 
     $id = $request->get('id');
     $user_id = $this->getUserId();
@@ -261,10 +261,10 @@ class BlogPluginsController extends AdminController
   public function download()
   {
     $request = \Fc2blog\Request::getInstance();
-    $blog_plugins_model = Model::load('BlogPlugins');
+    $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $id = $request->get('id');
-    $plugin = Model::load('Plugins')->findById($id);
+    $plugin = \Fc2blog\Model\Model::load('Plugins')->findById($id);
     if (empty($plugin)) {
       $this->setErrorMessage(__('Plugin does not exist'));
       $this->redirectBack(array('controller'=>'blog_plugins', 'action'=>'index'));
@@ -281,7 +281,7 @@ class BlogPluginsController extends AdminController
 
       // 新規登録処理
       $blog_plugin_data['blog_id'] = $this->getBlogId();
-      if ($id=Model::load('BlogPlugins')->insert($blog_plugin_data)) {
+      if ($id=\Fc2blog\Model\Model::load('BlogPlugins')->insert($blog_plugin_data)) {
         $this->setInfoMessage(__('I created a plugin'));
         $this->redirect(array('action'=>'index', 'device_type'=>$plugin['device_type']));
       }
@@ -297,7 +297,7 @@ class BlogPluginsController extends AdminController
   public function sort()
   {
     $request = \Fc2blog\Request::getInstance();
-    $blog_plugins_model = Model::load('BlogPlugins');
+    $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $blog_id = $this->getBlogId();
     $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
@@ -318,7 +318,7 @@ class BlogPluginsController extends AdminController
   public function display_changes()
   {
     $request = \Fc2blog\Request::getInstance();
-    $blog_plugins_model = Model::load('BlogPlugins');
+    $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $blog_id = $this->getBlogId();
     $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
@@ -341,7 +341,7 @@ class BlogPluginsController extends AdminController
   public function display_change()
   {
     $request = \Fc2blog\Request::getInstance();
-    $blog_plugins_model = Model::load('BlogPlugins');
+    $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -372,7 +372,7 @@ class BlogPluginsController extends AdminController
     $blog_id = $this->getBlogId();
 
     // 登録データの取得
-    if (!$blog_plugin=Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id)) {
+    if (!$blog_plugin=\Fc2blog\Model\Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id)) {
       $this->redirect(array('action'=>'index'));
     }
 

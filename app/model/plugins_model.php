@@ -1,6 +1,6 @@
 <?php
 
-class PluginsModel extends Model
+class PluginsModel extends \Fc2blog\Model\Model
 {
 
   public static $instance = null;
@@ -81,7 +81,7 @@ class PluginsModel extends Model
       return $id;
     }
     // 作成したプラグインIDで更新
-    return Model::load('BlogPlugins')->updateByIdAndBlogId(array('plugin_id'=>$id), $blog_plugin['id'], $blog_plugin['blog_id']);
+    return \Fc2blog\Model\Model::load('BlogPlugins')->updateByIdAndBlogId(array('plugin_id'=>$id), $blog_plugin['id'], $blog_plugin['blog_id']);
   }
 
   /**
@@ -93,7 +93,7 @@ class PluginsModel extends Model
       return false;
     }
     // 登録状態(id<>0)のプラグインを未登録(id=0)に戻す
-    return Model::load('BlogPlugins')->update(array('plugin_id'=>0), 'plugin_id=?', array($id));
+    return \Fc2blog\Model\Model::load('BlogPlugins')->update(array('plugin_id'=>0), 'plugin_id=?', array($id));
   }
 
   /**

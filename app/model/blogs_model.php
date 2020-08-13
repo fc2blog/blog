@@ -1,6 +1,6 @@
 <?php
 
-class BlogsModel extends Model
+class BlogsModel extends \Fc2blog\Model\Model
 {
 
   public static $instance = null;
@@ -285,13 +285,13 @@ class BlogsModel extends Model
 
     // CategoryのSystem用Nodeの追加(id=1の削除できないノード)
     $data = array('name'=>__('Unclassified'), 'blog_id'=>$id);
-    Model::load('Categories')->addNode($data, 'blog_id=?', array($id));
+    \Fc2blog\Model\Model::load('Categories')->addNode($data, 'blog_id=?', array($id));
 
     // ブログ用の設定作成
-    Model::load('BlogSettings')->insert(array('blog_id'=>$id));
+    \Fc2blog\Model\Model::load('BlogSettings')->insert(array('blog_id'=>$id));
 
     // 初期のテンプレートを作成する(pc,mb,sp,tb)
-    $blog_templates_model = Model::load('BlogTemplates');
+    $blog_templates_model = \Fc2blog\Model\Model::load('BlogTemplates');
 
     $blog_data = array();
 
@@ -361,13 +361,13 @@ class BlogsModel extends Model
     $reply_type = strstr($blog_template['html'], '<%comment_reply_body>') ?
       \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
     // コメントの表示タイプを更新
-    Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
+    \Fc2blog\Model\Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
 
     $ret = $this->updateById($data, $blog_id);
 
     if ($ret) {
       // 更新に成功した場合 現在のテンプレートを削除
-      Model::load('BlogTemplates');
+      \Fc2blog\Model\Model::load('BlogTemplates');
       $template_path = BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type);
       is_file($template_path) && unlink($template_path);
       $css_path = BlogTemplatesModel::getCssFilePath($blog_id, $device_type);

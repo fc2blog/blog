@@ -45,7 +45,7 @@ abstract class UserController extends AppController
       return true;
     }
     // ログイン判定
-    return Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id);
+    return \Fc2blog\Model\Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id);
   }
 
   /**

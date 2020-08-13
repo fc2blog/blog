@@ -37,7 +37,7 @@
             <input type="button" value="<?php echo __('Add'); ?>" id="sys-add-tag-button" />
             <ul id="sys-add-tags"></ul>
             <ul id="sys-use-well-tags">
-            <?php $tags = Model::load('Tags')->getWellUsedTags($this->getBlogId()); ?>
+            <?php $tags = \Fc2blog\Model\Model::load('Tags')->getWellUsedTags($this->getBlogId()); ?>
             <?php foreach($tags as $key => $tag): ?><li><?php echo h($tag); ?></li><?php endforeach; ?>
             </ul>
           </td>

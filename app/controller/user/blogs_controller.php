@@ -11,7 +11,7 @@ class BlogsController extends UserController
    */
   public function index()
   {
-    $blog = Model::load('Blogs')->findByRandom();
+    $blog = \Fc2blog\Model\Model::load('Blogs')->findByRandom();
     if (empty($blog)) {
       return $this->error404();
     }

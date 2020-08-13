@@ -1,6 +1,6 @@
 <?php
 
-class CategoriesModel extends Model
+class CategoriesModel extends \Fc2blog\Model\Model
 {
 
   public static $instance = null;
@@ -282,7 +282,7 @@ SQL;
       'where'  => 'blog_id=? AND category_id=1',
       'params' => array($blog_id),
     );
-    $count = Model::load('EntryCategories')->find('one', $options);
+    $count = \Fc2blog\Model\Model::load('EntryCategories')->find('one', $options);
     $this->updateByIdAndBlogId(array('count'=>$count), 1, $blog_id);
 
     // カテゴリー削除

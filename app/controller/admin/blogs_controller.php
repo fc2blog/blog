@@ -24,7 +24,7 @@ class BlogsController extends AdminController
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
       $options['page'] = 0;
     }
-    $blogs_model = Model::load('Blogs');
+    $blogs_model = \Fc2blog\Model\Model::load('Blogs');
     $blogs = $blogs_model->find('all', $options);
     if ($blogs === false) $blogs = array();
     $paging = $blogs_model->getPaging($options);
@@ -46,7 +46,7 @@ class BlogsController extends AdminController
       return ;
     }
 
-    $blogs_model = Model::load('Blogs');
+    $blogs_model = \Fc2blog\Model\Model::load('Blogs');
 
     // 新規登録処理
     $errors = array();
@@ -71,7 +71,7 @@ class BlogsController extends AdminController
   {
     $request = \Fc2blog\Request::getInstance();
     /** @var BlogsModel $blogs_model */
-    $blogs_model = Model::load('Blogs');
+    $blogs_model = \Fc2blog\Model\Model::load('Blogs');
 
     $blog_id = $this->getBlogId();
 
@@ -111,7 +111,7 @@ class BlogsController extends AdminController
     $blog_id = $request->get('blog_id');
 
     // 切り替え先のブログの存在チェック
-    $blog = Model::load('Blogs')->findByIdAndUserId($blog_id, $this->getUserId());
+    $blog = \Fc2blog\Model\Model::load('Blogs')->findByIdAndUserId($blog_id, $this->getUserId());
     if (!empty($blog)) {
       $this->setBlog($blog);
     }
@@ -135,7 +135,7 @@ class BlogsController extends AdminController
     $user_id = $this->getUserId();
 
     // 削除データの取得
-    $blogs_model = Model::load('Blogs');
+    $blogs_model = \Fc2blog\Model\Model::load('Blogs');
     if (!$blog=$blogs_model->findByIdAndUserId($blog_id, $user_id)) {
       $this->redirect(array('action'=>'index'));
     }

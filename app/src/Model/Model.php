@@ -4,6 +4,8 @@
 * Sql群の書き出しクラス 子クラスでSingletonで呼び出し予定
 */
 
+namespace Fc2blog\Model;
+
 abstract class Model implements \Fc2blog\Model\ModelInterface
 {
   const LIKE_WILDCARD = '\\_%'; // MySQL用
@@ -76,7 +78,7 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
   {
     $model .= 'Model';
     if (empty(self::$loaded[$model])) {
-      require(snakeCase($model) . '.php');
+      require(__DIR__.'/../../model/'.snakeCase($model) . '.php');
       self::$loaded[$model] = new $model;
     }
     return self::$loaded[$model];

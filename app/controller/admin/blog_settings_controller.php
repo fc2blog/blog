@@ -42,7 +42,7 @@ class BlogSettingsController extends AdminController
   private function settingEdit($white_list, $action)
   {
     $request = \Fc2blog\Request::getInstance();
-    $blog_settings_model = Model::load('BlogSettings');
+    $blog_settings_model = \Fc2blog\Model\Model::load('BlogSettings');
 
     $blog_id = $this->getBlogId();
 
@@ -64,7 +64,7 @@ class BlogSettingsController extends AdminController
           && isset($blog_setting_data['comment_confirm'])
           && $blog_setting_data['comment_confirm'] == \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
       ) {
-        Model::load('Comments')->updateApproval($blog_id);
+        \Fc2blog\Model\Model::load('Comments')->updateApproval($blog_id);
       }
 
       // ブログの設定情報更新処理

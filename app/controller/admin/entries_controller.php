@@ -11,7 +11,7 @@ class EntriesController extends AdminController
   public function index()
   {
     $request = \Fc2blog\Request::getInstance();
-    $entries_model = Model::load('Entries');
+    $entries_model = \Fc2blog\Model\Model::load('Entries');
 
     $blog_id = $this->getBlogId();
 
@@ -21,7 +21,7 @@ class EntriesController extends AdminController
     $from = array();
 
     if ($keyword=$request->get('keyword')) {
-      $keyword = Model::escape_wildcard($keyword);
+      $keyword = \Fc2blog\Model\Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND (entries.title LIKE ? OR entries.body LIKE ? OR entries.extend LIKE ?)';
       $params = array_merge($params, array($keyword, $keyword, $keyword));
@@ -84,8 +84,8 @@ class EntriesController extends AdminController
     }
 
     $request = \Fc2blog\Request::getInstance();
-    $entries_model = Model::load('Entries');
-    $entry_categories_model = Model::load('EntryCategories');
+    $entries_model = \Fc2blog\Model\Model::load('Entries');
+    $entry_categories_model = \Fc2blog\Model\Model::load('EntryCategories');
 
     $blog_id = $this->getBlogId();
 
@@ -106,7 +106,7 @@ class EntriesController extends AdminController
         // カテゴリと紐付
         $entry_categories_model->save($blog_id, $id, $entry_categories_data);
         // タグと紐付
-        Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
+        \Fc2blog\Model\Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I created a entry'));
         $this->redirect(array('action'=>'index'));
@@ -129,8 +129,8 @@ class EntriesController extends AdminController
     }
 
     $request = \Fc2blog\Request::getInstance();
-    $entries_model = Model::load('Entries');
-    $entry_categories_model = Model::load('EntryCategories');
+    $entries_model = \Fc2blog\Model\Model::load('Entries');
+    $entry_categories_model = \Fc2blog\Model\Model::load('EntryCategories');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -142,7 +142,7 @@ class EntriesController extends AdminController
       }
       $request->set('entry', $entry);
       $request->set('entry_categories', array('category_id'=>$entry_categories_model->getCategoryIds($blog_id, $id)));
-      $request->set('entry_tags', Model::load('Tags')->getEntryTagNames($blog_id, $id));   // タグの文字列をテーブルから取得
+      $request->set('entry_tags', \Fc2blog\Model\Model::load('Tags')->getEntryTagNames($blog_id, $id));   // タグの文字列をテーブルから取得
       return ;
     }
 
@@ -161,7 +161,7 @@ class EntriesController extends AdminController
         // カテゴリと紐付
         $entry_categories_model->save($blog_id, $id, $entry_categories_data);
         // タグと紐付
-        Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
+        \Fc2blog\Model\Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I have updated the entry'));
         $this->redirect(array('action'=>'index'));
@@ -181,7 +181,7 @@ class EntriesController extends AdminController
     $request = \Fc2blog\Request::getInstance();
     if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
       // 削除処理
-      if (Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId()))
+      if (\Fc2blog\Model\Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId()))
         $this->setInfoMessage(__('I removed the entry'));
     }
     $this->redirect(array('action'=>'index'));
@@ -195,7 +195,7 @@ class EntriesController extends AdminController
     \Fc2blog\Config::set('DEBUG', 0);    // デバッグ設定を変更
 
     $request = \Fc2blog\Request::getInstance();
-    $files_model = Model::load('Files');
+    $files_model = \Fc2blog\Model\Model::load('Files');
 
     $blog_id = $this->getBlogId();
 

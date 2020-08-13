@@ -182,7 +182,7 @@ function posted_at_select_to_input(){
         <ul id="sys-add-tags"></ul>
         <hr id="add-tag-line" />
         <ul id="sys-use-well-tags">
-          <?php $tags = Model::load('Tags')->getWellUsedTags($this->getBlogId()); ?>
+          <?php $tags = \Fc2blog\Model\Model::load('Tags')->getWellUsedTags($this->getBlogId()); ?>
           <?php foreach($tags as $key => $tag): ?><li><?php echo h($tag); ?></li><?php endforeach; ?>
         </ul>
       </div><!--/form_contents-->

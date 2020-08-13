@@ -44,7 +44,7 @@
       <?php if ($this->isLogin()): ?>
       <div id="blog_id">
         <?php echo __('Blog name'); ?>：
-        <?php $blogSelectList = Model::load('Blogs')->getSelectList($this->getUserId()); ?>
+        <?php $blogSelectList = \Fc2blog\Model\Model::load('Blogs')->getSelectList($this->getUserId()); ?>
         <select id="sys-blog-change">
           <?php foreach ($blogSelectList as $key => $value) : ?>
             <option value="<?php echo $key; ?>" <?php if($key==$this->getBlogId()): ?>selected="selected"<?php endif; ?>><?php echo h($value) ?></option>

@@ -1,6 +1,6 @@
 <header><h2><?php echo __('List of users'); ?></h2></header>
 
-<?php $blogs_model = Model::load('Blogs'); ?>
+<?php $blogs_model = \Fc2blog\Model\Model::load('Blogs'); ?>
 
 <?php foreach($users as $user): ?>
   <h3><?php echo h($user['login_id']); ?></h3>

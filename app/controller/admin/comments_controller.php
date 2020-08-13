@@ -11,7 +11,7 @@ class CommentsController extends AdminController
   public function index()
   {
     $request = \Fc2blog\Request::getInstance();
-    $comments_model = Model::load('Comments');
+    $comments_model = \Fc2blog\Model\Model::load('Comments');
 
     $blog_id = $this->getBlogId();
 
@@ -20,7 +20,7 @@ class CommentsController extends AdminController
     $params = array($blog_id);
 
     if ($keyword=$request->get('keyword')) {
-      $keyword = Model::escape_wildcard($keyword);
+      $keyword = \Fc2blog\Model\Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND (comments.title LIKE ? OR comments.body LIKE ? OR comments.name LIKE ?)';
       $params = array_merge($params, array($keyword, $keyword, $keyword));
@@ -85,7 +85,7 @@ class CommentsController extends AdminController
   public function approval()
   {
     $request = \Fc2blog\Request::getInstance();
-    $comments_model = Model::load('Comments');
+    $comments_model = \Fc2blog\Model\Model::load('Comments');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -120,7 +120,7 @@ class CommentsController extends AdminController
     $this->layout = 'json.html';
 
     $request = \Fc2blog\Request::getInstance();
-    $comments_model = Model::load('Comments');
+    $comments_model = \Fc2blog\Model\Model::load('Comments');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -147,7 +147,7 @@ class CommentsController extends AdminController
   public function reply()
   {
     $request = \Fc2blog\Request::getInstance();
-    $comments_model = Model::load('Comments');
+    $comments_model = \Fc2blog\Model\Model::load('Comments');
 
     $comment_id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -161,7 +161,7 @@ class CommentsController extends AdminController
 
     // コメントの初期表示時入力データ設定
     if (!$request->get('comment')){
-      $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+      $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
       if ($comment['reply_status']!=\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']==\Fc2blog\Config::get('COMMENT.QUOTE.USE')) {
         $comment['reply_body'] = '> ' . str_replace("\n", "\n> ",$comment['body']) . "\n";
       }
@@ -202,7 +202,7 @@ class CommentsController extends AdminController
     $this->layout = 'ajax.html';
 
     $request = \Fc2blog\Request::getInstance();
-    $comments_model = Model::load('Comments');
+    $comments_model = \Fc2blog\Model\Model::load('Comments');
 
     $comment_id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -216,7 +216,7 @@ class CommentsController extends AdminController
 
     // コメントの初期表示時入力データ設定
     if (!$request->get('comment')){
-      $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+      $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
       if ($comment['reply_status']!=\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']==\Fc2blog\Config::get('COMMENT.QUOTE.USE')) {
         $comment['reply_body'] = '> ' . str_replace("\n", "\n> ",$comment['body']) . "\n";
       }
@@ -248,7 +248,7 @@ class CommentsController extends AdminController
     $request = \Fc2blog\Request::getInstance();
 
     // 削除処理
-    if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+    if (\Fc2blog\Model\Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
       $this->setInfoMessage(__('I removed the comment'));
     } else {
       $this->setErrorMessage(__('I failed to remove'));

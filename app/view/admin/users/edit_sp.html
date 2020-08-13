@@ -12,7 +12,7 @@
     </div>
     <div class="form_contents">
       <h4><?php echo __('Blog ID at login'); ?></h4>
-      <?php echo \Fc2blog\Web\Html::input('user[login_blog_id]', 'select', array('options'=>Model::load('Blogs')->getListByUserId(\Fc2blog\Session::get('user_id')))); ?>
+      <?php echo \Fc2blog\Web\Html::input('user[login_blog_id]', 'select', array('options'=>\Fc2blog\Model\Model::load('Blogs')->getListByUserId(\Fc2blog\Session::get('user_id')))); ?>
       <?php if (isset($errors['user']['login_blog_id'])): ?><span class="error"><?php echo $errors['user']['login_blog_id']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">

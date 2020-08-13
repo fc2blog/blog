@@ -21,7 +21,7 @@ class UsersController extends AdminController
       'page'  => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order' => 'id DESC',
     );
-    $users_model = Model::load('Users');
+    $users_model = \Fc2blog\Model\Model::load('Users');
     $users = $users_model->find('all', $options);
     $paging = $users_model->getPaging($options);
 
@@ -45,8 +45,8 @@ class UsersController extends AdminController
       return ;
     }
 
-    $users_model = Model::load('Users');
-    $blogs_model = Model::load('Blogs');
+    $users_model = \Fc2blog\Model\Model::load('Users');
+    $blogs_model = \Fc2blog\Model\Model::load('Blogs');
 
     // ユーザーとブログの新規登録処理
     $errors = array();
@@ -76,7 +76,7 @@ class UsersController extends AdminController
   public function edit()
   {
     $request = \Fc2blog\Request::getInstance();
-    $users_model = Model::load('Users');
+    $users_model = \Fc2blog\Model\Model::load('Users');
 
     $user_id = $this->getUserId();
 
@@ -117,7 +117,7 @@ class UsersController extends AdminController
     }
 
     // 削除処理
-    Model::load('Users')->deleteById($this->getUserId());
+    \Fc2blog\Model\Model::load('Users')->deleteById($this->getUserId());
     $this->setInfoMessage(__('Was completed withdrawal'));
     $this->logout();
   }
@@ -138,7 +138,7 @@ class UsersController extends AdminController
       return ;
     }
 
-    $users_model = Model::load('Users');
+    $users_model = \Fc2blog\Model\Model::load('Users');
 
     // ログインフォームのバリデート
     $errors = $users_model->loginValidate($request->get('user'), $data, array('login_id', 'password'));
@@ -146,7 +146,7 @@ class UsersController extends AdminController
       $user = $users_model->findByLoginIdAndPassword($data['login_id'], $data['password']);
       if ($user) {
         // ログイン処理
-        $blog = Model::load('Blogs')->getLoginBlog($user);
+        $blog = \Fc2blog\Model\Model::load('Blogs')->getLoginBlog($user);
         $this->loginProcess($user, $blog);
         $users_model->updateById(array('logged_at'=>date('Y-m-d H:i:s')), $user['id']);
         if (!$this->isSelectedBlog()) {

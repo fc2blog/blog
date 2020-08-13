@@ -1,6 +1,6 @@
 <?php
 
-class BlogSettingsModel extends Model{
+class BlogSettingsModel extends \Fc2blog\Model\Model{
 
   public $validates = array();
 

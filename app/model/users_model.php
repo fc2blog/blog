@@ -1,6 +1,6 @@
 <?php
 
-class UsersModel extends Model
+class UsersModel extends \Fc2blog\Model\Model
 {
 
   public static $instance = null;
@@ -40,7 +40,7 @@ class UsersModel extends Model
     );
     if (in_array('login_blog_id', $white_list)) {
       $this->validates['login_blog_id'] = array(
-        'in_array' => array('values'=>array_keys(Model::load('Blogs')->getListByUserId(\Fc2blog\Session::get('user_id')))),
+        'in_array' => array('values'=>array_keys(\Fc2blog\Model\Model::load('Blogs')->getListByUserId(\Fc2blog\Session::get('user_id')))),
       );
     }
   }
@@ -142,7 +142,7 @@ class UsersModel extends Model
   */
   public function deleteById($user_id, $options=array())
   {
-    $blogs_model = Model::load('Blogs');
+    $blogs_model = \Fc2blog\Model\Model::load('Blogs');
 
     // ユーザーが所持しているブログを全て削除
     $blogs = $blogs_model->findByUserId($user_id);

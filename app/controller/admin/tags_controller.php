@@ -11,7 +11,7 @@ class TagsController extends AdminController
   public function index()
   {
     $request = \Fc2blog\Request::getInstance();
-    $tags_model = Model::load('Tags');
+    $tags_model = \Fc2blog\Model\Model::load('Tags');
 
     $blog_id = $this->getBlogId();
 
@@ -22,7 +22,7 @@ class TagsController extends AdminController
     $params = array($blog_id);
 
     if ($name=$request->get('name')) {
-      $name = Model::escape_wildcard($name);
+      $name = \Fc2blog\Model\Model::escape_wildcard($name);
       $name = "%{$name}%";
       $where .= ' AND name LIKE ?';
       $params = array_merge($params, array($name));
@@ -62,7 +62,7 @@ class TagsController extends AdminController
   public function edit()
   {
     $request = \Fc2blog\Request::getInstance();
-    $tags_model = Model::load('Tags');
+    $tags_model = \Fc2blog\Model\Model::load('Tags');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -114,7 +114,7 @@ class TagsController extends AdminController
 
     if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
       // 削除処理
-      if (Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+      if (\Fc2blog\Model\Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
         $this->setInfoMessage(__('I removed the tag'));
       } else {
         $this->setErrorMessage(__('I failed to remove'));

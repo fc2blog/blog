@@ -1,6 +1,6 @@
 <?php
 
-class EntriesModel extends Model
+class EntriesModel extends \Fc2blog\Model\Model
 {
 
   public static $instance = null;
@@ -145,8 +145,8 @@ SQL;
     }
 
     // 記事のカテゴリ一覧を取得 TODO:後でcacheを使用する形に
-    $entry['categories'] = Model::load('Categories')->getEntryCategories($entry['blog_id'], $entry['id']);
-    $entry['tags'] = Model::load('Tags')->getEntryTags($entry['blog_id'], $entry['id']);
+    $entry['categories'] = \Fc2blog\Model\Model::load('Categories')->getEntryCategories($entry['blog_id'], $entry['id']);
+    $entry['tags'] = \Fc2blog\Model\Model::load('Tags')->getEntryTags($entry['blog_id'], $entry['id']);
 
     return $entry;
   }
@@ -221,7 +221,7 @@ SQL;
     $flag = parent::insert($data, $options);
 
     if ($flag && isset($data['blog_id'])) {
-      Model::load('Blogs')->updateLastPostedAt($data['blog_id']);
+      \Fc2blog\Model\Model::load('Blogs')->updateLastPostedAt($data['blog_id']);
     }
     return $flag;
   }
@@ -256,13 +256,13 @@ SQL;
   public function deleteByIdAndBlogId($entry_id, $blog_id, $options=array())
   {
     // コメント削除
-    Model::load('Comments')->deleteEntryRelation($blog_id, $entry_id);
+    \Fc2blog\Model\Model::load('Comments')->deleteEntryRelation($blog_id, $entry_id);
 
     // カテゴリー削除
-    Model::load('EntryCategories')->deleteEntryRelation($blog_id, $entry_id);
+    \Fc2blog\Model\Model::load('EntryCategories')->deleteEntryRelation($blog_id, $entry_id);
 
     // タグ削除
-    Model::load('EntryTags')->deleteEntryRelation($blog_id, $entry_id);
+    \Fc2blog\Model\Model::load('EntryTags')->deleteEntryRelation($blog_id, $entry_id);
 
     // 記事本体削除
     return parent::deleteByIdAndBlogId($entry_id, $blog_id, $options);
@@ -370,7 +370,7 @@ SQL;
   */
   public function getTemplateRecents($blog_id)
   {
-    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+    $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
     $options = array(
       'where'  => 'blog_id=?',
       'params' => array($blog_id),

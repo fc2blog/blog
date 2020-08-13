@@ -1,6 +1,6 @@
 <?php
 
-class TagsModel extends Model
+class TagsModel extends \Fc2blog\Model\Model
 {
 
   public static $instance = null;
@@ -224,7 +224,7 @@ SQL;
   public function deleteByIdAndBlogId($tag_id, $blog_id, $options=array())
   {
     // タグの紐付け情報削除
-    Model::load('EntryTags')->delete('blog_id=? AND tag_id=?', array($blog_id, $tag_id));
+    \Fc2blog\Model\Model::load('EntryTags')->delete('blog_id=? AND tag_id=?', array($blog_id, $tag_id));
 
     // 記事本体削除
     return parent::deleteByIdAndBlogId($tag_id, $blog_id, $options);

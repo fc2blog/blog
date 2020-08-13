@@ -5,7 +5,7 @@
   $request = \Fc2blog\Request::getInstance();
 
   $entry_categories = $request->get('entry_categories', array('category_id' => array()));
-  $categories = Model::load('Categories')->getList($blog_id);
+  $categories = \Fc2blog\Model\Model::load('Categories')->getList($blog_id);
 ?>
 
 <h3><span class="h3_inner"><?php echo __('Categories'); ?></span></h3>

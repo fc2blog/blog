@@ -3,8 +3,6 @@
 * Controllerの親クラス
 */
 
-require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model.php');
-
 abstract class Controller
 {
 

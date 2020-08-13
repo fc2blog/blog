@@ -14,10 +14,8 @@ class PasswordCheckTest extends TestCase
 {
   public function setUp(): void
   {
-    /** @noinspection PhpIncludeInspection */
-    require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model.php');
     if (!class_exists(CommentsModel::class)) {
-      Model::load('comments');
+      \Fc2blog\Model\Model::load('comments');
     }
 
     DBHelper::clearDbAndInsertFixture();

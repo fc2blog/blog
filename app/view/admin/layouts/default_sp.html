@@ -150,7 +150,7 @@
               <li><a class="touch" href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Users', 'action'=>'index')); ?>"><span><i class="sidemenu_history"></i></span><span>ユーザー一覧</span></a></li>
             <?php endif; ?>
           <li class="list_titile"><?php echo __('Blog name'); ?></li>
-          <?php $blogSelectList = Model::load('Blogs')->getSelectList($this->getUserId()); ?>
+          <?php $blogSelectList = \Fc2blog\Model\Model::load('Blogs')->getSelectList($this->getUserId()); ?>
           <?php foreach ($blogSelectList as $key => $value) : ?>
             <li<?php if($key==$this->getBlogId()): ?> class="selected"<?php endif; ?>><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Blogs', 'action'=>'choice', 'blog_id'=>$key)); ?>"><span><i class="sidemenu_home"></i></span><span><?php echo $value; ?></span></a></li>
           <?php endforeach; ?>
