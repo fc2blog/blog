@@ -66,7 +66,7 @@ describe("crawl some blog", () => {
     // console.log(template_cookie);
     expect(template_cookie.value).toEqual("glid");
     expect(template_cookie.domain).toEqual("localhost");
-    expect(template_cookie.path).toEqual("/testblog2");
+    expect(template_cookie.path).toEqual("/");
     expect(template_cookie.expires).toEqual(-1);
     expect(template_cookie.httpOnly).toEqual(false);
     expect(template_cookie.secure).toEqual(false);
