@@ -23,11 +23,11 @@ describe("crawl admin pages", () => {
     await c.getSS("admin_login.png");
 
     // check session cookie.
-    const cookies = await c.page.cookies()
+    const cookies = await c.page.cookies();
     expect(cookies.length).toEqual(1);
-    expect(cookies[0].name).toEqual('dojima');
-    expect(cookies[0].domain).toEqual('localhost');
-    expect(cookies[0].path).toEqual('/');
+    expect(cookies[0].name).toEqual("dojima");
+    expect(cookies[0].domain).toEqual("localhost");
+    expect(cookies[0].path).toEqual("/");
     expect(cookies[0].expires).toEqual(-1);
     expect(cookies[0].httpOnly).toEqual(true);
     expect(cookies[0].secure).toEqual(false);
@@ -71,26 +71,22 @@ describe("crawl admin pages", () => {
       "#id_form > tbody > tr:nth-child(1) > td",
       (elm) => elm.textContent
     );
-    expect(/ログインIDまたはパスワードが違います/.exec(input_error_message)).not.toBeNull();
+    expect(
+      /ログインIDまたはパスワードが違います/.exec(input_error_message)
+    ).not.toBeNull();
   });
 
   it("login success", async () => {
     await c.page.$eval(
-        "#id_form input[name='user[login_id]']",
-        (elm: HTMLInputElement) => (elm.value = "")
-    );
-    await c.page.type(
       "#id_form input[name='user[login_id]']",
-      admin_id
+      (elm: HTMLInputElement) => (elm.value = "")
     );
+    await c.page.type("#id_form input[name='user[login_id]']", admin_id);
     await c.page.$eval(
-        "#id_form input[name='user[password]']",
-        (elm: HTMLInputElement) => (elm.value = "")
-    );
-    await c.page.type(
       "#id_form input[name='user[password]']",
-      admin_pass
+      (elm: HTMLInputElement) => (elm.value = "")
     );
+    await c.page.type("#id_form input[name='user[password]']", admin_pass);
 
     let [response] = await Promise.all([
       c.waitLoad(),
@@ -107,7 +103,9 @@ describe("crawl admin pages", () => {
   it("open お知らせ", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(1) > ul > li:nth-child(1) > a[href='/admin/common/notice']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(1) > ul > li:nth-child(1) > a[href='/admin/common/notice']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
@@ -118,18 +116,24 @@ describe("crawl admin pages", () => {
   it("open 新しく記事を書く", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(1) > ul > li:nth-child(3) > a[href='/admin/entries/create']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(1) > ul > li:nth-child(3) > a[href='/admin/entries/create']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/entries/create");
+    expect(response.url()).toEqual(
+      "http://localhost:8080/admin/entries/create"
+    );
   });
 
   it("open 記事一覧", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(1) > ul > li:nth-child(4) > a[href='/admin/entries/index']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(1) > ul > li:nth-child(4) > a[href='/admin/entries/index']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
@@ -140,18 +144,24 @@ describe("crawl admin pages", () => {
   it("open コメント一覧", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(1) > ul > li:nth-child(5) > a[href='/admin/comments/index']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(1) > ul > li:nth-child(5) > a[href='/admin/comments/index']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/comments/index");
+    expect(response.url()).toEqual(
+      "http://localhost:8080/admin/comments/index"
+    );
   });
 
   it("open ファイルアップロード", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(1) > ul > li:nth-child(6) > a[href='/admin/files/upload']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(1) > ul > li:nth-child(6) > a[href='/admin/files/upload']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
@@ -162,40 +172,54 @@ describe("crawl admin pages", () => {
   it("open テンプレート管理", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(2) > ul > li:nth-child(1) > a[href='/admin/blog_templates/index']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(2) > ul > li:nth-child(1) > a[href='/admin/blog_templates/index']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/blog_templates/index");
+    expect(response.url()).toEqual(
+      "http://localhost:8080/admin/blog_templates/index"
+    );
   });
 
   it("open プラグイン管理", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(2) > ul > li:nth-child(2) > a[href='/admin/blog_plugins/index']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(2) > ul > li:nth-child(2) > a[href='/admin/blog_plugins/index']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/blog_plugins/index");
+    expect(response.url()).toEqual(
+      "http://localhost:8080/admin/blog_plugins/index"
+    );
   });
 
   it("open カテゴリー管理", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(2) > ul > li:nth-child(3) > a[href='/admin/categories/create']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(2) > ul > li:nth-child(3) > a[href='/admin/categories/create']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/categories/create");
+    expect(response.url()).toEqual(
+      "http://localhost:8080/admin/categories/create"
+    );
   });
 
   it("open タグ一覧", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(2) > ul > li:nth-child(4) > a[href='/admin/tags/index']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(2) > ul > li:nth-child(4) > a[href='/admin/tags/index']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
@@ -206,7 +230,9 @@ describe("crawl admin pages", () => {
   it("open ブログ一覧", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(3) > ul > li:nth-child(1) > a[href='/admin/blogs/index']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(3) > ul > li:nth-child(1) > a[href='/admin/blogs/index']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
@@ -217,7 +243,9 @@ describe("crawl admin pages", () => {
   it("open ユーザー設定", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(3) > ul > li:nth-child(2) > a[href='/admin/users/edit']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(3) > ul > li:nth-child(2) > a[href='/admin/users/edit']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
@@ -235,7 +263,10 @@ describe("crawl admin pages", () => {
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     expect(response.url()).toEqual("http://localhost:8080/admin/users/edit");
 
-    const home_string = await c.page.$eval("#left-nav > div:nth-child(1) > h3", elm=>elm.textContent);
+    const home_string = await c.page.$eval(
+      "#left-nav > div:nth-child(1) > h3",
+      (elm) => elm.textContent
+    );
     expect(/Home/.exec(home_string)).not.toEqual(null);
   });
 
@@ -249,14 +280,19 @@ describe("crawl admin pages", () => {
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     expect(response.url()).toEqual("http://localhost:8080/admin/users/edit");
 
-    const home_string = await c.page.$eval("#left-nav > div:nth-child(1) > h3", elm=>elm.textContent);
+    const home_string = await c.page.$eval(
+      "#left-nav > div:nth-child(1) > h3",
+      (elm) => elm.textContent
+    );
     expect(/ホーム/.exec(home_string)).not.toEqual(null);
   });
 
   it("logout success", async () => {
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#left-nav > div:nth-child(3) > ul > li:nth-child(3) > a[href='/admin/users/logout']"),
+      await c.page.click(
+        "#left-nav > div:nth-child(3) > ul > li:nth-child(3) > a[href='/admin/users/logout']"
+      ),
     ]);
 
     expect(response.status()).toEqual(200);
@@ -264,8 +300,8 @@ describe("crawl admin pages", () => {
     expect(response.url()).toEqual("http://localhost:8080/admin/users/login");
 
     const h2_text = await c.page.$eval(
-        "#main-contents > header > h2",
-        (elm) => elm.textContent
+      "#main-contents > header > h2",
+      (elm) => elm.textContent
     );
     expect(/ログイン/.exec(h2_text)).not.toBeNull();
   });

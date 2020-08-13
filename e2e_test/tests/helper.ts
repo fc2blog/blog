@@ -58,25 +58,27 @@ export class Helper {
     return some[0];
   }
 
-    async isExists(selector): Promise<boolean> {
-        const elms = await this.page.$$(selector);
-        return elms.length > 0;
-    }
+  async isExists(selector): Promise<boolean> {
+    const elms = await this.page.$$(selector);
+    return elms.length > 0;
+  }
 
-    async setCheckBox(selector): Promise<void> {
-        await Promise.all([
-            this.page.$eval(selector, elem => (elem as HTMLElement).click()),
-            this.page.waitForSelector(selector)
-        ]);
-    }
+  async setCheckBox(selector): Promise<void> {
+    await Promise.all([
+      this.page.$eval(selector, (elem) => (elem as HTMLElement).click()),
+      this.page.waitForSelector(selector),
+    ]);
+  }
 
-    // 画面にPHPのNoticeやWarningエラーがでておらず、</html>まで出力されている
-    async isNotAnyNoticeOrWarningsFinishWithEndHtmlTag(): Promise<boolean> {
-        const whole_text = await this.page.$eval(
-            "html",
-            (elm) => elm.textContent
-        );
-        const whole_html = await this.page.evaluate(() => document.documentElement.outerHTML);
-        return /(Notice: |Warning: )/.exec(whole_text) === null && /<\/html>/.exec(whole_html) !== null;
-    }
+  // 画面にPHPのNoticeやWarningエラーがでておらず、</html>まで出力されている
+  async isNotAnyNoticeOrWarningsFinishWithEndHtmlTag(): Promise<boolean> {
+    const whole_text = await this.page.$eval("html", (elm) => elm.textContent);
+    const whole_html = await this.page.evaluate(
+      () => document.documentElement.outerHTML
+    );
+    return (
+      /(Notice: |Warning: )/.exec(whole_text) === null &&
+      /<\/html>/.exec(whole_html) !== null
+    );
+  }
 }
