@@ -38,7 +38,7 @@ class FilesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', App::getPageLimit('FILE'), \Fc2blog\Request::VALID_POSITIVE_INT),
+      'limit'  => $request->get('limit', \Fc2blog\App::getPageLimit('FILE'), \Fc2blog\Request::VALID_POSITIVE_INT),
       'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
@@ -62,7 +62,7 @@ class FilesController extends AdminController
 
     $blog_id = $this->getBlogId();
 
-    \Fc2blog\Session::set('sig', App::genRandomString());
+    \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
      
     // 初期表示時
     if ($request->file('file')) {
@@ -76,8 +76,8 @@ class FilesController extends AdminController
         if ($id=$files_model->insert($data_file)) {
           // ファイルの移動
           $data_file['id'] = $id;
-          $move_file_path = App::getUserFilePath($data_file, true);
-          App::mkdir($move_file_path);
+          $move_file_path = \Fc2blog\App::getUserFilePath($data_file, true);
+          \Fc2blog\App::mkdir($move_file_path);
           move_uploaded_file($tmp_name, $move_file_path);
 
           $this->setInfoMessage(__('I have completed the upload of files'));
@@ -92,7 +92,7 @@ class FilesController extends AdminController
     }
 
     // PCの場合はajaxでファイル情報を取得するので以下の処理は不要
-    if (App::isPC()) {
+    if (\Fc2blog\App::isPC()) {
       return ;
     }
 
@@ -119,7 +119,7 @@ class FilesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', App::getPageLimit('FILE'), \Fc2blog\Request::VALID_POSITIVE_INT),
+      'limit'  => $request->get('limit', \Fc2blog\App::getPageLimit('FILE'), \Fc2blog\Request::VALID_POSITIVE_INT),
       'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
@@ -153,7 +153,7 @@ class FilesController extends AdminController
       if (!empty($back_url)) {
         $request->set('back_url', $back_url);    // 戻る用のURL
       }
-      \Fc2blog\Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 
@@ -173,8 +173,8 @@ class FilesController extends AdminController
         if (!empty($tmp_name)) {
           $data_file['id'] = $id;
           $data_file['blog_id'] = $blog_id;
-          $move_file_path = App::getUserFilePath($data_file, true);
-          App::deleteFile($blog_id, $id);
+          $move_file_path = \Fc2blog\App::getUserFilePath($data_file, true);
+          \Fc2blog\App::deleteFile($blog_id, $id);
           move_uploaded_file($tmp_name, $move_file_path);
         }
 

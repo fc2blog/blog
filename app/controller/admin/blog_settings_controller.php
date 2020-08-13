@@ -48,7 +48,7 @@ class BlogSettingsController extends AdminController
 
     // 初期表示時に編集データの取得&設定
     if (!$request->get('blog_setting') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
       $blog_setting = $blog_settings_model->findByBlogId($blog_id);
       $request->set('blog_setting', $blog_setting);
       return ;

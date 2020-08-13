@@ -1,7 +1,7 @@
 
 <h3 id="entry_count">
   <?php echo __('File search'); ?>[<?php echo __('Hits'); ?>&nbsp;<?php echo $paging['count']; ?><?php echo __(' results'); ?>]
-  <?php echo Html::input('limit', 'select', array('options'=>App::getPageList('FILE'), 'default'=>\Fc2blog\Config::get('FILE.DEFAULT_LIMIT'))); ?>
+  <?php echo Html::input('limit', 'select', array('options'=>\Fc2blog\App::getPageList('FILE'), 'default'=>\Fc2blog\Config::get('FILE.DEFAULT_LIMIT'))); ?>
   <?php echo Html::input('page', 'select', array('options'=>Model::getPageList($paging), 'default'=>0)); ?>
 </h3>
 <p><?php echo __('You can search to match the conditions file.'); ?></p>
@@ -9,7 +9,7 @@
   <form method="GET" id="sys-search-form" onsubmit="return false;">
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Files" />
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="ajax_index" />
-    <?php echo Html::input('limit', 'hidden', array('default'=>App::getPageLimit('FILE'))); ?>
+    <?php echo Html::input('limit', 'hidden', array('default'=>\Fc2blog\App::getPageLimit('FILE'))); ?>
     <?php echo Html::input('page', 'hidden', array('default'=>0)); ?>
     <?php echo Html::input('order', 'hidden', array('default'=>'created_at_desc')); ?>
     <br /><?php echo Html::input('keyword', 'text', array('maxlength'=>100)); ?>
@@ -37,11 +37,11 @@
         <td class="center ss_cell"><input type="checkbox" name="id[]" value="<?php echo $file['id']; ?>" /></td>
         <td class="center">
           <?php if (in_array($file['ext'], array('jpeg', 'jpg', 'png', 'gif'))) : ?>
-            <img src="<?php echo App::getUserFilePath($file, false, true); ?>" style="width: 120px;" />
+            <img src="<?php echo \Fc2blog\App::getUserFilePath($file, false, true); ?>" style="width: 120px;" />
           <?php endif; ?>
         </td>
         <td><?php echo df($file['created_at'], 'y/m/d'); ?></td>
-        <td><a href="<?php echo App::getUserFilePath($file, false, true); ?>" target="_blank"><?php echo th($file['name'], 30); ?></a></td>
+        <td><a href="<?php echo \Fc2blog\App::getUserFilePath($file, false, true); ?>" target="_blank"><?php echo th($file['name'], 30); ?></a></td>
         <td class="center s_cell"><a href="<?php echo Html::url(array('action'=>'edit', 'id'=>$file['id'])); ?>"><?php echo __('Edit'); ?></a></td>
         <td class="center s_cell"><a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$file['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
       </tr>

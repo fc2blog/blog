@@ -14,7 +14,7 @@ if (!empty($entries)) {
     // topentry系変数のデータ設定
     $entries[$key]['title_w_img'] = $value['title'];
     $entries[$key]['title'] = strip_tags($value['title']);
-    $entries[$key]['link'] = App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$value['blog_id'], 'id'=>$value['id']));
+    $entries[$key]['link'] = \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$value['blog_id'], 'id'=>$value['id']));
 
     list($entries[$key]['year'], $entries[$key]['month'], $entries[$key]['day'],
       $entries[$key]['hour'], $entries[$key]['minute'], $entries[$key]['second'], $entries[$key]['youbi'], $entries[$key]['month_short']

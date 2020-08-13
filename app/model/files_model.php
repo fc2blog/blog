@@ -132,7 +132,7 @@ class FilesModel extends Model{
 
     // ファイル削除
     if ($flag) {
-      App::deleteFile($file['blog_id'], $file['id']);
+      \Fc2blog\App::deleteFile($file['blog_id'], $file['id']);
     }
 
     return $flag;

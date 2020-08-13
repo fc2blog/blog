@@ -60,7 +60,7 @@ class BlogTemplatesModel extends Model
   public static function fc2TemplateSyntax($value)
   {
     // フォルダが存在しない場合作成
-    $templatePath = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer(\Fc2blog\Session::get('blog_id')) . '/syntax.php';
+    $templatePath = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer(\Fc2blog\Session::get('blog_id')) . '/syntax.php';
     $templateDir = dirname($templatePath);
     if (!file_exists($templateDir)) {
       mkdir($templateDir, 0777, true);
@@ -85,7 +85,7 @@ class BlogTemplatesModel extends Model
   */
   public static function getTemplateFilePath($blog_id, $device_type=0, $isPreview=false)
   {
-    return \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
+    return \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
   }
 
   /**
@@ -93,7 +93,7 @@ class BlogTemplatesModel extends Model
   */
   public static function getCssFilePath($blog_id, $device_type, $isPreview=false)
   {
-    return \Fc2blog\Config::get('WWW_UPLOAD_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
+    return \Fc2blog\Config::get('WWW_UPLOAD_DIR') . \Fc2blog\App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
   }
 
   /**
@@ -101,7 +101,7 @@ class BlogTemplatesModel extends Model
   */
   public static function getCssUrl($blog_id, $device_type, $isPreview=false)
   {
-    return '/' . \Fc2blog\Config::get('UPLOAD_DIR_NAME') . '/' . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
+    return '/' . \Fc2blog\Config::get('UPLOAD_DIR_NAME') . '/' . \Fc2blog\App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
   }
 
   /**

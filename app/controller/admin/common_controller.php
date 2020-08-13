@@ -20,7 +20,7 @@ class CommonController extends AdminController
 
     // TOPへ戻す
     $url = \Fc2blog\Config::get('BASE_DIRECTORY');
-    $device_name = App::getArgsDevice();
+    $device_name = \Fc2blog\App::getArgsDevice();
     if (!empty($device_name)) {
       $url .= '?' . $device_name;
     }

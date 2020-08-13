@@ -33,7 +33,7 @@
             </td>
           <?php endif; ?>
           <td class="center">
-            <a href="<?php echo App::userURL(array('controller'=>'entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId(), 'template_id'=>$blog_template['id'], $device_key=>1), false, true); ?>" target="_blank"><?php echo __('Preview'); ?></a>
+            <a href="<?php echo \Fc2blog\App::userURL(array('controller'=>'entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId(), 'template_id'=>$blog_template['id'], $device_key=>1), false, true); ?>" target="_blank"><?php echo __('Preview'); ?></a>
           </td>
           <td class="center">
             <?php if (in_array($blog_template['id'], $template_ids)): ?>

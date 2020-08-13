@@ -15,7 +15,7 @@ class TagsController extends AdminController
 
     $blog_id = $this->getBlogId();
 
-    \Fc2blog\Session::set('sig', App::genRandomString());
+    \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
 
     // 検索条件作成
     $where = 'blog_id=?';

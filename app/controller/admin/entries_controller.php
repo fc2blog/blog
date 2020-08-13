@@ -54,7 +54,7 @@ class EntriesController extends AdminController
       case 'body_asc':      $order = 'entries.body ASC, entries.id ASC';            break;
     }
 
-    \Fc2blog\Session::set('sig', App::genRandomString());
+    \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
 
     // オプション設定
     $options = array(
@@ -91,7 +91,7 @@ class EntriesController extends AdminController
 
     // 初期表示時
     if (!$request->get('entry') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 
@@ -210,7 +210,7 @@ class EntriesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => \Fc2blog\Config::get('PAGE.FILE.LIMIT', App::getPageLimit('FILE_AJAX')),
+      'limit'  => \Fc2blog\Config::get('PAGE.FILE.LIMIT', \Fc2blog\App::getPageLimit('FILE_AJAX')),
       'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order'  => 'id DESC',
     );

@@ -137,7 +137,7 @@ class BlogPluginsModel extends Model
   public static function fc2PluginSyntax($value)
   {
     // フォルダが存在しない場合作成
-    $plugin_path = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer(\Fc2blog\Session::get('blog_id')) . '/plugins/syntax.php';
+    $plugin_path = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer(\Fc2blog\Session::get('blog_id')) . '/plugins/syntax.php';
     $plugin_dir = dirname($plugin_path);
     if (!file_exists($plugin_dir)) {
       mkdir($plugin_dir, 0777, true);
@@ -323,7 +323,7 @@ class BlogPluginsModel extends Model
   public function deleteByIdAndBlogId($id, $blog_id, $options=array())
   {
     // プラグインファイルの削除
-    $plugin_file = App::getPluginFilePath($blog_id, $id);
+    $plugin_file = \Fc2blog\App::getPluginFilePath($blog_id, $id);
     is_file($plugin_file) && unlink($plugin_file);
 
     // 本体削除
@@ -366,7 +366,7 @@ class BlogPluginsModel extends Model
   public static function createPlugin($html, $blog_id, $id='preview')
   {
     // フォルダが存在しない場合作成
-    $plugin_path = App::getPluginFilePath($blog_id, $id);
+    $plugin_path = \Fc2blog\App::getPluginFilePath($blog_id, $id);
     $plugin_dir = dirname($plugin_path);
     if (!file_exists($plugin_dir)) {
       mkdir($plugin_dir, 0777, true);

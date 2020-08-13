@@ -12,7 +12,7 @@ class BlogTemplatesController extends AdminController
   {
     $request = \Fc2blog\Request::getInstance();
 
-    \Fc2blog\Session::set('sig', App::genRandomString());
+    \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
 
     $blog_id = $this->getBlogId();
     $device_type = $request->get('device_type', 0);
@@ -100,7 +100,7 @@ class BlogTemplatesController extends AdminController
       } else {
         $request->set('blog_template.device_type', $request->get('device_type'));
       }
-      \Fc2blog\Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 
@@ -141,7 +141,7 @@ class BlogTemplatesController extends AdminController
         $this->redirect(array('action'=>'index'));
       }
       $request->set('blog_template', $blog_template);
-      \Fc2blog\Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 

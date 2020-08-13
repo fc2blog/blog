@@ -6,7 +6,7 @@
   <input type="hidden" name="id" value="<?php echo $request->get('id'); ?>" />
   <input type="hidden" name="sig" value="<?php echo \Fc2blog\Session::get('sig'); ?>" />
 
-  <a href="<?php echo App::getUserFilePath($file, false, true); ?>" target="_blank"><img src="<?php echo App::getThumbnailPath(App::getUserFilePath($file, false, true), 600, 'w'); ?>" alt="<?php echo $file['name']; ?>" /></a>
+  <a href="<?php echo \Fc2blog\App::getUserFilePath($file, false, true); ?>" target="_blank"><img src="<?php echo \Fc2blog\App::getThumbnailPath(\Fc2blog\App::getUserFilePath($file, false, true), 600, 'w'); ?>" alt="<?php echo $file['name']; ?>" /></a>
 
   <?php if (isset($errors['file']['ext'])): ?>
     <p class="error"><?php echo $errors['file']['ext']; ?></p>

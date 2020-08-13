@@ -89,7 +89,7 @@ class CommonController extends UserController
       'id'      => $id,
       'ext'     => $ext,
     );
-    $file_path = App::getUserFilePath($file, true);
+    $file_path = \Fc2blog\App::getUserFilePath($file, true);
     if (!file_exists($file_path)) {
       return $this->error404();
     }

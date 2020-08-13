@@ -10,7 +10,7 @@
     <?php foreach($files as $file): ?>
     <li class="file_table_cell">
       <label for="sys-form-add-media-check-<?php echo $file['id']; ?>">
-        <img src="<?php echo App::getUserFilePath($file, false); ?>" />
+        <img src="<?php echo \Fc2blog\App::getUserFilePath($file, false); ?>" />
         <span class="img_name"><?php echo th($file['name'], 10); ?></span>
       </label>
       <p>

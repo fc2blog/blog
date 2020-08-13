@@ -36,7 +36,7 @@ $(function(){
 
   // プレビュー処理を行う
   $('#sys-blog-template-form-preview').click(function(){
-    var action = '<?php echo App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Session::get('blog_id')), false, true); ?>';
+    var action = '<?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Session::get('blog_id')), false, true); ?>';
     $('#sys-blog-template-form').prop('action', action);
     $('#sys-blog-template-form').prop('target', '_preview');
     $('#sys-blog-template-form').submit();

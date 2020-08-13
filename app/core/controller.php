@@ -6,7 +6,6 @@
 require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model.php');
 
 require_once(\Fc2blog\Config::get('CORE_DIR') . 'html.php');    // HTMLの便利関数群
-require_once(\Fc2blog\Config::get('CORE_DIR') . 'app.php');  // アプリ用の便利関数群
 
 require_once(\Fc2blog\Config::get('LIB_DIR') . 'WordTag.php');
 
@@ -30,7 +29,7 @@ abstract class Controller
     \Fc2blog\Config::set('ActionName', $method);
 
     // デバイスタイプの設定
-    \Fc2blog\Config::set('DeviceType', App::getDeviceType());
+    \Fc2blog\Config::set('DeviceType', \Fc2blog\App::getDeviceType());
 
     // アプリプレフィックス
     $prefix = \Fc2blog\Config::get('APP_PREFIX');

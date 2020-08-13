@@ -65,7 +65,7 @@ abstract class AppController extends Controller
   {
     if ($key===null) {
       // 適当な値をトークンに設定
-      $key = App::genRandomStringAlphaNum(32);
+      $key = \Fc2blog\App::genRandomStringAlphaNum(32);
     }
     \Fc2blog\Session::set($name, $key);
   }

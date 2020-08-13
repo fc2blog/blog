@@ -179,7 +179,7 @@ class EntriesController extends UserController
     // 開始日付と終了日付の計算
     preg_match('/^([0-9]{4})([0-9]{2})?([0-9]{2})?$/', $request->get('date'), $matches);
     $dates = $matches + array('', date('Y'), 0, 0);
-    list($start, $end) = App::calcStartAndEndDate($dates[1], $dates[2], $dates[3]);
+    list($start, $end) = \Fc2blog\App::calcStartAndEndDate($dates[1], $dates[2], $dates[3]);
 
     // 記事一覧データ設定
     $where = 'blog_id=? AND ?<=posted_at AND posted_at<=?';
@@ -466,7 +466,7 @@ class EntriesController extends UserController
 
     // FC2用のテンプレートで表示
     $areas = array('permanent_area');
-    if (App::isPC()) {
+    if (\Fc2blog\App::isPC()) {
       $areas[] = 'comment_area';
     }
     $this->setPageData($areas);
@@ -537,7 +537,7 @@ class EntriesController extends UserController
 
     // 記事のコメント取得(パスワード制限時はコメントを取得しない)
     if ($self_blog || $entry['open_status']!=\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') || \Fc2blog\Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
-      if (App::isPC()) {
+      if (\Fc2blog\App::isPC()) {
         $areas[] = 'comment_area';
         $this->set('comments', Model::load('Comments')->getCommentListByBlogSetting($blog_id, $id, $blog_setting, $self_blog));
       }
@@ -689,7 +689,7 @@ class EntriesController extends UserController
     $this->fc2CommentError('comment', $errors['comment'], $data);
 
     // FC2用のテンプレートで表示
-    $this->setPageData(array(App::isPC() ? 'comment_area' : 'form_area'));
+    $this->setPageData(array(\Fc2blog\App::isPC() ? 'comment_area' : 'form_area'));
     return $this->fc2template($entry['blog_id']);
   }
 

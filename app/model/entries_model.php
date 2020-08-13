@@ -390,7 +390,7 @@ SQL;
     // テンプレート用変数追加
     foreach ($entries as $key => $value) {
       $entries[$key]['title'] = strip_tags($value['title']);
-      $entries[$key]['link'] = App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$value['blog_id'], 'id'=>$value['id']));
+      $entries[$key]['link'] = \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$value['blog_id'], 'id'=>$value['id']));
 
       list($entries[$key]['year'], $entries[$key]['month'], $entries[$key]['day'],
         $entries[$key]['hour'], $entries[$key]['minute'], $entries[$key]['second'], $entries[$key]['youbi'], $entries[$key]['month_short']
@@ -439,7 +439,7 @@ SQL;
           $calendar[$c][] = $day;
           continue ;
         }
-        $calendar[$c][] = '<a href="' . App::userURL(array('controller'=>'entries', 'action'=>'date',
+        $calendar[$c][] = '<a href="' . \Fc2blog\App::userURL(array('controller'=>'entries', 'action'=>'date',
           'blog_id'=>$blog_id, 'date'=>sprintf('%04d%02d%02d', $year, $month, $day))) . '">' . $day . '</a>';
       }
     }

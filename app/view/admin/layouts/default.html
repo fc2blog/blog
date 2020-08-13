@@ -27,7 +27,7 @@
     <?php endif; ?>
     common.baseDirectory = '<?php echo \Fc2blog\Config::get('BASE_DIRECTORY'); ?>';
     common.deviceType = <?php echo $this->getDeviceType(); ?>;
-    common.deviceArgs = '<?php echo App::getArgsDevice(); ?>';
+    common.deviceArgs = '<?php echo \Fc2blog\App::getArgsDevice(); ?>';
   </script>
 
   <?php echo $this->includeJS(); ?>
@@ -87,7 +87,7 @@
             <h3 class="home"><?php echo __('Home'); ?></h3>
             <ul>
               <li><a href="<?php echo Html::url(array('controller'=>'Common','action'=>'notice')); ?>"><?php echo __('Notice'); ?></a></li>
-              <li><a href="<?php echo App::userURL(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId())); ?>" target="_blank"><?php echo __('Checking the blog'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\App::userURL(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId())); ?>" target="_blank"><?php echo __('Checking the blog'); ?></a></li>
               <li><a href="<?php echo Html::url(array('controller'=>'Entries','action'=>'create')); ?>"><?php echo __('New article'); ?></a></li>
               <li><a href="<?php echo Html::url(array('controller'=>'Entries', 'action'=>'index')); ?>"><?php echo __('List of articles'); ?></a></li>
               <li><a href="<?php echo Html::url(array('controller'=>'Comments', 'action'=>'index')); ?>"><?php echo __('List of comments'); ?></a></li>

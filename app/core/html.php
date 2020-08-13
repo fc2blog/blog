@@ -36,7 +36,7 @@ class Html
     }
 
     // 引数のデバイスタイプを取得
-    $device_name = App::getArgsDevice();
+    $device_name = \Fc2blog\App::getArgsDevice();
     if (!empty($device_name) && isset($args[$device_name])) {
       unset($args[$device_name]);
     }

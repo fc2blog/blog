@@ -12,7 +12,7 @@ class BlogPluginsController extends AdminController
   {
     $request = \Fc2blog\Request::getInstance();
 
-    \Fc2blog\Session::set('sig', App::genRandomString());
+    \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
 
     $blog_id = $this->getBlogId();
     $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
@@ -90,7 +90,7 @@ class BlogPluginsController extends AdminController
 
     // 初期表示時
     if (!$request->get('blog_plugin') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
       $request->set('blog_plugin', array(
         'device_type' => $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES')),
         'category'    => $request->get('category', 1),
@@ -134,7 +134,7 @@ class BlogPluginsController extends AdminController
     // 初期表示時に編集データの設定
     if (!$request->get('blog_plugin') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
       $request->set('blog_plugin', $blog_plugin);
-      \Fc2blog\Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 
@@ -208,7 +208,7 @@ class BlogPluginsController extends AdminController
         // 未登録
         $request->set('plugin.title', $blog_plugin['title']);
       }
-      \Fc2blog\Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 
@@ -306,7 +306,7 @@ class BlogPluginsController extends AdminController
     $blog_plugins_model->sort($request->get('blog_plugins', array()), $device_type, $blog_id);
 
     $this->setInfoMessage(__('I have completed the sorting'));
-    if (App::isSP()) {
+    if (\Fc2blog\App::isSP()) {
       $this->redirect(array('action'=>'index', 'device_type'=>$device_type, 'state'=>'sort'));
     }
     $this->redirect(array('action'=>'index', 'device_type'=>$device_type));
@@ -329,7 +329,7 @@ class BlogPluginsController extends AdminController
       $this->setInfoMessage(__('I changed the display settings'));
     }
 
-    if (App::isSP()) {
+    if (\Fc2blog\App::isSP()) {
       $this->redirect(array('action'=>'index', 'device_type'=>$device_type, 'state'=>'display'));
     }
     $this->redirect(array('action'=>'index', 'device_type'=>$device_type));

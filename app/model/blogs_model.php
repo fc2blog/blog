@@ -397,7 +397,7 @@ class BlogsModel extends Model
     }
 
     // ブログディレクトリー削除
-    App::removeBlogDirectory($blog_id);
+    \Fc2blog\App::removeBlogDirectory($blog_id);
     return true;
   }
 

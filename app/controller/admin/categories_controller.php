@@ -32,7 +32,7 @@ class CategoriesController extends AdminController
 
     // 初期表示時
     if (!$request->get('category') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 

@@ -103,8 +103,8 @@ $config['fc2_template_if'] = array(
   'res_nextpage_area'  => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>',
   'res_prevpage_area'  => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>',
   // デバイスタイプ
-  'ios'     => '<?php if(App::isIOS()) { ?>',
-  'android' => '<?php if(App::isAndroid()) { ?>',
+  'ios'     => '<?php if(\Fc2blog\App::isIOS()) { ?>',
+  'android' => '<?php if(\Fc2blog\App::isAndroid()) { ?>',
 );
 
 $template_vars = array(
@@ -181,10 +181,10 @@ PHP
   '<%topentry_tb_no>'              => '',
   '<%topentry_jointtag>'           => '<?php if(!empty($entry[\'tags\'])) foreach($entry[\'tags\'] as $tag) echo \'<a href="\' . $url . \'?tag=\' . ue($tag[\'name\']) . \'">\' . h($tag[\'name\']) . \'</a>\'; ?>',
   '<%topentry_image>'              => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . $entry[\'first_image\'] . \'" />\'; ?>',
-  '<%topentry_image_72>'           => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . App::getThumbnailPath($entry[\'first_image\'], 72) . \'" />\'; ?>',
-  '<%topentry_image_w300>'         => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . App::getThumbnailPath($entry[\'first_image\'], 300, \'w\') . \'" />\'; ?>',
+  '<%topentry_image_72>'           => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . \Fc2blog\App::getThumbnailPath($entry[\'first_image\'], 72) . \'" />\'; ?>',
+  '<%topentry_image_w300>'         => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . \Fc2blog\App::getThumbnailPath($entry[\'first_image\'], 300, \'w\') . \'" />\'; ?>',
   '<%topentry_image_url>'          => '<?php if(!empty($entry[\'first_image\'])) echo getServerUrl() . $entry[\'first_image\']; ?>',
-  '<%topentry_image_url_760x420>'  => '<?php if(!empty($entry[\'first_image\'])) echo getServerUrl() . App::getCenterThumbnailPath($entry[\'first_image\'], 760, 420, \'wh\'); ?>',
+  '<%topentry_image_url_760x420>'  => '<?php if(!empty($entry[\'first_image\'])) echo getServerUrl() . \Fc2blog\App::getCenterThumbnailPath($entry[\'first_image\'], 760, 420, \'wh\'); ?>',
   '<%topentry_comment_num>'        => '<?php if(isset($entry[\'comment_count\'])) echo $entry[\'comment_count\']; ?>',
   // 記事のカテゴリー系
   '<%topentry_category_no>'        => '<?php if(!isset($entry[\'categories\'][0][\'id\'])){}else if(!empty($category) && $category[\'entry_id\']==$entry[\'categories\'][0][\'entry_id\']){'
@@ -253,9 +253,9 @@ PHP
   '<%plugin_first_title>'         => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>',
   '<%plugin_second_title>'        => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>',
   '<%plugin_third_title>'         => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>',
-  '<%plugin_first_content>'       => '<?php if(isset($t_plugin[\'id\'])) include(App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
-  '<%plugin_second_content>'      => '<?php if(isset($t_plugin[\'id\'])) include(App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
-  '<%plugin_third_content>'       => '<?php if(isset($t_plugin[\'id\'])) include(App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
+  '<%plugin_first_content>'       => '<?php if(isset($t_plugin[\'id\'])) include(\Fc2blog\App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
+  '<%plugin_second_content>'      => '<?php if(isset($t_plugin[\'id\'])) include(\Fc2blog\App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
+  '<%plugin_third_content>'       => '<?php if(isset($t_plugin[\'id\'])) include(\Fc2blog\App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
   '<%plugin_first_description>'   => '',
   '<%plugin_first_description2>'  => '',
   '<%plugin_second_description>'  => '',
@@ -282,7 +282,7 @@ PHP
   '<%spplugin_first_no>'     => '<?php if(isset($t_plugin[\'id\'])) echo $t_plugin[\'id\']; ?>',
   '<%spplugin_first_title>'  => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>',
   '<%spplugin_title>'        => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>',
-  '<%spplugin_content>'      => '<?php if(isset($t_plugin[\'id\'])) include(App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
+  '<%spplugin_content>'      => '<?php if(isset($t_plugin[\'id\'])) include(\Fc2blog\App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
   '<%spplugin_talign>'       => '<?php if(isset($t_plugin[\'title_align\'])) echo $t_plugin[\'title_align\']; ?>',
   '<%spplugin_tcolor>'       => '<?php if(isset($t_plugin[\'title_color\'])) echo $t_plugin[\'title_color\']; ?>',
   '<%spplugin_first_talign>' => '<?php if(isset($t_plugin[\'title_align\'])) echo $t_plugin[\'title_align\']; ?>',
@@ -302,7 +302,7 @@ PHP
   '<%recent_second>'     => '<?php if(isset($t_recent[\'second\'])) echo $t_recent[\'second\']; ?>',
   '<%recent_youbi>'      => '<?php if(isset($t_recent[\'youbi\'])) echo $t_recent[\'youbi\']; ?>',
   '<%recent_wayoubi>'    => '<?php if(isset($t_recent[\'wayoubi\'])) echo $t_recent[\'wayoubi\']; ?>',
-  '<%recent_image_w300>' => '<?php if(!empty($t_recent[\'first_image\'])) echo \'<img src="\' . App::getThumbnailPath($t_recent[\'first_image\'], 300, \'w\') . \'" />\'; ?>',
+  '<%recent_image_w300>' => '<?php if(!empty($t_recent[\'first_image\'])) echo \'<img src="\' . \Fc2blog\App::getThumbnailPath($t_recent[\'first_image\'], 300, \'w\') . \'" />\'; ?>',
   // カテゴリー一覧(プラグイン系)
   '<%category_no>'     => '<?php if(!empty($t_category)) echo $t_category[\'id\']; ?>',
   '<%category_number>' => '<?php if(!empty($t_category)) echo $t_category[\'id\']; ?>',
@@ -362,9 +362,9 @@ PHP
   '<%next_year>'            => '<?php echo date(\'Y\', strtotime($next_month_date)); ?>',
   '<%prev_month_link>'      => '<?php echo Html::url(array(\'blog_id\'=>$blog_id, \'action\'=>\'date\', \'date\'=>date(\'Ym\', strtotime($prev_month_date)))); ?>',
   '<%next_month_link>'      => '<?php echo Html::url(array(\'blog_id\'=>$blog_id, \'action\'=>\'date\', \'date\'=>date(\'Ym\', strtotime($next_month_date)))); ?>',
-  '<%nextentry_url>'        => '<?php if(!empty($next_entry)) echo App::userURL(array(\'id\'=>$next_entry[\'id\'], \'blog_id\'=>$blog_id)); ?>',
+  '<%nextentry_url>'        => '<?php if(!empty($next_entry)) echo \Fc2blog\App::userURL(array(\'id\'=>$next_entry[\'id\'], \'blog_id\'=>$blog_id)); ?>',
   '<%nextentry_title>'      => '<?php if(!empty($next_entry)) echo h($next_entry[\'title\']); ?>',
-  '<%preventry_url>'        => '<?php if(!empty($prev_entry)) echo App::userURL(array(\'id\'=>$prev_entry[\'id\'], \'blog_id\'=>$blog_id)); ?>',
+  '<%preventry_url>'        => '<?php if(!empty($prev_entry)) echo \Fc2blog\App::userURL(array(\'id\'=>$prev_entry[\'id\'], \'blog_id\'=>$blog_id)); ?>',
   '<%preventry_title>'      => '<?php if(!empty($prev_entry)) echo h($prev_entry[\'title\']); ?>',
   '<%firstpage_num>'        => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo 1; ?>',
   '<%lastpage_num>'         => '<?php if(!empty($paging) && $paging[\'is_next\']) echo $paging[\'max_page\']; ?>',

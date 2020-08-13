@@ -33,7 +33,6 @@ class UrlTest extends TestCase
     }
 
     require_once(TEST_APP_DIR . "/core/html.php");
-    require_once(TEST_APP_DIR . "/core/app.php");
 
     parent::setUp();
   }

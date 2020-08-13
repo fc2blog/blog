@@ -10,7 +10,7 @@
           </a>
         </li>
 <!--<?php echo __('Summary'); ?> : <?php echo $template['discription']; ?>
-        <a class="admin_common_btn create_btn" href="<?php echo App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId(), 'fc2_id'=>$template['id'], 'device_type'=>$request->get('device_type')), false, true); ?>" target="_blank"><?php echo __('Preview'); ?></a>
+        <a class="admin_common_btn create_btn" href="<?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId(), 'fc2_id'=>$template['id'], 'device_type'=>$request->get('device_type')), false, true); ?>" target="_blank"><?php echo __('Preview'); ?></a>
         <a class="admin_common_btn create_btn" href="<?php echo Html::url(array('controller'=>'blog_templates', 'action'=>'download', 'fc2_id'=>$template['id'], 'device_type'=>$request->get('device_type'))); ?>"><?php echo __('Download'); ?></a>-->
   <?php endforeach; ?>
   </ul>

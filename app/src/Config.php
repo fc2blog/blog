@@ -15,7 +15,8 @@ class Config{
    * 設定を取得する
    *
    * @param string $key 取得用のキー(MASTER.DB => $config["MASTER"]["DB"] .区切りで取得できる)
-   * @param object $default 未設定の場合に返却する値
+   * @param null $default 未設定の場合に返却する値
+   * @return mixed|object|null
    */
   public static function get($key, $default=null){
     if (isset(self::$config[$key])) {
