@@ -30,14 +30,14 @@
           <?php echo nl2br(h($plugin['body'])); ?>
         </td>
         <td class="center">
-          <a href="<?php echo Html::url(array('action'=>'download', 'id'=>$plugin['id'], 'category'=>$request->get('category'), 'sig'=>Session::get('sig'))); ?>"><?php echo __('Download'); ?></a>
+          <a href="<?php echo Html::url(array('action'=>'download', 'id'=>$plugin['id'], 'category'=>$request->get('category'), 'sig'=>\Fc2blog\Session::get('sig'))); ?>"><?php echo __('Download'); ?></a>
         </td>
         <td class="center">
           <a href="<?php echo App::userURL(array('controller'=>'entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId(), 'plugin_id'=>$plugin['id'], 'category'=>$request->get('category'), $device_key=>1), false, true); ?>" target="_blank"><?php echo __('Preview'); ?></a>
         </td>
         <td class="center">
           <?php if ($user_id==$plugin['user_id']): ?>
-            <a href="<?php echo Html::url(array('action'=>'plugin_delete', 'id'=>$plugin['id'], 'sig'=>Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
+            <a href="<?php echo Html::url(array('action'=>'plugin_delete', 'id'=>$plugin['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
           <?php else: ?>
             &nbsp;
           <?php endif; ?>

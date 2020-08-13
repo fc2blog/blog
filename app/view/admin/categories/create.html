@@ -34,7 +34,7 @@
         </tr>
       </tbody>
     </table>
-    <input type="hidden" name="sig" value="<?php echo Session::get('sig'); ?>" />
+    <input type="hidden" name="sig" value="<?php echo \Fc2blog\Session::get('sig'); ?>" />
 
   </form>
 <?php endif; ?>
@@ -61,7 +61,7 @@
         <li>
           <a href="<?php echo Html::url(array('action'=>'edit', 'id'=>$category['id'])); ?>"><?php echo h($category['name']); ?>(<?php echo $category['count']; ?>)</a>
           <?php if ($category['id']!=1) : ?>
-            <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$category['id'], 'sig'=>Session::get('sig'))); ?>"
+            <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$category['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>"
                onclick="return confirm('<?php echo __('If the child category exists\nRemove all along with the child category, but do you really want?'); ?>');"><?php echo __('Delete'); ?></a>
           <?php endif; ?>
         </li>

@@ -24,8 +24,8 @@ if(!headers_sent()){
 
   <header class="clear">
     <div>
-      <?php if (Session::get('id')): ?>
-        <span><?php echo Session::get('nickname'); ?></span>
+      <?php if (\Fc2blog\Session::get('id')): ?>
+        <span><?php echo \Fc2blog\Session::get('nickname'); ?></span>
       <?php endif; ?>
 
       <?php $lang = \Fc2blog\Config::get('LANG'); ?>

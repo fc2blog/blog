@@ -15,7 +15,7 @@
     <?php endforeach; ?>
   </ul>
 
-  <?php Session::start(); ?>
+  <?php \Fc2blog\Session::start(); ?>
   <?php if(!empty($_SESSION)): ?>
     <h3 id="sys-debug-session">Session &gt;&gt;</h3>
     <pre style="display: none;"><?php var_dump($_SESSION); ?></pre>

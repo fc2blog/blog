@@ -15,7 +15,7 @@ class TagsController extends AdminController
 
     $blog_id = $this->getBlogId();
 
-    Session::set('sig', App::genRandomString());
+    \Fc2blog\Session::set('sig', App::genRandomString());
 
     // 検索条件作成
     $where = 'blog_id=?';
@@ -73,7 +73,7 @@ class TagsController extends AdminController
     $this->set('tag', $tag);
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('tag') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('tag') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
       $request->set('tag', $tag);
       $back_url = $request->getReferer();
       if (!empty($back_url)) {
@@ -112,7 +112,7 @@ class TagsController extends AdminController
   {
     $request = Request::getInstance();
 
-    if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+    if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
       // 削除処理
       if (Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
         $this->setInfoMessage(__('I removed the tag'));

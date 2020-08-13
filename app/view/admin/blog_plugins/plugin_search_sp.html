@@ -14,7 +14,7 @@
     <h4><?php echo th($plugin['title'], 20); ?></h4>
     <p><?php echo th($plugin['body'], 20); ?></p>
     <div class="parallel_btn">
-      <a class="btn_contents touch" href="<?php echo Html::url(array('action'=>'download', 'id'=>$plugin['id'], 'category'=>$request->get('category'), 'sig'=>Session::get('sig'))); ?>"><?php echo __('Add'); ?></a>
+      <a class="btn_contents touch" href="<?php echo Html::url(array('action'=>'download', 'id'=>$plugin['id'], 'category'=>$request->get('category'), 'sig'=>\Fc2blog\Session::get('sig'))); ?>"><?php echo __('Add'); ?></a>
       <a class="btn_contents touch" href="<?php echo App::userURL(array('controller'=>'entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId(), 'plugin_id'=>$plugin['id'], 'category'=>$request->get('category'), $device_key=>1), false, true); ?>" target="_blank"><?php echo __('Preview'); ?></a>
     </div>
   </li>

@@ -62,7 +62,7 @@ class FilesController extends AdminController
 
     $blog_id = $this->getBlogId();
 
-    Session::set('sig', App::genRandomString());
+    \Fc2blog\Session::set('sig', App::genRandomString());
      
     // 初期表示時
     if ($request->file('file')) {
@@ -153,11 +153,11 @@ class FilesController extends AdminController
       if (!empty($back_url)) {
         $request->set('back_url', $back_url);    // 戻る用のURL
       }
-      Session::set('sig', App::genRandomString());
+      \Fc2blog\Session::set('sig', App::genRandomString());
       return ;
     }
 
-    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
       $request->clear();
       $this->redirect(array('action'=>'upload'));
     }
@@ -204,7 +204,7 @@ class FilesController extends AdminController
   {
     $request = Request::getInstance();
 
-    if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+    if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
       // 削除処理
       if (Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
         $this->setInfoMessage(__('I removed the file'));

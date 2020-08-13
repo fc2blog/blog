@@ -40,7 +40,7 @@ class UsersModel extends Model
     );
     if (in_array('login_blog_id', $white_list)) {
       $this->validates['login_blog_id'] = array(
-        'in_array' => array('values'=>array_keys(Model::load('Blogs')->getListByUserId(Session::get('user_id')))),
+        'in_array' => array('values'=>array_keys(Model::load('Blogs')->getListByUserId(\Fc2blog\Session::get('user_id')))),
       );
     }
   }

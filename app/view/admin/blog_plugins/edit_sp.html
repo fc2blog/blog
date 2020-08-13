@@ -5,7 +5,7 @@
   <input type="hidden" name="id" value="<?php echo $request->get('id'); ?>" />
   <?php echo Html::input('blog_plugin[device_type]', 'hidden'); ?>
   <?php echo Html::input('blog_plugin[category]', 'hidden'); ?>
-  <?php echo Html::input('sig', 'hidden', array('value'=>Session::get('sig'))); ?>
+  <?php echo Html::input('sig', 'hidden', array('value'=>\Fc2blog\Session::get('sig'))); ?>
   <?php if (isset($errors['blog_plugin']['device_type'])): ?><p class="error"><?php echo $errors['blog_plugin']['device_type']; ?></p><?php endif; ?>
   <?php if (isset($errors['blog_plugin']['category'])): ?><p class="error"><?php echo $errors['blog_plugin']['category']; ?></p><?php endif; ?>
 
@@ -60,7 +60,7 @@
 
 <h2><span class="h2_inner"><?php echo __('Delete plugin'); ?></span></h2>
 <div class="btn_area"><ul class="btn_area_inner"><li>
-  <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$request->get('id'), 'sig'=>Session::get('sig'))); ?>" class="btn_contents touch"
+  <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$request->get('id'), 'sig'=>\Fc2blog\Session::get('sig'))); ?>" class="btn_contents touch"
      onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><i class="delete_icon btn_icon"></i><?php echo __('Delete'); ?></a>
 </li></ul></div>
 
@@ -72,7 +72,7 @@ $(function(){
   // プレビュー処理を行う
   $('#sys-blog-plugin-form-preview').click(function(){
     <?php $device_key = \Fc2blog\Config::get('DEVICE_FC2_KEY.' . $request->get('blog_plugin.device_type')); ?>
-    var action = '<?php echo App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>Session::get('blog_id'), $device_key=>1), false, true); ?>';
+    var action = '<?php echo App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Session::get('blog_id'), $device_key=>1), false, true); ?>';
     $('#sys-blog-plugin-form').prop('action', action);
     $('#sys-blog-plugin-form').prop('target', '_preview');
     $('#sys-blog-plugin-form').submit();

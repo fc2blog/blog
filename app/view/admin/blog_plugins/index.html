@@ -40,7 +40,7 @@
               <a href="<?php echo Html::url(array('action'=>'register', 'id'=>$blog_plugin['id'])); ?>"><?php if($blog_plugin['plugin_id']): ?><?php echo __('Update'); ?><?php else: ?><?php echo __('Register'); ?><?php endif; ?></a>
             </td>
             <td class="center s_cell">
-              <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$blog_plugin['id'], 'sig'=>Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
+              <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$blog_plugin['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
             </td>
           </tr>
         <?php endforeach; ?>
@@ -83,7 +83,7 @@ $(function(){
       url : common.fwURL('blog_plugins', 'display_change', {
         id: $(this).val(),
         display: $(this).prop('checked') ? 1 : 0,
-        sig: "<?php echo Session::get('sig'); ?>"
+        sig: "<?php echo \Fc2blog\Session::get('sig'); ?>"
       }),
       cache: false
     });

@@ -16,7 +16,7 @@
     <tr>
       <th><?php echo __('Blog ID at login'); ?></th>
       <td>
-        <?php echo Html::input('user[login_blog_id]', 'select', array('options'=>Model::load('Blogs')->getListByUserId(Session::get('user_id')))); ?>
+        <?php echo Html::input('user[login_blog_id]', 'select', array('options'=>Model::load('Blogs')->getListByUserId(\Fc2blog\Session::get('user_id')))); ?>
         <?php if (isset($errors['user']['login_blog_id'])): ?><p class="error"><?php echo $errors['user']['login_blog_id']; ?></p><?php endif; ?>
       </td>
     </tr>

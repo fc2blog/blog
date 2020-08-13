@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-  <?php echo Html::input('sig', 'hidden', array('value' => Session::get('sig'))); ?>
+  <?php echo Html::input('sig', 'hidden', array('value' => \Fc2blog\Session::get('sig'))); ?>
 </form>
 
 <?php if (!$request->get('category')) : ?>

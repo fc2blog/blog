@@ -59,7 +59,7 @@
             <?php echo $entry['comment_count']; ?>
           <?php endif; ?>
         </td>
-        <td class="center s_cell"><a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$entry['id'], 'sig'=>Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
+        <td class="center s_cell"><a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$entry['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
       </tr>
       <?php endforeach; ?>
     </tbody>
@@ -67,7 +67,7 @@
 
   <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="entries" />
   <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="delete" />
-  <input type="hidden" name="sig" value="<?php echo Session::get('sig'); ?>" />
+  <input type="hidden" name="sig" value="<?php echo \Fc2blog\Session::get('sig'); ?>" />
   <input type="button" id="sys-entries-delete-button" value="<?php echo __('Remove what you have selected'); ?>" onclick="if(confirm('<?php echo __('Are you sure you want to delete?'); ?>')) $('#sys-list-form').submit();" disabled="disabled" />
 </form>
 

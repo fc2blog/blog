@@ -3,6 +3,8 @@
 * Sessionクラス
 */
 
+namespace Fc2blog;
+
 class Session
 {
 

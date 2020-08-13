@@ -3,7 +3,7 @@
 <h2><span class="h2_inner"><?php echo __('Edit category'); ?></span></h2>
 <form method="POST" class="admin-form">
   <input type="hidden" name="id" value="<?php echo $request->get('id'); ?>" />
-  <input type="hidden" name="sig" value="<?php echo Session::get('sig'); ?>" />
+  <input type="hidden" name="sig" value="<?php echo \Fc2blog\Session::get('sig'); ?>" />
   <div class="form_area">
     <div class="form_contents">
       <h4><?php echo __('Parent category'); ?></h4>
@@ -35,7 +35,7 @@
     </li>
     <?php if ($request->get('id')!=1): ?>
       <li>
-        <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$request->get('id'), 'sig'=>Session::get('sig'))); ?>" class="btn_contents touch"
+        <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$request->get('id'), 'sig'=>\Fc2blog\Session::get('sig'))); ?>" class="btn_contents touch"
            onclick="return confirm('<?php echo __('If the child category exists\nRemove all along with the child category, but do you really want?'); ?>');"><i class="delete_icon btn_icon"></i><?php echo __('Delete'); ?></a>
       </li>
     <?php endif; ?>

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
   <meta content="telephone=no" name="format-detection" />
   <meta name="robots" content="noindex, nofollow, noarchive" />
-  <title><?php echo Session::get('blog_id'); ?></title>
+  <title><?php echo \Fc2blog\Session::get('blog_id'); ?></title>
   <link rel="stylesheet" href="/css/sp/blog_sp_admin.css" type="text/css" media="all">
   <link rel="stylesheet" href="/css/sp/side_menu.css" type="text/css" media="all">
 
@@ -86,7 +86,7 @@
     <?php if ($this->isLogin()): ?>
       <div><span id="right_menu_btn"><i class="rightmenu"></i></span></div>
     <?php endif; ?>
-    <h1><?php echo Session::get('blog_id'); ?></h1>
+    <h1><?php echo \Fc2blog\Session::get('blog_id'); ?></h1>
   </header>
 
   <div id="contents">

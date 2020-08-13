@@ -43,7 +43,7 @@
         <td><?php echo df($file['created_at'], 'y/m/d'); ?></td>
         <td><a href="<?php echo App::getUserFilePath($file, false, true); ?>" target="_blank"><?php echo th($file['name'], 30); ?></a></td>
         <td class="center s_cell"><a href="<?php echo Html::url(array('action'=>'edit', 'id'=>$file['id'])); ?>"><?php echo __('Edit'); ?></a></td>
-        <td class="center s_cell"><a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$file['id'], 'sig'=>Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
+        <td class="center s_cell"><a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$file['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
       </tr>
       <?php endforeach; ?>
     <?php else: ?>
@@ -99,7 +99,7 @@ $(function(){
     $.ajax({
       url: '<?php echo Html::url(array('controller'=>'Files', 'action'=>'ajax_delete')); ?>',
       type: 'POST',
-      data: {id: ids, sig: '<?php echo Session::get('sig'); ?>'},
+      data: {id: ids, sig: '<?php echo \Fc2blog\Session::get('sig'); ?>'},
       dataType: 'json',
       success: function(json){
         // 削除完了後検索処理を実行

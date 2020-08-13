@@ -3,7 +3,7 @@
 <form method="POST" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
 
   <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo \Fc2blog\Config::get('FILE.MAX_SIZE'); ?>" />
-  <input type="hidden" name="sig" value="<?php echo Session::get('sig'); ?>" />
+  <input type="hidden" name="sig" value="<?php echo \Fc2blog\Session::get('sig'); ?>" />
 
   <?php if (isset($errors['file']['ext'])): ?>
     <p class="error"><?php echo $errors['file']['ext']; ?></p>

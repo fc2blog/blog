@@ -15,7 +15,7 @@
 
 <form method="POST" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
   <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo \Fc2blog\Config::get('FILE.MAX_SIZE'); ?>" />
-  <input type="hidden" name="sig" value="<?php echo Session::get('sig'); ?>" />
+  <input type="hidden" name="sig" value="<?php echo \Fc2blog\Session::get('sig'); ?>" />
   <div class="btn_area">
     <div class="up_file_btn">
       <?php echo Html::input('file[name]', 'text', array('id'=>'sys-file-name')); ?>

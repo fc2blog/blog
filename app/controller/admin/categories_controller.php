@@ -31,8 +31,8 @@ class CategoriesController extends AdminController
     }
 
     // 初期表示時
-    if (!$request->get('category') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
+    if (!$request->get('category') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
+      \Fc2blog\Session::set('sig', App::genRandomString());
       return ;
     }
 
@@ -69,7 +69,7 @@ class CategoriesController extends AdminController
     $this->set('category_parents', array(0=>'') + $options);
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('category') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('category') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
       if (!$category=$categories_model->findByIdAndBlogId($id, $blog_id)) {
         $this->redirect(array('action'=>'create'));
       }
@@ -105,7 +105,7 @@ class CategoriesController extends AdminController
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
 
-    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
       $request->clear();
       $this->redirect(array('action'=>'create'));
       return;
@@ -136,7 +136,7 @@ class CategoriesController extends AdminController
 
     $json = array('status' => 0);
     
-    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
       $request->clear();
       return;
     }
