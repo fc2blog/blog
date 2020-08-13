@@ -32,7 +32,7 @@ if (!empty($entries)) {
 // コメント一覧の情報
 if (!empty($comments)) {
   foreach ($comments as $key => $value) {
-    $comments[$key]['edit_link'] = Html::url(array('controller'=>'Entries', 'action'=>'comment_edit', 'blog_id'=>$value['blog_id'], 'id'=>$value['id']));
+    $comments[$key]['edit_link'] = \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'comment_edit', 'blog_id'=>$value['blog_id'], 'id'=>$value['id']));
 
     list($comments[$key]['year'], $comments[$key]['month'], $comments[$key]['day'],
       $comments[$key]['hour'], $comments[$key]['minute'], $comments[$key]['second'], $comments[$key]['youbi']

@@ -33,7 +33,7 @@
       <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
         <?php echo __('Published'); ?>
       <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
-        <?php echo __('Approval pending'); ?> &raquo; <a href="<?php echo Html::url(array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;" id="sys-comment-approval"><?php echo __('Approval'); ?></a>
+        <?php echo __('Approval pending'); ?> &raquo; <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;" id="sys-comment-approval"><?php echo __('Approval'); ?></a>
       <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
         <?php echo __('Only exposed administrator'); ?>
       <?php endif; ?>
@@ -54,7 +54,7 @@
 <form method="POST" id="sys-comment-form" class="admin-form">
 
   <?php if ($comment['open_status']!=\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
-    <?php echo Html::input('comment[reply_body]', 'textarea', array('style'=>'width: 95%; height: 200px;')); ?>
+    <?php echo \Fc2blog\Web\Html::input('comment[reply_body]', 'textarea', array('style'=>'width: 95%; height: 200px;')); ?>
     <p class="error" style="display: none;" id="sys-reply-error"></p>
 
     <p class="mb20">
@@ -73,7 +73,7 @@
   <h3><?php echo __('Delete Comment'); ?></h3>
   <div id="comment_dell" class="mb20">
     <p class="mb10"><?php echo __('You can delete a comment by pressing the button below.'); ?></p>
-    <a class="admin_common_btn dell_btn" href="<?php echo Html::url(array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
+    <a class="admin_common_btn dell_btn" href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
   </div>
 
 </form>

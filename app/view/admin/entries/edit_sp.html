@@ -11,7 +11,7 @@
 
 <h2><span class="h2_inner"><?php echo __('Delete entry'); ?></span></h2>
 <div class="btn_area"><ul class="btn_area_inner"><li>
-  <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$request->get('id'), 'sig'=>\Fc2blog\Session::get('sig'))); ?>" class="btn_contents touch"
+  <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$request->get('id'), 'sig'=>\Fc2blog\Session::get('sig'))); ?>" class="btn_contents touch"
      onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><i class="delete_icon btn_icon"></i><?php echo __('Delete'); ?></a>
 </li></ul></div>
 

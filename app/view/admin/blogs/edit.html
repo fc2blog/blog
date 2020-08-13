@@ -9,56 +9,56 @@
     <tr>
       <th><?php echo __('Blog name'); ?></th>
       <td>
-        <?php echo Html::input('blog[name]', 'text', array('maxlength'=>255)); ?>
+        <?php echo \Fc2blog\Web\Html::input('blog[name]', 'text', array('maxlength'=>255)); ?>
         <?php if (isset($errors['blog']['name'])): ?><?php echo $errors['blog']['name']; ?><?php endif; ?>
       </td>
     </tr>
     <tr>
       <th><?php echo __('Blog Description'); ?></th>
       <td>
-        <?php echo Html::input('blog[introduction]', 'text', array('maxlength'=>200)); ?>
+        <?php echo \Fc2blog\Web\Html::input('blog[introduction]', 'text', array('maxlength'=>200)); ?>
         <?php if (isset($errors['blog']['introduction'])): ?><?php echo $errors['blog']['introduction']; ?><?php endif; ?>
       </td>
     </tr>
     <tr>
       <th><?php echo __('Nickname'); ?></th>
       <td>
-        <?php echo Html::input('blog[nickname]', 'text', array('maxlength'=>255)); ?>
+        <?php echo \Fc2blog\Web\Html::input('blog[nickname]', 'text', array('maxlength'=>255)); ?>
         <?php if (isset($errors['blog']['nickname'])): ?><p class="error"><?php echo $errors['blog']['nickname']; ?></p><?php endif; ?>
       </td>
     </tr>
     <tr>
       <th><?php echo __('Visibility Blog'); ?></th>
       <td>
-        <?php echo Html::input('blog[open_status]', 'select', array('options'=>BlogsModel::getOpenStatusList())); ?>
+        <?php echo \Fc2blog\Web\Html::input('blog[open_status]', 'select', array('options'=>BlogsModel::getOpenStatusList())); ?>
         <?php if (isset($errors['blog']['open_status'])): ?><p class="error"><?php echo $errors['blog']['open_status']; ?></p><?php endif; ?>
       </td>
     </tr>
     <tr>
       <th><?php echo __('View password blog'); ?></th>
       <td>
-        <?php echo Html::input('blog[blog_password]', 'text'); ?>
+        <?php echo \Fc2blog\Web\Html::input('blog[blog_password]', 'text'); ?>
         <?php if (isset($errors['blog']['blog_password'])): ?><?php echo $errors['blog']['blog_password']; ?><?php endif; ?>
       </td>
     </tr>
     <tr>
       <th><?php echo __('Time zone'); ?></th>
       <td>
-        <?php echo Html::input('blog[timezone]', 'select', array('options'=>BlogsModel::getTimezoneList())); ?>
+        <?php echo \Fc2blog\Web\Html::input('blog[timezone]', 'select', array('options'=>BlogsModel::getTimezoneList())); ?>
         <?php if (isset($errors['blog']['timezone'])): ?><p class="error"><?php echo $errors['blog']['timezone']; ?></p><?php endif; ?>
       </td>
     </tr>
     <tr>
       <th><?php echo __('SSL Enable Mode'); ?></th>
       <td>
-        <?php echo Html::input('blog[ssl_enable]', 'select', array('options'=>BlogsModel::getSSLEnableSettingList())); ?>
+        <?php echo \Fc2blog\Web\Html::input('blog[ssl_enable]', 'select', array('options'=>BlogsModel::getSSLEnableSettingList())); ?>
         <?php if (isset($errors['blog']['ssl_enable'])): ?><p class="error"><?php echo $errors['blog']['ssl_enable']; ?></p><?php endif; ?>
       </td>
     </tr>
     <tr>
       <th><?php echo __('Redirect status code'); ?></th>
       <td>
-        <?php echo Html::input('blog[redirect_status_code]', 'select', array('options'=>BlogsModel::getRedirectStatusCodeSettingList())); ?>
+        <?php echo \Fc2blog\Web\Html::input('blog[redirect_status_code]', 'select', array('options'=>BlogsModel::getRedirectStatusCodeSettingList())); ?>
         <?php if (isset($errors['blog']['redirect_status_code'])): ?><p class="error"><?php echo $errors['blog']['redirect_status_code']; ?></p><?php endif; ?>
       </td>
     </tr>

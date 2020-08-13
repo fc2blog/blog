@@ -1,4 +1,4 @@
-<?php Html::addCSS('/css/sp/entry_sp.css'); ?>
+<?php \Fc2blog\Web\Html::addCSS('/css/sp/entry_sp.css'); ?>
 
 <script type="text/javascript" src="/js/jquery/jquery.fc2tab.js"></script>
 <script type="text/javascript">
@@ -68,7 +68,7 @@ function posted_at_select_to_input(){
 <div class="form_area">
   <div class="form_contents common_input_text">
     <!--<?php echo __('Title'); ?>-->
-    <?php echo Html::input('entry[title]', 'text', array('placeholder'=>__('Article Title'))); ?>
+    <?php echo \Fc2blog\Web\Html::input('entry[title]', 'text', array('placeholder'=>__('Article Title'))); ?>
     <?php if (isset($errors['entry']['title'])): ?><p class="error"><?php echo $errors['entry']['title']; ?></p><?php endif; ?>
   </div>
 </div>
@@ -82,12 +82,12 @@ function posted_at_select_to_input(){
   </li>
 </ul>
 <div class="content_wrap" style="display: block;">
-    <div class="edit_area_box"><?php echo Html::input('entry[body]', 'textarea', array('id'=>'sys-entry-body','placeholder'=>__('Body'))); ?></div>
+    <div class="edit_area_box"><?php echo \Fc2blog\Web\Html::input('entry[body]', 'textarea', array('id'=>'sys-entry-body','placeholder'=>__('Body'))); ?></div>
     <?php if (isset($errors['entry']['body'])): ?><p class="error"><?php echo $errors['entry']['body']; ?></p><?php endif; ?>
 </div>
 
 <div class="content_wrap nondisplay" style="display: none; ">
-  <div class="edit_area_box"><?php echo Html::input('entry[extend]', 'textarea', array('id'=>'sys-entry-extend','placeholder'=>__('Edit a postscript'))); ?></div>
+  <div class="edit_area_box"><?php echo \Fc2blog\Web\Html::input('entry[extend]', 'textarea', array('id'=>'sys-entry-extend','placeholder'=>__('Edit a postscript'))); ?></div>
   <?php if (isset($errors['entry']['extend'])): ?><p class="error"><?php echo $errors['entry']['extend']; ?></p><?php endif; ?>
 </div>
 
@@ -98,15 +98,15 @@ function posted_at_select_to_input(){
       <h3><span class="h3_inner"><?php echo __('Post type'); ?></span></h3>
       <div class="form_contents">
         <div class="radio_vertical_box">
-          <?php echo Html::input('entry[open_status]', 'radio', array('options'=>EntriesModel::getOpenStatusList(), 'default'=>\Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),'class'=>'radio_vertical_input')); ?>
+          <?php echo \Fc2blog\Web\Html::input('entry[open_status]', 'radio', array('options'=>EntriesModel::getOpenStatusList(), 'default'=>\Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),'class'=>'radio_vertical_input')); ?>
           <?php if (isset($errors['entry']['open_status'])): ?><p class="error"><?php echo $errors['entry']['open_status']; ?></p><?php endif; ?>
         </div>
         <div class="sys-entry-password">
           <h4><?php echo __('Set Password'); ?></h4>
-          <div class="common_input_text"><?php echo Html::input('entry[password]', 'text'); ?></div>
+          <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('entry[password]', 'text'); ?></div>
           <p>
             <?php echo __('They are authenticated with a password of the entire If empty');  ?><br />
-            <a href="<?php echo Html::url(array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank"><?php echo __('Passwords in the whole place'); ?></a><br />
+            <a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank"><?php echo __('Passwords in the whole place'); ?></a><br />
           </p>
           <?php if (isset($errors['entry']['password'])): ?><p class="error"><?php echo $errors['entry']['password']; ?></p><?php endif; ?>
         </div>
@@ -144,7 +144,7 @@ function posted_at_select_to_input(){
                 </tr>
             </table>
           </div>
-        <?php echo Html::input('entry[posted_at]', 'hidden'); ?>
+        <?php echo \Fc2blog\Web\Html::input('entry[posted_at]', 'hidden'); ?>
         <?php if (isset($errors['entry']['posted_at'])): ?><p class="error"><?php echo $errors['entry']['posted_at']; ?></p><?php endif; ?>
       </div><!--/form_contents-->
     </div><!--/form_area-->
@@ -152,7 +152,7 @@ function posted_at_select_to_input(){
       <h3><span class="h3_inner"><?php echo __('Accept comments'); ?></span></h3>
       <div class="form_contents">
         <div class="radio_horizontal_box">
-          <?php echo Html::input('entry[comment_accepted]', 'radio', array('options'=>EntriesModel::getCommentAcceptedList(), 'default'=>\Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'),'class'=>'common_input_radio')); ?>
+          <?php echo \Fc2blog\Web\Html::input('entry[comment_accepted]', 'radio', array('options'=>EntriesModel::getCommentAcceptedList(), 'default'=>\Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'),'class'=>'common_input_radio')); ?>
         </div>
         <?php if (isset($errors['entry']['comment_accepted'])): ?><p class="error"><?php echo $errors['entry']['comment_accepted']; ?></p><?php endif; ?>
       </div><!--/form_contents-->
@@ -161,7 +161,7 @@ function posted_at_select_to_input(){
       <h3><span class="h3_inner"><?php echo __('New paragraph'); ?></span></h3>
       <div class="form_contents">
         <div class="radio_horizontal_box">
-          <?php echo Html::input('entry[auto_linefeed]', 'radio', array('options'=>EntriesModel::getAutoLinefeedList(), 'default'=>\Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE'))); ?>
+          <?php echo \Fc2blog\Web\Html::input('entry[auto_linefeed]', 'radio', array('options'=>EntriesModel::getAutoLinefeedList(), 'default'=>\Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE'))); ?>
         </div>
         <?php if (isset($errors['entry']['auto_linefeed'])): ?><p class="error"><?php echo $errors['entry']['auto_linefeed']; ?></p><?php endif; ?>
       </div><!--/form_contents-->

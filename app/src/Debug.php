@@ -155,7 +155,7 @@ class Debug{
     file_put_contents($filePath, $html);    // 結果をデバッグ用HTMLに書き込み
     chmod($filePath, 0777);
 
-    $url = Html::url(array('controller'=>'common', 'action'=>'debug', 'key'=> $key));
+    $url = \Fc2blog\Web\Html::url(array('controller'=>'common', 'action'=>'debug', 'key'=> $key));
     if ($debug==2) {
       // iframeで表示
       echo <<<HTML

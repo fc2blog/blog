@@ -5,7 +5,7 @@
   <?php $devices = \Fc2blog\Config::get('DEVICE_NAME'); ?>
   <select onchange="location.href=$(this).val();">
     <?php foreach ($devices as $type => $name) : ?>
-      <option value="<?php echo Html::url(array('device_type'=>$type)); ?>" <?php if($device_type==$type): ?>selected="selected"<?php endif; ?>><?php echo h($name) ?></option>
+      <option value="<?php echo \Fc2blog\Web\Html::url(array('device_type'=>$type)); ?>" <?php if($device_type==$type): ?>selected="selected"<?php endif; ?>><?php echo h($name) ?></option>
     <?php endforeach; ?>
   </select>
 </div>
@@ -14,9 +14,9 @@
   <?php foreach($category_blog_plugins as $category => $blog_plugins): ?>
     <h3><?php echo __('Category'); ?><?php echo $category; ?></h3>
     <p class="header_btn">
-      <a class="admin_common_btn create_btn" href="<?php echo Html::url(array('controller'=>'BlogPlugins','action'=>'official_search', 'device_type'=>$device_type, 'category'=>$category)); ?>"><?php echo __('Official Plugin Search'); ?></a>
-      <a class="admin_common_btn create_btn" href="<?php echo Html::url(array('controller'=>'BlogPlugins','action'=>'share_search', 'device_type'=>$device_type, 'category'=>$category)); ?>"><?php echo __('Share Plugin Search'); ?></a>
-      <a class="admin_common_btn create_btn" href="<?php echo Html::url(array('controller'=>'BlogPlugins','action'=>'create', 'device_type'=>$device_type, 'category'=>$category)); ?>"><?php echo __('Plugin Creation'); ?></a>
+      <a class="admin_common_btn create_btn" href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogPlugins','action'=>'official_search', 'device_type'=>$device_type, 'category'=>$category)); ?>"><?php echo __('Official Plugin Search'); ?></a>
+      <a class="admin_common_btn create_btn" href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogPlugins','action'=>'share_search', 'device_type'=>$device_type, 'category'=>$category)); ?>"><?php echo __('Share Plugin Search'); ?></a>
+      <a class="admin_common_btn create_btn" href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogPlugins','action'=>'create', 'device_type'=>$device_type, 'category'=>$category)); ?>"><?php echo __('Plugin Creation'); ?></a>
     </p>
     <table>
       <thead>
@@ -31,16 +31,16 @@
         <?php foreach($blog_plugins as $blog_plugin): ?>
           <tr>
             <td>
-              <a href="<?php echo Html::url(array('action'=>'edit', 'id'=>$blog_plugin['id'])); ?>"><?php echo th($blog_plugin['title'], 20); ?></a>
+              <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'edit', 'id'=>$blog_plugin['id'])); ?>"><?php echo th($blog_plugin['title'], 20); ?></a>
             </td>
             <td class="center m_cell">
               <input type="checkbox" name="blog_plugin[display]" value="<?php echo $blog_plugin['id']; ?>" <?php if ($blog_plugin['display']==\Fc2blog\Config::get('APP.DISPLAY.SHOW')) echo 'checked="checked"'; ?> />
             </td>
             <td class="center">
-              <a href="<?php echo Html::url(array('action'=>'register', 'id'=>$blog_plugin['id'])); ?>"><?php if($blog_plugin['plugin_id']): ?><?php echo __('Update'); ?><?php else: ?><?php echo __('Register'); ?><?php endif; ?></a>
+              <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'register', 'id'=>$blog_plugin['id'])); ?>"><?php if($blog_plugin['plugin_id']): ?><?php echo __('Update'); ?><?php else: ?><?php echo __('Register'); ?><?php endif; ?></a>
             </td>
             <td class="center s_cell">
-              <a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$blog_plugin['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
+              <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$blog_plugin['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
             </td>
           </tr>
         <?php endforeach; ?>
@@ -53,7 +53,7 @@
 </div>
 
 <?php $json = array(); ?>
-<form action="<?php echo Html::url(array('controller'=>'blog_plugins', 'action'=>'sort')); ?>" method="POST" id="sys-order" style="display: none;">
+<form action="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'blog_plugins', 'action'=>'sort')); ?>" method="POST" id="sys-order" style="display: none;">
   <?php foreach($category_blog_plugins as $category => $blog_plugins): ?>
     <h3><?php echo __('Category'); ?><?php echo $category; ?></h3>
     <ul id="sys-category-<?php echo $category; ?>" class="jquery-ui-sortable mb20"></ul>

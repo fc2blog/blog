@@ -16,8 +16,8 @@ abstract class AppController extends Controller
     $html = $this->output;
 
     // cssとjsを置き換える
-    $css_html = Html::getCSSHtml();
-    $js_html = Html::getJSHtml();
+    $css_html = \Fc2blog\Web\Html::getCSSHtml();
+    $js_html = \Fc2blog\Web\Html::getJSHtml();
 
     // cssとjsを置き換え
     $html = str_replace(array($this->includeCSS(), $this->includeJS()), array($css_html, $js_html), $html);

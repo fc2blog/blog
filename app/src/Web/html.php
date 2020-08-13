@@ -3,6 +3,8 @@
 * HTMLの便利関数群
 */
 
+namespace Fc2blog\Web;
+
 class Html
 {
 
@@ -85,7 +87,7 @@ class Html
 
     // フルのURLを取得する（SSL強制リダイレクト用）
     if ($full_url && !is_null($blog_id)) {
-      $url = BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
+      $url = \BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
     }
     return $url;
   }

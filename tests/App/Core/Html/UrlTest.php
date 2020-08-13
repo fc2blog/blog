@@ -32,8 +32,6 @@ class UrlTest extends TestCase
       Model::load('blogs');
     }
 
-    require_once(TEST_APP_DIR . "/core/html.php");
-
     parent::setUp();
   }
 
@@ -45,7 +43,7 @@ class UrlTest extends TestCase
     $_SERVER["REQUEST_METHOD"] = "GET";
     $_SERVER['REQUEST_URI'] = "/";
     $_POST = [];
-    $url = Html::url([
+    $url = \Fc2blog\Web\Html::url([
       'controller' => 'user',
       'action' => 'action',
       'blog_id' => 'testblog1'
@@ -63,7 +61,7 @@ class UrlTest extends TestCase
     $_SERVER["REQUEST_METHOD"] = "GET";
     $_SERVER['REQUEST_URI'] = "/";
     $_POST = [];
-    $url = Html::url([
+    $url = \Fc2blog\Web\Html::url([
       'controller' => 'user',
       'action' => 'action',
       'blog_id' => 'testblog1'

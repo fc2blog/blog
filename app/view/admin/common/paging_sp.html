@@ -19,13 +19,13 @@
 
     <ul class="pager btn_contents">
       <?php if($paging['is_prev']): ?>
-        <li><a href="<?php echo Html::url(array('page'=>$paging['page']-1), true); ?>"><?php echo __('Previous page'); ?></a></li>
+        <li><a href="<?php echo \Fc2blog\Web\Html::url(array('page'=>$paging['page']-1), true); ?>"><?php echo __('Previous page'); ?></a></li>
       <?php else: ?>
         <li><span><?php echo __('Previous page'); ?></span></li>
       <?php endif; ?>
 
       <?php if($paging['is_next']): ?>
-        <li><a href="<?php echo Html::url(array('page'=>$paging['page']+1), true); ?>"><?php echo __('Next page'); ?></a></li>
+        <li><a href="<?php echo \Fc2blog\Web\Html::url(array('page'=>$paging['page']+1), true); ?>"><?php echo __('Next page'); ?></a></li>
       <?php else: ?>
         <li><span><?php echo __('Next page'); ?></span></li>
       <?php endif; ?>

@@ -5,8 +5,6 @@
 
 require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model.php');
 
-require_once(\Fc2blog\Config::get('CORE_DIR') . 'html.php');    // HTMLの便利関数群
-
 abstract class Controller
 {
 
@@ -75,7 +73,7 @@ abstract class Controller
   protected function redirect($url, $hash = '', bool $full_url = false, string $blog_id = null)
   {
     if (is_array($url)) {
-      $url = Html::url($url, false, $full_url);
+      $url = \Fc2blog\Web\Html::url($url, false, $full_url);
 
     } else if ($full_url && is_string($blog_id) && strlen($blog_id) > 0) {
       $url = BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;

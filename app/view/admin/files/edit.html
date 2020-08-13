@@ -18,8 +18,8 @@
   <dl class="form_item">
     <dt><?php echo __('Upload file'); ?>：</dt>
     <dd>
-      <?php echo Html::input('file[name]', 'text', array('id'=>'sys-file-name')); ?>
-      <?php echo Html::input('file[file]', 'file', array('style'=>'opacity: 0; position: absolute; width: 120px;', 'onchange'=>"$('#sys-file-name').val($(this).val().split('\\\\').pop());")); ?>
+      <?php echo \Fc2blog\Web\Html::input('file[name]', 'text', array('id'=>'sys-file-name')); ?>
+      <?php echo \Fc2blog\Web\Html::input('file[file]', 'file', array('style'=>'opacity: 0; position: absolute; width: 120px;', 'onchange'=>"$('#sys-file-name').val($(this).val().split('\\\\').pop());")); ?>
       <input type="button" value="<?php echo __('File selection'); ?>" onclick="$(this).prev().click();" style="width: 120px;" />
     </dd>
   </dl>

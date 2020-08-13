@@ -1,11 +1,11 @@
 
 <!-- timepicker-addon -->
-<?php Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js'); ?>
 <?php if (\Fc2blog\Config::get('LANG')!='en'): ?>
-  <?php Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-' . \Fc2blog\Config::get('LANG') . '.js'); ?>
+  <?php \Fc2blog\Web\Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-' . \Fc2blog\Config::get('LANG') . '.js'); ?>
 <?php endif; ?>
 
-<?php Html::addJS('/js/js.cookie.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/js.cookie.js'); ?>
 
 <!-- メディアを追加する -->
 <div id="sys-add-media-dialog" title="<?php echo __('Add Media'); ?>">
@@ -24,7 +24,7 @@
   <div id="sys-add-media-load"></div>
 </div>
 
-<?php Html::addJS('/js/admin/entry_editor.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/admin/entry_editor.js'); ?>
 
 <script>
 $(function(){
@@ -142,9 +142,9 @@ $(function(){
   $('#sys-entry-form-submit').click(function(){
     var action = '';
     if ($('#sys-entry-form').find('input[name=id]').val()) {
-      action = '<?php echo Html::url(array('controller'=>'Entries', 'action'=>'edit')); ?>';
+      action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'edit')); ?>';
     } else {
-      action = '<?php echo Html::url(array('controller'=>'Entries', 'action'=>'create')); ?>';
+      action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'create')); ?>';
     }
     $('#sys-entry-form').prop('action', action);
     $('#sys-entry-form').prop('target', '_self');

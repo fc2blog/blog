@@ -1,4 +1,4 @@
-<?php Html::addCSS('/css/sp/category_sp.css', array('media'=>'all')); ?>
+<?php \Fc2blog\Web\Html::addCSS('/css/sp/category_sp.css', array('media'=>'all')); ?>
 
 <?php
   $blog_id = $this->getBlogId();
@@ -164,7 +164,7 @@ $(function(){
     $('#sys-category-add').val('通信中');
 
     $.ajax({
-      url: '<?php echo Html::url(array('controller'=>'Categories', 'action'=>'ajax_add')); ?>',
+      url: '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Categories', 'action'=>'ajax_add')); ?>',
       type: 'POST',
       data: {category: {parent_id: parent_id, name: name}, sig: "<?php echo \Fc2blog\Session::get('sig'); ?>"},
       dataType: 'json',

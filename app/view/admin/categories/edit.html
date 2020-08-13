@@ -10,21 +10,21 @@
       <tr>
         <th><?php echo __('Parent category'); ?></th>
         <td>
-          <?php echo Html::input('category[parent_id]', 'select', array('options' => $category_parents)); ?>
+          <?php echo \Fc2blog\Web\Html::input('category[parent_id]', 'select', array('options' => $category_parents)); ?>
           <?php if (isset($errors['parent_id'])): ?><span class="error"><?php echo $errors['parent_id']; ?></span><?php endif; ?>
         </td>
       </tr>
       <tr>
         <th><?php echo __('Category name'); ?></th>
         <td>
-          <?php echo Html::input('category[name]', 'text'); ?>
+          <?php echo \Fc2blog\Web\Html::input('category[name]', 'text'); ?>
           <?php if (isset($errors['name'])): ?><span class="error"><?php echo $errors['name']; ?></span><?php endif; ?>
         </td>
       </tr>
       <tr>
         <th><?php echo __('Sort by category'); ?></th>
         <td>
-          <?php echo Html::input('category[category_order]', 'select', array('options'=>CategoriesModel::getOrderList())); ?>
+          <?php echo \Fc2blog\Web\Html::input('category[category_order]', 'select', array('options'=>CategoriesModel::getOrderList())); ?>
           <?php if (isset($errors['category_order'])): ?><span class="error"><?php echo $errors['category_order']; ?></span><?php endif; ?>
         </td>
       </tr>
