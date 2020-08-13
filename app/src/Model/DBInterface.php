@@ -3,6 +3,8 @@
 * DB用のインタフェース
 */
 
+namespace Fc2blog\Model;
+
 interface DBInterface{
 
   const RESULT_ONE = 'one';                // １カラムのみ取得

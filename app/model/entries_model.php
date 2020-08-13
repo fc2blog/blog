@@ -122,7 +122,7 @@ GROUP BY DATE_FORMAT(posted_at, '%Y-%m')
 ORDER BY posted_at DESC
 SQL;
     $params = array($blog_id);
-    $options = array('result'=>DBInterface::RESULT_ALL);
+    $options = array('result'=>\Fc2blog\Model\DBInterface::RESULT_ALL);
     $archives = $this->findSql($sql, $params, $options);
     return $archives;
   }
@@ -349,7 +349,7 @@ SQL;
   {
     $sql = 'UPDATE ' . $this->getTableName() . ' SET comment_count=comment_count+1 WHERE blog_id=? AND id=?';
     $params = array($blog_id, $entry_id);
-    $options['result'] = DBInterface::RESULT_SUCCESS;
+    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -360,7 +360,7 @@ SQL;
   {
     $sql = 'UPDATE ' . $this->getTableName() . ' SET comment_count=comment_count-1 WHERE blog_id=? AND id=? AND comment_count>0';
     $params = array($blog_id, $entry_id);
-    $options['result'] = DBInterface::RESULT_SUCCESS;
+    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 

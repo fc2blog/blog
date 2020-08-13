@@ -432,7 +432,7 @@ class CommentsModel extends Model
       $params[] = $comment_id;
     }
     $sql .= ' AND open_status=' . \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING');
-    $options['result'] = DBInterface::RESULT_SUCCESS;
+    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 

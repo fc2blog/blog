@@ -4,6 +4,8 @@
 * mysqliのラッピング
 */
 
+namespace Fc2blog\Model;
+
 class PDOWrap implements DBInterface
 {
 
@@ -37,12 +39,12 @@ class PDOWrap implements DBInterface
   {
     $_options = array(
       'types'  => '',                  // paramsの型設定(sdi)
-      'result' => DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statment...
+      'result' => \Fc2blog\Model\DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statment...
     );
     $options = array_merge($_options, $options);
     try{
       $stmt = $this->query($sql, $params, $options['types']);
-    }catch(Exception $e){
+    }catch(\Exception $e){
       if (\Fc2blog\Config::get('DEBUG', 0)) {
         \Fc2blog\Debug::log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
@@ -59,12 +61,12 @@ class PDOWrap implements DBInterface
   {
     $_options = array(
       'types' => '',                      // paramsの型設定(sdi)
-      'result' => DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statment...
+      'result' => \Fc2blog\Model\DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statment...
     );
     $options = array_merge($_options, $options);
     try{
       $stmt = $this->query($sql, $params, $options['types']);
-    }catch(Exception $e){
+    }catch(\Exception $e){
       if (\Fc2blog\Config::get('DEBUG', 0)) {
         \Fc2blog\Debug::log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
@@ -100,7 +102,7 @@ class PDOWrap implements DBInterface
    * @param array $params
    * @param string $types
    * @return PDOStatement|mixed 成功時PDOStatement
-   * @throws Exception
+   * @throws \Exception
    */
   private function query($sql, $params=array(), $types='')
   {
@@ -115,7 +117,7 @@ class PDOWrap implements DBInterface
       // SQL文をそのまま実行
       $stmt = $this->db->query($sql);
       if (getType($stmt) == 'boolean' && !$stmt) {
-        throw new Exception('[query Error]' . $sql);
+        throw new \Exception('[query Error]' . $sql);
       }
       if (\Fc2blog\Config::get('DEBUG', 0)) {
         $mtime = sprintf('%f', microtime(true) - $mtime);
@@ -127,7 +129,7 @@ class PDOWrap implements DBInterface
     // プリペアドステートメント
     $stmt = $this->db->prepare($sql);
     if (!$stmt) {
-      throw new Exception('[prepare Error]' . $sql);
+      throw new \Exception('[prepare Error]' . $sql);
     }
     $stmt->execute($params);
     if (\Fc2blog\Config::get('DEBUG', 0)) {
@@ -145,17 +147,17 @@ class PDOWrap implements DBInterface
         $dsn = "mysql:host={$this->host};dbname={$this->database};";
       }
       $options = array(
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
+        \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+        \PDO::ATTR_EMULATE_PREPARES   => false,
       );
       if ($is_charset) {
         if (version_compare(PHP_VERSION, '5.3.6') < 0) {
-          $options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES '" .$this->charset. "';";
+          $options[\PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES '" .$this->charset. "';";
         } else {
           $dsn .= "charset={$this->charset};";
         }
       }
-      $this->db = new PDO($dsn, $this->user, $this->password, $options);
+      $this->db = new \PDO($dsn, $this->user, $this->password, $options);
     }
   }
 
@@ -179,39 +181,39 @@ class PDOWrap implements DBInterface
 
     switch($type){
       // １カラムのみ取得
-      case DBInterface::RESULT_ONE :
+      case \Fc2blog\Model\DBInterface::RESULT_ONE :
         return $stmt->fetchColumn();
 
       // １行のみ取得
-      case DBInterface::RESULT_ROW :
+      case \Fc2blog\Model\DBInterface::RESULT_ROW :
         return $stmt->fetch();
 
       // リスト形式で取得
-      case DBInterface::RESULT_LIST :
+      case \Fc2blog\Model\DBInterface::RESULT_LIST :
         $rows = array();
-        $stmt->setFetchMode(PDO::FETCH_NUM);
+        $stmt->setFetchMode(\PDO::FETCH_NUM);
         foreach ($stmt as $value) {
           $rows[$value[0]] = $value[1];
         }
         return $rows;
 
       // 全て取得
-      case DBInterface::RESULT_ALL :
+      case \Fc2blog\Model\DBInterface::RESULT_ALL :
         return $stmt->fetchAll();
 
       // InsertIDを返却
-      case DBInterface::RESULT_INSERT_ID :
+      case \Fc2blog\Model\DBInterface::RESULT_INSERT_ID :
         return $this->db->lastInsertId();
 
       // 影響のあった行数を返却
-      case DBInterface::RESULT_AFFECTED :
+      case \Fc2blog\Model\DBInterface::RESULT_AFFECTED :
         return $stmt->rowCount();
 
       // 成功したかどうかを返却
-      case DBInterface::RESULT_SUCCESS :
+      case \Fc2blog\Model\DBInterface::RESULT_SUCCESS :
         return 1;
 
-      case DBInterface::RESULT_STAT: default:
+      case \Fc2blog\Model\DBInterface::RESULT_STAT: default:
         return $stmt;
     }
   }
@@ -222,7 +224,7 @@ class PDOWrap implements DBInterface
   public function getVersion()
   {
     $this->connect(false, false);
-    $version = explode('-',$this->db->getAttribute(PDO::ATTR_SERVER_VERSION));
+    $version = explode('-',$this->db->getAttribute(\PDO::ATTR_SERVER_VERSION));
     return $version[0];
   }
 

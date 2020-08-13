@@ -112,7 +112,7 @@ class CommonController extends AdminController
         !file_exists(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html') && mkdir(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html', 0777, true);
         !file_exists(\Fc2blog\Config::get('TEMP_DIR') . 'log') && mkdir(\Fc2blog\Config::get('TEMP_DIR') . 'log', 0777, true);
 
-        $msdb = MSDB::getInstance();
+        $msdb = \Fc2blog\Model\MSDB::getInstance();
         try {
           // DB接続確認(DATABASEの存在判定含む)
           $msdb->connect();
@@ -127,7 +127,7 @@ class CommonController extends AdminController
 
         // テーブルの存在チェック
         $sql = "SHOW TABLES LIKE 'users'";
-        $table = MSDB::getInstance()->find($sql);
+        $table = \Fc2blog\Model\MSDB::getInstance()->find($sql);
 
         if (count($table)) {
           // 既にDB登録完了
@@ -139,7 +139,7 @@ class CommonController extends AdminController
           $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
         }
 
-        MSDB::getInstance()->multiExecute($sql);
+        \Fc2blog\Model\MSDB::getInstance()->multiExecute($sql);
 
         // 初期公式プラグインを追加
         Model::load('Plugins')->addInitialOfficialPlugin();

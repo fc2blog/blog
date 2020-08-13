@@ -12,7 +12,7 @@ class DBHelper extends TestCase
 {
   public static function clearDbAndInsertFixture()
   {
-    $msdb = MSDB::getInstance();
+    $msdb = \Fc2blog\Model\MSDB::getInstance();
 
     // DB接続確認(DATABASEの存在判定含む)
     $msdb->connect();
@@ -23,7 +23,7 @@ class DBHelper extends TestCase
     if (DB_CHARSET != 'UTF8MB4') {
       $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
     }
-    MSDB::getInstance()->multiExecute($sql);
+    \Fc2blog\Model\MSDB::getInstance()->multiExecute($sql);
 
     // load fixture
     $sql = file_get_contents(__DIR__ . "/test_fixture.sql");

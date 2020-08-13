@@ -84,7 +84,7 @@ table#db
     $is_connect = true;
     $connect_message = '';
     try{
-      MSDB::getInstance()->connect(false, false);
+      \Fc2blog\Model\MSDB::getInstance()->connect(false, false);
     }catch(Exception $e){
       $is_connect = false;
       $connect_message = $e->getMessage();
@@ -125,7 +125,7 @@ table#db
   </li>
 
   <?php if ($is_connect): ?>
-  <?php $is_character = version_compare(MSDB::getInstance()->getVersion(), '5.5.0')>=0 || DB_CHARSET!='UTF8MB4'; ?>
+  <?php $is_character = version_compare(\Fc2blog\Model\MSDB::getInstance()->getVersion(), '5.5.0')>=0 || DB_CHARSET!='UTF8MB4'; ?>
   <li class="<?php echo $is_character ? 'ok' : 'ng'; ?>">
     <?php echo __('Character code check of MySQL'); ?> . . .
     <?php if ($is_character): ?>

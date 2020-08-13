@@ -4,7 +4,6 @@
 * Sql群の書き出しクラス 子クラスでSingletonで呼び出し予定
 */
 
-require_once(\Fc2blog\Config::get('CORE_DIR') . 'msdb.php');
 require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model_interface.php');
 require_once(\Fc2blog\Config::get('MODEL_DIR') . 'validate.php');
 
@@ -25,7 +24,7 @@ abstract class Model implements ModelInterface
 
   public function getDB()
   {
-    return MSDB::getInstance();
+    return \Fc2blog\Model\MSDB::getInstance();
   }
 
   public function close()
@@ -130,24 +129,24 @@ abstract class Model implements ModelInterface
       case 'count':
         $options['fields'] = 'COUNT(*)';
         $options['limit'] = 1;
-        $options['options']['result'] = DBInterface::RESULT_ONE;
+        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_ONE;
         break;
       case 'one':
         $options['limit'] = 1;
-        $options['options']['result'] = DBInterface::RESULT_ONE;
+        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_ONE;
         break;
       case 'row':
         $options['limit'] = 1;
-        $options['options']['result'] = DBInterface::RESULT_ROW;
+        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_ROW;
         break;
       case 'list':
-        $options['options']['result'] = DBInterface::RESULT_LIST;
+        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_LIST;
         break;
       case 'all':
-        $options['options']['result'] = DBInterface::RESULT_ALL;
+        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_ALL;
         break;
       case 'statment': default:
-        $options['options']['result'] = DBInterface::RESULT_STAT;
+        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_STAT;
         break;
     }
     $fields = '*';
@@ -265,7 +264,7 @@ abstract class Model implements ModelInterface
   public function getFoundRows()
   {
     $sql = 'SELECT FOUND_ROWS()';
-    return $this->findSql($sql, array(), array('result'=>DBInterface::RESULT_ONE));
+    return $this->findSql($sql, array(), array('result'=>\Fc2blog\Model\DBInterface::RESULT_ONE));
   }
 
   /**
@@ -307,7 +306,7 @@ abstract class Model implements ModelInterface
       $values = array_values($values);
     }
     if (!isset($options['result'])) {
-      $options['result'] = DBInterface::RESULT_INSERT_ID;
+      $options['result'] = \Fc2blog\Model\DBInterface::RESULT_INSERT_ID;
     }
     return $this->executeSql($sql, $values, $options);
   }
@@ -323,7 +322,7 @@ abstract class Model implements ModelInterface
     }
     $sql = 'UPDATE ' . $this->getTableName() . ' SET ' . implode(',', $sets) . ' WHERE ' . $where;
     $params = array_merge(array_values($values), $params);
-    $options['result'] = DBInterface::RESULT_SUCCESS;
+    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -349,7 +348,7 @@ abstract class Model implements ModelInterface
   public function delete($where, $params=array(), $options=array())
   {
     $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $where;
-    $options['result'] = DBInterface::RESULT_SUCCESS;
+    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -386,13 +385,13 @@ abstract class Model implements ModelInterface
       $sqls[] = '(' . implode(',',array_fill(0, count($columns), '?')) . ')';
     }
     $sql .= implode(',', $sqls);
-    $options['result'] = DBInterface::RESULT_INSERT_ID;
+    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_INSERT_ID;
     return $this->executeSql($sql, $params, $options);
   }
 
   public function insertSql($sql, $params=array(), $options=array())
   {
-    $options['result'] = DBInterface::RESULT_INSERT_ID;
+    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_INSERT_ID;
     return $this->executeSql($sql, $params, $options);
   }
 

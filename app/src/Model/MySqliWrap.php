@@ -4,6 +4,8 @@
 * mysqliのラッピング
 */
 
+namespace Fc2blog\Model;
+
 class MySqliWrap implements DBInterface{
 
   // DB情報
@@ -30,12 +32,12 @@ class MySqliWrap implements DBInterface{
   public function find($sql, $params=array(), $options=array()){
     $_options = array(
       'types'  => '',                  // paramsの型設定(sdi)
-      'result' => DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statment...
+      'result' => \Fc2blog\Model\DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statment...
     );
     $options = array_merge($_options, $options);
     try{
       $stmt = $this->query($sql, $params, $options['types']);
-    }catch(Exception $e){
+    }catch(\Exception $e){
       if (\Fc2blog\Config::get('DEBUG', 0)) {
         \Fc2blog\Debug::log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
@@ -51,12 +53,12 @@ class MySqliWrap implements DBInterface{
   public function execute($sql, $params=array(), $options=array()){
     $_options = array(
       'types' => '',                      // paramsの型設定(sdi)
-      'result' => DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statment...
+      'result' => \Fc2blog\Model\DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statment...
     );
     $options = array_merge($_options, $options);
     try{
       $stmt = $this->query($sql, $params, $options['types']);
-    }catch(Exception $e){
+    }catch(\Exception $e){
       if (\Fc2blog\Config::get('DEBUG', 0)) {
         \Fc2blog\Debug::log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
@@ -98,7 +100,7 @@ class MySqliWrap implements DBInterface{
       // SQL文をそのまま実行
       $stmt = $this->db->query($sql);
       if (getType($stmt) == 'boolean' && !$stmt) {
-        throw new Exception('[query Error]' . $sql);
+        throw new \Exception('[query Error]' . $sql);
       }
       if (\Fc2blog\Config::get('DEBUG', 0)) {
         $mtime = sprintf('%f', microtime(true) - $mtime);
@@ -110,7 +112,7 @@ class MySqliWrap implements DBInterface{
     // プリペアドステートメント
     $stmt = $this->db->prepare($sql);
     if (!$stmt) {
-      throw new Exception('[prepare Error]' . $sql);
+      throw new \Exception('[prepare Error]' . $sql);
     }
     $types = count($params) == strlen($types) ? $types : $this->getBindTypes($params);
     $bindParams = array($types);
@@ -119,7 +121,7 @@ class MySqliWrap implements DBInterface{
     }
     $res = call_user_func_array(array($stmt, 'bind_param'), $bindParams);
     if (!$stmt->execute()) {
-      throw new Exception('[execute Error]' . $sql);
+      throw new \Exception('[execute Error]' . $sql);
     }
     if (\Fc2blog\Config::get('DEBUG', 0)) {
       $mtime = sprintf('%f', microtime(true) - $mtime);
@@ -131,9 +133,9 @@ class MySqliWrap implements DBInterface{
   public function connect($is_charset=true, $is_database=true){
     if ($this->db == null) {
       if ($is_database) {
-        $this->db = new mysqli($this->host, $this->user, $this->password, $this->database);
+        $this->db = new \mysqli($this->host, $this->user, $this->password, $this->database);
       } else {
-        $this->db = new mysqli($this->host, $this->user, $this->password);
+        $this->db = new \mysqli($this->host, $this->user, $this->password);
       }
       $this->errorCheck('Connect Error');
       if ($is_charset) {
@@ -151,12 +153,12 @@ class MySqliWrap implements DBInterface{
 
   private function errorCheck($msg){
     if (mysqli_connect_error()) {
-      throw new Exception('['.$msg . '] (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+      throw new \Exception('['.$msg . '] (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
     }
 /*
     // PHP 5.2.9 および 5.3.0 より前のバージョンでは $connect_error は動作していない
     if ($this->db->connect_errno) {
-      throw new Exception('['.$msg . '] (' . $this->db->connect_errno . ') ' . $this->db->connect_error);
+      throw new \Exception('['.$msg . '] (' . $this->db->connect_errno . ') ' . $this->db->connect_error);
     }
 */
   }
@@ -178,7 +180,7 @@ class MySqliWrap implements DBInterface{
   public function result($stmt, $type){
     switch($type){
       // １カラムのみ取得
-      case DBInterface::RESULT_ONE :
+      case \Fc2blog\Model\DBInterface::RESULT_ONE :
         $one = null;
         switch (get_class($stmt)) {
           case 'mysqli_stmt':
@@ -196,7 +198,7 @@ class MySqliWrap implements DBInterface{
         return $one;
 
       // １行のみ取得
-      case DBInterface::RESULT_ROW :
+      case \Fc2blog\Model\DBInterface::RESULT_ROW :
         $row = array();
         switch (get_class($stmt)) {
           case 'mysqli_stmt':
@@ -212,7 +214,7 @@ class MySqliWrap implements DBInterface{
         return $row;
 
       // リスト形式で取得
-      case DBInterface::RESULT_LIST :
+      case \Fc2blog\Model\DBInterface::RESULT_LIST :
         $rows = array();
         switch (get_class($stmt)) {
           case 'mysqli_stmt':
@@ -231,7 +233,7 @@ class MySqliWrap implements DBInterface{
 
 
       // 全て取得
-      case DBInterface::RESULT_ALL :
+      case \Fc2blog\Model\DBInterface::RESULT_ALL :
         $rows = array();
         switch (get_class($stmt)) {
           case 'mysqli_stmt':
@@ -249,7 +251,7 @@ class MySqliWrap implements DBInterface{
         return $rows;
 
       // InsertIDを返却
-      case DBInterface::RESULT_INSERT_ID :
+      case \Fc2blog\Model\DBInterface::RESULT_INSERT_ID :
         $insert_id = $this->db->insert_id;
         if (getType($stmt) === 'object') {
           $stmt->close();
@@ -257,7 +259,7 @@ class MySqliWrap implements DBInterface{
         return $insert_id;
 
       // 影響のあった行数を返却
-      case DBInterface::RESULT_AFFECTED :
+      case \Fc2blog\Model\DBInterface::RESULT_AFFECTED :
         $affected_rows = $this->db->affected_rows;
         if (getType($stmt) === 'object') {
           $stmt->close();
@@ -265,10 +267,10 @@ class MySqliWrap implements DBInterface{
         return $affected_rows;
 
       // 成功したかどうかを返却
-      case DBInterface::RESULT_SUCCESS :
+      case \Fc2blog\Model\DBInterface::RESULT_SUCCESS :
         return 1;
 
-      case DBInterface::RESULT_STAT: default:
+      case \Fc2blog\Model\DBInterface::RESULT_STAT: default:
         return $stmt;
     }
   }
@@ -281,7 +283,7 @@ class MySqliWrap implements DBInterface{
     $params = array();
 
     if (!$stmt->store_result()) {
-      throw new Exception('[store_result] error=[' . $stmt->error . ']');
+      throw new \Exception('[store_result] error=[' . $stmt->error . ']');
     }
     $meta = $stmt->result_metadata();
     while ($field = $meta->fetch_field()) {
