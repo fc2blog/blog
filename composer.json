@@ -5,7 +5,8 @@
   "require": {
     "ext-mbstring": "*",
     "ext-gd": "*",
-    "ext-gettext": "*"
+    "ext-gettext": "*",
+    "ext-fileinfo": "*"
   },
   "config": {
     "vendor-dir": "app/vendor"

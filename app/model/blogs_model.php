@@ -103,9 +103,9 @@ class BlogsModel extends Model
    */
   public static function isValidBlogId(string $blog_id)
   {
-    if (Validate::alphanumeric($blog_id, []) !== true) return false;
-    if (Validate::minlength($blog_id, ['min' => 3]) !== true) return false;
-    if (Validate::maxlength($blog_id, ['max' => 50]) !== true) return false;
+    if (\Fc2blog\Model\Validate::alphanumeric($blog_id, []) !== true) return false;
+    if (\Fc2blog\Model\Validate::minlength($blog_id, ['min' => 3]) !== true) return false;
+    if (\Fc2blog\Model\Validate::maxlength($blog_id, ['max' => 50]) !== true) return false;
     if (strtolower($blog_id) !== $blog_id) return false;
     return true;
   }

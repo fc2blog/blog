@@ -5,7 +5,6 @@
 */
 
 require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model_interface.php');
-require_once(\Fc2blog\Config::get('MODEL_DIR') . 'validate.php');
 
 abstract class Model implements ModelInterface
 {
@@ -55,7 +54,7 @@ abstract class Model implements ModelInterface
         if (!isset($data[$key])) {
           $data[$key] = null;
         }
-        $error = Validate::$method($data[$key], $options, $key, $data, $this);
+        $error = \Fc2blog\Model\Validate::$method($data[$key], $options, $key, $data, $this);
         if ($error === false) {
           break;
         }

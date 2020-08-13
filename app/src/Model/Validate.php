@@ -3,6 +3,8 @@
 * 入力エラーチェッククラス
 */
 
+namespace Fc2blog\Model;
+
 class Validate
 {
 
@@ -233,7 +235,7 @@ class Validate
     foreach ($valid as $mKey => $options) {
       $method = is_array($options) && isset($options['rule']) ? $options['rule'] : $mKey;
       foreach ($values as $key => $value) {
-        $error = Validate::$method($values[$key], $options, $key, $values, $model);
+        $error = \Fc2blog\Model\Validate::$method($values[$key], $options, $key, $values, $model);
         if ($error === false) {
           break;
         }
