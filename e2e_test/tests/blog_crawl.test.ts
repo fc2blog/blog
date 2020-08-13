@@ -166,6 +166,8 @@ describe("crawl some blog", () => {
     expect(entry_h2_title.match(/3rd/)).toBeTruthy();
   });
 
+  let posted_comment_num;
+
   it("comment", async () => {
     expect(
       (await c.page.$eval("#cm h3.sub_header", (elm) => elm.textContent)).match(
@@ -247,6 +249,7 @@ describe("crawl some blog", () => {
     expect(is_captcha_failed).toBeTruthy();
   });
 
+
   it("comment success", async () => {
     await c.page.type("input[name=token]", captcha_key);
     await c.getSS("comment_success.png");
@@ -256,20 +259,24 @@ describe("crawl some blog", () => {
       await c.page.click("#sys-comment-form input[type=submit]"),
     ]);
 
-    await c.getSS("comment_success.png");
-
     expect(response.status()).toEqual(200);
     const exp = new RegExp(
       start_url + "index.php\\?mode=entries&process=view&id=[0-9]{1,100}"
     );
     expect(response.url().match(exp)).not.toBeNull();
+
+    const comment_a_text = await c.page.$eval("#e3 > div.entry_footer > ul > li:nth-child(2) > a[title=コメントの投稿]", elm=>elm.textContent);
+
+    await c.getSS("comment_success.png");
+    posted_comment_num = parseInt(comment_a_text.replace(/^CM:/,''));
   });
 
   it("comment edit", async () => {
     // NOTE: html構造的に、「編集」リンクが探しづらい
+    await c.getSS("comment_edit_before");
     let [response] = await Promise.all([
       c.waitLoad(),
-      await c.page.click("#cm #comment1 > ul > li:nth-child(3) > a"),
+      await c.page.click("#cm ul > li:nth-child(3) > a"),
     ]);
 
     expect(response.status()).toEqual(200);
@@ -339,14 +346,10 @@ describe("crawl some blog", () => {
     expect(response.status()).toEqual(200);
   });
 
-  // WIP、削除機能がうごいていないので。
-  it("comment delete", async () => {
+  it("comment delete fail by wrong password", async () => {
     const comment1 = await c.page.$("#comment1");
-    const title = await comment1.$eval(
-      "h4.sub_title",
-      (elm) => elm.textContent
-    );
-    const edit_a = await c.page.$("#comment1 > ul > li:nth-child(3) > a");
+    await c.getSS("comment_delete_fail_before");
+    const edit_a = await c.page.$("#cm ul > li:nth-child(3) > a");
 
     // NOTE: html構造的に、「編集」リンクが探しづらい
     let [response] = await Promise.all([c.waitLoad(), await edit_a.click()]);
@@ -359,12 +362,36 @@ describe("crawl some blog", () => {
     expect(h3_test.match(/コメントの編集/)).toBeTruthy();
 
     const delete_button = await c.page.$(
-      "#comment_form > p > input[type=submit]:nth-child(2)"
+        "#comment_form > p > input[type=submit]:nth-child(2)"
     );
 
     [response] = await Promise.all([c.waitLoad(), await delete_button.click()]);
 
-    // TODO 削除機能がうごいていないので完成と言えない
+    expect(response.status()).toEqual(200);
+    expect(response.url()).toEqual(start_url);
+
+    const wrong_password_error_text = await c.page.$eval("#comment_form > dl > dd:nth-child(13) > p", elm => elm.textContent);
+    expect(/必ず入力してください/.exec(wrong_password_error_text)).toBeTruthy();
+
+  });
+
+  it("comment delete succss", async () => {
+
+    await c.page.type("#pass", "pass_is_pass");
+
+    const [response] = await Promise.all([
+      c.waitLoad(),
+      await c.page.click("#comment_form > p > input[type=submit]:nth-child(2)")
+    ]);
+
+    expect(response.status()).toEqual(200);
+    expect(response.url()).toEqual(start_url+"index.php?mode=entries&process=index");
+
+    await c.getSS("comment_deleted");
+    const comment_a_text = await c.page.$eval("#e3 > ul.entry_state > li > a[title=コメントの投稿]", elm=>elm.textContent);
+    const comment_num = parseInt(comment_a_text.replace(/^CM:/,''));
+    expect(comment_num).toEqual(posted_comment_num);
+
   });
 
   afterAll(async () => {
