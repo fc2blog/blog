@@ -70,7 +70,7 @@ class Request
       echo "コントローラー名、メソッド名が指定されておりません\n";
       echo "cron.php [ControllerName] [MethodName] [...key=value]\n";
       if(defined("THIS_IS_TEST")){
-        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+        throw new \Fc2blog\Exception\PseudoExit(__FILE__ . ":" . __LINE__ ." ");
       }else{
         exit;
       }

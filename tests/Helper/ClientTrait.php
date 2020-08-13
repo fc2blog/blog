@@ -5,7 +5,7 @@ namespace Fc2blog\Tests\Helper;
 
 use Exception;
 use InvalidArgumentException;
-use PseudoExit;
+use \Fc2blog\Exception\PseudoExit;
 
 trait ClientTrait
 {
@@ -81,7 +81,7 @@ trait ClientTrait
       throw new Exception("Unexpected, no PseudoExit thrown.");
 
     } /** @noinspection PhpRedundantCatchClauseInspection */ catch (PseudoExit $e) {
-      // PseudoExit は正常終了と同義
+      // \Fc2blog\Exception\PseudoExit は正常終了と同義
       $ob = ob_get_clean();
       echo $ob;
       return $ob;

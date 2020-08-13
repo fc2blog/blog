@@ -93,14 +93,14 @@ abstract class AppController extends Controller
 
     if (!is_file(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
       if(defined("THIS_IS_TEST")){
-        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+        throw new \Fc2blog\Exception\PseudoExit(__FILE__ . ":" . __LINE__ ." ");
       }else{
         exit;
       }
     }
     include(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html/' . $key);
     if(defined("THIS_IS_TEST")){
-      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+      throw new \Fc2blog\Exception\PseudoExit(__FILE__ . ":" . __LINE__ ." ");
     }else{
       exit;
     }

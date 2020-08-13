@@ -73,8 +73,8 @@ abstract class Controller
    * @param $url
    * @param string $hash
    * @param bool $full_url BlogIdが特定できるとき、http(s)://〜からのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
-   * @param string $blog_id
-   * @throws PseudoExit
+   * @param string|null $blog_id
+   * @throws \Fc2blog\Exception\PseudoExit
    */
   protected function redirect($url, $hash = '', bool $full_url = false, string $blog_id = null)
   {
@@ -107,7 +107,7 @@ abstract class Controller
     $escaped_url = h($url);
     echo "redirect to {$escaped_url} status code:{$status_code}";
     if(defined("THIS_IS_TEST")){
-      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." redirect to {$escaped_url} status code:{$status_code}");
+      throw new \Fc2blog\Exception\PseudoExit(__FILE__ . ":" . __LINE__ ." redirect to {$escaped_url} status code:{$status_code}");
     }else{
       exit;
     }
