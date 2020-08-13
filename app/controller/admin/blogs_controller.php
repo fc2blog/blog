@@ -10,7 +10,7 @@ class BlogsController extends AdminController
    */
   public function index()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     \Fc2blog\Session::set('sig', App::genRandomString());
 
     // ブログの一覧取得
@@ -18,7 +18,7 @@ class BlogsController extends AdminController
       'where'  => 'user_id=?',
       'params' => array($this->getUserId()),
       'limit'  => \Fc2blog\Config::get('BLOG.DEFAULT_LIMIT', 10),
-      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order'  => 'created_at DESC',
     );
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
@@ -38,7 +38,7 @@ class BlogsController extends AdminController
    */
   public function create()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 初期表示時
     if (!$request->get('blog') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
@@ -69,7 +69,7 @@ class BlogsController extends AdminController
    */
   public function edit()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     /** @var BlogsModel $blogs_model */
     $blogs_model = Model::load('Blogs');
 
@@ -106,7 +106,7 @@ class BlogsController extends AdminController
   */
   public function choice()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     $blog_id = $request->get('blog_id');
 
@@ -123,7 +123,7 @@ class BlogsController extends AdminController
    */
   public function delete()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 退会チェック
     if (!$request->get('blog.delete') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {

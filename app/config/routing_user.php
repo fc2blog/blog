@@ -4,7 +4,7 @@
 */
 
 // ユーザー用のパラメータを設定する
-$request = Request::getInstance();
+$request = \Fc2blog\Request::getInstance();
 $path = $request->getPath();
 $paths = $request->getPaths();
 $query = $request->getQuery();

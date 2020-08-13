@@ -141,7 +141,7 @@ class App
   public static function getDeviceType()
   {
     // パラメータによりデバイスタイプを変更(FC2の引数順守)
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     if ($request->isArgs('pc')) {
       return \Fc2blog\Config::get('DEVICE_PC');
     }
@@ -195,7 +195,7 @@ class App
   public static function getArgsDevice(){
     static $device_name = null;   // 良く使用するのでキャッシュ
     if ($device_name===null) {
-      $request = Request::getInstance();
+      $request = \Fc2blog\Request::getInstance();
       if ($request->isArgs('pc')) {
         $device_name = 'pc';
       } else if ($request->isArgs('sp')) {
@@ -250,7 +250,7 @@ class App
   {
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
-      $gets = Request::getInstance()->getGet();;
+      $gets = \Fc2blog\Request::getInstance()->getGet();;
       unset($gets[\Fc2blog\Config::get('ARGS_CONTROLLER')]);
       unset($gets[\Fc2blog\Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);

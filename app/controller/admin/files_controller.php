@@ -10,7 +10,7 @@ class FilesController extends AdminController
    */
   public function ajax_index()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $files_model = Model::load('Files');
 
     $blog_id = $this->getBlogId();
@@ -38,8 +38,8 @@ class FilesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', App::getPageLimit('FILE'), Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'limit'  => $request->get('limit', App::getPageLimit('FILE'), \Fc2blog\Request::VALID_POSITIVE_INT),
+      'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
     $files = $files_model->find('all', $options);
@@ -57,7 +57,7 @@ class FilesController extends AdminController
    */
   public function upload()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $files_model = Model::load('Files');
 
     $blog_id = $this->getBlogId();
@@ -119,8 +119,8 @@ class FilesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', App::getPageLimit('FILE'), Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'limit'  => $request->get('limit', App::getPageLimit('FILE'), \Fc2blog\Request::VALID_POSITIVE_INT),
+      'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
     $files = $files_model->find('all', $options);
@@ -135,7 +135,7 @@ class FilesController extends AdminController
    */
   public function edit()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $files_model = Model::load('Files');
 
     $id = $request->get('id');
@@ -202,7 +202,7 @@ class FilesController extends AdminController
    */
   public function delete()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
       // 削除処理
@@ -226,7 +226,7 @@ class FilesController extends AdminController
    */
   public function ajax_delete()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 削除処理
     $json = array('status'=>0);

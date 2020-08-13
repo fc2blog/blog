@@ -16,7 +16,7 @@ class Html
   public static function url($args=array(), $reused=false, $full_url=false){
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
-      $gets = Request::getInstance()->getGet();;
+      $gets = \Fc2blog\Request::getInstance()->getGet();;
       unset($gets[\Fc2blog\Config::get('ARGS_CONTROLLER')]);
       unset($gets[\Fc2blog\Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);
@@ -91,7 +91,7 @@ class Html
   }
 
   public static function input($name, $type, $attrs=array(), $option_attrs=array()){
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     $default = isset($attrs['default']) ? $attrs['default'] : null;    // デフォルト文字列
     $options = isset($attrs['options']) ? $attrs['options'] : array(); // オプション

@@ -14,11 +14,11 @@ class UsersController extends AdminController
       return $this->error404();
     }
 
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     $options = array(
       'limit' => \Fc2blog\Config::get('PAGE.USER.LIMIT', 10),
-      'page'  => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'page'  => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order' => 'id DESC',
     );
     $users_model = Model::load('Users');
@@ -38,7 +38,7 @@ class UsersController extends AdminController
       return $this->error404();
     }
 
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 初期表示時
     if (!$request->get('user')) {
@@ -75,7 +75,7 @@ class UsersController extends AdminController
   */
   public function edit()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $users_model = Model::load('Users');
 
     $user_id = $this->getUserId();
@@ -109,7 +109,7 @@ class UsersController extends AdminController
    */
   public function withdrawal()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 退会チェック
     if (!$request->get('user.delete')) {
@@ -131,7 +131,7 @@ class UsersController extends AdminController
       $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
     }
 
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 初期表示時
     if (!$request->get('user')) {

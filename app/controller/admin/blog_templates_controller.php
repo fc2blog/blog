@@ -10,7 +10,7 @@ class BlogTemplatesController extends AdminController
    */
   public function index()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     \Fc2blog\Session::set('sig', App::genRandomString());
 
@@ -30,7 +30,7 @@ class BlogTemplatesController extends AdminController
   */
   public function fc2_index()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // デバイスタイプの設定
     $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'));
@@ -38,7 +38,7 @@ class BlogTemplatesController extends AdminController
 
     // 条件設定
     $condition = array();
-    $condition['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
+    $condition['page'] = $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT);
     $condition['device'] = \Fc2blog\Config::get('DEVICE_FC2_KEY.' . $device_type);
 
     // テンプレート一覧取得
@@ -55,7 +55,7 @@ class BlogTemplatesController extends AdminController
   */
   public function fc2_view()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 戻る用URLの設定
     $back_url = $request->getReferer();
@@ -81,7 +81,7 @@ class BlogTemplatesController extends AdminController
    */
   public function create()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_templates_model = Model::load('BlogTemplates');
 
     // 初期表示時
@@ -126,7 +126,7 @@ class BlogTemplatesController extends AdminController
    */
   public function edit()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');
@@ -166,7 +166,7 @@ class BlogTemplatesController extends AdminController
   */
   public function apply()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');
@@ -191,7 +191,7 @@ class BlogTemplatesController extends AdminController
    */
   public function download()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('fc2_id');
@@ -237,7 +237,7 @@ class BlogTemplatesController extends AdminController
    */
   public function delete()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');

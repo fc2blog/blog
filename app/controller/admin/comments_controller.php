@@ -10,7 +10,7 @@ class CommentsController extends AdminController
    */
   public function index()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $comments_model = Model::load('Comments');
 
     $blog_id = $this->getBlogId();
@@ -60,8 +60,8 @@ class CommentsController extends AdminController
       'from'   => 'entries',
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'limit'  => $request->get('limit', \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'), \Fc2blog\Request::VALID_POSITIVE_INT),
+      'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
 
@@ -84,7 +84,7 @@ class CommentsController extends AdminController
   */
   public function approval()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $comments_model = Model::load('Comments');
 
     $id = $request->get('id');
@@ -119,7 +119,7 @@ class CommentsController extends AdminController
     \Fc2blog\Config::set('DEBUG', 0);
     $this->layout = 'json.html';
 
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $comments_model = Model::load('Comments');
 
     $id = $request->get('id');
@@ -146,7 +146,7 @@ class CommentsController extends AdminController
   */
   public function reply()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $comments_model = Model::load('Comments');
 
     $comment_id = $request->get('id');
@@ -201,7 +201,7 @@ class CommentsController extends AdminController
     \Fc2blog\Config::set('DEBUG', 0);
     $this->layout = 'ajax.html';
 
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $comments_model = Model::load('Comments');
 
     $comment_id = $request->get('id');
@@ -245,7 +245,7 @@ class CommentsController extends AdminController
    */
   public function delete()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 削除処理
     if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {

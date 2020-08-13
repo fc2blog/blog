@@ -4,6 +4,8 @@
 * POST,GETへのアクセスを便利にするクラス
 */
 
+namespace Fc2blog;
+
 class Request
 {
 
@@ -38,7 +40,7 @@ class Request
   public static function getInstance()
   {
     if (self::$instance === null) {
-      self::$instance = new Request();
+      self::$instance = new static();
     }
     return self::$instance;
   }

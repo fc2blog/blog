@@ -22,7 +22,7 @@ class UrlTest extends TestCase
 
     # Requestはキャッシュされるので、都度消去する
     /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Request::resetInstanceForTesting();
+    \Fc2blog\Request::resetInstanceForTesting();
 
     \Fc2blog\Config::read('user.php', true);
 

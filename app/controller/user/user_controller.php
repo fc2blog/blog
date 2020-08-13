@@ -10,7 +10,7 @@ abstract class UserController extends AppController
   */
   public function getBlogId()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     return $request->get('blog_id');
   }
 

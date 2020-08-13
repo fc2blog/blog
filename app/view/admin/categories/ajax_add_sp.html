@@ -2,7 +2,7 @@
 
 <?php
   $blog_id = $this->getBlogId();
-  $request = Request::getInstance();
+  $request = \Fc2blog\Request::getInstance();
 
   $entry_categories = $request->get('entry_categories', array('category_id' => array()));
   $categories = Model::load('Categories')->getList($blog_id);

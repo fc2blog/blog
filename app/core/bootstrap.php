@@ -19,9 +19,6 @@ if (class_exists('mysqli')) {
 // 疑似Exitクラスの読み込み（テスト用）
 require_once(\Fc2blog\Config::get('CORE_DIR') . 'PseudoExit.php');
 
-// リクエストクラスの読み込み
-require_once(\Fc2blog\Config::get('CORE_DIR') . 'request.php');
-
 // タイムゾーン設定
 date_default_timezone_set(\Fc2blog\Config::get('TIMEZONE'));
 

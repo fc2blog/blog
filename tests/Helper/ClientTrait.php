@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\Helper;
 
-
 use Exception;
 use InvalidArgumentException;
 use PseudoExit;
@@ -30,7 +29,7 @@ trait ClientTrait
 
     # Requestはキャッシュされるので、都度消去する
     /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Request::resetInstanceForTesting();
+    \Fc2blog\Request::resetInstanceForTesting();
 
     if ($target === "user") {
       /** @noinspection PhpFullyQualifiedNameUsageInspection */
@@ -100,6 +99,6 @@ trait ClientTrait
     unset($_SERVER['REQUEST_URI'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTPS'], $_SERVER['REQUEST_URI']);
     $_POST = [];
     /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Request::resetInstanceForTesting();
+    \Fc2blog\Request::resetInstanceForTesting();
   }
 }

@@ -41,7 +41,7 @@ class BlogSettingsController extends AdminController
   */
   private function settingEdit($white_list, $action)
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_settings_model = Model::load('BlogSettings');
 
     $blog_id = $this->getBlogId();

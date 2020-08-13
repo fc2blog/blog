@@ -3,7 +3,6 @@
 * Controllerの親クラス
 */
 
-require_once(\Fc2blog\Config::get('CORE_DIR') . 'request.php');  // リクエストクラス
 require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model.php');
 
 require_once(\Fc2blog\Config::get('CORE_DIR') . 'html.php');    // HTMLの便利関数群
@@ -182,7 +181,7 @@ abstract class Controller
     unset($fw_data);
 
     // リクエストデータ
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // Debug用にテンプレートで使用可能な変数一覧表示
     if (\Fc2blog\Config::get('DEBUG_TEMPLATE_VARS')) {

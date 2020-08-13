@@ -56,7 +56,7 @@ class EntriesController extends UserController
    */
   public function index()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 記事一覧データ設定
     $options = array(
@@ -80,7 +80,7 @@ class EntriesController extends UserController
   */
   public function search()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     $where = 'blog_id=?';
     $params = array($this->getBlogId());
@@ -107,7 +107,7 @@ class EntriesController extends UserController
   */
   public function category()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     $blog_id     = $this->getBlogId();
     $category_id = $request->get('cat');
@@ -141,7 +141,7 @@ class EntriesController extends UserController
   */
   public function tag()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // タグ検索
     $blog_id = $this->getBlogId();
@@ -174,7 +174,7 @@ class EntriesController extends UserController
   */
   public function date()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 開始日付と終了日付の計算
     preg_match('/^([0-9]{4})([0-9]{2})?([0-9]{2})?$/', $request->get('date'), $matches);
@@ -223,7 +223,7 @@ class EntriesController extends UserController
     header("X-XSS-Protection: 0");
 
     // preview処理用
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // 投稿者のブログIDチェック
@@ -260,7 +260,7 @@ class EntriesController extends UserController
   */
   private function preview_fc2_template()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // 記事一覧データ設定
@@ -299,7 +299,7 @@ class EntriesController extends UserController
   */
   private function preview_template()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // 記事一覧データ設定
@@ -340,7 +340,7 @@ class EntriesController extends UserController
   */
   private function preview_plugin()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // プラグインのプレビュー情報取得
@@ -427,7 +427,7 @@ class EntriesController extends UserController
   */
   private function preview_entry()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // DBの代わりにリクエストから取得
@@ -478,7 +478,7 @@ class EntriesController extends UserController
    */
   public function view()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $entries_model = Model::load('Entries');
 
     $blog_id = $this->getBlogId();
@@ -507,7 +507,7 @@ class EntriesController extends UserController
           // コメント一覧を取得(ページング用)
           $comments_model = Model::load('Comments');
           $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $id, $blog_setting);
-          $options['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
+          $options['page'] = $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT);
           $comments = $comments_model->find('all', $options);
           $this->set('comments', $comments_model->decorateByBlogSetting($comments, $blog_setting, $self_blog));
           $this->set('paging', $comments_model->getPaging($options));
@@ -558,7 +558,7 @@ class EntriesController extends UserController
   */
   public function plugin()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     $blog_id = $this->getBlogId();
     $id = $request->get('id');
@@ -577,7 +577,7 @@ class EntriesController extends UserController
   */
   public function password()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     $blog_id = $this->getBlogId();
     $id = $request->get('id');
@@ -607,7 +607,7 @@ class EntriesController extends UserController
    */
   public function blog_password()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     $blog_id = $this->getBlogId();
     $blog = $this->getBlog($blog_id);
@@ -639,7 +639,7 @@ class EntriesController extends UserController
     $is_captcha = $blog_setting['comment_captcha']==\Fc2blog\Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートにリクエスト情報を合わせる
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     if (!$is_captcha || !$request->isArgs('token')) {
       \Fc2blog\Config::read('fc2_request.php');
       $request->combine(\Fc2blog\Config::get('request_combine.comment_register'));    // 引数のキーを入れ替える
@@ -705,7 +705,7 @@ class EntriesController extends UserController
     $is_captcha = $blog_setting['comment_captcha']==\Fc2blog\Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートの引数を受け側で合わせる
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     if (!$is_captcha || !$request->isArgs('token')) {
       \Fc2blog\Config::read('fc2_request.php');
       $request->combine(\Fc2blog\Config::get('request_combine.comment_edit'));
@@ -784,7 +784,7 @@ class EntriesController extends UserController
   */
   public function comment_delete()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $comments_model = Model::load('Comments');
 
     $blog_id = $this->getBlogId();
@@ -814,7 +814,7 @@ class EntriesController extends UserController
   */
   private function setEntriesData($options=array(), $areas=array())
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $entries_model = Model::load('Entries');
 
     $blog_id = $this->getBlogId();
@@ -824,7 +824,7 @@ class EntriesController extends UserController
 
     $options = array_merge(array(
       'limit' => $blog_setting['entry_display_count'],
-      'page'  => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'page'  => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
       'order' => 'entries.posted_at ' . $order . ', entries.id ' . $order,
     ), $options);
 

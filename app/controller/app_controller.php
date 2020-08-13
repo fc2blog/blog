@@ -75,7 +75,7 @@ abstract class AppController extends Controller
   */
   protected function tokenValidate($name='token')
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $value = $request->get($name, '');
     $value = mb_convert_kana($value, 'n');
     return \Fc2blog\Session::remove($name) == $value ? null : __('Token authentication is invalid');
@@ -89,7 +89,7 @@ abstract class AppController extends Controller
     if (\Fc2blog\Config::get('DEBUG')!=2 && \Fc2blog\Config::get('DEBUG') !=3) {
       return $this->error404();
     }
-    $key = Request::getInstance()->get('key');
+    $key = \Fc2blog\Request::getInstance()->get('key');
 
     if (!is_file(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
       if(defined("THIS_IS_TEST")){

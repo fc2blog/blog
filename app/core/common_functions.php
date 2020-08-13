@@ -105,7 +105,7 @@ function snakeCase($camel_case)
 function getRouting(){
   require(\Fc2blog\Config::get('CONFIG_DIR') . \Fc2blog\Config::get('ROUTING'));  // ルーティング設定を読み込み
 
-  $request = Request::getInstance();
+  $request = \Fc2blog\Request::getInstance();
 
   $defaultClass  = \Fc2blog\Config::get('DEFAULT_CLASS_NAME');
   $defaultMethod = \Fc2blog\Config::get('DEFAULT_METHOD_NAME');

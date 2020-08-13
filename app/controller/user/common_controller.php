@@ -10,7 +10,7 @@ class CommonController extends UserController
   */
   public function lang()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 言語の設定
     $lang = $request->get('lang');
@@ -27,7 +27,7 @@ class CommonController extends UserController
   */
   public function device_change()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     // 言語の設定
     $device_type = 0;
@@ -75,7 +75,7 @@ class CommonController extends UserController
   */
   public function thumbnail()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
 
     $blog_id = $request->get('blog_id');
     $id      = $request->get('id');

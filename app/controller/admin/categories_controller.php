@@ -10,7 +10,7 @@ class CategoriesController extends AdminController
    */
   public function create()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $categories_model = Model::load('Categories');
 
     $blog_id = $this->getBlogId();
@@ -58,7 +58,7 @@ class CategoriesController extends AdminController
    */
   public function edit()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $categories_model = Model::load('Categories');
 
     $id = $request->get('id');
@@ -99,7 +99,7 @@ class CategoriesController extends AdminController
    */
   public function delete()
   {
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $categories_model = Model::load('Categories');
 
     $id = $request->get('id');
@@ -129,7 +129,7 @@ class CategoriesController extends AdminController
   {
     \Fc2blog\Config::set('DEBUG', 0);    // デバッグなしに変更
 
-    $request = Request::getInstance();
+    $request = \Fc2blog\Request::getInstance();
     $categories_model = Model::load('Categories');
 
     $blog_id = $this->getBlogId();
