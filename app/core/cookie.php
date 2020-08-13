@@ -20,14 +20,11 @@ class Cookie
   /**
    * クッキーから情報を取得し破棄する
    * @param string $key
-   * @param string|null $default
-   * @return string|null
+   * @return void
    */
-  public static function remove(string $key, string $default = null)
+  public static function remove(string $key):void
   {
-    $value = self::get($key, $default);
-    self::set($key, null, time() - 3600);
-    return $value;
+    self::set($key, "", time() - 3600);
   }
 
   /**
