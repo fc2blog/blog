@@ -9,10 +9,27 @@ class LoaderHelper extends TestCase
 {
   public static function requireBootStrap()
   {
-    if (file_exists(TEST_APP_DIR . "/../public/config.php")) {
-      require_once(TEST_APP_DIR . "/../public/config.php");
+    //TODO dotenvで外部化
+    putenv('FC2_CONFIG_FROM_ENV=1');
+    putenv('FC2_ENABLE_UNIT_TEST_ENDPOINT=1');
+    putenv('FC2_STRICT_ERROR_REPORT=1');
+    putenv('FC2_ERROR_LOG_PATH=php://stderr');
+    putenv('FC2_ERROR_ON_DISPLAY=1');
+    putenv('FC2_DB_HOST=127.0.0.1');
+    putenv('FC2_DB_USER=docker');
+    putenv('FC2_DB_PASSWORD=docker');
+    putenv('FC2_DB_DATABASE=dev_fc2blog');
+    putenv('FC2_DB_CHARSET=UTF8MB4');
+    putenv('FC2_DOMAIN=localhost');
+    putenv('FC2_HTTP_PORT=8080');
+    putenv('FC2_HTTPS_PORT=8480');
+    putenv('FC2_PASSWORD_SALT=7efe3a5b4d111b9e2148e24993c1cfdb');
+    putenv('FC2_DOCUMENT_ROOT_PATH=/var/www/html/');
+
+    if ((string)getenv("FC2_CONFIG_FROM_ENV") === "1") {
+      require(TEST_APP_DIR . '/config_read_from_env.php');
     } else {
-      require_once(TEST_APP_DIR . "/../docker/docker.config.php");
+      require(TEST_APP_DIR . '/config.php');
     }
   }
 }

@@ -22,15 +22,28 @@ services:
     image: php:7.4-apache
     container_name: fc2blog-apache
     environment:
-      MYSQL_HOST: "db"
+      FC2_CONFIG_FROM_ENV: 1
+      FC2_ENABLE_UNIT_TEST_ENDPOINT: 1
+      FC2_STRICT_ERROR_REPORT: 1
+      FC2_ERROR_LOG_PATH: "php://stderr"
+      FC2_ERROR_ON_DISPLAY: 1
+      FC2_DB_HOST: "db"
+      FC2_DB_USER: "docker"
+      FC2_DB_PASSWORD: "docker"
+      FC2_DB_DATABASE: "dev_fc2blog"
+      FC2_DB_CHARSET: "UTF8MB4"
+      FC2_DOMAIN: "localhost"
+      FC2_HTTP_PORT: "8080"
+      FC2_HTTPS_PORT: "8480"
+      FC2_PASSWORD_SALT: "7efe3a5b4d111b9e2148e24993c1cfdb"
+      FC2_DOCUMENT_ROOT_PATH: "/var/www/html/"
       DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
     depends_on:
       - db
-    working_dir: "/fc2blog/public"
+    working_dir: "/var/www/html"
     volumes:
       - ./public:/var/www/html
       - ./app:/var/www/app
-      - ./docker/docker.config.php:/var/www/html/config.php
     ports:
       - 8080:80
       - 8480:443
