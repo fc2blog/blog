@@ -1,0 +1,14 @@
+{
+  "name": "fc2blog",
+  "version": "0.0.0",
+  "description": "oss blog",
+  "repository": "https://github.com/fc2blog/blog",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "copy-cookie-js": "cp node_modules/js-cookie/src/js.cookie.js public/js/"
+  },
+  "dependencies": {
+    "js-cookie": "^2.2.1"
+  }
+}
