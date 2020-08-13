@@ -3,6 +3,8 @@
 * Controllerの親クラス
 */
 
+namespace Fc2blog\Web\Controller;
+
 abstract class Controller
 {
 
@@ -74,11 +76,11 @@ abstract class Controller
       $url = \Fc2blog\Web\Html::url($url, false, $full_url);
 
     } else if ($full_url && is_string($blog_id) && strlen($blog_id) > 0) {
-      $url = BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
+      $url = \BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
 
     } else if ($full_url && preg_match("|\A/([^/]+)/|u", $url, $match)) {
       // Blog idをURLから抜き出して利用
-      $url = BlogsModel::getFullHostUrlByBlogId($match[1]) . $url;
+      $url = \BlogsModel::getFullHostUrlByBlogId($match[1]) . $url;
       $blog_id = $match[1];
     }
     $url .= $hash;
@@ -88,7 +90,7 @@ abstract class Controller
     \Fc2blog\Debug::setSessionLogs();
 
     if(!is_null($blog_id) && $full_url) {
-      $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
+      $status_code = \BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
     }else{
       $status_code = 302;
     }

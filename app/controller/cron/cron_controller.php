@@ -1,8 +1,6 @@
 <?php
 
-require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'app_controller.php');
-
-abstract class CronController extends AppController
+abstract class CronController extends \Fc2blog\Web\Controller\AppController
 {
 
   protected $layout = '';

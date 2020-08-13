@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\Core\Controller;
 
 use BlogsModel;
-
 use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
-use Model;
 use PHPUnit\Framework\TestCase;
 
 class RedirectTest extends TestCase

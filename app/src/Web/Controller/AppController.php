@@ -3,9 +3,9 @@
 * アプリ用のControllerの親クラス
 */
 
-require(\Fc2blog\Config::get('CORE_DIR') . 'controller.php');  // HTMLの便利関数群
+namespace Fc2blog\Web\Controller;
 
-abstract class AppController extends Controller
+abstract class AppController extends \Fc2blog\Web\Controller\Controller
 {
 
   /**
