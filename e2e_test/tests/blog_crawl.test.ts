@@ -67,11 +67,17 @@ describe("crawl some blog", () => {
     expect(template_cookie.value).toEqual("glid");
     expect(template_cookie.domain).toEqual("localhost");
     expect(template_cookie.path).toEqual("/");
-    expect(template_cookie.expires).toEqual(-1);
+    // cookieは30日後に失効するように発行されているが、テスト時に正確に一致を期待してはいけないので前後60秒の誤差を許す
+    const cookie_fuzz_lower =
+      Math.floor(new Date().getTime() / 1000) + (30 * 24 * 60 * 60) - 60;
+    const cookie_fuzz_higher =
+      Math.floor(new Date().getTime() / 1000) + (30 * 24 * 60 * 60) + 60;
+    expect(template_cookie.expires).toBeGreaterThan(cookie_fuzz_lower);
+    expect(template_cookie.expires).toBeLessThan(cookie_fuzz_higher);
     expect(template_cookie.httpOnly).toEqual(false);
     expect(template_cookie.secure).toEqual(false);
-    expect(template_cookie.session).toEqual(true);
-    expect(template_cookie).not.toHaveProperty("sameSite");
+    expect(template_cookie.session).toEqual(false);
+    expect(template_cookie.sameSite).toEqual("Lax");
   });
 
   it("check fuzzy display contents", async () => {
