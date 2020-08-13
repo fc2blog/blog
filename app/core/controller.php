@@ -36,7 +36,7 @@ abstract class Controller
     // アプリプレフィックス
     $prefix = \Fc2blog\Config::get('APP_PREFIX');
 
-    Debug::log('Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . \Fc2blog\Config::get('DeviceType') . ']', false, 'system', __FILE__, __LINE__);
+    \Fc2blog\Debug::log('Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . \Fc2blog\Config::get('DeviceType') . ']', false, 'system', __FILE__, __LINE__);
 
     $this->beforeFilter();
 
@@ -93,8 +93,8 @@ abstract class Controller
     $url .= $hash;
 
     // デバッグ時にSessionにログを保存
-    Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
-    Debug::setSessionLogs();
+    \Fc2blog\Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
+    \Fc2blog\Debug::setSessionLogs();
 
     if(!is_null($blog_id) && $full_url) {
       $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
@@ -138,7 +138,7 @@ abstract class Controller
     // アプリプレフィックス
     $prefix = \Fc2blog\Config::get('APP_PREFIX');
 
-    Debug::log('Layout[' . $this->layout . ']', false, 'system', __FILE__, __LINE__);
+    \Fc2blog\Debug::log('Layout[' . $this->layout . ']', false, 'system', __FILE__, __LINE__);
     if ($this->layout=='') {
       // layoutが空の場合は表示処理を行わない
       return ;
@@ -152,7 +152,7 @@ abstract class Controller
     } elseif (is_file($fw_template_path)) {
       include($fw_template_path);
     } else {
-      Debug::log('Not Found Layout[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
+      \Fc2blog\Debug::log('Not Found Layout[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
     }
   }
 
@@ -196,10 +196,10 @@ abstract class Controller
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       include($fw_template_device_path);
     } elseif (is_file($fw_template_path)) {
-      Debug::log('Template[' . $fw_template_path . ']', false, 'system', __FILE__, __LINE__);
+      \Fc2blog\Debug::log('Template[' . $fw_template_path . ']', false, 'system', __FILE__, __LINE__);
       include($fw_template_path);
     }else{
-      Debug::log('Not Found Template[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
+      \Fc2blog\Debug::log('Not Found Template[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
     }
   }
 

@@ -11,7 +11,7 @@ if (class_exists('mysqli')) {
 }
 
 // ディレクトリ一覧読み込み
-\Fc2blog\Config::read(dirname(__FILE__) . '/../config/dir.php');
+\Fc2blog\Config::read(__DIR__ . '/../config/dir.php');
 
 // 環境設定読み込み
 \Fc2blog\Config::read('env.php');
@@ -24,9 +24,6 @@ require_once(\Fc2blog\Config::get('CORE_DIR') . 'request.php');
 
 // タイムゾーン設定
 date_default_timezone_set(\Fc2blog\Config::get('TIMEZONE'));
-
-// Debugクラス
-require(\Fc2blog\Config::get('CORE_DIR') . 'debug.php');
 
 // 共通関数群読み込み
 require(\Fc2blog\Config::get('CORE_DIR') . 'common_functions.php');

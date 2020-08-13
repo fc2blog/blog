@@ -895,17 +895,17 @@ class EntriesController extends UserController
 
     Model::load('BlogTemplates');
     $templateFilePath = BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
-    Debug::log('Blog Template[' . $templateFilePath . ']', false, 'log', __FILE__, __LINE__);
+    \Fc2blog\Debug::log('Blog Template[' . $templateFilePath . ']', false, 'log', __FILE__, __LINE__);
 
     if (!is_file($templateFilePath)) {
       // テンプレートファイルが生成されていなければ作成(CSSも同時に)
-      Debug::log('Template does not exist! Create', false, 'log', __FILE__, __LINE__);
+      \Fc2blog\Debug::log('Template does not exist! Create', false, 'log', __FILE__, __LINE__);
 
       $blog = $this->getBlog($blog_id);
       $templateId = $blog[\Fc2blog\Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)];
       BlogTemplatesModel::createTemplate($templateId, $blog_id, $device_type, $html, $css);
 
-      Debug::log('Template generation completion', false, 'log', __FILE__, __LINE__);
+      \Fc2blog\Debug::log('Template generation completion', false, 'log', __FILE__, __LINE__);
     }
 
     // CSSのURL

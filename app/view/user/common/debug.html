@@ -1,7 +1,7 @@
 <section>
   <h2>Debug</h2>
 
-  <?php $logs = Debug::getLogs(); ?>
+  <?php $logs = \Fc2blog\Debug::getLogs(); ?>
   <h3>Logs</h3>
   <ul class="debug">
     <?php foreach ($logs as $log): ?>

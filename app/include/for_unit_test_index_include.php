@@ -19,10 +19,10 @@ if(!preg_match("/\A(127.0.0.|172.24.)/u", $_SERVER['REMOTE_ADDR'])){
 
 \Fc2blog\Config::read('test.php'); // test用の環境設定読み込み
 
-Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
+\Fc2blog\Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
 
 list($classFile, $className, $methodName) = getRouting();
 require($classFile);
 $controller = new $className($methodName);
 
-Debug::output($controller);
+\Fc2blog\Debug::output($controller);

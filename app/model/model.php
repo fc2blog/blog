@@ -238,7 +238,7 @@ abstract class Model implements ModelInterface
   public function getPaging($options=array())
   {
     if (!isset($options['page']) || !isset($options['limit'])) {
-      Debug::log('getPaging options["page"] or options["limit"]が設定されておりません', array(), 'error');
+      \Fc2blog\Debug::log('getPaging options["page"] or options["limit"]が設定されておりません', array(), 'error');
       return array();
     }
 

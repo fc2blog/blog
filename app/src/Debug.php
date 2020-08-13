@@ -3,6 +3,8 @@
 * Debug表示用クラス
 */
 
+namespace Fc2blog;
+
 class Debug{
 
   private static $logs = array();
@@ -137,7 +139,7 @@ class Debug{
       return ;
     }
 
-    Debug::log('Debug::output()', false, 'system', __FILE__, __LINE__);    // 最後の出力処理
+    \Fc2blog\Debug::log('\Fc2blog\Debug::output()', false, 'system', __FILE__, __LINE__);    // 最後の出力処理
     \Fc2blog\Config::set('DEBUG_TEMPLATE_VARS', 0);  // デバッグ用テンプレートには使用可能変数一覧は非表示
 
     // logsデータを元にdebug用htmlをfetch

@@ -12,6 +12,6 @@ list($classFile, $className, $methodName) = getRouting(\Fc2blog\Config::get('DEF
 require($classFile);
 $controller = new $className();
 
-Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
+\Fc2blog\Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
 $controller->process($methodName);
 
