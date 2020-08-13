@@ -34,7 +34,7 @@ describe("crawl some blog", () => {
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual(start_url + "archives.html");
 
-    expect(await c.page.title()).toEqual("- testblog2"); // TODO 記事一覧などと出るのでは？
+    expect(await c.page.title()).toEqual("記事一覧 - testblog2");
 
     const h2_text = await c.page.$eval(
       "#titlelist > h2",
