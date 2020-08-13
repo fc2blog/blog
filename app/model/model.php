@@ -4,9 +4,7 @@
 * Sql群の書き出しクラス 子クラスでSingletonで呼び出し予定
 */
 
-require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model_interface.php');
-
-abstract class Model implements ModelInterface
+abstract class Model implements \Fc2blog\Model\ModelInterface
 {
   const LIKE_WILDCARD = '\\_%'; // MySQL用
 

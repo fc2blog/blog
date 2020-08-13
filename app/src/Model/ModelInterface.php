@@ -3,6 +3,8 @@
 * Model用のインタフェース
 */
 
+namespace Fc2blog\Model;
+
 interface ModelInterface{
 
   /**
