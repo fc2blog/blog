@@ -413,7 +413,7 @@ SQL;
       'fields' => 'DAY(posted_at) as day',
       'where'  => 'blog_id=? AND ? <= posted_at AND posted_at <= ?',
       'params' => array($blog_id, date('Y-m-01 00:00:00', $timestamp), date('Y-m-t 23:59:59', $timestamp)),
-      'group'  => 'DAY(posted_at)',
+      'group'  => 'DAY(posted_at), posted_at',
       'order'  => 'posted_at ASC',
     );
     $days = $this->find('all', $options);

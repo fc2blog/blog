@@ -61,7 +61,8 @@ class BlogSettingsController extends AdminController
       // コメント確認からコメントを確認せずそのまま表示に変更した場合既存の承認待ちを全て承認済みに変更する
       $blog_setting = $blog_settings_model->findByBlogId($blog_id);
       if ($blog_setting['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')
-        && $blog_setting_data['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
+          && isset($blog_setting_data['comment_confirm'])
+          && $blog_setting_data['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
       ) {
         Model::load('Comments')->updateApproval($blog_id);
       }
