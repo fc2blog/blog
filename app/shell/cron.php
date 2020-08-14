@@ -10,7 +10,7 @@ require(__DIR__ . '/../core/bootstrap.php');
 
 \Fc2blog\Request::getInstance()->setCronParams($argv);
 
-list($className, $methodName) = getNeoRouting(\Fc2blog\Config::get('DEFAULT_CLASS_NAME'), \Fc2blog\Config::get('DEFAULT_METHOD_NAME'), \Fc2blog\Config::get('APP_PREFIX'));
+list($className, $methodName) = getRouting(\Fc2blog\Config::get('DEFAULT_CLASS_NAME'), \Fc2blog\Config::get('DEFAULT_METHOD_NAME'), \Fc2blog\Config::get('APP_PREFIX'));
 $controller = new $className();
 
 \Fc2blog\Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);

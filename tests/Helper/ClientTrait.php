@@ -42,7 +42,7 @@ trait ClientTrait
       throw new InvalidArgumentException("target is wrong.");
     }
 
-    [$className, $methodName] = getNeoRouting();
+    [$className, $methodName] = getRouting();
 
 
     return [$className, $methodName];

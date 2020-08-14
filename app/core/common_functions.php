@@ -101,10 +101,9 @@ function snakeCase($camel_case)
 }
 
 /**
- * PSR-4 クラス対応のルーティング用メソッド
- * TODO: 後でgetRouting と差し替え
+ * ルーティング用メソッド
  */
-function getNeoRouting()
+function getRouting()
 {
   require(\Fc2blog\Config::get('CONFIG_DIR') . \Fc2blog\Config::get('ROUTING'));  // ルーティング設定を読み込み
 
