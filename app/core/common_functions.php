@@ -149,7 +149,7 @@ function getNeoRouting()
   $defaultClass = \Fc2blog\Config::get('DEFAULT_CLASS_NAME');
   $defaultMethod = \Fc2blog\Config::get('DEFAULT_METHOD_NAME');
   $prefix = \Fc2blog\Config::get('APP_PREFIX');
-  $classPrefix = '\Fc2blog\Web\Controller\\' . $prefix . '\\';
+  $classPrefix = \Fc2blog\Config::get('CLASS_PREFIX');
 
   $denyClass = $prefix ? $prefix . 'Controller' : 'AppController';
   $denyMethod = array('process', 'display', 'fetch', 'set');
