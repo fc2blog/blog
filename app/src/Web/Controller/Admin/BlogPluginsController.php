@@ -1,6 +1,6 @@
 <?php
 
-require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+namespace Fc2blog\Web\Controller\Admin;
 
 class BlogPluginsController extends AdminController
 {

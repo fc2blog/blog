@@ -10,8 +10,7 @@ require(__DIR__ . '/config_loading_include.php');
 
 \Fc2blog\Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
 
-list($classFile, $className, $methodName) = getRouting();
-require($classFile);
+list($className, $methodName) = getNeoRouting();
 $controller = new $className($methodName);
 
 \Fc2blog\Debug::output($controller); // Debug用の出力

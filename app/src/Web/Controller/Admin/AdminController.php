@@ -1,5 +1,7 @@
 <?php
 
+namespace Fc2blog\Web\Controller\Admin;
+
 abstract class AdminController extends \Fc2blog\Web\Controller\AppController
 {
 
