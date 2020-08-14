@@ -1,7 +1,7 @@
 <table><tbody>
   <tr>
     <th><?php echo __('Article name'); ?></th>
-    <td><a href="<?php echo BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], Config::get('DOMAIN_USER')); ?><?php echo App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></td>
+    <td><a href="<?php echo BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></td>
   </tr>
   <tr>
     <th><?php echo __('Contributor'); ?></th>
@@ -30,11 +30,11 @@
   <tr>
     <th><?php echo __('Public state'); ?></th>
     <td id="sys-open-status">
-      <?php if ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
+      <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
         <?php echo __('Published'); ?>
-      <?php elseif ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
+      <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
         <?php echo __('Approval pending'); ?> &raquo; <a href="<?php echo Html::url(array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;" id="sys-comment-approval"><?php echo __('Approval'); ?></a>
-      <?php elseif ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
+      <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
         <?php echo __('Only exposed administrator'); ?>
       <?php endif; ?>
     </td>
@@ -43,7 +43,7 @@
     <th><?php echo __('Updated date'); ?></th>
     <td><?php echo df($comment['updated_at']); ?></td>
   </tr>
-  <?php if ($comment['reply_status']==Config::get('COMMENT.REPLY_STATUS.REPLY')) : ?>
+  <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY')) : ?>
   <tr>
     <th><?php echo __('Response time'); ?></th>
     <td><?php echo df($comment['reply_updated_at']); ?></td>
@@ -53,16 +53,16 @@
 
 <form method="POST" id="sys-comment-form" class="admin-form">
 
-  <?php if ($comment['open_status']!=Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
+  <?php if ($comment['open_status']!=\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
     <?php echo Html::input('comment[reply_body]', 'textarea', array('style'=>'width: 95%; height: 200px;')); ?>
     <p class="error" style="display: none;" id="sys-reply-error"></p>
 
     <p class="mb20">
-      <?php if($comment['reply_status']==Config::get('COMMENT.REPLY_STATUS.REPLY')): ?>
+      <?php if($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY')): ?>
         <input type="button" id="sys-reply-button" value="<?php echo __('Update'); ?>" onclick="reply.submit(<?php echo $comment['id']; ?>);"/>
       <?php else: ?>
         <input type="button" id="sys-reply-button" value="<?php echo __('Reply'); ?>" onclick="reply.submit(<?php echo $comment['id']; ?>);" /><br />
-        <?php if($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PENDING')): ?>
+        <?php if($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')): ?>
           ※<?php echo __('When you press the reply button, the message will be approved'); ?>
         <?php endif; ?>
       <?php endif; ?>

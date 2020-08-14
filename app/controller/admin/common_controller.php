@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
 
 class CommonController extends AdminController
 {
@@ -14,12 +14,12 @@ class CommonController extends AdminController
 
     // 言語の設定
     $lang = $request->get('lang');
-    if ($language=Config::get('LANGUAGES.' . $lang)) {
+    if ($language=\Fc2blog\Config::get('LANGUAGES.' . $lang)) {
       Cookie::set('lang', $lang);
     }
 
     // TOPへ戻す
-    $url = Config::get('BASE_DIRECTORY');
+    $url = \Fc2blog\Config::get('BASE_DIRECTORY');
     $device_name = App::getArgsDevice();
     if (!empty($device_name)) {
       $url .= '?' . $device_name;
@@ -38,11 +38,11 @@ class CommonController extends AdminController
     $device_type = 0;
     $device = $request->get('device');
     switch ($device) {
-      case 'pc': $device_type = Config::get('DEVICE_PC'); break;
+      case 'pc': $device_type = \Fc2blog\Config::get('DEVICE_PC'); break;
       case 'm':
-      case 'mb':  $device_type = Config::get('DEVICE_MB'); break;
-      case 'sp': $device_type = Config::get('DEVICE_SP'); break;
-      case 'tb': $device_type = Config::get('DEVICE_TB'); break;
+      case 'mb':  $device_type = \Fc2blog\Config::get('DEVICE_MB'); break;
+      case 'sp': $device_type = \Fc2blog\Config::get('DEVICE_SP'); break;
+      case 'tb': $device_type = \Fc2blog\Config::get('DEVICE_TB'); break;
       default:
         Cookie::set('device', null);
         $this->redirectBack(array('controller'=>'entries', 'action'=>'index'));
@@ -61,11 +61,11 @@ class CommonController extends AdminController
     if (is_array($setting)) {
       switch ($setting['start_page']) {
         default:
-        case Config::get('BLOG.START_PAGE.NOTICE'):
+        case \Fc2blog\Config::get('BLOG.START_PAGE.NOTICE'):
           $this->redirect(array('controller' => 'Common', 'action' => 'notice'));
           break;
 
-        case Config::get('BLOG.START_PAGE.ENTRY'):
+        case \Fc2blog\Config::get('BLOG.START_PAGE.ENTRY'):
           $this->redirect(array('controller' => 'Entries', 'action' => 'create'));
           break;
       }
@@ -108,9 +108,9 @@ class CommonController extends AdminController
 
       case 1:
         // フォルダの作成
-        !file_exists(Config::get('TEMP_DIR') . 'blog_template') && mkdir(Config::get('TEMP_DIR') . 'blog_template', 0777, true);
-        !file_exists(Config::get('TEMP_DIR') . 'debug_html') && mkdir(Config::get('TEMP_DIR') . 'debug_html', 0777, true);
-        !file_exists(Config::get('TEMP_DIR') . 'log') && mkdir(Config::get('TEMP_DIR') . 'log', 0777, true);
+        !file_exists(\Fc2blog\Config::get('TEMP_DIR') . 'blog_template') && mkdir(\Fc2blog\Config::get('TEMP_DIR') . 'blog_template', 0777, true);
+        !file_exists(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html') && mkdir(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html', 0777, true);
+        !file_exists(\Fc2blog\Config::get('TEMP_DIR') . 'log') && mkdir(\Fc2blog\Config::get('TEMP_DIR') . 'log', 0777, true);
 
         $msdb = MSDB::getInstance();
         try {
@@ -131,9 +131,9 @@ class CommonController extends AdminController
 
         if (count($table)) {
           // 既にDB登録完了
-          $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=2');
+          $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY') . 'install.php?state=2');
         }
-        $sql_path = Config::get('CONFIG_DIR') . 'blog.sql';
+        $sql_path = \Fc2blog\Config::get('CONFIG_DIR') . 'blog.sql';
         $sql = file_get_contents($sql_path);
         if (DB_CHARSET!='UTF8MB4') {
           $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
@@ -144,12 +144,12 @@ class CommonController extends AdminController
         // 初期公式プラグインを追加
         Model::load('Plugins')->addInitialOfficialPlugin();
 
-        $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=2');
+        $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY') . 'install.php?state=2');
 
       case 2:  // 管理者登録
         if (Model::load('Users')->isExistAdmin()) {
           // 既にユーザー登録完了
-          $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=3');
+          $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY') . 'install.php?state=3');
         }
 
         break;
@@ -172,11 +172,11 @@ class CommonController extends AdminController
     $errors['user'] = $users_model->registerValidate($request->get('user'), $user_data, array('login_id', 'password'));
     $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, array('id', 'name', 'nickname'));
     if (empty($errors['user']) && empty($errors['blog'])) {
-      $user_data['type'] = Config::get('USER.TYPE.ADMIN');
+      $user_data['type'] = \Fc2blog\Config::get('USER.TYPE.ADMIN');
       $blog_data['user_id'] = $users_model->insert($user_data);
       if ($blog_data['user_id'] && $blog_id=$blogs_model->insert($blog_data)) {
         $this->setInfoMessage(__('User registration is completed'));
-        $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=3');
+        $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY') . 'install.php?state=3');
       } else {
         // ブログ作成失敗時には登録したユーザーを削除
         $users_model->deleteById($blog_data['user_id']);

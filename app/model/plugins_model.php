@@ -103,8 +103,8 @@ class PluginsModel extends Model
   {
     $this->delete('user_id=0');
 
-    Config::read('fc2_default_plugin.php');   // 初期公式プラグインデータ取得
-    $plugins = Config::get('official_plugins');
+    \Fc2blog\Config::read('fc2_default_plugin.php');   // 初期公式プラグインデータ取得
+    $plugins = \Fc2blog\Config::get('official_plugins');
     foreach ($plugins as $plugin) {
       $plugin['list'] = '';
       $plugin['attribute'] = '{}';

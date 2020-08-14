@@ -11,38 +11,38 @@ class BlogSettingsModel extends Model{
     $this->validates = array(
       // コメントの確認設定
       'comment_confirm' => array(
-        'default_value' => Config::get('COMMENT.COMMENT_CONFIRM.THROUGH'),
+        'default_value' => \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.THROUGH'),
         'in_array'      => array('values' => array(
-          Config::get('COMMENT.COMMENT_CONFIRM.THROUGH'),
-          Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.THROUGH'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM'),
         )),
       ),
       'comment_display_approval' => array(
-        'default_value' => Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
+        'default_value' => \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
         'in_array'      => array('values' => array(
-          Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
-          Config::get('COMMENT.COMMENT_DISPLAY.HIDE'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.HIDE'),
         )),
       ),
       'comment_display_private' => array(
-        'default_value' => Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
+        'default_value' => \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
         'in_array'      => array('values' => array(
-          Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
-          Config::get('COMMENT.COMMENT_DISPLAY.HIDE'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.HIDE'),
         )),
       ),
       'comment_cookie_save' => array(
-        'default_value' => Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE'),
+        'default_value' => \Fc2blog\Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE'),
         'in_array'      => array('values' => array(
-          Config::get('COMMENT.COMMENT_COOKIE_SAVE.NOT_SAVE'),
-          Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_COOKIE_SAVE.NOT_SAVE'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE'),
         )),
       ),
       'comment_captcha' => array(
-        'default_value' => Config::get('COMMENT.COMMENT_CAPTCHA.USE'),
+        'default_value' => \Fc2blog\Config::get('COMMENT.COMMENT_CAPTCHA.USE'),
         'in_array'      => array('values' => array(
-          Config::get('COMMENT.COMMENT_CAPTCHA.NOT_USE'),
-          Config::get('COMMENT.COMMENT_CAPTCHA.USE'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_CAPTCHA.NOT_USE'),
+          \Fc2blog\Config::get('COMMENT.COMMENT_CAPTCHA.USE'),
         )),
       ),
       'comment_display_count' => array(
@@ -94,64 +94,64 @@ class BlogSettingsModel extends Model{
 
   public static function getCommentConfirmList(){
     return array(
-      Config::get('COMMENT.COMMENT_CONFIRM.THROUGH') => __('Displayed as it is'),
-      Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM') => __('I check the comments'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.THROUGH') => __('Displayed as it is'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM') => __('I check the comments'),
     );
   }
 
   public static function getCommentDisplayApprovalList(){
     return array(
-      Config::get('COMMENT.COMMENT_DISPLAY.SHOW') => __('View "This comment is awaiting moderation" and'),
-      Config::get('COMMENT.COMMENT_DISPLAY.HIDE') => __('Do not show'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.SHOW') => __('View "This comment is awaiting moderation" and'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.HIDE') => __('Do not show'),
     );
   }
 
   public static function getCommentDisplayPrivateList(){
     return array(
-      Config::get('COMMENT.COMMENT_DISPLAY.SHOW') => __('Display'),
-      Config::get('COMMENT.COMMENT_DISPLAY.HIDE') => __('Do not show'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.SHOW') => __('Display'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.HIDE') => __('Do not show'),
     );
   }
 
   public static function getCommentCookieSaveList(){
     return array(
-      Config::get('COMMENT.COMMENT_COOKIE_SAVE.NOT_SAVE') => __('Not save'),
-      Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')     => __('Record'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_COOKIE_SAVE.NOT_SAVE') => __('Not save'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')     => __('Record'),
     );
   }
 
   public static function getCommentCaptchaList(){
     return array(
-      Config::get('COMMENT.COMMENT_CAPTCHA.NOT_USE') => __('Do not use'),
-      Config::get('COMMENT.COMMENT_CAPTCHA.USE')     => __('CAPTCHA to Use'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_CAPTCHA.NOT_USE') => __('Do not use'),
+      \Fc2blog\Config::get('COMMENT.COMMENT_CAPTCHA.USE')     => __('CAPTCHA to Use'),
     );
   }
 
   public static function getCommentOrderList(){
     return array(
-      Config::get('COMMENT.ORDER.ASC')  => __('Oldest First'),
-      Config::get('COMMENT.ORDER.DESC') => __('Latest order'),
+      \Fc2blog\Config::get('COMMENT.ORDER.ASC')  => __('Oldest First'),
+      \Fc2blog\Config::get('COMMENT.ORDER.DESC') => __('Latest order'),
     );
   }
 
   public static function getCommentQuoteList(){
     return array(
-      Config::get('COMMENT.QUOTE.USE')  => __('Quote'),
-      Config::get('COMMENT.QUOTE.NONE') => __('Do not quote'),
+      \Fc2blog\Config::get('COMMENT.QUOTE.USE')  => __('Quote'),
+      \Fc2blog\Config::get('COMMENT.QUOTE.NONE') => __('Do not quote'),
     );
   }
 
   public static function getEntryOrderList(){
     return array(
-      Config::get('ENTRY.ORDER.DESC') => __('Latest order'),
-      Config::get('ENTRY.ORDER.ASC')  => __('Oldest First'),
+      \Fc2blog\Config::get('ENTRY.ORDER.DESC') => __('Latest order'),
+      \Fc2blog\Config::get('ENTRY.ORDER.ASC')  => __('Oldest First'),
     );
   }
 
   public static function getStartPageList(){
     return array(
-      Config::get('BLOG.START_PAGE.NOTICE') => __('Notice'),
-      Config::get('BLOG.START_PAGE.ENTRY')  => __('New article'),
+      \Fc2blog\Config::get('BLOG.START_PAGE.NOTICE') => __('Notice'),
+      \Fc2blog\Config::get('BLOG.START_PAGE.ENTRY')  => __('New article'),
     );
   }
 
@@ -177,7 +177,7 @@ class BlogSettingsModel extends Model{
   */
   public function updateReplyType($device_type, $reply_type, $blog_id){
     $values = array();
-    $values[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $device_type)] = $reply_type;
+    $values[\Fc2blog\Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $device_type)] = $reply_type;
     return $this->updateByBlogId($values, $blog_id);
   }
 

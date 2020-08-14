@@ -2,7 +2,7 @@
 
 <div class="form_area">
   <div class="form_contents">
-    <?php $devices = Config::get('DEVICE_NAME'); ?>
+    <?php $devices = \Fc2blog\Config::get('DEVICE_NAME'); ?>
     <select onchange="location.href=$(this).val();">
       <?php foreach ($devices as $key => $device): ?>
         <option value="<?php echo Html::url(array('device_type'=>$key)); ?>" <?php if ($request->get('device_type')==$key) echo 'selected="selected"'; ?>><?php echo $device; ?></option>
@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<?php $devices = Config::get('DEVICE_NAME'); ?>
+<?php $devices = \Fc2blog\Config::get('DEVICE_NAME'); ?>
 <?php foreach($device_blog_templates as $device_type => $blog_templates): ?>
   <div class="btn_area sp_no_template">
     <ul class="btn_area_inner">

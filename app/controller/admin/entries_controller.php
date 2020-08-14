@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
 
 class EntriesController extends AdminController
 {
@@ -62,7 +62,7 @@ class EntriesController extends AdminController
       'where'  => $where,
       'params' => $params,
       'from'   => $from,
-      'limit'  => $request->get('limit', Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+      'limit'  => $request->get('limit', \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
       'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
@@ -192,7 +192,7 @@ class EntriesController extends AdminController
   */
   public function ajax_media_load()
   {
-    Config::set('DEBUG', 0);    // デバッグ設定を変更
+    \Fc2blog\Config::set('DEBUG', 0);    // デバッグ設定を変更
 
     $request = Request::getInstance();
     $files_model = Model::load('Files');
@@ -210,7 +210,7 @@ class EntriesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => Config::get('PAGE.FILE.LIMIT', App::getPageLimit('FILE_AJAX')),
+      'limit'  => \Fc2blog\Config::get('PAGE.FILE.LIMIT', App::getPageLimit('FILE_AJAX')),
       'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => 'id DESC',
     );

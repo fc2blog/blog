@@ -7,13 +7,17 @@
     "ext-gd": "*",
     "ext-gettext": "*"
   },
+  "config": {
+    "vendor-dir": "app/vendor"
+  },
   "require-dev": {
     "phpunit/phpunit": "^9.2",
     "ext-pdo": "*"
   },
   "autoload": {
     "psr-4": {
-      "Fc2blog\\Tests\\": "tests/"
+      "Fc2blog\\Tests\\": "tests/",
+      "Fc2blog\\": "app/src/"
     }
   },
   "scripts": {

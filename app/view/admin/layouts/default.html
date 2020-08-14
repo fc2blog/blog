@@ -1,6 +1,6 @@
 <?php header("Content-Type: text/html; charset=UTF-8"); ?>
 <!DOCTYPE html>
-<html lang="<?php echo Config::get('LANG'); ?>">
+<html lang="<?php echo \Fc2blog\Config::get('LANG'); ?>">
 <head>
   <meta charset="utf-8">
   <title><?php echo Session::get('blog_id'); ?></title>
@@ -22,10 +22,10 @@
   <script type="text/javascript" src="/js/common.js"></script>
   <script>
     // フレームワーク用のjsの設定
-    <?php if(Config::get('URL_REWRITE')): ?>
+    <?php if(\Fc2blog\Config::get('URL_REWRITE')): ?>
       common.isURLRewrite = true;
     <?php endif; ?>
-    common.baseDirectory = '<?php echo Config::get('BASE_DIRECTORY'); ?>';
+    common.baseDirectory = '<?php echo \Fc2blog\Config::get('BASE_DIRECTORY'); ?>';
     common.deviceType = <?php echo $this->getDeviceType(); ?>;
     common.deviceArgs = '<?php echo App::getArgsDevice(); ?>';
   </script>
@@ -67,7 +67,7 @@
       </div>
       <?php endif; ?>
 
-      <?php $lang = Config::get('LANG'); ?>
+      <?php $lang = \Fc2blog\Config::get('LANG'); ?>
       <div id="switch_lang">
         <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
           <option value="ja" <?php if ($lang=='ja') : ?>selected="selected"<?php endif; ?>>日本語</option>
@@ -116,7 +116,7 @@
           </ul>
         </div>
 
-        <?php if (Config::get('DEBUG')!=0): ?>
+        <?php if (\Fc2blog\Config::get('DEBUG')!=0): ?>
           <div class="menu">
             <h3 style="background-color:#999;background-position: 2px -660px;">デバッグ用</h3>
             <ul>
@@ -130,7 +130,7 @@
         <div class="menu">
           <h3 style="background-color:#999;background-position: 2px -660px;"><?php echo __('User Menu'); ?></h3>
           <ul>
-            <?php if (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')): ?>
+            <?php if (\Fc2blog\Config::get('USER.REGIST_SETTING.FREE') == \Fc2blog\Config::get('USER.REGIST_STATUS')): ?>
               <li><a href="<?php echo Html::url(array('controller'=>'Users', 'action'=>'register')); ?>"><?php echo __('User registration'); ?></a></li>
             <?php endif; ?>
             <li><a href="<?php echo Html::url(array('controller'=>'Users', 'action'=>'login')); ?>"><?php echo __('Login'); ?></a></li>

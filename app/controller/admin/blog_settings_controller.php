@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
 
 class BlogSettingsController extends AdminController
 {
@@ -60,9 +60,9 @@ class BlogSettingsController extends AdminController
     if (empty($errors['blog_setting'])) {
       // コメント確認からコメントを確認せずそのまま表示に変更した場合既存の承認待ちを全て承認済みに変更する
       $blog_setting = $blog_settings_model->findByBlogId($blog_id);
-      if ($blog_setting['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')
+      if ($blog_setting['comment_confirm'] == \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')
           && isset($blog_setting_data['comment_confirm'])
-          && $blog_setting_data['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
+          && $blog_setting_data['comment_confirm'] == \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
       ) {
         Model::load('Comments')->updateApproval($blog_id);
       }

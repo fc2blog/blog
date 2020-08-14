@@ -81,8 +81,8 @@ class Request
       list($key, $value) = explode('=', $a);
       $data[$key] = $value;
     }
-    $data[Config::get('ARGS_CONTROLLER')] = $className;
-    $data[Config::get('ARGS_ACTION')] = $methodName;
+    $data[\Fc2blog\Config::get('ARGS_CONTROLLER')] = $className;
+    $data[\Fc2blog\Config::get('ARGS_ACTION')] = $methodName;
     $this->request = $data;
   }
 

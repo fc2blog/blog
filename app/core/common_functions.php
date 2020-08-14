@@ -16,7 +16,7 @@ if(function_exists('lcfirst') === false) {
 * HTMLエスケープの短縮形
 */
 function h($text){
-  return htmlentities($text, ENT_QUOTES, Config::get('INTERNAL_ENCODING'));
+  return htmlentities($text, ENT_QUOTES, \Fc2blog\Config::get('INTERNAL_ENCODING'));
 }
 
 
@@ -27,8 +27,8 @@ function t($text, $length=10, $etc='...'){
   if (!$length) {
     return '';
   }
-  if (mb_strlen($text, Config::get('INTERNAL_ENCODING')) > $length) {
-    return mb_substr($text, 0, $length, Config::get('INTERNAL_ENCODING')) . $etc;
+  if (mb_strlen($text, \Fc2blog\Config::get('INTERNAL_ENCODING')) > $length) {
+    return mb_substr($text, 0, $length, \Fc2blog\Config::get('INTERNAL_ENCODING')) . $etc;
   }
   return $text;
 }
@@ -103,24 +103,24 @@ function snakeCase($camel_case)
 * ルーティング用メソッド
 */
 function getRouting(){
-  require(Config::get('CONFIG_DIR') . Config::get('ROUTING'));  // ルーティング設定を読み込み
+  require(\Fc2blog\Config::get('CONFIG_DIR') . \Fc2blog\Config::get('ROUTING'));  // ルーティング設定を読み込み
 
   $request = Request::getInstance();
 
-  $defaultClass  = Config::get('DEFAULT_CLASS_NAME');
-  $defaultMethod = Config::get('DEFAULT_METHOD_NAME');
-  $prefix        = Config::get('APP_PREFIX');
+  $defaultClass  = \Fc2blog\Config::get('DEFAULT_CLASS_NAME');
+  $defaultMethod = \Fc2blog\Config::get('DEFAULT_METHOD_NAME');
+  $prefix        = \Fc2blog\Config::get('APP_PREFIX');
 
   $denyClass   = $prefix ? $prefix . 'Controller' : 'AppController';
   $denyMethod  = array('process', 'display', 'fetch', 'set');
   $denyPattern = array('CommonController'=>array('install'));
 
-  $argsc = Config::get('ARGS_CONTROLLER');
-  $argsa = Config::get('ARGS_ACTION');
+  $argsc = \Fc2blog\Config::get('ARGS_CONTROLLER');
+  $argsa = \Fc2blog\Config::get('ARGS_ACTION');
 
   $className = pascalCase(basename($request->get($argsc)));
   $className = $className ? $className . 'Controller' : $defaultClass;
-  $classFile = Config::get('CONTROLLER_DIR') . ($prefix ? $prefix . '/' : '') . snakeCase($className) . '.php';
+  $classFile = \Fc2blog\Config::get('CONTROLLER_DIR') . ($prefix ? $prefix . '/' : '') . snakeCase($className) . '.php';
   $methodName = $request->get($argsa, $defaultMethod);
   $methodName = in_array($methodName, $denyMethod) ? $defaultMethod : $methodName;
   if ($className==$denyClass
@@ -128,7 +128,7 @@ function getRouting(){
     || (isset($denyPattern[$className]) && in_array($methodName, $denyPattern[$className]))
   ) {
     $className = $defaultClass;
-    $classFile = Config::get('CONTROLLER_DIR') . ($prefix ? $prefix . '/' : '') . snakeCase($className) . '.php';
+    $classFile = \Fc2blog\Config::get('CONTROLLER_DIR') . ($prefix ? $prefix . '/' : '') . snakeCase($className) . '.php';
     $methodName = $defaultMethod;
   }
 
@@ -144,15 +144,15 @@ function setLanguage($lang=null, $file='messages'){
   }
   if ($lang) {
     // 言語チェック
-    if ($language=Config::get('LANGUAGES.' . $lang)) {
-      Config::set('LANG', $lang);
-      Config::set('LANGUAGE', $language);
+    if ($language=\Fc2blog\Config::get('LANGUAGES.' . $lang)) {
+      \Fc2blog\Config::set('LANG', $lang);
+      \Fc2blog\Config::set('LANGUAGE', $language);
     }
   }
   // 多言語化対応
-  putenv('LANG=' . Config::get('LANGUAGE'));
-  setlocale(LC_ALL, Config::get('LANGUAGE'));
-  bindtextdomain($file, Config::get('LOCALE_DIR'));
+  putenv('LANG=' . \Fc2blog\Config::get('LANGUAGE'));
+  setlocale(LC_ALL, \Fc2blog\Config::get('LANGUAGE'));
+  bindtextdomain($file, \Fc2blog\Config::get('LOCALE_DIR'));
   textdomain($file);
 }
 
@@ -171,7 +171,7 @@ if (!function_exists('is_countable')) {
 function getServerUrl()
 {
   $url  = (empty($_SERVER["HTTPS"])) ? 'http://' : 'https://';
-  $url .= Config::get('DOMAIN');
+  $url .= \Fc2blog\Config::get('DOMAIN');
 
   return $url;
 }

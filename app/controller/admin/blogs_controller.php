@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
 
 class BlogsController extends AdminController
 {
@@ -17,7 +17,7 @@ class BlogsController extends AdminController
     $options = array(
       'where'  => 'user_id=?',
       'params' => array($this->getUserId()),
-      'limit'  => Config::get('BLOG.DEFAULT_LIMIT', 10),
+      'limit'  => \Fc2blog\Config::get('BLOG.DEFAULT_LIMIT', 10),
       'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => 'created_at DESC',
     );
@@ -115,7 +115,7 @@ class BlogsController extends AdminController
     if (!empty($blog)) {
       $this->setBlog($blog);
     }
-    $this->redirect(Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
+    $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
   }
 
   /**

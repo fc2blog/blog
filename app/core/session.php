@@ -27,12 +27,12 @@ class Session
       // NOTE: 要件としてhttpサポートがあるため secure属性は指定ができない
     ];
 
-    if (strlen(Config::get('SESSION_DEFAULT_DOMAIN')) > 0) {
-      $session_cookie_options['domain'] = Config::get('SESSION_DEFAULT_DOMAIN');
+    if (strlen(\Fc2blog\Config::get('SESSION_DEFAULT_DOMAIN')) > 0) {
+      $session_cookie_options['domain'] = \Fc2blog\Config::get('SESSION_DEFAULT_DOMAIN');
     }
 
     session_set_cookie_params($session_cookie_options);
-    session_name(Config::get('SESSION_NAME'));
+    session_name(\Fc2blog\Config::get('SESSION_NAME'));
     session_start();
     self::$isStart = true;
   }
@@ -92,8 +92,8 @@ class Session
   public static function destroy()
   {
     $_SESSION = array();
-    if (isset($_COOKIE[Config::get('SESSION_NAME')])) {
-      Cookie::remove(Config::get('SESSION_NAME'), '');
+    if (isset($_COOKIE[\Fc2blog\Config::get('SESSION_NAME')])) {
+      Cookie::remove(\Fc2blog\Config::get('SESSION_NAME'), '');
     }
     session_destroy();
   }

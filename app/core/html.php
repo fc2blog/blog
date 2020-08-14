@@ -17,19 +17,19 @@ class Html
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
       $gets = Request::getInstance()->getGet();;
-      unset($gets[Config::get('ARGS_CONTROLLER')]);
-      unset($gets[Config::get('ARGS_ACTION')]);
+      unset($gets[\Fc2blog\Config::get('ARGS_CONTROLLER')]);
+      unset($gets[\Fc2blog\Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);
     }
 
-    $controller = Config::get('ControllerName');
+    $controller = \Fc2blog\Config::get('ControllerName');
     if (isset($args['controller'])) {
       $controller = $args['controller'];
       unset($args['controller']);
     }
     $controller = snakeCase($controller);
 
-    $action = Config::get('ActionName');
+    $action = \Fc2blog\Config::get('ActionName');
     if (isset($args['action'])) {
       $action = $args['action'];
       unset($args['action']);
@@ -42,7 +42,7 @@ class Html
     }
 
     // URL/Controller/Methodの形で返却
-    if (Config::get('URL_REWRITE')) {
+    if (\Fc2blog\Config::get('URL_REWRITE')) {
       $params = array();
       foreach($args as $key => $value){
         $params[] = $key . '=' . $value;
@@ -51,7 +51,7 @@ class Html
         $params[] = $device_name;
       }
 
-      $url = Config::get('BASE_DIRECTORY') . $controller . '/' . $action;
+      $url = \Fc2blog\Config::get('BASE_DIRECTORY') . $controller . '/' . $action;
       if (count($params)) {
         $url .= '?' . implode('&', $params);
       }
@@ -66,8 +66,8 @@ class Html
     }
 
     $params = array();
-    $params[] = Config::get('ARGS_CONTROLLER') . '=' . $controller;
-    $params[] = Config::get('ARGS_ACTION') . '=' . $action;
+    $params[] = \Fc2blog\Config::get('ARGS_CONTROLLER') . '=' . $controller;
+    $params[] = \Fc2blog\Config::get('ARGS_ACTION') . '=' . $action;
     foreach($args as $key => $value){
       $params[] = $key . '=' . $value;
     }
@@ -75,7 +75,7 @@ class Html
       $params[] = $device_name;
     }
 
-    $url = Config::get('BASE_DIRECTORY') . Config::get('DIRECTORY_INDEX');
+    $url = \Fc2blog\Config::get('BASE_DIRECTORY') . \Fc2blog\Config::get('DIRECTORY_INDEX');
     if (count($params)) {
       $url .= '?' . implode('&', $params);
     }

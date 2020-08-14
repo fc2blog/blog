@@ -3,8 +3,8 @@
 
 <form method="POST" id="sys-comment-form" class="user-form">
 
-  <input type="hidden" name="<?php echo Config::get('ARGS_CONTROLLER'); ?>" value="Entries" />
-  <input type="hidden" name="<?php echo Config::get('ARGS_ACTION'); ?>" value="comment_regist" />
+  <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Entries" />
+  <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="comment_regist" />
 
   <?php echo Html::input('comment[entry_id]', 'hidden'); ?>
 

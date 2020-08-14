@@ -112,7 +112,7 @@ class UsersModel extends Model
   */
   public static function passwordHash($password)
   {
-    return hash('sha256', $password . Config::get('PASSWORD_SALT'));
+    return hash('sha256', $password . \Fc2blog\Config::get('PASSWORD_SALT'));
   }
 
   /**
@@ -133,7 +133,7 @@ class UsersModel extends Model
   public function isExistAdmin()
   {
     return $this->isExist(array(
-      'where' => 'type=' . Config::get('USER.TYPE.ADMIN'),
+      'where' => 'type=' . \Fc2blog\Config::get('USER.TYPE.ADMIN'),
     ));
   }
 

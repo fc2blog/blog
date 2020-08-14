@@ -36,7 +36,7 @@ class MySqliWrap implements DBInterface{
     try{
       $stmt = $this->query($sql, $params, $options['types']);
     }catch(Exception $e){
-      if (Config::get('DEBUG', 0)) {
+      if (\Fc2blog\Config::get('DEBUG', 0)) {
         Debug::log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
       return false;
@@ -57,7 +57,7 @@ class MySqliWrap implements DBInterface{
     try{
       $stmt = $this->query($sql, $params, $options['types']);
     }catch(Exception $e){
-      if (Config::get('DEBUG', 0)) {
+      if (\Fc2blog\Config::get('DEBUG', 0)) {
         Debug::log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
       return false;
@@ -88,7 +88,7 @@ class MySqliWrap implements DBInterface{
    */
   private function query($sql, $params=array(), $types=''){
     $mtime = 0;    // SQL実行結果時間取得用
-    if (Config::get('DEBUG', 0)) {
+    if (\Fc2blog\Config::get('DEBUG', 0)) {
       $mtime = microtime(true);
     }
 
@@ -100,7 +100,7 @@ class MySqliWrap implements DBInterface{
       if (getType($stmt) == 'boolean' && !$stmt) {
         throw new Exception('[query Error]' . $sql);
       }
-      if (Config::get('DEBUG', 0)) {
+      if (\Fc2blog\Config::get('DEBUG', 0)) {
         $mtime = sprintf('%f', microtime(true) - $mtime);
         Debug::log('実行時間：' . $mtime . '<br />' . $sql, $params, 'sql', __FILE__, __LINE__);
       }
@@ -121,7 +121,7 @@ class MySqliWrap implements DBInterface{
     if (!$stmt->execute()) {
       throw new Exception('[execute Error]' . $sql);
     }
-    if (Config::get('DEBUG', 0)) {
+    if (\Fc2blog\Config::get('DEBUG', 0)) {
       $mtime = sprintf('%f', microtime(true) - $mtime);
       Debug::log('実行時間：' . $mtime . '<br />' . $sql, $params, 'sql', __FILE__, __LINE__);
     }

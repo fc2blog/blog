@@ -5,7 +5,7 @@
 <?php $device_type = $request->get('device_type'); ?>
 <div class="form_area">
   <div class="form_contents">
-    <?php $devices = Config::get('DEVICE_NAME'); ?>
+    <?php $devices = \Fc2blog\Config::get('DEVICE_NAME'); ?>
     <select onchange="location.href=$(this).val();">
       <?php foreach ($devices as $type => $name) : ?>
         <option value="<?php echo Html::url(array('device_type'=>$type)); ?>" <?php if($device_type==$type): ?>selected="selected"<?php endif; ?>><?php echo h($name) ?></option>
@@ -32,11 +32,11 @@
         <li class="link_list_item">
           <a class="common_next_link next_bg" href="<?php echo Html::url(array('action'=>'edit', 'id'=>$blog_plugin['id'])); ?>">
             <span class="plugin_title"><?php echo th($blog_plugin['title'], 20); ?></span>
-            <span class="contents_status"><span class="check_icon_text"><?php if ($blog_plugin['display']==Config::get('APP.DISPLAY.SHOW')): ?><i class="green_check_icon btn_icon"></i><?php echo __('Show'); ?><?php else: ?><?php echo __('Hide'); ?><?php endif; ?></span></span>
+            <span class="contents_status"><span class="check_icon_text"><?php if ($blog_plugin['display']==\Fc2blog\Config::get('APP.DISPLAY.SHOW')): ?><i class="green_check_icon btn_icon"></i><?php echo __('Show'); ?><?php else: ?><?php echo __('Hide'); ?><?php endif; ?></span></span>
           </a>
           <div class="switch_checkbox" style="display: none;">
             <div class="toggle toggle-light" style="height: 22px; width: 78px;"></div>
-            <input type="checkbox" value="<?php echo $blog_plugin['id']; ?>" class="toggle" <?php if ($blog_plugin['display']==Config::get('APP.DISPLAY.SHOW')) echo 'checked="checked"'; ?> />
+            <input type="checkbox" value="<?php echo $blog_plugin['id']; ?>" class="toggle" <?php if ($blog_plugin['display']==\Fc2blog\Config::get('APP.DISPLAY.SHOW')) echo 'checked="checked"'; ?> />
           </div>
           <i class="sortable_icon btn_icon" style="display: none;"></i>
         </li>
@@ -273,7 +273,7 @@ $(function(){
     var form = $('#sys-display');
     $('ul.link_list input[type=checkbox]').each(function(){
       form.append('<input type="hidden" name="blog_plugins['+$(this).val()+']" value="'
-        +($(this).prop('checked') ? <?php echo Config::get('APP.DISPLAY.SHOW'); ?> : <?php echo Config::get('APP.DISPLAY.HIDE'); ?>)+'" />');
+        +($(this).prop('checked') ? <?php echo \Fc2blog\Config::get('APP.DISPLAY.SHOW'); ?> : <?php echo \Fc2blog\Config::get('APP.DISPLAY.HIDE'); ?>)+'" />');
     });
     form.submit();
   });

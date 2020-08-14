@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'app_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'app_controller.php');
 
 abstract class UserController extends AppController
 {

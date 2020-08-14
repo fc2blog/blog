@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'user/user_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'user/user_controller.php');
 
 class BlogsController extends UserController
 {
@@ -15,7 +15,7 @@ class BlogsController extends UserController
     if (empty($blog)) {
       return $this->error404();
     }
-    $this->redirect(Config::get('BASE_DIRECTORY') . $blog['id'] . '/');
+    $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY') . $blog['id'] . '/');
   }
 
 }

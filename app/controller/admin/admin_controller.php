@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'app_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'app_controller.php');
 
 abstract class AdminController extends AppController
 {
@@ -21,8 +21,8 @@ abstract class AdminController extends AppController
         'Users'  => array('login', 'register'),
         'Common' => array('lang', 'install', 'debug'),
       );
-      $controller_name = Config::get('ControllerName');
-      $action_name = Config::get('ActionName');
+      $controller_name = \Fc2blog\Config::get('ControllerName');
+      $action_name = \Fc2blog\Config::get('ActionName');
       if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
         $this->redirect(array('controller'=>'Users', 'action'=>'login'));
       }
@@ -36,8 +36,8 @@ abstract class AdminController extends AppController
         'Blogs'  => array('index', 'create', 'delete', 'choice'),
         'Common' => array('lang', 'install'),
       );
-      $controller_name = Config::get('ControllerName');
-      $action_name = Config::get('ActionName');
+      $controller_name = \Fc2blog\Config::get('ControllerName');
+      $action_name = \Fc2blog\Config::get('ActionName');
       if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
         $this->setWarnMessage(__('Please select a blog'));
         $this->redirect(array('controller'=>'Blogs', 'action'=>'index'));
@@ -106,7 +106,7 @@ abstract class AdminController extends AppController
   */
   protected function isAdmin()
   {
-    return Session::get('user_type') === Config::get('USER.TYPE.ADMIN');
+    return Session::get('user_type') === \Fc2blog\Config::get('USER.TYPE.ADMIN');
   }
 
   /**

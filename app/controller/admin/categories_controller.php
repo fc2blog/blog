@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
 
 class CategoriesController extends AdminController
 {
@@ -20,7 +20,7 @@ class CategoriesController extends AdminController
     $this->set('category_parents', array(0=>'') + $options);
 
     // カテゴリ登録数
-    $create_limit = Config::get('CATEGORY.CREATE_LIMIT');
+    $create_limit = \Fc2blog\Config::get('CATEGORY.CREATE_LIMIT');
     $is_limit_create_category = ($create_limit > 0)? ($create_limit <= count($options)) : false;
     $this->set('is_limit_create_category', $is_limit_create_category);
 
@@ -127,7 +127,7 @@ class CategoriesController extends AdminController
   */
   public function ajax_add()
   {
-    Config::set('DEBUG', 0);    // デバッグなしに変更
+    \Fc2blog\Config::set('DEBUG', 0);    // デバッグなしに変更
 
     $request = Request::getInstance();
     $categories_model = Model::load('Categories');

@@ -2,18 +2,18 @@
 
 <h3 id="entry_count">
   <?php echo __('Entry search'); ?>[<?php echo __('Hits'); ?>&nbsp;<?php echo $paging['count']; ?><?php echo __(' results'); ?>]
-  <?php echo Html::input('limit', 'select', array('options'=>Config::get('ENTRY.LIMIT_LIST'), 'default'=>Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+  <?php echo Html::input('limit', 'select', array('options'=>\Fc2blog\Config::get('ENTRY.LIMIT_LIST'), 'default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
   <?php echo Html::input('page', 'select', array('options'=>Model::getPageList($paging), 'default'=>0)); ?>
 </h3>
 <p><?php echo __('You can search in accordance with the conditions of past articles.'); ?></p>
 <div id="entry_search">
   <form method="GET" id="sys-search-form">
-    <input type="hidden" name="<?php echo Config::get('ARGS_CONTROLLER'); ?>" value="Entries" />
-    <input type="hidden" name="<?php echo Config::get('ARGS_ACTION'); ?>" value="index" />
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Entries" />
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="index" />
     <?php echo Html::input('category_id', 'select', array('options'=>array(''=>__('Category name')) + Model::load('Categories')->getSearchList($this->getBlogId()))); ?>
     <?php echo Html::input('tag_id', 'select', array('options'=>array(''=>__('Tag name')) + Model::load('Tags')->getSearchList($this->getBlogId()))); ?>
     <?php echo Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + EntriesModel::getOpenStatusList())); ?>
-    <?php echo Html::input('limit', 'hidden', array('default'=>Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+    <?php echo Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
     <?php echo Html::input('page', 'hidden', array('default'=>0)); ?>
     <?php echo Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
     <br /><?php echo Html::input('keyword', 'text', array('maxlength'=>100)); ?>
@@ -45,7 +45,7 @@
         <td class="center ss_cell"><input type="checkbox" name="id[]" value="<?php echo $entry['id']; ?>" /></td>
         <td><?php echo df($entry['posted_at'], 'y-m-d'); ?></td>
         <td class="m_cell">
-          <a href="<?php echo BlogsModel::getFullHostUrlByBlogId($this->getBlogId(), Config::get('DOMAIN_USER')); ?><?php echo App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$entry['blog_id'], 'id'=>$entry['id'])); ?>" target="_blank">
+          <a href="<?php echo BlogsModel::getFullHostUrlByBlogId($this->getBlogId(), \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$entry['blog_id'], 'id'=>$entry['id'])); ?>" target="_blank">
             <?php echo th($entry['title'], 10); ?>
           </a>
         </td>
@@ -65,8 +65,8 @@
     </tbody>
   </table>
 
-  <input type="hidden" name="<?php echo Config::get('ARGS_CONTROLLER'); ?>" value="entries" />
-  <input type="hidden" name="<?php echo Config::get('ARGS_ACTION'); ?>" value="delete" />
+  <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="entries" />
+  <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="delete" />
   <input type="hidden" name="sig" value="<?php echo Session::get('sig'); ?>" />
   <input type="button" id="sys-entries-delete-button" value="<?php echo __('Remove what you have selected'); ?>" onclick="if(confirm('<?php echo __('Are you sure you want to delete?'); ?>')) $('#sys-list-form').submit();" disabled="disabled" />
 </form>

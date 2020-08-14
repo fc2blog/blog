@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
 
 class CommentsController extends AdminController
 {
@@ -60,13 +60,13 @@ class CommentsController extends AdminController
       'from'   => 'entries',
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+      'limit'  => $request->get('limit', \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
       'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
 
-    if ($options['limit'] > max(array_keys(Config::get('ENTRY.LIMIT_LIST')))) {
-      $options['limit'] = Config::get('ENTRY.DEFAULT_LIMIT');
+    if ($options['limit'] > max(array_keys(\Fc2blog\Config::get('ENTRY.LIMIT_LIST')))) {
+      $options['limit'] = \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT');
     }
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
       $options['page'] = 0;
@@ -95,7 +95,7 @@ class CommentsController extends AdminController
       $this->redirect(array('action'=>'index'));
     }
 
-    if ($comment['open_status']!=Config::get('COMMENT.OPEN_STATUS.PENDING')) {
+    if ($comment['open_status']!=\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) {
       // 承認待ち以外はリダイレクト
       $this->redirect(array('action'=>'index'));
     }
@@ -116,7 +116,7 @@ class CommentsController extends AdminController
   * コメントの承認(ajax版)
   */
   public function ajax_approval () {
-    Config::set('DEBUG', 0);
+    \Fc2blog\Config::set('DEBUG', 0);
     $this->layout = 'json.html';
 
     $request = Request::getInstance();
@@ -131,7 +131,7 @@ class CommentsController extends AdminController
       return ;
     }
 
-    if ($comment['open_status']!=Config::get('COMMENT.OPEN_STATUS.PENDING')) {
+    if ($comment['open_status']!=\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) {
       $this->set('json', array('success'=>1));
       return ;
     }
@@ -162,7 +162,7 @@ class CommentsController extends AdminController
     // コメントの初期表示時入力データ設定
     if (!$request->get('comment')){
       $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
-      if ($comment['reply_status']!=Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']==Config::get('COMMENT.QUOTE.USE')) {
+      if ($comment['reply_status']!=\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']==\Fc2blog\Config::get('COMMENT.QUOTE.USE')) {
         $comment['reply_body'] = '> ' . str_replace("\n", "\n> ",$comment['body']) . "\n";
       }
       $request->set('comment', $comment);
@@ -198,7 +198,7 @@ class CommentsController extends AdminController
   * ajax用の返信
   */
   public function ajax_reply(){
-    Config::set('DEBUG', 0);
+    \Fc2blog\Config::set('DEBUG', 0);
     $this->layout = 'ajax.html';
 
     $request = Request::getInstance();
@@ -217,7 +217,7 @@ class CommentsController extends AdminController
     // コメントの初期表示時入力データ設定
     if (!$request->get('comment')){
       $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
-      if ($comment['reply_status']!=Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']==Config::get('COMMENT.QUOTE.USE')) {
+      if ($comment['reply_status']!=\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']==\Fc2blog\Config::get('COMMENT.QUOTE.USE')) {
         $comment['reply_body'] = '> ' . str_replace("\n", "\n> ",$comment['body']) . "\n";
       }
       $request->set('comment', $comment);

@@ -22,7 +22,7 @@ if (!empty($entries)) {
     $entries[$key]['wayoubi'] = __($entries[$key]['youbi']);
 
     // 自動改行処理
-    if ($value['auto_linefeed']==Config::get('ENTRY.AUTO_LINEFEED.USE')) {
+    if ($value['auto_linefeed']==\Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE')) {
       $entries[$key]['body'] = nl2br($value['body']);
       $entries[$key]['extend'] = nl2br($value['extend']);
     }

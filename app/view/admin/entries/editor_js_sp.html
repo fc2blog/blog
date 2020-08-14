@@ -1,8 +1,8 @@
 
 <!-- timepicker-addon -->
 <?php Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js'); ?>
-<?php if (Config::get('LANG')!='en'): ?>
-  <?php Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-' . Config::get('LANG') . '.js'); ?>
+<?php if (\Fc2blog\Config::get('LANG')!='en'): ?>
+  <?php Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-' . \Fc2blog\Config::get('LANG') . '.js'); ?>
 <?php endif; ?>
 
 <?php Html::addJS('/js/js.cookie.js'); ?>
@@ -33,8 +33,8 @@ $(function(){
 
   // 追記と記事の設定の開閉処理
   var cookie_config = {
-    expires: <?php echo Config::get('COOKIE_EXPIRE'); ?>,
-    domain: '<?php echo Config::get('COOKIE_DEFAULT_DOMAIN'); ?>',
+    expires: <?php echo \Fc2blog\Config::get('COOKIE_EXPIRE'); ?>,
+    domain: '<?php echo \Fc2blog\Config::get('COOKIE_DEFAULT_DOMAIN'); ?>',
     path: '/',
     sameSite: 'Lax'
   };
@@ -62,7 +62,7 @@ $(function(){
   // 公開区分による表示処理変更
   $('input[name="entry[open_status]"]').on('change', function(){
     var open_status = $('input[name="entry[open_status]"]:checked').val();
-    if (open_status=='<?php echo Config::get('ENTRY.OPEN_STATUS.PASSWORD'); ?>') {
+    if (open_status=='<?php echo \Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD'); ?>') {
       $('.sys-entry-password').slideDown('fast');
     } else {
       $('.sys-entry-password').slideUp('fast');
@@ -131,7 +131,7 @@ $(function(){
 
   // プレビュー処理を行う
   $('#sys-entry-form-preview').click(function(){
-    var action = '//<?php echo Config::get('DOMAIN_USER'); ?>';
+    var action = '//<?php echo \Fc2blog\Config::get('DOMAIN_USER'); ?>';
     action    += '<?php echo App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId())); ?>';
     $('#sys-entry-form').prop('action', action);
     $('#sys-entry-form').prop('target', '_preview');

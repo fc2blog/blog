@@ -4,7 +4,7 @@
   <ul id="top_menu">
     <li class="main_btn_list touch"><a href="<?php echo Html::url(array('controller'=>'Entries','action'=>'create')); ?>" class="main_btn"><i class="editor_btn"></i><?php echo __('New article'); ?></a></li>
     <li class="main_btn_list touch"><a href="<?php echo Html::url(array('controller'=>'Entries', 'action'=>'index')); ?>" class="main_btn"><i class="entry_btn"></i><?php echo __('List of articles'); ?></a></li>
-    <li class="main_btn_list touch"><a href="<?php echo BlogsModel::getFullHostUrlByBlogId($blog['id'], Config::get('DOMAIN_USER')); ?>/<?php echo $this->getBlogId(); ?>/" target="_blank" class="main_btn"><i class="myblog_btn"></i><?php echo __('Checking the blog'); ?></a></li>
+    <li class="main_btn_list touch"><a href="<?php echo BlogsModel::getFullHostUrlByBlogId($blog['id'], \Fc2blog\Config::get('DOMAIN_USER')); ?>/<?php echo $this->getBlogId(); ?>/" target="_blank" class="main_btn"><i class="myblog_btn"></i><?php echo __('Checking the blog'); ?></a></li>
   </ul>
 </div>
 
@@ -18,7 +18,7 @@
     <a href="<?php echo Html::url(array(
       'controller'   => 'Comments',
       'action'       => 'index',
-      'reply_status' => Config::get('COMMENT.REPLY_STATUS.UNREAD'),
+      'reply_status' => \Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD'),
     )); ?>" class="common_next_link next_bg"><?php echo sprintf(__('There %d reviews unread comments'), $unread_count); ?></a>
   </li>
 <?php endif ; ?>
@@ -29,7 +29,7 @@
     <a href="<?php echo Html::url(array(
       'controller'  => 'Comments',
       'action'      => 'index',
-      'open_status' => Config::get('COMMENT.OPEN_STATUS.PENDING'),
+      'open_status' => \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING'),
     )); ?>" class="common_next_link next_bg"><?php echo sprintf(__('There %d reviews unapproved comment'), $unapproved_count); ?></a>
   </li>
 <?php endif ; ?>

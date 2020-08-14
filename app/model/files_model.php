@@ -64,7 +64,7 @@ class FilesModel extends Model{
         'file' => array(
           'required'  => true,
           'mime_type' => array('image/jpeg', 'image/png', 'image/gif'),
-          'size'      => Config::get('FILE.MAX_SIZE'),
+          'size'      => \Fc2blog\Config::get('FILE.MAX_SIZE'),
         ),
       ),
     );
@@ -91,7 +91,7 @@ class FilesModel extends Model{
       'file' => array(
         'file' => array(
           'mime_type' => array('image/jpeg', 'image/png', 'image/gif'),
-          'size'      => Config::get('FILE.MAX_SIZE'),
+          'size'      => \Fc2blog\Config::get('FILE.MAX_SIZE'),
         ),
       ),
     );

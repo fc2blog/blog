@@ -3,13 +3,13 @@
 * Controllerの親クラス
 */
 
-require_once(Config::get('CORE_DIR') . 'request.php');  // リクエストクラス
-require_once(Config::get('MODEL_DIR') . 'model.php');
+require_once(\Fc2blog\Config::get('CORE_DIR') . 'request.php');  // リクエストクラス
+require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model.php');
 
-require_once(Config::get('CORE_DIR') . 'html.php');    // HTMLの便利関数群
-require_once(Config::get('CORE_DIR') . 'app.php');  // アプリ用の便利関数群
+require_once(\Fc2blog\Config::get('CORE_DIR') . 'html.php');    // HTMLの便利関数群
+require_once(\Fc2blog\Config::get('CORE_DIR') . 'app.php');  // アプリ用の便利関数群
 
-require_once(Config::get('LIB_DIR') . 'WordTag.php');
+require_once(\Fc2blog\Config::get('LIB_DIR') . 'WordTag.php');
 
 
 abstract class Controller
@@ -25,18 +25,18 @@ abstract class Controller
 
     // コントローラー名の設定
     $controllerName = explode('Controller', $className);
-    Config::set('ControllerName', $controllerName[0]);
+    \Fc2blog\Config::set('ControllerName', $controllerName[0]);
 
     // メソッド名の設定
-    Config::set('ActionName', $method);
+    \Fc2blog\Config::set('ActionName', $method);
 
     // デバイスタイプの設定
-    Config::set('DeviceType', App::getDeviceType());
+    \Fc2blog\Config::set('DeviceType', App::getDeviceType());
 
     // アプリプレフィックス
-    $prefix = Config::get('APP_PREFIX');
+    $prefix = \Fc2blog\Config::get('APP_PREFIX');
 
-    Debug::log('Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']', false, 'system', __FILE__, __LINE__);
+    Debug::log('Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . \Fc2blog\Config::get('DeviceType') . ']', false, 'system', __FILE__, __LINE__);
 
     $this->beforeFilter();
 
@@ -136,7 +136,7 @@ abstract class Controller
     extract($this->data);
 
     // アプリプレフィックス
-    $prefix = Config::get('APP_PREFIX');
+    $prefix = \Fc2blog\Config::get('APP_PREFIX');
 
     Debug::log('Layout[' . $this->layout . ']', false, 'system', __FILE__, __LINE__);
     if ($this->layout=='') {
@@ -144,8 +144,8 @@ abstract class Controller
       return ;
     }
 
-    $fw_template_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
+    $fw_template_path = \Fc2blog\Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
+    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . \Fc2blog\Config::get('DEVICE_PREFIX.' . \Fc2blog\Config::get('DeviceType')) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       include($fw_template_device_path);
@@ -185,13 +185,13 @@ abstract class Controller
     $request = Request::getInstance();
 
     // Debug用にテンプレートで使用可能な変数一覧表示
-    if (Config::get('DEBUG_TEMPLATE_VARS')) {
-      include(Config::get('VIEW_DIR') . 'Common/variables.html');
+    if (\Fc2blog\Config::get('DEBUG_TEMPLATE_VARS')) {
+      include(\Fc2blog\Config::get('VIEW_DIR') . 'Common/variables.html');
     }
 
     // Template表示
-    $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? Config::get('APP_PREFIX') . '/' : '') . $fw_template;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
+    $fw_template_path = \Fc2blog\Config::get('VIEW_DIR') . ($fw_is_prefix ? \Fc2blog\Config::get('APP_PREFIX') . '/' : '') . $fw_template;
+    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . \Fc2blog\Config::get('DEVICE_PREFIX.' . \Fc2blog\Config::get('DeviceType')) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       include($fw_template_device_path);

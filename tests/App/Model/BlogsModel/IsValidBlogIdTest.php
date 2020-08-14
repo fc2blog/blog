@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\Model\BlogsModel;
 
 use BlogsModel;
-use Config;
+
 use Fc2blog\Tests\DBHelper;
 use Model;
 use PHPUnit\Framework\TestCase;
@@ -14,7 +14,7 @@ class IsValidBlogIdTest extends TestCase
   public function setUp(): void
   {
     /** @noinspection PhpIncludeInspection */
-    require_once(Config::get('MODEL_DIR') . 'model.php');
+    require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model.php');
     if (!class_exists(BlogsModel::class)) {
       Model::load('blogs');
     }

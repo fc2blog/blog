@@ -1,14 +1,14 @@
 
 <h3 id="entry_count">
   <?php echo __('File search'); ?>[<?php echo __('Hits'); ?>&nbsp;<?php echo $paging['count']; ?><?php echo __(' results'); ?>]
-  <?php echo Html::input('limit', 'select', array('options'=>App::getPageList('FILE'), 'default'=>Config::get('FILE.DEFAULT_LIMIT'))); ?>
+  <?php echo Html::input('limit', 'select', array('options'=>App::getPageList('FILE'), 'default'=>\Fc2blog\Config::get('FILE.DEFAULT_LIMIT'))); ?>
   <?php echo Html::input('page', 'select', array('options'=>Model::getPageList($paging), 'default'=>0)); ?>
 </h3>
 <p><?php echo __('You can search to match the conditions file.'); ?></p>
 <div id="entry_search">
   <form method="GET" id="sys-search-form" onsubmit="return false;">
-    <input type="hidden" name="<?php echo Config::get('ARGS_CONTROLLER'); ?>" value="Files" />
-    <input type="hidden" name="<?php echo Config::get('ARGS_ACTION'); ?>" value="ajax_index" />
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Files" />
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="ajax_index" />
     <?php echo Html::input('limit', 'hidden', array('default'=>App::getPageLimit('FILE'))); ?>
     <?php echo Html::input('page', 'hidden', array('default'=>0)); ?>
     <?php echo Html::input('order', 'hidden', array('default'=>'created_at_desc')); ?>

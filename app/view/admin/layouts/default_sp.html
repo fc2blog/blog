@@ -1,6 +1,6 @@
 <?php header("Content-Type: text/html; charset=UTF-8"); ?>
 <!DOCTYPE html>
-<html lang="<?php echo Config::get('LANG'); ?>">
+<html lang="<?php echo \Fc2blog\Config::get('LANG'); ?>">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
@@ -22,10 +22,10 @@
   <script type="text/javascript" src="/js/common.js"></script>
   <script>
     // フレームワーク用のjsの設定
-    <?php if(Config::get('URL_REWRITE')): ?>
+    <?php if(\Fc2blog\Config::get('URL_REWRITE')): ?>
       common.isURLRewrite = true;
     <?php endif; ?>
-    common.baseDirectory = '<?php echo Config::get('BASE_DIRECTORY'); ?>';
+    common.baseDirectory = '<?php echo \Fc2blog\Config::get('BASE_DIRECTORY'); ?>';
     common.deviceType = <?php echo $this->getDeviceType(); ?>;
     common.deviceArgs = '<?php echo App::getArgsDevice(); ?>';
   </script>
@@ -95,7 +95,7 @@
   </div>
 
   <footer id="site_footer">
-      <?php $lang = Config::get('LANG'); ?>
+      <?php $lang = \Fc2blog\Config::get('LANG'); ?>
       <div id="switch_lang" class="sh_langselect">
         <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
           <option value="ja" <?php if ($lang=='ja') : ?>selected="selected"<?php endif; ?>>日本語</option>
@@ -119,8 +119,8 @@
         <?php endif; ?>
         <?php if ($this->isSelectedBlog()) : ?>
             <li class="list_titile"><?php echo __('Setting'); ?></li>
-            <li <?php if (App::isActiveMenu('blog_templates/index')) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'BlogTemplates', 'action'=>'index', 'device_type'=>Config::get('DEVICE_SP'))); ?>"><span><i class="sidemenu_template"></i></span><span><?php echo __('Template management'); ?></span></a></li>
-            <li <?php if (App::isActiveMenu('blog_plugins/index')) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'blog_plugins', 'action'=>'index', 'device_type'=>Config::get('DEVICE_SP'))); ?>"><span><i class="sidemenu_plugin"></i></span><span><?php echo __('Plugin management'); ?></span></a></li>
+            <li <?php if (App::isActiveMenu('blog_templates/index')) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'BlogTemplates', 'action'=>'index', 'device_type'=>\Fc2blog\Config::get('DEVICE_SP'))); ?>"><span><i class="sidemenu_template"></i></span><span><?php echo __('Template management'); ?></span></a></li>
+            <li <?php if (App::isActiveMenu('blog_plugins/index')) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'blog_plugins', 'action'=>'index', 'device_type'=>\Fc2blog\Config::get('DEVICE_SP'))); ?>"><span><i class="sidemenu_plugin"></i></span><span><?php echo __('Plugin management'); ?></span></a></li>
             <li <?php if (App::isActiveMenu(array('categories/create', 'categories/edit'))) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'Categories','action'=>'create')); ?>"><span><i class="sidemenu_category"></i></span><span><?php echo __('Category management'); ?></span></a></li>
             <li <?php if (App::isActiveMenu(array('tags/index', 'tags/edit'))) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'Tags', 'action'=>'index')); ?>"><span><i class="sidemenu_tag"></i></span><span><?php echo __('List of tags'); ?></span></a></li>
             <li <?php if (App::isActiveMenu(array('blogs/edit', 'blog_settings/entry_edit', 'blog_settings/comment_edit', 'blog_settings/etc_edit', 'blogs/delete'))) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'Blogs', 'action'=>'edit')); ?>"><span><i class="sidemenu_setting"></i></span><span><?php echo __('Blog setting'); ?></span></a></li>
@@ -130,7 +130,7 @@
       <?php else: ?>
         <div id="left_menu" class="sidemenu">
           <ul>
-            <?php if (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')): ?>
+            <?php if (\Fc2blog\Config::get('USER.REGIST_SETTING.FREE') == \Fc2blog\Config::get('USER.REGIST_STATUS')): ?>
               <li <?php if (App::isActiveMenu('users/register')) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'Users', 'action'=>'register')); ?>"><span><i class="sidemenu_editor"></i></span><span><?php echo __('User registration'); ?></span></a></li>
             <?php endif; ?>
             <li <?php if (App::isActiveMenu('users/login')) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'Users', 'action'=>'login')); ?>"><span></span><span><?php echo __('Login'); ?></span></a></li>
@@ -145,7 +145,7 @@
             <li <?php if (App::isActiveMenu('blogs/index')) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'Blogs', 'action'=>'index')); ?>"><span><i class="sidemenu_myblog"></i></span><span><?php echo __('List of blogs'); ?></span></a></li>
             <li <?php if (App::isActiveMenu(array('users/edit', 'users/withdrawal'))) echo 'class="selected"'; ?>><a class="touch" href="<?php echo Html::url(array('controller'=>'Users', 'action'=>'edit')); ?>"><span><i class="sidemenu_setting"></i></span><span><?php echo __('User setting'); ?></span></a></li>
             <li><a class="touch" href="<?php echo Html::url(array('controller'=>'Users', 'action'=>'logout')); ?>"><span><i class="sidemenu_logout"></i></span><span><?php echo __('Logout'); ?></span></a></li>
-            <?php if (Config::get('DEBUG')!=0): ?>
+            <?php if (\Fc2blog\Config::get('DEBUG')!=0): ?>
               <li class="list_titile">デバッグ用</li>
               <li><a class="touch" href="<?php echo Html::url(array('controller'=>'Users', 'action'=>'index')); ?>"><span><i class="sidemenu_history"></i></span><span>ユーザー一覧</span></a></li>
             <?php endif; ?>

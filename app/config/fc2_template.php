@@ -26,10 +26,10 @@ $config['fc2_template_foreach'] = array(
   // タグ
   'ctag'          => '<?php if (!empty($t_tags)) foreach($t_tags as $t_tag) { ?>',
   // プラグイン系
-  'plugin_first'   => '<?php if(!isset($t_plugins_1)) $t_plugins_1=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
-  'plugin_second'  => '<?php if(!isset($t_plugins_2)) $t_plugins_2=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), Config::get(\'BLOG_PLUGIN.CATEGORY.SECOND\'), $blog_id); ?><?php if (!empty($t_plugins_2)) foreach($t_plugins_2 as $t_plugin) { ?>',
-  'plugin_third'   => '<?php if(!isset($t_plugins_3)) $t_plugins_3=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), Config::get(\'BLOG_PLUGIN.CATEGORY.THIRD\'), $blog_id); ?><?php if (!empty($t_plugins_3)) foreach($t_plugins_3 as $t_plugin) { ?>',
-  'spplugin_first' => '<?php if(!isset($t_plugins_1)) $t_plugins_1=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
+  'plugin_first'   => '<?php if(!isset($t_plugins_1)) $t_plugins_1=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
+  'plugin_second'  => '<?php if(!isset($t_plugins_2)) $t_plugins_2=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.SECOND\'), $blog_id); ?><?php if (!empty($t_plugins_2)) foreach($t_plugins_2 as $t_plugin) { ?>',
+  'plugin_third'   => '<?php if(!isset($t_plugins_3)) $t_plugins_3=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.THIRD\'), $blog_id); ?><?php if (!empty($t_plugins_3)) foreach($t_plugins_3 as $t_plugin) { ?>',
+  'spplugin_first' => '<?php if(!isset($t_plugins_1)) $t_plugins_1=Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
 );
 
 // if文の置き換え用
@@ -48,9 +48,9 @@ $config['fc2_template_if'] = array(
   'ctag_exists'        => '<?php if(!isset($t_tags)) $t_tags = Model::load(\'Tags\')->getTemplateTags($blog_id); ?><?php if(!empty($t_tags)) { ?>',
   'search_area'        => '<?php if(!empty($search_area)) { ?>',
   'not_search_area'    => '<?php if(empty($search_area)) { ?>',
-  'comment_area'       => '<?php if(!empty($comment_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',
+  'comment_area'       => '<?php if(!empty($comment_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',
   'not_comment_area'   => '<?php if(empty($comment_area)) { ?>',
-  'form_area'          => '<?php if(!empty($form_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',
+  'form_area'          => '<?php if(!empty($form_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',
   'not_form_area'      => '<?php if(empty($form_area)) { ?>',
   'edit_area'          => '<?php if(!empty($edit_area)) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',
   'not_edit_area'      => '<?php if(empty($edit_area)) { ?>',
@@ -68,8 +68,8 @@ $config['fc2_template_if'] = array(
   'more_link'          => '<?php if(empty($comment_area) && !empty($entry[\'extend\'])) { ?>',
   'more'               => '<?php if(!empty($comment_area) && !empty($entry[\'extend\'])) { ?>',
   // コメントの受付可否
-  'allow_comment'      => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?>',
-  'deny_comment'       => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==Config::get(\'ENTRY.COMMENT_ACCEPTED.REJECT\')) { ?>',
+  'allow_comment'      => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?>',
+  'deny_comment'       => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.REJECT\')) { ?>',
   // 記事のスレッドテーマも無し判定
   'community'          => '<?php if(false) { ?>',
   // トラックバックは無し判定
@@ -142,7 +142,7 @@ $template_vars = array(
   '<%topentry_body>'               => <<<PHP
 <?php
   if (isset(\$entry['body'])) {
-    if (!\$self_blog && \$entry['open_status']==Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+    if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
       echo <<<HTML
 <form method="POST">
   <input type="hidden" name="mode" value="Entries" />
@@ -167,7 +167,7 @@ PHP
   '<%topentry_desc>'               => '',
   '<%topentry_link>'               => '<?php if(isset($entry[\'link\'])) echo $entry[\'link\']; ?>',
   '<%topentry_enc_link>'           => '<?php if(isset($entry[\'enc_link\'])) echo $entry[\'enc_link\']; ?>',
-  '<%topentry_more>'               => '<?php if(!empty($entry[\'extend\']) && ($entry[\'open_status\']!=Config::get(\'ENTRY.OPEN_STATUS.PASSWORD\') || Session::get(\'entry_password.\' . $entry[\'blog_id\'] . \'.\' . $entry[\'id\']))) echo $entry[\'extend\']; ?>',
+  '<%topentry_more>'               => '<?php if(!empty($entry[\'extend\']) && ($entry[\'open_status\']!=\Fc2blog\Config::get(\'ENTRY.OPEN_STATUS.PASSWORD\') || Session::get(\'entry_password.\' . $entry[\'blog_id\'] . \'.\' . $entry[\'id\']))) echo $entry[\'extend\']; ?>',
   '<%topentry_year>'               => '<?php if(isset($entry[\'year\'])) echo $entry[\'year\']; ?>',
   '<%topentry_month>'              => '<?php if(isset($entry[\'month\'])) echo $entry[\'month\']; ?>',
   '<%topentry_month:short>'        => '<?php if(isset($entry[\'month_short\'])) echo $entry[\'month_short\']; ?>',
@@ -483,7 +483,7 @@ PHP
   "<%template_goto_preventry>"  => '<?php echo __(\'Prev Entry\'); ?>',
   "<%template_goto_nextentry>"  => '<?php echo __(\'Next Entry\'); ?>',
   "<%template_secret>"          => '<?php echo __(\'Private comment\'); ?>',
-  "<%template_css_text>"        => '<?php if(isset($css_link)) echo file_get_contents(Config::get(\'WWW_DIR\') . substr($css_link, 1)); ?>',
+  "<%template_css_text>"        => '<?php if(isset($css_link)) echo file_get_contents(\Fc2blog\Config::get(\'WWW_DIR\') . substr($css_link, 1)); ?>',
 
   // HTML変換
   'name="mode" value="regist"' => 'name="process" value="comment_regist"',
@@ -516,7 +516,7 @@ function getTopentryDiscription(): string
   return <<<PHP
 <?php
   if (isset(\$entry['body'])) {
-    if (!\$self_blog && \$entry['open_status']==Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+    if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
       echo <<<HTML
 <form method="POST">
   <input type="hidden" name="mode" value="Entries" />

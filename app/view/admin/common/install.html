@@ -43,7 +43,7 @@ table#db
   }
 </style>
 <ul class="check">
-  <?php $is_write_temp = is_writable(Config::get('TEMP_DIR') . '.'); ?>
+  <?php $is_write_temp = is_writable(\Fc2blog\Config::get('TEMP_DIR') . '.'); ?>
   <li class="<?php echo $is_write_temp ? 'ok' : 'ng'; ?>">
     <?php echo __('Write access to the temporary directory'); ?> . . .
     <?php if ($is_write_temp): ?>
@@ -51,11 +51,11 @@ table#db
     <?php else: ?>
       <span style="color: red;">NG!</span>
       <hr />
-      <p class="ng">[<?php echo Config::get('TEMP_DIR'); ?>]<br /><?php echo __('Please perform a writable set for the above folder'); ?></p>
+      <p class="ng">[<?php echo \Fc2blog\Config::get('TEMP_DIR'); ?>]<br /><?php echo __('Please perform a writable set for the above folder'); ?></p>
     <?php endif; ?>
   </li>
 
-  <?php $is_write_upload = is_writable(Config::get('WWW_UPLOAD_DIR') . '.'); ?>
+  <?php $is_write_upload = is_writable(\Fc2blog\Config::get('WWW_UPLOAD_DIR') . '.'); ?>
   <li class="<?php echo $is_write_upload ? 'ok' : 'ng'; ?>">
     <?php echo __('Write access to the upload directory'); ?> . . .
     <?php if ($is_write_upload): ?>
@@ -63,7 +63,7 @@ table#db
     <?php else: ?>
       <span style="color: red;">NG!</span>
       <hr />
-      <p class="ng">[<?php echo Config::get('WWW_UPLOAD_DIR'); ?>]<br /><?php echo __('Please perform a writable set for the above folder'); ?></p>
+      <p class="ng">[<?php echo \Fc2blog\Config::get('WWW_UPLOAD_DIR'); ?>]<br /><?php echo __('Please perform a writable set for the above folder'); ?></p>
     <?php endif; ?>
   </li>
 
@@ -80,7 +80,7 @@ table#db
   </li>
 
   <?php
-    require_once(Config::get('CORE_DIR') . 'msdb.php');
+    require_once(\Fc2blog\Config::get('CORE_DIR') . 'msdb.php');
     $is_connect = true;
     $connect_message = '';
     try{

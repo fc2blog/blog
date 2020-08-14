@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\Helper;
 
-use Config;
+
 use Exception;
 use InvalidArgumentException;
 use PseudoExit;
@@ -34,11 +34,11 @@ trait ClientTrait
 
     if ($target === "user") {
       /** @noinspection PhpFullyQualifiedNameUsageInspection */
-      Config::read('user.php');
+      \Fc2blog\Config::read('user.php');
     } else if ($target === "admin") {
-      Config::read('admin.php');
+      \Fc2blog\Config::read('admin.php');
     } else if ($target === "test") {
-      Config::read('test.php');
+      \Fc2blog\Config::read('test.php');
     } else {
       throw new InvalidArgumentException("target is wrong.");
     }

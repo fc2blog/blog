@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\Core\Html;
 
 use BlogsModel;
-use Config;
+
 use Html;
 use Model;
 use PHPUnit\Framework\TestCase;
@@ -24,10 +24,10 @@ class UrlTest extends TestCase
     /** @noinspection PhpFullyQualifiedNameUsageInspection */
     \Request::resetInstanceForTesting();
 
-    Config::read('user.php', true);
+    \Fc2blog\Config::read('user.php', true);
 
     /** @noinspection PhpIncludeInspection */
-    require_once(Config::get('MODEL_DIR') . 'model.php');
+    require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model.php');
     if (!class_exists(BlogsModel::class)) {
       Model::load('blogs');
     }

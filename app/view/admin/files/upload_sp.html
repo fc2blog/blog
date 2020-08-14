@@ -1,8 +1,8 @@
 <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title"><?php echo __('File upload'); ?></span><span class="accordion_btn"><i class="search_icon btn_icon"></i></span></h1></header>
 <div id="entry_search" class="accordion_contents" style="display:none;">
   <form method="GET" id="sys-search-form">
-    <input type="hidden" name="<?php echo Config::get('ARGS_CONTROLLER'); ?>" value="Files" />
-    <input type="hidden" name="<?php echo Config::get('ARGS_ACTION'); ?>" value="upload" />
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Files" />
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="upload" />
     <?php echo Html::input('limit', 'hidden', array('default'=>App::getPageLimit('FILE'))); ?>
     <?php echo Html::input('page', 'hidden', array('default'=>0)); ?>
     <?php echo Html::input('order', 'hidden', array('default'=>'created_at_desc')); ?>
@@ -14,7 +14,7 @@
 </div>
 
 <form method="POST" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
-  <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo Config::get('FILE.MAX_SIZE'); ?>" />
+  <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo \Fc2blog\Config::get('FILE.MAX_SIZE'); ?>" />
   <input type="hidden" name="sig" value="<?php echo Session::get('sig'); ?>" />
   <div class="btn_area">
     <div class="up_file_btn">

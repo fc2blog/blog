@@ -58,7 +58,7 @@
         <tr>
           <th><?php echo __('Post type'); ?></th>
           <td>
-            <?php echo Html::input('entry[open_status]', 'radio', array('options'=>EntriesModel::getOpenStatusList(), 'default'=>Config::get('ENTRY.OPEN_STATUS.OPEN'))); ?>
+            <?php echo Html::input('entry[open_status]', 'radio', array('options'=>EntriesModel::getOpenStatusList(), 'default'=>\Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'))); ?>
             <?php if (isset($errors['entry']['open_status'])): ?><p class="error"><?php echo $errors['entry']['open_status']; ?></p><?php endif; ?>
           </td>
         </tr>
@@ -81,14 +81,14 @@
         <tr>
           <th><?php echo __('New paragraph'); ?></th>
           <td>
-            <?php echo Html::input('entry[auto_linefeed]', 'radio', array('options'=>EntriesModel::getAutoLinefeedList(), 'default'=>Config::get('ENTRY.AUTO_LINEFEED.USE'))); ?>
+            <?php echo Html::input('entry[auto_linefeed]', 'radio', array('options'=>EntriesModel::getAutoLinefeedList(), 'default'=>\Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE'))); ?>
             <?php if (isset($errors['entry']['auto_linefeed'])): ?><p class="error"><?php echo $errors['entry']['auto_linefeed']; ?></p><?php endif; ?>
           </td>
         </tr>
         <tr>
           <th><?php echo __('Accept comments'); ?></th>
           <td>
-            <?php echo Html::input('entry[comment_accepted]', 'radio', array('options'=>EntriesModel::getCommentAcceptedList(), 'default'=>Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'))); ?>
+            <?php echo Html::input('entry[comment_accepted]', 'radio', array('options'=>EntriesModel::getCommentAcceptedList(), 'default'=>\Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'))); ?>
             <?php if (isset($errors['entry']['comment_accepted'])): ?><p class="error"><?php echo $errors['entry']['comment_accepted']; ?></p><?php endif; ?>
           </td>
         </tr>

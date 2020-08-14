@@ -4,6 +4,8 @@
 *
 */
 
+namespace Fc2blog;
+
 class Config{
 
   private static $config = array();
@@ -60,7 +62,7 @@ class Config{
       return;
     }
     self::$read_files[$name] = true;
-    $configs = include(Config::get('CONFIG_DIR') . $name);
+    $configs = include(static::get('CONFIG_DIR') . $name);
     foreach ($configs as $key => $value) {
       self::$config[$key] = $value;
     }

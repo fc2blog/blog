@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'user/user_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'user/user_controller.php');
 
 class CommonController extends UserController
 {
@@ -14,7 +14,7 @@ class CommonController extends UserController
 
     // 言語の設定
     $lang = $request->get('lang');
-    if ($language=Config::get('LANGUAGES.' . $lang)) {
+    if ($language=\Fc2blog\Config::get('LANGUAGES.' . $lang)) {
       Cookie::set('lang', $lang);
     }
 
@@ -33,11 +33,11 @@ class CommonController extends UserController
     $device_type = 0;
     $device = $request->get('device');
     switch ($device) {
-      case 'pc': $device_type = Config::get('DEVICE_PC'); break;
+      case 'pc': $device_type = \Fc2blog\Config::get('DEVICE_PC'); break;
       case 'm':
-      case 'mb': $device_type = Config::get('DEVICE_MB'); break;
-      case 'sp': $device_type = Config::get('DEVICE_SP'); break;
-      case 'tb': $device_type = Config::get('DEVICE_TB'); break;
+      case 'mb': $device_type = \Fc2blog\Config::get('DEVICE_MB'); break;
+      case 'sp': $device_type = \Fc2blog\Config::get('DEVICE_SP'); break;
+      case 'tb': $device_type = \Fc2blog\Config::get('DEVICE_TB'); break;
       default:
         Cookie::set('device', null);
         $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId()));
@@ -52,7 +52,7 @@ class CommonController extends UserController
   */
   public function captcha()
   {
-    require_once(Config::get('LIB_DIR') . 'CaptchaImage.php');
+    require_once(\Fc2blog\Config::get('LIB_DIR') . 'CaptchaImage.php');
     $size_x = 200;
     $size_y = 40;
     // 自動テスト用に"DEBUG_FORCE_CAPTCHA_KEY"環境変数で、Captchaキーの固定機能
@@ -62,11 +62,11 @@ class CommonController extends UserController
       $key = random_int(1000, 9999);
     }
     $this->setToken($key);    // トークン設定
-    $isJa = Config::get('LANG')=='ja'; // 日本語以外は数字のみを表示
-    $captcha = new CaptchaImage($size_x, $size_y, Config::get('PASSWORD_SALT'), $isJa);
+    $isJa = \Fc2blog\Config::get('LANG')=='ja'; // 日本語以外は数字のみを表示
+    $captcha = new CaptchaImage($size_x, $size_y, \Fc2blog\Config::get('PASSWORD_SALT'), $isJa);
     $captcha->drawNumber($key, true);
 
-    Config::set('DEBUG', 0);
+    \Fc2blog\Config::set('DEBUG', 0);
     $this->layout = 'none.html';
   }
 
@@ -121,7 +121,7 @@ class CommonController extends UserController
     }
 
     // サムネイル出力処理
-    include(Config::get('LIB_DIR') . 'ThumbnailImageMaker.php');
+    include(\Fc2blog\Config::get('LIB_DIR') . 'ThumbnailImageMaker.php');
     $image = new ThumbnailImageMaker();
     $load_result = $image->load($file_path);
     if($load_result!==true){

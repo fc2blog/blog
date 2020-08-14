@@ -3,7 +3,7 @@
 * アプリ用のControllerの親クラス
 */
 
-require(Config::get('CORE_DIR') . 'controller.php');  // HTMLの便利関数群
+require(\Fc2blog\Config::get('CORE_DIR') . 'controller.php');  // HTMLの便利関数群
 
 abstract class AppController extends Controller
 {
@@ -55,7 +55,7 @@ abstract class AppController extends Controller
   */
   protected function getDeviceType()
   {
-    return Config::get('DeviceType');
+    return \Fc2blog\Config::get('DeviceType');
   }
 
   /**
@@ -86,19 +86,19 @@ abstract class AppController extends Controller
   */
   public function debug()
   {
-    if (Config::get('DEBUG')!=2 && Config::get('DEBUG') !=3) {
+    if (\Fc2blog\Config::get('DEBUG')!=2 && \Fc2blog\Config::get('DEBUG') !=3) {
       return $this->error404();
     }
     $key = Request::getInstance()->get('key');
 
-    if (!is_file(Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
+    if (!is_file(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
       if(defined("THIS_IS_TEST")){
         throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
       }else{
         exit;
       }
     }
-    include(Config::get('TEMP_DIR') . 'debug_html/' . $key);
+    include(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html/' . $key);
     if(defined("THIS_IS_TEST")){
       throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
     }else{

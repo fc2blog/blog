@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
 
 class UsersController extends AdminController
 {
@@ -17,7 +17,7 @@ class UsersController extends AdminController
     $request = Request::getInstance();
 
     $options = array(
-      'limit' => Config::get('PAGE.USER.LIMIT', 10),
+      'limit' => \Fc2blog\Config::get('PAGE.USER.LIMIT', 10),
       'page'  => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => 'id DESC',
     );
@@ -34,7 +34,7 @@ class UsersController extends AdminController
   */
   public function register()
   {
-    if (Config::get('USER.REGIST_SETTING.FREE') != Config::get('USER.REGIST_STATUS')) {
+    if (\Fc2blog\Config::get('USER.REGIST_SETTING.FREE') != \Fc2blog\Config::get('USER.REGIST_STATUS')) {
       return $this->error404();
     }
 
@@ -128,7 +128,7 @@ class UsersController extends AdminController
   public function login()
   {
     if ($this->isLogin()) {
-      $this->redirect(Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
+      $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
     }
 
     $request = Request::getInstance();
@@ -152,7 +152,7 @@ class UsersController extends AdminController
         if (!$this->isSelectedBlog()) {
           $this->redirect(array('controller'=>'Blogs', 'action'=>'create'));
         }
-        $this->redirect(Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
+        $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
       }
       $errors = array('login_id' => __('Login ID or password is incorrect'));
     }

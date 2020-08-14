@@ -20,7 +20,7 @@ class App
   public static function getUserFilePath($file, $abs=false, $timestamp=false)
   {
     $file_path = App::getBlogLayer($file['blog_id']) . '/file/' . $file['id'] . '.' . $file['ext'];
-    return ($abs ? Config::get('WWW_UPLOAD_DIR') : '/' . Config::get('UPLOAD_DIR_NAME') . '/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
+    return ($abs ? \Fc2blog\Config::get('WWW_UPLOAD_DIR') : '/' . \Fc2blog\Config::get('UPLOAD_DIR_NAME') . '/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
   }
 
   /**
@@ -55,7 +55,7 @@ class App
   * ブログIDとIDに紐づくファイルを削除する
   */
   public static function deleteFile($blog_id, $id){
-    $dir_path = Config::get('WWW_UPLOAD_DIR') . App::getBlogLayer($blog_id) . '/file/';
+    $dir_path = \Fc2blog\Config::get('WWW_UPLOAD_DIR') . App::getBlogLayer($blog_id) . '/file/';
     $files = scandir($dir_path);
     foreach ($files as $file_name) {
       if (strpos($file_name, $id . '_') === 0) {
@@ -74,7 +74,7 @@ class App
   */
   public static function getPluginFilePath($blog_id, $id)
   {
-    return Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/plugins/' . $id . '.php';
+    return \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/plugins/' . $id . '.php';
   }
 
   /**
@@ -93,10 +93,10 @@ class App
   */
   public static function removeBlogDirectory($blog_id)
   {
-    $upload_path = Config::get('WWW_UPLOAD_DIR') . '/' .  App::getBlogLayer($blog_id);
+    $upload_path = \Fc2blog\Config::get('WWW_UPLOAD_DIR') . '/' .  App::getBlogLayer($blog_id);
     system("rm -fr " . $upload_path);
 
-    $template_path = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id);
+    $template_path = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id);
     system("rm -fr " . $template_path);
   }
 
@@ -143,21 +143,21 @@ class App
     // パラメータによりデバイスタイプを変更(FC2の引数順守)
     $request = Request::getInstance();
     if ($request->isArgs('pc')) {
-      return Config::get('DEVICE_PC');
+      return \Fc2blog\Config::get('DEVICE_PC');
     }
     if ($request->isArgs('sp')) {
-      return Config::get('DEVICE_SP');
+      return \Fc2blog\Config::get('DEVICE_SP');
     }
     if ($request->isArgs('tb')) {
-      return Config::get('DEVICE_TB');
+      return \Fc2blog\Config::get('DEVICE_TB');
     }
     if ($request->isArgs('m')) {
-      return Config::get('DEVICE_MB');
+      return \Fc2blog\Config::get('DEVICE_MB');
     }
 
     // Cookieからデバイスタイプを取得
     $device_type = Cookie::get('device');
-    $devices = array(Config::get('DEVICE_PC'), Config::get('DEVICE_MB'), Config::get('DEVICE_SP'), Config::get('DEVICE_TB'));
+    $devices = array(\Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Config::get('DEVICE_MB'), \Fc2blog\Config::get('DEVICE_SP'), \Fc2blog\Config::get('DEVICE_TB'));
     if (!empty($device_type) && in_array($device_type, $devices)) {
       return $device_type;
     }
@@ -168,10 +168,10 @@ class App
     $devices = array('iPhone', 'iPod', 'Android');
     foreach ($devices as $device) {
       if (strpos($ua, $device)!==false) {
-        return Config::get('DEVICE_SP');
+        return \Fc2blog\Config::get('DEVICE_SP');
       }
     }
-    return Config::get('DEVICE_PC');
+    return \Fc2blog\Config::get('DEVICE_PC');
   }
 
   /**
@@ -232,7 +232,7 @@ class App
   */
   public static function isPC()
   {
-    return Config::get('DeviceType') == Config::get('DEVICE_PC');
+    return \Fc2blog\Config::get('DeviceType') == \Fc2blog\Config::get('DEVICE_PC');
   }
 
   /**
@@ -240,7 +240,7 @@ class App
   */
   public static function isSP()
   {
-    return Config::get('DeviceType') == Config::get('DEVICE_SP');
+    return \Fc2blog\Config::get('DeviceType') == \Fc2blog\Config::get('DEVICE_SP');
   }
 
   /**
@@ -251,18 +251,18 @@ class App
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
       $gets = Request::getInstance()->getGet();;
-      unset($gets[Config::get('ARGS_CONTROLLER')]);
-      unset($gets[Config::get('ARGS_ACTION')]);
+      unset($gets[\Fc2blog\Config::get('ARGS_CONTROLLER')]);
+      unset($gets[\Fc2blog\Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);
     }
 
-    $controller = Config::get('ControllerName');
+    $controller = \Fc2blog\Config::get('ControllerName');
     if (isset($args['controller'])) {
       $controller = $args['controller'];
       unset($args['controller']);
     }
 
-    $action = Config::get('ActionName');
+    $action = \Fc2blog\Config::get('ActionName');
     if (isset($args['action'])) {
       $action = $args['action'];
       unset($args['action']);
@@ -329,8 +329,8 @@ class App
     }
 
     $params = array();
-    $params[] = Config::get('ARGS_CONTROLLER') . '=' . lcfirst($controller);
-    $params[] = Config::get('ARGS_ACTION') . '=' . $action;
+    $params[] = \Fc2blog\Config::get('ARGS_CONTROLLER') . '=' . lcfirst($controller);
+    $params[] = \Fc2blog\Config::get('ARGS_ACTION') . '=' . $action;
     foreach($args as $key => $value){
       $params[] = $key . '=' . $value;
     }
@@ -338,7 +338,7 @@ class App
       $params[] = $device_name;
     }
 
-    $url = '/'. Config::get('DIRECTORY_INDEX');
+    $url = '/'. \Fc2blog\Config::get('DIRECTORY_INDEX');
     if (count($params)) {
       $url .= '?' . implode('&', $params);
     }
@@ -354,7 +354,7 @@ class App
   */
   public static function getPageLimit($key)
   {
-    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey() . '.LIMIT', Config::get('PAGE.' . $key . '.DEFAULT.LIMIT', 10));
+    return \Fc2blog\Config::get('PAGE.' . $key . '.' . self::getDeviceKey() . '.LIMIT', \Fc2blog\Config::get('PAGE.' . $key . '.DEFAULT.LIMIT', 10));
   }
 
   /**
@@ -362,7 +362,7 @@ class App
   */
   public static function getPageList($key)
   {
-    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey() . '.LIST', Config::get('PAGE.' . $key . '.DEFAULT.LIST', array()));
+    return \Fc2blog\Config::get('PAGE.' . $key . '.' . self::getDeviceKey() . '.LIST', \Fc2blog\Config::get('PAGE.' . $key . '.DEFAULT.LIST', array()));
   }
 
   /**
@@ -375,8 +375,8 @@ class App
     static $controller_name = null;
     static $method_name = null;
     if ($controller_name==null) {
-      $controller_name = snakeCase(Config::get('ControllerName'));
-      $method_name = snakeCase(Config::get('ActionName'));
+      $controller_name = snakeCase(\Fc2blog\Config::get('ControllerName'));
+      $method_name = snakeCase(\Fc2blog\Config::get('ActionName'));
     }
 
     if (is_string($params)) {

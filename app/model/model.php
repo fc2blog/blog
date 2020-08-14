@@ -4,9 +4,9 @@
 * Sql群の書き出しクラス 子クラスでSingletonで呼び出し予定
 */
 
-require_once(Config::get('CORE_DIR') . 'msdb.php');
-require_once(Config::get('MODEL_DIR') . 'model_interface.php');
-require_once(Config::get('MODEL_DIR') . 'validate.php');
+require_once(\Fc2blog\Config::get('CORE_DIR') . 'msdb.php');
+require_once(\Fc2blog\Config::get('MODEL_DIR') . 'model_interface.php');
+require_once(\Fc2blog\Config::get('MODEL_DIR') . 'validate.php');
 
 abstract class Model implements ModelInterface
 {

@@ -62,7 +62,7 @@ $(function(){
 
   // プレビュー処理を行う
   $('#sys-blog-plugin-form-preview').click(function(){
-    <?php $device_key = Config::get('DEVICE_FC2_KEY.' . $request->get('blog_plugin.device_type')); ?>
+    <?php $device_key = \Fc2blog\Config::get('DEVICE_FC2_KEY.' . $request->get('blog_plugin.device_type')); ?>
     var action = '<?php echo App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>Session::get('blog_id'), $device_key=>1), false, true); ?>';
     $('#sys-blog-plugin-form').prop('action', action);
     $('#sys-blog-plugin-form').prop('target', '_preview');

@@ -47,18 +47,18 @@ class EntriesModel extends Model
         'maxlength' => array('max' => 255),
       ),
       'open_status'  => array(
-        'default_value' => Config::get('ENTRY.OPEN_STATUS.OPEN'),
+        'default_value' => \Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),
         'in_array'      => array('values'=>array_keys(self::getOpenStatusList())),
       ),
       'password'  => array(
         'maxlength' => array('max' => 50),
       ),
       'auto_linefeed'  => array(
-        'default_value' => Config::get('ENTRY.AUTO_LINEFEED.USE'),
+        'default_value' => \Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE'),
         'in_array'      => array('values'=>array_keys(self::getAutoLinefeedList())),
       ),
       'comment_accepted'  => array(
-        'default_value' => Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'),
+        'default_value' => \Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'),
         'in_array'      => array('values'=>array_keys(self::getCommentAcceptedList())),
       ),
       'posted_at'  => array(
@@ -73,27 +73,27 @@ class EntriesModel extends Model
   public static function getOpenStatusList()
   {
     return array(
-      Config::get('ENTRY.OPEN_STATUS.OPEN')        => __('Publication'),
-      Config::get('ENTRY.OPEN_STATUS.DRAFT')       => __('Draft'),
-      Config::get('ENTRY.OPEN_STATUS.PASSWORD')    => __('Password Protection'),
-      Config::get('ENTRY.OPEN_STATUS.LIMIT')       => __('Limited time offer'),
-      Config::get('ENTRY.OPEN_STATUS.RESERVATION') => __('Reservations Posts'),
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN')        => __('Publication'),
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.DRAFT')       => __('Draft'),
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD')    => __('Password Protection'),
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.LIMIT')       => __('Limited time offer'),
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.RESERVATION') => __('Reservations Posts'),
     );
   }
 
   public static function getCommentAcceptedList()
   {
     return array(
-      Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED') => __('Be accepted'),
-      Config::get('ENTRY.COMMENT_ACCEPTED.REJECT')   => __('Reject'),
+      \Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED') => __('Be accepted'),
+      \Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.REJECT')   => __('Reject'),
     );
   }
 
   public static function getAutoLinefeedList()
   {
     return array(
-      Config::get('ENTRY.AUTO_LINEFEED.USE')  => __('I do automatic line feed'),
-      Config::get('ENTRY.AUTO_LINEFEED.NONE') => __('HTML tags only a new line'),
+      \Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE')  => __('I do automatic line feed'),
+      \Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.NONE') => __('HTML tags only a new line'),
     );
   }
 
@@ -105,9 +105,9 @@ class EntriesModel extends Model
   {
     // 表示項目リスト
     $open_status_list = array(
-      Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-      Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-      Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
     );
     $add_where = ' AND open_status IN (' . implode(',', $open_status_list) . ')';
 
@@ -138,8 +138,8 @@ SQL;
       return array();
     }
 
-    if ($entry['open_status'] == Config::get('ENTRY.OPEN_STATUS.DRAFT')
-        || $entry['open_status'] == Config::get('ENTRY.OPEN_STATUS.RESERVATION')
+    if ($entry['open_status'] == \Fc2blog\Config::get('ENTRY.OPEN_STATUS.DRAFT')
+        || $entry['open_status'] == \Fc2blog\Config::get('ENTRY.OPEN_STATUS.RESERVATION')
     ) {
       return array();
     }
@@ -167,9 +167,9 @@ SQL;
 
     // 表示項目リスト
     $open_status_list = array(
-      Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-      Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-      Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
     );
     $options['where'] .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
 
@@ -192,9 +192,9 @@ SQL;
 
     // 表示項目リスト
     $open_status_list = array(
-      Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-      Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-      Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
     );
     $options['where'] .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
 
@@ -207,7 +207,7 @@ SQL;
   public function getCommentAcceptedEntry($entry_id, $blog_id)
   {
     return $this->findByIdAndBlogId($entry_id, $blog_id,
-      array('where'=>'comment_accepted=' . Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED')));
+      array('where'=>'comment_accepted=' . \Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED')));
   }
 
   public function insert($data, $options=array())
@@ -301,7 +301,7 @@ SQL;
       $where .= 'blog_id=? AND ';
       $params[] = $blog_id;
     }
-    $where .= ' open_status=' . Config::get('ENTRY.OPEN_STATUS.RESERVATION') . ' ';
+    $where .= ' open_status=' . \Fc2blog\Config::get('ENTRY.OPEN_STATUS.RESERVATION') . ' ';
     $where .= " AND posted_at <= '" . date('Y-m-d H:i:s') . "'";
 
     $options = array('where'=>$where, 'params'=>$params);
@@ -312,7 +312,7 @@ SQL;
     }
 
     // 予約投稿のエントリーを公開に変更
-    $data = array('open_status'=>Config::get('ENTRY.OPEN_STATUS.OPEN'));
+    $data = array('open_status'=>\Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'));
     $this->update($data, $where, $params);
   }
 
@@ -327,7 +327,7 @@ SQL;
       $where .= 'blog_id=? AND ';
       $params[] = $blog_id;
     }
-    $where .= ' open_status=' . Config::get('ENTRY.OPEN_STATUS.LIMIT') . ' ';
+    $where .= ' open_status=' . \Fc2blog\Config::get('ENTRY.OPEN_STATUS.LIMIT') . ' ';
     $where .= " AND posted_at <= '" . date('Y-m-d H:i:s') . "'";
 
     $options = array('where'=>$where, 'params'=>$params);
@@ -338,7 +338,7 @@ SQL;
     }
 
     // 期間限定投稿のエントリーを下書きに変更
-    $data = array('open_status'=>Config::get('ENTRY.OPEN_STATUS.DRAFT'));
+    $data = array('open_status'=>\Fc2blog\Config::get('ENTRY.OPEN_STATUS.DRAFT'));
     $this->update($data, $where, $params);
   }
 
@@ -380,9 +380,9 @@ SQL;
 
     // 表示項目リスト
     $open_status_list = array(
-      Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-      Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-      Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
+      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
     );
     $options['where'] .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
     $entries = $this->find('all', $options);

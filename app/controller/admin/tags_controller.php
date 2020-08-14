@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
 
 class TagsController extends AdminController
 {
@@ -39,12 +39,12 @@ class TagsController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', Config::get('TAG.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+      'limit'  => $request->get('limit', \Fc2blog\Config::get('TAG.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
       'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
-    if ($options['limit'] > max(array_keys(Config::get('TAG.LIMIT_LIST')))) {
-      $options['limit'] = Config::get('TAG.DEFAULT_LIMIT');
+    if ($options['limit'] > max(array_keys(\Fc2blog\Config::get('TAG.LIMIT_LIST')))) {
+      $options['limit'] = \Fc2blog\Config::get('TAG.DEFAULT_LIMIT');
     }
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
       $options['page'] = 0;

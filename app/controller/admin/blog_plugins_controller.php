@@ -1,6 +1,6 @@
 <?php
 
-require_once(Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
+require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'admin/admin_controller.php');
 
 class BlogPluginsController extends AdminController
 {
@@ -15,7 +15,7 @@ class BlogPluginsController extends AdminController
     Session::set('sig', App::genRandomString());
 
     $blog_id = $this->getBlogId();
-    $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
     $request->set('device_type', $device_type);
 
     // デバイス毎に分けられたテンプレート一覧を取得
@@ -48,7 +48,7 @@ class BlogPluginsController extends AdminController
     $plugins_model = Model::load('Plugins');
 
     // デバイスタイプの取得
-    $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
     $request->set('device_type', $device_type);
 
     // 検索条件作成
@@ -67,7 +67,7 @@ class BlogPluginsController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', Config::get('PAGE.PLUGIN.DEFAULT.LIMIT'), Request::VALID_POSITIVE_INT),
+      'limit'  => $request->get('limit', \Fc2blog\Config::get('PAGE.PLUGIN.DEFAULT.LIMIT'), Request::VALID_POSITIVE_INT),
       'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
@@ -92,7 +92,7 @@ class BlogPluginsController extends AdminController
     if (!$request->get('blog_plugin') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       Session::set('sig', App::genRandomString());
       $request->set('blog_plugin', array(
-        'device_type' => $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES')),
+        'device_type' => $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES')),
         'category'    => $request->get('category', 1),
       ));
       return ;
@@ -300,7 +300,7 @@ class BlogPluginsController extends AdminController
     $blog_plugins_model = Model::load('BlogPlugins');
 
     $blog_id = $this->getBlogId();
-    $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
 
     // 並べ替え処理
     $blog_plugins_model->sort($request->get('blog_plugins', array()), $device_type, $blog_id);
@@ -321,7 +321,7 @@ class BlogPluginsController extends AdminController
     $blog_plugins_model = Model::load('BlogPlugins');
 
     $blog_id = $this->getBlogId();
-    $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
 
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // プラグインの表示可否の一括変更
@@ -345,7 +345,7 @@ class BlogPluginsController extends AdminController
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
-    $display = $request->get('display') ? Config::get('APP.DISPLAY.SHOW') : Config::get('APP.DISPLAY.HIDE');  // 表示可否
+    $display = $request->get('display') ? \Fc2blog\Config::get('APP.DISPLAY.SHOW') : \Fc2blog\Config::get('APP.DISPLAY.HIDE');  // 表示可否
 
     // 編集対象のデータ取得
     if (!$blog_plugin=$blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
@@ -356,7 +356,7 @@ class BlogPluginsController extends AdminController
     $blog_plugins_model->updateByIdAndBlogId(array('display'=>$display), $id, $blog_id);
 //    $blog_plugins_model->updateDisplay(array($id=>$request->get('display')), $blog_id);   // TODO:後でこちらに置き換え
 
-    Config::set('DEBUG', 0);    // デバッグ設定を変更
+    \Fc2blog\Config::set('DEBUG', 0);    // デバッグ設定を変更
     $this->layout = 'ajax.html';
   }
 

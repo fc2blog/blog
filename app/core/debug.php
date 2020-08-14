@@ -8,7 +8,7 @@ class Debug{
   private static $logs = array();
 
   public static function log($msg, $params=array(), $class='log', $file=null, $line=null){
-    switch(Config::get('DEBUG')){
+    switch(\Fc2blog\Config::get('DEBUG')){
       // Debug文の表示はしない
       default: case 0:
         break;
@@ -113,7 +113,7 @@ class Debug{
   * セッションに現在のログを保存する(ページをまたがったログ用)
   */
   public static function setSessionLogs(){
-    if (Config::get('DEBUG')!=2) {
+    if (\Fc2blog\Config::get('DEBUG')!=2) {
       // DebugをHTMLへ吐き出す以外は処理を行わない
       return ;
     }
@@ -131,25 +131,25 @@ class Debug{
   * DebugLogのアウトプットを行う
   */
   public static function output($controller){
-    $debug = Config::get('DEBUG');
+    $debug = \Fc2blog\Config::get('DEBUG');
     if (!($debug==2 || $debug==3)) {
       // htmlでデバッグ以外は何も処理を行わない
       return ;
     }
 
     Debug::log('Debug::output()', false, 'system', __FILE__, __LINE__);    // 最後の出力処理
-    Config::set('DEBUG_TEMPLATE_VARS', 0);  // デバッグ用テンプレートには使用可能変数一覧は非表示
+    \Fc2blog\Config::set('DEBUG_TEMPLATE_VARS', 0);  // デバッグ用テンプレートには使用可能変数一覧は非表示
 
     // logsデータを元にdebug用htmlをfetch
     $html = $controller->fetch('Common/debug.html', array('logs'=>self::getLogs()), false);
 
     // 10分前以前のファイルは削除
-    $cmd = "find " . Config::get('TEMP_DIR') . 'debug_html/' . " -amin +10 -name '*.html' | xargs rm -f";
+    $cmd = "find " . \Fc2blog\Config::get('TEMP_DIR') . 'debug_html/' . " -amin +10 -name '*.html' | xargs rm -f";
     system($cmd);
 
     // fetchしたデータでhtmlを作成
     $key = time() . '.html';      // 後でキー名はセッションIDやログインIDを付与する
-    $filePath = Config::get('TEMP_DIR') . 'debug_html/' . $key;
+    $filePath = \Fc2blog\Config::get('TEMP_DIR') . 'debug_html/' . $key;
     file_put_contents($filePath, $html);    // 結果をデバッグ用HTMLに書き込み
     chmod($filePath, 0777);
 
