@@ -137,6 +137,43 @@ function getRouting(){
 }
 
 /**
+ * PSR-4 クラス対応のルーティング用メソッド
+ * TODO: 後でgetRouting と差し替え
+ */
+function getNeoRouting()
+{
+  require(\Fc2blog\Config::get('CONFIG_DIR') . \Fc2blog\Config::get('ROUTING'));  // ルーティング設定を読み込み
+
+  $request = \Fc2blog\Request::getInstance();
+
+  $defaultClass = \Fc2blog\Config::get('DEFAULT_CLASS_NAME');
+  $defaultMethod = \Fc2blog\Config::get('DEFAULT_METHOD_NAME');
+  $prefix = \Fc2blog\Config::get('APP_PREFIX');
+  $classPrefix = '\Fc2blog\Web\Controller\\' . $prefix . '\\';
+
+  $denyClass = $prefix ? $prefix . 'Controller' : 'AppController';
+  $denyMethod = array('process', 'display', 'fetch', 'set');
+  $denyPattern = array('CommonController' => array('install'));
+
+  $argsc = \Fc2blog\Config::get('ARGS_CONTROLLER');
+  $argsa = \Fc2blog\Config::get('ARGS_ACTION');
+
+  $className = pascalCase(basename($request->get($argsc)));
+  $className = $className ? $className . 'Controller' : $defaultClass;
+  $methodName = $request->get($argsa, $defaultMethod);
+  $methodName = in_array($methodName, $denyMethod) ? $defaultMethod : $methodName;
+  if (
+    $className == $denyClass ||
+    (isset($denyPattern[$className]) && in_array($methodName, $denyPattern[$className]))
+  ) {
+    $className = $defaultClass;
+    $methodName = $defaultMethod;
+  }
+
+  return array($classPrefix . $className, $methodName);
+}
+
+/**
 * 言語設定
 */
 function setLanguage($lang=null, $file='messages'){

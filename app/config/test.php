@@ -2,7 +2,7 @@
 
 $config = [];
 
-$config['APP_PREFIX'] = 'test';
+$config['APP_PREFIX'] = 'Test';
 
 $config['DEFAULT_CLASS_NAME'] = 'CommonController';
 $config['DEFAULT_METHOD_NAME'] = 'index';

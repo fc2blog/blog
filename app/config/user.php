@@ -2,7 +2,7 @@
 
 $config = array();
 
-$config['APP_PREFIX'] = 'user';
+$config['APP_PREFIX'] = 'User';
 
 $config['DEFAULT_CLASS_NAME'] = 'BlogsController';
 $config['DEFAULT_METHOD_NAME'] = 'index';

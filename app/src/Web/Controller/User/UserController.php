@@ -1,5 +1,7 @@
 <?php
 
+namespace Fc2blog\Web\Controller\User;
+
 abstract class UserController extends \Fc2blog\Web\Controller\AppController
 {
 

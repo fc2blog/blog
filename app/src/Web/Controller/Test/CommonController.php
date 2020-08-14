@@ -1,6 +1,6 @@
 <?php
 
-require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'test/test_controller.php');
+namespace Fc2blog\Web\Controller\Test;
 
 class CommonController extends TestController
 {

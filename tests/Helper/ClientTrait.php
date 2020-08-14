@@ -42,10 +42,8 @@ trait ClientTrait
       throw new InvalidArgumentException("target is wrong.");
     }
 
-    [$classFile, $className, $methodName] = getRouting();
+    [$className, $methodName] = getNeoRouting();
 
-    /** @noinspection PhpIncludeInspection */
-    require_once($classFile);
 
     return [$className, $methodName];
   }

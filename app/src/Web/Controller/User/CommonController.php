@@ -1,6 +1,6 @@
 <?php
 
-require_once(\Fc2blog\Config::get('CONTROLLER_DIR') . 'user/user_controller.php');
+namespace Fc2blog\Web\Controller\User;
 
 class CommonController extends UserController
 {

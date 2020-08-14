@@ -16,6 +16,11 @@ abstract class Controller
   {
     $className = get_class($this);
 
+    { // PSR-4 対応のためのTweak
+      $classNamePathList = explode('\\', $className);
+      $className = $classNamePathList[count($classNamePathList) - 1];
+    }
+
     // コントローラー名の設定
     $controllerName = explode('Controller', $className);
     \Fc2blog\Config::set('ControllerName', $controllerName[0]);
