@@ -21,8 +21,7 @@ if(!preg_match("/\A(127.0.0.|172.24.)/u", $_SERVER['REMOTE_ADDR'])){
 
 \Fc2blog\Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
 
-list($classFile, $className, $methodName) = getRouting();
-require($classFile);
+list($className, $methodName) = getNeoRouting();
 $controller = new $className($methodName);
 
 \Fc2blog\Debug::output($controller);
