@@ -36,8 +36,11 @@
    
    // クッキーのオプション
    // var COOKIE_OPTION  = { expire: 30, domain: "myblog.blog.fc2.com", path: "/" };
-   var COOKIE_OPTION     = { expire: 30 };
-   
+   var COOKIE_OPTION = {
+     expires: 30,
+     sameSite: 'Lax'
+   };
+
    /** フッタープラグイン配置 **/
    jQuery( "#footer_plg .plg" ).equalbox();
    
@@ -75,7 +78,7 @@
        jQuery( ".switch .grid a" ).removeClass( "selected" );
        jQuery( ".entry" ).removeClass( "grid_content" );
      
-       jQuery.cookie( COOKIE_KEY_NAME, "list", COOKIE_OPTION );
+       Cookies.set( COOKIE_KEY_NAME, "list", COOKIE_OPTION );
        
        equalizeBoxHeight();
        
@@ -107,8 +110,8 @@
        
        jQuery( ".switch .list a" ).removeClass( "selected" );
        jQuery( ".entry" ).removeClass( "list_content" );
-     
-       jQuery.cookie( COOKIE_KEY_NAME, "glid", COOKIE_OPTION );
+
+       Cookies.set( COOKIE_KEY_NAME, "glid", COOKIE_OPTION );
        
        equalizeBoxHeight();
        
@@ -133,7 +136,7 @@
    };
    
    function initialize() {
-     var layout = jQuery.cookie( COOKIE_KEY_NAME );
+     var layout = Cookies.get( COOKIE_KEY_NAME );
      if ( !checkCookieValue( layout ) ) {
        layout = DEFAULT_LAYOUT;
      }
@@ -402,6 +405,6 @@
   </div><!--/footer-->
 </div><!--/container-->
 <script type="text/javascript" src="https://static.fc2.com/share/blog_template/equalbox.js"></script>
-<script type="text/javascript" src="https://static.fc2.com/share/blog_template/jquery.cookie.js"></script>
+<script type="text/javascript" src="/js/js.cookie.js"></script>
 </body>
 </html>
