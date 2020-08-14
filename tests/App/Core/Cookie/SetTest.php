@@ -4,19 +4,12 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\Core\Cookie;
 
 use Cookie;
-use Fc2blog\Tests\LoaderHelper;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
 class SetTest extends TestCase
 {
-  public function setUp(): void
-  {
-    LoaderHelper::requireBootStrap();
-    parent::setUp();
-  }
-
   public function testSetString(): void
   {
     // Cookieの正しいテストはUnitTestでは困難です

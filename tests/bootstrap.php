@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
+use Fc2blog\Tests\LoaderHelper;
+
 require_once __DIR__ . "/../vendor/autoload.php";
 
-ini_set('html_errors', '0');
-
-define("TEST_APP_DIR", __DIR__. "/../app");
+define("TEST_APP_DIR", __DIR__ . "/../app");
 define("THIS_IS_TEST", true);
+LoaderHelper::requireBootStrap();

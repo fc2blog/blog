@@ -210,6 +210,7 @@ class EntriesController extends UserController
       'params' => array($this->getBlogId()),
     );
     $this->setEntriesData($options, array('titlelist_area'));
+    $this->set('sub_title', __("List of articles"));
     return $this->fc2template($this->getBlogId());
   }
 

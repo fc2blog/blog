@@ -6,7 +6,6 @@ namespace Fc2blog\Tests\App\Model\CommentsModel;
 use CommentsModel;
 use Config;
 use Fc2blog\Tests\DBHelper;
-use Fc2blog\Tests\LoaderHelper;
 use Model;
 use PHPUnit\Framework\TestCase;
 use TypeError;
@@ -15,8 +14,6 @@ class PasswordCheckTest extends TestCase
 {
   public function setUp(): void
   {
-    LoaderHelper::requireBootStrap();
-
     /** @noinspection PhpIncludeInspection */
     require_once(Config::get('MODEL_DIR') . 'model.php');
     if (!class_exists(CommentsModel::class)) {

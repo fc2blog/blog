@@ -12,8 +12,6 @@ class DBHelper extends TestCase
 {
   public static function clearDbAndInsertFixture()
   {
-    LoaderHelper::requireBootStrap();
-
     $msdb = MSDB::getInstance();
 
     // DB接続確認(DATABASEの存在判定含む)
