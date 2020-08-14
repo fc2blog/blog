@@ -738,6 +738,11 @@ class EntriesController extends UserController
       return $this->fc2template($blog_id);
     }
 
+    // 削除ボタンを押された場合の処理
+    if ($request->get('comment.delete')) {
+      return $this->comment_delete();
+    }
+
     // Captcha画面の初期表示処理
     if ($is_captcha && !$request->isArgs('token')) {
       return ;
@@ -746,11 +751,6 @@ class EntriesController extends UserController
     // FC2テンプレート編集時
     if (!$is_captcha) {
       $this->set('edit_comment', $request->get('comment'));
-    }
-
-    // 削除ボタンを押された場合の処理
-    if ($request->get('comment.delete')) {
-      return $this->comment_delete();
     }
 
     // コメント投稿処理
