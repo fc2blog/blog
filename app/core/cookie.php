@@ -46,7 +46,7 @@ class Cookie
   public static function set(string $key,
                              string $value,
                              int $expires = 0,
-                             string $path = "",
+                             string $path = "/",
                              string $domain = "",
                              bool $secure = false,
                              bool $httponly = true,
