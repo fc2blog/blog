@@ -1,4 +1,5 @@
 <?php
+// the file will be load by composer autoloader.
 
 // lcfirst関数補完
 if(function_exists('lcfirst') === false) {

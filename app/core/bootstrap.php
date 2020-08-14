@@ -19,9 +19,6 @@ if (class_exists('mysqli')) {
 // タイムゾーン設定
 date_default_timezone_set(\Fc2blog\Config::get('TIMEZONE'));
 
-// 共通関数群読み込み
-require(\Fc2blog\Config::get('CORE_DIR') . 'common_functions.php');
-
 // 言語設定
 setLanguage();
 
