@@ -19,7 +19,7 @@ abstract class UserController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getAdminBlogId()
   {
-    return \Fc2blog\Session::get('blog_id');
+    return \Fc2blog\Web\Session::get('blog_id');
   }
 
   /**
@@ -27,7 +27,7 @@ abstract class UserController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getAdminUserId()
   {
-    return \Fc2blog\Session::get('user_id');
+    return \Fc2blog\Web\Session::get('user_id');
   }
 
   /**

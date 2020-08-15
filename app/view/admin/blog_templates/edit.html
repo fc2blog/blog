@@ -3,7 +3,7 @@
 <form method="POST" id="sys-blog-template-form" class="admin-form">
 
   <input type="hidden" name="id" value="<?php echo $request->get('id'); ?>" />
-  <?php echo \Fc2blog\Web\Html::input('sig', 'hidden', array('value'=>\Fc2blog\Session::get('sig'))); ?>
+  <?php echo \Fc2blog\Web\Html::input('sig', 'hidden', array('value'=>\Fc2blog\Web\Session::get('sig'))); ?>
 
   <h3><?php echo __('Template name'); ?></h3>
   <div>
@@ -35,7 +35,7 @@ $(function(){
 
   // プレビュー処理を行う
   $('#sys-blog-template-form-preview').click(function(){
-    var action = '<?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Session::get('blog_id')), false, true); ?>';
+    var action = '<?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Web\Session::get('blog_id')), false, true); ?>';
     $('#sys-blog-template-form').prop('action', action);
     $('#sys-blog-template-form').prop('target', '_preview');
     $('#sys-blog-template-form').submit();

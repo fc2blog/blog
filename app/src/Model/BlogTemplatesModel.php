@@ -62,7 +62,7 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
   public static function fc2TemplateSyntax($value)
   {
     // フォルダが存在しない場合作成
-    $templatePath = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer(\Fc2blog\Session::get('blog_id')) . '/syntax.php';
+    $templatePath = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer(\Fc2blog\Web\Session::get('blog_id')) . '/syntax.php';
     $templateDir = dirname($templatePath);
     if (!file_exists($templateDir)) {
       mkdir($templateDir, 0777, true);

@@ -36,7 +36,7 @@ class EntriesController extends UserController
 
     // 非公開モードの場合はパスワード認証画面へ遷移
     if ($blog['open_status']==\Fc2blog\Config::get('BLOG.OPEN_STATUS.PRIVATE')
-      && !\Fc2blog\Session::get($this->getBlogPasswordKey($blog['id']))
+      && !\Fc2blog\Web\Session::get($this->getBlogPasswordKey($blog['id']))
       && \Fc2blog\Config::get('ActionName')!='blog_password'
       && !$self_blog
     ) {
@@ -503,7 +503,7 @@ class EntriesController extends UserController
         $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
 
         // 記事のコメント取得(パスワード制限時はコメントを取得しない)
-        if ($self_blog || $entry['open_status']!=\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') || \Fc2blog\Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
+        if ($self_blog || $entry['open_status']!=\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') || \Fc2blog\Web\Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
           // コメント一覧を取得(ページング用)
           $comments_model = \Fc2blog\Model\Model::load('Comments');
           $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $id, $blog_setting);
@@ -536,7 +536,7 @@ class EntriesController extends UserController
     $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
 
     // 記事のコメント取得(パスワード制限時はコメントを取得しない)
-    if ($self_blog || $entry['open_status']!=\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') || \Fc2blog\Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
+    if ($self_blog || $entry['open_status']!=\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') || \Fc2blog\Web\Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
       if (\Fc2blog\App::isPC()) {
         $areas[] = 'comment_area';
         $this->set('comments', \Fc2blog\Model\Model::load('Comments')->getCommentListByBlogSetting($blog_id, $id, $blog_setting, $self_blog));
@@ -596,7 +596,7 @@ class EntriesController extends UserController
     }
     if ($entry['password']===$request->get('password', '')) {
       // パスワードが合致すればセッションに記録
-      \Fc2blog\Session::set($this->getEntryPasswordKey($entry['blog_id'], $entry['id']), true);
+      \Fc2blog\Web\Session::set($this->getEntryPasswordKey($entry['blog_id'], $entry['id']), true);
     }
 
     $this->redirect(array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$id));
@@ -612,13 +612,13 @@ class EntriesController extends UserController
     $blog_id = $this->getBlogId();
     $blog = $this->getBlog($blog_id);
 
-    if ($blog['open_status']!=\Fc2blog\Config::get('BLOG.OPEN_STATUS.PRIVATE') || \Fc2blog\Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog()) {
+    if ($blog['open_status']!=\Fc2blog\Config::get('BLOG.OPEN_STATUS.PRIVATE') || \Fc2blog\Web\Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog()) {
       $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
     }
 
     if ($request->get('blog')) {
       if ($request->get('blog.password')==$blog['blog_password']) {
-        \Fc2blog\Session::set($this->getBlogPasswordKey($blog['id']), true);
+        \Fc2blog\Web\Session::set($this->getBlogPasswordKey($blog['id']), true);
         $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
       }
       $this->set('errors', array('password'=>__('The password is incorrect!')));

@@ -67,7 +67,7 @@ abstract class AppController extends \Fc2blog\Web\Controller\Controller
       // 適当な値をトークンに設定
       $key = \Fc2blog\App::genRandomStringAlphaNum(32);
     }
-    \Fc2blog\Session::set($name, $key);
+    \Fc2blog\Web\Session::set($name, $key);
   }
 
   /**
@@ -78,7 +78,7 @@ abstract class AppController extends \Fc2blog\Web\Controller\Controller
     $request = \Fc2blog\Request::getInstance();
     $value = $request->get($name, '');
     $value = mb_convert_kana($value, 'n');
-    return \Fc2blog\Session::remove($name) == $value ? null : __('Token authentication is invalid');
+    return \Fc2blog\Web\Session::remove($name) == $value ? null : __('Token authentication is invalid');
   }
 
   /**

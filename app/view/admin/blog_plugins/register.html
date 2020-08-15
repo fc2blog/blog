@@ -6,7 +6,7 @@
 <form method="POST" id="sys-plugin-form" class="admin-form">
 
   <input type="hidden" name="id" value="<?php echo $request->get('id'); ?>" />
-  <input type="hidden" name="sig" value="<?php echo \Fc2blog\Session::get('sig'); ?>" />
+  <input type="hidden" name="sig" value="<?php echo \Fc2blog\Web\Session::get('sig'); ?>" />
   <table>
     <tbody>
       <tr>

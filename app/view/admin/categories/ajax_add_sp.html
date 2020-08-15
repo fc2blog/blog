@@ -166,7 +166,7 @@ $(function(){
     $.ajax({
       url: '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Categories', 'action'=>'ajax_add')); ?>',
       type: 'POST',
-      data: {category: {parent_id: parent_id, name: name}, sig: "<?php echo \Fc2blog\Session::get('sig'); ?>"},
+      data: {category: {parent_id: parent_id, name: name}, sig: "<?php echo \Fc2blog\Web\Session::get('sig'); ?>"},
       dataType: 'json',
       success: function(json){
         if (json.status!=1) {

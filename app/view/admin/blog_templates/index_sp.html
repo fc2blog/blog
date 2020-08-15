@@ -50,7 +50,7 @@ $(function(){
       return ;
     }
     if (confirm('<?php echo __('Are you sure you want to delete?'); ?>')) {
-      location.href = common.fwURL('blog_templates', 'delete', {id: id, sig: "<?php echo \Fc2blog\Session::get('sig'); ?>"});
+      location.href = common.fwURL('blog_templates', 'delete', {id: id, sig: "<?php echo \Fc2blog\Web\Session::get('sig'); ?>"});
     }
   });
   // テンプレートの適応
@@ -61,7 +61,7 @@ $(function(){
       return ;
     }
     if (confirm('<?php echo __('Are you sure you want to apply this template?'); ?>')) {
-      location.href = common.fwURL('blog_templates', 'apply', {id: id, sig: "<?php echo \Fc2blog\Session::get('sig'); ?>"});
+      location.href = common.fwURL('blog_templates', 'apply', {id: id, sig: "<?php echo \Fc2blog\Web\Session::get('sig'); ?>"});
     }
   });
 });

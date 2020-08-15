@@ -54,7 +54,7 @@ class EntriesController extends AdminController
       case 'body_asc':      $order = 'entries.body ASC, entries.id ASC';            break;
     }
 
-    \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+    \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
 
     // オプション設定
     $options = array(
@@ -90,8 +90,8 @@ class EntriesController extends AdminController
     $blog_id = $this->getBlogId();
 
     // 初期表示時
-    if (!$request->get('entry') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+    if (!$request->get('entry') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 
@@ -146,7 +146,7 @@ class EntriesController extends AdminController
       return ;
     }
 
-    if (!\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
+    if (!\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
       $request->clear();
       return;
     }
@@ -179,7 +179,7 @@ class EntriesController extends AdminController
   public function delete()
   {
     $request = \Fc2blog\Request::getInstance();
-    if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
+    if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
       // 削除処理
       if (\Fc2blog\Model\Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId()))
         $this->setInfoMessage(__('I removed the entry'));

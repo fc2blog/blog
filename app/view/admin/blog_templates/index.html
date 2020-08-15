@@ -29,7 +29,7 @@
             </td>
           <?php else: ?>
             <td class="center">
-              <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'apply', 'id'=>$blog_template['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to apply this template?'); ?>')"><?php echo __('Apply'); ?></a>
+              <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'apply', 'id'=>$blog_template['id'], 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to apply this template?'); ?>')"><?php echo __('Apply'); ?></a>
             </td>
           <?php endif; ?>
           <td class="center">
@@ -39,7 +39,7 @@
             <?php if (in_array($blog_template['id'], $template_ids)): ?>
               &nbsp;
             <?php else: ?>
-              <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$blog_template['id'], 'sig'=>\Fc2blog\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
+              <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$blog_template['id'], 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
             <?php endif; ?>
           </td>
         </tr>

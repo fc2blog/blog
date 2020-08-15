@@ -142,7 +142,7 @@ $template_vars = array(
   '<%topentry_body>'               => <<<PHP
 <?php
   if (isset(\$entry['body'])) {
-    if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+    if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
       echo <<<HTML
 <form method="POST">
   <input type="hidden" name="mode" value="Entries" />
@@ -167,7 +167,7 @@ PHP
   '<%topentry_desc>'               => '',
   '<%topentry_link>'               => '<?php if(isset($entry[\'link\'])) echo $entry[\'link\']; ?>',
   '<%topentry_enc_link>'           => '<?php if(isset($entry[\'enc_link\'])) echo $entry[\'enc_link\']; ?>',
-  '<%topentry_more>'               => '<?php if(!empty($entry[\'extend\']) && ($entry[\'open_status\']!=\Fc2blog\Config::get(\'ENTRY.OPEN_STATUS.PASSWORD\') || \Fc2blog\Session::get(\'entry_password.\' . $entry[\'blog_id\'] . \'.\' . $entry[\'id\']))) echo $entry[\'extend\']; ?>',
+  '<%topentry_more>'               => '<?php if(!empty($entry[\'extend\']) && ($entry[\'open_status\']!=\Fc2blog\Config::get(\'ENTRY.OPEN_STATUS.PASSWORD\') || \Fc2blog\Web\Session::get(\'entry_password.\' . $entry[\'blog_id\'] . \'.\' . $entry[\'id\']))) echo $entry[\'extend\']; ?>',
   '<%topentry_year>'               => '<?php if(isset($entry[\'year\'])) echo $entry[\'year\']; ?>',
   '<%topentry_month>'              => '<?php if(isset($entry[\'month\'])) echo $entry[\'month\']; ?>',
   '<%topentry_month:short>'        => '<?php if(isset($entry[\'month_short\'])) echo $entry[\'month_short\']; ?>',
@@ -516,7 +516,7 @@ function getTopentryDiscription(): string
   return <<<PHP
 <?php
   if (isset(\$entry['body'])) {
-    if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+    if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
       echo <<<HTML
 <form method="POST">
   <input type="hidden" name="mode" value="Entries" />

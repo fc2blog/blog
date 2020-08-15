@@ -151,7 +151,7 @@ class Html
         break;
 
       case 'token':
-        $html = '<input type="hidden" ' . $attr . ' value="' . h(\Fc2blog\Session::get($name)) . '" />';
+        $html = '<input type="hidden" ' . $attr . ' value="' . h(\Fc2blog\Web\Session::get($name)) . '" />';
         break;
 
       case 'captcha':

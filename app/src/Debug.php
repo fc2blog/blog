@@ -82,7 +82,7 @@ class Debug{
   */
   public static function getLogs(){
     self::initLogs();    // ログの初期化
-    \Fc2blog\Session::start();
+    \Fc2blog\Web\Session::start();
     $logs = self::$logs;
     return $logs;
   }
@@ -119,14 +119,14 @@ class Debug{
       // DebugをHTMLへ吐き出す以外は処理を行わない
       return ;
     }
-    \Fc2blog\Session::set('debug', self::getLogs());
+    \Fc2blog\Web\Session::set('debug', self::getLogs());
   }
 
   /**
   * セッションから前回のログを取得し削除する
   */
   public static function removeSessionLogs(){
-    return \Fc2blog\Session::remove('debug', array());
+    return \Fc2blog\Web\Session::remove('debug', array());
   }
 
   /**

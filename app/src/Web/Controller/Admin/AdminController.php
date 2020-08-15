@@ -57,15 +57,15 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function loginProcess($user, $blog=null)
   {
-    \Fc2blog\Session::regenerate();
+    \Fc2blog\Web\Session::regenerate();
 
-    \Fc2blog\Session::set('user_id',   $user['id']);
-    \Fc2blog\Session::set('login_id',  $user['login_id']);
-    \Fc2blog\Session::set('user_type', $user['type']);
+    \Fc2blog\Web\Session::set('user_id',   $user['id']);
+    \Fc2blog\Web\Session::set('login_id',  $user['login_id']);
+    \Fc2blog\Web\Session::set('user_type', $user['type']);
 
     if (!empty($blog)) {
-      \Fc2blog\Session::set('blog_id',  $blog['id']);
-      \Fc2blog\Session::set('nickname', $blog['nickname']);
+      \Fc2blog\Web\Session::set('blog_id',  $blog['id']);
+      \Fc2blog\Web\Session::set('nickname', $blog['nickname']);
     }
   }
 
@@ -74,7 +74,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function isLogin()
   {
-    return !!\Fc2blog\Session::get('user_id');
+    return !!\Fc2blog\Web\Session::get('user_id');
   }
 
   /**
@@ -82,7 +82,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getUserId()
   {
-    return \Fc2blog\Session::get('user_id');
+    return \Fc2blog\Web\Session::get('user_id');
   }
 
   /**
@@ -90,7 +90,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getNickname()
   {
-    return \Fc2blog\Session::get('nickname');
+    return \Fc2blog\Web\Session::get('nickname');
   }
 
   /**
@@ -98,7 +98,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function isSelectedBlog()
   {
-    return !!\Fc2blog\Session::get('blog_id');
+    return !!\Fc2blog\Web\Session::get('blog_id');
   }
 
   /**
@@ -106,7 +106,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function isAdmin()
   {
-    return \Fc2blog\Session::get('user_type') === \Fc2blog\Config::get('USER.TYPE.ADMIN');
+    return \Fc2blog\Web\Session::get('user_type') === \Fc2blog\Config::get('USER.TYPE.ADMIN');
   }
 
   /**
@@ -114,7 +114,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getBlogId()
   {
-    return \Fc2blog\Session::get('blog_id');
+    return \Fc2blog\Web\Session::get('blog_id');
   }
 
   /**
@@ -123,11 +123,11 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   protected function setBlog($blog=null)
   {
     if ($blog) {
-      \Fc2blog\Session::set('nickname', $blog['nickname']);
-      \Fc2blog\Session::set('blog_id',  $blog['id']);
+      \Fc2blog\Web\Session::set('nickname', $blog['nickname']);
+      \Fc2blog\Web\Session::set('blog_id',  $blog['id']);
     }else{
-      \Fc2blog\Session::set('nickname', null);
-      \Fc2blog\Session::set('blog_id',  null);
+      \Fc2blog\Web\Session::set('nickname', null);
+      \Fc2blog\Web\Session::set('blog_id',  null);
     }
   }
 
@@ -160,9 +160,9 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function setMessage($message, $type)
   {
-    $messages = \Fc2blog\Session::get($type, array());
+    $messages = \Fc2blog\Web\Session::get($type, array());
     $messages[] = $message;
-    \Fc2blog\Session::set($type, $messages);
+    \Fc2blog\Web\Session::set($type, $messages);
   }
 
   /**
@@ -171,9 +171,9 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   protected function removeMessage()
   {
     $messages = array();
-    $messages['info'] = \Fc2blog\Session::remove('flash-message-info');
-    $messages['warn'] = \Fc2blog\Session::remove('flash-message-warn');
-    $messages['error'] = \Fc2blog\Session::remove('flash-message-error');
+    $messages['info'] = \Fc2blog\Web\Session::remove('flash-message-info');
+    $messages['warn'] = \Fc2blog\Web\Session::remove('flash-message-warn');
+    $messages['error'] = \Fc2blog\Web\Session::remove('flash-message-error');
     return $messages;
   }
 

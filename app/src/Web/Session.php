@@ -3,7 +3,7 @@
 * Sessionクラス
 */
 
-namespace Fc2blog;
+namespace Fc2blog\Web;
 
 class Session
 {

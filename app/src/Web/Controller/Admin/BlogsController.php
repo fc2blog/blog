@@ -11,7 +11,7 @@ class BlogsController extends AdminController
   public function index()
   {
     $request = \Fc2blog\Request::getInstance();
-    \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+    \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
 
     // ブログの一覧取得
     $options = array(
@@ -41,8 +41,8 @@ class BlogsController extends AdminController
     $request = \Fc2blog\Request::getInstance();
 
     // 初期表示時
-    if (!$request->get('blog') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+    if (!$request->get('blog') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 
@@ -76,8 +76,8 @@ class BlogsController extends AdminController
     $blog_id = $this->getBlogId();
 
     // 初期表示時に編集データの設定
-    if (!$request->get('blog') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+    if (!$request->get('blog') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
       if (!$blog=$blogs_model->findById($blog_id)) {
         $this->redirect(array('action'=>'index'));
       }
@@ -126,8 +126,8 @@ class BlogsController extends AdminController
     $request = \Fc2blog\Request::getInstance();
 
     // 退会チェック
-    if (!$request->get('blog.delete') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+    if (!$request->get('blog.delete') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 

@@ -12,7 +12,7 @@ class BlogPluginsController extends AdminController
   {
     $request = \Fc2blog\Request::getInstance();
 
-    \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+    \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
 
     $blog_id = $this->getBlogId();
     $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
@@ -89,8 +89,8 @@ class BlogPluginsController extends AdminController
     $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     // 初期表示時
-    if (!$request->get('blog_plugin') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+    if (!$request->get('blog_plugin') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
       $request->set('blog_plugin', array(
         'device_type' => $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES')),
         'category'    => $request->get('category', 1),
@@ -132,9 +132,9 @@ class BlogPluginsController extends AdminController
     }
 
     // 初期表示時に編集データの設定
-    if (!$request->get('blog_plugin') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('blog_plugin') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
       $request->set('blog_plugin', $blog_plugin);
-      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 
@@ -171,7 +171,7 @@ class BlogPluginsController extends AdminController
       $this->redirect(array('action'=>'index'));
     }
 
-    if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
+    if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
       // 削除処理
       $blog_plugins_model->deleteByIdAndBlogId($id, $blog_id);
       $this->setInfoMessage(__('I removed the plugin'));
@@ -197,7 +197,7 @@ class BlogPluginsController extends AdminController
     }
     $this->set('blog_plugin', $blog_plugin);
 
-    if (!$request->get('plugin') || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('plugin') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
       // 初期値入力
       if ($blog_plugin['plugin_id']) {
         // 既に登録済み
@@ -208,7 +208,7 @@ class BlogPluginsController extends AdminController
         // 未登録
         $request->set('plugin.title', $blog_plugin['title']);
       }
-      \Fc2blog\Session::set('sig', \Fc2blog\App::genRandomString());
+      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
       return ;
     }
 
@@ -247,7 +247,7 @@ class BlogPluginsController extends AdminController
       $this->redirect(array('action'=>'search'));
     }
 
-    if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
+    if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
       // 削除処理
       $plugins_model->deleteByIdAndUserId($id, $user_id);
       $this->setInfoMessage(__('I removed the plugin'));
@@ -270,7 +270,7 @@ class BlogPluginsController extends AdminController
       $this->redirectBack(array('controller'=>'blog_plugins', 'action'=>'index'));
     }
 
-    if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
+    if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
       // 追加用のデータを取得データから作成
       $blog_plugin_data = array(
         'title'       => $plugin['title'],
@@ -323,7 +323,7 @@ class BlogPluginsController extends AdminController
     $blog_id = $this->getBlogId();
     $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
 
-    if (\Fc2blog\Session::get('sig') && \Fc2blog\Session::get('sig') === $request->get('sig')) {
+    if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
       // プラグインの表示可否の一括変更
       $blog_plugins_model->updateDisplay($request->get('blog_plugins'), $blog_id);
       $this->setInfoMessage(__('I changed the display settings'));
@@ -348,7 +348,7 @@ class BlogPluginsController extends AdminController
     $display = $request->get('display') ? \Fc2blog\Config::get('APP.DISPLAY.SHOW') : \Fc2blog\Config::get('APP.DISPLAY.HIDE');  // 表示可否
 
     // 編集対象のデータ取得
-    if (!$blog_plugin=$blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !\Fc2blog\Session::get('sig') || \Fc2blog\Session::get('sig') !== $request->get('sig')) {
+    if (!$blog_plugin=$blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
       $this->redirect(array('action'=>'index'));
     }
 

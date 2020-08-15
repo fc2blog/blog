@@ -166,7 +166,7 @@ class UsersController extends AdminController
   public function logout()
   {
     if ($this->isLogin()) {
-      \Fc2blog\Session::destroy();
+      \Fc2blog\Web\Session::destroy();
     }
     $this->redirect(array('action'=>'login'));
   }

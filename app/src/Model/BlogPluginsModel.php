@@ -139,7 +139,7 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
   public static function fc2PluginSyntax($value)
   {
     // フォルダが存在しない場合作成
-    $plugin_path = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer(\Fc2blog\Session::get('blog_id')) . '/plugins/syntax.php';
+    $plugin_path = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer(\Fc2blog\Web\Session::get('blog_id')) . '/plugins/syntax.php';
     $plugin_dir = dirname($plugin_path);
     if (!file_exists($plugin_dir)) {
       mkdir($plugin_dir, 0777, true);
