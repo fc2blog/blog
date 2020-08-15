@@ -53,6 +53,7 @@ class BlogsController extends AdminController
       return ;
     }
 
+    /** @var BlogsModel $blogs_model */
     $blogs_model = Model::load('Blogs');
 
     // 新規登録処理

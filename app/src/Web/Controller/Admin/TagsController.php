@@ -5,6 +5,7 @@ namespace Fc2blog\Web\Controller\Admin;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\Model;
+use Fc2blog\Model\TagsModel;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
@@ -68,6 +69,7 @@ class TagsController extends AdminController
   public function edit()
   {
     $request = Request::getInstance();
+    /** @var TagsModel $tags_model */
     $tags_model = Model::load('Tags');
 
     $id = $request->get('id');

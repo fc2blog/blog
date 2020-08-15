@@ -4,6 +4,7 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -48,6 +49,7 @@ class BlogSettingsController extends AdminController
   private function settingEdit($white_list, $action)
   {
     $request = Request::getInstance();
+    /** @var BlogSettingsModel $blog_settings_model */
     $blog_settings_model = Model::load('BlogSettings');
 
     $blog_id = $this->getBlogId();

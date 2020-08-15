@@ -5,8 +5,10 @@ namespace Fc2blog\Web\Controller\Admin;
 use Exception;
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\MSDB;
+use Fc2blog\Model\UsersModel;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
 
@@ -183,7 +185,9 @@ class CommonController extends AdminController
       return 'common/install_user.html';
     }
 
+    /** @var UsersModel $users_model */
     $users_model = Model::load('Users');
+    /** @var BlogsModel $blogs_model */
     $blogs_model = Model::load('Blogs');
 
     // ユーザーとブログの新規登録処理

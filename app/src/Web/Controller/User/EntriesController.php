@@ -8,6 +8,7 @@ use Fc2blog\Debug;
 use Fc2blog\Model\BlogPluginsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
+use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -677,6 +678,7 @@ class EntriesController extends UserController
     $this->set('entry', $entry);
 
     // 入力チェック処理
+    /** @var CommentsModel $comments_model */
     $comments_model = Model::load('Comments');
     $errors = array();
     $white_list = array('entry_id', 'name', 'title', 'mail', 'url', 'body', 'password', 'open_status');
@@ -727,6 +729,7 @@ class EntriesController extends UserController
     $comment_id = $request->get('id', $request->get('comment.id'));
 
     // 編集対象のコメント取得
+    /** @var CommentsModel $comments_model */
     $comments_model = Model::load('Comments');
     $comment = $comments_model->getEditableComment($comment_id, $blog_id);
     if (empty($comment)) {
@@ -795,10 +798,12 @@ class EntriesController extends UserController
   public function comment_delete()
   {
     $request = Request::getInstance();
+    /** @var CommentsModel $comments_model */
     $comments_model = Model::load('Comments');
 
     $blog_id = $this->getBlogId();
     $comment_id = $request->get('comment.id');
+    $comment = "";
     if (!$comment_id || !($comment=$comments_model->findByIdAndBlogId($comment_id, $blog_id)) || empty($comment['password'])) {
       $this->redirect(array('controller'=>'Entries', 'action'=>'index', 'blog_id'=>$blog_id));
     }

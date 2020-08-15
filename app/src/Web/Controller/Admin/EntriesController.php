@@ -4,6 +4,8 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\EntriesModel;
+use Fc2blog\Model\EntryCategoriesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -90,7 +92,9 @@ class EntriesController extends AdminController
     }
 
     $request = Request::getInstance();
+    /** @var EntriesModel $entries_model */
     $entries_model = Model::load('Entries');
+    /** @var EntryCategoriesModel $entry_categories_model */
     $entry_categories_model = Model::load('EntryCategories');
 
     $blog_id = $this->getBlogId();
@@ -135,7 +139,9 @@ class EntriesController extends AdminController
     }
 
     $request = Request::getInstance();
+    /** @var EntriesModel $entries_model */
     $entries_model = Model::load('Entries');
+    /** @var EntryCategoriesModel $entry_categories_model */
     $entry_categories_model = Model::load('EntryCategories');
 
     $id = $request->get('id');

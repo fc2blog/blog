@@ -5,6 +5,7 @@ namespace Fc2blog\Web\Controller\Admin;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -89,6 +90,7 @@ class BlogTemplatesController extends AdminController
   public function create()
   {
     $request = Request::getInstance();
+    /** @var BlogTemplatesModel $blog_templates_model */
     $blog_templates_model = Model::load('BlogTemplates');
 
     // 初期表示時
@@ -134,6 +136,7 @@ class BlogTemplatesController extends AdminController
   public function edit()
   {
     $request = Request::getInstance();
+    /** @var BlogTemplatesModel $blog_templates_model */
     $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');
@@ -199,6 +202,7 @@ class BlogTemplatesController extends AdminController
   public function download()
   {
     $request = Request::getInstance();
+    /** @var BlogTemplatesModel $blog_templates_model */
     $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('fc2_id');

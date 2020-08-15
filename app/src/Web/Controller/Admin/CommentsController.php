@@ -3,6 +3,7 @@
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\Config;
+use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 
@@ -151,6 +152,7 @@ class CommentsController extends AdminController
   public function reply()
   {
     $request = Request::getInstance();
+    /** @var CommentsModel $comments_model */
     $comments_model = Model::load('Comments');
 
     $comment_id = $request->get('id');
@@ -206,6 +208,7 @@ class CommentsController extends AdminController
     $this->layout = 'ajax.html';
 
     $request = Request::getInstance();
+    /** @var CommentsModel $comments_model */
     $comments_model = Model::load('Comments');
 
     $comment_id = $request->get('id');
