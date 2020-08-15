@@ -1,5 +1,7 @@
 <?php
 
+namespace Fc2blog\Model;
+
 class BlogPluginsModel extends \Fc2blog\Model\Model
 {
 

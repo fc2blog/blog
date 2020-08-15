@@ -72,13 +72,14 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
   }
 
   /**
-  * Modelをロードする(requireとgetInstance)
-  */
-  public static function load($model)
+   * Modelをロードする(requireとgetInstance)
+   * @param string $model
+   * @return mixed
+   */
+  public static function load(string $model)
   {
-    $model .= 'Model';
+    $model = "\\Fc2blog\\Model\\" . $model . 'Model';
     if (empty(self::$loaded[$model])) {
-      require(__DIR__.'/../../model/'.snakeCase($model) . '.php');
       self::$loaded[$model] = new $model;
     }
     return self::$loaded[$model];

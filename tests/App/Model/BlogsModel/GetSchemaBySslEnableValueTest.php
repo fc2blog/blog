@@ -12,8 +12,7 @@ class GetSchemaBySslEnableValueTest extends TestCase
 {
   public function setUp(): void
   {
-    /** @noinspection PhpIncludeInspection */
-    if (!class_exists(BlogsModel::class)) {
+    if (!class_exists(\Fc2blog\Model\BlogsModel::class)) {
       \Fc2blog\Model\Model::load('blogs');
     }
 
@@ -22,7 +21,7 @@ class GetSchemaBySslEnableValueTest extends TestCase
 
   public function testGetSchemaBySslEnableValue(): void
   {
-    $this->assertEquals('https:', BlogsModel::getSchemaBySslEnableValue(\Fc2blog\Config::get('BLOG.SSL_ENABLE.ENABLE')));
-    $this->assertEquals('http:', BlogsModel::getSchemaBySslEnableValue(\Fc2blog\Config::get('BLOG.SSL_ENABLE.DISABLE')));
+    $this->assertEquals('https:', \Fc2blog\Model\BlogsModel::getSchemaBySslEnableValue(\Fc2blog\Config::get('BLOG.SSL_ENABLE.ENABLE')));
+    $this->assertEquals('http:', \Fc2blog\Model\BlogsModel::getSchemaBySslEnableValue(\Fc2blog\Config::get('BLOG.SSL_ENABLE.DISABLE')));
   }
 }

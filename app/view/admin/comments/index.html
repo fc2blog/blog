@@ -11,8 +11,8 @@
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Comments" />
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="index" />
     <?php echo \Fc2blog\Web\Html::input('entry_id', 'hidden'); ?>
-    <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + CommentsModel::getOpenStatusList())); ?>
-    <?php echo \Fc2blog\Web\Html::input('reply_status', 'select', array('options'=>array(''=>__('Reply state')) + CommentsModel::getReplyStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\CommentsModel::getOpenStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input('reply_status', 'select', array('options'=>array(''=>__('Reply state')) + \Fc2blog\Model\CommentsModel::getReplyStatusList())); ?>
     <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
     <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
     <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
@@ -24,7 +24,7 @@
 
 <?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
 
-<?php $reply_status_list = CommentsModel::getReplyStatusList(); ?>
+<?php $reply_status_list = \Fc2blog\Model\CommentsModel::getReplyStatusList(); ?>
 <form method="POST" id="sys-list-form">
   <table>
     <thead>
@@ -47,7 +47,7 @@
           <input type="hidden" value="<?php echo $comment['reply_status']; ?>" id="sys-reply-status-value-<?php echo $comment['id']; ?>" />
         </td>
         <td class="s_cell center">
-          <a href="<?php echo BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
+          <a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
           <a href="<?php echo \Fc2blog\Web\Html::url(array('entry_id'=>$comment['entry_id']), true); ?>"><?php echo __('Narrowing'); ?></a>
         </td>
         <td>

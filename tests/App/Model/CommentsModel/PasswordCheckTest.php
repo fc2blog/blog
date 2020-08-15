@@ -1,12 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Fc2blog\Tests\App\Model\CommentsModel;
-
-use CommentsModel;
+namespace Fc2blog\Tests\App\Model;
 
 use Fc2blog\Tests\DBHelper;
-use Model;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
@@ -14,7 +11,7 @@ class PasswordCheckTest extends TestCase
 {
   public function setUp(): void
   {
-    if (!class_exists(CommentsModel::class)) {
+    if (!class_exists(\Fc2blog\Model\CommentsModel::class)) {
       \Fc2blog\Model\Model::load('comments');
     }
 
@@ -25,7 +22,7 @@ class PasswordCheckTest extends TestCase
 
   public function testPasswordCheck(): void
   {
-    $comments_model = new CommentsModel();
+    $comments_model = new \Fc2blog\Model\CommentsModel();
 
     $i = 10;
     while ($i-- > 0) { // ランダムで複数回チェック
@@ -54,7 +51,7 @@ class PasswordCheckTest extends TestCase
    */
   public function testEmptyPasswordCheck(): void
   {
-    $comments_model = new CommentsModel();
+    $comments_model = new \Fc2blog\Model\CommentsModel();
 
     $random_password = '';
     $passwd_hash = $comments_model::passwordHash($random_password);
@@ -69,7 +66,7 @@ class PasswordCheckTest extends TestCase
    */
   public function testDenyIntInputPasswordCheck(): void
   {
-    $comments_model = new CommentsModel();
+    $comments_model = new \Fc2blog\Model\CommentsModel();
 
     $random_password = 123;
     try {
@@ -87,7 +84,7 @@ class PasswordCheckTest extends TestCase
    */
   public function testDenyBoolInputPasswordCheck(): void
   {
-    $comments_model = new CommentsModel();
+    $comments_model = new \Fc2blog\Model\CommentsModel();
 
     $random_password = true;
     try {

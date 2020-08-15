@@ -12,8 +12,7 @@ class IsCorrectHttpSchemaByBlogArrayTest extends TestCase
 {
   public function setUp(): void
   {
-    /** @noinspection PhpIncludeInspection */
-    if (!class_exists(BlogsModel::class)) {
+    if (!class_exists(\Fc2blog\Model\BlogsModel::class)) {
       \Fc2blog\Model\Model::load('blogs');
     }
 
@@ -23,13 +22,13 @@ class IsCorrectHttpSchemaByBlogArrayTest extends TestCase
   public function testIsCorrectHttpSchemaByBlogArray(): void
   {
     $_SERVER['HTTPS'] = "on";
-    $this->assertFalse(BlogsModel::isCorrectHttpSchemaByBlogArray(['ssl_enable' => \Fc2blog\Config::get('BLOG.SSL_ENABLE.DISABLE')]));
+    $this->assertFalse(\Fc2blog\Model\BlogsModel::isCorrectHttpSchemaByBlogArray(['ssl_enable' => \Fc2blog\Config::get('BLOG.SSL_ENABLE.DISABLE')]));
     unset($_SERVER['HTTPS']);
-    $this->assertTrue(BlogsModel::isCorrectHttpSchemaByBlogArray(['ssl_enable' => \Fc2blog\Config::get('BLOG.SSL_ENABLE.DISABLE')]));
+    $this->assertTrue(\Fc2blog\Model\BlogsModel::isCorrectHttpSchemaByBlogArray(['ssl_enable' => \Fc2blog\Config::get('BLOG.SSL_ENABLE.DISABLE')]));
 
     $_SERVER['HTTPS'] = "on";
-    $this->assertTrue(BlogsModel::isCorrectHttpSchemaByBlogArray(['ssl_enable' => \Fc2blog\Config::get('BLOG.SSL_ENABLE.ENABLE')]));
+    $this->assertTrue(\Fc2blog\Model\BlogsModel::isCorrectHttpSchemaByBlogArray(['ssl_enable' => \Fc2blog\Config::get('BLOG.SSL_ENABLE.ENABLE')]));
     unset($_SERVER['HTTPS']);
-    $this->assertFalse(BlogsModel::isCorrectHttpSchemaByBlogArray(['ssl_enable' => \Fc2blog\Config::get('BLOG.SSL_ENABLE.ENABLE')]));
+    $this->assertFalse(\Fc2blog\Model\BlogsModel::isCorrectHttpSchemaByBlogArray(['ssl_enable' => \Fc2blog\Config::get('BLOG.SSL_ENABLE.ENABLE')]));
   }
 }

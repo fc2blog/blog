@@ -21,9 +21,9 @@ class EntriesController extends UserController
 
     // BlogのSSL_Enableの設定と食い違うなら強制リダイレクトする
     // URL構造そのままでリダイレクトするためにRequestUriを用いているがもっとベターな方法があるかもしれない
-    if(is_string($blog_id) && strlen($blog_id) > 0 && !\BlogsModel::isCorrectHttpSchemaByBlogId($blog_id)){
+    if(is_string($blog_id) && strlen($blog_id) > 0 && !\Fc2blog\Model\BlogsModel::isCorrectHttpSchemaByBlogId($blog_id)){
       $this->redirect($_SERVER['REQUEST_URI'],'',true, $blog_id);
-    }else if(is_array($blog) && !\BlogsModel::isCorrectHttpSchemaByBlogArray($blog)){
+    }else if(is_array($blog) && !\Fc2blog\Model\BlogsModel::isCorrectHttpSchemaByBlogArray($blog)){
       $this->redirect($_SERVER['REQUEST_URI'],'',true, $blog['id']);
     }
 
@@ -283,13 +283,13 @@ class EntriesController extends UserController
 
     // テンプレートのシンタックスチェック
     \Fc2blog\Model\Model::load('BlogTemplates');
-    $syntax = \BlogTemplatesModel::fc2TemplateSyntax($html);
+    $syntax = \Fc2blog\Model\BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
       return 'Entries/syntax.html';
     }
 
     // FC2用のテンプレートで表示
-    $preview_path = \BlogTemplatesModel::getTemplateFilePath($blog_id, $request->get('device_type'), $html);
+    $preview_path = \Fc2blog\Model\BlogTemplatesModel::getTemplateFilePath($blog_id, $request->get('device_type'), $html);
     is_file($preview_path) && unlink($preview_path);
     return $this->fc2template($blog_id, $html, $css);
   }
@@ -323,14 +323,14 @@ class EntriesController extends UserController
 
     // テンプレートのシンタックスチェック
     \Fc2blog\Model\Model::load('BlogTemplates');
-    $syntax = \BlogTemplatesModel::fc2TemplateSyntax($html);
+    $syntax = \Fc2blog\Model\BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
       return 'Entries/syntax.html';
     }
 
     // FC2用のテンプレートで表示
     $device_type = $this->getDeviceType();
-    $preview_path = \BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
+    $preview_path = \Fc2blog\Model\BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
     is_file($preview_path) && unlink($preview_path);
     return $this->fc2template($blog_id, $html, $css);
   }
@@ -894,7 +894,7 @@ class EntriesController extends UserController
     $device_type = $this->getDeviceType();
 
     \Fc2blog\Model\Model::load('BlogTemplates');
-    $templateFilePath = \BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
+    $templateFilePath = \Fc2blog\Model\BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
     \Fc2blog\Debug::log('Blog Template[' . $templateFilePath . ']', false, 'log', __FILE__, __LINE__);
 
     if (!is_file($templateFilePath)) {
@@ -903,13 +903,13 @@ class EntriesController extends UserController
 
       $blog = $this->getBlog($blog_id);
       $templateId = $blog[\Fc2blog\Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)];
-      \BlogTemplatesModel::createTemplate($templateId, $blog_id, $device_type, $html, $css);
+      \Fc2blog\Model\BlogTemplatesModel::createTemplate($templateId, $blog_id, $device_type, $html, $css);
 
       \Fc2blog\Debug::log('Template generation completion', false, 'log', __FILE__, __LINE__);
     }
 
     // CSSのURL
-    $this->set('css_link', \BlogTemplatesModel::getCssUrl($blog_id, $device_type, $html));
+    $this->set('css_link', \Fc2blog\Model\BlogTemplatesModel::getCssUrl($blog_id, $device_type, $html));
 
     $this->layout = 'fc2_template.html';
     return $templateFilePath;

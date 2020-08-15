@@ -41,7 +41,7 @@
     <dt><?php echo __('Secret'); ?></dt>
     <dd>
       <?php \Fc2blog\Model\Model::load('Comments'); ?>
-      <?php echo \Fc2blog\Web\Html::input('comment[open_status]', 'select', array('options'=>CommentsModel::getOpenStatusUserList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('comment[open_status]', 'select', array('options'=>\Fc2blog\Model\CommentsModel::getOpenStatusUserList())); ?>
       <?php if (isset($errors['comment']['open_status'])): ?><p class="error"><?php echo $errors['comment']['open_status']; ?></p><?php endif; ?>
     </dd>
     <dt><?php echo __('Authentication keyword'); ?></dt>

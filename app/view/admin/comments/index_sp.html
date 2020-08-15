@@ -10,8 +10,8 @@
     </dl>
     <div class="select_search">
       <?php echo \Fc2blog\Web\Html::input('entry_id', 'hidden'); ?>
-      <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + CommentsModel::getOpenStatusList())); ?>
-      <?php echo \Fc2blog\Web\Html::input('reply_status', 'select', array('options'=>array(''=>__('Reply state')) + CommentsModel::getReplyStatusList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\CommentsModel::getOpenStatusList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('reply_status', 'select', array('options'=>array(''=>__('Reply state')) + \Fc2blog\Model\CommentsModel::getReplyStatusList())); ?>
       <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
       <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
       <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
@@ -20,7 +20,7 @@
 </div>
 <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
 
-<?php $reply_status_list = CommentsModel::getReplyStatusList(); ?>
+<?php $reply_status_list = \Fc2blog\Model\CommentsModel::getReplyStatusList(); ?>
 <ul class="link_list">
 <?php foreach($comments as $comment): ?>
   <li class="link_list_item">

@@ -1,5 +1,7 @@
 <?php
 
+namespace Fc2blog\Model;
+
 class EntriesModel extends \Fc2blog\Model\Model
 {
 

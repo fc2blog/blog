@@ -1,5 +1,7 @@
 <?php
 
+namespace Fc2blog\Model;
+
 class FilesModel extends \Fc2blog\Model\Model{
 
   public static $instance = null;

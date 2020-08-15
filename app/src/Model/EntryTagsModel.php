@@ -1,5 +1,7 @@
 <?php
 
+namespace Fc2blog\Model;
+
 class EntryTagsModel extends \Fc2blog\Model\Model
 {
 

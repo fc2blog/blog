@@ -12,8 +12,7 @@ class GetSchemaByBlogIdTest extends TestCase
 {
   public function setUp(): void
   {
-    /** @noinspection PhpIncludeInspection */
-    if (!class_exists(BlogsModel::class)) {
+    if (!class_exists(\Fc2blog\Model\BlogsModel::class)) {
       \Fc2blog\Model\Model::load('blogs');
     }
 
@@ -22,7 +21,7 @@ class GetSchemaByBlogIdTest extends TestCase
 
   public function testGetSchemaByBlogIdTest(): void
   {
-    $this->assertEquals('https:', BlogsModel::getSchemaByBlogId('testblog1'));
-    $this->assertEquals('http:', BlogsModel::getSchemaByBlogId('testblog2'));
+    $this->assertEquals('https:', \Fc2blog\Model\BlogsModel::getSchemaByBlogId('testblog1'));
+    $this->assertEquals('http:', \Fc2blog\Model\BlogsModel::getSchemaByBlogId('testblog2'));
   }
 }

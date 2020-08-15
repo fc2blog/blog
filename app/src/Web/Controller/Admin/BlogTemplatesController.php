@@ -245,7 +245,7 @@ class BlogTemplatesController extends AdminController
 
     // 使用中のテンプレート判定
     $blog = $this->getBlog($blog_id);
-    $template_ids = BlogsModel::getTemplateIds($blog);
+    $template_ids = \Fc2blog\Model\BlogsModel::getTemplateIds($blog);
     if (in_array($id, $template_ids)) {
       $this->setErrorMessage(__('You can not delete a template in use'));
       $this->redirect(array('action'=>'index'));

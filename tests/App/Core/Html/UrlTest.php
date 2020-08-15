@@ -27,7 +27,7 @@ class UrlTest extends TestCase
     \Fc2blog\Config::read('user.php', true);
 
     /** @noinspection PhpIncludeInspection */
-    if (!class_exists(BlogsModel::class)) {
+    if (!class_exists(\Fc2blog\Model\BlogsModel::class)) {
       \Fc2blog\Model\Model::load('blogs');
     }
 

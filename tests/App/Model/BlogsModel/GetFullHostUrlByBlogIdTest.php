@@ -12,8 +12,7 @@ class GetFullHostUrlByBlogIdTest extends TestCase
 {
   public function setUp(): void
   {
-    /** @noinspection PhpIncludeInspection */
-    if (!class_exists(BlogsModel::class)) {
+    if (!class_exists(\Fc2blog\Model\BlogsModel::class)) {
       \Fc2blog\Model\Model::load('blogs');
     }
 
@@ -22,7 +21,7 @@ class GetFullHostUrlByBlogIdTest extends TestCase
 
   public function testGetFullHostUrlByBlogIdTest(): void
   {
-    $this->assertEquals('https://localhost:8480', BlogsModel::getFullHostUrlByBlogId('testblog1', 'localhost'));
-    $this->assertEquals('http://localhost:8080', BlogsModel::getFullHostUrlByBlogId('testblog2', 'localhost'));
+    $this->assertEquals('https://localhost:8480', \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId('testblog1', 'localhost'));
+    $this->assertEquals('http://localhost:8080', \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId('testblog2', 'localhost'));
   }
 }

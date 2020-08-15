@@ -1,7 +1,7 @@
 <table><tbody>
   <tr>
     <th><?php echo __('Article name'); ?></th>
-    <td><a href="<?php echo BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></td>
+    <td><a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></td>
   </tr>
   <tr>
     <th><?php echo __('Contributor'); ?></th>

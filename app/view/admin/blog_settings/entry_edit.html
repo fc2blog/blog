@@ -18,7 +18,7 @@
       <td>
         <?php echo \Fc2blog\Web\Html::input('blog_setting[entry_display_count]', 'text', array('maxlength'=>10)); ?>
         <?php if (isset($errors['blog_setting']['entry_display_count'])): ?><p class="error"><?php echo $errors['blog_setting']['entry_display_count']; ?></p><?php endif; ?>
-        <?php echo \Fc2blog\Web\Html::input('blog_setting[entry_order]', 'select', array('options'=>BlogSettingsModel::getEntryOrderList())); ?>
+        <?php echo \Fc2blog\Web\Html::input('blog_setting[entry_order]', 'select', array('options'=>\Fc2blog\Model\BlogSettingsModel::getEntryOrderList())); ?>
         <?php if (isset($errors['blog_setting']['entry_order'])): ?><p class="error"><?php echo $errors['blog_setting']['entry_order']; ?></p><?php endif; ?>
       </td>
     </tr>

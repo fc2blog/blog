@@ -14,7 +14,7 @@
       <h4><?php echo __('Display the number of articles, display order'); ?></h4>
       <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('blog_setting[entry_display_count]', 'text'); ?></div>
       <?php if (isset($errors['blog_setting']['entry_display_count'])): ?><span class="error"><?php echo $errors['blog_setting']['entry_display_count']; ?></span><?php endif; ?>
-      <?php echo \Fc2blog\Web\Html::input('blog_setting[entry_order]', 'select', array('options'=>BlogSettingsModel::getEntryOrderList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('blog_setting[entry_order]', 'select', array('options'=>\Fc2blog\Model\BlogSettingsModel::getEntryOrderList())); ?>
       <?php if (isset($errors['blog_setting']['entry_order'])): ?><p class="error"><?php echo $errors['blog_setting']['entry_order']; ?></p><?php endif; ?>
     </div>
     <div class="form_contents">

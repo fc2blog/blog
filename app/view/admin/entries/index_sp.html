@@ -10,7 +10,7 @@
     <div class="select_search">
       <?php echo \Fc2blog\Web\Html::input('category_id', 'select', array('options'=>array(''=>__('Category name')) + \Fc2blog\Model\Model::load('Categories')->getSearchList($this->getBlogId()))); ?>
       <?php echo \Fc2blog\Web\Html::input('tag_id', 'select', array('options'=>array(''=>__('Tag name')) + \Fc2blog\Model\Model::load('Tags')->getSearchList($this->getBlogId()))); ?>
-      <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + EntriesModel::getOpenStatusList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\EntriesModel::getOpenStatusList())); ?>
       <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
       <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
       <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
@@ -19,7 +19,7 @@
 </div>
 <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
 
-<?php $open_status_list = EntriesModel::getOpenStatusList(); ?>
+<?php $open_status_list = \Fc2blog\Model\EntriesModel::getOpenStatusList(); ?>
 <form method="POST" id="sys-list-form">
   <ul class="link_list">
   <?php foreach($entries as $entry): ?>

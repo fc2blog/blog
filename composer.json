@@ -6,7 +6,8 @@
     "ext-mbstring": "*",
     "ext-gd": "*",
     "ext-gettext": "*",
-    "ext-fileinfo": "*"
+    "ext-fileinfo": "*",
+    "ext-json": "*"
   },
   "config": {
     "vendor-dir": "app/vendor"

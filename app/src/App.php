@@ -287,7 +287,7 @@ class App
     }
 
     // 絶対パスが必要な際に、フルのホスト名を取得する
-    $full_domain = ($abs) ? \BlogsModel::getFullHostUrlByBlogId($blog_id) : "";
+    $full_domain = ($abs) ? \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($blog_id) : "";
 
     // TOPページの場合
     if (strtolower($controller)=='entries' && strtolower($action)=='index' && !empty($blog_id)) {

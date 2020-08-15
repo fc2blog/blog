@@ -16,7 +16,7 @@ class RedirectTest extends TestCase
 
   public function setUp(): void
   {
-    if (!class_exists(BlogsModel::class)) {
+    if (!class_exists(\Fc2blog\Model\BlogsModel::class)) {
       \Fc2blog\Model\Model::load('blogs');
     }
 

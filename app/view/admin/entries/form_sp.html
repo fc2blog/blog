@@ -98,7 +98,7 @@ function posted_at_select_to_input(){
       <h3><span class="h3_inner"><?php echo __('Post type'); ?></span></h3>
       <div class="form_contents">
         <div class="radio_vertical_box">
-          <?php echo \Fc2blog\Web\Html::input('entry[open_status]', 'radio', array('options'=>EntriesModel::getOpenStatusList(), 'default'=>\Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),'class'=>'radio_vertical_input')); ?>
+          <?php echo \Fc2blog\Web\Html::input('entry[open_status]', 'radio', array('options'=>\Fc2blog\Model\EntriesModel::getOpenStatusList(), 'default'=>\Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),'class'=>'radio_vertical_input')); ?>
           <?php if (isset($errors['entry']['open_status'])): ?><p class="error"><?php echo $errors['entry']['open_status']; ?></p><?php endif; ?>
         </div>
         <div class="sys-entry-password">
@@ -152,7 +152,7 @@ function posted_at_select_to_input(){
       <h3><span class="h3_inner"><?php echo __('Accept comments'); ?></span></h3>
       <div class="form_contents">
         <div class="radio_horizontal_box">
-          <?php echo \Fc2blog\Web\Html::input('entry[comment_accepted]', 'radio', array('options'=>EntriesModel::getCommentAcceptedList(), 'default'=>\Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'),'class'=>'common_input_radio')); ?>
+          <?php echo \Fc2blog\Web\Html::input('entry[comment_accepted]', 'radio', array('options'=>\Fc2blog\Model\EntriesModel::getCommentAcceptedList(), 'default'=>\Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'),'class'=>'common_input_radio')); ?>
         </div>
         <?php if (isset($errors['entry']['comment_accepted'])): ?><p class="error"><?php echo $errors['entry']['comment_accepted']; ?></p><?php endif; ?>
       </div><!--/form_contents-->
@@ -161,7 +161,7 @@ function posted_at_select_to_input(){
       <h3><span class="h3_inner"><?php echo __('New paragraph'); ?></span></h3>
       <div class="form_contents">
         <div class="radio_horizontal_box">
-          <?php echo \Fc2blog\Web\Html::input('entry[auto_linefeed]', 'radio', array('options'=>EntriesModel::getAutoLinefeedList(), 'default'=>\Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE'))); ?>
+          <?php echo \Fc2blog\Web\Html::input('entry[auto_linefeed]', 'radio', array('options'=>\Fc2blog\Model\EntriesModel::getAutoLinefeedList(), 'default'=>\Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE'))); ?>
         </div>
         <?php if (isset($errors['entry']['auto_linefeed'])): ?><p class="error"><?php echo $errors['entry']['auto_linefeed']; ?></p><?php endif; ?>
       </div><!--/form_contents-->

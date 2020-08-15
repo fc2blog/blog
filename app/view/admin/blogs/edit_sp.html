@@ -22,7 +22,7 @@
     </div>
     <div class="form_contents">
       <h4><?php echo __('Visibility Blog'); ?></h4>
-      <?php echo \Fc2blog\Web\Html::input('blog[open_status]', 'select', array('options'=>BlogsModel::getOpenStatusList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('blog[open_status]', 'select', array('options'=>\Fc2blog\Model\BlogsModel::getOpenStatusList())); ?>
       <?php if (isset($errors['blog']['open_status'])): ?><span class="error"><?php echo $errors['blog']['open_status']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">
@@ -32,7 +32,7 @@
     </div>
     <div class="form_contents">
       <h4><?php echo __('Time zone'); ?></h4>
-      <?php echo \Fc2blog\Web\Html::input('blog[timezone]', 'select', array('options'=>BlogsModel::getTimezoneList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('blog[timezone]', 'select', array('options'=>\Fc2blog\Model\BlogsModel::getTimezoneList())); ?>
       <?php if (isset($errors['blog']['timezone'])): ?><span class="error"><?php echo $errors['blog']['timezone']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">

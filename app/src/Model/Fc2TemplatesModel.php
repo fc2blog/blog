@@ -4,6 +4,8 @@
 * データソース元はAPIの予定
 */
 
+namespace Fc2blog\Model;
+
 class Fc2TemplatesModel extends \Fc2blog\Model\Model
 {
 

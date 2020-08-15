@@ -12,7 +12,7 @@
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="index" />
     <?php echo \Fc2blog\Web\Html::input('category_id', 'select', array('options'=>array(''=>__('Category name')) + \Fc2blog\Model\Model::load('Categories')->getSearchList($this->getBlogId()))); ?>
     <?php echo \Fc2blog\Web\Html::input('tag_id', 'select', array('options'=>array(''=>__('Tag name')) + \Fc2blog\Model\Model::load('Tags')->getSearchList($this->getBlogId()))); ?>
-    <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + EntriesModel::getOpenStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\EntriesModel::getOpenStatusList())); ?>
     <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
     <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
     <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
@@ -24,7 +24,7 @@
 
 <?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
 
-<?php $open_status_list = EntriesModel::getOpenStatusList(); ?>
+<?php $open_status_list = \Fc2blog\Model\EntriesModel::getOpenStatusList(); ?>
 <form method="POST" id="sys-list-form">
   <table>
     <thead>
@@ -45,7 +45,7 @@
         <td class="center ss_cell"><input type="checkbox" name="id[]" value="<?php echo $entry['id']; ?>" /></td>
         <td><?php echo df($entry['posted_at'], 'y-m-d'); ?></td>
         <td class="m_cell">
-          <a href="<?php echo BlogsModel::getFullHostUrlByBlogId($this->getBlogId(), \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$entry['blog_id'], 'id'=>$entry['id'])); ?>" target="_blank">
+          <a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($this->getBlogId(), \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$entry['blog_id'], 'id'=>$entry['id'])); ?>" target="_blank">
             <?php echo th($entry['title'], 10); ?>
           </a>
         </td>
