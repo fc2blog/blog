@@ -28,7 +28,7 @@ input, select{ vertical-align: middle; }
 body {
 	margin: 0;
 	padding: 0;
-	font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ƒqƒ‰ƒMƒmŠpƒS Pro W3";
+	font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ï¿½qï¿½ï¿½ï¿½Mï¿½mï¿½pï¿½S Pro W3";
 	-webkit-user-select: none;
 	-webkit-text-size-adjust: none;
 	color: #333;
@@ -46,7 +46,7 @@ a:focus,a:hover,a:active {
 	-moz-tap-highlight-color: rgba(0,0,0,0);
 	tap-highlight-color: rgba(0,0,0,0);
 }
-button{font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ƒqƒ‰ƒMƒmŠpƒS Pro W3";}
+button{font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ï¿½qï¿½ï¿½ï¿½Mï¿½mï¿½pï¿½S Pro W3";}
 h2,h4,li,a,label,button,input[type="radio"],.edit_area {
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 	-moz-tap-highlight-color: rgba(0,0,0,0);
@@ -1792,7 +1792,7 @@ div.bg_white {
 
 .default_album,
 .vertical_left_radio:checked + .vertical_left_label:after {
-	content: "ƒfƒtƒHƒ‹ƒgƒAƒ‹ƒoƒ€";
+	content: "ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Aï¿½ï¿½ï¿½oï¿½ï¿½";
 	color: #fff;
 	position: absolute;
 	right: 0;
@@ -1862,7 +1862,7 @@ div.bg_white {
 	background-color: #e5e5e5;
 }
 
-/* type="submit"@type="button"@    Reset & Set
+/* type="submit"ï¿½@type="button"ï¿½@    Reset & Set
 --------------------------------------------------------*/
 input[type="button"],input[type="submit"] {
 	-webkit-appearance: none;
@@ -2310,9 +2310,9 @@ h3 + .form_contents .table_2column:first-child {
 	position: relative;
 }
 
-.#editor .list_switch_item { border-bottom: 1px solid #ddd; }
+#editor .list_switch_item { border-bottom: 1px solid #ddd; }
 
-.#editor .list_switch_item.selected { border-bottom: 1px solid #e6e6e6; }
+#editor .list_switch_item.selected { border-bottom: 1px solid #e6e6e6; }
 
 .img_set_btn {
 	position: absolute;
