@@ -180,7 +180,7 @@ abstract class Controller
     unset($fw_data);
 
     // リクエストデータ
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     // Debug用にテンプレートで使用可能な変数一覧表示
     if (\Fc2blog\Config::get('DEBUG_TEMPLATE_VARS')) {

@@ -4,7 +4,7 @@
 * POST,GETへのアクセスを便利にするクラス
 */
 
-namespace Fc2blog;
+namespace Fc2blog\Web;
 
 class Request
 {

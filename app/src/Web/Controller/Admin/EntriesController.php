@@ -10,7 +10,7 @@ class EntriesController extends AdminController
    */
   public function index()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $entries_model = \Fc2blog\Model\Model::load('Entries');
 
     $blog_id = $this->getBlogId();
@@ -62,8 +62,8 @@ class EntriesController extends AdminController
       'where'  => $where,
       'params' => $params,
       'from'   => $from,
-      'limit'  => $request->get('limit', \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'), \Fc2blog\Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
+      'limit'  => $request->get('limit', \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'), \Fc2blog\Web\Request::VALID_POSITIVE_INT),
+      'page'   => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
     $entries = $entries_model->find('all', $options);
@@ -83,7 +83,7 @@ class EntriesController extends AdminController
       header('X-UA-Compatible: IE=EmulateIE10');
     }
 
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $entries_model = \Fc2blog\Model\Model::load('Entries');
     $entry_categories_model = \Fc2blog\Model\Model::load('EntryCategories');
 
@@ -128,7 +128,7 @@ class EntriesController extends AdminController
       header('X-UA-Compatible: IE=EmulateIE10');
     }
 
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $entries_model = \Fc2blog\Model\Model::load('Entries');
     $entry_categories_model = \Fc2blog\Model\Model::load('EntryCategories');
 
@@ -178,7 +178,7 @@ class EntriesController extends AdminController
    */
   public function delete()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
       // 削除処理
       if (\Fc2blog\Model\Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId()))
@@ -194,7 +194,7 @@ class EntriesController extends AdminController
   {
     \Fc2blog\Config::set('DEBUG', 0);    // デバッグ設定を変更
 
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $files_model = \Fc2blog\Model\Model::load('Files');
 
     $blog_id = $this->getBlogId();
@@ -211,7 +211,7 @@ class EntriesController extends AdminController
       'where'  => $where,
       'params' => $params,
       'limit'  => \Fc2blog\Config::get('PAGE.FILE.LIMIT', \Fc2blog\App::getPageLimit('FILE_AJAX')),
-      'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
+      'page'   => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
       'order'  => 'id DESC',
     );
     $files = $files_model->find('all', $options);

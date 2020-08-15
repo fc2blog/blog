@@ -10,12 +10,12 @@ class BlogPluginsController extends AdminController
    */
   public function index()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
 
     $blog_id = $this->getBlogId();
-    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
+    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Web\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
     $request->set('device_type', $device_type);
 
     // デバイス毎に分けられたテンプレート一覧を取得
@@ -44,11 +44,11 @@ class BlogPluginsController extends AdminController
   */
   private function plugin_search($is_official=true)
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $plugins_model = \Fc2blog\Model\Model::load('Plugins');
 
     // デバイスタイプの取得
-    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
+    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Web\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
     $request->set('device_type', $device_type);
 
     // 検索条件作成
@@ -67,8 +67,8 @@ class BlogPluginsController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', \Fc2blog\Config::get('PAGE.PLUGIN.DEFAULT.LIMIT'), \Fc2blog\Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
+      'limit'  => $request->get('limit', \Fc2blog\Config::get('PAGE.PLUGIN.DEFAULT.LIMIT'), \Fc2blog\Web\Request::VALID_POSITIVE_INT),
+      'page'   => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
     $plugins = $plugins_model->find('all', $options);
@@ -85,14 +85,14 @@ class BlogPluginsController extends AdminController
    */
   public function create()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     // 初期表示時
     if (!$request->get('blog_plugin') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
       \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
       $request->set('blog_plugin', array(
-        'device_type' => $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES')),
+        'device_type' => $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Web\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES')),
         'category'    => $request->get('category', 1),
       ));
       return ;
@@ -120,7 +120,7 @@ class BlogPluginsController extends AdminController
    */
   public function edit()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $id = $request->get('id');
@@ -159,7 +159,7 @@ class BlogPluginsController extends AdminController
    */
   public function delete()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $id = $request->get('id');
@@ -184,7 +184,7 @@ class BlogPluginsController extends AdminController
    */
   public function register()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $plugins_model = \Fc2blog\Model\Model::load('Plugins');
 
     $id = $request->get('id');
@@ -236,7 +236,7 @@ class BlogPluginsController extends AdminController
    */
   public function plugin_delete()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $plugins_model = \Fc2blog\Model\Model::load('Plugins');
 
     $id = $request->get('id');
@@ -260,7 +260,7 @@ class BlogPluginsController extends AdminController
    */
   public function download()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $id = $request->get('id');
@@ -296,11 +296,11 @@ class BlogPluginsController extends AdminController
    */
   public function sort()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $blog_id = $this->getBlogId();
-    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
+    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Web\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
 
     // 並べ替え処理
     $blog_plugins_model->sort($request->get('blog_plugins', array()), $device_type, $blog_id);
@@ -317,11 +317,11 @@ class BlogPluginsController extends AdminController
    */
   public function display_changes()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $blog_id = $this->getBlogId();
-    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
+    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'), \Fc2blog\Web\Request::VALID_IN_ARRAY, \Fc2blog\Config::get('ALLOW_DEVICES'));
 
     if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
       // プラグインの表示可否の一括変更
@@ -340,7 +340,7 @@ class BlogPluginsController extends AdminController
    */
   public function display_change()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $blog_plugins_model = \Fc2blog\Model\Model::load('BlogPlugins');
 
     $id = $request->get('id');
@@ -366,7 +366,7 @@ class BlogPluginsController extends AdminController
 /*
   public function export()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();

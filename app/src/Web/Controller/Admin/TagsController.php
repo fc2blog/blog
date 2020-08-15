@@ -10,7 +10,7 @@ class TagsController extends AdminController
    */
   public function index()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $tags_model = \Fc2blog\Model\Model::load('Tags');
 
     $blog_id = $this->getBlogId();
@@ -39,8 +39,8 @@ class TagsController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', \Fc2blog\Config::get('TAG.DEFAULT_LIMIT'), \Fc2blog\Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
+      'limit'  => $request->get('limit', \Fc2blog\Config::get('TAG.DEFAULT_LIMIT'), \Fc2blog\Web\Request::VALID_POSITIVE_INT),
+      'page'   => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
     if ($options['limit'] > max(array_keys(\Fc2blog\Config::get('TAG.LIMIT_LIST')))) {
@@ -61,7 +61,7 @@ class TagsController extends AdminController
    */
   public function edit()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     $tags_model = \Fc2blog\Model\Model::load('Tags');
 
     $id = $request->get('id');
@@ -110,7 +110,7 @@ class TagsController extends AdminController
    */
   public function delete()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
       // 削除処理

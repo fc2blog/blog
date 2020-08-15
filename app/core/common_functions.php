@@ -107,7 +107,7 @@ function getRouting()
 {
   require(\Fc2blog\Config::get('CONFIG_DIR') . \Fc2blog\Config::get('ROUTING'));  // ルーティング設定を読み込み
 
-  $request = \Fc2blog\Request::getInstance();
+  $request = \Fc2blog\Web\Request::getInstance();
 
   $defaultClass = \Fc2blog\Config::get('DEFAULT_CLASS_NAME');
   $defaultMethod = \Fc2blog\Config::get('DEFAULT_METHOD_NAME');

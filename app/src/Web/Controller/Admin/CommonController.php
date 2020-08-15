@@ -10,7 +10,7 @@ class CommonController extends AdminController
   */
   public function lang()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     // 言語の設定
     $lang = $request->get('lang');
@@ -32,7 +32,7 @@ class CommonController extends AdminController
   */
   public function device_change()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     // デバイスの設定
     $device_type = 0;
@@ -98,7 +98,7 @@ class CommonController extends AdminController
   {
     $this->layout = 'default_nomenu.html';
 
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     $state = $request->get('state', 0);
     switch ($state) {

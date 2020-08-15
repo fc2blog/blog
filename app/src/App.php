@@ -5,6 +5,7 @@
 
 namespace Fc2blog;
 
+use Fc2blog\Web\Request;
 use Exception;
 use InvalidArgumentException;
 
@@ -146,7 +147,7 @@ class App
   public static function getDeviceType()
   {
     // パラメータによりデバイスタイプを変更(FC2の引数順守)
-    $request = Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     if ($request->isArgs('pc')) {
       return Config::get('DEVICE_PC');
     }

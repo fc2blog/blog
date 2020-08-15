@@ -10,7 +10,7 @@ class BlogsController extends AdminController
    */
   public function index()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
 
     // ブログの一覧取得
@@ -18,7 +18,7 @@ class BlogsController extends AdminController
       'where'  => 'user_id=?',
       'params' => array($this->getUserId()),
       'limit'  => \Fc2blog\Config::get('BLOG.DEFAULT_LIMIT', 10),
-      'page'   => $request->get('page', 0, \Fc2blog\Request::VALID_UNSIGNED_INT),
+      'page'   => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
       'order'  => 'created_at DESC',
     );
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
@@ -38,7 +38,7 @@ class BlogsController extends AdminController
    */
   public function create()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     // 初期表示時
     if (!$request->get('blog') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
@@ -69,7 +69,7 @@ class BlogsController extends AdminController
    */
   public function edit()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
     /** @var BlogsModel $blogs_model */
     $blogs_model = \Fc2blog\Model\Model::load('Blogs');
 
@@ -106,7 +106,7 @@ class BlogsController extends AdminController
   */
   public function choice()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     $blog_id = $request->get('blog_id');
 
@@ -123,7 +123,7 @@ class BlogsController extends AdminController
    */
   public function delete()
   {
-    $request = \Fc2blog\Request::getInstance();
+    $request = \Fc2blog\Web\Request::getInstance();
 
     // 退会チェック
     if (!$request->get('blog.delete') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
