@@ -2,6 +2,12 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+
 class TagsController extends AdminController
 {
 
@@ -10,19 +16,19 @@ class TagsController extends AdminController
    */
   public function index()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $tags_model = \Fc2blog\Model\Model::load('Tags');
+    $request = Request::getInstance();
+    $tags_model = Model::load('Tags');
 
     $blog_id = $this->getBlogId();
 
-    \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
+    Session::set('sig', App::genRandomString());
 
     // 検索条件作成
     $where = 'blog_id=?';
     $params = array($blog_id);
 
     if ($name=$request->get('name')) {
-      $name = \Fc2blog\Model\Model::escape_wildcard($name);
+      $name = Model::escape_wildcard($name);
       $name = "%{$name}%";
       $where .= ' AND name LIKE ?';
       $params = array_merge($params, array($name));
@@ -39,12 +45,12 @@ class TagsController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', \Fc2blog\Config::get('TAG.DEFAULT_LIMIT'), \Fc2blog\Web\Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
+      'limit'  => $request->get('limit', Config::get('TAG.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
-    if ($options['limit'] > max(array_keys(\Fc2blog\Config::get('TAG.LIMIT_LIST')))) {
-      $options['limit'] = \Fc2blog\Config::get('TAG.DEFAULT_LIMIT');
+    if ($options['limit'] > max(array_keys(Config::get('TAG.LIMIT_LIST')))) {
+      $options['limit'] = Config::get('TAG.DEFAULT_LIMIT');
     }
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
       $options['page'] = 0;
@@ -61,8 +67,8 @@ class TagsController extends AdminController
    */
   public function edit()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $tags_model = \Fc2blog\Model\Model::load('Tags');
+    $request = Request::getInstance();
+    $tags_model = Model::load('Tags');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -73,7 +79,7 @@ class TagsController extends AdminController
     $this->set('tag', $tag);
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('tag') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('tag') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       $request->set('tag', $tag);
       $back_url = $request->getReferer();
       if (!empty($back_url)) {
@@ -110,11 +116,11 @@ class TagsController extends AdminController
    */
   public function delete()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
-    if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
+    if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // 削除処理
-      if (\Fc2blog\Model\Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+      if (Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
         $this->setInfoMessage(__('I removed the tag'));
       } else {
         $this->setErrorMessage(__('I failed to remove'));

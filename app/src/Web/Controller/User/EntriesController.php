@@ -2,6 +2,15 @@
 
 namespace Fc2blog\Web\Controller\User;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Debug;
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\BlogTemplatesModel;
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+
 class EntriesController extends UserController
 {
 
@@ -21,31 +30,31 @@ class EntriesController extends UserController
 
     // BlogのSSL_Enableの設定と食い違うなら強制リダイレクトする
     // URL構造そのままでリダイレクトするためにRequestUriを用いているがもっとベターな方法があるかもしれない
-    if(is_string($blog_id) && strlen($blog_id) > 0 && !\Fc2blog\Model\BlogsModel::isCorrectHttpSchemaByBlogId($blog_id)){
+    if(is_string($blog_id) && strlen($blog_id) > 0 && !BlogsModel::isCorrectHttpSchemaByBlogId($blog_id)){
       $this->redirect($_SERVER['REQUEST_URI'],'',true, $blog_id);
-    }else if(is_array($blog) && !\Fc2blog\Model\BlogsModel::isCorrectHttpSchemaByBlogArray($blog)){
+    }else if(is_array($blog) && !BlogsModel::isCorrectHttpSchemaByBlogArray($blog)){
       $this->redirect($_SERVER['REQUEST_URI'],'',true, $blog['id']);
     }
 
     $this->set('blog', $blog);
-    $this->set('blog_setting', \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id));
+    $this->set('blog_setting', Model::load('BlogSettings')->findByBlogId($blog_id));
 
     // 自身の所持しているブログ判定
     $self_blog = $this->isLoginBlog();
     $this->set('self_blog', $self_blog);
 
     // 非公開モードの場合はパスワード認証画面へ遷移
-    if ($blog['open_status']==\Fc2blog\Config::get('BLOG.OPEN_STATUS.PRIVATE')
-      && !\Fc2blog\Web\Session::get($this->getBlogPasswordKey($blog['id']))
-      && \Fc2blog\Config::get('ActionName')!='blog_password'
+    if ($blog['open_status']== Config::get('BLOG.OPEN_STATUS.PRIVATE')
+      && !Session::get($this->getBlogPasswordKey($blog['id']))
+      && Config::get('ActionName')!='blog_password'
       && !$self_blog
     ) {
       $this->redirect(array('action'=>'blog_password', 'blog_id'=>$blog_id));
     }
 
     // 予約投稿と期間投稿エントリーの更新処理
-    if (\Fc2blog\Config::get('CRON')===false) {
-      $entries_model = \Fc2blog\Model\Model::load('Entries');
+    if (Config::get('CRON')===false) {
+      $entries_model = Model::load('Entries');
       $entries_model->updateReservation($blog_id);
       $entries_model->updateLimited($blog_id);
     }
@@ -56,7 +65,7 @@ class EntriesController extends UserController
    */
   public function index()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // 記事一覧データ設定
     $options = array(
@@ -80,7 +89,7 @@ class EntriesController extends UserController
   */
   public function search()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     $where = 'blog_id=?';
     $params = array($this->getBlogId());
@@ -88,7 +97,7 @@ class EntriesController extends UserController
     // 検索ワード取得
     if ($keyword=$request->get('q')) {
       $this->set('sub_title', $request->get('q'));
-      $keyword = \Fc2blog\Model\Model::escape_wildcard($keyword);
+      $keyword = Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND (title LIKE ? OR body LIKE ?)';
       $params = array_merge($params, array($keyword, $keyword));
@@ -107,13 +116,13 @@ class EntriesController extends UserController
   */
   public function category()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     $blog_id     = $this->getBlogId();
     $category_id = $request->get('cat');
 
     // カテゴリー名取得
-    $category = \Fc2blog\Model\Model::load('Categories')->findByIdAndBlogId($category_id, $blog_id);
+    $category = Model::load('Categories')->findByIdAndBlogId($category_id, $blog_id);
     $this->set('sub_title', $category['name']);
 
     // 記事一覧データ設定
@@ -123,7 +132,7 @@ class EntriesController extends UserController
     $where .= ' AND entries.id=entry_categories.entry_id';
     $params = array($blog_id, $blog_id, $category_id);
 
-    $order = $category['category_order'] == \Fc2blog\Config::get('CATEGORY.ORDER.ASC') ? 'ASC' : 'DESC';
+    $order = $category['category_order'] == Config::get('CATEGORY.ORDER.ASC') ? 'ASC' : 'DESC';
 
     $options = array(
       'fields' => 'entries.*',
@@ -141,13 +150,13 @@ class EntriesController extends UserController
   */
   public function tag()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // タグ検索
     $blog_id = $this->getBlogId();
     $tag_name = $request->get('tag');
 
-    $tag = \Fc2blog\Model\Model::load('Tags')->findByNameAndBlogId($tag_name, $blog_id);
+    $tag = Model::load('Tags')->findByNameAndBlogId($tag_name, $blog_id);
     $tag_id = empty($tag) ? 0 : $tag['id'];
 
     $this->set('sub_title', $tag_name);
@@ -174,12 +183,12 @@ class EntriesController extends UserController
   */
   public function date()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // 開始日付と終了日付の計算
     preg_match('/^([0-9]{4})([0-9]{2})?([0-9]{2})?$/', $request->get('date'), $matches);
     $dates = $matches + array('', date('Y'), 0, 0);
-    list($start, $end) = \Fc2blog\App::calcStartAndEndDate($dates[1], $dates[2], $dates[3]);
+    list($start, $end) = App::calcStartAndEndDate($dates[1], $dates[2], $dates[3]);
 
     // 記事一覧データ設定
     $where = 'blog_id=? AND ?<=posted_at AND posted_at<=?';
@@ -203,7 +212,7 @@ class EntriesController extends UserController
     $options = array(
       'fields' => array(
         'id', 'blog_id', 'title', 'posted_at', 'comment_count',
-        \Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.NONE') . ' as auto_linefeed',
+        Config::get('ENTRY.AUTO_LINEFEED.NONE') . ' as auto_linefeed',
         'SUBSTRING(body, 1, 20) as body'
       ),
       'where'  => 'blog_id=?',
@@ -223,11 +232,11 @@ class EntriesController extends UserController
     header("X-XSS-Protection: 0");
 
     // preview処理用
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // 投稿者のブログIDチェック
-    if ($blog_id!=$this->getAdminBlogId() && !\Fc2blog\Model\Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id)) {
+    if ($blog_id!=$this->getAdminBlogId() && !Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id)) {
       return $this->error404();
     }
 
@@ -260,7 +269,7 @@ class EntriesController extends UserController
   */
   private function preview_fc2_template()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // 記事一覧データ設定
@@ -272,8 +281,8 @@ class EntriesController extends UserController
     $this->setEntriesData($options, $pages);
 
     // テンプレートのプレビュー
-    $device_key = \Fc2blog\Config::get('DEVICE_FC2_KEY.' . $request->get('device_type'));
-    $template = \Fc2blog\Model\Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
+    $device_key = Config::get('DEVICE_FC2_KEY.' . $request->get('device_type'));
+    $template = Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
     if (empty($template)) {
       return $this->error404();
     }
@@ -282,14 +291,14 @@ class EntriesController extends UserController
     $css  = $template['css'];
 
     // テンプレートのシンタックスチェック
-    \Fc2blog\Model\Model::load('BlogTemplates');
-    $syntax = \Fc2blog\Model\BlogTemplatesModel::fc2TemplateSyntax($html);
+    Model::load('BlogTemplates');
+    $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
       return 'Entries/syntax.html';
     }
 
     // FC2用のテンプレートで表示
-    $preview_path = \Fc2blog\Model\BlogTemplatesModel::getTemplateFilePath($blog_id, $request->get('device_type'), $html);
+    $preview_path = BlogTemplatesModel::getTemplateFilePath($blog_id, $request->get('device_type'), $html);
     is_file($preview_path) && unlink($preview_path);
     return $this->fc2template($blog_id, $html, $css);
   }
@@ -299,7 +308,7 @@ class EntriesController extends UserController
   */
   private function preview_template()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // 記事一覧データ設定
@@ -313,7 +322,7 @@ class EntriesController extends UserController
     // テンプレートのプレビュー
     $html = $css = null;
     if ($request->get('template_id')) {
-      $blog_template = \Fc2blog\Model\Model::load('BlogTemplates')->findByIdAndBlogId($request->get('template_id'), $blog_id);
+      $blog_template = Model::load('BlogTemplates')->findByIdAndBlogId($request->get('template_id'), $blog_id);
       $html = $blog_template['html'];
       $css = $blog_template['css'];
     } else {
@@ -322,15 +331,15 @@ class EntriesController extends UserController
     }
 
     // テンプレートのシンタックスチェック
-    \Fc2blog\Model\Model::load('BlogTemplates');
-    $syntax = \Fc2blog\Model\BlogTemplatesModel::fc2TemplateSyntax($html);
+    Model::load('BlogTemplates');
+    $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
       return 'Entries/syntax.html';
     }
 
     // FC2用のテンプレートで表示
     $device_type = $this->getDeviceType();
-    $preview_path = \Fc2blog\Model\BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
+    $preview_path = BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
     is_file($preview_path) && unlink($preview_path);
     return $this->fc2template($blog_id, $html, $css);
   }
@@ -340,14 +349,14 @@ class EntriesController extends UserController
   */
   private function preview_plugin()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // プラグインのプレビュー情報取得
     $preview_plugin = null;
     if ($request->get('plugin_id')) {
       // DBからプレビュー情報取得
-      $preview_plugin = \Fc2blog\Model\Model::load('Plugins')->findById($request->get('plugin_id'));
+      $preview_plugin = Model::load('Plugins')->findById($request->get('plugin_id'));
       $preview_plugin['category'] = $request->get('category');
     } else {
       // リクエストパラメータからプレビュー情報取得
@@ -358,7 +367,7 @@ class EntriesController extends UserController
     $contents = $preview_plugin['contents'];
 
     // テンプレートのシンタックスチェック
-    \Fc2blog\Model\Model::load('BlogPlugins');
+    Model::load('BlogPlugins');
     $syntax = BlogPluginsModel::fc2PluginSyntax($contents);
     if ($syntax !== true) {
       return 'Entries/syntax.html';
@@ -388,7 +397,7 @@ class EntriesController extends UserController
     );
 
     // スマフォ版のプラグインのプレビュー表示
-    if ($device_type==\Fc2blog\Config::get('DEVICE_SP')) {
+    if ($device_type== Config::get('DEVICE_SP')) {
       $this->set('s_plugin', $plugin);
       $this->setPageData(array('spplugin_area'));
       return $this->fc2template($blog_id);
@@ -403,7 +412,7 @@ class EntriesController extends UserController
     $this->setEntriesData($options, $pages);
 
     // 通常のプラグインリストに追加する
-    $plugins = \Fc2blog\Model\Model::load('BlogPlugins')->findByDeviceTypeAndCategory($this->getDeviceType(), $category, $blog_id);
+    $plugins = Model::load('BlogPlugins')->findByDeviceTypeAndCategory($this->getDeviceType(), $category, $blog_id);
     $id = $request->get('id');
     if (empty($id)) {
       // 新規プラグインは最後尾に追加する
@@ -427,7 +436,7 @@ class EntriesController extends UserController
   */
   private function preview_entry()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     $blog_id = $this->getBlogId();
 
     // DBの代わりにリクエストから取得
@@ -439,11 +448,11 @@ class EntriesController extends UserController
       'extend'        => $request->get('entry.extend'),
       'posted_at'     => $request->get('entry.posted_at', date('Y-m-d H:i:s')),
       'auto_linefeed' => $request->get('entry.auto_linefeed'),
-      'open_status'   => \Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),
+      'open_status'   => Config::get('ENTRY.OPEN_STATUS.OPEN'),
       'created_at'    => date('Y-m-d H:i:s'),
       'updated_at'    => date('Y-m-d H:i:s'),
     );
-    $entry['categories'] = \Fc2blog\Model\Model::load('Categories')->findByIdsAndBlogId($request->get('entry_categories.category_id'), $blog_id);
+    $entry['categories'] = Model::load('Categories')->findByIdsAndBlogId($request->get('entry_categories.category_id'), $blog_id);
     foreach ($entry['categories'] as $key => $value) {
       $entry['categories'][$key]['entry_id'] = 0;
     }
@@ -466,7 +475,7 @@ class EntriesController extends UserController
 
     // FC2用のテンプレートで表示
     $areas = array('permanent_area');
-    if (\Fc2blog\App::isPC()) {
+    if (App::isPC()) {
       $areas[] = 'comment_area';
     }
     $this->setPageData($areas);
@@ -478,8 +487,8 @@ class EntriesController extends UserController
    */
   public function view()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $entries_model = \Fc2blog\Model\Model::load('Entries');
+    $request = Request::getInstance();
+    $entries_model = Model::load('Entries');
 
     $blog_id = $this->getBlogId();
     $id = $request->get('id');
@@ -500,14 +509,14 @@ class EntriesController extends UserController
       // コメント一覧表示(スマフォ)
       case 'res':
         // ブログの設定情報取得
-        $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
+        $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
 
         // 記事のコメント取得(パスワード制限時はコメントを取得しない)
-        if ($self_blog || $entry['open_status']!=\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') || \Fc2blog\Web\Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
+        if ($self_blog || $entry['open_status']!= Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
           // コメント一覧を取得(ページング用)
-          $comments_model = \Fc2blog\Model\Model::load('Comments');
+          $comments_model = Model::load('Comments');
           $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $id, $blog_setting);
-          $options['page'] = $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT);
+          $options['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
           $comments = $comments_model->find('all', $options);
           $this->set('comments', $comments_model->decorateByBlogSetting($comments, $blog_setting, $self_blog));
           $this->set('paging', $comments_model->getPaging($options));
@@ -533,18 +542,18 @@ class EntriesController extends UserController
     $areas = array('permanent_area');
 
     // ブログの設定情報取得
-    $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
+    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
 
     // 記事のコメント取得(パスワード制限時はコメントを取得しない)
-    if ($self_blog || $entry['open_status']!=\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') || \Fc2blog\Web\Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
-      if (\Fc2blog\App::isPC()) {
+    if ($self_blog || $entry['open_status']!= Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
+      if (App::isPC()) {
         $areas[] = 'comment_area';
-        $this->set('comments', \Fc2blog\Model\Model::load('Comments')->getCommentListByBlogSetting($blog_id, $id, $blog_setting, $self_blog));
+        $this->set('comments', Model::load('Comments')->getCommentListByBlogSetting($blog_id, $id, $blog_setting, $self_blog));
       }
     }
 
     // 前後の記事取得
-    $is_asc = $blog_setting['entry_order'] == \Fc2blog\Config::get('ENTRY.ORDER.ASC');
+    $is_asc = $blog_setting['entry_order'] == Config::get('ENTRY.ORDER.ASC');
     $this->set('next_entry', $is_asc ? $entries_model->nextEntry($entry) : $entries_model->prevEntry($entry));
     $this->set('prev_entry', $is_asc ? $entries_model->prevEntry($entry) : $entries_model->nextEntry($entry));
 
@@ -558,13 +567,13 @@ class EntriesController extends UserController
   */
   public function plugin()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     $blog_id = $this->getBlogId();
     $id = $request->get('id');
 
     // プラグイン取得
-    $plugin = \Fc2blog\Model\Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id);
+    $plugin = Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id);
     $this->set('s_plugin', $plugin);
 
     // FC2用のテンプレートで表示
@@ -577,13 +586,13 @@ class EntriesController extends UserController
   */
   public function password()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     $blog_id = $this->getBlogId();
     $id = $request->get('id');
 
     // 記事詳細取得
-    $entry = \Fc2blog\Model\Model::load('Entries')->findByIdAndBlogId($id, $blog_id);
+    $entry = Model::load('Entries')->findByIdAndBlogId($id, $blog_id);
     if (!$entry) {
       $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
     }
@@ -591,12 +600,12 @@ class EntriesController extends UserController
     // パスワード入力チェック
     if ($entry['password']==='') {
       // パスワード未設定の場合は全体のパスワードを設定
-      $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
+      $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
       $entry['password'] = $blog_setting['entry_password'];
     }
     if ($entry['password']===$request->get('password', '')) {
       // パスワードが合致すればセッションに記録
-      \Fc2blog\Web\Session::set($this->getEntryPasswordKey($entry['blog_id'], $entry['id']), true);
+      Session::set($this->getEntryPasswordKey($entry['blog_id'], $entry['id']), true);
     }
 
     $this->redirect(array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$id));
@@ -607,18 +616,18 @@ class EntriesController extends UserController
    */
   public function blog_password()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     $blog_id = $this->getBlogId();
     $blog = $this->getBlog($blog_id);
 
-    if ($blog['open_status']!=\Fc2blog\Config::get('BLOG.OPEN_STATUS.PRIVATE') || \Fc2blog\Web\Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog()) {
+    if ($blog['open_status']!= Config::get('BLOG.OPEN_STATUS.PRIVATE') || Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog()) {
       $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
     }
 
     if ($request->get('blog')) {
       if ($request->get('blog.password')==$blog['blog_password']) {
-        \Fc2blog\Web\Session::set($this->getBlogPasswordKey($blog['id']), true);
+        Session::set($this->getBlogPasswordKey($blog['id']), true);
         $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
       }
       $this->set('errors', array('password'=>__('The password is incorrect!')));
@@ -635,23 +644,23 @@ class EntriesController extends UserController
     $blog_id  = $this->getBlogId();
 
     // ブログの設定情報取得(captchaの使用可否で画面切り替え)
-    $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
-    $is_captcha = $blog_setting['comment_captcha']==\Fc2blog\Config::get('COMMENT.COMMENT_CAPTCHA.USE');
+    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+    $is_captcha = $blog_setting['comment_captcha']== Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートにリクエスト情報を合わせる
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     if (!$is_captcha || !$request->isArgs('token')) {
-      \Fc2blog\Config::read('fc2_request.php');
-      $request->combine(\Fc2blog\Config::get('request_combine.comment_register'));    // 引数のキーを入れ替える
+      Config::read('fc2_request.php');
+      $request->combine(Config::get('request_combine.comment_register'));    // 引数のキーを入れ替える
       if ($request->get('comment.open_status')=='on') {
-        $request->set('comment.open_status', \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
+        $request->set('comment.open_status', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
       }
     }
 
     $entry_id = $request->get('comment.entry_id');
 
     // 記事詳細取得
-    $entry = \Fc2blog\Model\Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id);
+    $entry = Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id);
     if (!$entry) {
       $this->redirect(array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$entry_id));
     }
@@ -662,12 +671,12 @@ class EntriesController extends UserController
     }
 
     // 記事のカテゴリ一覧を取得 TODO:後でcacheを使用する形に
-    $entry['categories'] = \Fc2blog\Model\Model::load('Categories')->getEntryCategories($blog_id, $entry_id);
-    $entry['tags'] = \Fc2blog\Model\Model::load('Tags')->getEntryTags($blog_id, $entry_id);
+    $entry['categories'] = Model::load('Categories')->getEntryCategories($blog_id, $entry_id);
+    $entry['tags'] = Model::load('Tags')->getEntryTags($blog_id, $entry_id);
     $this->set('entry', $entry);
 
     // 入力チェック処理
-    $comments_model = \Fc2blog\Model\Model::load('Comments');
+    $comments_model = Model::load('Comments');
     $errors = array();
     $white_list = array('entry_id', 'name', 'title', 'mail', 'url', 'body', 'password', 'open_status');
     $errors['comment'] = $comments_model->registerValidate($request->get('comment'), $data, $white_list);
@@ -689,7 +698,7 @@ class EntriesController extends UserController
     $this->fc2CommentError('comment', $errors['comment'], $data);
 
     // FC2用のテンプレートで表示
-    $this->setPageData(array(\Fc2blog\App::isPC() ? 'comment_area' : 'form_area'));
+    $this->setPageData(array(App::isPC() ? 'comment_area' : 'form_area'));
     return $this->fc2template($entry['blog_id']);
   }
 
@@ -701,23 +710,23 @@ class EntriesController extends UserController
     $blog_id = $this->getBlogId();
 
     // ブログの設定情報を取得
-    $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
-    $is_captcha = $blog_setting['comment_captcha']==\Fc2blog\Config::get('COMMENT.COMMENT_CAPTCHA.USE');
+    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+    $is_captcha = $blog_setting['comment_captcha']== Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートの引数を受け側で合わせる
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     if (!$is_captcha || !$request->isArgs('token')) {
-      \Fc2blog\Config::read('fc2_request.php');
-      $request->combine(\Fc2blog\Config::get('request_combine.comment_edit'));
+      Config::read('fc2_request.php');
+      $request->combine(Config::get('request_combine.comment_edit'));
       if ($request->get('comment.open_status')=='on') {
-        $request->set('comment.open_status', \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
+        $request->set('comment.open_status', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
       }
     }
 
     $comment_id = $request->get('id', $request->get('comment.id'));
 
     // 編集対象のコメント取得
-    $comments_model = \Fc2blog\Model\Model::load('Comments');
+    $comments_model = Model::load('Comments');
     $comment = $comments_model->getEditableComment($comment_id, $blog_id);
     if (empty($comment)) {
       $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
@@ -725,7 +734,7 @@ class EntriesController extends UserController
 
     // 編集対象の親記事
     $entry_id = $comment['entry_id'];
-    if (!($entry=\Fc2blog\Model\Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id))) {
+    if (!($entry= Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id))) {
       $this->redirect(array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$entry_id));
     }
     $this->set('edit_entry', $entry);
@@ -784,8 +793,8 @@ class EntriesController extends UserController
   */
   public function comment_delete()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $comments_model = \Fc2blog\Model\Model::load('Comments');
+    $request = Request::getInstance();
+    $comments_model = Model::load('Comments');
 
     $blog_id = $this->getBlogId();
     $comment_id = $request->get('comment.id');
@@ -814,25 +823,25 @@ class EntriesController extends UserController
   */
   private function setEntriesData($options=array(), $areas=array())
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $entries_model = \Fc2blog\Model\Model::load('Entries');
+    $request = Request::getInstance();
+    $entries_model = Model::load('Entries');
 
     $blog_id = $this->getBlogId();
 
-    $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
-    $order = $blog_setting['entry_order'] == \Fc2blog\Config::get('ENTRY.ORDER.ASC') ? 'ASC' : 'DESC';
+    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+    $order = $blog_setting['entry_order'] == Config::get('ENTRY.ORDER.ASC') ? 'ASC' : 'DESC';
 
     $options = array_merge(array(
       'limit' => $blog_setting['entry_display_count'],
-      'page'  => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
+      'page'  => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => 'entries.posted_at ' . $order . ', entries.id ' . $order,
     ), $options);
 
     // 表示項目リスト
     $open_status_list = array(
-      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+      Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
+      Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
+      Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
     );
     $options['where'] .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
 
@@ -841,8 +850,8 @@ class EntriesController extends UserController
     $paging = $entries_model->getPaging($options);
 
     // 記事のカテゴリ一覧を取得 TODO:後でcacheを使用する形に
-    $categories_model = \Fc2blog\Model\Model::load('Categories');
-    $tags_model = \Fc2blog\Model\Model::load('Tags');
+    $categories_model = Model::load('Categories');
+    $tags_model = Model::load('Tags');
 
     // 記事のカテゴリーとタグを一括で取得＆振り分け
     $entry_ids = array();
@@ -893,23 +902,23 @@ class EntriesController extends UserController
   {
     $device_type = $this->getDeviceType();
 
-    \Fc2blog\Model\Model::load('BlogTemplates');
-    $templateFilePath = \Fc2blog\Model\BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
-    \Fc2blog\Debug::log('Blog Template[' . $templateFilePath . ']', false, 'log', __FILE__, __LINE__);
+    Model::load('BlogTemplates');
+    $templateFilePath = BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
+    Debug::log('Blog Template[' . $templateFilePath . ']', false, 'log', __FILE__, __LINE__);
 
     if (!is_file($templateFilePath)) {
       // テンプレートファイルが生成されていなければ作成(CSSも同時に)
-      \Fc2blog\Debug::log('Template does not exist! Create', false, 'log', __FILE__, __LINE__);
+      Debug::log('Template does not exist! Create', false, 'log', __FILE__, __LINE__);
 
       $blog = $this->getBlog($blog_id);
-      $templateId = $blog[\Fc2blog\Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)];
-      \Fc2blog\Model\BlogTemplatesModel::createTemplate($templateId, $blog_id, $device_type, $html, $css);
+      $templateId = $blog[Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)];
+      BlogTemplatesModel::createTemplate($templateId, $blog_id, $device_type, $html, $css);
 
-      \Fc2blog\Debug::log('Template generation completion', false, 'log', __FILE__, __LINE__);
+      Debug::log('Template generation completion', false, 'log', __FILE__, __LINE__);
     }
 
     // CSSのURL
-    $this->set('css_link', \Fc2blog\Model\BlogTemplatesModel::getCssUrl($blog_id, $device_type, $html));
+    $this->set('css_link', BlogTemplatesModel::getCssUrl($blog_id, $device_type, $html));
 
     $this->layout = 'fc2_template.html';
     return $templateFilePath;
@@ -941,7 +950,7 @@ class EntriesController extends UserController
     foreach ($errors as $key => $value) {
       $js .= 'insertCommentErrorMessage("' . $name . '[' . $key . ']", "' . $value . '");' . "\n";
     }
-    $open_status_private = \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE');
+    $open_status_private = Config::get('COMMENT.OPEN_STATUS.PRIVATE');
     $comment_error = <<<HTML
 <script>
 function insertCommentErrorMessage(name, message){

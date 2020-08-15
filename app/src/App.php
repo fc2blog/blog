@@ -5,6 +5,8 @@
 
 namespace Fc2blog;
 
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
 use Exception;
 use InvalidArgumentException;
@@ -162,7 +164,7 @@ class App
     }
 
     // Cookieからデバイスタイプを取得
-    $device_type = \Fc2blog\Web\Cookie::get('device');
+    $device_type = Cookie::get('device');
     $devices = array(Config::get('DEVICE_PC'), Config::get('DEVICE_MB'), Config::get('DEVICE_SP'), Config::get('DEVICE_TB'));
     if (!empty($device_type) && in_array($device_type, $devices)) {
       return $device_type;
@@ -288,7 +290,7 @@ class App
     }
 
     // 絶対パスが必要な際に、フルのホスト名を取得する
-    $full_domain = ($abs) ? \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($blog_id) : "";
+    $full_domain = ($abs) ? BlogsModel::getFullHostUrlByBlogId($blog_id) : "";
 
     // TOPページの場合
     if (strtolower($controller)=='entries' && strtolower($action)=='index' && !empty($blog_id)) {

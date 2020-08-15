@@ -2,6 +2,10 @@
 
 namespace Fc2blog\Model;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Web\Session;
+
 class BlogTemplatesModel extends \Fc2blog\Model\Model
 {
 
@@ -48,8 +52,8 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
         'maxlength' => array('max' => 100000),
       ),
       'device_type' => array(
-        'default_value' => \Fc2blog\Config::get('DEVICE_PC'),
-        'in_array'      => array('values'=>array_keys(\Fc2blog\Config::get('DEVICE_NAME'))),
+        'default_value' => Config::get('DEVICE_PC'),
+        'in_array'      => array('values'=>array_keys(Config::get('DEVICE_NAME'))),
       ),
     );
 
@@ -62,7 +66,7 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
   public static function fc2TemplateSyntax($value)
   {
     // フォルダが存在しない場合作成
-    $templatePath = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer(\Fc2blog\Web\Session::get('blog_id')) . '/syntax.php';
+    $templatePath = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer(Session::get('blog_id')) . '/syntax.php';
     $templateDir = dirname($templatePath);
     if (!file_exists($templateDir)) {
       mkdir($templateDir, 0777, true);
@@ -87,7 +91,7 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
   */
   public static function getTemplateFilePath($blog_id, $device_type=0, $isPreview=false)
   {
-    return \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
+    return Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
   }
 
   /**
@@ -95,7 +99,7 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
   */
   public static function getCssFilePath($blog_id, $device_type, $isPreview=false)
   {
-    return \Fc2blog\Config::get('WWW_UPLOAD_DIR') . \Fc2blog\App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
+    return Config::get('WWW_UPLOAD_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
   }
 
   /**
@@ -103,7 +107,7 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
   */
   public static function getCssUrl($blog_id, $device_type, $isPreview=false)
   {
-    return '/' . \Fc2blog\Config::get('UPLOAD_DIR_NAME') . '/' . \Fc2blog\App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
+    return '/' . Config::get('UPLOAD_DIR_NAME') . '/' . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
   }
 
   /**
@@ -160,7 +164,7 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
       $options['where'] .= ' AND device_type=?';
       $options['params'][] = $device_type;
     } else {
-      $options['where'] .= ' AND device_type IN (' . implode(',', \Fc2blog\Config::get('ALLOW_DEVICES')) . ')';
+      $options['where'] .= ' AND device_type IN (' . implode(',', Config::get('ALLOW_DEVICES')) . ')';
     }
     $blog_templates = $this->find('all', $options);
 
@@ -216,7 +220,7 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
     if (\Fc2blog\Model\Model::load('Blogs')->isAppliedTemplate($id, $blog_id, $device_type)) {
       // コメントの表示タイプをテンプレートから判断
       $reply_type = strstr($values['html'], '<%comment_reply_body>') ?
-          \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+          Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
       // コメントの表示タイプを更新
       \Fc2blog\Model\Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
     }
@@ -242,11 +246,11 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
     $html = str_replace($searchs, $replaces, $html);
 
     // テンプレート置換用変数読み込み
-    \Fc2blog\Config::read('fc2_template.php');
+    Config::read('fc2_template.php');
     $ambiguous = array(); // 既存FC2テンプレートの曖昧置換用
 
     // ループ文用の置き換え
-    $loop = \Fc2blog\Config::get('fc2_template_foreach');
+    $loop = Config::get('fc2_template_foreach');
     foreach ($loop as $key => $value) {
       $ambiguous[] = $key;
       do{
@@ -255,7 +259,7 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
     }
 
     // 条件判断文用の置き換え
-    $cond = \Fc2blog\Config::get('fc2_template_if');
+    $cond = Config::get('fc2_template_if');
     foreach ($cond as $key => $value) {
       $ambiguous[] = $key;
       do{
@@ -290,7 +294,7 @@ class BlogTemplatesModel extends \Fc2blog\Model\Model
     }
 
     // 変数の置き換え
-    $html = str_replace(\Fc2blog\Config::get('fc2_template_var_search'), \Fc2blog\Config::get('fc2_template_var_replace'), $html);
+    $html = str_replace(Config::get('fc2_template_var_search'), Config::get('fc2_template_var_replace'), $html);
     $html = preg_replace('/<%[0-9a-zA-Z_]+?>/', '', $html);
     return $html;
   }

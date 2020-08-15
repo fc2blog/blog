@@ -2,7 +2,12 @@
 
 namespace Fc2blog\Web\Controller\User;
 
-abstract class UserController extends \Fc2blog\Web\Controller\AppController
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Controller\AppController;
+use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+
+abstract class UserController extends AppController
 {
 
   /**
@@ -10,7 +15,7 @@ abstract class UserController extends \Fc2blog\Web\Controller\AppController
   */
   public function getBlogId()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     return $request->get('blog_id');
   }
 
@@ -19,7 +24,7 @@ abstract class UserController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getAdminBlogId()
   {
-    return \Fc2blog\Web\Session::get('blog_id');
+    return Session::get('blog_id');
   }
 
   /**
@@ -27,7 +32,7 @@ abstract class UserController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getAdminUserId()
   {
-    return \Fc2blog\Web\Session::get('user_id');
+    return Session::get('user_id');
   }
 
   /**
@@ -45,7 +50,7 @@ abstract class UserController extends \Fc2blog\Web\Controller\AppController
       return true;
     }
     // ログイン判定
-    return \Fc2blog\Model\Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id);
+    return Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id);
   }
 
   /**

@@ -2,6 +2,10 @@
 
 namespace Fc2blog\Model;
 
+use Fc2blog\Config;
+use Fc2blog\Web\Cookie;
+use Fc2blog\Web\Html;
+
 class CommentsModel extends \Fc2blog\Model\Model
 {
 
@@ -30,26 +34,26 @@ class CommentsModel extends \Fc2blog\Model\Model
   public static function getOpenStatusList()
   {
     return array(
-      \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')  => __('Published'),
-      \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING') => __('Approval pending'),
-      \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE') => __('Only exposed administrator'),
+      Config::get('COMMENT.OPEN_STATUS.PUBLIC')  => __('Published'),
+      Config::get('COMMENT.OPEN_STATUS.PENDING') => __('Approval pending'),
+      Config::get('COMMENT.OPEN_STATUS.PRIVATE') => __('Only exposed administrator'),
     );
   }
 
   public static function getOpenStatusUserList()
   {
     return array(
-      \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')  => __('Public comment'),
-      \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE') => __('Secret comments to the management people'),
+      Config::get('COMMENT.OPEN_STATUS.PUBLIC')  => __('Public comment'),
+      Config::get('COMMENT.OPEN_STATUS.PRIVATE') => __('Secret comments to the management people'),
     );
   }
 
   public static function getReplyStatusList()
   {
     return array(
-      \Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD') => __('Not yet read'),
-      \Fc2blog\Config::get('COMMENT.REPLY_STATUS.READ')   => __('Already read'),
-      \Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY')  => __('Answered'),
+      Config::get('COMMENT.REPLY_STATUS.UNREAD') => __('Not yet read'),
+      Config::get('COMMENT.REPLY_STATUS.READ')   => __('Already read'),
+      Config::get('COMMENT.REPLY_STATUS.REPLY')  => __('Answered'),
     );
   }
 
@@ -91,11 +95,11 @@ class CommentsModel extends \Fc2blog\Model\Model
         'maxlength' => array('max' => 100),
       ),
       'open_status' => array(
-        'default_value' => \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC'),
+        'default_value' => Config::get('COMMENT.OPEN_STATUS.PUBLIC'),
         'replace'       => array(
-          'on' => \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE'),
+          'on' => Config::get('COMMENT.OPEN_STATUS.PRIVATE'),
         ), // データを置き換える
-        'in_array'      => array('values' => array(\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC'), \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE'))),
+        'in_array'      => array('values' => array(Config::get('COMMENT.OPEN_STATUS.PUBLIC'), Config::get('COMMENT.OPEN_STATUS.PRIVATE'))),
       ),
     );
   }
@@ -144,7 +148,7 @@ class CommentsModel extends \Fc2blog\Model\Model
     $comment = $this->findByIdAndBlogId($comment_id, $blog_id);
     // パスワード未設定、管理人のみは編集できない
     if (empty($comment) || empty($comment['password'])
-      || $comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')
+      || $comment['open_status']== Config::get('COMMENT.OPEN_STATUS.PRIVATE')
     ) {
       return array();
     }
@@ -172,7 +176,7 @@ class CommentsModel extends \Fc2blog\Model\Model
    */
   public static function passwordHash(string $password): string
   {
-    return hash('sha256', $password . \Fc2blog\Config::get('PASSWORD_SALT'));
+    return hash('sha256', $password . Config::get('PASSWORD_SALT'));
   }
 
   /**
@@ -196,9 +200,9 @@ class CommentsModel extends \Fc2blog\Model\Model
       $data['password'] = $this->passwordHash($data['password']);
     }
     // 全体公開の場合 コメントの承認が必要な場合は承認待ちに変更
-    if ($data['open_status'] == \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) {
-      if ($blog_setting['comment_confirm'] == \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')) {
-        $data['open_status'] = \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING');
+    if ($data['open_status'] == Config::get('COMMENT.OPEN_STATUS.PUBLIC')) {
+      if ($blog_setting['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')) {
+        $data['open_status'] = Config::get('COMMENT.OPEN_STATUS.PENDING');
       }
     }
     // 登録日時を設定
@@ -208,10 +212,10 @@ class CommentsModel extends \Fc2blog\Model\Model
     $id = parent::insert($data);
 
     // 入力した名前,email,urlをCookieに登録
-    if ($id && $blog_setting['comment_cookie_save']==\Fc2blog\Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
-      if (isset($data['name'])) \Fc2blog\Web\Cookie::set('comment_name', $data['name']);
-      if (isset($data['mail'])) \Fc2blog\Web\Cookie::set('comment_mail', $data['mail']);
-      if (isset($data['url']))  \Fc2blog\Web\Cookie::set('comment_url',  $data['url']);
+    if ($id && $blog_setting['comment_cookie_save']== Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
+      if (isset($data['name'])) Cookie::set('comment_name', $data['name']);
+      if (isset($data['mail'])) Cookie::set('comment_mail', $data['mail']);
+      if (isset($data['url']))  Cookie::set('comment_url',  $data['url']);
     }
     return $id;
   }
@@ -222,9 +226,9 @@ class CommentsModel extends \Fc2blog\Model\Model
     unset($data['password']);
 
     // 全体公開の場合 コメントの承認が必要な場合は承認待ちに変更
-    if ($data['open_status'] == \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) {
-      if ($blog_setting['comment_confirm'] == \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')) {
-        $data['open_status'] = \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING');
+    if ($data['open_status'] == Config::get('COMMENT.OPEN_STATUS.PUBLIC')) {
+      if ($blog_setting['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')) {
+        $data['open_status'] = Config::get('COMMENT.OPEN_STATUS.PENDING');
       }
     }
 
@@ -235,10 +239,10 @@ class CommentsModel extends \Fc2blog\Model\Model
     $ret = $this->updateByIdAndBlogId($data, $comment_id, $blog_id);
 
     // 入力した名前,email,urlをCookieに登録
-    if ($ret && $blog_setting['comment_cookie_save']==\Fc2blog\Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
-      if (isset($data['name'])) \Fc2blog\Web\Cookie::set('comment_name', $data['name']);
-      if (isset($data['mail'])) \Fc2blog\Web\Cookie::set('comment_mail', $data['mail']);
-      if (isset($data['url']))  \Fc2blog\Web\Cookie::set('comment_url',  $data['url']);
+    if ($ret && $blog_setting['comment_cookie_save']== Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
+      if (isset($data['name'])) Cookie::set('comment_name', $data['name']);
+      if (isset($data['mail'])) Cookie::set('comment_mail', $data['mail']);
+      if (isset($data['url']))  Cookie::set('comment_url',  $data['url']);
     }
     return $ret;
   }
@@ -287,8 +291,8 @@ class CommentsModel extends \Fc2blog\Model\Model
   */
   public function getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting)
   {
-    $isDisplayApprovalComment = $blog_setting['comment_display_approval'] == \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.SHOW');
-    $isDisplayPrivateComment  = $blog_setting['comment_display_private'] == \Fc2blog\Config::get('COMMENT.COMMENT_DISPLAY.SHOW');
+    $isDisplayApprovalComment = $blog_setting['comment_display_approval'] == Config::get('COMMENT.COMMENT_DISPLAY.SHOW');
+    $isDisplayPrivateComment  = $blog_setting['comment_display_private'] == Config::get('COMMENT.COMMENT_DISPLAY.SHOW');
 
     $where = 'blog_id=? AND entry_id=?';
     $params = array($blog_id, $entry_id);
@@ -296,20 +300,20 @@ class CommentsModel extends \Fc2blog\Model\Model
       // 全て表示する場合はwhere条件追加無し
     } elseif ($isDisplayApprovalComment) {
       // 承認中コメントを表示
-      $where .= ' AND open_status IN (' . \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC') . ',' . \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING') . ')';
+      $where .= ' AND open_status IN (' . Config::get('COMMENT.OPEN_STATUS.PUBLIC') . ',' . Config::get('COMMENT.OPEN_STATUS.PENDING') . ')';
     } elseif ($isDisplayPrivateComment) {
       // 非公開コメントを表示
-      $where .= ' AND open_status IN (' . \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC') . ',' . \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE') . ')';
+      $where .= ' AND open_status IN (' . Config::get('COMMENT.OPEN_STATUS.PUBLIC') . ',' . Config::get('COMMENT.OPEN_STATUS.PRIVATE') . ')';
     } else {
       // 承認済みコメントを表示
-      $where .= ' AND open_status = ' . \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+      $where .= ' AND open_status = ' . Config::get('COMMENT.OPEN_STATUS.PUBLIC');
     }
 
     // 記事のコメント取得
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'order'  => 'id ' . ($blog_setting['comment_order'] == \Fc2blog\Config::get('COMMENT.ORDER.ASC') ? 'ASC': 'DESC'),
+      'order'  => 'id ' . ($blog_setting['comment_order'] == Config::get('COMMENT.ORDER.ASC') ? 'ASC': 'DESC'),
     );
     return $options;
   }
@@ -319,13 +323,13 @@ class CommentsModel extends \Fc2blog\Model\Model
   */
   public function decorateByBlogSetting($tmp_comments, $blog_setting, $self_blog=false)
   {
-    $flag_pending = \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING');
-    $flag_private = \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE');
+    $flag_pending = Config::get('COMMENT.OPEN_STATUS.PENDING');
+    $flag_private = Config::get('COMMENT.OPEN_STATUS.PRIVATE');
 
     $blog = \Fc2blog\Model\Model::load('Blogs')->findById($blog_setting['blog_id']);
 
     // コメントを追加で表示するかどうか
-    $is_add_comment = $blog_setting[\Fc2blog\Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . \Fc2blog\Config::get('DeviceType'))] == \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+    $is_add_comment = $blog_setting[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . Config::get('DeviceType'))] == Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
 
     $comments = array();
     foreach ($tmp_comments as $key => $comment) {
@@ -349,7 +353,7 @@ class CommentsModel extends \Fc2blog\Model\Model
       $comments[] = $comment;
 
       // コメント返信の分(テンプレに返信タグがついている場合 下にコメントを追記する形で出力する
-      if ($is_add_comment && $comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY')) {
+      if ($is_add_comment && $comment['reply_status']== Config::get('COMMENT.REPLY_STATUS.REPLY')) {
         $comment['title'] = 'Re: ' . $comment['title'];
         $comment['body'] = $comment['reply_body'];
         $comment['name'] = $blog['nickname'];
@@ -379,7 +383,7 @@ class CommentsModel extends \Fc2blog\Model\Model
   {
     $count = $this->find('count', array(
       'where'  => 'blog_id=? AND reply_status=?',
-      'params' => array($blog_id, \Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD')),
+      'params' => array($blog_id, Config::get('COMMENT.REPLY_STATUS.UNREAD')),
     ));
     return $count;
   }
@@ -391,7 +395,7 @@ class CommentsModel extends \Fc2blog\Model\Model
   {
     $count = $this->find('count', array(
       'where'  => 'blog_id=? AND open_status=?',
-      'params' => array($blog_id, \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')),
+      'params' => array($blog_id, Config::get('COMMENT.OPEN_STATUS.PENDING')),
     ));
     return $count;
   }
@@ -413,9 +417,9 @@ class CommentsModel extends \Fc2blog\Model\Model
     $comment['entry_title'] = $entry['title'];
 
     // 未読状態の場合既読に変更する
-    if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD')) {
-      $this->updateReplyStatus($blog_id, $comment_id, \Fc2blog\Config::get('COMMENT.REPLY_STATUS.READ'));
-      $comment['reply_status'] = \Fc2blog\Config::get('COMMENT.REPLY_STATUS.READ');
+    if ($comment['reply_status']== Config::get('COMMENT.REPLY_STATUS.UNREAD')) {
+      $this->updateReplyStatus($blog_id, $comment_id, Config::get('COMMENT.REPLY_STATUS.READ'));
+      $comment['reply_status'] = Config::get('COMMENT.REPLY_STATUS.READ');
     }
 
     return $comment;
@@ -427,13 +431,13 @@ class CommentsModel extends \Fc2blog\Model\Model
   public function updateApproval($blog_id, $comment_id=null)
   {
     $params = array($blog_id);
-    $sql  = 'UPDATE ' . $this->getTableName() . ' SET open_status=' . \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+    $sql  = 'UPDATE ' . $this->getTableName() . ' SET open_status=' . Config::get('COMMENT.OPEN_STATUS.PUBLIC');
     $sql .= ' WHERE blog_id=?';
     if ($comment_id) {
       $sql .= ' AND id=?';
       $params[] = $comment_id;
     }
-    $sql .= ' AND open_status=' . \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING');
+    $sql .= ' AND open_status=' . Config::get('COMMENT.OPEN_STATUS.PENDING');
     $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
@@ -453,10 +457,10 @@ class CommentsModel extends \Fc2blog\Model\Model
   public function updateReply($data, $comment)
   {
     // 承認待ちの場合 全体公開への変更も行う
-    if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) {
-      $data['open_status'] = \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+    if ($comment['open_status']== Config::get('COMMENT.OPEN_STATUS.PENDING')) {
+      $data['open_status'] = Config::get('COMMENT.OPEN_STATUS.PUBLIC');
     }
-    $data['reply_status'] = \Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY');  // 返信済みに変更
+    $data['reply_status'] = Config::get('COMMENT.REPLY_STATUS.REPLY');  // 返信済みに変更
     $data['reply_updated_at'] = date('Y-m-d H:i:s');                    // 返信更新日を更新
     return parent::updateByIdAndBlogId($data, $comment['id'], $comment['blog_id']);
   }
@@ -473,12 +477,12 @@ class CommentsModel extends \Fc2blog\Model\Model
 
     // 記事の表示項目リスト
     $open_status_list = array(
-      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-      \Fc2blog\Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+      Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
+      Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
     );
 
     $where  = 'comments.blog_id=?';
-    $where .= ' AND comments.open_status=' . \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+    $where .= ' AND comments.open_status=' . Config::get('COMMENT.OPEN_STATUS.PUBLIC');
     $where .= ' AND entries.blog_id=?';
     $where .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
     $where .= ' AND comments.entry_id=entries.id';
@@ -496,7 +500,7 @@ class CommentsModel extends \Fc2blog\Model\Model
 
     $comments = $this->find('all', $options);
     foreach ($comments as $key => $value) {
-      $comments[$key]['link'] = \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$value['blog_id'], 'id'=>$value['entry_id']));
+      $comments[$key]['link'] = Html::url(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$value['blog_id'], 'id'=>$value['entry_id']));
 
       list($comments[$key]['year'], $comments[$key]['month'], $comments[$key]['day'],
         $comments[$key]['hour'], $comments[$key]['minute'], $comments[$key]['second'], $comments[$key]['youbi'], $comments[$key]['month_short']

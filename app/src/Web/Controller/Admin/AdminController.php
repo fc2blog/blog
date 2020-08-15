@@ -2,7 +2,11 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
-abstract class AdminController extends \Fc2blog\Web\Controller\AppController
+use Fc2blog\Config;
+use Fc2blog\Web\Controller\AppController;
+use Fc2blog\Web\Session;
+
+abstract class AdminController extends AppController
 {
 
   public function __construct($method)
@@ -21,8 +25,8 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
         'Users'  => array('login', 'register'),
         'Common' => array('lang', 'install', 'debug'),
       );
-      $controller_name = \Fc2blog\Config::get('ControllerName');
-      $action_name = \Fc2blog\Config::get('ActionName');
+      $controller_name = Config::get('ControllerName');
+      $action_name = Config::get('ActionName');
       if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
         $this->redirect(array('controller'=>'Users', 'action'=>'login'));
       }
@@ -36,8 +40,8 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
         'Blogs'  => array('index', 'create', 'delete', 'choice'),
         'Common' => array('lang', 'install'),
       );
-      $controller_name = \Fc2blog\Config::get('ControllerName');
-      $action_name = \Fc2blog\Config::get('ActionName');
+      $controller_name = Config::get('ControllerName');
+      $action_name = Config::get('ActionName');
       if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
         $this->setWarnMessage(__('Please select a blog'));
         $this->redirect(array('controller'=>'Blogs', 'action'=>'index'));
@@ -57,15 +61,15 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function loginProcess($user, $blog=null)
   {
-    \Fc2blog\Web\Session::regenerate();
+    Session::regenerate();
 
-    \Fc2blog\Web\Session::set('user_id',   $user['id']);
-    \Fc2blog\Web\Session::set('login_id',  $user['login_id']);
-    \Fc2blog\Web\Session::set('user_type', $user['type']);
+    Session::set('user_id',   $user['id']);
+    Session::set('login_id',  $user['login_id']);
+    Session::set('user_type', $user['type']);
 
     if (!empty($blog)) {
-      \Fc2blog\Web\Session::set('blog_id',  $blog['id']);
-      \Fc2blog\Web\Session::set('nickname', $blog['nickname']);
+      Session::set('blog_id',  $blog['id']);
+      Session::set('nickname', $blog['nickname']);
     }
   }
 
@@ -74,7 +78,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function isLogin()
   {
-    return !!\Fc2blog\Web\Session::get('user_id');
+    return !!Session::get('user_id');
   }
 
   /**
@@ -82,7 +86,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getUserId()
   {
-    return \Fc2blog\Web\Session::get('user_id');
+    return Session::get('user_id');
   }
 
   /**
@@ -90,7 +94,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getNickname()
   {
-    return \Fc2blog\Web\Session::get('nickname');
+    return Session::get('nickname');
   }
 
   /**
@@ -98,7 +102,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function isSelectedBlog()
   {
-    return !!\Fc2blog\Web\Session::get('blog_id');
+    return !!Session::get('blog_id');
   }
 
   /**
@@ -106,7 +110,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function isAdmin()
   {
-    return \Fc2blog\Web\Session::get('user_type') === \Fc2blog\Config::get('USER.TYPE.ADMIN');
+    return Session::get('user_type') === Config::get('USER.TYPE.ADMIN');
   }
 
   /**
@@ -114,7 +118,7 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function getBlogId()
   {
-    return \Fc2blog\Web\Session::get('blog_id');
+    return Session::get('blog_id');
   }
 
   /**
@@ -123,11 +127,11 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   protected function setBlog($blog=null)
   {
     if ($blog) {
-      \Fc2blog\Web\Session::set('nickname', $blog['nickname']);
-      \Fc2blog\Web\Session::set('blog_id',  $blog['id']);
+      Session::set('nickname', $blog['nickname']);
+      Session::set('blog_id',  $blog['id']);
     }else{
-      \Fc2blog\Web\Session::set('nickname', null);
-      \Fc2blog\Web\Session::set('blog_id',  null);
+      Session::set('nickname', null);
+      Session::set('blog_id',  null);
     }
   }
 
@@ -160,9 +164,9 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   */
   protected function setMessage($message, $type)
   {
-    $messages = \Fc2blog\Web\Session::get($type, array());
+    $messages = Session::get($type, array());
     $messages[] = $message;
-    \Fc2blog\Web\Session::set($type, $messages);
+    Session::set($type, $messages);
   }
 
   /**
@@ -171,9 +175,9 @@ abstract class AdminController extends \Fc2blog\Web\Controller\AppController
   protected function removeMessage()
   {
     $messages = array();
-    $messages['info'] = \Fc2blog\Web\Session::remove('flash-message-info');
-    $messages['warn'] = \Fc2blog\Web\Session::remove('flash-message-warn');
-    $messages['error'] = \Fc2blog\Web\Session::remove('flash-message-error');
+    $messages['info'] = Session::remove('flash-message-info');
+    $messages['warn'] = Session::remove('flash-message-warn');
+    $messages['error'] = Session::remove('flash-message-error');
     return $messages;
   }
 

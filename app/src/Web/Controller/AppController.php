@@ -5,6 +5,14 @@
 
 namespace Fc2blog\Web\Controller;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Exception\PseudoExit;
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Html;
+use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+
 abstract class AppController extends \Fc2blog\Web\Controller\Controller
 {
 
@@ -16,8 +24,8 @@ abstract class AppController extends \Fc2blog\Web\Controller\Controller
     $html = $this->output;
 
     // cssとjsを置き換える
-    $css_html = \Fc2blog\Web\Html::getCSSHtml();
-    $js_html = \Fc2blog\Web\Html::getJSHtml();
+    $css_html = Html::getCSSHtml();
+    $js_html = Html::getJSHtml();
 
     // cssとjsを置き換え
     $html = str_replace(array($this->includeCSS(), $this->includeJS()), array($css_html, $js_html), $html);
@@ -47,7 +55,7 @@ abstract class AppController extends \Fc2blog\Web\Controller\Controller
   */
   public function getBlog($blog_id)
   {
-    return \Fc2blog\Model\Model::load('Blogs')->findById($blog_id);
+    return Model::load('Blogs')->findById($blog_id);
   }
 
   /**
@@ -55,7 +63,7 @@ abstract class AppController extends \Fc2blog\Web\Controller\Controller
   */
   protected function getDeviceType()
   {
-    return \Fc2blog\Config::get('DeviceType');
+    return Config::get('DeviceType');
   }
 
   /**
@@ -65,9 +73,9 @@ abstract class AppController extends \Fc2blog\Web\Controller\Controller
   {
     if ($key===null) {
       // 適当な値をトークンに設定
-      $key = \Fc2blog\App::genRandomStringAlphaNum(32);
+      $key = App::genRandomStringAlphaNum(32);
     }
-    \Fc2blog\Web\Session::set($name, $key);
+    Session::set($name, $key);
   }
 
   /**
@@ -75,10 +83,10 @@ abstract class AppController extends \Fc2blog\Web\Controller\Controller
   */
   protected function tokenValidate($name='token')
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     $value = $request->get($name, '');
     $value = mb_convert_kana($value, 'n');
-    return \Fc2blog\Web\Session::remove($name) == $value ? null : __('Token authentication is invalid');
+    return Session::remove($name) == $value ? null : __('Token authentication is invalid');
   }
 
   /**
@@ -86,21 +94,21 @@ abstract class AppController extends \Fc2blog\Web\Controller\Controller
   */
   public function debug()
   {
-    if (\Fc2blog\Config::get('DEBUG')!=2 && \Fc2blog\Config::get('DEBUG') !=3) {
+    if (Config::get('DEBUG')!=2 && Config::get('DEBUG') !=3) {
       return $this->error404();
     }
-    $key = \Fc2blog\Web\Request::getInstance()->get('key');
+    $key = Request::getInstance()->get('key');
 
-    if (!is_file(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
+    if (!is_file(Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
       if(defined("THIS_IS_TEST")){
-        throw new \Fc2blog\Exception\PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
       }else{
         exit;
       }
     }
-    include(\Fc2blog\Config::get('TEMP_DIR') . 'debug_html/' . $key);
+    include(Config::get('TEMP_DIR') . 'debug_html/' . $key);
     if(defined("THIS_IS_TEST")){
-      throw new \Fc2blog\Exception\PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
     }else{
       exit;
     }

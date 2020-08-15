@@ -2,6 +2,9 @@
 
 namespace Fc2blog\Web\Controller\User;
 
+use Fc2blog\Config;
+use Fc2blog\Model\Model;
+
 class BlogsController extends UserController
 {
 
@@ -11,11 +14,11 @@ class BlogsController extends UserController
    */
   public function index()
   {
-    $blog = \Fc2blog\Model\Model::load('Blogs')->findByRandom();
+    $blog = Model::load('Blogs')->findByRandom();
     if (empty($blog)) {
       return $this->error404();
     }
-    $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY') . $blog['id'] . '/');
+    $this->redirect(Config::get('BASE_DIRECTORY') . $blog['id'] . '/');
   }
 
 }

@@ -2,6 +2,10 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\Config;
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Request;
+
 class CommentsController extends AdminController
 {
 
@@ -10,8 +14,8 @@ class CommentsController extends AdminController
    */
   public function index()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $comments_model = \Fc2blog\Model\Model::load('Comments');
+    $request = Request::getInstance();
+    $comments_model = Model::load('Comments');
 
     $blog_id = $this->getBlogId();
 
@@ -20,7 +24,7 @@ class CommentsController extends AdminController
     $params = array($blog_id);
 
     if ($keyword=$request->get('keyword')) {
-      $keyword = \Fc2blog\Model\Model::escape_wildcard($keyword);
+      $keyword = Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND (comments.title LIKE ? OR comments.body LIKE ? OR comments.name LIKE ?)';
       $params = array_merge($params, array($keyword, $keyword, $keyword));
@@ -60,13 +64,13 @@ class CommentsController extends AdminController
       'from'   => 'entries',
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'), \Fc2blog\Web\Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
+      'limit'  => $request->get('limit', Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
 
-    if ($options['limit'] > max(array_keys(\Fc2blog\Config::get('ENTRY.LIMIT_LIST')))) {
-      $options['limit'] = \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT');
+    if ($options['limit'] > max(array_keys(Config::get('ENTRY.LIMIT_LIST')))) {
+      $options['limit'] = Config::get('ENTRY.DEFAULT_LIMIT');
     }
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
       $options['page'] = 0;
@@ -84,8 +88,8 @@ class CommentsController extends AdminController
   */
   public function approval()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $comments_model = \Fc2blog\Model\Model::load('Comments');
+    $request = Request::getInstance();
+    $comments_model = Model::load('Comments');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -95,7 +99,7 @@ class CommentsController extends AdminController
       $this->redirect(array('action'=>'index'));
     }
 
-    if ($comment['open_status']!=\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) {
+    if ($comment['open_status']!= Config::get('COMMENT.OPEN_STATUS.PENDING')) {
       // 承認待ち以外はリダイレクト
       $this->redirect(array('action'=>'index'));
     }
@@ -116,11 +120,11 @@ class CommentsController extends AdminController
   * コメントの承認(ajax版)
   */
   public function ajax_approval () {
-    \Fc2blog\Config::set('DEBUG', 0);
+    Config::set('DEBUG', 0);
     $this->layout = 'json.html';
 
-    $request = \Fc2blog\Web\Request::getInstance();
-    $comments_model = \Fc2blog\Model\Model::load('Comments');
+    $request = Request::getInstance();
+    $comments_model = Model::load('Comments');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -131,7 +135,7 @@ class CommentsController extends AdminController
       return ;
     }
 
-    if ($comment['open_status']!=\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) {
+    if ($comment['open_status']!= Config::get('COMMENT.OPEN_STATUS.PENDING')) {
       $this->set('json', array('success'=>1));
       return ;
     }
@@ -146,8 +150,8 @@ class CommentsController extends AdminController
   */
   public function reply()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $comments_model = \Fc2blog\Model\Model::load('Comments');
+    $request = Request::getInstance();
+    $comments_model = Model::load('Comments');
 
     $comment_id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -161,8 +165,8 @@ class CommentsController extends AdminController
 
     // コメントの初期表示時入力データ設定
     if (!$request->get('comment')){
-      $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
-      if ($comment['reply_status']!=\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']==\Fc2blog\Config::get('COMMENT.QUOTE.USE')) {
+      $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+      if ($comment['reply_status']!= Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']== Config::get('COMMENT.QUOTE.USE')) {
         $comment['reply_body'] = '> ' . str_replace("\n", "\n> ",$comment['body']) . "\n";
       }
       $request->set('comment', $comment);
@@ -198,11 +202,11 @@ class CommentsController extends AdminController
   * ajax用の返信
   */
   public function ajax_reply(){
-    \Fc2blog\Config::set('DEBUG', 0);
+    Config::set('DEBUG', 0);
     $this->layout = 'ajax.html';
 
-    $request = \Fc2blog\Web\Request::getInstance();
-    $comments_model = \Fc2blog\Model\Model::load('Comments');
+    $request = Request::getInstance();
+    $comments_model = Model::load('Comments');
 
     $comment_id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -216,8 +220,8 @@ class CommentsController extends AdminController
 
     // コメントの初期表示時入力データ設定
     if (!$request->get('comment')){
-      $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
-      if ($comment['reply_status']!=\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']==\Fc2blog\Config::get('COMMENT.QUOTE.USE')) {
+      $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+      if ($comment['reply_status']!= Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote']== Config::get('COMMENT.QUOTE.USE')) {
         $comment['reply_body'] = '> ' . str_replace("\n", "\n> ",$comment['body']) . "\n";
       }
       $request->set('comment', $comment);
@@ -245,10 +249,10 @@ class CommentsController extends AdminController
    */
   public function delete()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // 削除処理
-    if (\Fc2blog\Model\Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+    if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
       $this->setInfoMessage(__('I removed the comment'));
     } else {
       $this->setErrorMessage(__('I failed to remove'));

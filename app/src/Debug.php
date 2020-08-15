@@ -5,6 +5,9 @@
 
 namespace Fc2blog;
 
+use Fc2blog\Web\Html;
+use Fc2blog\Web\Session;
+
 class Debug{
 
   private static $logs = array();
@@ -82,7 +85,7 @@ class Debug{
   */
   public static function getLogs(){
     self::initLogs();    // ログの初期化
-    \Fc2blog\Web\Session::start();
+    Session::start();
     $logs = self::$logs;
     return $logs;
   }
@@ -119,14 +122,14 @@ class Debug{
       // DebugをHTMLへ吐き出す以外は処理を行わない
       return ;
     }
-    \Fc2blog\Web\Session::set('debug', self::getLogs());
+    Session::set('debug', self::getLogs());
   }
 
   /**
   * セッションから前回のログを取得し削除する
   */
   public static function removeSessionLogs(){
-    return \Fc2blog\Web\Session::remove('debug', array());
+    return Session::remove('debug', array());
   }
 
   /**
@@ -155,7 +158,7 @@ class Debug{
     file_put_contents($filePath, $html);    // 結果をデバッグ用HTMLに書き込み
     chmod($filePath, 0777);
 
-    $url = \Fc2blog\Web\Html::url(array('controller'=>'common', 'action'=>'debug', 'key'=> $key));
+    $url = Html::url(array('controller'=>'common', 'action'=>'debug', 'key'=> $key));
     if ($debug==2) {
       // iframeで表示
       echo <<<HTML

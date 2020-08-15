@@ -2,6 +2,9 @@
 
 namespace Fc2blog\Model;
 
+use Fc2blog\Config;
+use Fc2blog\Web\Session;
+
 class UsersModel extends \Fc2blog\Model\Model
 {
 
@@ -42,7 +45,7 @@ class UsersModel extends \Fc2blog\Model\Model
     );
     if (in_array('login_blog_id', $white_list)) {
       $this->validates['login_blog_id'] = array(
-        'in_array' => array('values'=>array_keys(\Fc2blog\Model\Model::load('Blogs')->getListByUserId(\Fc2blog\Web\Session::get('user_id')))),
+        'in_array' => array('values'=>array_keys(\Fc2blog\Model\Model::load('Blogs')->getListByUserId(Session::get('user_id')))),
       );
     }
   }
@@ -114,7 +117,7 @@ class UsersModel extends \Fc2blog\Model\Model
   */
   public static function passwordHash($password)
   {
-    return hash('sha256', $password . \Fc2blog\Config::get('PASSWORD_SALT'));
+    return hash('sha256', $password . Config::get('PASSWORD_SALT'));
   }
 
   /**
@@ -135,7 +138,7 @@ class UsersModel extends \Fc2blog\Model\Model
   public function isExistAdmin()
   {
     return $this->isExist(array(
-      'where' => 'type=' . \Fc2blog\Config::get('USER.TYPE.ADMIN'),
+      'where' => 'type=' . Config::get('USER.TYPE.ADMIN'),
     ));
   }
 

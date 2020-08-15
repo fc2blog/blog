@@ -2,6 +2,11 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\Config;
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+
 class UsersController extends AdminController
 {
 
@@ -14,14 +19,14 @@ class UsersController extends AdminController
       return $this->error404();
     }
 
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     $options = array(
-      'limit' => \Fc2blog\Config::get('PAGE.USER.LIMIT', 10),
-      'page'  => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
+      'limit' => Config::get('PAGE.USER.LIMIT', 10),
+      'page'  => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => 'id DESC',
     );
-    $users_model = \Fc2blog\Model\Model::load('Users');
+    $users_model = Model::load('Users');
     $users = $users_model->find('all', $options);
     $paging = $users_model->getPaging($options);
 
@@ -34,19 +39,19 @@ class UsersController extends AdminController
   */
   public function register()
   {
-    if (\Fc2blog\Config::get('USER.REGIST_SETTING.FREE') != \Fc2blog\Config::get('USER.REGIST_STATUS')) {
+    if (Config::get('USER.REGIST_SETTING.FREE') != Config::get('USER.REGIST_STATUS')) {
       return $this->error404();
     }
 
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // 初期表示時
     if (!$request->get('user')) {
       return ;
     }
 
-    $users_model = \Fc2blog\Model\Model::load('Users');
-    $blogs_model = \Fc2blog\Model\Model::load('Blogs');
+    $users_model = Model::load('Users');
+    $blogs_model = Model::load('Blogs');
 
     // ユーザーとブログの新規登録処理
     $errors = array();
@@ -75,8 +80,8 @@ class UsersController extends AdminController
   */
   public function edit()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $users_model = \Fc2blog\Model\Model::load('Users');
+    $request = Request::getInstance();
+    $users_model = Model::load('Users');
 
     $user_id = $this->getUserId();
 
@@ -109,7 +114,7 @@ class UsersController extends AdminController
    */
   public function withdrawal()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // 退会チェック
     if (!$request->get('user.delete')) {
@@ -117,7 +122,7 @@ class UsersController extends AdminController
     }
 
     // 削除処理
-    \Fc2blog\Model\Model::load('Users')->deleteById($this->getUserId());
+    Model::load('Users')->deleteById($this->getUserId());
     $this->setInfoMessage(__('Was completed withdrawal'));
     $this->logout();
   }
@@ -128,17 +133,17 @@ class UsersController extends AdminController
   public function login()
   {
     if ($this->isLogin()) {
-      $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
+      $this->redirect(Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
     }
 
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // 初期表示時
     if (!$request->get('user')) {
       return ;
     }
 
-    $users_model = \Fc2blog\Model\Model::load('Users');
+    $users_model = Model::load('Users');
 
     // ログインフォームのバリデート
     $errors = $users_model->loginValidate($request->get('user'), $data, array('login_id', 'password'));
@@ -146,13 +151,13 @@ class UsersController extends AdminController
       $user = $users_model->findByLoginIdAndPassword($data['login_id'], $data['password']);
       if ($user) {
         // ログイン処理
-        $blog = \Fc2blog\Model\Model::load('Blogs')->getLoginBlog($user);
+        $blog = Model::load('Blogs')->getLoginBlog($user);
         $this->loginProcess($user, $blog);
         $users_model->updateById(array('logged_at'=>date('Y-m-d H:i:s')), $user['id']);
         if (!$this->isSelectedBlog()) {
           $this->redirect(array('controller'=>'Blogs', 'action'=>'create'));
         }
-        $this->redirect(\Fc2blog\Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
+        $this->redirect(Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
       }
       $errors = array('login_id' => __('Login ID or password is incorrect'));
     }
@@ -166,7 +171,7 @@ class UsersController extends AdminController
   public function logout()
   {
     if ($this->isLogin()) {
-      \Fc2blog\Web\Session::destroy();
+      Session::destroy();
     }
     $this->redirect(array('action'=>'login'));
   }

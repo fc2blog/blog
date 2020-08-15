@@ -2,7 +2,9 @@
 
 namespace Fc2blog\Model;
 
-class PluginsModel extends \Fc2blog\Model\Model
+use Fc2blog\Config;
+
+class PluginsModel extends Model
 {
 
   public static $instance = null;
@@ -83,7 +85,7 @@ class PluginsModel extends \Fc2blog\Model\Model
       return $id;
     }
     // 作成したプラグインIDで更新
-    return \Fc2blog\Model\Model::load('BlogPlugins')->updateByIdAndBlogId(array('plugin_id'=>$id), $blog_plugin['id'], $blog_plugin['blog_id']);
+    return Model::load('BlogPlugins')->updateByIdAndBlogId(array('plugin_id'=>$id), $blog_plugin['id'], $blog_plugin['blog_id']);
   }
 
   /**
@@ -95,7 +97,7 @@ class PluginsModel extends \Fc2blog\Model\Model
       return false;
     }
     // 登録状態(id<>0)のプラグインを未登録(id=0)に戻す
-    return \Fc2blog\Model\Model::load('BlogPlugins')->update(array('plugin_id'=>0), 'plugin_id=?', array($id));
+    return Model::load('BlogPlugins')->update(array('plugin_id'=>0), 'plugin_id=?', array($id));
   }
 
   /**
@@ -105,8 +107,8 @@ class PluginsModel extends \Fc2blog\Model\Model
   {
     $this->delete('user_id=0');
 
-    \Fc2blog\Config::read('fc2_default_plugin.php');   // 初期公式プラグインデータ取得
-    $plugins = \Fc2blog\Config::get('official_plugins');
+    Config::read('fc2_default_plugin.php');   // 初期公式プラグインデータ取得
+    $plugins = Config::get('official_plugins');
     foreach ($plugins as $plugin) {
       $plugin['list'] = '';
       $plugin['attribute'] = '{}';

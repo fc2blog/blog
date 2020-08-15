@@ -2,6 +2,9 @@
 
 namespace Fc2blog\Model;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+
 class BlogsModel extends \Fc2blog\Model\Model
 {
 
@@ -28,7 +31,7 @@ class BlogsModel extends \Fc2blog\Model\Model
   public static function privateCheck($value, $valid, $k, $d)
   {
     if ($value==null || $value==='') {
-      if ($d['open_status']==\Fc2blog\Config::get('BLOG.OPEN_STATUS.PRIVATE')) {
+      if ($d['open_status']== Config::get('BLOG.OPEN_STATUS.PRIVATE')) {
         return __('Please Be sure to set the password if you want to private');
       }
     }
@@ -40,7 +43,7 @@ class BlogsModel extends \Fc2blog\Model\Model
   */
   public static function useDirectory($value)
   {
-    if (is_dir(\Fc2blog\Config::get('WWW_DIR') . $value)) {
+    if (is_dir(Config::get('WWW_DIR') . $value)) {
       return __('Is already in use');
     }
     return true;
@@ -118,8 +121,8 @@ class BlogsModel extends \Fc2blog\Model\Model
   public static function getOpenStatusList()
   {
     return array(
-        \Fc2blog\Config::get('BLOG.OPEN_STATUS.PUBLIC')  => __('Public'),
-        \Fc2blog\Config::get('BLOG.OPEN_STATUS.PRIVATE') => __('Private'),
+        Config::get('BLOG.OPEN_STATUS.PUBLIC')  => __('Public'),
+        Config::get('BLOG.OPEN_STATUS.PRIVATE') => __('Private'),
     );
   }
 
@@ -152,8 +155,8 @@ class BlogsModel extends \Fc2blog\Model\Model
   public static function getSSLEnableSettingList(): array
   {
     return array(
-      \Fc2blog\Config::get('BLOG.SSL_ENABLE.DISABLE') => __("Disable"),
-      \Fc2blog\Config::get('BLOG.SSL_ENABLE.ENABLE') => __("Enable"),
+      Config::get('BLOG.SSL_ENABLE.DISABLE') => __("Disable"),
+      Config::get('BLOG.SSL_ENABLE.ENABLE') => __("Enable"),
     );
   }
 
@@ -163,8 +166,8 @@ class BlogsModel extends \Fc2blog\Model\Model
   public static function getRedirectStatusCodeSettingList(): array
   {
     return array(
-      \Fc2blog\Config::get('BLOG.REDIRECT_STATUS_CODE.MOVED_PERMANENTLY') => __("Moved Permanently"),
-      \Fc2blog\Config::get('BLOG.REDIRECT_STATUS_CODE.FOUND') => __("Found"),
+      Config::get('BLOG.REDIRECT_STATUS_CODE.MOVED_PERMANENTLY') => __("Moved Permanently"),
+      Config::get('BLOG.REDIRECT_STATUS_CODE.FOUND') => __("Found"),
     );
   }
 
@@ -172,7 +175,7 @@ class BlogsModel extends \Fc2blog\Model\Model
   * 現在使用中のテンプレートID一覧を取得する
   */
   public static function getTemplateIds($blog){
-    $columns = \Fc2blog\Config::get('BLOG_TEMPLATE_COLUMN');
+    $columns = Config::get('BLOG_TEMPLATE_COLUMN');
     return array($blog[$columns[1]], $blog[$columns[2]], $blog[$columns[4]], $blog[$columns[8]]);
   }
 
@@ -298,10 +301,10 @@ class BlogsModel extends \Fc2blog\Model\Model
     $blog_data = array();
 
     $devices = array(
-      'template_pc_id' => \Fc2blog\Config::get('DEVICE_PC'),
-      'template_mb_id' => \Fc2blog\Config::get('DEVICE_MB'),
-      'template_sp_id' => \Fc2blog\Config::get('DEVICE_SP'),
-      'template_tb_id' => \Fc2blog\Config::get('DEVICE_TB'),
+      'template_pc_id' => Config::get('DEVICE_PC'),
+      'template_mb_id' => Config::get('DEVICE_MB'),
+      'template_sp_id' => Config::get('DEVICE_SP'),
+      'template_tb_id' => Config::get('DEVICE_TB'),
     );
     $blog_templates_data = array(
       'blog_id'     => $id,
@@ -310,14 +313,14 @@ class BlogsModel extends \Fc2blog\Model\Model
     );
     foreach ($devices as $key => $device) {
       // TODO:ファイルではなくテンプレのDBから呼び出す or ユーザーに選択させる予定
-      $template_name = 'fc2_default_template' . \Fc2blog\Config::get('DEVICE_PREFIX.' . $device) . '.php';
-      $css_name = 'fc2_default_css' . \Fc2blog\Config::get('DEVICE_PREFIX.' . $device) . '.php';
-      if (file_exists(\Fc2blog\Config::get('CONFIG_DIR') . $template_name) && file_exists(\Fc2blog\Config::get('CONFIG_DIR') . $css_name)) {
-        $blog_templates_data['html'] = file_get_contents(\Fc2blog\Config::get('CONFIG_DIR') . $template_name);
-        $blog_templates_data['css'] = file_get_contents(\Fc2blog\Config::get('CONFIG_DIR') . $css_name);
+      $template_name = 'fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+      $css_name = 'fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+      if (file_exists(Config::get('CONFIG_DIR') . $template_name) && file_exists(Config::get('CONFIG_DIR') . $css_name)) {
+        $blog_templates_data['html'] = file_get_contents(Config::get('CONFIG_DIR') . $template_name);
+        $blog_templates_data['css'] = file_get_contents(Config::get('CONFIG_DIR') . $css_name);
       } else {
-        $blog_templates_data['html'] = file_get_contents(\Fc2blog\Config::get('CONFIG_DIR') . 'fc2_default_template.php');
-        $blog_templates_data['css'] = file_get_contents(\Fc2blog\Config::get('CONFIG_DIR') . 'fc2_default_css.php');
+        $blog_templates_data['html'] = file_get_contents(Config::get('CONFIG_DIR') . 'fc2_default_template.php');
+        $blog_templates_data['css'] = file_get_contents(Config::get('CONFIG_DIR') . 'fc2_default_css.php');
       }
 
       $blog_templates_data['device_type'] = $device;
@@ -357,11 +360,11 @@ class BlogsModel extends \Fc2blog\Model\Model
 
     // 使用テンプレートを更新
     $data = array();
-    $data[\Fc2blog\Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)] = $blog_template['id'];
+    $data[Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)] = $blog_template['id'];
 
     // コメントの表示タイプをテンプレートから判断
     $reply_type = strstr($blog_template['html'], '<%comment_reply_body>') ?
-      \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : \Fc2blog\Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+      Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
     // コメントの表示タイプを更新
     \Fc2blog\Model\Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
 
@@ -399,7 +402,7 @@ class BlogsModel extends \Fc2blog\Model\Model
     }
 
     // ブログディレクトリー削除
-    \Fc2blog\App::removeBlogDirectory($blog_id);
+    App::removeBlogDirectory($blog_id);
     return true;
   }
 
@@ -412,7 +415,7 @@ class BlogsModel extends \Fc2blog\Model\Model
    */
   public function isAppliedTemplate($template_id, $blog_id, $device_type): bool
   {
-    $blog_template_column = \Fc2blog\Config::get("BLOG_TEMPLATE_COLUMN.{$device_type}");
+    $blog_template_column = Config::get("BLOG_TEMPLATE_COLUMN.{$device_type}");
     $blogs = $this->findById($blog_id);
 
     $isAppliedTemplate = (
@@ -455,9 +458,9 @@ class BlogsModel extends \Fc2blog\Model\Model
   static public function getFullHostUrlByBlogId(string $blog_id, $domain=null){
     $schema = static::getSchemaByBlogId($blog_id);
     if(is_null($domain)) {
-      $domain = \Fc2blog\Config::get("DOMAIN");
+      $domain = Config::get("DOMAIN");
     }
-    $port = ($schema === "https:") ? \Fc2blog\Config::get("HTTPS_PORT_STR") : \Fc2blog\Config::get("HTTP_PORT_STR");
+    $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
     return $schema . "//" . $domain . $port;
   }
 
@@ -484,7 +487,7 @@ class BlogsModel extends \Fc2blog\Model\Model
    * @return string
    */
   static public function getSchemaBySslEnableValue(int $value){
-    return ($value === \Fc2blog\Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http:' : 'https:';
+    return ($value === Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http:' : 'https:';
   }
 
   /**

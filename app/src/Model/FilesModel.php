@@ -2,6 +2,9 @@
 
 namespace Fc2blog\Model;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+
 class FilesModel extends \Fc2blog\Model\Model{
 
   public static $instance = null;
@@ -66,7 +69,7 @@ class FilesModel extends \Fc2blog\Model\Model{
         'file' => array(
           'required'  => true,
           'mime_type' => array('image/jpeg', 'image/png', 'image/gif'),
-          'size'      => \Fc2blog\Config::get('FILE.MAX_SIZE'),
+          'size'      => Config::get('FILE.MAX_SIZE'),
         ),
       ),
     );
@@ -93,7 +96,7 @@ class FilesModel extends \Fc2blog\Model\Model{
       'file' => array(
         'file' => array(
           'mime_type' => array('image/jpeg', 'image/png', 'image/gif'),
-          'size'      => \Fc2blog\Config::get('FILE.MAX_SIZE'),
+          'size'      => Config::get('FILE.MAX_SIZE'),
         ),
       ),
     );
@@ -134,7 +137,7 @@ class FilesModel extends \Fc2blog\Model\Model{
 
     // ファイル削除
     if ($flag) {
-      \Fc2blog\App::deleteFile($file['blog_id'], $file['id']);
+      App::deleteFile($file['blog_id'], $file['id']);
     }
 
     return $flag;

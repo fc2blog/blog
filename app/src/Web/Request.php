@@ -6,6 +6,9 @@
 
 namespace Fc2blog\Web;
 
+use Fc2blog\Config;
+use Fc2blog\Exception\PseudoExit;
+
 class Request
 {
 
@@ -70,7 +73,7 @@ class Request
       echo "コントローラー名、メソッド名が指定されておりません\n";
       echo "cron.php [ControllerName] [MethodName] [...key=value]\n";
       if(defined("THIS_IS_TEST")){
-        throw new \Fc2blog\Exception\PseudoExit(__FILE__ . ":" . __LINE__ ." ");
+        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
       }else{
         exit;
       }
@@ -83,8 +86,8 @@ class Request
       list($key, $value) = explode('=', $a);
       $data[$key] = $value;
     }
-    $data[\Fc2blog\Config::get('ARGS_CONTROLLER')] = $className;
-    $data[\Fc2blog\Config::get('ARGS_ACTION')] = $methodName;
+    $data[Config::get('ARGS_CONTROLLER')] = $className;
+    $data[Config::get('ARGS_ACTION')] = $methodName;
     $this->request = $data;
   }
 

@@ -2,6 +2,12 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+
 class CategoriesController extends AdminController
 {
 
@@ -10,8 +16,8 @@ class CategoriesController extends AdminController
    */
   public function create()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $categories_model = \Fc2blog\Model\Model::load('Categories');
+    $request = Request::getInstance();
+    $categories_model = Model::load('Categories');
 
     $blog_id = $this->getBlogId();
 
@@ -20,7 +26,7 @@ class CategoriesController extends AdminController
     $this->set('category_parents', array(0=>'') + $options);
 
     // カテゴリ登録数
-    $create_limit = \Fc2blog\Config::get('CATEGORY.CREATE_LIMIT');
+    $create_limit = Config::get('CATEGORY.CREATE_LIMIT');
     $is_limit_create_category = ($create_limit > 0)? ($create_limit <= count($options)) : false;
     $this->set('is_limit_create_category', $is_limit_create_category);
 
@@ -31,8 +37,8 @@ class CategoriesController extends AdminController
     }
 
     // 初期表示時
-    if (!$request->get('category') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
+    if (!$request->get('category') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+      Session::set('sig', App::genRandomString());
       return ;
     }
 
@@ -58,8 +64,8 @@ class CategoriesController extends AdminController
    */
   public function edit()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $categories_model = \Fc2blog\Model\Model::load('Categories');
+    $request = Request::getInstance();
+    $categories_model = Model::load('Categories');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -69,7 +75,7 @@ class CategoriesController extends AdminController
     $this->set('category_parents', array(0=>'') + $options);
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('category') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('category') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       if (!$category=$categories_model->findByIdAndBlogId($id, $blog_id)) {
         $this->redirect(array('action'=>'create'));
       }
@@ -99,13 +105,13 @@ class CategoriesController extends AdminController
    */
   public function delete()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $categories_model = \Fc2blog\Model\Model::load('Categories');
+    $request = Request::getInstance();
+    $categories_model = Model::load('Categories');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
 
-    if (!\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       $request->clear();
       $this->redirect(array('action'=>'create'));
       return;
@@ -127,16 +133,16 @@ class CategoriesController extends AdminController
   */
   public function ajax_add()
   {
-    \Fc2blog\Config::set('DEBUG', 0);    // デバッグなしに変更
+    Config::set('DEBUG', 0);    // デバッグなしに変更
 
-    $request = \Fc2blog\Web\Request::getInstance();
-    $categories_model = \Fc2blog\Model\Model::load('Categories');
+    $request = Request::getInstance();
+    $categories_model = Model::load('Categories');
 
     $blog_id = $this->getBlogId();
 
     $json = array('status' => 0);
     
-    if (!\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       $request->clear();
       return;
     }

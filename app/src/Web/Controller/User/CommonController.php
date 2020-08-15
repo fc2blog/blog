@@ -2,6 +2,14 @@
 
 namespace Fc2blog\Web\Controller\User;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Debug;
+use Fc2blog\Lib\CaptchaImage;
+use Fc2blog\Lib\ThumbnailImageMaker;
+use Fc2blog\Web\Cookie;
+use Fc2blog\Web\Request;
+
 class CommonController extends UserController
 {
 
@@ -10,12 +18,12 @@ class CommonController extends UserController
   */
   public function lang()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // 言語の設定
     $lang = $request->get('lang');
-    if ($language=\Fc2blog\Config::get('LANGUAGES.' . $lang)) {
-      \Fc2blog\Web\Cookie::set('lang', $lang);
+    if ($language= Config::get('LANGUAGES.' . $lang)) {
+      Cookie::set('lang', $lang);
     }
 
     // 元のURLに戻す
@@ -27,23 +35,23 @@ class CommonController extends UserController
   */
   public function device_change()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // 言語の設定
     $device_type = 0;
     $device = $request->get('device');
     switch ($device) {
-      case 'pc': $device_type = \Fc2blog\Config::get('DEVICE_PC'); break;
+      case 'pc': $device_type = Config::get('DEVICE_PC'); break;
       case 'm':
-      case 'mb': $device_type = \Fc2blog\Config::get('DEVICE_MB'); break;
-      case 'sp': $device_type = \Fc2blog\Config::get('DEVICE_SP'); break;
-      case 'tb': $device_type = \Fc2blog\Config::get('DEVICE_TB'); break;
+      case 'mb': $device_type = Config::get('DEVICE_MB'); break;
+      case 'sp': $device_type = Config::get('DEVICE_SP'); break;
+      case 'tb': $device_type = Config::get('DEVICE_TB'); break;
       default:
-        \Fc2blog\Web\Cookie::set('device', null);
+        Cookie::set('device', null);
         $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId()));
     }
 
-    \Fc2blog\Web\Cookie::set('device', $device_type);
+    Cookie::set('device', $device_type);
     $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId()));
   }
 
@@ -61,11 +69,11 @@ class CommonController extends UserController
       $key = random_int(1000, 9999);
     }
     $this->setToken($key);    // トークン設定
-    $isJa = \Fc2blog\Config::get('LANG')=='ja'; // 日本語以外は数字のみを表示
-    $captcha = new \Fc2blog\Lib\CaptchaImage($size_x, $size_y, \Fc2blog\Config::get('PASSWORD_SALT'), $isJa);
+    $isJa = Config::get('LANG')=='ja'; // 日本語以外は数字のみを表示
+    $captcha = new CaptchaImage($size_x, $size_y, Config::get('PASSWORD_SALT'), $isJa);
     $captcha->drawNumber($key, true);
 
-    \Fc2blog\Config::set('DEBUG', 0);
+    Config::set('DEBUG', 0);
     $this->layout = 'none.html';
   }
 
@@ -74,7 +82,7 @@ class CommonController extends UserController
   */
   public function thumbnail()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     $blog_id = $request->get('blog_id');
     $id      = $request->get('id');
@@ -88,7 +96,7 @@ class CommonController extends UserController
       'id'      => $id,
       'ext'     => $ext,
     );
-    $file_path = \Fc2blog\App::getUserFilePath($file, true);
+    $file_path = App::getUserFilePath($file, true);
     if (!file_exists($file_path)) {
       return $this->error404();
     }
@@ -120,10 +128,10 @@ class CommonController extends UserController
     }
 
     // サムネイル出力処理
-    $image = new \Fc2blog\Lib\ThumbnailImageMaker();
+    $image = new ThumbnailImageMaker();
     $load_result = $image->load($file_path);
     if($load_result!==true){
-        \Fc2blog\Debug::log('Load image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+        Debug::log('Load image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
         return $this->error404();
     }
     switch ($whs) {
@@ -138,7 +146,7 @@ class CommonController extends UserController
         break;
     }
     if($resize_result!==true){
-      \Fc2blog\Debug::log('Resize thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+      Debug::log('Resize thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
       return $this->error404();
     }
 
@@ -150,7 +158,7 @@ class CommonController extends UserController
     }
     $save_result = $image->save($save_file, $image->image_type, 90);
     if($save_result!==true){
-      \Fc2blog\Debug::log('Save thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+      Debug::log('Save thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
       return $this->error404();
     }
     chmod($save_file, 0777);

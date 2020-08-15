@@ -5,6 +5,10 @@
 
 namespace Fc2blog\Web;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Model\BlogsModel;
+
 class Html
 {
 
@@ -19,32 +23,32 @@ class Html
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
       $gets = \Fc2blog\Web\Request::getInstance()->getGet();;
-      unset($gets[\Fc2blog\Config::get('ARGS_CONTROLLER')]);
-      unset($gets[\Fc2blog\Config::get('ARGS_ACTION')]);
+      unset($gets[Config::get('ARGS_CONTROLLER')]);
+      unset($gets[Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);
     }
 
-    $controller = \Fc2blog\Config::get('ControllerName');
+    $controller = Config::get('ControllerName');
     if (isset($args['controller'])) {
       $controller = $args['controller'];
       unset($args['controller']);
     }
     $controller = snakeCase($controller);
 
-    $action = \Fc2blog\Config::get('ActionName');
+    $action = Config::get('ActionName');
     if (isset($args['action'])) {
       $action = $args['action'];
       unset($args['action']);
     }
 
     // 引数のデバイスタイプを取得
-    $device_name = \Fc2blog\App::getArgsDevice();
+    $device_name = App::getArgsDevice();
     if (!empty($device_name) && isset($args[$device_name])) {
       unset($args[$device_name]);
     }
 
     // URL/Controller/Methodの形で返却
-    if (\Fc2blog\Config::get('URL_REWRITE')) {
+    if (Config::get('URL_REWRITE')) {
       $params = array();
       foreach($args as $key => $value){
         $params[] = $key . '=' . $value;
@@ -53,7 +57,7 @@ class Html
         $params[] = $device_name;
       }
 
-      $url = \Fc2blog\Config::get('BASE_DIRECTORY') . $controller . '/' . $action;
+      $url = Config::get('BASE_DIRECTORY') . $controller . '/' . $action;
       if (count($params)) {
         $url .= '?' . implode('&', $params);
       }
@@ -68,8 +72,8 @@ class Html
     }
 
     $params = array();
-    $params[] = \Fc2blog\Config::get('ARGS_CONTROLLER') . '=' . $controller;
-    $params[] = \Fc2blog\Config::get('ARGS_ACTION') . '=' . $action;
+    $params[] = Config::get('ARGS_CONTROLLER') . '=' . $controller;
+    $params[] = Config::get('ARGS_ACTION') . '=' . $action;
     foreach($args as $key => $value){
       $params[] = $key . '=' . $value;
     }
@@ -77,7 +81,7 @@ class Html
       $params[] = $device_name;
     }
 
-    $url = \Fc2blog\Config::get('BASE_DIRECTORY') . \Fc2blog\Config::get('DIRECTORY_INDEX');
+    $url = Config::get('BASE_DIRECTORY') . Config::get('DIRECTORY_INDEX');
     if (count($params)) {
       $url .= '?' . implode('&', $params);
     }
@@ -87,7 +91,7 @@ class Html
 
     // フルのURLを取得する（SSL強制リダイレクト用）
     if ($full_url && !is_null($blog_id)) {
-      $url = \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
+      $url = BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
     }
     return $url;
   }

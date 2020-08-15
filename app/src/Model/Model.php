@@ -6,6 +6,8 @@
 
 namespace Fc2blog\Model;
 
+use Fc2blog\Debug;
+
 abstract class Model implements \Fc2blog\Model\ModelInterface
 {
   const LIKE_WILDCARD = '\\_%'; // MySQL用
@@ -237,7 +239,7 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
   public function getPaging($options=array())
   {
     if (!isset($options['page']) || !isset($options['limit'])) {
-      \Fc2blog\Debug::log('getPaging options["page"] or options["limit"]が設定されておりません', array(), 'error');
+      Debug::log('getPaging options["page"] or options["limit"]が設定されておりません', array(), 'error');
       return array();
     }
 

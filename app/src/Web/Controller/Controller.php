@@ -5,6 +5,14 @@
 
 namespace Fc2blog\Web\Controller;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Debug;
+use Fc2blog\Exception\PseudoExit;
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Web\Html;
+use Fc2blog\Web\Request;
+
 abstract class Controller
 {
 
@@ -23,18 +31,18 @@ abstract class Controller
 
     // コントローラー名の設定
     $controllerName = explode('Controller', $className);
-    \Fc2blog\Config::set('ControllerName', $controllerName[0]);
+    Config::set('ControllerName', $controllerName[0]);
 
     // メソッド名の設定
-    \Fc2blog\Config::set('ActionName', $method);
+    Config::set('ActionName', $method);
 
     // デバイスタイプの設定
-    \Fc2blog\Config::set('DeviceType', \Fc2blog\App::getDeviceType());
+    Config::set('DeviceType', App::getDeviceType());
 
     // アプリプレフィックス
-    $prefix = \Fc2blog\Config::get('APP_PREFIX');
+    $prefix = Config::get('APP_PREFIX');
 
-    \Fc2blog\Debug::log('Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . \Fc2blog\Config::get('DeviceType') . ']', false, 'system', __FILE__, __LINE__);
+    Debug::log('Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']', false, 'system', __FILE__, __LINE__);
 
     $this->beforeFilter();
 
@@ -73,29 +81,29 @@ abstract class Controller
    * @param string $hash
    * @param bool $full_url BlogIdが特定できるとき、http(s)://〜からのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
    * @param string|null $blog_id
-   * @throws \Fc2blog\Exception\PseudoExit
+   * @throws PseudoExit
    */
   protected function redirect($url, $hash = '', bool $full_url = false, string $blog_id = null)
   {
     if (is_array($url)) {
-      $url = \Fc2blog\Web\Html::url($url, false, $full_url);
+      $url = Html::url($url, false, $full_url);
 
     } else if ($full_url && is_string($blog_id) && strlen($blog_id) > 0) {
-      $url = \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
+      $url = BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
 
     } else if ($full_url && preg_match("|\A/([^/]+)/|u", $url, $match)) {
       // Blog idをURLから抜き出して利用
-      $url = \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($match[1]) . $url;
+      $url = BlogsModel::getFullHostUrlByBlogId($match[1]) . $url;
       $blog_id = $match[1];
     }
     $url .= $hash;
 
     // デバッグ時にSessionにログを保存
-    \Fc2blog\Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
-    \Fc2blog\Debug::setSessionLogs();
+    Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
+    Debug::setSessionLogs();
 
     if(!is_null($blog_id) && $full_url) {
-      $status_code = \Fc2blog\Model\BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
+      $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
     }else{
       $status_code = 302;
     }
@@ -106,7 +114,7 @@ abstract class Controller
     $escaped_url = h($url);
     echo "redirect to {$escaped_url} status code:{$status_code}";
     if(defined("THIS_IS_TEST")){
-      throw new \Fc2blog\Exception\PseudoExit(__FILE__ . ":" . __LINE__ ." redirect to {$escaped_url} status code:{$status_code}");
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." redirect to {$escaped_url} status code:{$status_code}");
     }else{
       exit;
     }
@@ -134,23 +142,23 @@ abstract class Controller
     extract($this->data);
 
     // アプリプレフィックス
-    $prefix = \Fc2blog\Config::get('APP_PREFIX');
+    $prefix = Config::get('APP_PREFIX');
 
-    \Fc2blog\Debug::log('Layout[' . $this->layout . ']', false, 'system', __FILE__, __LINE__);
+    Debug::log('Layout[' . $this->layout . ']', false, 'system', __FILE__, __LINE__);
     if ($this->layout=='') {
       // layoutが空の場合は表示処理を行わない
       return ;
     }
 
-    $fw_template_path = \Fc2blog\Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . \Fc2blog\Config::get('DEVICE_PREFIX.' . \Fc2blog\Config::get('DeviceType')) . '.$2', $fw_template_path);
+    $fw_template_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
+    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       include($fw_template_device_path);
     } elseif (is_file($fw_template_path)) {
       include($fw_template_path);
     } else {
-      \Fc2blog\Debug::log('Not Found Layout[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
+      Debug::log('Not Found Layout[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
     }
   }
 
@@ -180,24 +188,24 @@ abstract class Controller
     unset($fw_data);
 
     // リクエストデータ
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // Debug用にテンプレートで使用可能な変数一覧表示
-    if (\Fc2blog\Config::get('DEBUG_TEMPLATE_VARS')) {
-      include(\Fc2blog\Config::get('VIEW_DIR') . 'Common/variables.html');
+    if (Config::get('DEBUG_TEMPLATE_VARS')) {
+      include(Config::get('VIEW_DIR') . 'Common/variables.html');
     }
 
     // Template表示
-    $fw_template_path = \Fc2blog\Config::get('VIEW_DIR') . ($fw_is_prefix ? \Fc2blog\Config::get('APP_PREFIX') . '/' : '') . $fw_template;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . \Fc2blog\Config::get('DEVICE_PREFIX.' . \Fc2blog\Config::get('DeviceType')) . '.$2', $fw_template_path);
+    $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? Config::get('APP_PREFIX') . '/' : '') . $fw_template;
+    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       include($fw_template_device_path);
     } elseif (is_file($fw_template_path)) {
-      \Fc2blog\Debug::log('Template[' . $fw_template_path . ']', false, 'system', __FILE__, __LINE__);
+      Debug::log('Template[' . $fw_template_path . ']', false, 'system', __FILE__, __LINE__);
       include($fw_template_path);
     }else{
-      \Fc2blog\Debug::log('Not Found Template[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
+      Debug::log('Not Found Template[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
     }
   }
 

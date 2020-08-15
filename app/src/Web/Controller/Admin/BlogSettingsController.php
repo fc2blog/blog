@@ -2,6 +2,12 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+
 class BlogSettingsController extends AdminController
 {
 
@@ -41,14 +47,14 @@ class BlogSettingsController extends AdminController
   */
   private function settingEdit($white_list, $action)
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $blog_settings_model = \Fc2blog\Model\Model::load('BlogSettings');
+    $request = Request::getInstance();
+    $blog_settings_model = Model::load('BlogSettings');
 
     $blog_id = $this->getBlogId();
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('blog_setting') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
+    if (!$request->get('blog_setting') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+      Session::set('sig', App::genRandomString());
       $blog_setting = $blog_settings_model->findByBlogId($blog_id);
       $request->set('blog_setting', $blog_setting);
       return ;
@@ -60,11 +66,11 @@ class BlogSettingsController extends AdminController
     if (empty($errors['blog_setting'])) {
       // コメント確認からコメントを確認せずそのまま表示に変更した場合既存の承認待ちを全て承認済みに変更する
       $blog_setting = $blog_settings_model->findByBlogId($blog_id);
-      if ($blog_setting['comment_confirm'] == \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')
+      if ($blog_setting['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')
           && isset($blog_setting_data['comment_confirm'])
-          && $blog_setting_data['comment_confirm'] == \Fc2blog\Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
+          && $blog_setting_data['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
       ) {
-        \Fc2blog\Model\Model::load('Comments')->updateApproval($blog_id);
+        Model::load('Comments')->updateApproval($blog_id);
       }
 
       // ブログの設定情報更新処理

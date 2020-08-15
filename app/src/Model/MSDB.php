@@ -6,6 +6,8 @@
 
 namespace Fc2blog\Model;
 
+use Fc2blog\Config;
+
 class MSDB implements DBInterface{
 
   // master/slave
@@ -29,20 +31,20 @@ class MSDB implements DBInterface{
     if(!$this->master){
       if (DB_CONNECT_LIB==='PDO') {
         $this->master = new PDOWrap(
-          \Fc2blog\Config::get('MASTER_DB.HOST'),
-          \Fc2blog\Config::get('MASTER_DB.USER'),
-          \Fc2blog\Config::get('MASTER_DB.PASSWORD'),
-          \Fc2blog\Config::get('MASTER_DB.DATABASE'),
-          \Fc2blog\Config::get('DB_CHARSET')
+          Config::get('MASTER_DB.HOST'),
+          Config::get('MASTER_DB.USER'),
+          Config::get('MASTER_DB.PASSWORD'),
+          Config::get('MASTER_DB.DATABASE'),
+          Config::get('DB_CHARSET')
         );
       }
       if (DB_CONNECT_LIB==='mysqli') {
         $this->master = new MySqliWrap(
-          \Fc2blog\Config::get('MASTER_DB.HOST'),
-          \Fc2blog\Config::get('MASTER_DB.USER'),
-          \Fc2blog\Config::get('MASTER_DB.PASSWORD'),
-          \Fc2blog\Config::get('MASTER_DB.DATABASE'),
-          \Fc2blog\Config::get('DB_CHARSET')
+          Config::get('MASTER_DB.HOST'),
+          Config::get('MASTER_DB.USER'),
+          Config::get('MASTER_DB.PASSWORD'),
+          Config::get('MASTER_DB.DATABASE'),
+          Config::get('DB_CHARSET')
         );
       }
     }
@@ -53,20 +55,20 @@ class MSDB implements DBInterface{
     if(!$this->slave){
       if (DB_CONNECT_LIB==='PDO') {
         $this->slave = new PDOWrap(
-          \Fc2blog\Config::get('SLAVE_DB.HOST'),
-          \Fc2blog\Config::get('SLAVE_DB.USER'),
-          \Fc2blog\Config::get('SLAVE_DB.PASSWORD'),
-          \Fc2blog\Config::get('SLAVE_DB.DATABASE'),
-          \Fc2blog\Config::get('DB_CHARSET')
+          Config::get('SLAVE_DB.HOST'),
+          Config::get('SLAVE_DB.USER'),
+          Config::get('SLAVE_DB.PASSWORD'),
+          Config::get('SLAVE_DB.DATABASE'),
+          Config::get('DB_CHARSET')
         );
       }
       if (DB_CONNECT_LIB==='mysqli') {
         $this->slave = new MySqliWrap(
-          \Fc2blog\Config::get('SLAVE_DB.HOST'),
-          \Fc2blog\Config::get('SLAVE_DB.USER'),
-          \Fc2blog\Config::get('SLAVE_DB.PASSWORD'),
-          \Fc2blog\Config::get('SLAVE_DB.DATABASE'),
-          \Fc2blog\Config::get('DB_CHARSET')
+          Config::get('SLAVE_DB.HOST'),
+          Config::get('SLAVE_DB.USER'),
+          Config::get('SLAVE_DB.PASSWORD'),
+          Config::get('SLAVE_DB.DATABASE'),
+          Config::get('DB_CHARSET')
         );
       }
     }
@@ -79,7 +81,7 @@ class MSDB implements DBInterface{
    */
   public function getDB($isMaster=false){
     // Master/Slave機能のON/OFF
-    if(!\Fc2blog\Config::get('IS_MASTER_SLAVE', true)){
+    if(!Config::get('IS_MASTER_SLAVE', true)){
       return $this->getMasterDB();
     }
     return $isMaster ? $this->getMasterDB() : $this->getSlaveDB();

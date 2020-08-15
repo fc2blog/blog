@@ -2,7 +2,9 @@
 
 namespace Fc2blog\Web\Controller\Test;
 
-abstract class TestController extends \Fc2blog\Web\Controller\AppController
+use Fc2blog\Web\Controller\AppController;
+
+abstract class TestController extends AppController
 {
 }
 

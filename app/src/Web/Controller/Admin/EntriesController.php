@@ -2,6 +2,12 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+
 class EntriesController extends AdminController
 {
 
@@ -10,8 +16,8 @@ class EntriesController extends AdminController
    */
   public function index()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $entries_model = \Fc2blog\Model\Model::load('Entries');
+    $request = Request::getInstance();
+    $entries_model = Model::load('Entries');
 
     $blog_id = $this->getBlogId();
 
@@ -21,7 +27,7 @@ class EntriesController extends AdminController
     $from = array();
 
     if ($keyword=$request->get('keyword')) {
-      $keyword = \Fc2blog\Model\Model::escape_wildcard($keyword);
+      $keyword = Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND (entries.title LIKE ? OR entries.body LIKE ? OR entries.extend LIKE ?)';
       $params = array_merge($params, array($keyword, $keyword, $keyword));
@@ -54,7 +60,7 @@ class EntriesController extends AdminController
       case 'body_asc':      $order = 'entries.body ASC, entries.id ASC';            break;
     }
 
-    \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
+    Session::set('sig', App::genRandomString());
 
     // オプション設定
     $options = array(
@@ -62,8 +68,8 @@ class EntriesController extends AdminController
       'where'  => $where,
       'params' => $params,
       'from'   => $from,
-      'limit'  => $request->get('limit', \Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'), \Fc2blog\Web\Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
+      'limit'  => $request->get('limit', Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
     $entries = $entries_model->find('all', $options);
@@ -83,15 +89,15 @@ class EntriesController extends AdminController
       header('X-UA-Compatible: IE=EmulateIE10');
     }
 
-    $request = \Fc2blog\Web\Request::getInstance();
-    $entries_model = \Fc2blog\Model\Model::load('Entries');
-    $entry_categories_model = \Fc2blog\Model\Model::load('EntryCategories');
+    $request = Request::getInstance();
+    $entries_model = Model::load('Entries');
+    $entry_categories_model = Model::load('EntryCategories');
 
     $blog_id = $this->getBlogId();
 
     // 初期表示時
-    if (!$request->get('entry') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
-      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
+    if (!$request->get('entry') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+      Session::set('sig', App::genRandomString());
       return ;
     }
 
@@ -106,7 +112,7 @@ class EntriesController extends AdminController
         // カテゴリと紐付
         $entry_categories_model->save($blog_id, $id, $entry_categories_data);
         // タグと紐付
-        \Fc2blog\Model\Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
+        Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I created a entry'));
         $this->redirect(array('action'=>'index'));
@@ -128,9 +134,9 @@ class EntriesController extends AdminController
       header('X-UA-Compatible: IE=EmulateIE10');
     }
 
-    $request = \Fc2blog\Web\Request::getInstance();
-    $entries_model = \Fc2blog\Model\Model::load('Entries');
-    $entry_categories_model = \Fc2blog\Model\Model::load('EntryCategories');
+    $request = Request::getInstance();
+    $entries_model = Model::load('Entries');
+    $entry_categories_model = Model::load('EntryCategories');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -142,11 +148,11 @@ class EntriesController extends AdminController
       }
       $request->set('entry', $entry);
       $request->set('entry_categories', array('category_id'=>$entry_categories_model->getCategoryIds($blog_id, $id)));
-      $request->set('entry_tags', \Fc2blog\Model\Model::load('Tags')->getEntryTagNames($blog_id, $id));   // タグの文字列をテーブルから取得
+      $request->set('entry_tags', Model::load('Tags')->getEntryTagNames($blog_id, $id));   // タグの文字列をテーブルから取得
       return ;
     }
 
-    if (!\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       $request->clear();
       return;
     }
@@ -161,7 +167,7 @@ class EntriesController extends AdminController
         // カテゴリと紐付
         $entry_categories_model->save($blog_id, $id, $entry_categories_data);
         // タグと紐付
-        \Fc2blog\Model\Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
+        Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I have updated the entry'));
         $this->redirect(array('action'=>'index'));
@@ -178,10 +184,10 @@ class EntriesController extends AdminController
    */
   public function delete()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
+    $request = Request::getInstance();
+    if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // 削除処理
-      if (\Fc2blog\Model\Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId()))
+      if (Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId()))
         $this->setInfoMessage(__('I removed the entry'));
     }
     $this->redirect(array('action'=>'index'));
@@ -192,10 +198,10 @@ class EntriesController extends AdminController
   */
   public function ajax_media_load()
   {
-    \Fc2blog\Config::set('DEBUG', 0);    // デバッグ設定を変更
+    Config::set('DEBUG', 0);    // デバッグ設定を変更
 
-    $request = \Fc2blog\Web\Request::getInstance();
-    $files_model = \Fc2blog\Model\Model::load('Files');
+    $request = Request::getInstance();
+    $files_model = Model::load('Files');
 
     $blog_id = $this->getBlogId();
 
@@ -210,8 +216,8 @@ class EntriesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => \Fc2blog\Config::get('PAGE.FILE.LIMIT', \Fc2blog\App::getPageLimit('FILE_AJAX')),
-      'page'   => $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT),
+      'limit'  => Config::get('PAGE.FILE.LIMIT', App::getPageLimit('FILE_AJAX')),
+      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => 'id DESC',
     );
     $files = $files_model->find('all', $options);

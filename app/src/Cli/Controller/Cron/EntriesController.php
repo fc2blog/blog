@@ -2,6 +2,8 @@
 
 namespace Fc2blog\Cli\Controller\Cron;
 
+use Fc2blog\Model\Model;
+
 class EntriesController extends CronController
 {
 
@@ -17,7 +19,7 @@ class EntriesController extends CronController
       return ;
     }
 
-    $entriesModel = \Fc2blog\Model\Model::load('Entries');
+    $entriesModel = Model::load('Entries');
 
     // 予約投稿処理
     $entriesModel->updateReservation($blog_id);

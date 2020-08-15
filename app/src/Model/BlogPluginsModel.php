@@ -2,6 +2,10 @@
 
 namespace Fc2blog\Model;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Web\Session;
+
 class BlogPluginsModel extends \Fc2blog\Model\Model
 {
 
@@ -60,8 +64,8 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
         'in_array'      => array('values'=>array_keys(self::getAttributeColor())),
       ),
       'device_type' => array(
-        'default_value' => \Fc2blog\Config::get('DEVICE_PC'),
-        'in_array'      => array('values'=>array_keys(\Fc2blog\Config::get('DEVICE_NAME'))),
+        'default_value' => Config::get('DEVICE_PC'),
+        'in_array'      => array('values'=>array_keys(Config::get('DEVICE_NAME'))),
       ),
       'category' => array(
         'default_value' => 1,
@@ -139,7 +143,7 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
   public static function fc2PluginSyntax($value)
   {
     // フォルダが存在しない場合作成
-    $plugin_path = \Fc2blog\Config::get('BLOG_TEMPLATE_DIR') . \Fc2blog\App::getBlogLayer(\Fc2blog\Web\Session::get('blog_id')) . '/plugins/syntax.php';
+    $plugin_path = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer(Session::get('blog_id')) . '/plugins/syntax.php';
     $plugin_dir = dirname($plugin_path);
     if (!file_exists($plugin_dir)) {
       mkdir($plugin_dir, 0777, true);
@@ -173,7 +177,7 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
     $blog_plugins = $this->find('all', $options);
 
     $category_blog_plugins = array(1=>array());
-    if ($device_type==\Fc2blog\Config::get('DEVICE_PC')) {
+    if ($device_type== Config::get('DEVICE_PC')) {
       // PC版のみ3つまでカテゴリーが存在する
       $category_blog_plugins = array(1=>array(), 2=>array(), 3=>array());
     }
@@ -213,7 +217,7 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
   public function findByDeviceTypeAndCategory($device_type, $category, $blog_id)
   {
     $options = array(
-      'where'  => 'blog_id=? AND device_type=? AND category=? AND display=' . \Fc2blog\Config::get('APP.DISPLAY.SHOW'),
+      'where'  => 'blog_id=? AND device_type=? AND category=? AND display=' . Config::get('APP.DISPLAY.SHOW'),
       'params' => array($blog_id, $device_type, $category),
       'order'  => 'plugin_order ASC',
     );
@@ -298,8 +302,8 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
     }
 
     $displays = array();
-    $displays[\Fc2blog\Config::get('APP.DISPLAY.SHOW')] = array();
-    $displays[\Fc2blog\Config::get('APP.DISPLAY.HIDE')] = array();
+    $displays[Config::get('APP.DISPLAY.SHOW')] = array();
+    $displays[Config::get('APP.DISPLAY.HIDE')] = array();
     foreach ($params as $id => $display) {
       // show,hide以外のdisplayは更新対象としない
       if (isset($displays[$display])) {
@@ -325,7 +329,7 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
   public function deleteByIdAndBlogId($id, $blog_id, $options=array())
   {
     // プラグインファイルの削除
-    $plugin_file = \Fc2blog\App::getPluginFilePath($blog_id, $id);
+    $plugin_file = App::getPluginFilePath($blog_id, $id);
     is_file($plugin_file) && unlink($plugin_file);
 
     // 本体削除
@@ -368,7 +372,7 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
   public static function createPlugin($html, $blog_id, $id='preview')
   {
     // フォルダが存在しない場合作成
-    $plugin_path = \Fc2blog\App::getPluginFilePath($blog_id, $id);
+    $plugin_path = App::getPluginFilePath($blog_id, $id);
     $plugin_dir = dirname($plugin_path);
     if (!file_exists($plugin_dir)) {
       mkdir($plugin_dir, 0777, true);

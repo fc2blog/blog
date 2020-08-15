@@ -2,6 +2,13 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\App;
+use Fc2blog\Config;
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\Model;
+use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+
 class BlogTemplatesController extends AdminController
 {
 
@@ -10,18 +17,18 @@ class BlogTemplatesController extends AdminController
    */
   public function index()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
-    \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
+    Session::set('sig', App::genRandomString());
 
     $blog_id = $this->getBlogId();
     $device_type = $request->get('device_type', 0);
 
     $blog = $this->getBlog($blog_id);
-    $this->set('template_ids', \Fc2blog\Model\Model::load('Blogs')->getTemplateIds($blog));
+    $this->set('template_ids', Model::load('Blogs')->getTemplateIds($blog));
 
     // デバイス毎に分けられたテンプレート一覧を取得
-    $device_blog_templates = \Fc2blog\Model\Model::load('BlogTemplates')->getTemplatesOfDevice($blog_id, $device_type);
+    $device_blog_templates = Model::load('BlogTemplates')->getTemplatesOfDevice($blog_id, $device_type);
     $this->set('device_blog_templates', $device_blog_templates);
   }
 
@@ -30,19 +37,19 @@ class BlogTemplatesController extends AdminController
   */
   public function fc2_index()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // デバイスタイプの設定
-    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'));
+    $device_type = $request->get('device_type', Config::get('DEVICE_PC'));
     $request->set('device_type', $device_type);
 
     // 条件設定
     $condition = array();
-    $condition['page'] = $request->get('page', 0, \Fc2blog\Web\Request::VALID_UNSIGNED_INT);
-    $condition['device'] = \Fc2blog\Config::get('DEVICE_FC2_KEY.' . $device_type);
+    $condition['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
+    $condition['device'] = Config::get('DEVICE_FC2_KEY.' . $device_type);
 
     // テンプレート一覧取得
-    $fc2_templates = \Fc2blog\Model\Model::load('Fc2Templates')->getListAndPaging($condition);
+    $fc2_templates = Model::load('Fc2Templates')->getListAndPaging($condition);
     $templates = $fc2_templates['templates'];
     $paging = $fc2_templates['pages'];
 
@@ -55,7 +62,7 @@ class BlogTemplatesController extends AdminController
   */
   public function fc2_view()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     // 戻る用URLの設定
     $back_url = $request->getReferer();
@@ -64,12 +71,12 @@ class BlogTemplatesController extends AdminController
     }
 
     // デバイスタイプの設定
-    $device_type = $request->get('device_type', \Fc2blog\Config::get('DEVICE_PC'));
+    $device_type = $request->get('device_type', Config::get('DEVICE_PC'));
     $request->set('device_type', $device_type);
 
     // テンプレート取得
-    $device_key = \Fc2blog\Config::get('DEVICE_FC2_KEY.' . $device_type);
-    $template = \Fc2blog\Model\Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
+    $device_key = Config::get('DEVICE_FC2_KEY.' . $device_type);
+    $template = Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
     if (empty($template)) {
       return $this->error404();
     }
@@ -81,16 +88,16 @@ class BlogTemplatesController extends AdminController
    */
   public function create()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $blog_templates_model = \Fc2blog\Model\Model::load('BlogTemplates');
+    $request = Request::getInstance();
+    $blog_templates_model = Model::load('BlogTemplates');
 
     // 初期表示時
-    if (!$request->get('blog_template') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('blog_template') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       // FC2テンプレートダウンロード
       if ($request->get('fc2_id')) {
         $device_type = $request->get('device_type');
-        $device_key = \Fc2blog\Config::get('DEVICE_FC2_KEY.' . $device_type);
-        $template = \Fc2blog\Model\Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
+        $device_key = Config::get('DEVICE_FC2_KEY.' . $device_type);
+        $template = Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
         $request->set('blog_template', array(
           'title'       => $template['name'],
           'html'        => $template['html'],
@@ -100,7 +107,7 @@ class BlogTemplatesController extends AdminController
       } else {
         $request->set('blog_template.device_type', $request->get('device_type'));
       }
-      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
+      Session::set('sig', App::genRandomString());
       return ;
     }
 
@@ -126,8 +133,8 @@ class BlogTemplatesController extends AdminController
    */
   public function edit()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $blog_templates_model = \Fc2blog\Model\Model::load('BlogTemplates');
+    $request = Request::getInstance();
+    $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -136,12 +143,12 @@ class BlogTemplatesController extends AdminController
     $blog = $this->getBlog($blog_id);
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('blog_template') || !\Fc2blog\Web\Session::get('sig') || \Fc2blog\Web\Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('blog_template') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       if (!$blog_template=$blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
         $this->redirect(array('action'=>'index'));
       }
       $request->set('blog_template', $blog_template);
-      \Fc2blog\Web\Session::set('sig', \Fc2blog\App::genRandomString());
+      Session::set('sig', App::genRandomString());
       return ;
     }
 
@@ -166,8 +173,8 @@ class BlogTemplatesController extends AdminController
   */
   public function apply()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $blog_templates_model = \Fc2blog\Model\Model::load('BlogTemplates');
+    $request = Request::getInstance();
+    $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
@@ -178,9 +185,9 @@ class BlogTemplatesController extends AdminController
       $this->redirectBack(array('action'=>'index'));
     }
 
-    if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
+    if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // テンプレートの切り替え作業
-      \Fc2blog\Model\Model::load('Blogs')->switchTemplate($blog_template, $blog_id);
+      Model::load('Blogs')->switchTemplate($blog_template, $blog_id);
       $this->setInfoMessage(__('I switch the template'));
     }
     $this->redirectBack(array('action'=>'index'));
@@ -191,8 +198,8 @@ class BlogTemplatesController extends AdminController
    */
   public function download()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $blog_templates_model = \Fc2blog\Model\Model::load('BlogTemplates');
+    $request = Request::getInstance();
+    $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('fc2_id');
     $device_type = $request->get('device_type');
@@ -200,8 +207,8 @@ class BlogTemplatesController extends AdminController
       return $this->error404();
     }
 
-    $device_key = \Fc2blog\Config::get('DEVICE_FC2_KEY.' . $device_type);
-    $template = \Fc2blog\Model\Model::load('Fc2Templates')->findByIdAndDevice($id, $device_key);
+    $device_key = Config::get('DEVICE_FC2_KEY.' . $device_type);
+    $template = Model::load('Fc2Templates')->findByIdAndDevice($id, $device_key);
     if (empty($template)) {
       $this->setErrorMessage(__('Template does not exist'));
       $this->redirectBack(array('controller'=>'blog_templates', 'action'=>'fc2_index', 'device_type'=>$device_type));
@@ -237,15 +244,15 @@ class BlogTemplatesController extends AdminController
    */
   public function delete()
   {
-    $request = \Fc2blog\Web\Request::getInstance();
-    $blog_templates_model = \Fc2blog\Model\Model::load('BlogTemplates');
+    $request = Request::getInstance();
+    $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId();
 
     // 使用中のテンプレート判定
     $blog = $this->getBlog($blog_id);
-    $template_ids = \Fc2blog\Model\BlogsModel::getTemplateIds($blog);
+    $template_ids = BlogsModel::getTemplateIds($blog);
     if (in_array($id, $template_ids)) {
       $this->setErrorMessage(__('You can not delete a template in use'));
       $this->redirect(array('action'=>'index'));
@@ -256,7 +263,7 @@ class BlogTemplatesController extends AdminController
       $this->redirect(array('action'=>'index'));
     }
 
-    if (\Fc2blog\Web\Session::get('sig') && \Fc2blog\Web\Session::get('sig') === $request->get('sig')) {
+    if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // 削除処理
       $blog_templates_model->deleteByIdAndBlogId($id, $blog_id);
       $this->setInfoMessage(__('I removed the template'));

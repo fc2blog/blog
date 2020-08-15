@@ -2,6 +2,8 @@
 
 namespace Fc2blog\Model;
 
+use Fc2blog\Config;
+
 class CategoriesModel extends \Fc2blog\Model\Model
 {
 
@@ -46,7 +48,7 @@ class CategoriesModel extends \Fc2blog\Model\Model
         'own'       => array('method' => 'uniqueName')
       ),
       'category_order' => array(
-        'default_value' => \Fc2blog\Config::get('CATEGORY.ORDER.ASC'),
+        'default_value' => Config::get('CATEGORY.ORDER.ASC'),
         'in_array' => array('values'=>array_keys($this->getOrderList())),
       ),
     );
@@ -86,8 +88,8 @@ class CategoriesModel extends \Fc2blog\Model\Model
   */
   public static function getOrderList(){
     return array(
-      \Fc2blog\Config::get('CATEGORY.ORDER.DESC') => __('Latest order'),
-      \Fc2blog\Config::get('CATEGORY.ORDER.ASC')  => __('Oldest First'),
+      Config::get('CATEGORY.ORDER.DESC') => __('Latest order'),
+      Config::get('CATEGORY.ORDER.ASC')  => __('Oldest First'),
     );
   }
 

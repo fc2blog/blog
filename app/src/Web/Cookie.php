@@ -5,6 +5,7 @@
 
 namespace Fc2blog\Web;
 
+use Fc2blog\Config;
 use InvalidArgumentException;
 
 class Cookie
@@ -80,8 +81,8 @@ class Cookie
     // domainは特別にコンフィグで設定されないかぎり空で、アクセスドメインに発行
     if (strlen($domain) > 0) {
       $params['domain'] = $domain;
-    } else if (strlen(\Fc2blog\Config::get('COOKIE_DEFAULT_DOMAIN')) > 0) {
-      $params['domain'] = $domain = \Fc2blog\Config::get('COOKIE_DEFAULT_DOMAIN');
+    } else if (strlen(Config::get('COOKIE_DEFAULT_DOMAIN')) > 0) {
+      $params['domain'] = $domain = Config::get('COOKIE_DEFAULT_DOMAIN');
     }
 
     // 不可能な組み合わせを拒否
