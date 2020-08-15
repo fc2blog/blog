@@ -22,7 +22,7 @@ class Html
   public static function url($args=array(), $reused=false, $full_url=false){
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
-      $gets = \Fc2blog\Web\Request::getInstance()->getGet();;
+      $gets = Request::getInstance()->getGet();;
       unset($gets[Config::get('ARGS_CONTROLLER')]);
       unset($gets[Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);
@@ -97,7 +97,7 @@ class Html
   }
 
   public static function input($name, $type, $attrs=array(), $option_attrs=array()){
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
 
     $default = isset($attrs['default']) ? $attrs['default'] : null;    // デフォルト文字列
     $options = isset($attrs['options']) ? $attrs['options'] : array(); // オプション
@@ -155,7 +155,7 @@ class Html
         break;
 
       case 'token':
-        $html = '<input type="hidden" ' . $attr . ' value="' . h(\Fc2blog\Web\Session::get($name)) . '" />';
+        $html = '<input type="hidden" ' . $attr . ' value="' . h(Session::get($name)) . '" />';
         break;
 
       case 'captcha':

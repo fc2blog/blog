@@ -4,7 +4,7 @@ namespace Fc2blog\Model;
 
 use Fc2blog\Config;
 
-class CategoriesModel extends \Fc2blog\Model\Model
+class CategoriesModel extends Model
 {
 
   public static $instance = null;
@@ -159,7 +159,7 @@ WHERE entry_categories.blog_id=?
 SQL;
     $params = array($blog_id, $entry_id, $blog_id);
     $options = array();
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_ALL;
+    $options['result'] = DBInterface::RESULT_ALL;
     return $this->findSql($sql, $params, $options);
   }
 
@@ -183,7 +183,7 @@ WHERE entry_categories.blog_id=?
 SQL;
     $params = array_merge(array($blog_id), $entry_ids, array($blog_id));
     $options = array();
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_ALL;
+    $options['result'] = DBInterface::RESULT_ALL;
     $categories = $this->findSql($sql, $params, $options);
 
     $entries_categories = array();
@@ -220,7 +220,7 @@ SQL;
     }
     $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count+1 WHERE blog_id=? AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
     $params = array_merge(array($blog_id), $ids);
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
+    $options['result'] = DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -234,7 +234,7 @@ SQL;
     }
     $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count-1 WHERE blog_id=? AND count>0 AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
     $params = array_merge(array($blog_id), $ids);
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
+    $options['result'] = DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -286,7 +286,7 @@ SQL;
       'where'  => 'blog_id=? AND category_id=1',
       'params' => array($blog_id),
     );
-    $count = \Fc2blog\Model\Model::load('EntryCategories')->find('one', $options);
+    $count = Model::load('EntryCategories')->find('one', $options);
     $this->updateByIdAndBlogId(array('count'=>$count), 1, $blog_id);
 
     // カテゴリー削除

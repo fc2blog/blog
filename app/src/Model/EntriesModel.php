@@ -5,7 +5,7 @@ namespace Fc2blog\Model;
 use Fc2blog\App;
 use Fc2blog\Config;
 
-class EntriesModel extends \Fc2blog\Model\Model
+class EntriesModel extends Model
 {
 
   public static $instance = null;
@@ -127,7 +127,7 @@ GROUP BY DATE_FORMAT(posted_at, '%Y-%m')
 ORDER BY posted_at DESC
 SQL;
     $params = array($blog_id);
-    $options = array('result'=>\Fc2blog\Model\DBInterface::RESULT_ALL);
+    $options = array('result'=> DBInterface::RESULT_ALL);
     $archives = $this->findSql($sql, $params, $options);
     return $archives;
   }
@@ -150,8 +150,8 @@ SQL;
     }
 
     // 記事のカテゴリ一覧を取得 TODO:後でcacheを使用する形に
-    $entry['categories'] = \Fc2blog\Model\Model::load('Categories')->getEntryCategories($entry['blog_id'], $entry['id']);
-    $entry['tags'] = \Fc2blog\Model\Model::load('Tags')->getEntryTags($entry['blog_id'], $entry['id']);
+    $entry['categories'] = Model::load('Categories')->getEntryCategories($entry['blog_id'], $entry['id']);
+    $entry['tags'] = Model::load('Tags')->getEntryTags($entry['blog_id'], $entry['id']);
 
     return $entry;
   }
@@ -226,7 +226,7 @@ SQL;
     $flag = parent::insert($data, $options);
 
     if ($flag && isset($data['blog_id'])) {
-      \Fc2blog\Model\Model::load('Blogs')->updateLastPostedAt($data['blog_id']);
+      Model::load('Blogs')->updateLastPostedAt($data['blog_id']);
     }
     return $flag;
   }
@@ -261,13 +261,13 @@ SQL;
   public function deleteByIdAndBlogId($entry_id, $blog_id, $options=array())
   {
     // コメント削除
-    \Fc2blog\Model\Model::load('Comments')->deleteEntryRelation($blog_id, $entry_id);
+    Model::load('Comments')->deleteEntryRelation($blog_id, $entry_id);
 
     // カテゴリー削除
-    \Fc2blog\Model\Model::load('EntryCategories')->deleteEntryRelation($blog_id, $entry_id);
+    Model::load('EntryCategories')->deleteEntryRelation($blog_id, $entry_id);
 
     // タグ削除
-    \Fc2blog\Model\Model::load('EntryTags')->deleteEntryRelation($blog_id, $entry_id);
+    Model::load('EntryTags')->deleteEntryRelation($blog_id, $entry_id);
 
     // 記事本体削除
     return parent::deleteByIdAndBlogId($entry_id, $blog_id, $options);
@@ -354,7 +354,7 @@ SQL;
   {
     $sql = 'UPDATE ' . $this->getTableName() . ' SET comment_count=comment_count+1 WHERE blog_id=? AND id=?';
     $params = array($blog_id, $entry_id);
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
+    $options['result'] = DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -365,7 +365,7 @@ SQL;
   {
     $sql = 'UPDATE ' . $this->getTableName() . ' SET comment_count=comment_count-1 WHERE blog_id=? AND id=? AND comment_count>0';
     $params = array($blog_id, $entry_id);
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
+    $options['result'] = DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -375,7 +375,7 @@ SQL;
   */
   public function getTemplateRecents($blog_id)
   {
-    $blog_setting = \Fc2blog\Model\Model::load('BlogSettings')->findByBlogId($blog_id);
+    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
     $options = array(
       'where'  => 'blog_id=?',
       'params' => array($blog_id),

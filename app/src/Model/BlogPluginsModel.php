@@ -6,7 +6,7 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Web\Session;
 
-class BlogPluginsModel extends \Fc2blog\Model\Model
+class BlogPluginsModel extends Model
 {
 
   public static $instance = null;
@@ -150,7 +150,7 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
     }
 
     // HTMLをPHPテンプレートに変換してテンプレートファイルの作成
-    \Fc2blog\Model\Model::load('BlogTemplates');
+    Model::load('BlogTemplates');
     $html = BlogTemplatesModel::convertFC2Template($value);
     file_put_contents($plugin_path, $html);
     chmod($plugin_path, 0777);
@@ -379,7 +379,7 @@ class BlogPluginsModel extends \Fc2blog\Model\Model
     }
 
     // HTMLをPHPテンプレートに変換してテンプレートファイルの作成
-    \Fc2blog\Model\Model::load('BlogTemplates');
+    Model::load('BlogTemplates');
     $html = BlogTemplatesModel::convertFC2Template($html);
     file_put_contents($plugin_path, $html);
     chmod($plugin_path, 0777);

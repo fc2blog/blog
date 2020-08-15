@@ -4,7 +4,8 @@ namespace Fc2blog\Model;
 
 use Fc2blog\Config;
 
-class BlogSettingsModel extends \Fc2blog\Model\Model{
+class BlogSettingsModel extends Model
+{
 
   public $validates = array();
 

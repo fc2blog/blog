@@ -5,7 +5,8 @@ namespace Fc2blog\Model;
 use Fc2blog\App;
 use Fc2blog\Config;
 
-class FilesModel extends \Fc2blog\Model\Model{
+class FilesModel extends Model
+{
 
   public static $instance = null;
 

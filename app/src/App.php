@@ -149,7 +149,7 @@ class App
   public static function getDeviceType()
   {
     // パラメータによりデバイスタイプを変更(FC2の引数順守)
-    $request = \Fc2blog\Web\Request::getInstance();
+    $request = Request::getInstance();
     if ($request->isArgs('pc')) {
       return Config::get('DEVICE_PC');
     }

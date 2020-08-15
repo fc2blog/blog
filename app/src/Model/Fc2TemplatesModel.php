@@ -6,7 +6,7 @@
 
 namespace Fc2blog\Model;
 
-class Fc2TemplatesModel extends \Fc2blog\Model\Model
+class Fc2TemplatesModel extends Model
 {
 
   public static $instance = null;

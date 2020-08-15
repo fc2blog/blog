@@ -5,7 +5,7 @@ namespace Fc2blog\Model;
 use Fc2blog\App;
 use Fc2blog\Config;
 
-class BlogsModel extends \Fc2blog\Model\Model
+class BlogsModel extends Model
 {
 
   public static $instance = null;
@@ -108,9 +108,9 @@ class BlogsModel extends \Fc2blog\Model\Model
    */
   public static function isValidBlogId(string $blog_id)
   {
-    if (\Fc2blog\Model\Validate::alphanumeric($blog_id, []) !== true) return false;
-    if (\Fc2blog\Model\Validate::minlength($blog_id, ['min' => 3]) !== true) return false;
-    if (\Fc2blog\Model\Validate::maxlength($blog_id, ['max' => 50]) !== true) return false;
+    if (Validate::alphanumeric($blog_id, []) !== true) return false;
+    if (Validate::minlength($blog_id, ['min' => 3]) !== true) return false;
+    if (Validate::maxlength($blog_id, ['max' => 50]) !== true) return false;
     if (strtolower($blog_id) !== $blog_id) return false;
     return true;
   }
@@ -282,7 +282,7 @@ class BlogsModel extends \Fc2blog\Model\Model
   {
     // 主キーがauto_incrementじゃないのでreturn値の受け取り方を変更
     $data['created_at'] = $data['updated_at'] = date('Y-m-d H:i:s');
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
+    $options['result'] = DBInterface::RESULT_SUCCESS;
     if (!parent::insert($data, $options)) {
       return false;
     }
@@ -290,13 +290,13 @@ class BlogsModel extends \Fc2blog\Model\Model
 
     // CategoryのSystem用Nodeの追加(id=1の削除できないノード)
     $data = array('name'=>__('Unclassified'), 'blog_id'=>$id);
-    \Fc2blog\Model\Model::load('Categories')->addNode($data, 'blog_id=?', array($id));
+    Model::load('Categories')->addNode($data, 'blog_id=?', array($id));
 
     // ブログ用の設定作成
-    \Fc2blog\Model\Model::load('BlogSettings')->insert(array('blog_id'=>$id));
+    Model::load('BlogSettings')->insert(array('blog_id'=>$id));
 
     // 初期のテンプレートを作成する(pc,mb,sp,tb)
-    $blog_templates_model = \Fc2blog\Model\Model::load('BlogTemplates');
+    $blog_templates_model = Model::load('BlogTemplates');
 
     $blog_data = array();
 
@@ -366,13 +366,13 @@ class BlogsModel extends \Fc2blog\Model\Model
     $reply_type = strstr($blog_template['html'], '<%comment_reply_body>') ?
       Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
     // コメントの表示タイプを更新
-    \Fc2blog\Model\Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
+    Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
 
     $ret = $this->updateById($data, $blog_id);
 
     if ($ret) {
       // 更新に成功した場合 現在のテンプレートを削除
-      \Fc2blog\Model\Model::load('BlogTemplates');
+      Model::load('BlogTemplates');
       $template_path = BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type);
       is_file($template_path) && unlink($template_path);
       $css_path = BlogTemplatesModel::getCssFilePath($blog_id, $device_type);

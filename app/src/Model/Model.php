@@ -8,7 +8,7 @@ namespace Fc2blog\Model;
 
 use Fc2blog\Debug;
 
-abstract class Model implements \Fc2blog\Model\ModelInterface
+abstract class Model implements ModelInterface
 {
   const LIKE_WILDCARD = '\\_%'; // MySQL用
 
@@ -25,7 +25,7 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
 
   public function getDB()
   {
-    return \Fc2blog\Model\MSDB::getInstance();
+    return MSDB::getInstance();
   }
 
   public function close()
@@ -56,7 +56,7 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
         if (!isset($data[$key])) {
           $data[$key] = null;
         }
-        $error = \Fc2blog\Model\Validate::$method($data[$key], $options, $key, $data, $this);
+        $error = Validate::$method($data[$key], $options, $key, $data, $this);
         if ($error === false) {
           break;
         }
@@ -131,24 +131,24 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
       case 'count':
         $options['fields'] = 'COUNT(*)';
         $options['limit'] = 1;
-        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_ONE;
+        $options['options']['result'] = DBInterface::RESULT_ONE;
         break;
       case 'one':
         $options['limit'] = 1;
-        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_ONE;
+        $options['options']['result'] = DBInterface::RESULT_ONE;
         break;
       case 'row':
         $options['limit'] = 1;
-        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_ROW;
+        $options['options']['result'] = DBInterface::RESULT_ROW;
         break;
       case 'list':
-        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_LIST;
+        $options['options']['result'] = DBInterface::RESULT_LIST;
         break;
       case 'all':
-        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_ALL;
+        $options['options']['result'] = DBInterface::RESULT_ALL;
         break;
       case 'statment': default:
-        $options['options']['result'] = \Fc2blog\Model\DBInterface::RESULT_STAT;
+        $options['options']['result'] = DBInterface::RESULT_STAT;
         break;
     }
     $fields = '*';
@@ -266,7 +266,7 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
   public function getFoundRows()
   {
     $sql = 'SELECT FOUND_ROWS()';
-    return $this->findSql($sql, array(), array('result'=>\Fc2blog\Model\DBInterface::RESULT_ONE));
+    return $this->findSql($sql, array(), array('result'=> DBInterface::RESULT_ONE));
   }
 
   /**
@@ -308,7 +308,7 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
       $values = array_values($values);
     }
     if (!isset($options['result'])) {
-      $options['result'] = \Fc2blog\Model\DBInterface::RESULT_INSERT_ID;
+      $options['result'] = DBInterface::RESULT_INSERT_ID;
     }
     return $this->executeSql($sql, $values, $options);
   }
@@ -324,7 +324,7 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
     }
     $sql = 'UPDATE ' . $this->getTableName() . ' SET ' . implode(',', $sets) . ' WHERE ' . $where;
     $params = array_merge(array_values($values), $params);
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
+    $options['result'] = DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -350,7 +350,7 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
   public function delete($where, $params=array(), $options=array())
   {
     $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $where;
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
+    $options['result'] = DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -387,13 +387,13 @@ abstract class Model implements \Fc2blog\Model\ModelInterface
       $sqls[] = '(' . implode(',',array_fill(0, count($columns), '?')) . ')';
     }
     $sql .= implode(',', $sqls);
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_INSERT_ID;
+    $options['result'] = DBInterface::RESULT_INSERT_ID;
     return $this->executeSql($sql, $params, $options);
   }
 
   public function insertSql($sql, $params=array(), $options=array())
   {
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_INSERT_ID;
+    $options['result'] = DBInterface::RESULT_INSERT_ID;
     return $this->executeSql($sql, $params, $options);
   }
 

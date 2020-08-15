@@ -109,7 +109,7 @@ class MSDB implements DBInterface{
     $_options = array(
       'master' => false,                  // Masterから取得するかどうか
       'types' => '',                      // paramsの型設定(sdi)
-      'result' => \Fc2blog\Model\DBInterface::RESULT_ALL,  // 戻り値 one/row/all/statment...
+      'result' => DBInterface::RESULT_ALL,  // 戻り値 one/row/all/statment...
     );
     $options = array_merge($_options, $options);
     $db = $this->getDB($options['master']);
@@ -122,7 +122,7 @@ class MSDB implements DBInterface{
   public function execute($sql, $params=array(), $options=array()){
     $_options = array(
       'types' => '',                            // paramsの型設定(sdi)
-      'result' => \Fc2blog\Model\DBInterface::RESULT_AFFECTED,  // 戻り値 one/row/all/statment...
+      'result' => DBInterface::RESULT_AFFECTED,  // 戻り値 one/row/all/statment...
     );
     $options = array_merge($_options, $options);
     $db = $this->getMasterDB();

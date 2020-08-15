@@ -2,7 +2,7 @@
 
 namespace Fc2blog\Model;
 
-class TagsModel extends \Fc2blog\Model\Model
+class TagsModel extends Model
 {
 
   public static $instance = null;
@@ -154,7 +154,7 @@ WHERE entry_tags.blog_id=?
 SQL;
     $params = array($blog_id, $entry_id, $blog_id);
     $options = array();
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_ALL;
+    $options['result'] = DBInterface::RESULT_ALL;
     return $this->findSql($sql, $params, $options);
   }
 
@@ -178,7 +178,7 @@ WHERE entry_tags.blog_id=?
 SQL;
     $params = array_merge(array($blog_id), $entry_ids, array($blog_id));
     $options = array();
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_ALL;
+    $options['result'] = DBInterface::RESULT_ALL;
     $tags = $this->findSql($sql, $params, $options);
     $entries_tags = array();
 
@@ -202,7 +202,7 @@ SQL;
     }
     $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count+1 WHERE blog_id=? AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
     $params = array_merge(array($blog_id), $ids);
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
+    $options['result'] = DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options);
   }
 
@@ -216,7 +216,7 @@ SQL;
     }
     $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count-1 WHERE blog_id=? AND count>0 AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
     $params = array_merge(array($blog_id), $ids);
-    $options['result'] = \Fc2blog\Model\DBInterface::RESULT_SUCCESS;
+    $options['result'] = DBInterface::RESULT_SUCCESS;
     return $this->executeSql($sql, $params, $options) && $this->delete('blog_id=? AND count<=0', array($blog_id));
   }
 
@@ -226,7 +226,7 @@ SQL;
   public function deleteByIdAndBlogId($tag_id, $blog_id, $options=array())
   {
     // タグの紐付け情報削除
-    \Fc2blog\Model\Model::load('EntryTags')->delete('blog_id=? AND tag_id=?', array($blog_id, $tag_id));
+    Model::load('EntryTags')->delete('blog_id=? AND tag_id=?', array($blog_id, $tag_id));
 
     // 記事本体削除
     return parent::deleteByIdAndBlogId($tag_id, $blog_id, $options);

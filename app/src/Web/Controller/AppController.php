@@ -13,7 +13,7 @@ use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
-abstract class AppController extends \Fc2blog\Web\Controller\Controller
+abstract class AppController extends Controller
 {
 
   /**

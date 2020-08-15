@@ -2,7 +2,7 @@
 
 namespace Fc2blog\Model;
 
-class EntryTagsModel extends \Fc2blog\Model\Model
+class EntryTagsModel extends Model
 {
 
   public static $instance = null;
@@ -64,7 +64,7 @@ class EntryTagsModel extends \Fc2blog\Model\Model
   */
   public function save($blog_id, $entry_id, $tags)
   {
-    $tags_model = \Fc2blog\Model\Model::load('Tags');
+    $tags_model = Model::load('Tags');
 
     // 入力値整形処理
     if (!is_array($tags)) {
@@ -137,7 +137,7 @@ class EntryTagsModel extends \Fc2blog\Model\Model
   {
     $tag_ids = $this->getTagIds($blog_id, $entry_id);
     if (count($tag_ids)) {
-      \Fc2blog\Model\Model::load('Tags')->decreaseCount($blog_id, $tag_ids);
+      Model::load('Tags')->decreaseCount($blog_id, $tag_ids);
     }
     return $this->delete('blog_id=? AND entry_id=?', array($blog_id, $entry_id));
   }

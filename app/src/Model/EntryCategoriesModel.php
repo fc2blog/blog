@@ -2,7 +2,7 @@
 
 namespace Fc2blog\Model;
 
-class EntryCategoriesModel extends \Fc2blog\Model\Model
+class EntryCategoriesModel extends Model
 {
 
   public static $instance = null;
@@ -64,7 +64,7 @@ class EntryCategoriesModel extends \Fc2blog\Model\Model
   */
   public function save($blog_id, $entry_id, $data)
   {
-    $categories_model = \Fc2blog\Model\Model::load('Categories');
+    $categories_model = Model::load('Categories');
 
     // 登録済みのカテゴリを取得
     $now_category_ids = $this->getCategoryIds($blog_id, $entry_id);
@@ -112,7 +112,7 @@ class EntryCategoriesModel extends \Fc2blog\Model\Model
   {
     $category_ids = $this->getCategoryIds($blog_id, $entry_id);
     if (count($category_ids)) {
-      \Fc2blog\Model\Model::load('Categories')->decreaseCount($blog_id, $category_ids);
+      Model::load('Categories')->decreaseCount($blog_id, $category_ids);
     }
     return $this->delete('blog_id=? AND entry_id=?', array($blog_id, $entry_id));
   }
