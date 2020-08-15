@@ -95,7 +95,7 @@ class Session
   {
     $_SESSION = array();
     if (isset($_COOKIE[\Fc2blog\Config::get('SESSION_NAME')])) {
-      \Fc2blog\Cookie::remove(\Fc2blog\Config::get('SESSION_NAME'), '');
+      \Fc2blog\Web\Cookie::remove(\Fc2blog\Config::get('SESSION_NAME'), '');
     }
     session_destroy();
   }

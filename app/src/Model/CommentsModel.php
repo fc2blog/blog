@@ -209,9 +209,9 @@ class CommentsModel extends \Fc2blog\Model\Model
 
     // 入力した名前,email,urlをCookieに登録
     if ($id && $blog_setting['comment_cookie_save']==\Fc2blog\Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
-      if (isset($data['name'])) \Fc2blog\Cookie::set('comment_name', $data['name']);
-      if (isset($data['mail'])) \Fc2blog\Cookie::set('comment_mail', $data['mail']);
-      if (isset($data['url']))  \Fc2blog\Cookie::set('comment_url',  $data['url']);
+      if (isset($data['name'])) \Fc2blog\Web\Cookie::set('comment_name', $data['name']);
+      if (isset($data['mail'])) \Fc2blog\Web\Cookie::set('comment_mail', $data['mail']);
+      if (isset($data['url']))  \Fc2blog\Web\Cookie::set('comment_url',  $data['url']);
     }
     return $id;
   }
@@ -236,9 +236,9 @@ class CommentsModel extends \Fc2blog\Model\Model
 
     // 入力した名前,email,urlをCookieに登録
     if ($ret && $blog_setting['comment_cookie_save']==\Fc2blog\Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
-      if (isset($data['name'])) \Fc2blog\Cookie::set('comment_name', $data['name']);
-      if (isset($data['mail'])) \Fc2blog\Cookie::set('comment_mail', $data['mail']);
-      if (isset($data['url']))  \Fc2blog\Cookie::set('comment_url',  $data['url']);
+      if (isset($data['name'])) \Fc2blog\Web\Cookie::set('comment_name', $data['name']);
+      if (isset($data['mail'])) \Fc2blog\Web\Cookie::set('comment_mail', $data['mail']);
+      if (isset($data['url']))  \Fc2blog\Web\Cookie::set('comment_url',  $data['url']);
     }
     return $ret;
   }

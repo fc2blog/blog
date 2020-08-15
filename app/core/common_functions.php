@@ -141,7 +141,7 @@ function getRouting()
 */
 function setLanguage($lang=null, $file='messages'){
   if ($lang==null) {
-    $lang = \Fc2blog\Cookie::get('lang');
+    $lang = \Fc2blog\Web\Cookie::get('lang');
   }
   if ($lang) {
     // 言語チェック

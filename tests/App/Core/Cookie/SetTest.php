@@ -15,7 +15,7 @@ class SetTest extends TestCase
     // Cookieの正しいテストはUnitTestでは困難です
     // echo '<?php setcookie("1","b");' | php-cgi
     // 等でテストができますが、php-cgiがない環境でテストが実行できません。
-    @\Fc2blog\Cookie::set("k", "v");
+    @\Fc2blog\Web\Cookie::set("k", "v");
     $this->assertTrue(true);
   }
 
@@ -23,7 +23,7 @@ class SetTest extends TestCase
   {
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
-      \Fc2blog\Cookie::set(true, "v");
+      \Fc2blog\Web\Cookie::set(true, "v");
       $this->fail();
     } catch (TypeError $e) {
       $this->assertInstanceOf(TypeError::class, $e);
@@ -31,7 +31,7 @@ class SetTest extends TestCase
 
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
-      \Fc2blog\Cookie::set(1, "v");
+      \Fc2blog\Web\Cookie::set(1, "v");
       $this->fail();
     } catch (TypeError $e) {
       $this->assertInstanceOf(TypeError::class, $e);
@@ -39,7 +39,7 @@ class SetTest extends TestCase
 
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
-      \Fc2blog\Cookie::set("k", true);
+      \Fc2blog\Web\Cookie::set("k", true);
       $this->fail();
     } catch (TypeError $e) {
       $this->assertInstanceOf(TypeError::class, $e);
@@ -47,7 +47,7 @@ class SetTest extends TestCase
 
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
-      \Fc2blog\Cookie::set("k", 1);
+      \Fc2blog\Web\Cookie::set("k", 1);
       $this->fail();
     } catch (TypeError $e) {
       $this->assertInstanceOf(TypeError::class, $e);
@@ -57,20 +57,20 @@ class SetTest extends TestCase
   public function testDenyInvalidSamesite(): void
   {
     try {
-      @\Fc2blog\Cookie::set("k", "v", time(), "", "", false, false, "Lax");
+      @\Fc2blog\Web\Cookie::set("k", "v", time(), "", "", false, false, "Lax");
       $this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
     }
     try {
-      @\Fc2blog\Cookie::set("k", "v", time(), "", "", false, false, "Strict");
+      @\Fc2blog\Web\Cookie::set("k", "v", time(), "", "", false, false, "Strict");
       $this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
     }
     try {
       $_SERVER['HTTPS'] = "on";
-      @\Fc2blog\Cookie::set("k", "v", time(), "", "", true, false, "None");
+      @\Fc2blog\Web\Cookie::set("k", "v", time(), "", "", true, false, "None");
       $this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
@@ -78,7 +78,7 @@ class SetTest extends TestCase
       unset($_SERVER['HTTPS']);
     }
     try {
-      @\Fc2blog\Cookie::set("k", "v", time(), "", "", false, false, "Wrong");
+      @\Fc2blog\Web\Cookie::set("k", "v", time(), "", "", false, false, "Wrong");
       $this->fail();
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
@@ -89,7 +89,7 @@ class SetTest extends TestCase
   {
     try {
       unset($_SERVER['HTTPS']);
-      @\Fc2blog\Cookie::set("k", "v", time(), "", "", true, false, "None");
+      @\Fc2blog\Web\Cookie::set("k", "v", time(), "", "", true, false, "None");
       $this->fail();
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
@@ -97,7 +97,7 @@ class SetTest extends TestCase
 
     try {
       $_SERVER['HTTPS'] = "on";
-      @\Fc2blog\Cookie::set("k", "v", time(), "", "", false, false, "None");
+      @\Fc2blog\Web\Cookie::set("k", "v", time(), "", "", false, false, "None");
       $this->fail();
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
@@ -107,7 +107,7 @@ class SetTest extends TestCase
 
     try {
       $_SERVER['HTTPS'] = "on";
-      @\Fc2blog\Cookie::set("k", "v", time(), "", "", true, false, "None");
+      @\Fc2blog\Web\Cookie::set("k", "v", time(), "", "", true, false, "None");
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
     } finally {

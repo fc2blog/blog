@@ -161,7 +161,7 @@ class App
     }
 
     // Cookieからデバイスタイプを取得
-    $device_type = Cookie::get('device');
+    $device_type = \Fc2blog\Web\Cookie::get('device');
     $devices = array(Config::get('DEVICE_PC'), Config::get('DEVICE_MB'), Config::get('DEVICE_SP'), Config::get('DEVICE_TB'));
     if (!empty($device_type) && in_array($device_type, $devices)) {
       return $device_type;

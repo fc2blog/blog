@@ -3,7 +3,7 @@
  * Cookieクラス
  */
 
-namespace Fc2blog;
+namespace Fc2blog\Web;
 
 use InvalidArgumentException;
 
