@@ -122,7 +122,7 @@ class CommentsController extends AdminController
   */
   public function ajax_approval () {
     Config::set('DEBUG', 0);
-    $this->layout = 'json.html';
+    $this->layout = 'json.php';
 
     $request = Request::getInstance();
     $comments_model = Model::load('Comments');
@@ -205,7 +205,7 @@ class CommentsController extends AdminController
   */
   public function ajax_reply(){
     Config::set('DEBUG', 0);
-    $this->layout = 'ajax.html';
+    $this->layout = 'ajax.php';
 
     $request = Request::getInstance();
     /** @var CommentsModel $comments_model */
@@ -232,7 +232,7 @@ class CommentsController extends AdminController
     }
 
     // 下記の入力チェック処理以降はjsonで返却
-    $this->layout = 'json.html';
+    $this->layout = 'json.php';
 
     // コメント投稿処理
     $errors = array();

@@ -192,7 +192,7 @@ abstract class Controller
 
     // Debug用にテンプレートで使用可能な変数一覧表示
     if (Config::get('DEBUG_TEMPLATE_VARS')) {
-      include(Config::get('VIEW_DIR') . 'Common/variables.html');
+      include(Config::get('VIEW_DIR') . 'Common/variables.php');
     }
 
     // Template表示
@@ -227,7 +227,7 @@ abstract class Controller
 
   public function error404()
   {
-    return 'Common/error404.html';
+    return 'Common/error404.php';
   }
 
 }

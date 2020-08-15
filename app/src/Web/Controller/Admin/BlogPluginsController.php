@@ -398,7 +398,7 @@ class BlogPluginsController extends AdminController
 
     $this->set('file_name', time() . '.json');
     $this->set('data', $json);
-    $this->layout = 'download.html';
+    $this->layout = 'download.php';
   }
 */
 }
