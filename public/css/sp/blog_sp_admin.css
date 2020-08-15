@@ -28,7 +28,7 @@ input, select{ vertical-align: middle; }
 body {
 	margin: 0;
 	padding: 0;
-	font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ƒqƒ‰ƒMƒmŠpƒS Pro W3";
+	font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ãƒ’ãƒ©ã‚®ãƒè§’ã‚´ Pro W3";
 	-webkit-user-select: none;
 	-webkit-text-size-adjust: none;
 	color: #333;
@@ -46,7 +46,7 @@ a:focus,a:hover,a:active {
 	-moz-tap-highlight-color: rgba(0,0,0,0);
 	tap-highlight-color: rgba(0,0,0,0);
 }
-button{font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ƒqƒ‰ƒMƒmŠpƒS Pro W3";}
+button{font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ãƒ’ãƒ©ã‚®ãƒè§’ã‚´ Pro W3";}
 h2,h4,li,a,label,button,input[type="radio"],.edit_area {
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 	-moz-tap-highlight-color: rgba(0,0,0,0);
@@ -1790,7 +1790,7 @@ div.bg_white {
 
 .default_album,
 .vertical_left_radio:checked + .vertical_left_label:after {
-	content: "ƒfƒtƒHƒ‹ƒgƒAƒ‹ƒoƒ€";
+	content: "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚¢ãƒ«ãƒãƒ ";
 	color: #fff;
 	position: absolute;
 	right: 0;
@@ -1860,7 +1860,7 @@ div.bg_white {
 	background-color: #e5e5e5;
 }
 
-/* type="submit"@type="button"@    Reset & Set
+/* type="submit"ã€€type="button"ã€€    Reset & Set
 --------------------------------------------------------*/
 input[type="button"],input[type="submit"] {
 	-webkit-appearance: none;
