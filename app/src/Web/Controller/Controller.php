@@ -17,7 +17,7 @@ abstract class Controller
 {
 
   private $data = array();             // テンプレートへ渡す変数の保存領域
-  protected $layout = 'default.html';  // 表示ページのレイアウトテンプレート
+  protected $layout = 'default.php';  // 表示ページのレイアウトテンプレート
   protected $output = '';              // 出力タグ
 
   public function __construct($method)
@@ -48,7 +48,7 @@ abstract class Controller
 
     $template = $this->$method();
     if (empty($template)) {
-      $template = substr($className, 0, strlen($className) - strlen('Controller')) . '/' . $method . '.html';
+      $template = substr($className, 0, strlen($className) - strlen('Controller')) . '/' . $method . '.php';
     }
 
     $this->afterFilter();

@@ -1,6 +1,6 @@
 <header><h2><?php echo __('Comments Settings'); ?></h2></header>
 
-<?php $this->display('BlogSettings/tab.html', array('tab'=>'comment_edit')); ?>
+<?php $this->display('BlogSettings/tab.php', array('tab'=>'comment_edit')); ?>
 
 <form method="POST" id="sys-blog-template-form" class="admin-form">
 

@@ -55,7 +55,7 @@ class FilesController extends AdminController
     $this->set('paging', $paging);
 
     // ajax表示
-    $this->layout = 'ajax.html';
+    $this->layout = 'ajax.php';
   }
 
   /**
@@ -242,7 +242,7 @@ class FilesController extends AdminController
       $json = array('status'=>1);
     }
 
-    $this->layout = 'json.html';
+    $this->layout = 'json.php';
     $this->set('json', $json);
   }
 

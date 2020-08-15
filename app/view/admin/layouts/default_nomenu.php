@@ -50,7 +50,7 @@
 
   <article>
     <article id="main-contents" style="margin-left: auto; margin-right: auto; float: none;">
-      <?php $this->display('Common/flash_message.html', array('messages'=>$this->removeMessage())); ?>
+      <?php $this->display('Common/flash_message.php', array('messages'=>$this->removeMessage())); ?>
       <?php $this->display($fw_template); ?>
     </article>
   </article>

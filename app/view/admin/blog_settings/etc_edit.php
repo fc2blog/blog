@@ -1,6 +1,6 @@
 <header><h2><?php echo __('Other Settings'); ?></h2></header>
 
-<?php $this->display('BlogSettings/tab.html', array('tab'=>'etc_edit')); ?>
+<?php $this->display('BlogSettings/tab.php', array('tab'=>'etc_edit')); ?>
 
 <form method="POST" id="sys-blog-template-form" class="admin-form">
 

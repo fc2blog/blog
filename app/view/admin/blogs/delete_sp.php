@@ -1,6 +1,6 @@
 <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title"><?php echo __('Blog Delete'); ?></span></h1></header>
 
-<?php $this->display('BlogSettings/tab.html', array('tab'=>'blog_delete')); ?>
+<?php $this->display('BlogSettings/tab.php', array('tab'=>'blog_delete')); ?>
 
 <h2 id="blog_settings"><span class="h2_inner"><?php echo __('Delete confirmation'); ?></span></h2>
 <form method="POST" id="sys-blogs-form" class="admin-form">

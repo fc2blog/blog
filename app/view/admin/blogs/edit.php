@@ -1,6 +1,6 @@
 <header><h2><?php echo __('Blog setting'); ?></h2></header>
 
-<?php $this->display('BlogSettings/tab.html', array('tab'=>'blog_edit')); ?>
+<?php $this->display('BlogSettings/tab.php', array('tab'=>'blog_edit')); ?>
 
 <form method="POST" class="admin-form">
 

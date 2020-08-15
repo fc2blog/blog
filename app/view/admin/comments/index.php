@@ -22,7 +22,7 @@
 </div>
 <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 
 <?php $reply_status_list = \Fc2blog\Model\CommentsModel::getReplyStatusList(); ?>
 <form method="POST" id="sys-list-form">
@@ -92,7 +92,7 @@
   <input type="button" id="sys-delete-button" value="<?php echo __('Remove what you have selected'); ?>" onclick="if(confirm('<?php echo __('Are you sure you want to delete?'); ?>')) $('#sys-list-form').submit();" disabled="disabled" />
 </form>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 
 <!-- コメント返信用ダイアログ -->
 <div id="sys-comment-reply-dialog" title="<?php echo __('Reply Comments'); ?>"></div>

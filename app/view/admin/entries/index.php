@@ -22,7 +22,7 @@
 </div>
 <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 
 <?php $open_status_list = \Fc2blog\Model\EntriesModel::getOpenStatusList(); ?>
 <form method="POST" id="sys-list-form">
@@ -71,7 +71,7 @@
   <input type="button" id="sys-entries-delete-button" value="<?php echo __('Remove what you have selected'); ?>" onclick="if(confirm('<?php echo __('Are you sure you want to delete?'); ?>')) $('#sys-list-form').submit();" disabled="disabled" />
 </form>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 
 <script>
 $(function(){

@@ -18,5 +18,5 @@
   <p class="no_item"><?php echo __('FC2 template can not be found'); ?></p>
 <?php endif; ?>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 

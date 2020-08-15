@@ -1,6 +1,6 @@
 <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title"><?php echo __('Withdrawal process'); ?></span></h1></header>
 
-<?php $this->display('Users/tab.html', array('tab'=>'withdrawal')); ?>
+<?php $this->display('Users/tab.php', array('tab'=>'withdrawal')); ?>
 
 <h2 id="blog_settings"><span class="h2_inner"><?php echo __('Unsubscribe confirmation'); ?></span></h2>
 <form method="POST" id="sys-users-form" class="admin-form">

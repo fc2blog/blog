@@ -50,5 +50,5 @@ $(function(){
 });
 </script>
 
-<?php echo $this->display('BlogTemplates/form_js.html'); ?>
+<?php echo $this->display('BlogTemplates/form_js.php'); ?>
 

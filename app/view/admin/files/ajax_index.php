@@ -17,7 +17,7 @@
   </form>
 </div>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 
 <table>
   <thead>
@@ -54,7 +54,7 @@
 
 <input type="button" id="sys-delete-button" value="<?php echo __('Remove what you have selected'); ?>" disabled="disabled" />
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 
 <script>
 $(function(){

@@ -170,7 +170,7 @@ function posted_at_select_to_input(){
   <h2 class="accordion_head"><i class="accordion_icon btn_icon"></i><?php echo __('Category'); ?></h2>
   <div class="accordion_inner" style="display: none;">
     <div class="form_area">
-      <?php $this->display('Categories/ajax_add.html', array()); ?>
+      <?php $this->display('Categories/ajax_add.php', array()); ?>
     </div><!--/form_area-->
   </div><!--/accordion_inner-->
   <h2 class="accordion_head"><i class="accordion_icon btn_icon"></i><?php echo __('User tags'); ?></h2>
@@ -197,5 +197,5 @@ function posted_at_select_to_input(){
   </ul>
 </div>
 
-<?php $this->display('Entries/editor_js.html', array()); ?>
+<?php $this->display('Entries/editor_js.php', array()); ?>
 

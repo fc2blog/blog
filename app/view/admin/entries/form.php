@@ -26,7 +26,7 @@
   <h3 class="accordion_head" id="sys-accordion-setting"><?php echo __('Entry settings'); ?><span>▼<?php echo __('Click to open/close'); ?></span></h3>
   <div <?php if(\Fc2blog\Web\Cookie::get('js_entry_hide_setting')){echo 'style="display: none;"';} ?>>
 
-    <?php $this->display('Categories/ajax_add.html', array()); ?>
+    <?php $this->display('Categories/ajax_add.php', array()); ?>
 
     <table>
       <tbody>
@@ -101,5 +101,5 @@
   <input type="button" value="<?php echo __('Preview'); ?>" id="sys-entry-form-preview" />
 </p>
 
-<?php $this->display('Entries/editor_js.html', array()); ?>
+<?php $this->display('Entries/editor_js.php', array()); ?>
 

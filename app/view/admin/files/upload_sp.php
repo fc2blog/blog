@@ -54,6 +54,6 @@
     <?php endif; ?>
   </div>
 
-  <?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+  <?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 <?php endif; ?>
 

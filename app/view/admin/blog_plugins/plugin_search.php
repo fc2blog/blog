@@ -8,7 +8,7 @@
       <a class="admin_common_btn create_btn" href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'blog_plugins', 'action'=>'index')); ?>"><?php echo __('Plugin management'); ?></a>
     </p>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 
 <table>
   <thead>
@@ -47,5 +47,5 @@
   </tbody>
 </table>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 

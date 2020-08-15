@@ -49,5 +49,5 @@
 <?php endforeach; ?>
 </ul>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 

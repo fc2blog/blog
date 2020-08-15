@@ -23,5 +23,5 @@
   </table>
 <?php endforeach; ?>
 
-<?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
 

@@ -106,7 +106,7 @@ class CommonController extends AdminController
   */
   public function install()
   {
-    $this->layout = 'default_nomenu.html';
+    $this->layout = 'default_nomenu.php';
 
     $request = Request::getInstance();
 
@@ -177,12 +177,12 @@ class CommonController extends AdminController
         // 完了画面表示と同時に、インストール済みロックファイルの生成
         file_put_contents($installed_lock_file_path, "This is installed check lockfile.\nThe blog already installed. if you want re-enable installer, please delete this file.");
 
-        return 'common/installed.html';
+        return 'common/installed.php';
     }
 
     // 初期表示時
     if (!$request->get('user')) {
-      return 'common/install_user.html';
+      return 'common/install_user.php';
     }
 
     /** @var UsersModel $users_model */
@@ -205,14 +205,14 @@ class CommonController extends AdminController
         $users_model->deleteById($blog_data['user_id']);
       }
       $this->setErrorMessage(__('I failed to register'));
-      return 'common/install_user.html';
+      return 'common/install_user.php';
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
 
-    return 'common/install_user.html';
+    return 'common/install_user.php';
   }
 
 }

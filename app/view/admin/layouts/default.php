@@ -142,7 +142,7 @@
     </nav>
 
     <article id="main-contents">
-      <?php $this->display('Common/flash_message.html', array('messages'=>$this->removeMessage())); ?>
+      <?php $this->display('Common/flash_message.php', array('messages'=>$this->removeMessage())); ?>
       <?php $this->display($fw_template); ?>
     </article>
 

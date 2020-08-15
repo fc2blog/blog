@@ -168,7 +168,7 @@ class CategoriesController extends AdminController
 
     $json['error'] = $errors;
 
-    $this->layout = 'json.html';
+    $this->layout = 'json.php';
     $this->set('json', $json);
   }
 

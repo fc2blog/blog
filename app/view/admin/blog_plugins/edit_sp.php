@@ -87,5 +87,5 @@ $(function(){
 });
 </script>
 
-<?php echo $this->display('BlogPlugins/form_js.html'); ?>
+<?php echo $this->display('BlogPlugins/form_js.php'); ?>
 
