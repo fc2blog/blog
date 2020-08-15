@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\Lib\CaptchaImage;
 
 use Exception;
+use Fc2blog\Lib\CaptchaImage;
 use PHPUnit\Framework\TestCase;
 
 class DrawNumberTest extends TestCase
@@ -12,12 +13,12 @@ class DrawNumberTest extends TestCase
 
   /**
    * @param array $params
+   * @param bool $mini_mode
    * @return false|resource gd resource
-   * @throws Exception
    */
-  private function generateGifImage(array $params, bool $mini_mode=true)
+  private function generateGifImage(array $params, bool $mini_mode = true)
   {
-    $captcha = new \Fc2blog\Lib\CaptchaImage($params['size_x'], $params['size_y'], $params['salt'], false);
+    $captcha = new CaptchaImage($params['size_x'], $params['size_y'], $params['salt'], false);
 
     $is_in_ob = ob_get_level() > 0;
     $before_ob = "";

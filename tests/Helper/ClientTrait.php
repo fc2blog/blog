@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\Helper;
 
 use Exception;
+use Fc2blog\Config;
+use Fc2blog\Exception\PseudoExit;
+use Fc2blog\Web\Request;
 use InvalidArgumentException;
-use \Fc2blog\Exception\PseudoExit;
 
 trait ClientTrait
 {
@@ -28,16 +30,14 @@ trait ClientTrait
     $_POST = $post;
 
     # Requestはキャッシュされるので、都度消去する
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Fc2blog\Web\Request::resetInstanceForTesting();
+    Request::resetInstanceForTesting();
 
     if ($target === "user") {
-      /** @noinspection PhpFullyQualifiedNameUsageInspection */
-      \Fc2blog\Config::read('user.php');
+      Config::read('user.php');
     } else if ($target === "admin") {
-      \Fc2blog\Config::read('admin.php');
+      Config::read('admin.php');
     } else if ($target === "test") {
-      \Fc2blog\Config::read('test.php');
+      Config::read('test.php');
     } else {
       throw new InvalidArgumentException("target is wrong.");
     }
@@ -67,6 +67,7 @@ trait ClientTrait
    * @param bool $is_https
    * @param string $method
    * @param array $post
+   * @param string $target
    * @return false|string
    * @throws Exception
    */
@@ -96,7 +97,6 @@ trait ClientTrait
   {
     unset($_SERVER['REQUEST_URI'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTPS'], $_SERVER['REQUEST_URI']);
     $_POST = [];
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Fc2blog\Web\Request::resetInstanceForTesting();
+    Request::resetInstanceForTesting();
   }
 }

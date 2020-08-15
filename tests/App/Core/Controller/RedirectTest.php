@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Core\Controller;
 
-use BlogsModel;
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\Model;
 use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
 use PHPUnit\Framework\TestCase;
@@ -16,8 +17,8 @@ class RedirectTest extends TestCase
 
   public function setUp(): void
   {
-    if (!class_exists(\Fc2blog\Model\BlogsModel::class)) {
-      \Fc2blog\Model\Model::load('blogs');
+    if (!class_exists(BlogsModel::class)) {
+      Model::load('blogs');
     }
 
     DBHelper::clearDbAndInsertFixture();

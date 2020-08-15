@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Fc2blog\Tests\App\Model;
+namespace Fc2blog\Tests\App\Model\CommentsModel;
 
+use Fc2blog\Model\CommentsModel;
+use Fc2blog\Model\Model;
 use Fc2blog\Tests\DBHelper;
 use PHPUnit\Framework\TestCase;
 use TypeError;
@@ -11,8 +13,8 @@ class PasswordCheckTest extends TestCase
 {
   public function setUp(): void
   {
-    if (!class_exists(\Fc2blog\Model\CommentsModel::class)) {
-      \Fc2blog\Model\Model::load('comments');
+    if (!class_exists(CommentsModel::class)) {
+      Model::load('comments');
     }
 
     DBHelper::clearDbAndInsertFixture();
@@ -22,12 +24,12 @@ class PasswordCheckTest extends TestCase
 
   public function testPasswordCheck(): void
   {
-    $comments_model = new \Fc2blog\Model\CommentsModel();
+    $comments_model = new CommentsModel();
 
     $i = 10;
     while ($i-- > 0) { // ランダムで複数回チェック
       /** @noinspection PhpUnhandledExceptionInspection テストなので、失敗したら失敗してもらう */
-      $random_password = base64_encode(random_bytes(random_int(1,1024)));
+      $random_password = base64_encode(random_bytes(random_int(1, 1024)));
       $passwd_hash = $comments_model::passwordHash($random_password);
 
       // 成功
@@ -51,7 +53,7 @@ class PasswordCheckTest extends TestCase
    */
   public function testEmptyPasswordCheck(): void
   {
-    $comments_model = new \Fc2blog\Model\CommentsModel();
+    $comments_model = new CommentsModel();
 
     $random_password = '';
     $passwd_hash = $comments_model::passwordHash($random_password);
@@ -66,14 +68,14 @@ class PasswordCheckTest extends TestCase
    */
   public function testDenyIntInputPasswordCheck(): void
   {
-    $comments_model = new \Fc2blog\Model\CommentsModel();
+    $comments_model = new CommentsModel();
 
     $random_password = 123;
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
       $comments_model::passwordHash($random_password);
       $this->fail();
-    }catch(TypeError $e){
+    } catch (TypeError $e) {
       //ok
       $this->assertInstanceOf(TypeError::class, $e);
     }
@@ -84,14 +86,14 @@ class PasswordCheckTest extends TestCase
    */
   public function testDenyBoolInputPasswordCheck(): void
   {
-    $comments_model = new \Fc2blog\Model\CommentsModel();
+    $comments_model = new CommentsModel();
 
     $random_password = true;
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
       $comments_model::passwordHash($random_password);
       $this->fail();
-    }catch(TypeError $e){
+    } catch (TypeError $e) {
       //ok
       $this->assertInstanceOf(TypeError::class, $e);
     }

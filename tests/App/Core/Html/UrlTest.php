@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Core\Html;
 
-use BlogsModel;
-
-use Html;
-use Model;
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Config;
+use Fc2blog\Web\Html;
+use Fc2blog\Web\Request;
+use Fc2blog\Model\Model;
 use PHPUnit\Framework\TestCase;
 
 class UrlTest extends TestCase
@@ -21,14 +22,12 @@ class UrlTest extends TestCase
     $_POST = [];
 
     # Requestはキャッシュされるので、都度消去する
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Fc2blog\Web\Request::resetInstanceForTesting();
+    Request::resetInstanceForTesting();
 
-    \Fc2blog\Config::read('user.php', true);
+    Config::read('user.php', true);
 
-    /** @noinspection PhpIncludeInspection */
-    if (!class_exists(\Fc2blog\Model\BlogsModel::class)) {
-      \Fc2blog\Model\Model::load('blogs');
+    if (!class_exists(BlogsModel::class)) {
+      Model::load('blogs');
     }
 
     parent::setUp();
@@ -42,7 +41,7 @@ class UrlTest extends TestCase
     $_SERVER["REQUEST_METHOD"] = "GET";
     $_SERVER['REQUEST_URI'] = "/";
     $_POST = [];
-    $url = \Fc2blog\Web\Html::url([
+    $url = Html::url([
       'controller' => 'user',
       'action' => 'action',
       'blog_id' => 'testblog1'
@@ -60,7 +59,7 @@ class UrlTest extends TestCase
     $_SERVER["REQUEST_METHOD"] = "GET";
     $_SERVER['REQUEST_URI'] = "/";
     $_POST = [];
-    $url = \Fc2blog\Web\Html::url([
+    $url = Html::url([
       'controller' => 'user',
       'action' => 'action',
       'blog_id' => 'testblog1'
