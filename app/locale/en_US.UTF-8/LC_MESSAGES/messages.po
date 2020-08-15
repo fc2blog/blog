@@ -1217,11 +1217,6 @@ msgstr "Absolute link"
 msgid "Please log from the following"
 msgstr ""
 
-#: shell/../view/admin/common/installed.html:6
-msgid ""
-"In addition, please delete admin / install.php because it is unnecessary"
-msgstr ""
-
 #: shell/../view/admin/categories/create.html:4
 #: shell/../view/admin/categories/create_sp.html:5
 msgid "Add category"
@@ -2466,4 +2461,7 @@ msgstr "{%displayNone}"
 #~ msgstr "dd/mm/yy"
 
 msgid "Login to Administration page"
+msgstr ""
+
+msgid "If you want to re-enable this installer, please delete `installed.lock` file in temp dir."
 msgstr ""

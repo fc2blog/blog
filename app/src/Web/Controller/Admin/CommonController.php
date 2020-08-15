@@ -108,6 +108,13 @@ class CommonController extends AdminController
     $request = Request::getInstance();
 
     $state = $request->get('state', 0);
+
+    // インストール済みロックファイルをチェックする。ロックファイルがあればインストール済みと判定し、完了画面へ
+    $installed_lock_file_path = Config::get('TEMP_DIR') . "installed.lock";
+    if (file_exists($installed_lock_file_path)) {
+      $state = 3;
+    }
+
     switch ($state) {
       default: case 0:
         // 環境チェック確認
@@ -163,6 +170,10 @@ class CommonController extends AdminController
 
       case 3:
         // 完了画面
+
+        // 完了画面表示と同時に、インストール済みロックファイルの生成
+        file_put_contents($installed_lock_file_path, "This is installed check lockfile.\nThe blog already installed. if you want re-enable installer, please delete this file.");
+
         return 'common/installed.html';
     }
 
