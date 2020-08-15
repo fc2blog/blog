@@ -2308,9 +2308,9 @@ h3 + .form_contents .table_2column:first-child {
 	position: relative;
 }
 
-.#editor .list_switch_item { border-bottom: 1px solid #ddd; }
+#editor .list_switch_item { border-bottom: 1px solid #ddd; }
 
-.#editor .list_switch_item.selected { border-bottom: 1px solid #e6e6e6; }
+#editor .list_switch_item.selected { border-bottom: 1px solid #e6e6e6; }
 
 .img_set_btn {
 	position: absolute;
