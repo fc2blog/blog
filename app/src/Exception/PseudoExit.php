@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fc2blog\Exception;
 
-use Exception;
+use RuntimeException;
 
 /**
  * 疑似Exit
  * Class PseudoExit
  */
-class PseudoExit extends Exception
+class PseudoExit extends RuntimeException
 {
 }
