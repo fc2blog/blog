@@ -5,6 +5,8 @@
 
 namespace Fc2blog\Lib;
 
+use Exception;
+
 class CaptchaImage
 {
   var $img_size_x;

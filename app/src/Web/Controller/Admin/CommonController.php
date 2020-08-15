@@ -2,6 +2,7 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Exception;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\Model;

@@ -374,9 +374,10 @@ class App
   }
 
   /**
-  * 現在選択中のメニューかどうかを返す
-  * @param params = array('entries/create', 'entries/edit', ...),
-  */
+   * 現在選択中のメニューかどうかを返す
+   * @param array params = array('entries/create', 'entries/edit', ...),
+   * @return bool
+   */
   public static function isActiveMenu($params)
   {
     // コントローラー名とメソッド名を取得
