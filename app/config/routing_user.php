@@ -11,6 +11,21 @@ $query = $request->getQuery();
 $argsc = \Fc2blog\Config::get('ARGS_CONTROLLER');
 $argsa = \Fc2blog\Config::get('ARGS_ACTION');
 
+// favicon.ico アクセス時に404をレスポンスし、ブラウザにリトライさせない。
+// しない場合、404扱いからのブログページへリダイレクトが発生し、無駄な資源を消費する。
+// 可能なら、httpd側でハンドルしたほうが良いのだが、可搬性のため。
+if (isset($paths[0]) && preg_match('/\Afavicon\.ico/u', $paths[0])) {
+  echo "NotFound";
+  if(defined("THIS_IS_TEST")) {
+    throw new \Fc2blog\Exception\PseudoExit(__FILE__ . ":" . __LINE__);
+  }else{
+    if(!headers_sent()) {
+      http_response_code(404);
+    }
+    exit;
+  }
+}
+
 // blog_idの設定
 if (isset($paths[0]) && preg_match('/^[0-9a-zA-Z]+$/', $paths[0])) {
   $request->set('blog_id', $paths[0]);
