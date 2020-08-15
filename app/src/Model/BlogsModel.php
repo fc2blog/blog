@@ -389,6 +389,7 @@ class BlogsModel extends Model
   */
   public function deleteByIdAndUserId($blog_id, $user_id, $options=array())
   {
+    // TODO: deleteByIdは2引数だが、ここでは3をとっているのでおかしい
     if (!parent::deleteById($blog_id, array('where'=>'user_id=?', 'params'=>array($user_id)), $options)){
       return 0;
     }
