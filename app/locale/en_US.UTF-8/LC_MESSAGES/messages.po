@@ -2464,3 +2464,6 @@ msgstr "{%displayNone}"
 
 #~ msgid "system-date-format"
 #~ msgstr "dd/mm/yy"
+
+msgid "Login to Administration page"
+msgstr ""

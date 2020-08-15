@@ -137,6 +137,7 @@ class UsersController extends AdminController
     }
 
     $request = Request::getInstance();
+    $this->set('html_title', __('Login to Administration page'));
 
     // 初期表示時
     if (!$request->get('user')) {
