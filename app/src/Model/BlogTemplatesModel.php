@@ -179,23 +179,29 @@ class BlogTemplatesModel extends Model
   }
 
   /**
-  * テンプレートの作成
-  */
-  public function insert($values, $options=array())
+   * テンプレートの作成
+   * @param array $values
+   * @param array $options
+   * @return array|false|int|mixed
+   */
+  public function insert(array $values, array $options = [])
   {
     $default_values = [
       'template_id' => 0,
     ];
     $values += $default_values;
     $values['updated_at'] = $values['created_at'] = date('Y-m-d H:i:s');
-    $id = parent::insert($values, $options);
-
-    return $id;
+    return parent::insert($values, $options);
   }
 
   /**
-  * テンプレートの更新
-  */
+   * テンプレートの更新
+   * @param $values
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return bool
+   */
   public function updateByIdAndBlogId($values, $id, $blog_id, $options=array())
   {
     $values['updated_at'] = date('Y-m-d H:i:s');

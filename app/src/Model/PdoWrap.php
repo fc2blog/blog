@@ -35,7 +35,7 @@ class PDOWrap implements DBInterface
    * @param array $options
    * @return mixed
    */
-  public function find($sql, $params=array(), $options=array())
+  public function find(string $sql, array $params=[], array $options=[])
   {
     $_options = array(
       'types'  => '',                  // paramsの型設定(sdi)
@@ -56,8 +56,12 @@ class PDOWrap implements DBInterface
 
   /**
    * 更新系SQL
+   * @param string $sql
+   * @param array $params
+   * @param array $options
+   * @return array|false|int
    */
-  public function execute($sql, $params=array(), $options=array())
+  public function execute(string $sql, array $params=[], array $options=[])
   {
     $_options = array(
       'types' => '',                      // paramsの型設定(sdi)
