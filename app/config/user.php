@@ -1,6 +1,8 @@
 <?php
 
-$config = array();
+declare(strict_types=1);
+
+$config = [];
 
 $config['APP_PREFIX'] = 'User';
 
