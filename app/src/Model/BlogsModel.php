@@ -277,10 +277,14 @@ class BlogsModel extends Model
   }
 
   /**
-  * ブログの追加登録処理
-  *  ブログの作成と同時にCategoryのRootNodeの追加も行う
-  */
-  public function insert($data, $options=array())
+   * ブログの追加登録処理
+   *  ブログの作成と同時にCategoryのRootNodeの追加も行う
+   * TODO: トランザクションがないので、本関数が失敗してもデータが巻き戻らない
+   * @param array $data
+   * @param array $options
+   * @return false|string falseは登録失敗
+   */
+  public function insert($data, $options = [])
   {
     // 主キーがauto_incrementじゃないのでreturn値の受け取り方を変更
     $data['created_at'] = $data['updated_at'] = date('Y-m-d H:i:s');
@@ -291,47 +295,54 @@ class BlogsModel extends Model
     $id = $data['id'];
 
     // CategoryのSystem用Nodeの追加(id=1の削除できないノード)
-    $data = array('name'=>__('Unclassified'), 'blog_id'=>$id);
-    Model::load('Categories')->addNode($data, 'blog_id=?', array($id));
+    $data = ['name' => __('Unclassified'), 'blog_id' => $id];
+    Model::load('Categories')->addNode($data, 'blog_id=?', [$id]);
 
     // ブログ用の設定作成
-    Model::load('BlogSettings')->insert(array('blog_id'=>$id));
+    Model::load('BlogSettings')->insert(['blog_id' => $id]);
 
     // 初期のテンプレートを作成する(pc,mb,sp,tb)
     $blog_templates_model = Model::load('BlogTemplates');
 
-    $blog_data = array();
+    $blog_data = [];
 
-    $devices = array(
+    $devices = [
       'template_pc_id' => Config::get('DEVICE_PC'),
       'template_mb_id' => Config::get('DEVICE_MB'),
       'template_sp_id' => Config::get('DEVICE_SP'),
       'template_tb_id' => Config::get('DEVICE_TB'),
-    );
-    $blog_templates_data = array(
-      'blog_id'     => $id,
+    ];
+
+    $blog_templates_data = [
+      'blog_id' => $id,
       'template_id' => 0,
-      'title'       => '初期テンプレート',
-    );
+      'title' => '初期テンプレート',
+    ];
+
+    $default_template_path = Config::get('APP_DIR') . 'templates/default/fc2_default_template_pc.php';
+    $default_css_path = Config::get('APP_DIR') . 'templates/default/fc2_default_css_pc.php';
+
     foreach ($devices as $key => $device) {
-      // TODO:ファイルではなくテンプレのDBから呼び出す or ユーザーに選択させる予定
-      $template_name = 'fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
-      $css_name = 'fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
-      if (file_exists(Config::get('CONFIG_DIR') . $template_name) && file_exists(Config::get('CONFIG_DIR') . $css_name)) {
-        $blog_templates_data['html'] = file_get_contents(Config::get('CONFIG_DIR') . $template_name);
-        $blog_templates_data['css'] = file_get_contents(Config::get('CONFIG_DIR') . $css_name);
-      } else {
-        $blog_templates_data['html'] = file_get_contents(Config::get('CONFIG_DIR') . 'fc2_default_template.php');
-        $blog_templates_data['css'] = file_get_contents(Config::get('CONFIG_DIR') . 'fc2_default_css.php');
+      $template_path = Config::get('APP_DIR') . 'templates/default/fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+      $css_path = Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+      if (!file_exists($template_path) || !file_exists($css_path)) {
+        // 指定のデバイスに対応するテンプレーが無いので、PC用にフォールバック
+        // TODO: 携帯（ガラケー）向けのテンプレートが実質存在しないのだが大丈夫なのだろうか？
+        $template_path = $default_template_path;
+        $css_path = $default_css_path;
       }
 
+      $blog_templates_data['html'] = file_get_contents($template_path);
+      $blog_templates_data['css'] = file_get_contents($css_path);
       $blog_templates_data['device_type'] = $device;
       $blog_templates_data['created_at'] = $blog_templates_data['updated_at'] = date('Y-m-d H:i:s');
       $blog_data[$key] = $blog_templates_model->insert($blog_templates_data);
     }
+
     if (!$this->update($blog_data, 'id=?', array($id))) {
       return false;
     }
+
     return $id;
   }
 
