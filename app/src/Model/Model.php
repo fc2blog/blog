@@ -287,7 +287,12 @@ abstract class Model implements ModelInterface
     return $this->getDB()->find($sql, $params, $options);
   }
 
-  public function insert($values, $options=array())
+  /**
+   * @param array $values
+   * @param array $options
+   * @return false|int|mixed
+   */
+  public function insert(array $values, array $options=[])
   {
     if (!count($values)) {
       return 0;
@@ -397,7 +402,13 @@ abstract class Model implements ModelInterface
     return $this->executeSql($sql, $params, $options);
   }
 
-  public function executeSql($sql, $params=array(), $options=array())
+  /**
+   * @param string $sql
+   * @param array $params
+   * @param array $options
+   * @return array|false|int|mixed
+   */
+  public function executeSql(string $sql, array $params=[], array $options=[])
   {
     return $this->getDB()->execute($sql, $params, $options);
   }

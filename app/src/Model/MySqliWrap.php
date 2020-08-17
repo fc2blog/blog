@@ -28,8 +28,12 @@ class MySqliWrap implements DBInterface{
 
   /**
    * 参照系SQL
+   * @param string $sql
+   * @param array $params
+   * @param array $options
+   * @return array|false|int|mixed
    */
-  public function find($sql, $params=array(), $options=array()){
+  public function find(string $sql, array $params=[], array $options=[]){
     $_options = array(
       'types'  => '',                  // paramsの型設定(sdi)
       'result' => \Fc2blog\Model\DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statment...
@@ -49,8 +53,12 @@ class MySqliWrap implements DBInterface{
 
   /**
    * 更新系SQL
+   * @param string $sql
+   * @param array $params
+   * @param array $options
+   * @return array|false|int|mixed
    */
-  public function execute($sql, $params=array(), $options=array()){
+  public function execute(string $sql, array $params=[], array $options=[]){
     $_options = array(
       'types' => '',                      // paramsの型設定(sdi)
       'result' => \Fc2blog\Model\DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statment...

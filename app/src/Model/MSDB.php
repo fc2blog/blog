@@ -105,7 +105,7 @@ class MSDB implements DBInterface{
    * @param array $options
    * @return mixed
    */
-  public function find($sql, $params=array(), $options=array()){
+  public function find(string $sql, array $params=[], array $options=[]){
     $_options = array(
       'master' => false,                  // Masterから取得するかどうか
       'types' => '',                      // paramsの型設定(sdi)
@@ -118,13 +118,17 @@ class MSDB implements DBInterface{
 
   /**
    * 更新系SQL
+   * @param string $sql
+   * @param array $params
+   * @param array $options
+   * @return false|int|mixed
    */
-  public function execute($sql, $params=array(), $options=array()){
-    $_options = array(
-      'types' => '',                            // paramsの型設定(sdi)
+  public function execute(string $sql, array $params=[], array $options=[]){
+    $default_options = [
+      'types' => '',                             // paramsの型設定(sdi)
       'result' => DBInterface::RESULT_AFFECTED,  // 戻り値 one/row/all/statment...
-    );
-    $options = array_merge($_options, $options);
+    ];
+    $options = array_merge($default_options, $options);
     $db = $this->getMasterDB();
     return $db->execute($sql, $params, $options);
   }
