@@ -15,6 +15,7 @@ class DrawNumberTest extends TestCase
    * @param array $params
    * @param bool $mini_mode
    * @return false|resource gd resource
+   * @throws Exception
    */
   private function generateGifImage(array $params, bool $mini_mode = true)
   {

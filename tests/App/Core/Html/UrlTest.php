@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Core\Html;
 
-use Fc2blog\Model\BlogsModel;
 use Fc2blog\Config;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
-use Fc2blog\Model\Model;
 use PHPUnit\Framework\TestCase;
 
 class UrlTest extends TestCase
@@ -25,10 +23,6 @@ class UrlTest extends TestCase
     Request::resetInstanceForTesting();
 
     Config::read('user.php', true);
-
-    if (!class_exists(BlogsModel::class)) {
-      Model::load('blogs');
-    }
 
     parent::setUp();
   }
