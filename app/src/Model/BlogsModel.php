@@ -297,10 +297,10 @@ class BlogsModel extends Model
 
     // CategoryのSystem用Nodeの追加(id=1の削除できないノード)
     $data = ['name' => __('Unclassified'), 'blog_id' => $id];
-    (new BlogTemplatesModel())->addNode($data, 'blog_id=?', [$id]);
+    (new CategoriesModel())->addNode($data, 'blog_id=?', [$id]);
 
     // ブログ用の設定作成
-    (new BlogTemplatesModel())->insert(['blog_id' => $id]);
+    (new BlogSettingsModel())->insert(['blog_id' => $id]);
 
     // 初期のテンプレートを作成する(pc,mb,sp,tb)
     $blog_templates_model = new BlogTemplatesModel();
