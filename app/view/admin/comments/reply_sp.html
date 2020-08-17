@@ -9,15 +9,15 @@
 <dl class="output_contents comment_about">
   <dt class="about_title"><?php echo __('Public state'); ?></dt>
   <dd class="about_content">
-    <?php if ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
+    <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
       <span class="published"><?php echo __('Published'); ?></span>
-    <?php elseif ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
+    <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
       <span class="approval"><?php echo __('Approval pending'); ?></span>
-    <?php elseif ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
+    <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
       <span class="private"><?php echo __('Only exposed administrator'); ?></span>
     <?php endif; ?>
   </dd>
-  <?php if ($comment['reply_status']==Config::get('COMMENT.REPLY_STATUS.REPLY')) : ?>
+  <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY')) : ?>
     <dt class="about_title"><?php echo __('Response time'); ?></dt>
     <dd class="about_content"><?php echo df($comment['reply_updated_at']); ?></dd>
   <?php endif; ?>
@@ -32,36 +32,36 @@
   <dd class="about_content"><a href="<?php echo $comment['url']; ?>" target="_blank"><?php echo $comment['url']; ?></a></dd>
   <?php endif; ?>
   <dt class="about_title"><?php echo __('Article name'); ?></dt>
-  <dd class="about_content"><a href="<?php echo App::userURL(array('controller'=>'entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'], 'sp'=>1)); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></dd>
+  <dd class="about_content"><a href="<?php echo \Fc2blog\App::userURL(array('controller'=>'entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'], 'sp'=>1)); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></dd>
 </dl>
 
 <div class="btn_area">
-  <?php if ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
+  <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
     <div class="btn">
-      <a href="<?php echo Html::url(array('action'=>'approval', 'id'=>$comment['id'], 'back_url'=>ue($request->get('back_url')))); ?>"
+      <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'approval', 'id'=>$comment['id'], 'back_url'=>ue($request->get('back_url')))); ?>"
        onclick="return confirm('<?php echo __('Are you sure you want to be approved?'); ?>');" class="btn_contents positive touch"><i class="check_icon btn_icon"></i><?php echo __('I moderate comments'); ?></a>
      </div>
   <?php endif; ?>
   <ul class="btn_area_inner">
-    <li><a class="btn_contents touch" href="<?php if($request->isArgs('back_url')): ?><?php echo $request->get('back_url'); ?><?php else: ?><?php echo Html::url(array('action'=>'index')); ?><?php endif; ?>"><i class="return_icon btn_icon"></i><?php echo __('I Back to List'); ?></a></li>
-    <li><a class="btn_contents touch" href="<?php echo Html::url(array('action'=>'delete', 'id'=>$comment['id'], 'back_url'=>ue($request->get('back_url')))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><i class="delete_icon btn_icon"></i><?php echo __('Delete'); ?></a></li>
+    <li><a class="btn_contents touch" href="<?php if($request->isArgs('back_url')): ?><?php echo $request->get('back_url'); ?><?php else: ?><?php echo \Fc2blog\Web\Html::url(array('action'=>'index')); ?><?php endif; ?>"><i class="return_icon btn_icon"></i><?php echo __('I Back to List'); ?></a></li>
+    <li><a class="btn_contents touch" href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$comment['id'], 'back_url'=>ue($request->get('back_url')))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><i class="delete_icon btn_icon"></i><?php echo __('Delete'); ?></a></li>
   </ul>
 </div>
 
-<?php if ($comment['open_status']!=Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
+<?php if ($comment['open_status']!=\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
   <form method="POST" id="sys-comment-form" class="admin-form">
     <h2 id="jamp1"><span class="h2_inner"><?php echo __('I will reply to comments'); ?></span></h2>
     <div class="form_area">
-      <?php echo Html::input('back_url', 'hidden', array('default'=>$request->get('back_url'))); ?>
-      <p class="form_contents"><?php echo Html::input('comment[reply_body]', 'textarea', array('class'=>'common_textarea')); ?></p>
+      <?php echo \Fc2blog\Web\Html::input('back_url', 'hidden', array('default'=>$request->get('back_url'))); ?>
+      <p class="form_contents"><?php echo \Fc2blog\Web\Html::input('comment[reply_body]', 'textarea', array('class'=>'common_textarea')); ?></p>
       <?php if (isset($errors['comment']['reply_body'])): ?><p class="error"><?php echo $errors['comment']['reply_body']; ?></p><?php endif; ?>
     </div>
     <div class="btn_area">
-      <?php if($comment['reply_status']==Config::get('COMMENT.REPLY_STATUS.REPLY')): ?>
+      <?php if($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY')): ?>
         <div class="btn"><button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i><?php echo __('Update'); ?></button></div>
       <?php else: ?>
         <div class="btn"><button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i><?php echo __('Reply'); ?></button></div>
-        <?php if($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PENDING')): ?>
+        <?php if($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')): ?>
           ※<?php echo __('When you press the reply button, the message will be approved'); ?>
         <?php endif; ?>
       <?php endif; ?>

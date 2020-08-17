@@ -1,10 +1,10 @@
-<?php Html::addJS('/js/admin/syntax_check.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/admin/syntax_check.js'); ?>
 
 <script>
 <?php
   // テンプレート置換用変数読み込み
-  Config::read('fc2_template.php');
-  $template_syntaxes = array_merge(array_keys(Config::get('fc2_template_foreach')), array_keys(Config::get('fc2_template_if')));
+  \Fc2blog\Config::read('fc2_template.php');
+  $template_syntaxes = array_merge(array_keys(\Fc2blog\Config::get('fc2_template_foreach')), array_keys(\Fc2blog\Config::get('fc2_template_if')));
 ?>
 var template_syntaxes = <?php echo json_encode($template_syntaxes); ?>;
 $(function(){

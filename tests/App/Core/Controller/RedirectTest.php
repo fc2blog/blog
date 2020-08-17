@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Core\Controller;
 
-use BlogsModel;
-use Config;
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\Model;
 use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
-use Model;
 use PHPUnit\Framework\TestCase;
 
 class RedirectTest extends TestCase
@@ -18,9 +17,6 @@ class RedirectTest extends TestCase
 
   public function setUp(): void
   {
-    if (!class_exists(Model::class)) {
-      require_once(Config::get('MODEL_DIR') . 'model.php');
-    }
     if (!class_exists(BlogsModel::class)) {
       Model::load('blogs');
     }

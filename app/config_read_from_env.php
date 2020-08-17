@@ -16,7 +16,7 @@ if ((string)getenv("FC2_STRICT_ERROR_REPORT") === 1) {
   error_reporting(0);
 }
 
-if (strlen((string)getenv("FC2_ERROR_ON_DISPLAY"))) {
+if ((string)getenv("FC2_ERROR_ON_DISPLAY") === 0) {
   ini_set('display_errors', '1');
   ini_set('display_startup_errors', '1');
   ini_set('html_errors', '1');

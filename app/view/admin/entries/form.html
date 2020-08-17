@@ -4,7 +4,7 @@
     <tr>
       <th><?php echo __('Title'); ?></th>
       <td>
-        <?php echo Html::input('entry[title]', 'text'); ?>
+        <?php echo \Fc2blog\Web\Html::input('entry[title]', 'text'); ?>
         <?php if (isset($errors['entry']['title'])): ?><p class="error"><?php echo $errors['entry']['title']; ?></p><?php endif; ?>
       </td>
     </tr>
@@ -13,18 +13,18 @@
 
   <h3><?php echo __('Body'); ?></h3>
   <div>
-    <?php echo Html::input('entry[body]', 'textarea', array('id'=>'sys-entry-body')); ?>
+    <?php echo \Fc2blog\Web\Html::input('entry[body]', 'textarea', array('id'=>'sys-entry-body')); ?>
     <?php if (isset($errors['entry']['body'])): ?><p class="error"><?php echo $errors['entry']['body']; ?></p><?php endif; ?>
   </div>
 
   <h3 class="accordion_head" id="sys-accordion-extend"><?php echo __('Edit a postscript'); ?><span>▼<?php echo __('Click to open/close'); ?></span></h3>
-  <div <?php if(Cookie::get('js_entry_hide_extend')){echo 'style="visibility: hidden;"';} ?>>
-    <?php echo Html::input('entry[extend]', 'textarea', array('id'=>'sys-entry-extend')); ?>
+  <div <?php if(\Fc2blog\Web\Cookie::get('js_entry_hide_extend')){echo 'style="visibility: hidden;"';} ?>>
+    <?php echo \Fc2blog\Web\Html::input('entry[extend]', 'textarea', array('id'=>'sys-entry-extend')); ?>
     <?php if (isset($errors['entry']['extend'])): ?><p class="error"><?php echo $errors['entry']['extend']; ?></p><?php endif; ?>
   </div>
 
   <h3 class="accordion_head" id="sys-accordion-setting"><?php echo __('Entry settings'); ?><span>▼<?php echo __('Click to open/close'); ?></span></h3>
-  <div <?php if(Cookie::get('js_entry_hide_setting')){echo 'style="display: none;"';} ?>>
+  <div <?php if(\Fc2blog\Web\Cookie::get('js_entry_hide_setting')){echo 'style="display: none;"';} ?>>
 
     <?php $this->display('Categories/ajax_add.html', array()); ?>
 
@@ -37,7 +37,7 @@
             <input type="button" value="<?php echo __('Add'); ?>" id="sys-add-tag-button" />
             <ul id="sys-add-tags"></ul>
             <ul id="sys-use-well-tags">
-            <?php $tags = Model::load('Tags')->getWellUsedTags($this->getBlogId()); ?>
+            <?php $tags = \Fc2blog\Model\Model::load('Tags')->getWellUsedTags($this->getBlogId()); ?>
             <?php foreach($tags as $key => $tag): ?><li><?php echo h($tag); ?></li><?php endforeach; ?>
             </ul>
           </td>
@@ -50,7 +50,7 @@
         <tr>
           <th><?php echo __('Date and time'); ?></th>
           <td>
-            <?php echo Html::input('entry[posted_at]', 'text', array('class'=>'date-time-picker')); ?>
+            <?php echo \Fc2blog\Web\Html::input('entry[posted_at]', 'text', array('class'=>'date-time-picker')); ?>
             <?php echo __('Date and time of submission will be set when it is not input'); ?><br />
             <?php if (isset($errors['entry']['posted_at'])): ?><p class="error"><?php echo $errors['entry']['posted_at']; ?></p><?php endif; ?>
           </td>
@@ -58,18 +58,18 @@
         <tr>
           <th><?php echo __('Post type'); ?></th>
           <td>
-            <?php echo Html::input('entry[open_status]', 'radio', array('options'=>EntriesModel::getOpenStatusList(), 'default'=>Config::get('ENTRY.OPEN_STATUS.OPEN'))); ?>
+            <?php echo \Fc2blog\Web\Html::input('entry[open_status]', 'radio', array('options'=>\Fc2blog\Model\EntriesModel::getOpenStatusList(), 'default'=>\Fc2blog\Config::get('ENTRY.OPEN_STATUS.OPEN'))); ?>
             <?php if (isset($errors['entry']['open_status'])): ?><p class="error"><?php echo $errors['entry']['open_status']; ?></p><?php endif; ?>
           </td>
         </tr>
         <tr>
           <th class="sys-entry-password"><?php echo __('Set Password'); ?></th>
           <td class="sys-entry-password">
-            <?php echo Html::input('entry[password]', 'text'); ?>
+            <?php echo \Fc2blog\Web\Html::input('entry[password]', 'text'); ?>
             <?php if (isset($errors['entry']['password'])): ?><p class="error"><?php echo $errors['entry']['password']; ?></p><?php endif; ?>
             <p>
               <?php echo __('They are authenticated with a password of the entire If empty');  ?><br />
-              <a href="<?php echo Html::url(array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank"><?php echo __('Passwords in the whole place'); ?></a><br />
+              <a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank"><?php echo __('Passwords in the whole place'); ?></a><br />
             </p>
           </td>
         </tr>
@@ -81,14 +81,14 @@
         <tr>
           <th><?php echo __('New paragraph'); ?></th>
           <td>
-            <?php echo Html::input('entry[auto_linefeed]', 'radio', array('options'=>EntriesModel::getAutoLinefeedList(), 'default'=>Config::get('ENTRY.AUTO_LINEFEED.USE'))); ?>
+            <?php echo \Fc2blog\Web\Html::input('entry[auto_linefeed]', 'radio', array('options'=>\Fc2blog\Model\EntriesModel::getAutoLinefeedList(), 'default'=>\Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE'))); ?>
             <?php if (isset($errors['entry']['auto_linefeed'])): ?><p class="error"><?php echo $errors['entry']['auto_linefeed']; ?></p><?php endif; ?>
           </td>
         </tr>
         <tr>
           <th><?php echo __('Accept comments'); ?></th>
           <td>
-            <?php echo Html::input('entry[comment_accepted]', 'radio', array('options'=>EntriesModel::getCommentAcceptedList(), 'default'=>Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'))); ?>
+            <?php echo \Fc2blog\Web\Html::input('entry[comment_accepted]', 'radio', array('options'=>\Fc2blog\Model\EntriesModel::getCommentAcceptedList(), 'default'=>\Fc2blog\Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'))); ?>
             <?php if (isset($errors['entry']['comment_accepted'])): ?><p class="error"><?php echo $errors['entry']['comment_accepted']; ?></p><?php endif; ?>
           </td>
         </tr>

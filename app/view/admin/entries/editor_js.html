@@ -1,20 +1,20 @@
 
 <!-- elRTE -->
-<?php Html::addCSS('/js/elrte/css/elrte.min.css', array('media'=>'screen')); ?>
-<?php //Html::addJS('/js/elrte/js/elrte.min.js'); ?>
-<?php Html::addJS('/js/elrte/js/elrte.full.js'); ?>
+<?php \Fc2blog\Web\Html::addCSS('/js/elrte/css/elrte.min.css', array('media'=>'screen')); ?>
+<?php //\Fc2blog\Web\Html::addJS('/js/elrte/js/elrte.min.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/elrte/js/elrte.full.js'); ?>
 
 <!-- elRTE translation messages -->
-<?php Html::addJS('/js/elrte/src/elrte/js/elRTE.options.js'); ?>
-<?php Html::addJS('/js/elrte/js/i18n/elrte.' . Config::get('LANG_ELRTE.' . Config::get('LANG')) . '.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/elrte/src/elrte/js/elRTE.options.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/elrte/js/i18n/elrte.' . \Fc2blog\Config::get('LANG_ELRTE.' . \Fc2blog\Config::get('LANG')) . '.js'); ?>
 
 <!-- timepicker-addon -->
-<?php Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js'); ?>
-<?php if (Config::get('LANG')!='en'): ?>
-  <?php Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-' . Config::get('LANG') . '.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js'); ?>
+<?php if (\Fc2blog\Config::get('LANG')!='en'): ?>
+  <?php \Fc2blog\Web\Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-' . \Fc2blog\Config::get('LANG') . '.js'); ?>
 <?php endif; ?>
 
-<?php Html::addJS('/js/js.cookie.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/js.cookie.js'); ?>
 
 <!-- メディアを追加する -->
 <div id="sys-add-media-dialog" title="<?php echo __('Add Media'); ?>">
@@ -29,7 +29,7 @@
   <div id="sys-add-media-load"></div>
 </div>
 
-<?php Html::addJS('/js/admin/entry_editor.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/admin/entry_editor.js'); ?>
 
 <script>
 $(function(){
@@ -38,8 +38,8 @@ $(function(){
 
   // 追記と記事の設定の開閉処理
   var cookie_config = {
-    expires: <?php echo Config::get('COOKIE_EXPIRE'); ?>,
-    domain: '<?php echo Config::get('COOKIE_DEFAULT_DOMAIN'); ?>',
+    expires: <?php echo \Fc2blog\Config::get('COOKIE_EXPIRE'); ?>,
+    domain: '<?php echo \Fc2blog\Config::get('COOKIE_DEFAULT_DOMAIN'); ?>',
     path: '/',
     sameSite: 'Lax'
   };
@@ -67,7 +67,7 @@ $(function(){
   // 公開区分による表示処理変更
   $('input[name="entry[open_status]"]').on('change', function(){
     var open_status = $('input[name="entry[open_status]"]:checked').val();
-    if (open_status=='<?php echo Config::get('ENTRY.OPEN_STATUS.PASSWORD'); ?>') {
+    if (open_status=='<?php echo \Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD'); ?>') {
       $('.sys-entry-password').slideDown('fast');
     } else {
       $('.sys-entry-password').slideUp('fast');
@@ -138,7 +138,7 @@ $(function(){
     cssClass : 'el-rte',
     height   : 450,
     toolbar  : 'custome',
-    lang     : '<?php echo Config::get('LANG_ELRTE.' . Config::get('LANG')); ?>',
+    lang     : '<?php echo \Fc2blog\Config::get('LANG_ELRTE.' . \Fc2blog\Config::get('LANG')); ?>',
     cssfiles : ['/js/elrte/css/elrte-inner.css']
   }
 
@@ -175,7 +175,7 @@ $(function(){
   $('#sys-entry-form-preview').click(function(){
     source['body'] = $('#sys-entry-body').elrte('val');   // submit用に値が変わるので一旦保存
     source['extend'] = $('#sys-entry-extend').elrte('val');   // submit用に値が変わるので一旦保存
-    var action = '<?php echo App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId()), false, true); ?>';
+    var action = '<?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId()), false, true); ?>';
     $('#sys-entry-form').prop('action', action);
     $('#sys-entry-form').prop('target', '_preview');
     $('#sys-entry-form').submit();
@@ -189,9 +189,9 @@ $(function(){
     source['extend'] = $('#sys-entry-extend').elrte('val');   // submit用に値が変わるので一旦保存(本来不要だがpreviewと合わせる為必要)
     var action = '';
     if ($('#sys-entry-form').find('input[name=id]').val()) {
-      action = '<?php echo Html::url(array('controller'=>'Entries', 'action'=>'edit')); ?>';
+      action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'edit')); ?>';
     } else {
-      action = '<?php echo Html::url(array('controller'=>'Entries', 'action'=>'create')); ?>';
+      action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'create')); ?>';
     }
     $('#sys-entry-form').prop('action', action);
     $('#sys-entry-form').prop('target', '_self');

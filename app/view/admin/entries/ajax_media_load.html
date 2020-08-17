@@ -4,7 +4,7 @@
     <?php foreach($files as $file): ?>
     <li>
       <label for="sys-form-add-media-check-<?php echo $file['id']; ?>">
-        <img src="<?php echo App::getUserFilePath($file, false); ?>" />
+        <img src="<?php echo \Fc2blog\App::getUserFilePath($file, false); ?>" />
       </label>
       <p>
         <input type="checkbox" id="sys-form-add-media-check-<?php echo $file['id']; ?>"/>

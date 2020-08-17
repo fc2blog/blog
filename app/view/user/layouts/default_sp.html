@@ -4,7 +4,7 @@ if(!headers_sent()){
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo Config::get('LANG'); ?>">
+<html lang="<?php echo \Fc2blog\Config::get('LANG'); ?>">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
@@ -38,7 +38,7 @@ if(!headers_sent()){
     <?php if ($this->isLogin()): ?>
       <div><!--span id="right_menu_btn"><i class="rightmenu"></i></span--></div>
     <?php endif; ?>
-    <!--h1><?php echo Session::get('blog_id'); ?></h1-->
+    <!--h1><?php echo \Fc2blog\Web\Session::get('blog_id'); ?></h1-->
   </header>
 
   <div id="contents">
@@ -46,7 +46,7 @@ if(!headers_sent()){
   </div>
 
   <footer id="site_footer">
-      <?php $lang = Config::get('LANG'); ?>
+      <?php $lang = \Fc2blog\Config::get('LANG'); ?>
       <div id="switch_lang" class="sh_langselect">
         <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
           <option value="ja" <?php if ($lang=='ja') : ?>selected="selected"<?php endif; ?>>日本語</option>

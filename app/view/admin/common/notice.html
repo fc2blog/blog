@@ -5,10 +5,10 @@
 <?php if ($unread_count > 0) : ?>
   <?php $is_notice = true; ?>
   <p>
-    <a href="<?php echo Html::url(array(
+    <a href="<?php echo \Fc2blog\Web\Html::url(array(
       'controller'   => 'Comments',
       'action'       => 'index',
-      'reply_status' => Config::get('COMMENT.REPLY_STATUS.UNREAD'),
+      'reply_status' => \Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD'),
     )); ?>"><?php echo sprintf(__('There %d reviews unread comments'), $unread_count); ?></a>
   </p>
 <?php endif ; ?>
@@ -16,10 +16,10 @@
 <?php if ($unapproved_count > 0) : ?>
   <?php $is_notice = true; ?>
   <p>
-    <a href="<?php echo Html::url(array(
+    <a href="<?php echo \Fc2blog\Web\Html::url(array(
       'controller'  => 'Comments',
       'action'      => 'index',
-      'open_status' => Config::get('COMMENT.OPEN_STATUS.PENDING'),
+      'open_status' => \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING'),
     )); ?>"><?php echo sprintf(__('There %d reviews unapproved comment'), $unapproved_count); ?></a>
   </p>
 <?php endif ; ?>

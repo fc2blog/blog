@@ -1,6 +1,6 @@
 <header><h2><?php echo __('List of users'); ?></h2></header>
 
-<?php $blogs_model = Model::load('Blogs'); ?>
+<?php $blogs_model = \Fc2blog\Model\Model::load('Blogs'); ?>
 
 <?php foreach($users as $user): ?>
   <h3><?php echo h($user['login_id']); ?></h3>
@@ -17,7 +17,7 @@
         <td style="width: 100px;"><?php echo h($blog['id']); ?></td>
         <td style="width: 200px;"><?php echo h($blog['name']); ?></td>
         <td><?php echo h($blog['nickname']); ?></td>
-        <td style="width: 120px;"><a href="<?php echo BlogsModel::getFullHostUrlByBlogId($blog['id'], Config::get('DOMAIN_USER')); ?><?php echo Html::url(array('controller'=>'Entries', 'action'=>'index', 'blog_id'=>$blog['id'])); ?>" target="_blank"><?php echo __('Checking the blog'); ?></a></td>
+        <td style="width: 120px;"><a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($blog['id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'index', 'blog_id'=>$blog['id'])); ?>" target="_blank"><?php echo __('Checking the blog'); ?></a></td>
       </tr>
     <?php endforeach; ?>
   </table>

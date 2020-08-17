@@ -29,6 +29,7 @@ class LoaderHelper extends TestCase
     if ((string)getenv("FC2_CONFIG_FROM_ENV") === "1") {
       require(TEST_APP_DIR . '/config_read_from_env.php');
     } else {
+      /** @noinspection PhpIncludeInspection このファイルはないことがあるので */
       require(TEST_APP_DIR . '/config.php');
     }
   }

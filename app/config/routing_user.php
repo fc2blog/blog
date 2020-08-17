@@ -4,12 +4,12 @@
 */
 
 // ユーザー用のパラメータを設定する
-$request = Request::getInstance();
+$request = \Fc2blog\Web\Request::getInstance();
 $path = $request->getPath();
 $paths = $request->getPaths();
 $query = $request->getQuery();
-$argsc = Config::get('ARGS_CONTROLLER');
-$argsa = Config::get('ARGS_ACTION');
+$argsc = \Fc2blog\Config::get('ARGS_CONTROLLER');
+$argsa = \Fc2blog\Config::get('ARGS_ACTION');
 
 // blog_idの設定
 if (isset($paths[0]) && preg_match('/^[0-9a-zA-Z]+$/', $paths[0])) {

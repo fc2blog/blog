@@ -4,10 +4,10 @@
 */
 
 // 管理用のパラメータを設定する
-$request = Request::getInstance();
+$request = \Fc2blog\Web\Request::getInstance();
 $paths = $request->getPaths();
-$argsc = Config::get('ARGS_CONTROLLER');
-$argsa = Config::get('ARGS_ACTION');
+$argsc = \Fc2blog\Config::get('ARGS_CONTROLLER');
+$argsa = \Fc2blog\Config::get('ARGS_ACTION');
 
 if ($request->isArgs($argsc)) {
   $request->set($argsc, $request->get($argsc));

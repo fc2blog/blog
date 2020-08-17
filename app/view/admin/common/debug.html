@@ -1,7 +1,7 @@
 <section>
   <h2>Debug</h2>
 
-  <?php $logs = Debug::getLogs(); ?>
+  <?php $logs = \Fc2blog\Debug::getLogs(); ?>
   <h3>Logs</h3>
   <ul class="debug">
     <?php foreach ($logs as $log): ?>
@@ -15,7 +15,7 @@
     <?php endforeach; ?>
   </ul>
 
-  <?php Session::start(); ?>
+  <?php \Fc2blog\Web\Session::start(); ?>
   <?php if(!empty($_SESSION)): ?>
     <h3 id="sys-debug-session">Session &gt;&gt;</h3>
     <pre style="display: none;"><?php var_dump($_SESSION); ?></pre>

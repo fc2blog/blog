@@ -4,7 +4,7 @@ if(!headers_sent()){
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo Config::get('LANG'); ?>">
+<html lang="<?php echo \Fc2blog\Config::get('LANG'); ?>">
 <head>
   <meta charset="utf-8">
   <title><?php echo h($blog['name']); ?></title>
@@ -24,11 +24,11 @@ if(!headers_sent()){
 
   <header class="clear">
     <div>
-      <?php if (Session::get('id')): ?>
-        <span><?php echo Session::get('nickname'); ?></span>
+      <?php if (\Fc2blog\Web\Session::get('id')): ?>
+        <span><?php echo \Fc2blog\Web\Session::get('nickname'); ?></span>
       <?php endif; ?>
 
-      <?php $lang = Config::get('LANG'); ?>
+      <?php $lang = \Fc2blog\Config::get('LANG'); ?>
       <div id="switch_lang">
         <select id="sys-language-setting">
           <option value="ja" <?php if ($lang=='ja') : ?>selected="selected"<?php endif; ?>>日本語</option>
@@ -37,7 +37,7 @@ if(!headers_sent()){
         <script>
           $(function(){
             $('#sys-language-setting').on('change', function(){
-              location.href="<?php echo Html::url(array('controller'=>'Common', 'action'=>'lang')); ?>&lang=" + $('#sys-language-setting').val();
+              location.href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Common', 'action'=>'lang')); ?>&lang=" + $('#sys-language-setting').val();
             });
           });
         </script>

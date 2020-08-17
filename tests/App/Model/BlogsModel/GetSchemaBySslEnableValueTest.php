@@ -3,17 +3,15 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Model\BlogsModel;
 
-use BlogsModel;
-use Config;
-use Model;
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Config;
+use Fc2blog\Model\Model;
 use PHPUnit\Framework\TestCase;
 
 class GetSchemaBySslEnableValueTest extends TestCase
 {
   public function setUp(): void
   {
-    /** @noinspection PhpIncludeInspection */
-    require_once(Config::get('MODEL_DIR') . 'model.php');
     if (!class_exists(BlogsModel::class)) {
       Model::load('blogs');
     }

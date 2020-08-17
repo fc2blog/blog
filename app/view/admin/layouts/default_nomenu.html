@@ -1,9 +1,9 @@
 <?php header("Content-Type: text/html; charset=UTF-8"); ?>
 <!DOCTYPE html>
-<html lang="<?php echo Config::get('LANG'); ?>">
+<html lang="<?php echo \Fc2blog\Config::get('LANG'); ?>">
 <head>
   <meta charset="utf-8">
-  <title><?php echo Session::get('blog_id'); ?></title>
+  <title><?php echo \Fc2blog\Web\Session::get('blog_id'); ?></title>
   <link rel="stylesheet" href="/css/normalize.css" type="text/css" media="all">
   <link rel="stylesheet" href="/css/admin-fc2.css" type="text/css" media="all">
   <link rel="stylesheet" href="/css/admin-form.css" type="text/css" media="all">
@@ -22,12 +22,12 @@
   <script type="text/javascript" src="/js/common.js"></script>
   <script>
     // フレームワーク用のjsの設定
-    <?php if(Config::get('URL_REWRITE')): ?>
+    <?php if(\Fc2blog\Config::get('URL_REWRITE')): ?>
       common.isURLRewrite = true;
     <?php endif; ?>
-    common.baseDirectory = '<?php echo Config::get('BASE_DIRECTORY'); ?>';
+    common.baseDirectory = '<?php echo \Fc2blog\Config::get('BASE_DIRECTORY'); ?>';
     common.deviceType = <?php echo $this->getDeviceType(); ?>;
-    common.deviceArgs = '<?php echo App::getArgsDevice(); ?>';
+    common.deviceArgs = '<?php echo \Fc2blog\App::getArgsDevice(); ?>';
   </script>
 
   <?php echo $this->includeJS(); ?>
@@ -37,7 +37,7 @@
 
   <header class="clear">
     <div>
-      <?php $lang = Config::get('LANG'); ?>
+      <?php $lang = \Fc2blog\Config::get('LANG'); ?>
       <div id="switch_lang">
         <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
           <option value="ja" <?php if ($lang=='ja') : ?>selected="selected"<?php endif; ?>>日本語</option>

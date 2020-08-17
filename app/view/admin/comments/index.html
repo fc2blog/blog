@@ -2,21 +2,21 @@
 
 <h3 id="entry_count">
   <?php echo __('Comment search'); ?>[<?php echo __('Hits'); ?>&nbsp;<?php echo $paging['count']; ?><?php echo __(' results'); ?>]
-  <?php echo Html::input('limit', 'select', array('options'=>Config::get('ENTRY.LIMIT_LIST'), 'default'=>Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-  <?php echo Html::input('page', 'select', array('options'=>Model::getPageList($paging), 'default'=>0)); ?>
+  <?php echo \Fc2blog\Web\Html::input('limit', 'select', array('options'=>\Fc2blog\Config::get('ENTRY.LIMIT_LIST'), 'default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+  <?php echo \Fc2blog\Web\Html::input('page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
 </h3>
 <p><?php echo __('You can search in accordance with the conditions of the past comments.'); ?></p>
 <div id="entry_search">
   <form method="GET" id="sys-search-form">
-    <input type="hidden" name="<?php echo Config::get('ARGS_CONTROLLER'); ?>" value="Comments" />
-    <input type="hidden" name="<?php echo Config::get('ARGS_ACTION'); ?>" value="index" />
-    <?php echo Html::input('entry_id', 'hidden'); ?>
-    <?php echo Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + CommentsModel::getOpenStatusList())); ?>
-    <?php echo Html::input('reply_status', 'select', array('options'=>array(''=>__('Reply state')) + CommentsModel::getReplyStatusList())); ?>
-    <?php echo Html::input('limit', 'hidden', array('default'=>Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-    <?php echo Html::input('page', 'hidden', array('default'=>0)); ?>
-    <?php echo Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
-    <br /><?php echo Html::input('keyword', 'text'); ?>
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Comments" />
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="index" />
+    <?php echo \Fc2blog\Web\Html::input('entry_id', 'hidden'); ?>
+    <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\CommentsModel::getOpenStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input('reply_status', 'select', array('options'=>array(''=>__('Reply state')) + \Fc2blog\Model\CommentsModel::getReplyStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+    <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
+    <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
+    <br /><?php echo \Fc2blog\Web\Html::input('keyword', 'text'); ?>
     <input type="submit" value="<?php echo __('Search'); ?>" />
   </form>
 </div>
@@ -24,7 +24,7 @@
 
 <?php $this->display('Common/paging.html', array('paging' => $paging)); ?>
 
-<?php $reply_status_list = CommentsModel::getReplyStatusList(); ?>
+<?php $reply_status_list = \Fc2blog\Model\CommentsModel::getReplyStatusList(); ?>
 <form method="POST" id="sys-list-form">
   <table>
     <thead>
@@ -47,8 +47,8 @@
           <input type="hidden" value="<?php echo $comment['reply_status']; ?>" id="sys-reply-status-value-<?php echo $comment['id']; ?>" />
         </td>
         <td class="s_cell center">
-          <a href="<?php echo BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], Config::get('DOMAIN_USER')); ?><?php echo App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
-          <a href="<?php echo Html::url(array('entry_id'=>$comment['entry_id']), true); ?>"><?php echo __('Narrowing'); ?></a>
+          <a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
+          <a href="<?php echo \Fc2blog\Web\Html::url(array('entry_id'=>$comment['entry_id']), true); ?>"><?php echo __('Narrowing'); ?></a>
         </td>
         <td>
           <?php echo df($comment['updated_at'], 'y/m/d'); ?><br />
@@ -56,39 +56,39 @@
         </td>
         <td><?php echo th($comment['name'], 8); ?></td>
         <td>
-          <?php if ($comment['reply_status']==Config::get('COMMENT.REPLY_STATUS.UNREAD')) : ?><span id="sys-new-icon-<?php echo $comment['id']; ?>" class="red new"><?php echo __('New'); ?></span><?php endif; ?><?php echo th($comment['body'], 16); ?><br />
-          <a href="javascript:void(0); return false;" onclick="reply.open(<?php echo $comment['id']; ?>, <?php if($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PRIVATE')): ?>true<?php else: ?>false<?php endif; ?>); return false;"><?php echo __('I see the comment'); ?></a>
+          <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD')) : ?><span id="sys-new-icon-<?php echo $comment['id']; ?>" class="red new"><?php echo __('New'); ?></span><?php endif; ?><?php echo th($comment['body'], 16); ?><br />
+          <a href="javascript:void(0); return false;" onclick="reply.open(<?php echo $comment['id']; ?>, <?php if($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')): ?>true<?php else: ?>false<?php endif; ?>); return false;"><?php echo __('I see the comment'); ?></a>
         </td>
         <td class="cm_status">
           <p id="sys-open-status-<?php echo $comment['id']; ?>">
-            <?php if ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
+            <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
               <span class="published"><?php echo __('Published'); ?></span>
-            <?php elseif ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
-              <span class="approval"><a href="<?php echo Html::url(array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;"><?php echo __('Approval'); ?></a></span>
-            <?php elseif ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
+            <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
+              <span class="approval"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;"><?php echo __('Approval'); ?></a></span>
+            <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
               <span class="private"><?php echo __('Only exposed administrator'); ?></span>
             <?php endif; ?>
           </p>
           <p id="sys-reply-status-<?php echo $comment['id']; ?>">
-            <?php if ($comment['reply_status']==Config::get('COMMENT.REPLY_STATUS.UNREAD')) : ?>
+            <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD')) : ?>
               <span class="no_reply"><?php echo __('Not yet read'); ?></span>
             <?php endif; ?>
-            <?php if ($comment['reply_status']==Config::get('COMMENT.REPLY_STATUS.READ')) : ?>
-              <?php if ($comment['open_status']==Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?><span class="private"><?php echo __('Reply not'); ?></span><?php else: ?><span class="no_reply"><?php echo __('Unanswered'); ?></span><?php endif; ?>
+            <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.READ')) : ?>
+              <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?><span class="private"><?php echo __('Reply not'); ?></span><?php else: ?><span class="no_reply"><?php echo __('Unanswered'); ?></span><?php endif; ?>
             <?php endif; ?>
-            <?php if ($comment['reply_status']==Config::get('COMMENT.REPLY_STATUS.REPLY')) : ?>
+            <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY')) : ?>
               <span class="replied"><?php echo __('Answered'); ?></span>
             <?php endif; ?>
           </p>
         </td>
-        <td class="center s_cell"><a href="<?php echo Html::url(array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
+        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
       </tr>
       <?php endforeach; ?>
     </tbody>
   </table>
 
-  <input type="hidden" name="<?php echo Config::get('ARGS_CONTROLLER'); ?>" value="comments" />
-  <input type="hidden" name="<?php echo Config::get('ARGS_ACTION'); ?>" value="delete" />
+  <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="comments" />
+  <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="delete" />
   <input type="button" id="sys-delete-button" value="<?php echo __('Remove what you have selected'); ?>" onclick="if(confirm('<?php echo __('Are you sure you want to delete?'); ?>')) $('#sys-list-form').submit();" disabled="disabled" />
 </form>
 
@@ -103,16 +103,16 @@ reply.id = null;
 // 既読状態に変更
 reply.updateReadStatus = function(is_private){
   var status = $('#sys-reply-status-value-' + reply.id);
-  if (status.val()!=<?php echo Config::get('COMMENT.REPLY_STATUS.UNREAD'); ?>) {
+  if (status.val()!=<?php echo \Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD'); ?>) {
     return ;
   }
-  status.val(<?php echo Config::get('COMMENT.REPLY_STATUS.READ'); ?>);
+  status.val(<?php echo \Fc2blog\Config::get('COMMENT.REPLY_STATUS.READ'); ?>);
   $('#sys-new-icon-' + reply.id).hide();
   $('#sys-reply-status-' + reply.id).html(is_private ? '<span class="private"><?php echo __('Reply not'); ?></span>' : '<span class="no_reply"><?php echo __('Unanswered'); ?></span>');
 };
 // 返信状態に変更
 reply.updateReplyStatus = function(){
-  $('#sys-reply-status-value-' + reply.id).val(<?php echo Config::get('COMMENT.REPLY_STATUS.REPLY'); ?>);
+  $('#sys-reply-status-value-' + reply.id).val(<?php echo \Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY'); ?>);
   $('#sys-reply-status-' + reply.id).html('<span class="replied"><?php echo __('Answered'); ?></span>');
 };
 // コメント返信画面を開く

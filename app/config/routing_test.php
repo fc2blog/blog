@@ -4,12 +4,12 @@
  */
 
 // 管理用のパラメータを設定する
-$request = Request::getInstance();
+$request = \Fc2blog\Web\Request::getInstance();
 $path = $request->getPath(); // full path with out query args.
 $paths = $request->getPaths(); // explode with `/`
 $query = $request->getQuery(); // query args
-$argsc = Config::get('ARGS_CONTROLLER');
-$argsa = Config::get('ARGS_ACTION');
+$argsc = \Fc2blog\Config::get('ARGS_CONTROLLER');
+$argsa = \Fc2blog\Config::get('ARGS_ACTION');
 
 // argsa => method(action
 // argsc => class

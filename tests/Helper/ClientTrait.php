@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\Helper;
 
-use Config;
 use Exception;
+use Fc2blog\Config;
+use Fc2blog\Exception\PseudoExit;
+use Fc2blog\Web\Request;
 use InvalidArgumentException;
-use PseudoExit;
 
 trait ClientTrait
 {
@@ -29,11 +30,9 @@ trait ClientTrait
     $_POST = $post;
 
     # Requestはキャッシュされるので、都度消去する
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Request::resetInstanceForTesting();
+    Request::resetInstanceForTesting();
 
     if ($target === "user") {
-      /** @noinspection PhpFullyQualifiedNameUsageInspection */
       Config::read('user.php');
     } else if ($target === "admin") {
       Config::read('admin.php');
@@ -43,10 +42,8 @@ trait ClientTrait
       throw new InvalidArgumentException("target is wrong.");
     }
 
-    [$classFile, $className, $methodName] = getRouting();
+    [$className, $methodName] = getRouting();
 
-    /** @noinspection PhpIncludeInspection */
-    require_once($classFile);
 
     return [$className, $methodName];
   }
@@ -70,6 +67,7 @@ trait ClientTrait
    * @param bool $is_https
    * @param string $method
    * @param array $post
+   * @param string $target
    * @return false|string
    * @throws Exception
    */
@@ -82,7 +80,7 @@ trait ClientTrait
       throw new Exception("Unexpected, no PseudoExit thrown.");
 
     } /** @noinspection PhpRedundantCatchClauseInspection */ catch (PseudoExit $e) {
-      // PseudoExit は正常終了と同義
+      // \Fc2blog\Exception\PseudoExit は正常終了と同義
       $ob = ob_get_clean();
       echo $ob;
       return $ob;
@@ -99,7 +97,6 @@ trait ClientTrait
   {
     unset($_SERVER['REQUEST_URI'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTPS'], $_SERVER['REQUEST_URI']);
     $_POST = [];
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Request::resetInstanceForTesting();
+    Request::resetInstanceForTesting();
   }
 }

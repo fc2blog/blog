@@ -7,7 +7,7 @@
   <div class="form_area">
     <div class="form_contents">
       <h4><?php echo __('Initial display page'); ?></h4>
-      <?php echo Html::input('blog_setting[start_page]', 'select', array('options'=>BlogSettingsModel::getStartPageList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('blog_setting[start_page]', 'select', array('options'=>\Fc2blog\Model\BlogSettingsModel::getStartPageList())); ?>
       <?php if (isset($errors['blog_setting']['start_page'])): ?><span class="error"><?php echo $errors['blog_setting']['start_page']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">
@@ -16,6 +16,6 @@
       </div>
     </div>
   </div>
-  <input type="hidden" name="sig" value="<?php echo Session::get('sig'); ?>">
+  <input type="hidden" name="sig" value="<?php echo \Fc2blog\Web\Session::get('sig'); ?>">
 </form>
 

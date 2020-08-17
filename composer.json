@@ -5,7 +5,12 @@
   "require": {
     "ext-mbstring": "*",
     "ext-gd": "*",
-    "ext-gettext": "*"
+    "ext-gettext": "*",
+    "ext-fileinfo": "*",
+    "ext-json": "*"
+  },
+  "config": {
+    "vendor-dir": "app/vendor"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.2",
@@ -13,8 +18,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Fc2blog\\Tests\\": "tests/"
-    }
+      "Fc2blog\\Tests\\": "tests/",
+      "Fc2blog\\": "app/src/"
+    },
+    "files": [
+      "app/core/common_functions.php"
+    ]
   },
   "scripts": {
     "test": "phpunit"

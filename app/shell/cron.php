@@ -1,17 +1,18 @@
 <?php
-
+// TODO Cronは元来正しく動作しない？ fix/cron-wip ブランチで作業中
 error_reporting(E_ALL);
 
-require(dirname(__FILE__) . '/../core/bootstrap.php');
-Config::read('cron.php');    // cron用の環境設定読み込み
+require_once(__DIR__ . "/../vendor/autoload.php");
 
-require_once(Config::get('CORE_DIR') . 'Request.php');
-Request::getInstance()->setCronParams($argv);
+require(__DIR__ . '/../core/bootstrap.php');
 
-list($classFile, $className, $methodName) = getRouting(Config::get('DEFAULT_CLASS_NAME'), Config::get('DEFAULT_METHOD_NAME'), Config::get('APP_PREFIX'));
-require($classFile);
+\Fc2blog\Config::read('cron.php');    // cron用の環境設定読み込み
+
+\Fc2blog\Web\Request::getInstance()->setCronParams($argv);
+
+list($className, $methodName) = getRouting(\Fc2blog\Config::get('DEFAULT_CLASS_NAME'), \Fc2blog\Config::get('DEFAULT_METHOD_NAME'), \Fc2blog\Config::get('APP_PREFIX'));
 $controller = new $className();
 
-Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
+\Fc2blog\Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
 $controller->process($methodName);
 

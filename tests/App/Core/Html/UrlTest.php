@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Core\Html;
 
-use BlogsModel;
-use Config;
-use Html;
-use Model;
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Config;
+use Fc2blog\Web\Html;
+use Fc2blog\Web\Request;
+use Fc2blog\Model\Model;
 use PHPUnit\Framework\TestCase;
 
 class UrlTest extends TestCase
@@ -21,19 +22,13 @@ class UrlTest extends TestCase
     $_POST = [];
 
     # Requestはキャッシュされるので、都度消去する
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    \Request::resetInstanceForTesting();
+    Request::resetInstanceForTesting();
 
     Config::read('user.php', true);
 
-    /** @noinspection PhpIncludeInspection */
-    require_once(Config::get('MODEL_DIR') . 'model.php');
     if (!class_exists(BlogsModel::class)) {
       Model::load('blogs');
     }
-
-    require_once(TEST_APP_DIR . "/core/html.php");
-    require_once(TEST_APP_DIR . "/core/app.php");
 
     parent::setUp();
   }

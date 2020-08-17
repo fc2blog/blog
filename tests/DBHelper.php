@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests;
 
-use Config;
-use MSDB;
+
+use Fc2blog\Config;
+use Fc2blog\Model\MSDB;
 use PDO;
 use PHPUnit\Framework\TestCase;
 

@@ -1,4 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
 require(__DIR__ . '/config_loading_include.php');
 
 // test endpoint work in only DEBUG mode.
@@ -12,12 +17,11 @@ if(!preg_match("/\A(127.0.0.|172.24.)/u", $_SERVER['REMOTE_ADDR'])){
   exit;
 }
 
-Config::read('test.php'); // test用の環境設定読み込み
+\Fc2blog\Config::read('test.php'); // test用の環境設定読み込み
 
-Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
+\Fc2blog\Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
 
-list($classFile, $className, $methodName) = getRouting();
-require($classFile);
+list($className, $methodName) = getRouting();
 $controller = new $className($methodName);
 
-Debug::output($controller);
+\Fc2blog\Debug::output($controller);

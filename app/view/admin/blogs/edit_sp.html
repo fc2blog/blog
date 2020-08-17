@@ -7,32 +7,32 @@
   <div class="form_area">
     <div class="form_contents">
       <h4><?php echo __('Blog name'); ?></h4>
-      <div class="common_input_text"><?php echo Html::input('blog[name]', 'text'); ?></div>
+      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('blog[name]', 'text'); ?></div>
       <?php if (isset($errors['blog']['name'])): ?><span class="error"><?php echo $errors['blog']['name']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">
       <h4><?php echo __('Blog Description'); ?></h4>
-      <div class="common_input_text"><?php echo Html::input('blog[introduction]', 'text'); ?></div>
+      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('blog[introduction]', 'text'); ?></div>
       <?php if (isset($errors['blog']['introduction'])): ?><span class="error"><?php echo $errors['blog']['introduction']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">
       <h4><?php echo __('Nickname'); ?></h4>
-      <div class="common_input_text"><?php echo Html::input('blog[nickname]', 'text'); ?></div>
+      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('blog[nickname]', 'text'); ?></div>
       <?php if (isset($errors['blog']['nickname'])): ?><span class="error"><?php echo $errors['blog']['nickname']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">
       <h4><?php echo __('Visibility Blog'); ?></h4>
-      <?php echo Html::input('blog[open_status]', 'select', array('options'=>BlogsModel::getOpenStatusList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('blog[open_status]', 'select', array('options'=>\Fc2blog\Model\BlogsModel::getOpenStatusList())); ?>
       <?php if (isset($errors['blog']['open_status'])): ?><span class="error"><?php echo $errors['blog']['open_status']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">
       <h4><?php echo __('View password blog'); ?></h4>
-      <div class="common_input_text"><?php echo Html::input('blog[blog_password]', 'text'); ?></div>
+      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('blog[blog_password]', 'text'); ?></div>
       <?php if (isset($errors['blog']['blog_password'])): ?><span class="error"><?php echo $errors['blog']['blog_password']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">
       <h4><?php echo __('Time zone'); ?></h4>
-      <?php echo Html::input('blog[timezone]', 'select', array('options'=>BlogsModel::getTimezoneList())); ?>
+      <?php echo \Fc2blog\Web\Html::input('blog[timezone]', 'select', array('options'=>\Fc2blog\Model\BlogsModel::getTimezoneList())); ?>
       <?php if (isset($errors['blog']['timezone'])): ?><span class="error"><?php echo $errors['blog']['timezone']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">
@@ -41,6 +41,6 @@
       </div>
     </div>
   </div>
-  <input type="hidden" name="sig" value="<?php echo Session::get('sig'); ?>">
+  <input type="hidden" name="sig" value="<?php echo \Fc2blog\Web\Session::get('sig'); ?>">
 </form>
 

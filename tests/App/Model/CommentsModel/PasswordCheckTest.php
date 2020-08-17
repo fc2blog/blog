@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Model\CommentsModel;
 
-use CommentsModel;
-use Config;
+use Fc2blog\Model\CommentsModel;
+use Fc2blog\Model\Model;
 use Fc2blog\Tests\DBHelper;
-use Model;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
@@ -14,8 +13,6 @@ class PasswordCheckTest extends TestCase
 {
   public function setUp(): void
   {
-    /** @noinspection PhpIncludeInspection */
-    require_once(Config::get('MODEL_DIR') . 'model.php');
     if (!class_exists(CommentsModel::class)) {
       Model::load('comments');
     }
@@ -32,7 +29,7 @@ class PasswordCheckTest extends TestCase
     $i = 10;
     while ($i-- > 0) { // ランダムで複数回チェック
       /** @noinspection PhpUnhandledExceptionInspection テストなので、失敗したら失敗してもらう */
-      $random_password = base64_encode(random_bytes(random_int(1,1024)));
+      $random_password = base64_encode(random_bytes(random_int(1, 1024)));
       $passwd_hash = $comments_model::passwordHash($random_password);
 
       // 成功
@@ -78,7 +75,7 @@ class PasswordCheckTest extends TestCase
       /** @noinspection PhpStrictTypeCheckingInspection */
       $comments_model::passwordHash($random_password);
       $this->fail();
-    }catch(TypeError $e){
+    } catch (TypeError $e) {
       //ok
       $this->assertInstanceOf(TypeError::class, $e);
     }
@@ -96,7 +93,7 @@ class PasswordCheckTest extends TestCase
       /** @noinspection PhpStrictTypeCheckingInspection */
       $comments_model::passwordHash($random_password);
       $this->fail();
-    }catch(TypeError $e){
+    } catch (TypeError $e) {
       //ok
       $this->assertInstanceOf(TypeError::class, $e);
     }
