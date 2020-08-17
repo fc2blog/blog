@@ -8,6 +8,7 @@
 <meta name="author" content="<%author_name>" />
 <meta name="description" content="<%introduction>" />
 <title><!--not_index_area--><%sub_title> - <!--/not_index_area--><%blog_name></title>
+<link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
 <link rel="stylesheet" type="text/css" href="<%css_link>" media="all" />
 <link rel="alternate" type="application/rss+xml" href="<%url>?xml" title="RSS" />
 <link rel="top" href="<%url>" title="Top" />
