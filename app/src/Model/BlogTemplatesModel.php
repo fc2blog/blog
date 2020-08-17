@@ -299,5 +299,25 @@ class BlogTemplatesModel extends Model
     return $html;
   }
 
+  static public function getPathDefaultTemplate(): string
+  {
+    return static::getPathDefaultTemplateWithDevice(Config::get('DEVICE_PC'));
+  }
+
+  static public function getPathDefaultCss(): string
+  {
+    return static::getPathDefaultCssWithDevice(Config::get('DEVICE_PC'));
+  }
+
+  static public function getPathDefaultTemplateWithDevice(string $device): string
+  {
+    return Config::get('APP_DIR') . 'templates/default/fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+  }
+
+  static public function getPathDefaultCssWithDevice(string $device): string
+  {
+    return Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+  }
+
 }
 

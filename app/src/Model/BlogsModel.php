@@ -296,13 +296,13 @@ class BlogsModel extends Model
 
     // CategoryのSystem用Nodeの追加(id=1の削除できないノード)
     $data = ['name' => __('Unclassified'), 'blog_id' => $id];
-    Model::load('Categories')->addNode($data, 'blog_id=?', [$id]);
+    (new BlogTemplatesModel())->addNode($data, 'blog_id=?', [$id]);
 
     // ブログ用の設定作成
-    Model::load('BlogSettings')->insert(['blog_id' => $id]);
+    (new BlogTemplatesModel())->insert(['blog_id' => $id]);
 
     // 初期のテンプレートを作成する(pc,mb,sp,tb)
-    $blog_templates_model = Model::load('BlogTemplates');
+    $blog_templates_model = new BlogTemplatesModel();
 
     $blog_data = [];
 
@@ -313,33 +313,31 @@ class BlogsModel extends Model
       'template_tb_id' => Config::get('DEVICE_TB'),
     ];
 
-    $blog_templates_data = [
+    $blog_templates_data_common = [
       'blog_id' => $id,
       'template_id' => 0,
       'title' => '初期テンプレート',
     ];
 
-    $default_template_path = Config::get('APP_DIR') . 'templates/default/fc2_default_template_pc.php';
-    $default_css_path = Config::get('APP_DIR') . 'templates/default/fc2_default_css_pc.php';
-
     foreach ($devices as $key => $device) {
-      $template_path = Config::get('APP_DIR') . 'templates/default/fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
-      $css_path = Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+      $template_path = BlogTemplatesModel::getPathDefaultTemplateWithDevice($device);
+      $css_path = BlogTemplatesModel::getPathDefaultCssWithDevice($device);
+
       if (!file_exists($template_path) || !file_exists($css_path)) {
         // 指定のデバイスに対応するテンプレーが無いので、PC用にフォールバック
         // TODO: 携帯（ガラケー）向けのテンプレートが実質存在しないのだが大丈夫なのだろうか？
-        $template_path = $default_template_path;
-        $css_path = $default_css_path;
+        $template_path = BlogTemplatesModel::getPathDefaultTemplate();
+        $css_path = BlogTemplatesModel::getPathDefaultCss();
       }
 
       $blog_templates_data['html'] = file_get_contents($template_path);
       $blog_templates_data['css'] = file_get_contents($css_path);
       $blog_templates_data['device_type'] = $device;
       $blog_templates_data['created_at'] = $blog_templates_data['updated_at'] = date('Y-m-d H:i:s');
-      $blog_data[$key] = $blog_templates_model->insert($blog_templates_data);
+      $blog_data[$key] = $blog_templates_model->insert(array_merge($blog_templates_data_common, $blog_templates_data));
     }
 
-    if (!$this->update($blog_data, 'id=?', array($id))) {
+    if (!$this->update($blog_data, 'id=?', [$id])) {
       return false;
     }
 
