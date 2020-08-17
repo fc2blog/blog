@@ -20,7 +20,7 @@
   <div>
     <?php echo \Fc2blog\Web\Html::input('blog_template[css]', 'textarea'); ?>
     <?php if (isset($errors['blog_template']['css'])): ?><p class="error"><?php echo $errors['blog_template']['css']; ?></p><?php endif; ?>
-  </dd><?php /*TODO: ddではなく、DIVでは？*/?>
+  </div>
 
   <p class="form-button">
     <input type="submit" value="<?php echo __('Add'); ?>" id="sys-blog-template-form-submit" />
