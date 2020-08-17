@@ -7,7 +7,8 @@
     "ext-gd": "*",
     "ext-gettext": "*",
     "ext-fileinfo": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-pdo": "*"
   },
   "config": {
     "vendor-dir": "app/vendor"
