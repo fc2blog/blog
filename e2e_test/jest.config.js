@@ -3,7 +3,6 @@ module.exports = {
     testEnvironment: 'node',
     verbose: true,
     testMatch: [
-        "**/tests/**/*.test.js",
         "**/?(*.)+(spec|test).+(ts|tsx|js)"
     ],
     setupFilesAfterEnv: [
