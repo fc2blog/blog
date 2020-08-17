@@ -2511,3 +2511,6 @@ msgstr "さん"
 
 #~ msgid "Midway"
 #~ msgstr "ミッドウェー島"
+
+msgid "Login to Administration page"
+msgstr "管理画面へログイン"
