@@ -6,6 +6,7 @@ use DateTimeZone;
 use Fc2blog\App;
 use Fc2blog\Config;
 use InvalidArgumentException;
+use OutOfBoundsException;
 
 class BlogsModel extends Model
 {
@@ -296,13 +297,13 @@ class BlogsModel extends Model
 
     // CategoryのSystem用Nodeの追加(id=1の削除できないノード)
     $data = ['name' => __('Unclassified'), 'blog_id' => $id];
-    Model::load('Categories')->addNode($data, 'blog_id=?', [$id]);
+    (new CategoriesModel())->addNode($data, 'blog_id=?', [$id]);
 
     // ブログ用の設定作成
-    Model::load('BlogSettings')->insert(['blog_id' => $id]);
+    (new BlogSettingsModel())->insert(['blog_id' => $id]);
 
     // 初期のテンプレートを作成する(pc,mb,sp,tb)
-    $blog_templates_model = Model::load('BlogTemplates');
+    $blog_templates_model = new BlogTemplatesModel();
 
     $blog_data = [];
 
@@ -313,37 +314,94 @@ class BlogsModel extends Model
       'template_tb_id' => Config::get('DEVICE_TB'),
     ];
 
-    $blog_templates_data = [
+    $blog_templates_data_common = [
       'blog_id' => $id,
       'template_id' => 0,
       'title' => '初期テンプレート',
     ];
 
-    $default_template_path = Config::get('APP_DIR') . 'templates/default/fc2_default_template_pc.php';
-    $default_css_path = Config::get('APP_DIR') . 'templates/default/fc2_default_css_pc.php';
-
     foreach ($devices as $key => $device) {
-      $template_path = Config::get('APP_DIR') . 'templates/default/fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
-      $css_path = Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+      $template_path = BlogTemplatesModel::getPathDefaultTemplateWithDevice($device);
+      $css_path = BlogTemplatesModel::getPathDefaultCssWithDevice($device);
+
       if (!file_exists($template_path) || !file_exists($css_path)) {
         // 指定のデバイスに対応するテンプレーが無いので、PC用にフォールバック
         // TODO: 携帯（ガラケー）向けのテンプレートが実質存在しないのだが大丈夫なのだろうか？
-        $template_path = $default_template_path;
-        $css_path = $default_css_path;
+        $template_path = BlogTemplatesModel::getPathDefaultTemplate();
+        $css_path = BlogTemplatesModel::getPathDefaultCss();
       }
 
       $blog_templates_data['html'] = file_get_contents($template_path);
       $blog_templates_data['css'] = file_get_contents($css_path);
       $blog_templates_data['device_type'] = $device;
       $blog_templates_data['created_at'] = $blog_templates_data['updated_at'] = date('Y-m-d H:i:s');
-      $blog_data[$key] = $blog_templates_model->insert($blog_templates_data);
+      $blog_data[$key] = $blog_templates_model->insert(array_merge($blog_templates_data_common, $blog_templates_data));
     }
 
-    if (!$this->update($blog_data, 'id=?', array($id))) {
+    if (!$this->update($blog_data, 'id=?', [$id])) {
       return false;
     }
 
     return $id;
+  }
+
+  public function resetToDefaultTemplateByBlogId(string $blog_id)
+  {
+    $blogs_model = new BlogsModel();
+    $blog = $blogs_model->findById($blog_id);
+
+    // 初期のテンプレートを作成する(pc,mb,sp,tb)
+    $blog_templates_model = new BlogTemplatesModel();
+
+    $blog_templates_data_common = [
+      'blog_id' => $blog['id'],
+      'template_id' => 0,
+      'title' => '初期テンプレート',
+    ];
+
+    $devices_flipped = array_flip([
+      'template_pc_id' => Config::get('DEVICE_PC'),
+      'template_mb_id' => Config::get('DEVICE_MB'),
+      'template_sp_id' => Config::get('DEVICE_SP'),
+      'template_tb_id' => Config::get('DEVICE_TB'),
+    ]);
+
+    $blog_templates = $blog_templates_model->getTemplatesOfDevice($blog_id);
+
+    $blog_templates_device_id_list = array_keys($blog_templates);
+
+    foreach($blog_templates_device_id_list as $device_id){
+      foreach($blog_templates[$device_id] as $template){
+        if($template['title'] !== '初期テンプレート') continue;
+
+        $template_path = BlogTemplatesModel::getPathDefaultTemplateWithDevice($device_id);
+        $css_path = BlogTemplatesModel::getPathDefaultCssWithDevice($device_id);
+
+        if (!file_exists($template_path) || !file_exists($css_path)) {
+          // 指定のデバイスに対応するテンプレーが無いので、PC用にフォールバック
+          $template_path = BlogTemplatesModel::getPathDefaultTemplate();
+          $css_path = BlogTemplatesModel::getPathDefaultCss();
+        }
+
+        $template['html'] = file_get_contents($template_path);
+        $template['css'] = file_get_contents($css_path);
+
+        // テンプレートデータをアップデート
+        $blog_data[$devices_flipped[$device_id]] = $blog_templates_model->updateByIdAndBlogId(
+          array_merge($blog_templates_data_common, $template),
+          $template['id'],
+          $blog['id']
+        );
+
+        if (!$blogs_model->isAppliedTemplate($template['id'], $blog_id, $device_id)){
+          // 初期テンプレートが適用ではないので、初期テンプレートを適用する
+          $blogs_model->switchTemplate(
+            array_merge($blog_templates_data_common, $template),
+            $blog_id
+          );
+        }
+      }
+    }
   }
 
   /**
@@ -400,8 +458,7 @@ class BlogsModel extends Model
   */
   public function deleteByIdAndUserId($blog_id, $user_id, $options=array())
   {
-    // TODO: deleteByIdは2引数だが、ここでは3をとっているのでおかしい
-    if (!parent::deleteById($blog_id, array('where'=>'user_id=?', 'params'=>array($user_id)), $options)){
+    if (!parent::deleteById($blog_id, array('where'=>'user_id=?', 'params'=>array($user_id)))){
       return 0;
     }
 
@@ -427,17 +484,30 @@ class BlogsModel extends Model
    * @param $device_type
    * @return bool
    */
-  public function isAppliedTemplate($template_id, $blog_id, $device_type): bool
+  public function isAppliedTemplate(int $template_id, string $blog_id, int $device_type): bool
+  {
+    try {
+      $applied_template_id = static::getAppliedTemplateId($blog_id, $device_type);
+      return $applied_template_id == $template_id;
+    } catch (OutOfBoundsException $e) {
+      return false;
+    }
+  }
+
+  /**
+   * 指定したブログID,デバイスIDのテンプレートIDを取得する
+   * @param $blog_id
+   * @param $device_type
+   * @return int
+   */
+  public function getAppliedTemplateId(string $blog_id, int $device_type): int
   {
     $blog_template_column = Config::get("BLOG_TEMPLATE_COLUMN.{$device_type}");
     $blogs = $this->findById($blog_id);
 
-    $isAppliedTemplate = (
-      isset($blogs[$blog_template_column]) &&
-      $blogs[$blog_template_column] == $template_id
-    );
+    if (!isset($blogs[$blog_template_column])) throw new OutOfBoundsException("any applied template found");
 
-    return $isAppliedTemplate;
+    return $blogs[$blog_template_column];
   }
 
   /**

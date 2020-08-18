@@ -848,6 +848,7 @@ class EntriesController extends UserController
 
     $blog_id = $this->getBlogId();
 
+    // FIXME どこかの処理で失敗すると、$blog_setting==false（削除した?）状態のBlogがあり得る模様。
     $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
     $order = $blog_setting['entry_order'] == Config::get('ENTRY.ORDER.ASC') ? 'ASC' : 'DESC';
 

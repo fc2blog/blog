@@ -1,11 +1,12 @@
 <?php
 /**
-* DB用のインタフェース
-*/
+ * DB用のインタフェース
+ */
 
 namespace Fc2blog\Model;
 
-interface DBInterface{
+interface DBInterface
+{
 
   const RESULT_ONE = 'one';                // １カラムのみ取得
   const RESULT_ROW = 'row';                // １行のみ取得
@@ -16,11 +17,16 @@ interface DBInterface{
   const RESULT_AFFECTED = 'affected';      // 変更のあった行数を返却
   const RESULT_SUCCESS = 'success';        // SQLの実行結果が成功かどうかを返却
 
-  public function find($sql, $params=array(), $options=array());
-  public function execute($sql, $params=array(), $options=array());
-  public function multiExecute($sql);
+  public function find(string $sql, array $params = [], array $options = []);
+
+  public function execute(string $sql, array $params = [], array $options = []);
+
+  public function multiExecute(string $sql);
+
   public function connect();
+
   public function close();
+
   public function getVersion();
 
 }

@@ -179,23 +179,29 @@ class BlogTemplatesModel extends Model
   }
 
   /**
-  * テンプレートの作成
-  */
-  public function insert($values, $options=array())
+   * テンプレートの作成
+   * @param array $values
+   * @param array $options
+   * @return array|false|int|mixed
+   */
+  public function insert(array $values, array $options = [])
   {
     $default_values = [
       'template_id' => 0,
     ];
     $values += $default_values;
     $values['updated_at'] = $values['created_at'] = date('Y-m-d H:i:s');
-    $id = parent::insert($values, $options);
-
-    return $id;
+    return parent::insert($values, $options);
   }
 
   /**
-  * テンプレートの更新
-  */
+   * テンプレートの更新
+   * @param $values
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return bool
+   */
   public function updateByIdAndBlogId($values, $id, $blog_id, $options=array())
   {
     $values['updated_at'] = date('Y-m-d H:i:s');
@@ -297,6 +303,26 @@ class BlogTemplatesModel extends Model
     $html = str_replace(Config::get('fc2_template_var_search'), Config::get('fc2_template_var_replace'), $html);
     $html = preg_replace('/<%[0-9a-zA-Z_]+?>/', '', $html);
     return $html;
+  }
+
+  static public function getPathDefaultTemplate(): string
+  {
+    return static::getPathDefaultTemplateWithDevice(Config::get('DEVICE_PC'));
+  }
+
+  static public function getPathDefaultCss(): string
+  {
+    return static::getPathDefaultCssWithDevice(Config::get('DEVICE_PC'));
+  }
+
+  static public function getPathDefaultTemplateWithDevice(string $device): string
+  {
+    return Config::get('APP_DIR') . 'templates/default/fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+  }
+
+  static public function getPathDefaultCssWithDevice(string $device): string
+  {
+    return Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
   }
 
 }
