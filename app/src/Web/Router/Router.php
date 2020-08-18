@@ -30,7 +30,7 @@ class Router
       return null;
     }
 
-    if (preg_match('|\A/admin/|u', $request->uri)) {
+    if (preg_match('|\A/admin/|u', $request->uri)) { // Admin routing
       Config::set('URL_REWRITE', true);
       Config::set('BASE_DIRECTORY', '/admin/');
       Config::set('APP_PREFIX', 'Admin');
