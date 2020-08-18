@@ -150,7 +150,7 @@ class CommonController extends AdminController
           // 既にDB登録完了
           $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=2');
         }
-        $sql_path = Config::get('CONFIG_DIR') . 'blog.sql';
+        $sql_path = Config::get('APP_DIR') . 'db/0_initialize.sql';
         $sql = file_get_contents($sql_path);
         if (DB_CHARSET!='UTF8MB4') {
           $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);

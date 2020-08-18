@@ -4,24 +4,11 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\Model\CommentsModel;
 
 use Fc2blog\Model\CommentsModel;
-use Fc2blog\Model\Model;
-use Fc2blog\Tests\DBHelper;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
 class PasswordCheckTest extends TestCase
 {
-  public function setUp(): void
-  {
-    if (!class_exists(CommentsModel::class)) {
-      Model::load('comments');
-    }
-
-    DBHelper::clearDbAndInsertFixture();
-
-    parent::setUp();
-  }
-
   public function testPasswordCheck(): void
   {
     $comments_model = new CommentsModel();

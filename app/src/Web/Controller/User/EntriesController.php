@@ -652,8 +652,12 @@ class EntriesController extends UserController
     // FC2テンプレートにリクエスト情報を合わせる
     $request = Request::getInstance();
     if (!$is_captcha || !$request->isArgs('token')) {
-      Config::read('fc2_request.php');
-      $request->combine(Config::get('request_combine.comment_register'));    // 引数のキーを入れ替える
+      $pattern = [
+        'comment.no' => 'comment.entry_id',
+        'comment.pass' => 'comment.password',
+        'comment.himitu' => 'comment.open_status',
+      ];
+      $request->combine($pattern); // 引数のキーを入れ替える
       if ($request->get('comment.open_status')=='on') {
         $request->set('comment.open_status', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
       }
@@ -719,8 +723,18 @@ class EntriesController extends UserController
     // FC2テンプレートの引数を受け側で合わせる
     $request = Request::getInstance();
     if (!$is_captcha || !$request->isArgs('token')) {
-      Config::read('fc2_request.php');
-      $request->combine(Config::get('request_combine.comment_edit'));
+      $pattern = [
+        'edit.rno' => 'comment.id',
+        'edit.name' => 'comment.name',
+        'edit.title' => 'comment.title',
+        'edit.mail' => 'comment.mail',
+        'edit.url' => 'comment.url',
+        'edit.body' => 'comment.body',
+        'edit.pass' => 'comment.password',
+        'edit.himitu' => 'comment.open_status',
+        'edit.delete' => 'comment.delete',
+      ];
+      $request->combine($pattern);
       if ($request->get('comment.open_status')=='on') {
         $request->set('comment.open_status', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
       }

@@ -4,26 +4,18 @@
 
 if (strlen((string)getenv("FC2_ERROR_LOG_PATH")) > 0) {
   ini_set('error_log', (string)getenv("FC2_ERROR_LOG_PATH"));
-} else {
-  ini_set('error_log', "php://stderr");
 }
 
-if ((string)getenv("FC2_STRICT_ERROR_REPORT") === 1) {
+if ((string)getenv("FC2_STRICT_ERROR_REPORT") === "1") {
   error_reporting(-1);
   ini_set('log_errors', '1');
   ini_set('ignore_repeated_errors', '0');
-} else {
-  error_reporting(0);
 }
 
-if ((string)getenv("FC2_ERROR_ON_DISPLAY") === 0) {
+if ((string)getenv("FC2_ERROR_ON_DISPLAY") === "1") {
   ini_set('display_errors', '1');
   ini_set('display_startup_errors', '1');
   ini_set('html_errors', '1');
-} else {
-  ini_set('display_errors', '0');
-  ini_set('display_startup_errors', '0');
-  ini_set('html_errors', '0');
 }
 
 // DB settings

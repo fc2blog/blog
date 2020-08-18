@@ -1,5 +1,21 @@
+## ログ設定
+### エラーを画面に表示する、可能ならば本番時はコメントアウト推奨
 php_value display_errors on
+php_value display_startup_errors On
+### エラーをログする、本番時も有効化推奨
+php_value log_errors On
 
+## 開発時用設定、通常はコメントアウトのままとしてください。
+#php_value error_reporting -1
+#php_value xdebug.remote_enable On
+#php_value xdebug.remote_autostart On
+#php_value xdebug.remote_host host.docker.internal
+#php_value xdebug.remote_port 9009
+#php_value xdebug.var_display_max_children -1
+#php_value xdebug.var_display_max_data -1
+#php_value xdebug.var_display_max_depth -1
+
+## mod_rewirte 設定、通常修正不要
 RewriteEngine On
 RewriteBase /
 

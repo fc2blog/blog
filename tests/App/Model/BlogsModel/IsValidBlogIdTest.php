@@ -4,15 +4,12 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\Model\BlogsModel;
 
 use Fc2blog\Model\BlogsModel;
-use Fc2blog\Tests\DBHelper;
 use PHPUnit\Framework\TestCase;
 
 class IsValidBlogIdTest extends TestCase
 {
   public function setUp(): void
   {
-    DBHelper::clearDbAndInsertFixture();
-
     parent::setUp();
   }
 

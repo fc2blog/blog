@@ -54,7 +54,7 @@ trait ClientTrait
     ob_start();
     try {
       new $className($methodName); // すべての実行が行われる
-    } /** @noinspection PhpRedundantCatchClauseInspection */ catch (PseudoExit $e) {
+    } catch (PseudoExit $e) {
       echo "\nUnexpected exit. {$e->getFile()}:{$e->getLine()} {$e->getMessage()}\n {$e->getTraceAsString()}";
     }
     static::resetClient();
@@ -79,7 +79,7 @@ trait ClientTrait
       new $className($methodName);
       throw new Exception("Unexpected, no PseudoExit thrown.");
 
-    } /** @noinspection PhpRedundantCatchClauseInspection */ catch (PseudoExit $e) {
+    } catch (PseudoExit $e) {
       // \Fc2blog\Exception\PseudoExit は正常終了と同義
       $ob = ob_get_clean();
       echo $ob;
