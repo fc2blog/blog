@@ -6,6 +6,7 @@
 namespace Fc2blog;
 
 use Fc2blog\Web\Html;
+use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
 class Debug{
@@ -135,7 +136,7 @@ class Debug{
   /**
   * DebugLogのアウトプットを行う
   */
-  public static function output($controller){
+  public static function output(Request $request, $controller){
     $debug = Config::get('DEBUG');
     if (!($debug==2 || $debug==3)) {
       // htmlでデバッグ以外は何も処理を行わない
@@ -146,7 +147,7 @@ class Debug{
     Config::set('DEBUG_TEMPLATE_VARS', 0);  // デバッグ用テンプレートには使用可能変数一覧は非表示
 
     // logsデータを元にdebug用htmlをfetch
-    $html = $controller->fetch('Common/debug.php', array('logs'=>self::getLogs()), false);
+    $html = $controller->fetch($request, 'Common/debug.php', array('logs'=>self::getLogs()), false);
 
     // 10分前以前のファイルは削除
     $cmd = "find " . Config::get('TEMP_DIR') . 'debug_html/' . " -amin +10 -name '*.html' | xargs rm -f";

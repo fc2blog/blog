@@ -126,7 +126,7 @@ abstract class Controller
   /**
   * 前のURLに戻す リファラーが取れなければ引数のURLに飛ばす
   */
-  protected function redirectBack($url, $hash='')
+  protected function redirectBack(Request $request, $url, $hash='')
   {
     // 元のURLに戻す
     if (!empty($_SERVER['HTTP_REFERER'])) {
@@ -216,7 +216,7 @@ abstract class Controller
   /**
   * 表示処理データを取得
   */
-  public function fetch($template, $data=array(), $isPrefix=true)
+  public function fetch(Request $request, $template, $data=array(), $isPrefix=true)
   {
     ob_start();
     $this->display($request, $template, $data, $isPrefix);

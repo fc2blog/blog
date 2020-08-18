@@ -28,7 +28,7 @@ class CommonController extends UserController
     }
 
     // 元のURLに戻す
-    $this->redirectBack('/');
+    $this->redirectBack($request, '/');
   }
 
   /**
@@ -45,11 +45,11 @@ class CommonController extends UserController
       case 'sp': $device_type = Config::get('DEVICE_SP'); break;
       default:
         Cookie::set('device', null);
-        $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)));
+        $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)));
     }
 
     Cookie::set('device', $device_type);
-    $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)));
+    $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)));
   }
 
   /**
