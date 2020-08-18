@@ -7,6 +7,7 @@ use Exception;
 use Fc2blog\Config;
 use Fc2blog\Exception\PseudoExit;
 use Fc2blog\Web\Request;
+use Fc2blog\Web\Router\Router;
 use InvalidArgumentException;
 
 trait ClientTrait
@@ -29,31 +30,23 @@ trait ClientTrait
     $_SERVER['REQUEST_URI'] = $uri;
     $_POST = $post;
 
-    # Requestはキャッシュされるので、都度消去する
-    Request::resetInstanceForTesting();
-
-    if ($target === "user") {
-      Config::read('user.php');
-    } else if ($target === "admin") {
-      Config::read('admin.php');
-    } else if ($target === "test") {
-      Config::read('test.php');
-    } else {
+    if ($target !== "user" && $target !== "admin" && $target !== "test") {
       throw new InvalidArgumentException("target is wrong.");
     }
 
-    [$className, $methodName] = getRouting();
+    $request = new Request();
 
+    $router = new Router($request);
 
-    return [$className, $methodName];
+    return $router->resolve();
   }
 
   public static function execute(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
   {
-    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post, $target);
+    $resolve = static::resolve($uri, $is_https, $method, $post, $target);
     ob_start();
     try {
-      new $className($methodName); // すべての実行が行われる
+      new $resolve['className']($resolve['request'], $resolve['methodName']); // すべての実行が行われる
     } catch (PseudoExit $e) {
       echo "\nUnexpected exit. {$e->getFile()}:{$e->getLine()} {$e->getMessage()}\n {$e->getTraceAsString()}";
     }
@@ -73,10 +66,10 @@ trait ClientTrait
    */
   public static function executeWithShouldExit(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
   {
-    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post, $target);
+    $resolve = static::resolve($uri, $is_https, $method, $post, $target);
     try {
       ob_start();
-      new $className($methodName);
+      new $resolve['className']($resolve['request'], $resolve['methodName']); // すべての実行が行われる
       throw new Exception("Unexpected, no PseudoExit thrown.");
 
     } catch (PseudoExit $e) {
@@ -97,6 +90,6 @@ trait ClientTrait
   {
     unset($_SERVER['REQUEST_URI'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTPS'], $_SERVER['REQUEST_URI']);
     $_POST = [];
-    Request::resetInstanceForTesting();
+    $_GET = [];
   }
 }

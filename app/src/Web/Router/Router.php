@@ -16,9 +16,11 @@ class Router
 {
   public $className = "";
   public $methodName = "";
+  public $request;
 
   public function __construct(Request $request)
   {
+    $this->request = $request;
     // favicon.ico アクセス時に404をレスポンスし、ブラウザにリトライさせない。
     // しない場合、404扱いからのブログページへリダイレクトが発生し、無駄な資源を消費する。
     // 可能なら、httpd側でハンドルしたほうが良いのだが、可搬性のため。
@@ -175,6 +177,7 @@ class Router
   public function resolve():array
   {
     return [
+      "request"=>$this->request,
       "className"=>$this->className,
       "methodName"=>$this->methodName
     ];

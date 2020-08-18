@@ -19,9 +19,6 @@ class UrlTest extends TestCase
     $_SERVER['REQUEST_URI'] = "/";
     $_POST = [];
 
-    # Requestはキャッシュされるので、都度消去する
-    Request::resetInstanceForTesting();
-
     Config::read('user.php', true);
 
     parent::setUp();
@@ -30,12 +27,19 @@ class UrlTest extends TestCase
   public function testNotFullUrl()
   {
     # 擬似的にアクセスURLをセットする
-    $_SERVER['HTTP_USER_AGENT'] = "phpunit";
-    $_SERVER['HTTPS'] = "on";
-    $_SERVER["REQUEST_METHOD"] = "GET";
-    $_SERVER['REQUEST_URI'] = "/";
-    $_POST = [];
-    $url = Html::url([
+    $request = new Request(
+      'GET',
+      '/',
+      null,
+      null,
+      null,
+      null,
+      [
+        'HTTP_USER_AGENT'=>'phpunit',
+        'HTTPS'=>"on"
+      ]
+    );
+    $url = Html::url($request, [
       'controller' => 'user',
       'action' => 'action',
       'blog_id' => 'testblog1'
@@ -47,13 +51,19 @@ class UrlTest extends TestCase
 
   public function testFullUrl()
   {
-    # 擬似的にアクセスURLをセットする
-    $_SERVER['HTTP_USER_AGENT'] = "phpunit";
-    $_SERVER['HTTPS'] = "on";
-    $_SERVER["REQUEST_METHOD"] = "GET";
-    $_SERVER['REQUEST_URI'] = "/";
-    $_POST = [];
-    $url = Html::url([
+    $request = new Request(
+      'GET',
+      '/',
+      null,
+      null,
+      null,
+      null,
+      [
+        'HTTP_USER_AGENT'=>'phpunit',
+        'HTTPS'=>"on"
+      ]
+    );
+    $url = Html::url($request, [
       'controller' => 'user',
       'action' => 'action',
       'blog_id' => 'testblog1'
