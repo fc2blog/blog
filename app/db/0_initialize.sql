@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.19, for osx10.15 (x86_64)
 --
--- Host: localhost    Database: blog
+-- Host: 127.0.0.1    Database: dev_fc2blog
 -- ------------------------------------------------------
--- Server version	5.5.34-0ubuntu0.12.04.1
+-- Server version	5.7.30
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `blog_plugins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blog_plugins` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `blog_id` varchar(50) NOT NULL DEFAULT '0',
@@ -39,7 +39,7 @@ CREATE TABLE `blog_plugins` (
   PRIMARY KEY (`id`,`blog_id`),
   KEY `plugin_id_idx` (`plugin_id`),
   KEY `id_idx` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +48,7 @@ CREATE TABLE `blog_plugins` (
 
 DROP TABLE IF EXISTS `blog_settings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blog_settings` (
   `blog_id` varchar(50) NOT NULL,
   `comment_confirm` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT ' /* comment truncated */ /*0 = 承認なしで表示 1 = 要承認*/',
@@ -65,9 +65,7 @@ CREATE TABLE `blog_settings` (
   `entry_password` varchar(50) DEFAULT NULL,
   `start_page` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `template_pc_reply_type` tinyint(4) unsigned NOT NULL DEFAULT '1',
-  `template_mb_reply_type` tinyint(4) unsigned NOT NULL DEFAULT '1',
   `template_sp_reply_type` tinyint(4) unsigned NOT NULL DEFAULT '1',
-  `template_tb_reply_type` tinyint(4) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`blog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -78,7 +76,7 @@ CREATE TABLE `blog_settings` (
 
 DROP TABLE IF EXISTS `blog_templates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blog_templates` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `blog_id` varchar(50) NOT NULL,
@@ -92,7 +90,7 @@ CREATE TABLE `blog_templates` (
   PRIMARY KEY (`id`,`blog_id`),
   KEY `blog_id_idx` (`blog_id`),
   KEY `template_id_idx` (`template_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +99,7 @@ CREATE TABLE `blog_templates` (
 
 DROP TABLE IF EXISTS `blogs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blogs` (
   `id` varchar(50) NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
@@ -109,13 +107,11 @@ CREATE TABLE `blogs` (
   `nickname` varchar(255) NOT NULL,
   `introduction` varchar(200) DEFAULT NULL,
   `template_pc_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT ' /* comment truncated */ /*PC用のテンプレートID*/',
-  `template_mb_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT ' /* comment truncated */ /*携帯用のテンプレートID*/',
   `template_sp_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT ' /* comment truncated */ /*スマフォ用のテンプレートID*/',
-  `template_tb_id` int(11) unsigned NOT NULL DEFAULT '0',
   `timezone` varchar(50) NOT NULL DEFAULT 'Asia/Tokyo',
   `open_status` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `ssl_enable` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `redirect_status_code` int(11) unsigned NOT NULL DEFAULT 302,
+  `redirect_status_code` int(11) unsigned NOT NULL DEFAULT '302',
   `blog_password` varchar(50) DEFAULT NULL,
   `last_posted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL,
@@ -131,7 +127,7 @@ CREATE TABLE `blogs` (
 
 DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `blog_id` varchar(50) NOT NULL,
@@ -143,7 +139,7 @@ CREATE TABLE `categories` (
   `count` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`blog_id`),
   KEY `blog_id_idx` (`blog_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +148,7 @@ CREATE TABLE `categories` (
 
 DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `blog_id` varchar(50) NOT NULL,
@@ -171,7 +167,7 @@ CREATE TABLE `comments` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`,`blog_id`),
   KEY `entry_id_idx` (`blog_id`,`entry_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +176,7 @@ CREATE TABLE `comments` (
 
 DROP TABLE IF EXISTS `entries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `entries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `blog_id` varchar(50) NOT NULL,
@@ -198,7 +194,7 @@ CREATE TABLE `entries` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`,`blog_id`),
   KEY `blog_id` (`blog_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,7 +203,7 @@ CREATE TABLE `entries` (
 
 DROP TABLE IF EXISTS `entry_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `entry_categories` (
   `blog_id` varchar(50) NOT NULL,
   `entry_id` int(10) unsigned NOT NULL,
@@ -223,7 +219,7 @@ CREATE TABLE `entry_categories` (
 
 DROP TABLE IF EXISTS `entry_tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `entry_tags` (
   `blog_id` varchar(50) NOT NULL,
   `entry_id` int(10) unsigned NOT NULL,
@@ -239,7 +235,7 @@ CREATE TABLE `entry_tags` (
 
 DROP TABLE IF EXISTS `files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `files` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `blog_id` varchar(50) NOT NULL,
@@ -249,7 +245,7 @@ CREATE TABLE `files` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`,`blog_id`),
   KEY `blog_id_idx` (`blog_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -258,7 +254,7 @@ CREATE TABLE `files` (
 
 DROP TABLE IF EXISTS `plugins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `plugins` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `blog_id` varchar(50) NOT NULL DEFAULT '0',
@@ -273,7 +269,7 @@ CREATE TABLE `plugins` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `blog_id_idx` (`blog_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -282,7 +278,7 @@ CREATE TABLE `plugins` (
 
 DROP TABLE IF EXISTS `tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `blog_id` varchar(50) NOT NULL,
@@ -290,7 +286,7 @@ CREATE TABLE `tags` (
   `count` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`blog_id`),
   KEY `blog_id_idx` (`blog_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -299,7 +295,7 @@ CREATE TABLE `tags` (
 
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `login_id` varchar(50) NOT NULL,
@@ -309,7 +305,7 @@ CREATE TABLE `users` (
   `created_at` datetime DEFAULT NULL,
   `logged_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -321,4 +317,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-13  3:02:15
+-- Dump completed on 2020-08-18 18:48:28
