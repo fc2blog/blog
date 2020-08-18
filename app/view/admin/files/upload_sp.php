@@ -39,7 +39,7 @@
   <div class="file_table">
     <?php if (count($files)) : ?>
       <?php foreach($files as $file): ?>
-        <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'edit', 'id'=>$file['id'])); ?>">
+        <a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'edit', 'id'=>$file['id'])); ?>">
           <div class="file_table_cell">
             <!--<input type="checkbox" />-->
             <?php if (in_array($file['ext'], array('jpeg', 'jpg', 'png', 'gif'))) : ?>
@@ -54,6 +54,6 @@
     <?php endif; ?>
   </div>
 
-  <?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+  <?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 <?php endif; ?>
 

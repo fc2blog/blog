@@ -13,9 +13,8 @@ abstract class CronController extends AppController
   /**
   * ブログID取得
   */
-  public function getBlogId()
+  public function getBlogId(Request $request)
   {
-    $request = Request::getInstance();
     return $request->get('blog_id');
   }
 

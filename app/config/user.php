@@ -7,7 +7,7 @@ $config = [];
 $config['APP_PREFIX'] = 'User';
 
 $config['DEFAULT_CLASS_NAME'] = 'BlogsController';
-$config['DEFAULT_METHOD_NAME'] = 'index';
+// DELME $config['DEFAULT_METHOD_NAME'] = 'index';
 $config['CLASS_PREFIX'] = "\\Fc2blog\\Web\\Controller\\User\\";
 
 $config['URL_REWRITE'] = false;

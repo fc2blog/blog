@@ -15,14 +15,13 @@ class BlogTemplatesController extends AdminController
 
   /**
    * 一覧表示
+   * @param Request $request
    */
-  public function index()
+  public function index(Request $request)
   {
-    $request = Request::getInstance();
-
     Session::set('sig', App::genRandomString());
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     $device_type = $request->get('device_type', 0);
 
     $blog = $this->getBlog($blog_id);
@@ -38,10 +37,8 @@ class BlogTemplatesController extends AdminController
   /**
   * FC2のテンプレート一覧
   */
-  public function fc2_index()
+  public function fc2_index(Request $request)
   {
-    $request = Request::getInstance();
-
     // デバイスタイプの設定
     $device_type = $request->get('device_type', Config::get('DEVICE_PC'));
     $request->set('device_type', $device_type);
@@ -63,10 +60,8 @@ class BlogTemplatesController extends AdminController
   /**
   * FC2のテンプレート一覧
   */
-  public function fc2_view()
+  public function fc2_view(Request $request)
   {
-    $request = Request::getInstance();
-
     // 戻る用URLの設定
     $back_url = $request->getReferer();
     if (!empty($back_url)) {
@@ -89,9 +84,8 @@ class BlogTemplatesController extends AdminController
   /**
    * 新規作成
    */
-  public function create()
+  public function create(Request $request)
   {
-    $request = Request::getInstance();
     /** @var BlogTemplatesModel $blog_templates_model */
     $blog_templates_model = Model::load('BlogTemplates');
 
@@ -120,10 +114,10 @@ class BlogTemplatesController extends AdminController
     $white_list = array('title', 'html', 'css', 'device_type');
     $errors['blog_template'] = $blog_templates_model->validate($request->get('blog_template'), $blog_template_data, $white_list);
     if (empty($errors['blog_template'])) {
-      $blog_template_data['blog_id'] = $this->getBlogId();
+      $blog_template_data['blog_id'] = $this->getBlogId($request);
       if ($id=$blog_templates_model->insert($blog_template_data)) {
         $this->setInfoMessage(__('I created a template'));
-        $this->redirect(array('action'=>'index'));
+        $this->redirect($request, array('action'=>'index'));
       }
     }
 
@@ -135,14 +129,13 @@ class BlogTemplatesController extends AdminController
   /**
    * 編集
    */
-  public function edit()
+  public function edit(Request $request)
   {
-    $request = Request::getInstance();
     /** @var BlogTemplatesModel $blog_templates_model */
     $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 使用中のテンプレート判定
     $blog = $this->getBlog($blog_id);
@@ -150,7 +143,7 @@ class BlogTemplatesController extends AdminController
     // 初期表示時に編集データの取得&設定
     if (!$request->get('blog_template') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       if (!$blog_template=$blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
-        $this->redirect(array('action'=>'index'));
+        $this->redirect($request, array('action'=>'index'));
       }
       $request->set('blog_template', $blog_template);
       Session::set('sig', App::genRandomString());
@@ -164,7 +157,7 @@ class BlogTemplatesController extends AdminController
     if (empty($errors['blog_template'])) {
       if ($blog_templates_model->updateByIdAndBlogId($blog_template_data, $id, $blog_id)) {
         $this->setInfoMessage(__('I have updated the template'));
-        $this->redirect(array('action'=>'index'));
+        $this->redirect($request, array('action'=>'index'));
       }
     }
 
@@ -176,13 +169,12 @@ class BlogTemplatesController extends AdminController
   /**
   * 対象のテンプレートをブログのテンプレートとして設定する
   */
-  public function apply()
+  public function apply(Request $request)
   {
-    $request = Request::getInstance();
     $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     $blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id);
     if (empty($blog_template)) {
@@ -201,9 +193,8 @@ class BlogTemplatesController extends AdminController
   /**
    * テンプレートダウンロード
    */
-  public function download()
+  public function download(Request $request)
   {
-    $request = Request::getInstance();
     /** @var BlogTemplatesModel $blog_templates_model */
     $blog_templates_model = Model::load('BlogTemplates');
 
@@ -233,10 +224,10 @@ class BlogTemplatesController extends AdminController
     $white_list = array('title', 'html', 'css', 'device_type');
     $errors['blog_template'] = $blog_templates_model->validate($blog_template, $blog_template_data, $white_list);
     if (empty($errors['blog_template'])) {
-      $blog_template_data['blog_id'] = $this->getBlogId();
+      $blog_template_data['blog_id'] = $this->getBlogId($request);
       if ($id=$blog_templates_model->insert($blog_template_data)) {
         $this->setInfoMessage('「' . h($blog_template['title']) . '」' . __('I downloaded the template'));
-        $this->redirect(array('action'=>'index', 'device_type'=>$device_type));
+        $this->redirect($request, array('action'=>'index', 'device_type'=>$device_type));
       }
     }
 
@@ -248,25 +239,24 @@ class BlogTemplatesController extends AdminController
   /**
    * 削除
    */
-  public function delete()
+  public function delete(Request $request)
   {
-    $request = Request::getInstance();
     $blog_templates_model = Model::load('BlogTemplates');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 使用中のテンプレート判定
     $blog = $this->getBlog($blog_id);
     $template_ids = BlogsModel::getTemplateIds($blog);
     if (in_array($id, $template_ids)) {
       $this->setErrorMessage(__('You can not delete a template in use'));
-      $this->redirect(array('action'=>'index'));
+      $this->redirect($request, array('action'=>'index'));
     }
 
     // 削除データの取得
     if (!$blog_template=$blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect(array('action'=>'index'));
+      $this->redirect($request, array('action'=>'index'));
     }
 
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {

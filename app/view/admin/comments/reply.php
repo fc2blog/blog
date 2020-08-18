@@ -3,7 +3,7 @@
 <table><tbody>
   <tr>
     <th><?php echo __('Article name'); ?></th>
-    <td><a href="<?php echo \Fc2blog\App::userURL(array('controller'=>'entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></td>
+    <td><a href="<?php echo \Fc2blog\App::userURL($request,array('controller'=>'entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></td>
   </tr>
   <tr>
     <th><?php echo __('Contributor'); ?></th>
@@ -55,7 +55,7 @@
 
 <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
   <h3><?php echo __('I moderate comments'); ?></h3>
-  <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'approval', 'id'=>$comment['id'], 'back_url'=>ue($request->get('back_url')))); ?>"
+  <a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'approval', 'id'=>$comment['id'], 'back_url'=>ue($request->get('back_url')))); ?>"
      onclick="return confirm('<?php echo __('Are you sure you want to be approved?'); ?>');"><?php echo __('Approval'); ?></a>
 <?php endif; ?>
 
@@ -81,6 +81,6 @@
 <h3><?php echo __('Delete Comment'); ?></h3>
 <div id="comment_dell" class="mb20">
   <p class="mb10"><?php echo __('You can delete a comment by pressing the button below.'); ?></p>
-  <a class="admin_common_btn dell_btn" href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$comment['id'], 'back_url'=>ue($request->get('back_url')))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
+  <a class="admin_common_btn dell_btn" href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'delete', 'id'=>$comment['id'], 'back_url'=>ue($request->get('back_url')))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
 </div>
 

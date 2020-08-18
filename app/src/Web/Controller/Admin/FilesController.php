@@ -13,13 +13,13 @@ class FilesController extends AdminController
 
   /**
    * 一覧表示
+   * @param Request $request
    */
-  public function ajax_index()
+  public function ajax_index(Request $request)
   {
-    $request = Request::getInstance();
     $files_model = Model::load('Files');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     
     // 検索条件
     $where = 'blog_id=?';
@@ -61,13 +61,12 @@ class FilesController extends AdminController
   /**
    * 新規作成
    */
-  public function upload()
+  public function upload(Request $request)
   {
-    $request = Request::getInstance();
     /** @var FilesModel $files_model */
     $files_model = Model::load('Files');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     Session::set('sig', App::genRandomString());
      
@@ -88,7 +87,7 @@ class FilesController extends AdminController
           move_uploaded_file($tmp_name, $move_file_path);
 
           $this->setInfoMessage(__('I have completed the upload of files'));
-          $this->redirect(array('action'=>'upload'));
+          $this->redirect($request, array('action'=>'upload'));
         }
       }
 
@@ -140,18 +139,17 @@ class FilesController extends AdminController
   /**
    * 編集
    */
-  public function edit()
+  public function edit(Request $request)
   {
-    $request = Request::getInstance();
     /** @var FilesModel $files_model */
     $files_model = Model::load('Files');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 詳細データの取得
     if (!$file=$files_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect(array('action'=>'index'));
+      $this->redirect($request, array('action'=>'index'));
     }
     $this->set('file', $file);
 
@@ -167,7 +165,7 @@ class FilesController extends AdminController
 
     if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       $request->clear();
-      $this->redirect(array('action'=>'upload'));
+      $this->redirect($request, array('action'=>'upload'));
     }
 
     // 新規登録処理
@@ -189,9 +187,9 @@ class FilesController extends AdminController
         $this->setInfoMessage(__('I have updated the file'));
         $back_url = $request->get('back_url');
         if (!empty($back_url)) {
-          $this->redirect($back_url);
+          $this->redirect($request, $back_url);
         }
-        $this->redirect(array('action'=>'upload'));
+        $this->redirect($request, array('action'=>'upload'));
       }
     }
 
@@ -208,13 +206,11 @@ class FilesController extends AdminController
   /**
    * 削除
    */
-  public function delete()
+  public function delete(Request $request)
   {
-    $request = Request::getInstance();
-
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // 削除処理
-      if (Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+      if (Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
         $this->setInfoMessage(__('I removed the file'));
       } else {
         $this->setErrorMessage(__('I failed to remove'));
@@ -224,21 +220,19 @@ class FilesController extends AdminController
     // 元の画面へ戻る
     $back_url = $request->get('back_url');
     if (!empty($back_url)) {
-      $this->redirect($back_url);
+      $this->redirect($request, $back_url);
     }
-    $this->redirect(array('action'=>'upload'));
+    $this->redirect($request, array('action'=>'upload'));
   }
 
   /**
    * 削除
    */
-  public function ajax_delete()
+  public function ajax_delete(Request $request)
   {
-    $request = Request::getInstance();
-
     // 削除処理
     $json = array('status'=>0);
-    if (!Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+    if (!Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
       $json = array('status'=>1);
     }
 

@@ -4,11 +4,11 @@
 <form method="POST" id="sys-tag-form" class="admin-form">
   <input type="hidden" name="id" value="<?php echo $request->get('id'); ?>" />
   <input type="hidden" name="sig" value="<?php echo \Fc2blog\Web\Session::get('sig'); ?>" />
-  <?php echo \Fc2blog\Web\Html::input('back_url', 'hidden', array('default'=>$request->get('back_url'))); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'back_url', 'hidden', array('default'=>$request->get('back_url'))); ?>
   <div class="form_area">
     <div class="form_contents">
       <h4><?php echo __('Tag name'); ?></h4>
-      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('tag[name]', 'text'); ?></div>
+      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input($request, 'tag[name]', 'text'); ?></div>
       <?php if (isset($errors['tag']['name'])): ?><span class="error"><?php echo $errors['tag']['name']; ?></span><?php endif; ?>
       <div class="btn">
         <button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i><?php echo __('Update'); ?></button>

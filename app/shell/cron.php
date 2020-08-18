@@ -10,9 +10,9 @@ require(__DIR__ . '/../core/bootstrap.php');
 
 \Fc2blog\Web\Request::getInstance()->setCronParams($argv);
 
-list($className, $methodName) = getRouting(\Fc2blog\Config::get('DEFAULT_CLASS_NAME'), \Fc2blog\Config::get('DEFAULT_METHOD_NAME'), \Fc2blog\Config::get('APP_PREFIX'));
-$controller = new $className();
+$request = getRouting(\Fc2blog\Config::get('DEFAULT_CLASS_NAME'), 'index', \Fc2blog\Config::get('APP_PREFIX'));
+$controller = new $request->className();
 
 \Fc2blog\Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
-$controller->process($methodName);
+$controller->process($request->methodName);
 

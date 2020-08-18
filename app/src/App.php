@@ -147,10 +147,9 @@ class App
   /**
   * デバイスタイプを取得する
   */
-  public static function getDeviceType()
+  public static function getDeviceType(Request $request)
   {
     // パラメータによりデバイスタイプを変更(FC2の引数順守)
-    $request = Request::getInstance();
     if ($request->isArgs('pc')) {
       return Config::get('DEVICE_PC');
     }
@@ -159,7 +158,7 @@ class App
     }
 
     // Cookieからデバイスタイプを取得
-    $device_type = Cookie::get('device');
+    $device_type = $request->rawCookie('device');
     $devices = [
       Config::get('DEVICE_PC'),
       Config::get('DEVICE_SP'),
@@ -169,7 +168,7 @@ class App
     }
 
     // ユーザーエージェントからデバイスタイプを取得
-    $ua = $_SERVER['HTTP_USER_AGENT'];
+    $ua = $request->server['HTTP_USER_AGENT'];
 
     $devices = array('iPhone', 'iPod', 'Android');
     foreach ($devices as $device) {
@@ -196,18 +195,13 @@ class App
   /**
   * 引数のデバイスタイプを取得する
   */
-  public static function getArgsDevice(){
+  public static function getArgsDevice(Request $request){
     static $device_name = null;   // 良く使用するのでキャッシュ
     if ($device_name===null) {
-      $request = Request::getInstance();
       if ($request->isArgs('pc')) {
         $device_name = 'pc';
       } else if ($request->isArgs('sp')) {
         $device_name = 'sp';
-      } else if ($request->isArgs('tb')) {
-        $device_name = 'tb';
-      } else if ($request->isArgs('m')) {
-        $device_name = 'm';
       } else {
         $device_name = '';
       }
@@ -250,11 +244,11 @@ class App
   /**
   * ユーザー画面用のURL
   */
-  public static function userURL($args=array(), $reused=false, $abs=false)
+  public static function userURL(Request $request, $args=array(), $reused=false, $abs=false)
   {
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
-      $gets = Request::getInstance()->getGet();
+      $gets = $request->getGet();
       unset($gets[Config::get('ARGS_CONTROLLER')]);
       unset($gets[Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);
@@ -280,7 +274,7 @@ class App
     }
 
     // 引数のデバイスタイプを取得
-    $device_name = self::getArgsDevice();
+    $device_name = self::getArgsDevice($request);
     if (!empty($device_name) && isset($args[$device_name])) {
       unset($args[$device_name]);
     }

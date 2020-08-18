@@ -500,7 +500,7 @@ class CommentsModel extends Model
 
     $comments = $this->find('all', $options);
     foreach ($comments as $key => $value) {
-      $comments[$key]['link'] = Html::url(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$value['blog_id'], 'id'=>$value['entry_id']));
+      $comments[$key]['link'] = Html::url($request, array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$value['blog_id'], 'id'=>$value['entry_id']));
 
       list($comments[$key]['year'], $comments[$key]['month'], $comments[$key]['day'],
         $comments[$key]['hour'], $comments[$key]['minute'], $comments[$key]['second'], $comments[$key]['youbi'], $comments[$key]['month_short']

@@ -62,7 +62,7 @@ $(function(){
   // プレビュー処理を行う
   $('#sys-blog-plugin-form-preview').click(function(){
     <?php $device_key = \Fc2blog\Config::get('DEVICE_FC2_KEY.' . $request->get('blog_plugin.device_type')); ?>
-    var action = '<?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Web\Session::get('blog_id'), $device_key=>1), false, true); ?>';
+    var action = '<?php echo \Fc2blog\App::userURL($request,array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Web\Session::get('blog_id'), $device_key=>1), false, true); ?>';
     $('#sys-blog-plugin-form').prop('action', action);
     $('#sys-blog-plugin-form').prop('target', '_preview');
     $('#sys-blog-plugin-form').submit();
@@ -70,12 +70,12 @@ $(function(){
 
   // submit処理を行う
   $('#sys-blog-plugin-form-submit').click(function(){
-    var action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogPlugins', 'action'=>'edit')); ?>';
+    var action = '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogPlugins', 'action'=>'edit')); ?>';
     $('#sys-blog-plugin-form').prop('action', action);
     $('#sys-blog-plugin-form').prop('target', '_self');
   });
 });
 </script>
 
-<?php echo $this->display('BlogPlugins/form_js.php'); ?>
+<?php echo $this->display($request, 'BlogPlugins/form_js.php'); ?>
 

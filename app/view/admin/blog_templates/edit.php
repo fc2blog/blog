@@ -35,7 +35,7 @@ $(function(){
 
   // プレビュー処理を行う
   $('#sys-blog-template-form-preview').click(function(){
-    var action = '<?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Web\Session::get('blog_id')), false, true); ?>';
+    var action = '<?php echo \Fc2blog\App::userURL($request,array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Web\Session::get('blog_id')), false, true); ?>';
     $('#sys-blog-template-form').prop('action', action);
     $('#sys-blog-template-form').prop('target', '_preview');
     $('#sys-blog-template-form').submit();
@@ -43,12 +43,12 @@ $(function(){
 
   // submit処理を行う
   $('#sys-blog-template-form-submit').click(function(){
-    var action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogTemplates', 'action'=>'edit')); ?>';
+    var action = '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogTemplates', 'action'=>'edit')); ?>';
     $('#sys-blog-template-form').prop('action', action);
     $('#sys-blog-template-form').prop('target', '_self');
   });
 });
 </script>
 
-<?php echo $this->display('BlogTemplates/form_js.php'); ?>
+<?php echo $this->display($request, 'BlogTemplates/form_js.php'); ?>
 

@@ -13,9 +13,8 @@ abstract class UserController extends AppController
   /**
   * ブログID取得
   */
-  public function getBlogId()
+  public function getBlogId(Request $request)
   {
-    $request = Request::getInstance();
     return $request->get('blog_id');
   }
 
@@ -38,14 +37,14 @@ abstract class UserController extends AppController
   /**
   * ログイン中のブログかどうかを返却
   */
-  protected function isLoginBlog(){
+  protected function isLoginBlog(Request $request){
     // ログイン中判定
     $admin_blog_id = $this->getAdminBlogId();
     if (empty($admin_blog_id)) {
       return false;
     }
     // ログイン中のブログIDと判定
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     if ($admin_blog_id==$blog_id) {
       return true;
     }
@@ -68,6 +67,4 @@ abstract class UserController extends AppController
   {
     return 'entry_password.' . $blog_id . '.' . $entry_id;
   }
-
 }
-

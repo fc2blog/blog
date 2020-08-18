@@ -38,7 +38,7 @@ if(!headers_sent()){
         <script>
           $(function(){
             $('#sys-language-setting').on('change', function(){
-              location.href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Common', 'action'=>'lang')); ?>&lang=" + $('#sys-language-setting').val();
+              location.href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Common', 'action'=>'lang')); ?>&lang=" + $('#sys-language-setting').val();
             });
           });
         </script>
@@ -48,7 +48,7 @@ if(!headers_sent()){
 
   <article>
     <article id="main-contents">
-      <?php $this->display($fw_template); ?>
+      <?php $this->display($request, $fw_template); ?>
     </article>
   </article>
 

@@ -15,13 +15,13 @@ class EntriesController extends AdminController
 
   /**
    * 一覧表示
+   * @param Request $request
    */
-  public function index()
+  public function index(Request $request)
   {
-    $request = Request::getInstance();
     $entries_model = Model::load('Entries');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 検索条件
     $where = 'entries.blog_id=?';
@@ -84,20 +84,19 @@ class EntriesController extends AdminController
   /**
    * 新規作成
    */
-  public function create()
+  public function create(Request $request)
   {
     // IE11のエディター対応
     if (stristr($_SERVER['HTTP_USER_AGENT'], 'trident')) {
       header('X-UA-Compatible: IE=EmulateIE10');
     }
 
-    $request = Request::getInstance();
     /** @var EntriesModel $entries_model */
     $entries_model = Model::load('Entries');
     /** @var EntryCategoriesModel $entry_categories_model */
     $entry_categories_model = Model::load('EntryCategories');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 初期表示時
     if (!$request->get('entry') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
@@ -119,7 +118,7 @@ class EntriesController extends AdminController
         Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I created a entry'));
-        $this->redirect(array('action'=>'index'));
+        $this->redirect($request, array('action'=>'index'));
       }
     }
 
@@ -131,26 +130,25 @@ class EntriesController extends AdminController
   /**
    * 編集
    */
-  public function edit()
+  public function edit(Request $request)
   {
     // IE11のエディター対応
     if (stristr($_SERVER['HTTP_USER_AGENT'], 'trident')) {
       header('X-UA-Compatible: IE=EmulateIE10');
     }
 
-    $request = Request::getInstance();
     /** @var EntriesModel $entries_model */
     $entries_model = Model::load('Entries');
     /** @var EntryCategoriesModel $entry_categories_model */
     $entry_categories_model = Model::load('EntryCategories');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 初期表示時に編集データの取得&設定
     if (!$request->get('entry')) {
       if (!$entry=$entries_model->findByIdAndBlogId($id, $blog_id)) {
-        $this->redirect(array('action'=>'index'));
+        $this->redirect($request, array('action'=>'index'));
       }
       $request->set('entry', $entry);
       $request->set('entry_categories', array('category_id'=>$entry_categories_model->getCategoryIds($blog_id, $id)));
@@ -176,7 +174,7 @@ class EntriesController extends AdminController
         Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I have updated the entry'));
-        $this->redirect(array('action'=>'index'));
+        $this->redirect($request, array('action'=>'index'));
       }
     }
 
@@ -188,28 +186,26 @@ class EntriesController extends AdminController
   /**
    * 削除
    */
-  public function delete()
+  public function delete(Request $request)
   {
-    $request = Request::getInstance();
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // 削除処理
-      if (Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId()))
+      if (Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request)))
         $this->setInfoMessage(__('I removed the entry'));
     }
-    $this->redirect(array('action'=>'index'));
+    $this->redirect($request, array('action'=>'index'));
   }
 
   /**
   * ajaxでメディアを表示する画面
   */
-  public function ajax_media_load()
+  public function ajax_media_load(Request $request)
   {
     Config::set('DEBUG', 0);    // デバッグ設定を変更
 
-    $request = Request::getInstance();
     $files_model = Model::load('Files');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 検索条件
     $where = 'blog_id=?';

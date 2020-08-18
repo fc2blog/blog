@@ -5,7 +5,7 @@
     <?php $devices = \Fc2blog\Config::get('DEVICE_NAME'); ?>
     <select onchange="location.href=$(this).val();">
       <?php foreach ($devices as $key => $device): ?>
-        <option value="<?php echo \Fc2blog\Web\Html::url(array('device_type'=>$key)); ?>" <?php if ($request->get('device_type')==$key) echo 'selected="selected"'; ?>><?php echo $device; ?></option>
+        <option value="<?php echo \Fc2blog\Web\Html::url($request, array('device_type'=>$key)); ?>" <?php if ($request->get('device_type')==$key) echo 'selected="selected"'; ?>><?php echo $device; ?></option>
       <?php endforeach; ?>
     </select>
   </div>

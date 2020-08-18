@@ -1,6 +1,6 @@
 <header><h2><?php echo __('Article setting') ?></h2></header>
 
-<?php $this->display('BlogSettings/tab.php', array('tab'=>'entry_edit')); ?>
+<?php $this->display($request, 'BlogSettings/tab.php', array('tab'=>'entry_edit')); ?>
 
 <form method="POST" id="sys-blog-template-form" class="admin-form">
 

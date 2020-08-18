@@ -16,12 +16,11 @@ class CommonController extends UserController
 {
 
   /**
-  * 言語設定変更
-  */
-  public function lang()
+   * 言語設定変更
+   * @param Request $request
+   */
+  public function lang(Request $request)
   {
-    $request = Request::getInstance();
-
     // 言語の設定
     $lang = $request->get('lang');
     if ($language= Config::get('LANGUAGES.' . $lang)) {
@@ -33,12 +32,11 @@ class CommonController extends UserController
   }
 
   /**
-  * デバイス変更
-  */
-  public function device_change()
+   * デバイス変更
+   * @param Request $request
+   */
+  public function device_change(Request $request)
   {
-    $request = Request::getInstance();
-
     // 言語の設定
     $device_type = 0;
     $device = $request->get('device');
@@ -47,17 +45,18 @@ class CommonController extends UserController
       case 'sp': $device_type = Config::get('DEVICE_SP'); break;
       default:
         Cookie::set('device', null);
-        $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId()));
+        $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)));
     }
 
     Cookie::set('device', $device_type);
-    $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId()));
+    $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)));
   }
 
   /**
-  * 画像認証
-  */
-  public function captcha()
+   * 画像認証
+   * @param Request $request
+   */
+  public function captcha(Request $request)
   {
     $size_x = 200;
     $size_y = 40;
@@ -85,12 +84,12 @@ class CommonController extends UserController
   }
 
   /**
-  * サムネイル処理
-  */
-  public function thumbnail()
+   * サムネイル処理
+   * @param Request $request
+   * @return string
+   */
+  public function thumbnail(Request $request)
   {
-    $request = Request::getInstance();
-
     $blog_id = $request->get('blog_id');
     $id      = $request->get('id');
     $ext     = $request->get('ext');
@@ -171,7 +170,7 @@ class CommonController extends UserController
     chmod($save_file, 0777);
 
     // 作成したファイルへリダイレクト
-    $this->redirect($request->getPath() . '?' . $request->getQuery());
+    $this->redirect($request, $request->getPath() . '?' . $request->getQuery());
   }
 }
 

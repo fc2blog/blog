@@ -15,12 +15,11 @@ class TagsController extends AdminController
   /**
    * 一覧表示
    */
-  public function index()
+  public function index(Request $request)
   {
-    $request = Request::getInstance();
     $tags_model = Model::load('Tags');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     Session::set('sig', App::genRandomString());
 
@@ -66,17 +65,16 @@ class TagsController extends AdminController
   /**
    * 編集
    */
-  public function edit()
+  public function edit(Request $request)
   {
-    $request = Request::getInstance();
     /** @var TagsModel $tags_model */
     $tags_model = Model::load('Tags');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     if (!$tag=$tags_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect(array('action'=>'index'));
+      $this->redirect($request, array('action'=>'index'));
     }
     $this->set('tag', $tag);
 
@@ -102,9 +100,9 @@ class TagsController extends AdminController
         // 元の画面へ戻る
         $back_url = $request->get('back_url');
         if (!empty($back_url)) {
-          $this->redirect($back_url);
+          $this->redirect($request, $back_url);
         }
-        $this->redirect(array('action'=>'index'));
+        $this->redirect($request, array('action'=>'index'));
       }
     }
 
@@ -116,13 +114,11 @@ class TagsController extends AdminController
   /**
    * 削除
    */
-  public function delete()
+  public function delete(Request $request)
   {
-    $request = Request::getInstance();
-
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // 削除処理
-      if (Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+      if (Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
         $this->setInfoMessage(__('I removed the tag'));
       } else {
         $this->setErrorMessage(__('I failed to remove'));
@@ -132,7 +128,7 @@ class TagsController extends AdminController
     // 元の画面へ戻る
     $back_url = $request->get('back_url');
     if (!empty($back_url)) {
-      $this->redirect($back_url);
+      $this->redirect($request, $back_url);
     }
     $this->redirectBack(array('action'=>'index'));
   }

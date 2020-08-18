@@ -1,6 +1,6 @@
 <header><h2><?php echo __('Registration of plug-in'); ?></h2></header>
 <p class="header_btn">
-  <a class="admin_common_btn create_btn" href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'blog_plugins', 'action'=>'index')); ?>"><?php echo __('Plugin management'); ?></a>
+  <a class="admin_common_btn create_btn" href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'blog_plugins', 'action'=>'index')); ?>"><?php echo __('Plugin management'); ?></a>
 </p>
 
 <form method="POST" id="sys-plugin-form" class="admin-form">

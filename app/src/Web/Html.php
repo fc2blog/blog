@@ -19,10 +19,10 @@ class Html
   * URLを作成する
   * TODO:ユーザー側のURL生成時はApp:userURLを使用に置き換え最終的にblog_idの部分を削る
   */
-  public static function url($args=array(), $reused=false, $full_url=false){
+  public static function url(Request $request, $args=array(), $reused=false, $full_url=false){
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
-      $gets = Request::getInstance()->getGet();
+      $gets = $request->getGet();
       unset($gets[Config::get('ARGS_CONTROLLER')]);
       unset($gets[Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);
@@ -42,7 +42,7 @@ class Html
     }
 
     // 引数のデバイスタイプを取得
-    $device_name = App::getArgsDevice();
+    $device_name = App::getArgsDevice($request);
     if (!empty($device_name) && isset($args[$device_name])) {
       unset($args[$device_name]);
     }
@@ -96,9 +96,7 @@ class Html
     return $url;
   }
 
-  public static function input($name, $type, $attrs=array(), $option_attrs=array()){
-    $request = Request::getInstance();
-
+  public static function input(Request $request, $name, $type, $attrs=array(), $option_attrs=array()){
     $default = isset($attrs['default']) ? $attrs['default'] : null;    // デフォルト文字列
     $options = isset($attrs['options']) ? $attrs['options'] : array(); // オプション
     $label   = isset($attrs['label']) ? $attrs['label'] : '';          // ラベル

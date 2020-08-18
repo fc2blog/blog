@@ -81,9 +81,8 @@ abstract class AppController extends Controller
   /**
   * tokenチェック
   */
-  protected function tokenValidate($name='token')
+  protected function tokenValidate(Request $request, $name='token')
   {
-    $request = Request::getInstance();
     $value = $request->get($name, '');
     $value = mb_convert_kana($value, 'n');
     return Session::remove($name) == $value ? null : __('Token authentication is invalid');
@@ -92,12 +91,12 @@ abstract class AppController extends Controller
   /**
   * Debug表示画面
   */
-  public function debug()
+  public function debug(Request $request)
   {
     if (Config::get('DEBUG')!=2 && Config::get('DEBUG') !=3) {
       return $this->error404();
     }
-    $key = Request::getInstance()->get('key');
+    $key = $request->get('key');
 
     if (!is_file(Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
       if(defined("THIS_IS_TEST")){

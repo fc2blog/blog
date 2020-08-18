@@ -4,20 +4,21 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\Config;
 use Fc2blog\Web\Controller\AppController;
+use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
 abstract class AdminController extends AppController
 {
 
-  public function __construct($method)
+  public function __construct(Request $request, $method)
   {
-    parent::__construct($method);
+    parent::__construct($request, $method);
   }
 
-  protected function beforeFilter()
+  protected function beforeFilter(Request $request)
   {
     // 親のフィルター呼び出し
-    parent::beforeFilter();
+    parent::beforeFilter($request);
 
     if (!$this->isLogin()) {
       // 未ログイン時は新規登録とログイン以外させない
@@ -28,7 +29,7 @@ abstract class AdminController extends AppController
       $controller_name = Config::get('ControllerName');
       $action_name = Config::get('ActionName');
       if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
-        $this->redirect(array('controller'=>'Users', 'action'=>'login'));
+        $this->redirect($request, array('controller'=>'Users', 'action'=>'login'));
       }
       return ;
     }
@@ -44,13 +45,13 @@ abstract class AdminController extends AppController
       $action_name = Config::get('ActionName');
       if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
         $this->setWarnMessage(__('Please select a blog'));
-        $this->redirect(array('controller'=>'Blogs', 'action'=>'index'));
+        $this->redirect($request, array('controller'=>'Blogs', 'action'=>'index'));
       }
       return ;
     }
 
     // ログイン中でかつブログ選択中の場合ブログ情報を取得し時間設定を行う
-    $blog = $this->getBlog($this->getBlogId());
+    $blog = $this->getBlog($this->getBlogId($request));
     if(is_array($blog) && isset($blog['timezone'])) {
       date_default_timezone_set($blog['timezone']);
     }
@@ -116,7 +117,7 @@ abstract class AdminController extends AppController
   /**
   * ブログIDを取得する
   */
-  protected function getBlogId()
+  protected function getBlogId($request)
   {
     return Session::get('blog_id');
   }

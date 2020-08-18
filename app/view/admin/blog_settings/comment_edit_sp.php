@@ -1,6 +1,6 @@
 <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title"><?php echo __('Comments Settings'); ?></span></h1></header>
 
-<?php $this->display('BlogSettings/tab.php', array('tab'=>'comment_edit')); ?>
+<?php $this->display($request, 'BlogSettings/tab.php', array('tab'=>'comment_edit')); ?>
 
 <h2 id="blog_settings"><span class="h2_inner"><?php echo __('Setting'); ?></span></h2>
 <form method="POST" id="sys-blog-template-form" class="admin-form">

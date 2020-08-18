@@ -15,13 +15,12 @@ class CategoriesController extends AdminController
   /**
    * 新規作成
    */
-  public function create()
+  public function create(Request $request)
   {
-    $request = Request::getInstance();
     /** @var CategoriesModel $categories_model */
     $categories_model = Model::load('Categories');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 親カテゴリー一覧
     $options = $categories_model->getParentList($blog_id);
@@ -52,7 +51,7 @@ class CategoriesController extends AdminController
       $data['blog_id'] = $blog_id;
       if ($id=$categories_model->addNode($data, 'blog_id=?', array($blog_id))) {
         $this->setInfoMessage(__('I added a category'));
-        $this->redirect(array('action'=>'create'));
+        $this->redirect($request, array('action'=>'create'));
       }
     }
 
@@ -64,14 +63,13 @@ class CategoriesController extends AdminController
   /**
    * 編集
    */
-  public function edit()
+  public function edit(Request $request)
   {
-    $request = Request::getInstance();
     /** @var CategoriesModel $categories_model */
     $categories_model = Model::load('Categories');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 親カテゴリー一覧
     $options = $categories_model->getParentList($blog_id, $id);
@@ -80,7 +78,7 @@ class CategoriesController extends AdminController
     // 初期表示時に編集データの取得&設定
     if (!$request->get('category') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       if (!$category=$categories_model->findByIdAndBlogId($id, $blog_id)) {
-        $this->redirect(array('action'=>'create'));
+        $this->redirect($request, array('action'=>'create'));
       }
       $request->set('category', $category);
       return ;
@@ -94,7 +92,7 @@ class CategoriesController extends AdminController
     if (empty($errors)){
       if ($categories_model->updateNodeById($data, $id, 'blog_id=?', array($blog_id))) {
         $this->setInfoMessage(__('I have updated the category'));
-        $this->redirect(array('action'=>'create'));
+        $this->redirect($request, array('action'=>'create'));
       }
     }
 
@@ -106,43 +104,40 @@ class CategoriesController extends AdminController
   /**
    * 削除
    */
-  public function delete()
+  public function delete(Request $request)
   {
-    $request = Request::getInstance();
     $categories_model = Model::load('Categories');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       $request->clear();
-      $this->redirect(array('action'=>'create'));
+      $this->redirect($request, array('action'=>'create'));
       return;
     }
     
     // 削除データの取得(未分類であるid=1は削除させない)
     if ($id==1 || !$category=$categories_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect(array('action'=>'create'));
+      $this->redirect($request, array('action'=>'create'));
     }
 
     // 削除処理
     $categories_model->deleteNodeByIdAndBlogId($id, $blog_id);
     $this->setInfoMessage(__('I removed the category'));
-    $this->redirect(array('action'=>'create'));
+    $this->redirect($request, array('action'=>'create'));
   }
 
   /**
   * ajax用のカテゴリ追加
   */
-  public function ajax_add()
+  public function ajax_add(Request $request)
   {
     Config::set('DEBUG', 0);    // デバッグなしに変更
-
-    $request = Request::getInstance();
     /** @var CategoriesModel $categories_model */
     $categories_model = Model::load('Categories');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     $json = array('status' => 0);
     

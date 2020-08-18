@@ -19,9 +19,11 @@ abstract class Controller
   private $data = array();             // テンプレートへ渡す変数の保存領域
   protected $layout = 'default.php';  // 表示ページのレイアウトテンプレート
   protected $output = '';              // 出力タグ
-
-  public function __construct($method)
+  protected $requset;
+  public function __construct(Request $request, $method)
   {
+    $this->requset = $request;
+
     $className = get_class($this);
 
     { // PSR-4 対応のためのTweak
@@ -37,24 +39,25 @@ abstract class Controller
     Config::set('ActionName', $method);
 
     // デバイスタイプの設定
-    Config::set('DeviceType', App::getDeviceType());
+    Config::set('DeviceType', App::getDeviceType($request));
 
     // アプリプレフィックス
     $prefix = Config::get('APP_PREFIX');
 
     Debug::log('Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']', false, 'system', __FILE__, __LINE__);
 
-    $this->beforeFilter();
+    $this->beforeFilter($request);
 
-    $template = $this->$method();
+    $template = $this->$method($request);
+
     if (empty($template)) {
       $template = substr($className, 0, strlen($className) - strlen('Controller')) . '/' . $method . '.php';
     }
 
-    $this->afterFilter();
+    $this->afterFilter($request);
 
     ob_start();
-    $this->layout($template);
+    $this->layout($request, $template);
     $this->output = ob_get_clean();
 
     $this->beforeRender();
@@ -63,9 +66,9 @@ abstract class Controller
     echo $this->output;
   }
 
-  protected function beforeFilter(){}
+  protected function beforeFilter(Request $request){}
 
-  protected function afterFilter(){}
+  protected function afterFilter(Request $request){}
 
   protected function beforeRender(){}
 
@@ -83,10 +86,10 @@ abstract class Controller
    * @param string|null $blog_id
    * @throws PseudoExit
    */
-  protected function redirect($url, $hash = '', bool $full_url = false, string $blog_id = null)
+  protected function redirect(Request $request, $url, $hash = '', bool $full_url = false, string $blog_id = null)
   {
     if (is_array($url)) {
-      $url = Html::url($url, false, $full_url);
+      $url = Html::url($request, $url, false, $full_url);
 
     } else if ($full_url && is_string($blog_id) && strlen($blog_id) > 0) {
       $url = BlogsModel::getFullHostUrlByBlogId($blog_id) . $url;
@@ -127,13 +130,13 @@ abstract class Controller
   {
     // 元のURLに戻す
     if (!empty($_SERVER['HTTP_REFERER'])) {
-      $this->redirect($_SERVER['HTTP_REFERER']);
+      $this->redirect($request, $_SERVER['HTTP_REFERER']);
     }
     // リファラーが取れなければメインへ飛ばす
-    $this->redirect($url, $hash);
+    $this->redirect($request, $url, $hash);
   }
 
-  private function layout($fw_template)
+  private function layout(Request $request, $fw_template)
   {
     // 定義済み変数に関しては展開させない
     unset($this->data['fw_template']);
@@ -142,7 +145,7 @@ abstract class Controller
     extract($this->data);
 
     // アプリプレフィックス
-    $prefix = Config::get('APP_PREFIX');
+    $prefix = strtolower(Config::get('APP_PREFIX'));
 
     Debug::log('Layout[' . $this->layout . ']', false, 'system', __FILE__, __LINE__);
     if ($this->layout=='') {
@@ -163,9 +166,13 @@ abstract class Controller
   }
 
   /**
-  * 画面表示処理
-  */
-  public function display($fw_template, $fw_data=array(), $fw_is_prefix=true)
+   * 画面表示処理
+   * @param Request $request
+   * @param $fw_template
+   * @param array $fw_data
+   * @param bool $fw_is_prefix
+   */
+  public function display(Request $request, $fw_template, $fw_data=array(), $fw_is_prefix=true)
   {
     $fw_template = snakeCase($fw_template);
     // データの設定
@@ -186,9 +193,6 @@ abstract class Controller
     }
     // 展開完了後fw_dataは解除
     unset($fw_data);
-
-    // リクエストデータ
-    $request = Request::getInstance();
 
     // Debug用にテンプレートで使用可能な変数一覧表示
     if (Config::get('DEBUG_TEMPLATE_VARS')) {
@@ -215,7 +219,7 @@ abstract class Controller
   public function fetch($template, $data=array(), $isPrefix=true)
   {
     ob_start();
-    $this->display($template, $data, $isPrefix);
+    $this->display($request, $template, $data, $isPrefix);
     $html = ob_get_clean();
     return $html;
   }

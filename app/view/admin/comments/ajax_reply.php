@@ -1,7 +1,7 @@
 <table><tbody>
   <tr>
     <th><?php echo __('Article name'); ?></th>
-    <td><a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></td>
+    <td><a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL($request,array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo $comment['entry_title']; ?></a></td>
   </tr>
   <tr>
     <th><?php echo __('Contributor'); ?></th>
@@ -33,7 +33,7 @@
       <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
         <?php echo __('Published'); ?>
       <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
-        <?php echo __('Approval pending'); ?> &raquo; <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;" id="sys-comment-approval"><?php echo __('Approval'); ?></a>
+        <?php echo __('Approval pending'); ?> &raquo; <a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;" id="sys-comment-approval"><?php echo __('Approval'); ?></a>
       <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
         <?php echo __('Only exposed administrator'); ?>
       <?php endif; ?>
@@ -73,7 +73,7 @@
   <h3><?php echo __('Delete Comment'); ?></h3>
   <div id="comment_dell" class="mb20">
     <p class="mb10"><?php echo __('You can delete a comment by pressing the button below.'); ?></p>
-    <a class="admin_common_btn dell_btn" href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
+    <a class="admin_common_btn dell_btn" href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a>
   </div>
 
 </form>

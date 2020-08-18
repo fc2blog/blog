@@ -43,7 +43,7 @@ if(!headers_sent()){
   </header>
 
   <div id="contents">
-      <?php $this->display($fw_template); ?>
+      <?php $this->display($request, $fw_template); ?>
   </div>
 
   <footer id="site_footer">

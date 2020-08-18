@@ -24,7 +24,7 @@
 <ul class="link_list">
 <?php foreach($comments as $comment): ?>
   <li class="link_list_item">
-    <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'reply', 'id'=>$comment['id'])); ?>" class="common_next_link next_bg">
+    <a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'reply', 'id'=>$comment['id'])); ?>" class="common_next_link next_bg">
       <dl>
         <dt class="item_title"><?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD')) : ?><span class="red new">New</span><?php endif; ?><?php echo d(th($comment['title'], 20), __('No title')); ?></dt>
         <dd class="item_time"><i class="entry_time detail_icon"></i><time><?php echo df($comment['updated_at'], 'y-m-d'); ?></time></dd>
@@ -49,5 +49,5 @@
 <?php endforeach; ?>
 </ul>
 
-<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+<?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 

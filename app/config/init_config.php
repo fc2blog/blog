@@ -108,10 +108,10 @@ $config['BASE_DIRECTORY'] = '/';
 $config['DIRECTORY_INDEX'] = 'index.php';
 
 // Controller引数
-$config['ARGS_CONTROLLER'] = 'mode';
+$config['ARGS_CONTROLLER'] = 'mode'; // TODO mode以外の状態が存在しない
 
 // Action引数
-$config['ARGS_ACTION'] = 'process';
+$config['ARGS_ACTION'] = 'process'; // TODO process以外の状態が存在しない
 
 // ルーティング設定
 $config['ROUTING'] = 'routing.php';

@@ -22,7 +22,7 @@
 </div>
 <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
 
-<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+<?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 
 <?php $reply_status_list = \Fc2blog\Model\CommentsModel::getReplyStatusList(); ?>
 <form method="POST" id="sys-list-form">
@@ -47,8 +47,8 @@
           <input type="hidden" value="<?php echo $comment['reply_status']; ?>" id="sys-reply-status-value-<?php echo $comment['id']; ?>" />
         </td>
         <td class="s_cell center">
-          <a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
-          <a href="<?php echo \Fc2blog\Web\Html::url(array('entry_id'=>$comment['entry_id']), true); ?>"><?php echo __('Narrowing'); ?></a>
+          <a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL($request,array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
+          <a href="<?php echo \Fc2blog\Web\Html::url($request, array('entry_id'=>$comment['entry_id']), true); ?>"><?php echo __('Narrowing'); ?></a>
         </td>
         <td>
           <?php echo df($comment['updated_at'], 'y/m/d'); ?><br />
@@ -64,7 +64,7 @@
             <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
               <span class="published"><?php echo __('Published'); ?></span>
             <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
-              <span class="approval"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;"><?php echo __('Approval'); ?></a></span>
+              <span class="approval"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;"><?php echo __('Approval'); ?></a></span>
             <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
               <span class="private"><?php echo __('Only exposed administrator'); ?></span>
             <?php endif; ?>
@@ -81,7 +81,7 @@
             <?php endif; ?>
           </p>
         </td>
-        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
+        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
       </tr>
       <?php endforeach; ?>
     </tbody>
@@ -92,7 +92,7 @@
   <input type="button" id="sys-delete-button" value="<?php echo __('Remove what you have selected'); ?>" onclick="if(confirm('<?php echo __('Are you sure you want to delete?'); ?>')) $('#sys-list-form').submit();" disabled="disabled" />
 </form>
 
-<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+<?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 
 <!-- コメント返信用ダイアログ -->
 <div id="sys-comment-reply-dialog" title="<?php echo __('Reply Comments'); ?>"></div>

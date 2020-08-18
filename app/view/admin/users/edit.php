@@ -1,6 +1,6 @@
 <header><h2><?php echo __('User setting'); ?></h2></header>
 
-<?php $this->display('Users/tab.php', array('tab'=>'edit')); ?>
+<?php $this->display($request, 'Users/tab.php', array('tab'=>'edit')); ?>
 
 <form method="POST" id="sys-users-form" class="admin-form">
 

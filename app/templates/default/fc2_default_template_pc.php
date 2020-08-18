@@ -288,7 +288,7 @@
           <!--/comment-->
           <div class="form">
             <h4 class="sub_title"><%template_post_comment></h4>
-            <form action="../../config" method="post" name="comment_form" id="comment_form">
+            <form action="./" method="post" name="comment_form" id="comment_form">
               <dl>
                 <dt>
                   <input type="hidden" name="mode" value="regist" />

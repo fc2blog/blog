@@ -7,7 +7,7 @@ $config = [];
 $config['APP_PREFIX'] = 'Test';
 
 $config['DEFAULT_CLASS_NAME'] = 'CommonController';
-$config['DEFAULT_METHOD_NAME'] = 'index';
+// DELME $config['DEFAULT_METHOD_NAME'] = 'index';
 $config['CLASS_PREFIX'] = "\\Fc2blog\\Web\\Controller\\Test\\";
 
 $config['URL_REWRITE'] = true;

@@ -17,12 +17,12 @@ class CommonController extends TestController
   public function redirect_test_no_full_url()
   {
     // $url, $hash = '', bool $full_url = false, string $blog_id = null
-    $this->redirect('/_for_unit_test_/phpinfo', '');
+    $this->redirect($request, '/_for_unit_test_/phpinfo', '');
   }
   public function redirect_test_full_url()
   {
     // $url, $hash = '', bool $full_url = false, string $blog_id = null
-    $this->redirect('/_for_unit_test_/phpinfo', '', true, 'testblog1');
+    $this->redirect($request, '/_for_unit_test_/phpinfo', '', true, 'testblog1');
   }
 }
 

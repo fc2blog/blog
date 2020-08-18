@@ -13,12 +13,11 @@ class CommentsController extends AdminController
   /**
    * 一覧表示
    */
-  public function index()
+  public function index(Request $request)
   {
-    $request = Request::getInstance();
     $comments_model = Model::load('Comments');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 検索条件
     $where = 'comments.blog_id=?';
@@ -87,22 +86,21 @@ class CommentsController extends AdminController
   /**
   * コメントの承認
   */
-  public function approval()
+  public function approval(Request $request)
   {
-    $request = Request::getInstance();
     $comments_model = Model::load('Comments');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 承認データの取得
     if (!$comment=$comments_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect(array('action'=>'index'));
+      $this->redirect($request, array('action'=>'index'));
     }
 
     if ($comment['open_status']!= Config::get('COMMENT.OPEN_STATUS.PENDING')) {
       // 承認待ち以外はリダイレクト
-      $this->redirect(array('action'=>'index'));
+      $this->redirect($request, array('action'=>'index'));
     }
 
     // 承認処理
@@ -112,23 +110,22 @@ class CommentsController extends AdminController
     // 元の画面へ戻る
     $back_url = $request->get('back_url');
     if (!empty($back_url)) {
-      $this->redirect($back_url);
+      $this->redirect($request, $back_url);
     }
-    $this->redirect(array('action'=>'index'));
+    $this->redirect($request, array('action'=>'index'));
   }
 
   /**
   * コメントの承認(ajax版)
   */
-  public function ajax_approval () {
+  public function ajax_approval (Request $request) {
     Config::set('DEBUG', 0);
     $this->layout = 'json.php';
 
-    $request = Request::getInstance();
     $comments_model = Model::load('Comments');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 承認データの取得
     if (!$comment=$comments_model->findByIdAndBlogId($id, $blog_id)) {
@@ -149,14 +146,13 @@ class CommentsController extends AdminController
   /**
   * 返信
   */
-  public function reply()
+  public function reply(Request $request)
   {
-    $request = Request::getInstance();
     /** @var CommentsModel $comments_model */
     $comments_model = Model::load('Comments');
 
     $comment_id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 返信用のコメント取得
     $comment = $comments_model->getReplyComment($blog_id, $comment_id);
@@ -189,7 +185,7 @@ class CommentsController extends AdminController
         // 元の画面へ戻る
         $back_url = $request->get('back_url');
         if (!empty($back_url)) {
-          $this->redirect($back_url);
+          $this->redirect($request, $back_url);
         }
         $this->redirectBack(array('action'=>'index'));
       }
@@ -203,16 +199,15 @@ class CommentsController extends AdminController
   /**
   * ajax用の返信
   */
-  public function ajax_reply(){
+  public function ajax_reply(Request $request){
     Config::set('DEBUG', 0);
     $this->layout = 'ajax.php';
 
-    $request = Request::getInstance();
     /** @var CommentsModel $comments_model */
     $comments_model = Model::load('Comments');
 
     $comment_id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 返信用のコメント取得
     $comment = $comments_model->getReplyComment($blog_id, $comment_id);
@@ -250,12 +245,10 @@ class CommentsController extends AdminController
   /**
    * 削除
    */
-  public function delete()
+  public function delete(Request $request)
   {
-    $request = Request::getInstance();
-
     // 削除処理
-    if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+    if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
       $this->setInfoMessage(__('I removed the comment'));
     } else {
       $this->setErrorMessage(__('I failed to remove'));
@@ -264,7 +257,7 @@ class CommentsController extends AdminController
     // 元の画面へ戻る
     $back_url = $request->get('back_url');
     if (!empty($back_url)) {
-      $this->redirect($back_url);
+      $this->redirect($request, $back_url);
     }
     $this->redirectBack(array('action'=>'index'));
   }

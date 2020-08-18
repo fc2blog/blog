@@ -4,7 +4,7 @@
 
   <input type="hidden" name="sig" value="<?php echo \Fc2blog\Web\Session::get('sig'); ?>" />
 
-  <?php $this->display('Entries/form.php'); ?>
+  <?php $this->display($request, 'Entries/form.php'); ?>
 
 </form>
 

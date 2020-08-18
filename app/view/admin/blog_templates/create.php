@@ -2,23 +2,23 @@
 
 <form method="POST" id="sys-blog-template-form" class="admin-form">
 
-  <?php echo \Fc2blog\Web\Html::input('blog_template[device_type]', 'hidden'); ?>
-  <?php echo \Fc2blog\Web\Html::input('sig', 'hidden', array('value'=>\Fc2blog\Web\Session::get('sig'))); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'blog_template[device_type]', 'hidden'); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'sig', 'hidden', array('value'=>\Fc2blog\Web\Session::get('sig'))); ?>
   <?php if (isset($errors['blog_template']['device_type'])): ?><p class="error"><?php echo $errors['blog_template']['device_type']; ?></p><?php endif; ?>
 
   <h3><?php echo __('Template name'); ?></h3>
   <div>
-    <?php echo \Fc2blog\Web\Html::input('blog_template[title]', 'text'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'blog_template[title]', 'text'); ?>
     <?php if (isset($errors['blog_template']['title'])): ?><p class="error"><?php echo $errors['blog_template']['title']; ?></p><?php endif; ?>
   </div>
   <h3>HTML</h3>
   <div>
-    <?php echo \Fc2blog\Web\Html::input('blog_template[html]', 'textarea'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'blog_template[html]', 'textarea'); ?>
     <?php if (isset($errors['blog_template']['html'])): ?><p class="error"><?php echo $errors['blog_template']['html']; ?></p><?php endif; ?>
   </div>
   <h3>CSS</h3>
   <div>
-    <?php echo \Fc2blog\Web\Html::input('blog_template[css]', 'textarea'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'blog_template[css]', 'textarea'); ?>
     <?php if (isset($errors['blog_template']['css'])): ?><p class="error"><?php echo $errors['blog_template']['css']; ?></p><?php endif; ?>
   </div>
 
@@ -36,7 +36,7 @@ $(function(){
 
   // プレビュー処理を行う
   $('#sys-blog-template-form-preview').click(function(){
-    var action = '<?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Web\Session::get('blog_id')), false, true); ?>';
+    var action = '<?php echo \Fc2blog\App::userURL($request,array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>\Fc2blog\Web\Session::get('blog_id')), false, true); ?>';
     $('#sys-blog-template-form').prop('action', action);
     $('#sys-blog-template-form').prop('target', '_preview');
     $('#sys-blog-template-form').submit();
@@ -51,5 +51,5 @@ $(function(){
 });
 </script>
 
-<?php echo $this->display('BlogTemplates/form_js.php'); ?>
+<?php echo $this->display($request, 'BlogTemplates/form_js.php'); ?>
 

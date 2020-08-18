@@ -106,7 +106,7 @@ function posted_at_select_to_input(){
           <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('entry[password]', 'text'); ?></div>
           <p>
             <?php echo __('They are authenticated with a password of the entire If empty');  ?><br />
-            <a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank"><?php echo __('Passwords in the whole place'); ?></a><br />
+            <a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank"><?php echo __('Passwords in the whole place'); ?></a><br />
           </p>
           <?php if (isset($errors['entry']['password'])): ?><p class="error"><?php echo $errors['entry']['password']; ?></p><?php endif; ?>
         </div>
@@ -170,7 +170,7 @@ function posted_at_select_to_input(){
   <h2 class="accordion_head"><i class="accordion_icon btn_icon"></i><?php echo __('Category'); ?></h2>
   <div class="accordion_inner" style="display: none;">
     <div class="form_area">
-      <?php $this->display('Categories/ajax_add.php', array()); ?>
+      <?php $this->display($request, 'Categories/ajax_add.php', array()); ?>
     </div><!--/form_area-->
   </div><!--/accordion_inner-->
   <h2 class="accordion_head"><i class="accordion_icon btn_icon"></i><?php echo __('User tags'); ?></h2>
@@ -182,7 +182,7 @@ function posted_at_select_to_input(){
         <ul id="sys-add-tags"></ul>
         <hr id="add-tag-line" />
         <ul id="sys-use-well-tags">
-          <?php $tags = \Fc2blog\Model\Model::load('Tags')->getWellUsedTags($this->getBlogId()); ?>
+          <?php $tags = \Fc2blog\Model\Model::load('Tags')->getWellUsedTags($this->getBlogId($request)); ?>
           <?php foreach($tags as $key => $tag): ?><li><?php echo h($tag); ?></li><?php endforeach; ?>
         </ul>
       </div><!--/form_contents-->
@@ -197,5 +197,5 @@ function posted_at_select_to_input(){
   </ul>
 </div>
 
-<?php $this->display('Entries/editor_js.php', array()); ?>
+<?php $this->display($request, 'Entries/editor_js.php', array()); ?>
 

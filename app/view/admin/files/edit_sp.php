@@ -17,8 +17,8 @@
   <input type="hidden" name="sig" value="<?php echo \Fc2blog\Web\Session::get('sig'); ?>" />
   <div class="btn_area">
     <div class="up_file_btn">
-      <?php echo \Fc2blog\Web\Html::input('file[name]', 'text', array('id'=>'sys-file-name')); ?>
-      <?php echo \Fc2blog\Web\Html::input('file[file]', 'file', array('style'=>'opacity: 0; position: absolute; width: 120px;', 'onchange'=>"$('#sys-file-name').val($(this).val().split('\\\\').pop());")); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'file[name]', 'text', array('id'=>'sys-file-name')); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'file[file]', 'file', array('style'=>'opacity: 0; position: absolute; width: 120px;', 'onchange'=>"$('#sys-file-name').val($(this).val().split('\\\\').pop());")); ?>
       <button type="button" class="lineform_btn touch" onclick="$(this).prev().click();" style="width: 120px;" /><?php echo __('File selection'); ?></button>
     </div>
     <?php if (isset($errors['file']['ext'])): ?>
@@ -36,7 +36,7 @@
 
 <div class="btn_area">
   <ul class="btn_area_inner">
-    <li><a class="btn_contents touch" href="<?php if($request->isArgs('back_url')): ?><?php echo $request->get('back_url'); ?><?php else: ?><?php echo \Fc2blog\Web\Html::url(array('action'=>'upload')); ?><?php endif; ?>"><i class="return_icon btn_icon"></i><?php echo __('I Back to List'); ?></a></li>
+    <li><a class="btn_contents touch" href="<?php if($request->isArgs('back_url')): ?><?php echo $request->get('back_url'); ?><?php else: ?><?php echo \Fc2blog\Web\Html::url($request, array('action'=>'upload')); ?><?php endif; ?>"><i class="return_icon btn_icon"></i><?php echo __('I Back to List'); ?></a></li>
     <li><a class="btn_contents touch" href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$file['id'], 'back_url'=>ue($request->get('back_url')), 'sig'=>ue(\Fc2blog\Web\Session::get('sig')))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><i class="delete_icon btn_icon"></i><?php echo __('Delete'); ?></a></li>
   </ul>
 </div>

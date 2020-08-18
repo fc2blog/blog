@@ -1,10 +1,10 @@
-<?php $blog = $this->getBlog($this->getBlogId()); ?>
+<?php $blog = $this->getBlog($this->getBlogId($request)); ?>
 <header><h1 class="sh_heading_main_b"><?php echo $blog['name']; ?></h1></header>
 <div id="top_menu_wrap">
   <ul id="top_menu">
-    <li class="main_btn_list touch"><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries','action'=>'create')); ?>" class="main_btn"><i class="editor_btn"></i><?php echo __('New article'); ?></a></li>
-    <li class="main_btn_list touch"><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'index')); ?>" class="main_btn"><i class="entry_btn"></i><?php echo __('List of articles'); ?></a></li>
-    <li class="main_btn_list touch"><a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($blog['id'], \Fc2blog\Config::get('DOMAIN_USER')); ?>/<?php echo $this->getBlogId(); ?>/" target="_blank" class="main_btn"><i class="myblog_btn"></i><?php echo __('Checking the blog'); ?></a></li>
+    <li class="main_btn_list touch"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Entries','action'=>'create')); ?>" class="main_btn"><i class="editor_btn"></i><?php echo __('New article'); ?></a></li>
+    <li class="main_btn_list touch"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Entries', 'action'=>'index')); ?>" class="main_btn"><i class="entry_btn"></i><?php echo __('List of articles'); ?></a></li>
+    <li class="main_btn_list touch"><a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($blog['id'], \Fc2blog\Config::get('DOMAIN_USER')); ?>/<?php echo $this->getBlogId($request); ?>/" target="_blank" class="main_btn"><i class="myblog_btn"></i><?php echo __('Checking the blog'); ?></a></li>
   </ul>
 </div>
 
@@ -15,7 +15,7 @@
 <?php if ($unread_count > 0) : ?>
   <?php $is_notice = true; ?>
   <li class="link_list_item">
-    <a href="<?php echo \Fc2blog\Web\Html::url(array(
+    <a href="<?php echo \Fc2blog\Web\Html::url($request, array(
       'controller'   => 'Comments',
       'action'       => 'index',
       'reply_status' => \Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD'),
@@ -26,7 +26,7 @@
 <?php if ($unapproved_count > 0) : ?>
   <?php $is_notice = true; ?>
   <li class="link_list_item">
-    <a href="<?php echo \Fc2blog\Web\Html::url(array(
+    <a href="<?php echo \Fc2blog\Web\Html::url($request, array(
       'controller'  => 'Comments',
       'action'      => 'index',
       'open_status' => \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING'),

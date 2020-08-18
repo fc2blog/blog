@@ -18,10 +18,8 @@ class CommonController extends AdminController
   /**
   * 言語設定変更
   */
-  public function lang()
+  public function lang(Request $request)
   {
-    $request = Request::getInstance();
-
     // 言語の設定
     $lang = $request->get('lang');
     if ($language= Config::get('LANGUAGES.' . $lang)) {
@@ -40,10 +38,8 @@ class CommonController extends AdminController
   /**
   * デバイス変更
   */
-  public function device_change()
+  public function device_change(Request $request)
   {
-    $request = Request::getInstance();
-
     // デバイスの設定
     $device_type = 0;
     $device = $request->get('device');
@@ -64,20 +60,20 @@ class CommonController extends AdminController
   */
   public function initial()
   {
-    $setting = Model::load('BlogSettings')->findByBlogId($this->getBlogId());
+    $setting = Model::load('BlogSettings')->findByBlogId($this->getBlogId($request));
     if (is_array($setting)) {
       switch ($setting['start_page']) {
         default:
         case Config::get('BLOG.START_PAGE.NOTICE'):
-          $this->redirect(array('controller' => 'Common', 'action' => 'notice'));
+          $this->redirect($request, array('controller' => 'Common', 'action' => 'notice'));
           break;
 
         case Config::get('BLOG.START_PAGE.ENTRY'):
-          $this->redirect(array('controller' => 'Entries', 'action' => 'create'));
+          $this->redirect($request, array('controller' => 'Entries', 'action' => 'create'));
           break;
       }
     } else {
-      $this->redirect(array('controller' => 'Common', 'action' => 'notice'));
+      $this->redirect($request, array('controller' => 'Common', 'action' => 'notice'));
     }
   }
 
@@ -91,7 +87,7 @@ class CommonController extends AdminController
   */
   public function notice()
   {
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     $comments_model = Model::load('Comments');
     $this->set('unread_count', $comments_model->getUnreadCount($blog_id));
@@ -101,11 +97,9 @@ class CommonController extends AdminController
   /**
   * インストール画面
   */
-  public function install()
+  public function install(Request $request)
   {
     $this->layout = 'default_nomenu.php';
-
-    $request = Request::getInstance();
 
     $state = $request->get('state', 0);
 
@@ -145,7 +139,7 @@ class CommonController extends AdminController
 
         if (count($table)) {
           // 既にDB登録完了
-          $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=2');
+          $this->redirect($request, Config::get('BASE_DIRECTORY') . 'install.php?state=2');
         }
         $sql_path = Config::get('APP_DIR') . 'db/0_initialize.sql';
         $sql = file_get_contents($sql_path);
@@ -158,12 +152,12 @@ class CommonController extends AdminController
         // 初期公式プラグインを追加
         Model::load('Plugins')->addInitialOfficialPlugin();
 
-        $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=2');
+        $this->redirect($request, Config::get('BASE_DIRECTORY') . 'install.php?state=2');
 
       case 2:  // 管理者登録
         if (Model::load('Users')->isExistAdmin()) {
           // 既にユーザー登録完了
-          $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=3');
+          $this->redirect($request, Config::get('BASE_DIRECTORY') . 'install.php?state=3');
         }
 
         break;
@@ -196,7 +190,7 @@ class CommonController extends AdminController
       $blog_data['user_id'] = $users_model->insert($user_data);
       if ($blog_data['user_id'] && $blog_id=$blogs_model->insert($blog_data)) {
         $this->setInfoMessage(__('User registration is completed'));
-        $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=3');
+        $this->redirect($request, Config::get('BASE_DIRECTORY') . 'install.php?state=3');
       } else {
         // ブログ作成失敗時には登録したユーザーを削除
         $users_model->deleteById($blog_data['user_id']);

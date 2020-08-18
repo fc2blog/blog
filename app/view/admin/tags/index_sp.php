@@ -16,7 +16,7 @@
 <ul class="link_list">
   <?php foreach($tags as $tag): ?>
   <li class="link_list_item">
-    <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'edit', 'id'=>$tag['id'])); ?>" class="common_next_link next_bg">
+    <a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'edit', 'id'=>$tag['id'])); ?>" class="common_next_link next_bg">
      <dl>
        <dt class="item_title"><?php echo h($tag['name']); ?></dt>
        <dd class="state"><i class="entry_state detail_icon"></i><?php echo $tag['count']; ?></dd>
@@ -26,5 +26,5 @@
   <?php endforeach; ?>
 </ul>
 
-<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+<?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 

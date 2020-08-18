@@ -12,7 +12,7 @@ class EntriesController extends CronController
    */
   public function updateOpenStatus()
   {
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     if (empty($blog_id)) {
       // blog_idが指定されていない場合は処理しない
       // cron実行時であればblog_id無し(全体)で処理を行う

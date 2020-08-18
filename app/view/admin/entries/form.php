@@ -26,7 +26,7 @@
   <h3 class="accordion_head" id="sys-accordion-setting"><?php echo __('Entry settings'); ?><span>▼<?php echo __('Click to open/close'); ?></span></h3>
   <div <?php if(\Fc2blog\Web\Cookie::get('js_entry_hide_setting')){echo 'style="display: none;"';} ?>>
 
-    <?php $this->display('Categories/ajax_add.php', array()); ?>
+    <?php $this->display($request, 'Categories/ajax_add.php', array()); ?>
 
     <table>
       <tbody>
@@ -37,7 +37,7 @@
             <input type="button" value="<?php echo __('Add'); ?>" id="sys-add-tag-button" />
             <ul id="sys-add-tags"></ul>
             <ul id="sys-use-well-tags">
-            <?php $tags = \Fc2blog\Model\Model::load('Tags')->getWellUsedTags($this->getBlogId()); ?>
+            <?php $tags = \Fc2blog\Model\Model::load('Tags')->getWellUsedTags($this->getBlogId($request)); ?>
             <?php foreach($tags as $key => $tag): ?><li><?php echo h($tag); ?></li><?php endforeach; ?>
             </ul>
           </td>
@@ -69,7 +69,7 @@
             <?php if (isset($errors['entry']['password'])): ?><p class="error"><?php echo $errors['entry']['password']; ?></p><?php endif; ?>
             <p>
               <?php echo __('They are authenticated with a password of the entire If empty');  ?><br />
-              <a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank"><?php echo __('Passwords in the whole place'); ?></a><br />
+              <a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank"><?php echo __('Passwords in the whole place'); ?></a><br />
             </p>
           </td>
         </tr>
@@ -101,5 +101,5 @@
   <input type="button" value="<?php echo __('Preview'); ?>" id="sys-entry-form-preview" />
 </p>
 
-<?php $this->display('Entries/editor_js.php', array()); ?>
+<?php $this->display($request, 'Entries/editor_js.php', array()); ?>
 
