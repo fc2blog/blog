@@ -46,7 +46,11 @@ class Router
         $request->set($args_action, $paths[2]);
       }
 
-    } elseif (preg_match('|\A/_for_unit_test_/|u', $request->uri)) {
+    } elseif (preg_match('|\A/_for_unit_test_/|u', $request->uri)) { // Test routings
+
+      Config::set('APP_PREFIX', 'Test');
+      $this->className = \Fc2blog\Web\Controller\Test\CommonController::class; // default controller.
+
       // 管理用のパラメータを設定する
       $path = $request->getPath(); // full path with out query args.
       $paths = $request->getPaths(); // explode with `/`
@@ -63,18 +67,20 @@ class Router
       // → /_for_unit_test_/phpinfo
       //     ^- path[0]      ^- path[1]
       if ($paths[1] === "phpinfo") {
-        $request->set($args_action, "phpinfo");
+        $this->methodName = "phpinfo";
 
-      }else if($paths[1] === "redirect_test_no_full_url"){
-        $request->set($args_action, "redirect_test_no_full_url");
+      } else if ($paths[1] === "redirect_test_no_full_url") {
+        $this->methodName = "redirect_test_no_full_url";
 
-      }else if($paths[1] === "redirect_test_full_url"){
-        $request->set($args_action, "redirect_test_full_url");
+      } else if ($paths[1] === "redirect_test_full_url") {
+        $this->methodName = "redirect_test_full_url";
 
       }
 
-    } else {
-      //user
+    } else { // User Routings
+
+      // TODO if文ベースのルーターから、なんらかのルーターに切り替えたい（Config全廃が前提）
+
       Config::set('APP_PREFIX', 'User');
       $this->className = BlogsController::class; // default controller.
 
@@ -85,7 +91,7 @@ class Router
       $args_controller = "mode";
       $args_action = "process";
 
-      if($request->get($args_controller)=="common"){
+      if ($request->get($args_controller) == "common") {
         $this->className = CommonController::class;
       }
 
@@ -103,18 +109,18 @@ class Router
 
       // 記事詳細
       if ($request->rawHasGet('no') && $request->isGet()) {
-        $this->methodName =  'view';
+        $this->methodName = 'view';
         $request->set('id', $request->get('no'));
       }
       if ($request->isArgs('no') && $request->isArgs('m2')) {
-        $this->methodName =  'view';
+        $this->methodName = 'view';
         $request->set('id', $request->get('no'));
         return;
       }
 
       // プラグイン単体
       if ($request->rawHasGet('mp')) {
-        $this->methodName =  'plugin';
+        $this->methodName = 'plugin';
         $request->set('id', $request->get('mp'));
       }
 
@@ -140,7 +146,7 @@ class Router
 
       // 記事詳細
       if (isset($paths[1]) && preg_match('/^blog-entry-([0-9]+)\.html$/u', $paths[1], $matches)) {
-        $this->methodName =  'view';
+        $this->methodName = 'view';
         $request->set('id', $matches[1]);
       }
 
@@ -165,21 +171,20 @@ class Router
         $request->set('ext', $matches[6]);
       }
 
-      if($this->methodName === ""){
+      if ($this->methodName === "") {
         // 一つもかからなかったので
         $this->methodName = $request->get($args_action);
       }
 
     }
-
   }
 
-  public function resolve():array
+  public function resolve(): array
   {
     return [
-      "request"=>$this->request,
-      "className"=>$this->className,
-      "methodName"=>$this->methodName
+      "request" => $this->request,
+      "className" => $this->className,
+      "methodName" => $this->methodName
     ];
   }
 }
