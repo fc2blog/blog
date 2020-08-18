@@ -30,8 +30,8 @@ UNLOCK TABLES;
 
 LOCK TABLES `blog_settings` WRITE;
 /*!40000 ALTER TABLE `blog_settings` DISABLE KEYS */;
-INSERT INTO `blog_settings` (`blog_id`, `comment_confirm`, `comment_display_approval`, `comment_display_private`, `comment_cookie_save`, `comment_captcha`, `comment_order`, `comment_display_count`, `comment_quote`, `entry_order`, `entry_display_count`, `entry_recent_display_count`, `entry_password`, `start_page`, `template_pc_reply_type`, `template_mb_reply_type`, `template_sp_reply_type`, `template_tb_reply_type`) VALUES ('testblog1',0,0,0,1,1,0,10,0,1,5,5,NULL,0,1,1,1,1);
-INSERT INTO `blog_settings` (`blog_id`, `comment_confirm`, `comment_display_approval`, `comment_display_private`, `comment_cookie_save`, `comment_captcha`, `comment_order`, `comment_display_count`, `comment_quote`, `entry_order`, `entry_display_count`, `entry_recent_display_count`, `entry_password`, `start_page`, `template_pc_reply_type`, `template_mb_reply_type`, `template_sp_reply_type`, `template_tb_reply_type`) VALUES ('testblog2',0,0,0,1,1,0,10,0,1,5,5,NULL,0,1,1,1,1);
+INSERT INTO `blog_settings` (`blog_id`, `comment_confirm`, `comment_display_approval`, `comment_display_private`, `comment_cookie_save`, `comment_captcha`, `comment_order`, `comment_display_count`, `comment_quote`, `entry_order`, `entry_display_count`, `entry_recent_display_count`, `entry_password`, `start_page`, `template_pc_reply_type`, `template_sp_reply_type`) VALUES ('testblog1',0,0,0,1,1,0,10,0,1,5,5,NULL,0,1,1);
+INSERT INTO `blog_settings` (`blog_id`, `comment_confirm`, `comment_display_approval`, `comment_display_private`, `comment_cookie_save`, `comment_captcha`, `comment_order`, `comment_display_count`, `comment_quote`, `entry_order`, `entry_display_count`, `entry_recent_display_count`, `entry_password`, `start_page`, `template_pc_reply_type`, `template_sp_reply_type`) VALUES ('testblog2',0,0,0,1,1,0,10,0,1,5,5,NULL,0,1,1);
 /*!40000 ALTER TABLE `blog_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,8 +58,8 @@ UNLOCK TABLES;
 
 LOCK TABLES `blogs` WRITE;
 /*!40000 ALTER TABLE `blogs` DISABLE KEYS */;
-INSERT INTO `blogs` (`id`, `user_id`, `name`, `nickname`, `introduction`, `template_pc_id`, `template_mb_id`, `template_sp_id`, `template_tb_id`, `timezone`, `open_status`, `ssl_enable`, `redirect_status_code`, `blog_password`, `last_posted_at`, `created_at`, `updated_at`) VALUES ('testblog1',1,'testblog1','testnick1','',1,2,3,4,'Asia/Tokyo',0,1,302,'','2020-07-24 12:09:55','2020-07-24 11:48:03','2020-07-24 12:08:11');
-INSERT INTO `blogs` (`id`, `user_id`, `name`, `nickname`, `introduction`, `template_pc_id`, `template_mb_id`, `template_sp_id`, `template_tb_id`, `timezone`, `open_status`, `ssl_enable`, `redirect_status_code`, `blog_password`, `last_posted_at`, `created_at`, `updated_at`) VALUES ('testblog2',1,'testblog2','testnick2',NULL,1,2,3,4,'Asia/Tokyo',0,0,301,NULL,'2020-07-24 12:10:46','2020-07-24 12:09:11','2020-07-24 12:09:11');
+INSERT INTO `blogs` (`id`, `user_id`, `name`, `nickname`, `introduction`, `template_pc_id`, `template_sp_id`, `timezone`, `open_status`, `ssl_enable`, `redirect_status_code`, `blog_password`, `last_posted_at`, `created_at`, `updated_at`) VALUES ('testblog1',1,'testblog1','testnick1','',1,3,'Asia/Tokyo',0,1,302,'','2020-07-24 12:09:55','2020-07-24 11:48:03','2020-07-24 12:08:11');
+INSERT INTO `blogs` (`id`, `user_id`, `name`, `nickname`, `introduction`, `template_pc_id`, `template_sp_id`, `timezone`, `open_status`, `ssl_enable`, `redirect_status_code`, `blog_password`, `last_posted_at`, `created_at`, `updated_at`) VALUES ('testblog2',1,'testblog2','testnick2',NULL,1,3,'Asia/Tokyo',0,0,301,NULL,'2020-07-24 12:10:46','2020-07-24 12:09:11','2020-07-24 12:09:11');
 /*!40000 ALTER TABLE `blogs` ENABLE KEYS */;
 UNLOCK TABLES;
 

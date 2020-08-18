@@ -123,65 +123,49 @@ $config['APP_PREFIX'] = null;
 
 // デバイスタイプ
 $config['DEVICE_PC'] = 1;   // PC
-$config['DEVICE_MB'] = 2;   // 携帯
 $config['DEVICE_SP'] = 4;   // スマフォ
-$config['DEVICE_TB'] = 8;   // タブレット
 
 // デバイスの値一覧
 $config['DEVICES'] = array(
-  $config['DEVICE_PC'], $config['DEVICE_MB'], $config['DEVICE_SP'], $config['DEVICE_TB'],
+  $config['DEVICE_PC'],
+  $config['DEVICE_SP'],
 );
 
 // デバイス毎のファイル修飾子
 $config['DEVICE_PREFIX'] = array(
   1 => '_pc',   // PC
-  2 => '_mb',   // 携帯
   4 => '_sp',   // スマフォ
-  8 => '_tb',   // タブレット
 );
 
 // デバイス毎のFC2APIキー
 $config['DEVICE_FC2_KEY'] = array(
   1 => 'pc',   // PC
-  2 => 'mb',   // 携帯
   4 => 'sp',   // スマフォ
-  8 => 'tb',   // タブレット
 );
 
 // デバイス毎の名称
 $config['DEVICE_NAME'] = array(
   1 => __('PC'),             // PC
-  2 => __('Mobile phone'),   // 携帯
   4 => __('Smartphone'),     // スマフォ
-  8 => __('Tablet'),         // タブレット
 );
 
 // ブログテンプレートのデバイス毎のカラム名
 $config['BLOG_TEMPLATE_COLUMN'] = array(
   1 => 'template_pc_id',
-  2 => 'template_mb_id',
   4 => 'template_sp_id',
-  8 => 'template_tb_id',
 );
 
 // ブログテンプレートのデバイス毎のリプライタイプカラム名
 $config['BLOG_TEMPLATE_REPLY_TYPE_COLUMN'] = array(
   1 => 'template_pc_reply_type',
-  2 => 'template_mb_reply_type',
   4 => 'template_sp_reply_type',
-  8 => 'template_tb_reply_type',
 );
 
 // 許可デバイス一覧
 $config['ALLOW_DEVICES'] = array(
-  $config['DEVICE_PC'], $config['DEVICE_SP'],
+  $config['DEVICE_PC'],
+  $config['DEVICE_SP'],
 );
-// 許可していないデバイス分を表示から削除
-foreach ($config['DEVICE_NAME'] as $key => $value) {
-  if (!in_array($key, $config['ALLOW_DEVICES'])) {
-    unset($config['DEVICE_NAME'][$key]);
-  }
-}
 
 // アプリ用定数
 $config['APP'] = array(

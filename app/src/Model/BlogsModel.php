@@ -179,7 +179,10 @@ class BlogsModel extends Model
   */
   public static function getTemplateIds($blog){
     $columns = Config::get('BLOG_TEMPLATE_COLUMN');
-    return array($blog[$columns[1]], $blog[$columns[2]], $blog[$columns[4]], $blog[$columns[8]]);
+    return [
+      $blog[$columns[1]],
+      $blog[$columns[4]],
+    ];
   }
 
   /**
@@ -302,16 +305,14 @@ class BlogsModel extends Model
     // ブログ用の設定作成
     (new BlogSettingsModel())->insert(['blog_id' => $id]);
 
-    // 初期のテンプレートを作成する(pc,mb,sp,tb)
+    // 初期のテンプレートを作成する(pc,sp)
     $blog_templates_model = new BlogTemplatesModel();
 
     $blog_data = [];
 
     $devices = [
       'template_pc_id' => Config::get('DEVICE_PC'),
-      'template_mb_id' => Config::get('DEVICE_MB'),
       'template_sp_id' => Config::get('DEVICE_SP'),
-      'template_tb_id' => Config::get('DEVICE_TB'),
     ];
 
     $blog_templates_data_common = [
@@ -326,7 +327,6 @@ class BlogsModel extends Model
 
       if (!file_exists($template_path) || !file_exists($css_path)) {
         // 指定のデバイスに対応するテンプレーが無いので、PC用にフォールバック
-        // TODO: 携帯（ガラケー）向けのテンプレートが実質存在しないのだが大丈夫なのだろうか？
         $template_path = BlogTemplatesModel::getPathDefaultTemplate();
         $css_path = BlogTemplatesModel::getPathDefaultCss();
       }
@@ -350,7 +350,7 @@ class BlogsModel extends Model
     $blogs_model = new BlogsModel();
     $blog = $blogs_model->findById($blog_id);
 
-    // 初期のテンプレートを作成する(pc,mb,sp,tb)
+    // 初期のテンプレートを作成する(pc,sp)
     $blog_templates_model = new BlogTemplatesModel();
 
     $blog_templates_data_common = [
@@ -361,9 +361,7 @@ class BlogsModel extends Model
 
     $devices_flipped = array_flip([
       'template_pc_id' => Config::get('DEVICE_PC'),
-      'template_mb_id' => Config::get('DEVICE_MB'),
       'template_sp_id' => Config::get('DEVICE_SP'),
-      'template_tb_id' => Config::get('DEVICE_TB'),
     ]);
 
     $blog_templates = $blog_templates_model->getTemplatesOfDevice($blog_id);
@@ -590,6 +588,4 @@ class BlogsModel extends Model
 
     return $blog_array['redirect_status_code'];
   }
-
 }
-
