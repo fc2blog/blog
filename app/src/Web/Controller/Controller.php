@@ -19,7 +19,7 @@ abstract class Controller
   private $data = array();             // テンプレートへ渡す変数の保存領域
   protected $layout = 'default.php';  // 表示ページのレイアウトテンプレート
   protected $output = '';              // 出力タグ
-  protected $requset;
+  protected $request;
   public function __construct(Request $request, $method)
   {
     $this->requset = $request;
