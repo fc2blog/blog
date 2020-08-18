@@ -12,7 +12,4 @@ $router = new \Fc2blog\Web\Router\Router($request);
 
 $resolve = $router->resolve();
 
-//var_dump($request);
-//var_dump($resolve);
-
-$controller = new $resolve['className']($request, $resolve['methodName']);
+new $resolve['className']($request, $resolve['methodName']);
