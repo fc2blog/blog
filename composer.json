@@ -19,12 +19,16 @@
   },
   "autoload": {
     "psr-4": {
-      "Fc2blog\\Tests\\": "tests/",
       "Fc2blog\\": "app/src/"
     },
     "files": [
       "app/core/common_functions.php"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Fc2blog\\Tests\\": "tests/"
+    }
   },
   "scripts": {
     "test": "phpunit"
