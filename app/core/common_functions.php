@@ -104,7 +104,9 @@ function snakeCase($camel_case)
  * ルーティング用メソッド
  * @param string $config_file_name
  * @return \Fc2blog\Web\Request
+ * @deprecated
  */
+// DELME
 function getRouting(string $config_file_name=""):\Fc2blog\Web\Request
 {
   $request = new \Fc2blog\Web\Request();

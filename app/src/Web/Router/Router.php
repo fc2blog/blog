@@ -22,6 +22,11 @@ class Router
   {
     // TODO if文ベースのルーターから、なんらかのルーターに切り替えたい（Config全廃が前提）
 
+    // TODO Denyの実装
+//    $denyClass = $prefix ? $prefix . 'Controller' : 'AppController';
+//    $denyMethod = ['process', 'display', 'fetch', 'set']; // このメソッドは外部からコールできない、Denyリスト
+//    $denyPattern = ['CommonController' => ['install']]; // このメソッドは外部からコールできない、Denyリスト
+
     $this->request = $request;
     // favicon.ico アクセス時に404をレスポンスし、ブラウザにリトライさせない。
     // しない場合、404扱いからのブログページへリダイレクトが発生し、無駄な資源を消費する。
