@@ -157,16 +157,13 @@ class App
     if ($request->isArgs('sp')) {
       return Config::get('DEVICE_SP');
     }
-    if ($request->isArgs('tb')) {
-      return Config::get('DEVICE_TB');
-    }
-    if ($request->isArgs('m')) {
-      return Config::get('DEVICE_MB');
-    }
 
     // Cookieからデバイスタイプを取得
     $device_type = Cookie::get('device');
-    $devices = array(Config::get('DEVICE_PC'), Config::get('DEVICE_MB'), Config::get('DEVICE_SP'), Config::get('DEVICE_TB'));
+    $devices = [
+      Config::get('DEVICE_PC'),
+      Config::get('DEVICE_SP'),
+    ];
     if (!empty($device_type) && in_array($device_type, $devices)) {
       return $device_type;
     }
@@ -184,7 +181,7 @@ class App
   }
 
   /**
-  * 現在のデバイスタイプをPC,MB,SP,TBの形で取得する
+  * 現在のデバイスタイプをPC,SPの形で取得する
   */
   public static function getDeviceKey()
   {
@@ -192,9 +189,7 @@ class App
     switch ($device_type) {
       default:
       case 1: return 'PC';
-      case 2: return 'MB';
       case 4: return 'SP';
-      case 8: return 'TB';
     }
   }
 

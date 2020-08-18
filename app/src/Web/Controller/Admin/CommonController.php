@@ -49,10 +49,7 @@ class CommonController extends AdminController
     $device = $request->get('device');
     switch ($device) {
       case 'pc': $device_type = Config::get('DEVICE_PC'); break;
-      case 'm':
-      case 'mb':  $device_type = Config::get('DEVICE_MB'); break;
       case 'sp': $device_type = Config::get('DEVICE_SP'); break;
-      case 'tb': $device_type = Config::get('DEVICE_TB'); break;
       default:
         Cookie::set('device', null);
         $this->redirectBack(array('controller'=>'entries', 'action'=>'index'));

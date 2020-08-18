@@ -26,10 +26,12 @@ class BlogTemplatesController extends AdminController
     $device_type = $request->get('device_type', 0);
 
     $blog = $this->getBlog($blog_id);
-    $this->set('template_ids', Model::load('Blogs')->getTemplateIds($blog));
+    $blogs_model = new BlogsModel();
+    $this->set('template_ids', $blogs_model->getTemplateIds($blog));
 
     // デバイス毎に分けられたテンプレート一覧を取得
-    $device_blog_templates = Model::load('BlogTemplates')->getTemplatesOfDevice($blog_id, $device_type);
+    $blog_template = new BlogTemplatesModel();
+    $device_blog_templates = $blog_template->getTemplatesOfDevice($blog_id, $device_type);
     $this->set('device_blog_templates', $device_blog_templates);
   }
 
