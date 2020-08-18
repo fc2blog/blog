@@ -4,6 +4,7 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\CategoriesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -17,6 +18,7 @@ class CategoriesController extends AdminController
   public function create()
   {
     $request = Request::getInstance();
+    /** @var CategoriesModel $categories_model */
     $categories_model = Model::load('Categories');
 
     $blog_id = $this->getBlogId();
@@ -65,6 +67,7 @@ class CategoriesController extends AdminController
   public function edit()
   {
     $request = Request::getInstance();
+    /** @var CategoriesModel $categories_model */
     $categories_model = Model::load('Categories');
 
     $id = $request->get('id');
@@ -136,6 +139,7 @@ class CategoriesController extends AdminController
     Config::set('DEBUG', 0);    // デバッグなしに変更
 
     $request = Request::getInstance();
+    /** @var CategoriesModel $categories_model */
     $categories_model = Model::load('Categories');
 
     $blog_id = $this->getBlogId();

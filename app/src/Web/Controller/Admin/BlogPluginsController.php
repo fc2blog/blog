@@ -4,7 +4,9 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\BlogPluginsModel;
 use Fc2blog\Model\Model;
+use Fc2blog\Model\PluginsModel;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
@@ -92,6 +94,7 @@ class BlogPluginsController extends AdminController
   public function create()
   {
     $request = Request::getInstance();
+    /** @var BlogPluginsModel $blog_plugins_model */
     $blog_plugins_model = Model::load('BlogPlugins');
 
     // 初期表示時
@@ -127,6 +130,7 @@ class BlogPluginsController extends AdminController
   public function edit()
   {
     $request = Request::getInstance();
+    /** @var BlogPluginsModel $blog_plugins_model */
     $blog_plugins_model = Model::load('BlogPlugins');
 
     $id = $request->get('id');
@@ -191,6 +195,7 @@ class BlogPluginsController extends AdminController
   public function register()
   {
     $request = Request::getInstance();
+    /** @var PluginsModel $plugins_model */
     $plugins_model = Model::load('Plugins');
 
     $id = $request->get('id');

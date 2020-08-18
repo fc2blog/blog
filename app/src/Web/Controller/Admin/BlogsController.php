@@ -4,6 +4,7 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -52,6 +53,7 @@ class BlogsController extends AdminController
       return ;
     }
 
+    /** @var BlogsModel $blogs_model */
     $blogs_model = Model::load('Blogs');
 
     // 新規登録処理

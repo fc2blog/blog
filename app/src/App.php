@@ -10,6 +10,7 @@ use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
 use Exception;
 use InvalidArgumentException;
+use RuntimeException;
 
 class App
 {
@@ -374,9 +375,10 @@ class App
   }
 
   /**
-  * 現在選択中のメニューかどうかを返す
-  * @param params = array('entries/create', 'entries/edit', ...),
-  */
+   * 現在選択中のメニューかどうかを返す
+   * @param array params = array('entries/create', 'entries/edit', ...),
+   * @return bool
+   */
   public static function isActiveMenu($params)
   {
     // コントローラー名とメソッド名を取得
@@ -410,7 +412,7 @@ class App
    * @param int $length 0文字以上の要求文字数
    * @param string $charList 1文字以上のUTF-8文字列、ただし合成文字はサポートしない
    * @return string
-   * @throws Exception
+   * @throws RuntimeException
    */
   public static function genRandomString(int $length = 16, string $charList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345679_-'): string
   {
@@ -421,7 +423,11 @@ class App
     $charListLen = count($charList);
     $str = '';
     for ($i = 0; $i < $length; $i++) {
-      $str .= $charList[random_int(0, $charListLen - 1)];
+      try {
+        $str .= $charList[random_int(0, $charListLen - 1)];
+      }catch(Exception $e){
+        throw new RuntimeException("random_int thrown exception. {$e->getMessage()}");
+      }
     }
     return $str;
   }
@@ -430,7 +436,6 @@ class App
    * a-zA-Z0-9 範囲から、指定長のランダム文字列を生成する
    * @param int $length
    * @return string
-   * @throws Exception
    */
   public static function genRandomStringAlphaNum(int $length = 32): string
   {

@@ -3,6 +3,7 @@
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
+use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -63,6 +64,7 @@ class FilesController extends AdminController
   public function upload()
   {
     $request = Request::getInstance();
+    /** @var FilesModel $files_model */
     $files_model = Model::load('Files');
 
     $blog_id = $this->getBlogId();
@@ -141,6 +143,7 @@ class FilesController extends AdminController
   public function edit()
   {
     $request = Request::getInstance();
+    /** @var FilesModel $files_model */
     $files_model = Model::load('Files');
 
     $id = $request->get('id');

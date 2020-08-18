@@ -22,7 +22,7 @@ class Html
   public static function url($args=array(), $reused=false, $full_url=false){
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
-      $gets = Request::getInstance()->getGet();;
+      $gets = Request::getInstance()->getGet();
       unset($gets[Config::get('ARGS_CONTROLLER')]);
       unset($gets[Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);

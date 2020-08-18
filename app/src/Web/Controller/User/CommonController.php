@@ -2,6 +2,7 @@
 
 namespace Fc2blog\Web\Controller\User;
 
+use Exception;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Debug;
@@ -9,6 +10,7 @@ use Fc2blog\Lib\CaptchaImage;
 use Fc2blog\Lib\ThumbnailImageMaker;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
+use RuntimeException;
 
 class CommonController extends UserController
 {
@@ -66,12 +68,20 @@ class CommonController extends UserController
     if (strlen((string)getenv("DEBUG_FORCE_CAPTCHA_KEY")) === 4) {
       $key = (int)getenv("DEBUG_FORCE_CAPTCHA_KEY");
     } else {
-      $key = random_int(1000, 9999);
+      try {
+        $key = random_int(1000, 9999);
+      } catch (Exception $e) {
+        throw new RuntimeException("random_int thrown exception {$e->getMessage()}");
+      }
     }
     $this->setToken($key);    // トークン設定
     $isJa = Config::get('LANG')=='ja'; // 日本語以外は数字のみを表示
     $captcha = new CaptchaImage($size_x, $size_y, Config::get('PASSWORD_SALT'), $isJa);
-    $captcha->drawNumber($key, true);
+    try {
+      $captcha->drawNumber($key, true);
+    } catch (Exception $e) {
+      throw new RuntimeException("drawNumber failed. {$e->getMessage()} {$e->getFile()}:{$e->getLine()}");
+    }
 
     Config::set('DEBUG', 0);
     $this->layout = 'none.html';

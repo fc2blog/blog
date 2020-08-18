@@ -3,7 +3,9 @@
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\Config;
+use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
+use Fc2blog\Model\UsersModel;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
@@ -50,7 +52,9 @@ class UsersController extends AdminController
       return ;
     }
 
+    /** @var UsersModel $users_model */
     $users_model = Model::load('Users');
+    /** @var BlogsModel $blogs_model */
     $blogs_model = Model::load('Blogs');
 
     // ユーザーとブログの新規登録処理
@@ -81,6 +85,7 @@ class UsersController extends AdminController
   public function edit()
   {
     $request = Request::getInstance();
+    /** @var UsersModel $users_model */
     $users_model = Model::load('Users');
 
     $user_id = $this->getUserId();
@@ -144,6 +149,7 @@ class UsersController extends AdminController
       return ;
     }
 
+    /** @var UsersModel $users_model */
     $users_model = Model::load('Users');
 
     // ログインフォームのバリデート

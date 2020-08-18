@@ -97,7 +97,7 @@ class Session
   {
     $_SESSION = array();
     if (isset($_COOKIE[Config::get('SESSION_NAME')])) {
-      Cookie::remove(Config::get('SESSION_NAME'), '');
+      Cookie::remove(Config::get('SESSION_NAME'));
     }
     session_destroy();
   }
