@@ -237,22 +237,22 @@ class EntriesController extends UserController
 
     // 記事のプレビュー
     if ($request->get('entry')) {
-      return $this->preview_entry();
+      return $this->preview_entry($request);
     }
 
     // FC2テンプレートのプレビュー
     if ($request->get('fc2_id') && $request->get('device_type')) {
-      return $this->preview_fc2_template();
+      return $this->preview_fc2_template($request);
     }
 
     // テンプレートのプレビュー
     if ($request->get('blog_template') || $request->get('template_id')) {
-      return $this->preview_template();
+      return $this->preview_template($request);
     }
 
     // プラグインのプレビュー
     if ($request->get('blog_plugin') || $request->get('plugin_id')) {
-      return $this->preview_plugin();
+      return $this->preview_plugin($request);
     }
 
     // 当てはまらない場合は404画面を表示
@@ -748,7 +748,7 @@ class EntriesController extends UserController
 
     // 削除ボタンを押された場合の処理
     if ($request->get('comment.delete')) {
-      return $this->comment_delete();
+      return $this->comment_delete($request);
     }
 
     // Captcha画面の初期表示処理
