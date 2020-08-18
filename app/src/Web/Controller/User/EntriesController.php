@@ -296,7 +296,7 @@ class EntriesController extends UserController
     Model::load('BlogTemplates');
     $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
-      return 'Entries/syntax.html';
+      return 'Entries/syntax.php';
     }
 
     // FC2用のテンプレートで表示
@@ -336,7 +336,7 @@ class EntriesController extends UserController
     Model::load('BlogTemplates');
     $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
-      return 'Entries/syntax.html';
+      return 'Entries/syntax.php';
     }
 
     // FC2用のテンプレートで表示
@@ -372,7 +372,7 @@ class EntriesController extends UserController
     Model::load('BlogPlugins');
     $syntax = BlogPluginsModel::fc2PluginSyntax($contents);
     if ($syntax !== true) {
-      return 'Entries/syntax.html';
+      return 'Entries/syntax.php';
     }
 
     // プラグインのPHPファイル作成
@@ -926,7 +926,7 @@ class EntriesController extends UserController
     // CSSのURL
     $this->set('css_link', BlogTemplatesModel::getCssUrl($blog_id, $device_type, $html));
 
-    $this->layout = 'fc2_template.html';
+    $this->layout = 'fc2_template.php';
     return $templateFilePath;
   }
 

@@ -232,7 +232,7 @@ class EntriesController extends AdminController
     $this->set('files', $files);
     $this->set('paging', $paging);
 
-    $this->layout = 'ajax.html';
+    $this->layout = 'ajax.php';
   }
 
 }

@@ -84,7 +84,7 @@ class CommonController extends UserController
     }
 
     Config::set('DEBUG', 0);
-    $this->layout = 'none.html';
+    $this->layout = 'none.php';
   }
 
   /**

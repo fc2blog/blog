@@ -85,7 +85,7 @@ class BlogPluginsController extends AdminController
     $this->set('plugins', $plugins);
     $this->set('paging', $paging);
 
-    return 'BlogPlugins/plugin_search.html';
+    return 'BlogPlugins/plugin_search.php';
   }
 
   /**
@@ -368,7 +368,7 @@ class BlogPluginsController extends AdminController
 //    $blog_plugins_model->updateDisplay(array($id=>$request->get('display')), $blog_id);   // TODO:後でこちらに置き換え
 
     Config::set('DEBUG', 0);    // デバッグ設定を変更
-    $this->layout = 'ajax.html';
+    $this->layout = 'ajax.php';
   }
 
   /**
@@ -398,7 +398,7 @@ class BlogPluginsController extends AdminController
 
     $this->set('file_name', time() . '.json');
     $this->set('data', $json);
-    $this->layout = 'download.html';
+    $this->layout = 'download.php';
   }
 */
 }

@@ -146,7 +146,7 @@ class Debug{
     Config::set('DEBUG_TEMPLATE_VARS', 0);  // デバッグ用テンプレートには使用可能変数一覧は非表示
 
     // logsデータを元にdebug用htmlをfetch
-    $html = $controller->fetch('Common/debug.html', array('logs'=>self::getLogs()), false);
+    $html = $controller->fetch('Common/debug.php', array('logs'=>self::getLogs()), false);
 
     // 10分前以前のファイルは削除
     $cmd = "find " . Config::get('TEMP_DIR') . 'debug_html/' . " -amin +10 -name '*.html' | xargs rm -f";

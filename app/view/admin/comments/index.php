@@ -1,0 +1,192 @@
+<header><h2><?php echo __('List of comments'); ?></h2></header>
+
+<h3 id="entry_count">
+  <?php echo __('Comment search'); ?>[<?php echo __('Hits'); ?>&nbsp;<?php echo $paging['count']; ?><?php echo __(' results'); ?>]
+  <?php echo \Fc2blog\Web\Html::input('limit', 'select', array('options'=>\Fc2blog\Config::get('ENTRY.LIMIT_LIST'), 'default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+  <?php echo \Fc2blog\Web\Html::input('page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
+</h3>
+<p><?php echo __('You can search in accordance with the conditions of the past comments.'); ?></p>
+<div id="entry_search">
+  <form method="GET" id="sys-search-form">
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Comments" />
+    <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="index" />
+    <?php echo \Fc2blog\Web\Html::input('entry_id', 'hidden'); ?>
+    <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\CommentsModel::getOpenStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input('reply_status', 'select', array('options'=>array(''=>__('Reply state')) + \Fc2blog\Model\CommentsModel::getReplyStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+    <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
+    <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
+    <br /><?php echo \Fc2blog\Web\Html::input('keyword', 'text'); ?>
+    <input type="submit" value="<?php echo __('Search'); ?>" />
+  </form>
+</div>
+<script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
+
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+
+<?php $reply_status_list = \Fc2blog\Model\CommentsModel::getReplyStatusList(); ?>
+<form method="POST" id="sys-list-form">
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" onclick="common.fullCheck(this);" /></th>
+        <th><a href="javascript:void(0);" onclick="orderChange('entry_id_desc'); return false;"><?php echo __('Article'); ?></a></th>
+        <th><a href="javascript:void(0);" onclick="orderChange('created_at_desc'); return false;"><?php echo __('Date'); ?></a></th>
+        <th><a href="javascript:void(0);" onclick="orderChange('name_asc'); return false;"><?php echo __('Contributor'); ?></a></th>
+        <th><a href="javascript:void(0);" onclick="orderChange('body_asc'); return false;"><?php echo __('Body'); ?></a></th>
+        <th><?php echo __('State'); ?></th>
+        <th><?php echo __('Delete'); ?></th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php foreach($comments as $comment): ?>
+      <tr>
+        <td class="center ss_cell">
+          <input type="checkbox" name="id[]" value="<?php echo $comment['id']; ?>" /><br />
+          <?php echo $comment['entry_id']; ?>
+          <input type="hidden" value="<?php echo $comment['reply_status']; ?>" id="sys-reply-status-value-<?php echo $comment['id']; ?>" />
+        </td>
+        <td class="s_cell center">
+          <a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
+          <a href="<?php echo \Fc2blog\Web\Html::url(array('entry_id'=>$comment['entry_id']), true); ?>"><?php echo __('Narrowing'); ?></a>
+        </td>
+        <td>
+          <?php echo df($comment['updated_at'], 'y/m/d'); ?><br />
+          <?php echo df($comment['updated_at'], 'H:i:s'); ?>
+        </td>
+        <td><?php echo th($comment['name'], 8); ?></td>
+        <td>
+          <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD')) : ?><span id="sys-new-icon-<?php echo $comment['id']; ?>" class="red new"><?php echo __('New'); ?></span><?php endif; ?><?php echo th($comment['body'], 16); ?><br />
+          <a href="javascript:void(0); return false;" onclick="reply.open(<?php echo $comment['id']; ?>, <?php if($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')): ?>true<?php else: ?>false<?php endif; ?>); return false;"><?php echo __('I see the comment'); ?></a>
+        </td>
+        <td class="cm_status">
+          <p id="sys-open-status-<?php echo $comment['id']; ?>">
+            <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
+              <span class="published"><?php echo __('Published'); ?></span>
+            <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
+              <span class="approval"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;"><?php echo __('Approval'); ?></a></span>
+            <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
+              <span class="private"><?php echo __('Only exposed administrator'); ?></span>
+            <?php endif; ?>
+          </p>
+          <p id="sys-reply-status-<?php echo $comment['id']; ?>">
+            <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD')) : ?>
+              <span class="no_reply"><?php echo __('Not yet read'); ?></span>
+            <?php endif; ?>
+            <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.READ')) : ?>
+              <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?><span class="private"><?php echo __('Reply not'); ?></span><?php else: ?><span class="no_reply"><?php echo __('Unanswered'); ?></span><?php endif; ?>
+            <?php endif; ?>
+            <?php if ($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY')) : ?>
+              <span class="replied"><?php echo __('Answered'); ?></span>
+            <?php endif; ?>
+          </p>
+        </td>
+        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
+      </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+
+  <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="comments" />
+  <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="delete" />
+  <input type="button" id="sys-delete-button" value="<?php echo __('Remove what you have selected'); ?>" onclick="if(confirm('<?php echo __('Are you sure you want to delete?'); ?>')) $('#sys-list-form').submit();" disabled="disabled" />
+</form>
+
+<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+
+<!-- コメント返信用ダイアログ -->
+<div id="sys-comment-reply-dialog" title="<?php echo __('Reply Comments'); ?>"></div>
+
+<script>
+var reply = {};
+reply.id = null;
+// 既読状態に変更
+reply.updateReadStatus = function(is_private){
+  var status = $('#sys-reply-status-value-' + reply.id);
+  if (status.val()!=<?php echo \Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD'); ?>) {
+    return ;
+  }
+  status.val(<?php echo \Fc2blog\Config::get('COMMENT.REPLY_STATUS.READ'); ?>);
+  $('#sys-new-icon-' + reply.id).hide();
+  $('#sys-reply-status-' + reply.id).html(is_private ? '<span class="private"><?php echo __('Reply not'); ?></span>' : '<span class="no_reply"><?php echo __('Unanswered'); ?></span>');
+};
+// 返信状態に変更
+reply.updateReplyStatus = function(){
+  $('#sys-reply-status-value-' + reply.id).val(<?php echo \Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY'); ?>);
+  $('#sys-reply-status-' + reply.id).html('<span class="replied"><?php echo __('Answered'); ?></span>');
+};
+// コメント返信画面を開く
+reply.open = function(id, is_private){
+  reply.id = id;
+  var option = {
+    modal: true,
+    resizable: false,
+    draggable: false,
+    width: $(window).width() - 100,
+    position: ['center', 50]
+  };
+  $('#sys-comment-reply-dialog').dialog(option);
+  $('#sys-comment-reply-dialog').html('now loading..');
+  $('#sys-comment-reply-dialog').load(common.fwURL('Comments', 'ajax_reply', {id: id}))
+  reply.updateReadStatus(is_private);
+};
+// コメントを閉じる処理
+reply.close = function(){
+  $('#sys-comment-reply-dialog').dialog('close');
+};
+// コメントの返信処理
+reply.submit = function(id){
+  $('#sys-reply-button').hide();
+  $('#sys-reply-message').show();
+  $.ajax({
+    type: 'POST',
+    url: common.fwURL('comments', 'ajax_reply', {id: id}),
+    data: {comment: {reply_body: $('textarea[name="comment[reply_body]"]').val()}},
+    dataType: 'json',
+    success: function(json){
+      if (json.success) {
+        $('#sys-open-status-' + id).html('<span class="published"><?php echo __('Published'); ?></span>');
+        reply.updateReplyStatus();
+        reply.close();
+        return ;
+      }
+      $('#sys-reply-button').show();
+      $('#sys-reply-message').hide();
+      $('#sys-reply-error').html(json.error);
+      $('#sys-reply-error').show();
+    }
+  });
+};
+// コメントの承認処理(ajax)
+reply.approval = function(id){
+  if (!confirm('<?php echo __('Are you sure you want to be approved?'); ?>')) {
+    return ;
+  }
+  $('#sys-comment-approval').hide();
+  $('#sys-open-status-' + id + ' > *').fadeOut('fast', function(){
+    $.ajax({
+      type: 'GET',
+      url: common.fwURL('comments', 'ajax_approval', {id: id}),
+      dataType: 'json',
+      success: function(json){
+        if (json.success) {
+          $('#sys-open-status-' + id).html('<span class="published"><?php echo __('Published'); ?></span>');
+          $('#sys-open-status').html('<span class="published"><?php echo __('Published'); ?></span>');
+          return ;
+        }
+        $('#sys-open-status-' + id + ' > *').show();
+        $('#sys-comment-approval').show();
+        alert(json.error);
+      }
+    });
+  });
+};
+
+$(function(){
+  // 削除用のチェックボックスがチェックされている時だけ削除ボタンを有効化する
+  $('input[type=checkbox][name="id[]"]').on('change', function(){
+    $('#sys-delete-button').prop('disabled', !$('input[type=checkbox][name="id[]"]:checked').length);
+  });
+});
+</script>
+
