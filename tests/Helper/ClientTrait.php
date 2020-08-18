@@ -4,11 +4,9 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\Helper;
 
 use Exception;
-use Fc2blog\Config;
 use Fc2blog\Exception\PseudoExit;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Router\Router;
-use InvalidArgumentException;
 
 trait ClientTrait
 {
@@ -18,10 +16,9 @@ trait ClientTrait
    * @param bool $is_https
    * @param string $method
    * @param array $post
-   * @param string $target user,admin,test
    * @return array
    */
-  public static function resolve(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user")
+  public static function resolve(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [])
   {
     # 擬似的にアクセスURLをセットする
     $_SERVER['HTTP_USER_AGENT'] = "phpunit";
@@ -30,10 +27,6 @@ trait ClientTrait
     $_SERVER['REQUEST_URI'] = $uri;
     $_POST = $post;
 
-    if ($target !== "user" && $target !== "admin" && $target !== "test") {
-      throw new InvalidArgumentException("target is wrong.");
-    }
-
     $request = new Request();
 
     $router = new Router($request);
@@ -41,9 +34,9 @@ trait ClientTrait
     return $router->resolve();
   }
 
-  public static function execute(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
+  public static function execute(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = []): string
   {
-    $resolve = static::resolve($uri, $is_https, $method, $post, $target);
+    $resolve = static::resolve($uri, $is_https, $method, $post);
     ob_start();
     try {
       new $resolve['className']($resolve['request'], $resolve['methodName']); // すべての実行が行われる
@@ -60,13 +53,12 @@ trait ClientTrait
    * @param bool $is_https
    * @param string $method
    * @param array $post
-   * @param string $target
    * @return false|string
    * @throws Exception
    */
-  public static function executeWithShouldExit(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
+  public static function executeWithShouldExit(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = []): string
   {
-    $resolve = static::resolve($uri, $is_https, $method, $post, $target);
+    $resolve = static::resolve($uri, $is_https, $method, $post);
     try {
       ob_start();
       new $resolve['className']($resolve['request'], $resolve['methodName']); // すべての実行が行われる
