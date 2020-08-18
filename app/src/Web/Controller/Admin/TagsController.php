@@ -130,7 +130,7 @@ class TagsController extends AdminController
     if (!empty($back_url)) {
       $this->redirect($request, $back_url);
     }
-    $this->redirectBack(array('action'=>'index'));
+    $this->redirectBack($request, array('action'=>'index'));
   }
 
 }

@@ -141,37 +141,37 @@ throw new \LogicException("deprecated");
     return $this->query;
   }
 
-//  public function getGet()
-//  {
-//    return $this->get;
-//  }
+  public function getGet()
+  {
+    return $this->get;
+  }
 
 //  public function getPost()
 //  {
 //    return $this->post;
 //  }
 
-//  /**
-//  * $_FILESの中身を加工して取得する
-//  */
-//  public function file($key, $default=null)
-//  {
-//    if (!isset($this->files[$key])) {
-//      return $default;
-//    }
-//    $file = $this->files[$key];
-//    if (!is_array($file['tmp_name'])){
-//      return $file;
-//    }
-//    $files = array();
-//    $keys = array_keys($file['tmp_name']);
-//    foreach ($keys as $key) {
-//      foreach ($file as $colomn => $value) {
-//        $files[$key][$colomn] = $value[$key];
-//      }
-//    }
-//    return $files;
-//  }
+  /**
+  * $_FILESの中身を加工して取得する
+  */
+  public function file($key, $default=null)
+  {
+    if (!isset($this->files[$key])) {
+      return $default;
+    }
+    $file = $this->files[$key];
+    if (!is_array($file['tmp_name'])){
+      return $file;
+    }
+    $files = array();
+    $keys = array_keys($file['tmp_name']);
+    foreach ($keys as $key) {
+      foreach ($file as $colomn => $value) {
+        $files[$key][$colomn] = $value[$key];
+      }
+    }
+    return $files;
+  }
 
   public function get($key, $default=null, $valid=self::VALID_NOT_EMPTY, $options=null)
   {

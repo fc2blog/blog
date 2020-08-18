@@ -6,9 +6,10 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 require(__DIR__ . '/config_loading_include.php');
 
-\Fc2blog\Debug::log('Controller Action', false, 'system', __FILE__, __LINE__);
+$request = new \Fc2blog\Web\Request();
 
-$request = getRouting('admin.php');
-$controller = new $request->className($request, $request->methodName);
+$router = new \Fc2blog\Web\Router\Router($request);
 
-\Fc2blog\Debug::output($controller); // Debug用の出力
+$resolve = $router->resolve();
+
+new $resolve['className']($request, $resolve['methodName']);

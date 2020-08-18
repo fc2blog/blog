@@ -10,10 +10,10 @@
     <div class="select_search">
       <?php echo \Fc2blog\Web\Html::input($request, 'category_id', 'select', array('options'=>array(''=>__('Category name')) + \Fc2blog\Model\Model::load('Categories')->getSearchList($this->getBlogId($request)))); ?>
       <?php echo \Fc2blog\Web\Html::input($request, 'tag_id', 'select', array('options'=>array(''=>__('Tag name')) + \Fc2blog\Model\Model::load('Tags')->getSearchList($this->getBlogId($request)))); ?>
-      <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\EntriesModel::getOpenStatusList())); ?>
-      <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-      <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
-      <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\EntriesModel::getOpenStatusList())); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'page', 'hidden', array('default'=>0)); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'order', 'hidden', array('default'=>'posted_at_desc')); ?>
     </div>
   </form>
 </div>

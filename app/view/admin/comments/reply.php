@@ -62,8 +62,8 @@
 <?php if ($comment['open_status']!=\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
   <h3><?php echo __('I will reply to comments'); ?></h3>
   <form method="POST" id="sys-comment-form" class="admin-form">
-    <?php echo \Fc2blog\Web\Html::input('back_url', 'hidden', array('default'=>$request->get('back_url'))); ?>
-    <?php echo \Fc2blog\Web\Html::input('comment[reply_body]', 'textarea', array('style'=>'width: 95%; height: 200px;')); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'back_url', 'hidden', array('default'=>$request->get('back_url'))); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'comment[reply_body]', 'textarea', array('style'=>'width: 95%; height: 200px;')); ?>
     <?php if (isset($errors['comment']['reply_body'])): ?><p class="error"><?php echo $errors['comment']['reply_body']; ?></p><?php endif; ?>
     <p class="mb20">
       <?php if($comment['reply_status']==\Fc2blog\Config::get('COMMENT.REPLY_STATUS.REPLY')): ?>

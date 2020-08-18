@@ -179,7 +179,7 @@ class BlogTemplatesController extends AdminController
     $blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id);
     if (empty($blog_template)) {
       $this->setErrorMessage(__('Template to be used can not be found'));
-      $this->redirectBack(array('action'=>'index'));
+      $this->redirectBack($request, array('action'=>'index'));
     }
 
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
@@ -187,7 +187,7 @@ class BlogTemplatesController extends AdminController
       Model::load('Blogs')->switchTemplate($blog_template, $blog_id);
       $this->setInfoMessage(__('I switch the template'));
     }
-    $this->redirectBack(array('action'=>'index'));
+    $this->redirectBack($request, array('action'=>'index'));
   }
 
   /**
@@ -208,7 +208,7 @@ class BlogTemplatesController extends AdminController
     $template = Model::load('Fc2Templates')->findByIdAndDevice($id, $device_key);
     if (empty($template)) {
       $this->setErrorMessage(__('Template does not exist'));
-      $this->redirectBack(array('controller'=>'blog_templates', 'action'=>'fc2_index', 'device_type'=>$device_type));
+      $this->redirectBack($request, array('controller'=>'blog_templates', 'action'=>'fc2_index', 'device_type'=>$device_type));
     }
 
     // 追加用のデータを取得データから作成
@@ -233,7 +233,7 @@ class BlogTemplatesController extends AdminController
 
     // エラー情報の設定
     $this->setErrorMessage(__('There is a flaw in the template to be downloaded'));
-    $this->redirectBack(array('controller'=>'blog_templates', 'action'=>'fc2_index', 'device_type'=>$device_type));
+    $this->redirectBack($request, array('controller'=>'blog_templates', 'action'=>'fc2_index', 'device_type'=>$device_type));
   }
 
   /**
@@ -264,7 +264,7 @@ class BlogTemplatesController extends AdminController
       $blog_templates_model->deleteByIdAndBlogId($id, $blog_id);
       $this->setInfoMessage(__('I removed the template'));
     }
-    $this->redirectBack(array('action'=>'index'));
+    $this->redirectBack($request, array('action'=>'index'));
   }
 
 }

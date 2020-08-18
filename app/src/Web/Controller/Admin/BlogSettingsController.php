@@ -15,14 +15,14 @@ class BlogSettingsController extends AdminController
   /**
    * コメント編集
    */
-  public function comment_edit()
+  public function comment_edit(Request $request)
   {
     $white_list = array(
       'comment_confirm', 'comment_display_approval', 'comment_display_private',
       'comment_cookie_save', 'comment_captcha',
       'comment_order', 'comment_display_count', 'comment_quote'
     );
-    $this->settingEdit($white_list, 'comment_edit');
+    $this->settingEdit($request, $white_list, 'comment_edit');
   }
 
   /**

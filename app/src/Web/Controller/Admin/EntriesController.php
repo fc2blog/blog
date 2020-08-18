@@ -218,7 +218,7 @@ class EntriesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => Config::get('PAGE.FILE.LIMIT', App::getPageLimit('FILE_AJAX')),
+      'limit'  => Config::get('PAGE.FILE.LIMIT', App::getPageLimit($request, 'FILE_AJAX')),
       'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => 'id DESC',
     );

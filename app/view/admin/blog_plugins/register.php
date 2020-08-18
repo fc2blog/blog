@@ -12,14 +12,14 @@
       <tr>
         <th><?php echo __('Plugin name'); ?></th>
         <td>
-          <?php echo \Fc2blog\Web\Html::input('plugin[title]', 'text'); ?>
+          <?php echo \Fc2blog\Web\Html::input($request, 'plugin[title]', 'text'); ?>
           <?php if (isset($errors['plugin']['title'])): ?><p class="error"><?php echo $errors['plugin']['title']; ?></p><?php endif; ?>
         </td>
       </tr>
       <tr>
         <th><?php echo __('Description'); ?></th>
         <td>
-          <?php echo \Fc2blog\Web\Html::input('plugin[body]', 'textarea'); ?>
+          <?php echo \Fc2blog\Web\Html::input($request, 'plugin[body]', 'textarea'); ?>
           <?php if (isset($errors['plugin']['body'])): ?><p class="error"><?php echo $errors['plugin']['body']; ?></p><?php endif; ?>
         </td>
       </tr>

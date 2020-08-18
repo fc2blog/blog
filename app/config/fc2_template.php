@@ -11,7 +11,7 @@ $config['fc2_template_foreach'] = array(
   'category_list' => '<?php if(!empty($entry[\'categories\'])) foreach($entry[\'categories\'] as $category) { ?>',
   'tag_list'      => '<?php if(!empty($entry[\'tags\'])) foreach($entry[\'tags\'] as $tag) { ?>',
   // 最新記事一覧(プラグイン表示用)
-  'recent'        => '<?php if(!isset($t_recents)) $t_recents = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateRecents($blog_id); ?><?php if (!empty($t_recents)) foreach($t_recents as $t_recent) { ?>',
+  'recent'        => '<?php if(!isset($t_recents)) $t_recents = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateRecents($request, $blog_id); ?><?php if (!empty($t_recents)) foreach($t_recents as $t_recent) { ?>',
   // カテゴリー(プラグイン表示用)
   'category'      => '<?php if(!isset($t_categories)) $t_categories = \Fc2blog\Model\Model::load(\'Categories\')->getTemplateCategories($blog_id); ?><?php if (!empty($t_categories)) foreach($t_categories as $t_category) { ?>',
   // アーカイブ(プラグイン表示用)

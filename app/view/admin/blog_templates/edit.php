@@ -3,21 +3,21 @@
 <form method="POST" id="sys-blog-template-form" class="admin-form">
 
   <input type="hidden" name="id" value="<?php echo $request->get('id'); ?>" />
-  <?php echo \Fc2blog\Web\Html::input('sig', 'hidden', array('value'=>\Fc2blog\Web\Session::get('sig'))); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'sig', 'hidden', array('value'=>\Fc2blog\Web\Session::get('sig'))); ?>
 
   <h3><?php echo __('Template name'); ?></h3>
   <div>
-    <?php echo \Fc2blog\Web\Html::input('blog_template[title]', 'text'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'blog_template[title]', 'text'); ?>
     <?php if (isset($errors['blog_template']['title'])): ?><p class="error"><?php echo $errors['blog_template']['title']; ?></p><?php endif; ?>
   </div>
   <h3>HTML</h3>
   <div>
-    <?php echo \Fc2blog\Web\Html::input('blog_template[html]', 'textarea'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'blog_template[html]', 'textarea'); ?>
     <?php if (isset($errors['blog_template']['html'])): ?><p class="error"><?php echo $errors['blog_template']['html']; ?></p><?php endif; ?>
   </div>
   <h3>CSS</h3>
   <div>
-    <?php echo \Fc2blog\Web\Html::input('blog_template[css]', 'textarea'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'blog_template[css]', 'textarea'); ?>
     <?php if (isset($errors['blog_template']['css'])): ?><p class="error"><?php echo $errors['blog_template']['css']; ?></p><?php endif; ?>
   </div>
 

@@ -7,7 +7,7 @@
   <div class="form_area">
     <div class="form_contents">
       <h4><?php echo __('Initial display page'); ?></h4>
-      <?php echo \Fc2blog\Web\Html::input('blog_setting[start_page]', 'select', array('options'=>\Fc2blog\Model\BlogSettingsModel::getStartPageList())); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'blog_setting[start_page]', 'select', array('options'=>\Fc2blog\Model\BlogSettingsModel::getStartPageList())); ?>
       <?php if (isset($errors['blog_setting']['start_page'])): ?><span class="error"><?php echo $errors['blog_setting']['start_page']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">

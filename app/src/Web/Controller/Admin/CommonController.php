@@ -28,11 +28,11 @@ class CommonController extends AdminController
 
     // TOPへ戻す
     $url = Config::get('BASE_DIRECTORY');
-    $device_name = App::getArgsDevice();
+    $device_name = App::getArgsDevice($request);
     if (!empty($device_name)) {
       $url .= '?' . $device_name;
     }
-    $this->redirectBack($url);
+    $this->redirectBack($request, $url);
   }
 
   /**
@@ -48,17 +48,18 @@ class CommonController extends AdminController
       case 'sp': $device_type = Config::get('DEVICE_SP'); break;
       default:
         Cookie::set('device', null);
-        $this->redirectBack(array('controller'=>'entries', 'action'=>'index'));
+        $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index'));
     }
 
     Cookie::set('device', $device_type);
-    $this->redirectBack(array('controller'=>'entries', 'action'=>'index'));
+    $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index'));
   }
 
   /**
-  * 初期表示ページ(ブログの設定よりリダイレクト)
-  */
-  public function initial()
+   * 初期表示ページ(ブログの設定よりリダイレクト)
+   * @param Request $request
+   */
+  public function initial(Request $request)
   {
     $setting = Model::load('BlogSettings')->findByBlogId($this->getBlogId($request));
     if (is_array($setting)) {
@@ -77,15 +78,15 @@ class CommonController extends AdminController
     }
   }
 
-  public function index()
+  public function index(Request $request)
   {
-    return $this->initial();
+    return $this->initial($request);
   }
 
   /**
   * お知らせ一覧画面
   */
-  public function notice()
+  public function notice(Request $request)
   {
     $blog_id = $this->getBlogId($request);
 

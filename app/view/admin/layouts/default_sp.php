@@ -28,7 +28,7 @@
     <?php endif; ?>
     common.baseDirectory = '<?php echo \Fc2blog\Config::get('BASE_DIRECTORY'); ?>';
     common.deviceType = <?php echo $this->getDeviceType(); ?>;
-    common.deviceArgs = '<?php echo \Fc2blog\App::getArgsDevice(); ?>';
+    common.deviceArgs = '<?php echo \Fc2blog\App::getArgsDevice($request); ?>';
   </script>
 
   <script type="text/javascript" src="/js/sp/jquery.slideMenu.js"></script>

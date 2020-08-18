@@ -4,6 +4,7 @@ namespace Fc2blog\Model;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Web\Request;
 
 class EntriesModel extends Model
 {
@@ -373,7 +374,7 @@ SQL;
   * 最近の記事一覧を取得
   * FC2テンプレートでの表示用
   */
-  public function getTemplateRecents($blog_id)
+  public function getTemplateRecents(Request $request, $blog_id)
   {
     $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
     $options = array(

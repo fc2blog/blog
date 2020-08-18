@@ -182,9 +182,9 @@ class App
   /**
   * 現在のデバイスタイプをPC,SPの形で取得する
   */
-  public static function getDeviceKey()
+  public static function getDeviceKey(Request $request)
   {
-    $device_type = self::getDeviceType();
+    $device_type = self::getDeviceType($request);
     switch ($device_type) {
       default:
       case 1: return 'PC';
@@ -350,17 +350,17 @@ class App
   /**
   * ページ毎、デバイス毎の初期制限件数
   */
-  public static function getPageLimit($key)
+  public static function getPageLimit(Request $request, $key)
   {
-    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey() . '.LIMIT', Config::get('PAGE.' . $key . '.DEFAULT.LIMIT', 10));
+    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIMIT', Config::get('PAGE.' . $key . '.DEFAULT.LIMIT', 10));
   }
 
   /**
   * ページ毎、デバイス毎の件数一覧
   */
-  public static function getPageList($key)
+  public static function getPageList(Request $request, $key)
   {
-    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey() . '.LIST', Config::get('PAGE.' . $key . '.DEFAULT.LIST', array()));
+    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIST', Config::get('PAGE.' . $key . '.DEFAULT.LIST', array()));
   }
 
   /**

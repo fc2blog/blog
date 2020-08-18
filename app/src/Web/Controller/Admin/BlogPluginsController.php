@@ -255,7 +255,7 @@ class BlogPluginsController extends AdminController
       $plugins_model->deleteByIdAndUserId($id, $user_id);
       $this->setInfoMessage(__('I removed the plugin'));
     }
-    $this->redirectBack(array('action'=>'search'));
+    $this->redirectBack($request, array('action'=>'search'));
   }
 
   /**
@@ -269,7 +269,7 @@ class BlogPluginsController extends AdminController
     $plugin = Model::load('Plugins')->findById($id);
     if (empty($plugin)) {
       $this->setErrorMessage(__('Plugin does not exist'));
-      $this->redirectBack(array('controller'=>'blog_plugins', 'action'=>'index'));
+      $this->redirectBack($request, array('controller'=>'blog_plugins', 'action'=>'index'));
     }
 
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
@@ -290,7 +290,7 @@ class BlogPluginsController extends AdminController
 
       $this->setErrorMessage(__('I failed to download the plug-in'));
     }
-    $this->redirectBack(array('controller'=>'blog_plugins', 'action'=>'index'));
+    $this->redirectBack($request, array('controller'=>'blog_plugins', 'action'=>'index'));
   }
 
   /**

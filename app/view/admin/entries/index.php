@@ -2,21 +2,21 @@
 
 <h3 id="entry_count">
   <?php echo __('Entry search'); ?>[<?php echo __('Hits'); ?>&nbsp;<?php echo $paging['count']; ?><?php echo __(' results'); ?>]
-  <?php echo \Fc2blog\Web\Html::input('limit', 'select', array('options'=>\Fc2blog\Config::get('ENTRY.LIMIT_LIST'), 'default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-  <?php echo \Fc2blog\Web\Html::input('page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'select', array('options'=>\Fc2blog\Config::get('ENTRY.LIMIT_LIST'), 'default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
 </h3>
 <p><?php echo __('You can search in accordance with the conditions of past articles.'); ?></p>
 <div id="entry_search">
   <form method="GET" id="sys-search-form">
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Entries" />
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="index" />
-    <?php echo \Fc2blog\Web\Html::input('category_id', 'select', array('options'=>array(''=>__('Category name')) + \Fc2blog\Model\Model::load('Categories')->getSearchList($this->getBlogId($request)))); ?>
-    <?php echo \Fc2blog\Web\Html::input('tag_id', 'select', array('options'=>array(''=>__('Tag name')) + \Fc2blog\Model\Model::load('Tags')->getSearchList($this->getBlogId($request)))); ?>
-    <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\EntriesModel::getOpenStatusList())); ?>
-    <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-    <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
-    <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
-    <br /><?php echo \Fc2blog\Web\Html::input('keyword', 'text', array('maxlength'=>100)); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'category_id', 'select', array('options'=>array(''=>__('Category name')) + \Fc2blog\Model\Model::load('Categories')->getSearchList($this->getBlogId($request)))); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'tag_id', 'select', array('options'=>array(''=>__('Tag name')) + \Fc2blog\Model\Model::load('Tags')->getSearchList($this->getBlogId($request)))); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\EntriesModel::getOpenStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'page', 'hidden', array('default'=>0)); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'order', 'hidden', array('default'=>'posted_at_desc')); ?>
+    <br /><?php echo \Fc2blog\Web\Html::input($request, 'keyword', 'text', array('maxlength'=>100)); ?>
     <input type="submit" value="<?php echo __('Search'); ?>" />
   </form>
 </div>

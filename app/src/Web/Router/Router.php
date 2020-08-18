@@ -20,34 +20,43 @@ class Router
 
   public function __construct(Request $request)
   {
+    // TODO if文ベースのルーターから、なんらかのルーターに切り替えたい（Config全廃が前提）
+
     $this->request = $request;
     // favicon.ico アクセス時に404をレスポンスし、ブラウザにリトライさせない。
     // しない場合、404扱いからのブログページへリダイレクトが発生し、無駄な資源を消費する。
     // 可能なら、httpd側でハンドルしたほうが良いのだが、可搬性のため。
-    if (preg_match('/\Afavicon\.ico/u', $request->uri)) {
+      if (preg_match('/\Afavicon\.ico/u', $request->uri)) {
       return null;
     }
 
     if (preg_match('|\A/admin/|u', $request->uri)) {
+      Config::set('URL_REWRITE', true);
+      Config::set('BASE_DIRECTORY', '/admin/');
+      Config::set('APP_PREFIX', 'Admin');
+      $this->className = \Fc2blog\Web\Controller\Admin\CommonController::class; // default controller.
+      $this->methodName = 'index'; // default method.
+
       // 管理用のパラメータを設定する
       $paths = $request->getPaths();
       $args_controller = \Fc2blog\Config::get('ARGS_CONTROLLER');
       $args_action = \Fc2blog\Config::get('ARGS_ACTION');
 
       if ($request->isArgs($args_controller)) {
-        $request->set($args_controller, $request->get($args_controller));
+        $this->className = "\\Fc2blog\\Web\\Controller\\Admin\\".pascalCase($request->get($args_controller))."Controller";
       } elseif (isset($paths[1])) {
-        $request->set($args_controller, $paths[1]);
+        $this->className = "\\Fc2blog\\Web\\Controller\\Admin\\".pascalCase($paths[1])."Controller";
       }
 
       if ($request->isArgs($args_action)) {
-        $request->set($args_action, $request->get($args_action));
+        $this->methodName = $request->get($args_action);
       } elseif (isset($paths[2])) {
-        $request->set($args_action, $paths[2]);
+        $this->methodName = $paths[2];
       }
 
     } elseif (preg_match('|\A/_for_unit_test_/|u', $request->uri)) { // Test routings
-
+      Config::set('URL_REWRITE', true);
+      Config::set('BASE_DIRECTORY', '/_for_unit_test_/');
       Config::set('APP_PREFIX', 'Test');
       $this->className = \Fc2blog\Web\Controller\Test\CommonController::class; // default controller.
 
@@ -79,8 +88,8 @@ class Router
 
     } else { // User Routings
 
-      // TODO if文ベースのルーターから、なんらかのルーターに切り替えたい（Config全廃が前提）
-
+      Config::set('URL_REWRITE', false);
+      Config::set('BASE_DIRECTORY', '/');
       Config::set('APP_PREFIX', 'User');
       $this->className = BlogsController::class; // default controller.
 

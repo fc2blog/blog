@@ -10,7 +10,7 @@
       <tr>
         <th><?php echo __('Tag name'); ?></th>
         <td>
-          <?php echo \Fc2blog\Web\Html::input('tag[name]', 'text'); ?>
+          <?php echo \Fc2blog\Web\Html::input($request, 'tag[name]', 'text'); ?>
           <?php if (isset($errors['tag']['name'])): ?><p class="error"><?php echo $errors['tag']['name']; ?></p><?php endif; ?>
         </td>
       </tr>

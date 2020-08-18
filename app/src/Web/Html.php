@@ -16,9 +16,14 @@ class Html
   private static $include_js = array();
 
   /**
-  * URLを作成する
-  * TODO:ユーザー側のURL生成時はApp:userURLを使用に置き換え最終的にblog_idの部分を削る
-  */
+   * URLを作成する
+   * TODO:ユーザー側のURL生成時はApp:userURLを使用に置き換え最終的にblog_idの部分を削る
+   * @param Request $request
+   * @param array $args
+   * @param bool $reused
+   * @param bool $full_url
+   * @return string
+   */
   public static function url(Request $request, $args=array(), $reused=false, $full_url=false){
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {

@@ -7,12 +7,12 @@
   <div class="form_area">
     <div class="form_contents">
       <h4><?php echo __('Change Password'); ?></h4>
-      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('user[password]', 'text'); ?></div>
+      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input($request, 'user[password]', 'text'); ?></div>
       <?php if (isset($errors['user']['password'])): ?><span class="error"><?php echo $errors['user']['password']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">
       <h4><?php echo __('Blog ID at login'); ?></h4>
-      <?php echo \Fc2blog\Web\Html::input('user[login_blog_id]', 'select', array('options'=>\Fc2blog\Model\Model::load('Blogs')->getListByUserId(\Fc2blog\Web\Session::get('user_id')))); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'user[login_blog_id]', 'select', array('options'=>\Fc2blog\Model\Model::load('Blogs')->getListByUserId(\Fc2blog\Web\Session::get('user_id')))); ?>
       <?php if (isset($errors['user']['login_blog_id'])): ?><span class="error"><?php echo $errors['user']['login_blog_id']; ?></span><?php endif; ?>
     </div>
     <div class="form_contents">

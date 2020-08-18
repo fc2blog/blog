@@ -12,7 +12,7 @@
       <a  class="btn_contents touch" href="<?php echo \Fc2blog\App::userURL($request,$request,array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId($request), 'fc2_id'=>$template['id'], 'device_type'=>$request->get('device_type')), false, true); ?>" target="_blank"><?php echo __('Preview'); ?></a>
     </p>
     <p>
-      <a  class="btn_contents touch" href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'blog_templates', 'action'=>'download', 'fc2_id'=>$template['id'], 'device_type'=>$request->get('device_type'), 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>"><?php echo __('Download'); ?></a>
+      <a  class="btn_contents touch" href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'blog_templates', 'action'=>'download', 'fc2_id'=>$template['id'], 'device_type'=>$request->get('device_type'), 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>"><?php echo __('Download'); ?></a>
     </p>
   </div>
   <h3><span class="h3_inner"><?php echo __('Name'); ?></span></h3>
@@ -22,10 +22,10 @@
   <div class="btn_area">
     <ul class="btn_area_inner">
       <li>
-        <a class="btn_contents touch" href="<?php if($request->isArgs('back_url')): ?><?php echo $request->get('back_url'); ?><?php else: ?><?php echo \Fc2blog\Web\Html::url(array('controller'=>'blog_templates', 'action'=>'fc2_index')); ?><?php endif; ?>"><i class="return_icon btn_icon"></i><?php echo __('I Back to List'); ?></a>
+        <a class="btn_contents touch" href="<?php if($request->isArgs('back_url')): ?><?php echo $request->get('back_url'); ?><?php else: ?><?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'blog_templates', 'action'=>'fc2_index')); ?><?php endif; ?>"><i class="return_icon btn_icon"></i><?php echo __('I Back to List'); ?></a>
       </li>
       <li>
-        <a class="btn_contents touch" href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'blog_templates', 'action'=>'download', 'fc2_id'=>$template['id'], 'device_type'=>$request->get('device_type'), 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>"><i class="add_icon btn_icon"></i><?php echo __('Download'); ?></a>
+        <a class="btn_contents touch" href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'blog_templates', 'action'=>'download', 'fc2_id'=>$template['id'], 'device_type'=>$request->get('device_type'), 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>"><i class="add_icon btn_icon"></i><?php echo __('Download'); ?></a>
       </li>
     </ul>
   </div>

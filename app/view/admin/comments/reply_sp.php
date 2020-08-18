@@ -52,8 +52,8 @@
   <form method="POST" id="sys-comment-form" class="admin-form">
     <h2 id="jamp1"><span class="h2_inner"><?php echo __('I will reply to comments'); ?></span></h2>
     <div class="form_area">
-      <?php echo \Fc2blog\Web\Html::input('back_url', 'hidden', array('default'=>$request->get('back_url'))); ?>
-      <p class="form_contents"><?php echo \Fc2blog\Web\Html::input('comment[reply_body]', 'textarea', array('class'=>'common_textarea')); ?></p>
+      <?php echo \Fc2blog\Web\Html::input($request, 'back_url', 'hidden', array('default'=>$request->get('back_url'))); ?>
+      <p class="form_contents"><?php echo \Fc2blog\Web\Html::input($request, 'comment[reply_body]', 'textarea', array('class'=>'common_textarea')); ?></p>
       <?php if (isset($errors['comment']['reply_body'])): ?><p class="error"><?php echo $errors['comment']['reply_body']; ?></p><?php endif; ?>
     </div>
     <div class="btn_area">

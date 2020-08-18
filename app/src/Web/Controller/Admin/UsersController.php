@@ -167,7 +167,7 @@ class UsersController extends AdminController
   /**
   * ログアウト
   */
-  public function logout()
+  public function logout(Request $request)
   {
     if ($this->isLogin()) {
       Session::destroy();

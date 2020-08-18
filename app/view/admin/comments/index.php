@@ -2,21 +2,21 @@
 
 <h3 id="entry_count">
   <?php echo __('Comment search'); ?>[<?php echo __('Hits'); ?>&nbsp;<?php echo $paging['count']; ?><?php echo __(' results'); ?>]
-  <?php echo \Fc2blog\Web\Html::input('limit', 'select', array('options'=>\Fc2blog\Config::get('ENTRY.LIMIT_LIST'), 'default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-  <?php echo \Fc2blog\Web\Html::input('page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'select', array('options'=>\Fc2blog\Config::get('ENTRY.LIMIT_LIST'), 'default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
 </h3>
 <p><?php echo __('You can search in accordance with the conditions of the past comments.'); ?></p>
 <div id="entry_search">
   <form method="GET" id="sys-search-form">
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Comments" />
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="index" />
-    <?php echo \Fc2blog\Web\Html::input('entry_id', 'hidden'); ?>
-    <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\CommentsModel::getOpenStatusList())); ?>
-    <?php echo \Fc2blog\Web\Html::input('reply_status', 'select', array('options'=>array(''=>__('Reply state')) + \Fc2blog\Model\CommentsModel::getReplyStatusList())); ?>
-    <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-    <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
-    <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
-    <br /><?php echo \Fc2blog\Web\Html::input('keyword', 'text'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'entry_id', 'hidden'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\CommentsModel::getOpenStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'reply_status', 'select', array('options'=>array(''=>__('Reply state')) + \Fc2blog\Model\CommentsModel::getReplyStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'page', 'hidden', array('default'=>0)); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'order', 'hidden', array('default'=>'posted_at_desc')); ?>
+    <br /><?php echo \Fc2blog\Web\Html::input($request, 'keyword', 'text'); ?>
     <input type="submit" value="<?php echo __('Search'); ?>" />
   </form>
 </div>

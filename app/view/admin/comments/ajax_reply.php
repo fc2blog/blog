@@ -54,7 +54,7 @@
 <form method="POST" id="sys-comment-form" class="admin-form">
 
   <?php if ($comment['open_status']!=\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
-    <?php echo \Fc2blog\Web\Html::input('comment[reply_body]', 'textarea', array('style'=>'width: 95%; height: 200px;')); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'comment[reply_body]', 'textarea', array('style'=>'width: 95%; height: 200px;')); ?>
     <p class="error" style="display: none;" id="sys-reply-error"></p>
 
     <p class="mb20">

@@ -46,7 +46,7 @@
     </dd>
     <dt><?php echo __('Authentication keyword'); ?></dt>
     <dd>
-      <img src="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'common', 'action'=>'captcha')); ?>" />
+      <img src="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'common', 'action'=>'captcha')); ?>" />
       <input type="button" class="captcha_reload" value="<?php echo __('Update authentication image'); ?>" onclick="$(this).prev().attr('src', common.fwURL('common', 'captcha', {t : new Date().getTime()}));" /><br />
       <?php echo \Fc2blog\Web\Html::input($request, 'token', 'captcha'); ?>
       <p><?php echo __('Please enter the numbers written on the image'); ?></p>

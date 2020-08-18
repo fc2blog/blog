@@ -38,7 +38,7 @@
         <td><a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId(\Fc2blog\Web\Session::get('blog_id'), \Fc2blog\Config::get('DOMAIN_USER')); ?>/<?php echo \Fc2blog\Web\Session::get('blog_id'); ?>/?tag=<?php echo ue($tag['name']); ?>" target="_blank"><?php echo h($tag['name']); ?></a></td>
         <td><?php echo $tag['count']; ?></td>
         <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'edit', 'id'=>$tag['id'])); ?>"><?php echo __('Edit'); ?></a></td>
-        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$tag['id'], 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
+        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'delete', 'id'=>$tag['id'], 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
       </tr>
       <?php endforeach; ?>
     </tbody>

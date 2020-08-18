@@ -44,7 +44,7 @@ class FilesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', App::getPageLimit('FILE'), Request::VALID_POSITIVE_INT),
+      'limit'  => $request->get('limit', App::getPageLimit($request, 'FILE'), Request::VALID_POSITIVE_INT),
       'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );
@@ -125,7 +125,7 @@ class FilesController extends AdminController
     $options = array(
       'where'  => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', App::getPageLimit('FILE'), Request::VALID_POSITIVE_INT),
+      'limit'  => $request->get('limit', App::getPageLimit($request, 'FILE'), Request::VALID_POSITIVE_INT),
       'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order'  => $order,
     );

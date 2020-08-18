@@ -3,34 +3,34 @@
 <form method="POST" id="sys-blog-plugin-form" class="admin-form">
 
   <input type="hidden" name="id" value="<?php echo $request->get('id'); ?>" />
-  <?php echo \Fc2blog\Web\Html::input('blog_plugin[device_type]', 'hidden'); ?>
-  <?php echo \Fc2blog\Web\Html::input('blog_plugin[category]', 'hidden'); ?>
-  <?php echo \Fc2blog\Web\Html::input('sig', 'hidden', array('value'=>\Fc2blog\Web\Session::get('sig'))); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'blog_plugin[device_type]', 'hidden'); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'blog_plugin[category]', 'hidden'); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'sig', 'hidden', array('value'=>\Fc2blog\Web\Session::get('sig'))); ?>
   <?php if (isset($errors['blog_plugin']['device_type'])): ?><p class="error"><?php echo $errors['blog_plugin']['device_type']; ?></p><?php endif; ?>
   <?php if (isset($errors['blog_plugin']['category'])): ?><p class="error"><?php echo $errors['blog_plugin']['category']; ?></p><?php endif; ?>
 
   <div class="form_area">
     <h2><span class="h2_inner"><?php echo __('Plugin name'); ?></span></h2>
     <div class="form_contents">
-      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input('blog_plugin[title]', 'text'); ?></div>
+      <div class="common_input_text"><?php echo \Fc2blog\Web\Html::input($request, 'blog_plugin[title]', 'text'); ?></div>
       <?php if (isset($errors['blog_plugin']['title'])): ?><span class="error"><?php echo $errors['blog_plugin']['title']; ?></span><?php endif; ?>
     </div>
   </div>
   <div class="form_area">
     <h2><span class="h2_inner"><?php echo __('Character color setting of title statement'); ?></span></h2>
     <div class="form_contents">
-      <?php echo \Fc2blog\Web\Html::input('blog_plugin[title_align]', 'select', array('options'=>\Fc2blog\Model\BlogPluginsModel::getAttributeAlign())); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'blog_plugin[title_align]', 'select', array('options'=>\Fc2blog\Model\BlogPluginsModel::getAttributeAlign())); ?>
       <?php if (isset($errors['blog_plugin']['title_align'])): ?><p class="error"><?php echo $errors['blog_plugin']['title_align']; ?></p><?php endif; ?>
-      <?php echo \Fc2blog\Web\Html::input('blog_plugin[title_color]', 'select', array('options'=>\Fc2blog\Model\BlogPluginsModel::getAttributeColor(true))); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'blog_plugin[title_color]', 'select', array('options'=>\Fc2blog\Model\BlogPluginsModel::getAttributeColor(true))); ?>
       <?php if (isset($errors['blog_plugin']['title_color'])): ?><p class="error"><?php echo $errors['blog_plugin']['title_color']; ?></p><?php endif; ?>
     </div>
   </div>
   <div class="form_area">
     <h2><span class="h2_inner"><?php echo __('Character color setting of content statement'); ?></span></h2>
     <div class="form_contents">
-      <?php echo \Fc2blog\Web\Html::input('blog_plugin[contents_align]', 'select', array('options'=>\Fc2blog\Model\BlogPluginsModel::getAttributeAlign())); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'blog_plugin[contents_align]', 'select', array('options'=>\Fc2blog\Model\BlogPluginsModel::getAttributeAlign())); ?>
       <?php if (isset($errors['blog_plugin']['contents_align'])): ?><p class="error"><?php echo $errors['blog_plugin']['contents_align']; ?></p><?php endif; ?>
-      <?php echo \Fc2blog\Web\Html::input('blog_plugin[contents_color]', 'select', array('options'=>\Fc2blog\Model\BlogPluginsModel::getAttributeColor(true))); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'blog_plugin[contents_color]', 'select', array('options'=>\Fc2blog\Model\BlogPluginsModel::getAttributeColor(true))); ?>
       <?php if (isset($errors['blog_plugin']['contents_color'])): ?><p class="error"><?php echo $errors['blog_plugin']['contents_color']; ?></p><?php endif; ?>
     </div>
   </div>
@@ -39,7 +39,7 @@
      <div class="edit_area_box">
      <div><a href="javascript:void(0);" onclick="$(this).parent().hide().next().show(); return false;"><?php echo __('I will do the editing of [HTML]. (For advanced users)'); ?></a></div>
       <div style="display: none;">
-        <?php echo \Fc2blog\Web\Html::input('blog_plugin[contents]', 'textarea'); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'blog_plugin[contents]', 'textarea'); ?>
         <?php if (isset($errors['blog_plugin']['contents'])): ?><p class="error"><?php echo $errors['blog_plugin']['contents']; ?></p><?php endif; ?>
       </div>
     </div>

@@ -37,7 +37,7 @@
 <div class="btn_area">
   <ul class="btn_area_inner">
     <li><a class="btn_contents touch" href="<?php if($request->isArgs('back_url')): ?><?php echo $request->get('back_url'); ?><?php else: ?><?php echo \Fc2blog\Web\Html::url($request, array('action'=>'upload')); ?><?php endif; ?>"><i class="return_icon btn_icon"></i><?php echo __('I Back to List'); ?></a></li>
-    <li><a class="btn_contents touch" href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$file['id'], 'back_url'=>ue($request->get('back_url')), 'sig'=>ue(\Fc2blog\Web\Session::get('sig')))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><i class="delete_icon btn_icon"></i><?php echo __('Delete'); ?></a></li>
+    <li><a class="btn_contents touch" href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'delete', 'id'=>$file['id'], 'back_url'=>ue($request->get('back_url')), 'sig'=>ue(\Fc2blog\Web\Session::get('sig')))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><i class="delete_icon btn_icon"></i><?php echo __('Delete'); ?></a></li>
   </ul>
 </div>
 

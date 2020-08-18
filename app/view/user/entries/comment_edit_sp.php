@@ -62,8 +62,8 @@
     <dl class="form">
       <dt><?php echo __('Authentication keyword'); ?></dt>
       <dd>
-        <img src="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'common', 'action'=>'captcha')); ?>" />
-        <span class="capcha_reload"><a href="javascript(0); return false;" onclick="$(this).parent().prev().attr('src', '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'common', 'action'=>'captcha')); ?>'); return false;"><?php echo __('Update authentication image'); ?></a></span>
+        <img src="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'common', 'action'=>'captcha')); ?>" />
+        <span class="capcha_reload"><a href="javascript(0); return false;" onclick="$(this).parent().prev().attr('src', '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'common', 'action'=>'captcha')); ?>'); return false;"><?php echo __('Update authentication image'); ?></a></span>
         <p><?php echo __('Please enter the numbers written on the image'); ?></p>
         <?php echo \Fc2blog\Web\Html::input($request, 'token', 'captcha'); ?>
         <?php if (isset($errors['token'])): ?><p class="error"><?php echo $errors['token']; ?></p><?php endif; ?>

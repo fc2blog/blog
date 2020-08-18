@@ -44,7 +44,7 @@ $(function(){
 
   // submit処理を行う
   $('#sys-blog-template-form-submit').click(function(){
-    var action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogTemplates', 'action'=>'create')); ?>';
+    var action = '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogTemplates', 'action'=>'create')); ?>';
     $('#sys-blog-template-form').prop('action', action);
     $('#sys-blog-template-form').prop('target', '_self');
   });

@@ -71,7 +71,7 @@ $(function(){
 
   // submit処理を行う
   $('#sys-blog-plugin-form-submit').click(function(){
-    var action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogPlugins', 'action'=>'create')); ?>';
+    var action = '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogPlugins', 'action'=>'create')); ?>';
     $('#sys-blog-plugin-form').prop('action', action);
     $('#sys-blog-plugin-form').prop('target', '_self');
   });
