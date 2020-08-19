@@ -21,16 +21,16 @@ abstract class UserController extends AppController
   }
 
   /**
-  * 管理画面ログイン中のブログIDを取得する
-  */
+   * 管理画面ログイン中のブログIDを取得する
+   */
   protected function getAdminBlogId()
   {
     return Session::get('blog_id');
   }
 
   /**
-  * 管理画面ログイン中のUserIDを取得する
-  */
+   * 管理画面ログイン中のUserIDを取得する
+   */
   protected function getAdminUserId()
   {
     return Session::get('user_id');
@@ -41,7 +41,8 @@ abstract class UserController extends AppController
    * @param Request $request
    * @return bool
    */
-  protected function isLoginBlog(Request $request){
+  protected function isLoginBlog(Request $request)
+  {
     // ログイン中判定
     $admin_blog_id = $this->getAdminBlogId();
     if (empty($admin_blog_id)) {
@@ -49,7 +50,7 @@ abstract class UserController extends AppController
     }
     // ログイン中のブログIDと判定
     $blog_id = $this->getBlogId($request);
-    if ($admin_blog_id==$blog_id) {
+    if ($admin_blog_id == $blog_id) {
       return true;
     }
     // ログイン判定

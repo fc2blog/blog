@@ -23,7 +23,7 @@ class CommonController extends AdminController
   {
     // 言語の設定
     $lang = $request->get('lang');
-    if ($language= Config::get('LANGUAGES.' . $lang)) {
+    if ($language = Config::get('LANGUAGES.' . $lang)) {
       Cookie::set($request, 'lang', $lang);
     }
 
@@ -46,15 +46,19 @@ class CommonController extends AdminController
     $device_type = 0;
     $device = $request->get('device');
     switch ($device) {
-      case 'pc': $device_type = Config::get('DEVICE_PC'); break;
-      case 'sp': $device_type = Config::get('DEVICE_SP'); break;
+      case 'pc':
+        $device_type = Config::get('DEVICE_PC');
+        break;
+      case 'sp':
+        $device_type = Config::get('DEVICE_SP');
+        break;
       default:
         Cookie::set($request, 'device', null);
-        $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index'));
+        $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index'));
     }
 
     Cookie::set($request, 'device', $device_type);
-    $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index'));
+    $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index'));
   }
 
   /**
@@ -116,9 +120,10 @@ class CommonController extends AdminController
     }
 
     switch ($state) {
-      default: case 0:
+      default:
+      case 0:
         // 環境チェック確認
-        return ;
+        return;
 
       case 1:
         // フォルダの作成
@@ -149,7 +154,7 @@ class CommonController extends AdminController
         }
         $sql_path = Config::get('APP_DIR') . 'db/0_initialize.sql';
         $sql = file_get_contents($sql_path);
-        if (DB_CHARSET!='UTF8MB4') {
+        if (DB_CHARSET != 'UTF8MB4') {
           $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
         }
 
@@ -196,7 +201,7 @@ class CommonController extends AdminController
     if (empty($errors['user']) && empty($errors['blog'])) {
       $user_data['type'] = Config::get('USER.TYPE.ADMIN');
       $blog_data['user_id'] = $users_model->insert($user_data);
-      if ($blog_data['user_id'] && $blog_id=$blogs_model->insert($blog_data)) {
+      if ($blog_data['user_id'] && $blog_id = $blogs_model->insert($blog_data)) {
         $this->setInfoMessage(__('User registration is completed'));
         $this->redirect($request, Config::get('BASE_DIRECTORY') . 'install.php?state=3');
       } else {

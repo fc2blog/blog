@@ -101,16 +101,16 @@ class BlogTemplatesController extends AdminController
         $device_key = Config::get('DEVICE_FC2_KEY.' . $device_type);
         $template = Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
         $request->set('blog_template', array(
-          'title'       => $template['name'],
-          'html'        => $template['html'],
-          'css'         => $template['css'],
+          'title' => $template['name'],
+          'html' => $template['html'],
+          'css' => $template['css'],
           'device_type' => $device_type,
         ));
       } else {
         $request->set('blog_template.device_type', $request->get('device_type'));
       }
       Session::set('sig', App::genRandomString());
-      return ;
+      return;
     }
 
     // 新規登録処理
@@ -119,9 +119,9 @@ class BlogTemplatesController extends AdminController
     $errors['blog_template'] = $blog_templates_model->validate($request->get('blog_template'), $blog_template_data, $white_list);
     if (empty($errors['blog_template'])) {
       $blog_template_data['blog_id'] = $this->getBlogId($request);
-      if ($id=$blog_templates_model->insert($blog_template_data)) {
+      if ($id = $blog_templates_model->insert($blog_template_data)) {
         $this->setInfoMessage(__('I created a template'));
-        $this->redirect($request, array('action'=>'index'));
+        $this->redirect($request, array('action' => 'index'));
       }
     }
 
@@ -147,12 +147,12 @@ class BlogTemplatesController extends AdminController
 
     // 初期表示時に編集データの取得&設定
     if (!$request->get('blog_template') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      if (!$blog_template=$blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
-        $this->redirect($request, array('action'=>'index'));
+      if (!$blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
+        $this->redirect($request, array('action' => 'index'));
       }
       $request->set('blog_template', $blog_template);
       Session::set('sig', App::genRandomString());
-      return ;
+      return;
     }
 
     // 更新処理
@@ -162,7 +162,7 @@ class BlogTemplatesController extends AdminController
     if (empty($errors['blog_template'])) {
       if ($blog_templates_model->updateByIdAndBlogId($blog_template_data, $id, $blog_id)) {
         $this->setInfoMessage(__('I have updated the template'));
-        $this->redirect($request, array('action'=>'index'));
+        $this->redirect($request, array('action' => 'index'));
       }
     }
 
@@ -185,7 +185,7 @@ class BlogTemplatesController extends AdminController
     $blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id);
     if (empty($blog_template)) {
       $this->setErrorMessage(__('Template to be used can not be found'));
-      $this->redirectBack($request, array('action'=>'index'));
+      $this->redirectBack($request, array('action' => 'index'));
     }
 
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
@@ -193,7 +193,7 @@ class BlogTemplatesController extends AdminController
       Model::load('Blogs')->switchTemplate($blog_template, $blog_id);
       $this->setInfoMessage(__('I switch the template'));
     }
-    $this->redirectBack($request, array('action'=>'index'));
+    $this->redirectBack($request, array('action' => 'index'));
   }
 
   /**
@@ -216,14 +216,14 @@ class BlogTemplatesController extends AdminController
     $template = Model::load('Fc2Templates')->findByIdAndDevice($id, $device_key);
     if (empty($template)) {
       $this->setErrorMessage(__('Template does not exist'));
-      $this->redirectBack($request, array('controller'=>'blog_templates', 'action'=>'fc2_index', 'device_type'=>$device_type));
+      $this->redirectBack($request, array('controller' => 'blog_templates', 'action' => 'fc2_index', 'device_type' => $device_type));
     }
 
     // 追加用のデータを取得データから作成
     $blog_template = array(
-      'title'       => $template['name'],
-      'html'        => $template['html'],
-      'css'         => $template['css'],
+      'title' => $template['name'],
+      'html' => $template['html'],
+      'css' => $template['css'],
       'device_type' => $device_type,
     );
 
@@ -233,15 +233,15 @@ class BlogTemplatesController extends AdminController
     $errors['blog_template'] = $blog_templates_model->validate($blog_template, $blog_template_data, $white_list);
     if (empty($errors['blog_template'])) {
       $blog_template_data['blog_id'] = $this->getBlogId($request);
-      if ($id=$blog_templates_model->insert($blog_template_data)) {
+      if ($id = $blog_templates_model->insert($blog_template_data)) {
         $this->setInfoMessage('「' . h($blog_template['title']) . '」' . __('I downloaded the template'));
-        $this->redirect($request, array('action'=>'index', 'device_type'=>$device_type));
+        $this->redirect($request, array('action' => 'index', 'device_type' => $device_type));
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('There is a flaw in the template to be downloaded'));
-    $this->redirectBack($request, array('controller'=>'blog_templates', 'action'=>'fc2_index', 'device_type'=>$device_type));
+    $this->redirectBack($request, array('controller' => 'blog_templates', 'action' => 'fc2_index', 'device_type' => $device_type));
   }
 
   /**
@@ -260,12 +260,12 @@ class BlogTemplatesController extends AdminController
     $template_ids = BlogsModel::getTemplateIds($blog);
     if (in_array($id, $template_ids)) {
       $this->setErrorMessage(__('You can not delete a template in use'));
-      $this->redirect($request, array('action'=>'index'));
+      $this->redirect($request, array('action' => 'index'));
     }
 
     // 削除データの取得
-    if (!$blog_template=$blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect($request, array('action'=>'index'));
+    if (!$blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
+      $this->redirect($request, array('action' => 'index'));
     }
 
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
@@ -273,7 +273,7 @@ class BlogTemplatesController extends AdminController
       $blog_templates_model->deleteByIdAndBlogId($id, $blog_id);
       $this->setInfoMessage(__('I removed the template'));
     }
-    $this->redirectBack($request, array('action'=>'index'));
+    $this->redirectBack($request, array('action' => 'index'));
   }
 
 }

@@ -56,7 +56,7 @@ class BlogPluginsController extends AdminController
    * @param bool $is_official
    * @return string
    */
-  private function plugin_search(Request $request, $is_official=true)
+  private function plugin_search(Request $request, $is_official = true)
   {
     $plugins_model = Model::load('Plugins');
 
@@ -78,11 +78,11 @@ class BlogPluginsController extends AdminController
     $order = 'updated_at DESC, id DESC';
 
     $options = array(
-      'where'  => $where,
+      'where' => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', Config::get('PAGE.PLUGIN.DEFAULT.LIMIT'), Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
-      'order'  => $order,
+      'limit' => $request->get('limit', Config::get('PAGE.PLUGIN.DEFAULT.LIMIT'), Request::VALID_POSITIVE_INT),
+      'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'order' => $order,
     );
     $plugins = $plugins_model->find('all', $options);
     $paging = $plugins_model->getPaging($options);
@@ -107,9 +107,9 @@ class BlogPluginsController extends AdminController
       Session::set('sig', App::genRandomString());
       $request->set('blog_plugin', array(
         'device_type' => $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES')),
-        'category'    => $request->get('category', 1),
+        'category' => $request->get('category', 1),
       ));
-      return ;
+      return;
     }
 
     // 新規登録処理
@@ -118,9 +118,9 @@ class BlogPluginsController extends AdminController
     $errors['blog_plugin'] = $blog_plugins_model->validate($request->get('blog_plugin'), $blog_plugin_data, $white_list);
     if (empty($errors['blog_plugin'])) {
       $blog_plugin_data['blog_id'] = $this->getBlogId($request);
-      if ($id=$blog_plugins_model->insert($blog_plugin_data)) {
+      if ($id = $blog_plugins_model->insert($blog_plugin_data)) {
         $this->setInfoMessage(__('I created a plugin'));
-        $this->redirect($request, array('action'=>'index', 'device_type'=>$blog_plugin_data['device_type']));
+        $this->redirect($request, array('action' => 'index', 'device_type' => $blog_plugin_data['device_type']));
       }
     }
 
@@ -142,15 +142,15 @@ class BlogPluginsController extends AdminController
     $blog_id = $this->getBlogId($request);
 
     // 編集対象のデータ取得
-    if (!$blog_plugin=$blog_plugins_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect($request, array('action'=>'index'));
+    if (!$blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id)) {
+      $this->redirect($request, array('action' => 'index'));
     }
 
     // 初期表示時に編集データの設定
     if (!$request->get('blog_plugin') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       $request->set('blog_plugin', $blog_plugin);
       Session::set('sig', App::genRandomString());
-      return ;
+      return;
     }
 
     // 更新処理
@@ -160,7 +160,7 @@ class BlogPluginsController extends AdminController
     if (empty($errors['blog_plugin'])) {
       if ($blog_plugins_model->updateByIdAndBlogId($blog_plugin_data, $id, $blog_id)) {
         $this->setInfoMessage(__('I have updated the plugin'));
-        $this->redirect($request, array('action'=>'index', 'device_type'=>$blog_plugin['device_type']));
+        $this->redirect($request, array('action' => 'index', 'device_type' => $blog_plugin['device_type']));
       }
     }
 
@@ -183,7 +183,7 @@ class BlogPluginsController extends AdminController
     // 削除データの取得
     $blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id);
     if (!$blog_plugin) {
-      $this->redirect($request, array('action'=>'index'));
+      $this->redirect($request, array('action' => 'index'));
     }
 
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
@@ -191,7 +191,7 @@ class BlogPluginsController extends AdminController
       $blog_plugins_model->deleteByIdAndBlogId($id, $blog_id);
       $this->setInfoMessage(__('I removed the plugin'));
     }
-    $this->redirect($request, array('action'=>'index', 'device_type'=>$blog_plugin['device_type']));
+    $this->redirect($request, array('action' => 'index', 'device_type' => $blog_plugin['device_type']));
   }
 
   /**
@@ -209,7 +209,7 @@ class BlogPluginsController extends AdminController
     // 登録データの取得
     $blog_plugin = Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id);
     if (!$blog_plugin) {
-      $this->redirect($request, array('action'=>'index'));
+      $this->redirect($request, array('action' => 'index'));
     }
     $this->set('blog_plugin', $blog_plugin);
 
@@ -225,7 +225,7 @@ class BlogPluginsController extends AdminController
         $request->set('plugin.title', $blog_plugin['title']);
       }
       Session::set('sig', App::genRandomString());
-      return ;
+      return;
     }
 
     // 新規登録処理
@@ -239,7 +239,7 @@ class BlogPluginsController extends AdminController
       } else {
         $this->setErrorMessage(__('I failed to register the plug-in'));
       }
-      $this->redirect($request, array('action'=>'index'));
+      $this->redirect($request, array('action' => 'index'));
     }
 
     // エラー情報の設定
@@ -259,8 +259,8 @@ class BlogPluginsController extends AdminController
     $user_id = $this->getUserId();
 
     // 削除データの取得
-    if (!$plugin=$plugins_model->findByIdAndUserId($id, $user_id)) {
-      $this->redirect($request, array('action'=>'search'));
+    if (!$plugin = $plugins_model->findByIdAndUserId($id, $user_id)) {
+      $this->redirect($request, array('action' => 'search'));
     }
 
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
@@ -268,7 +268,7 @@ class BlogPluginsController extends AdminController
       $plugins_model->deleteByIdAndUserId($id, $user_id);
       $this->setInfoMessage(__('I removed the plugin'));
     }
-    $this->redirectBack($request, array('action'=>'search'));
+    $this->redirectBack($request, array('action' => 'search'));
   }
 
   /**
@@ -283,28 +283,28 @@ class BlogPluginsController extends AdminController
     $plugin = Model::load('Plugins')->findById($id);
     if (empty($plugin)) {
       $this->setErrorMessage(__('Plugin does not exist'));
-      $this->redirectBack($request, array('controller'=>'blog_plugins', 'action'=>'index'));
+      $this->redirectBack($request, array('controller' => 'blog_plugins', 'action' => 'index'));
     }
 
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // 追加用のデータを取得データから作成
       $blog_plugin_data = array(
-        'title'       => $plugin['title'],
-        'contents'    => $plugin['contents'],
+        'title' => $plugin['title'],
+        'contents' => $plugin['contents'],
         'device_type' => $plugin['device_type'],
-        'category'    => $request->get('category'),
+        'category' => $request->get('category'),
       );
 
       // 新規登録処理
       $blog_plugin_data['blog_id'] = $this->getBlogId($request);
-      if ($id= Model::load('BlogPlugins')->insert($blog_plugin_data)) {
+      if ($id = Model::load('BlogPlugins')->insert($blog_plugin_data)) {
         $this->setInfoMessage(__('I created a plugin'));
-        $this->redirect($request, array('action'=>'index', 'device_type'=>$plugin['device_type']));
+        $this->redirect($request, array('action' => 'index', 'device_type' => $plugin['device_type']));
       }
 
       $this->setErrorMessage(__('I failed to download the plug-in'));
     }
-    $this->redirectBack($request, array('controller'=>'blog_plugins', 'action'=>'index'));
+    $this->redirectBack($request, array('controller' => 'blog_plugins', 'action' => 'index'));
   }
 
   /**
@@ -323,9 +323,9 @@ class BlogPluginsController extends AdminController
 
     $this->setInfoMessage(__('I have completed the sorting'));
     if (App::isSP()) {
-      $this->redirect($request, array('action'=>'index', 'device_type'=>$device_type, 'state'=>'sort'));
+      $this->redirect($request, array('action' => 'index', 'device_type' => $device_type, 'state' => 'sort'));
     }
-    $this->redirect($request, array('action'=>'index', 'device_type'=>$device_type));
+    $this->redirect($request, array('action' => 'index', 'device_type' => $device_type));
   }
 
   /**
@@ -346,9 +346,9 @@ class BlogPluginsController extends AdminController
     }
 
     if (App::isSP()) {
-      $this->redirect($request, array('action'=>'index', 'device_type'=>$device_type, 'state'=>'display'));
+      $this->redirect($request, array('action' => 'index', 'device_type' => $device_type, 'state' => 'display'));
     }
-    $this->redirect($request, array('action'=>'index', 'device_type'=>$device_type));
+    $this->redirect($request, array('action' => 'index', 'device_type' => $device_type));
   }
 
   /**
@@ -364,12 +364,12 @@ class BlogPluginsController extends AdminController
     $display = $request->get('display') ? Config::get('APP.DISPLAY.SHOW') : Config::get('APP.DISPLAY.HIDE');  // 表示可否
 
     // 編集対象のデータ取得
-    if (!$blog_plugin=$blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      $this->redirect($request, array('action'=>'index'));
+    if (!$blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+      $this->redirect($request, array('action' => 'index'));
     }
 
     // 表示・非表示設定
-    $blog_plugins_model->updateByIdAndBlogId(array('display'=>$display), $id, $blog_id);
+    $blog_plugins_model->updateByIdAndBlogId(array('display' => $display), $id, $blog_id);
 //    $blog_plugins_model->updateDisplay(array($id=>$request->get('display')), $blog_id);   // TODO:後でこちらに置き換え
 
     Config::set('DEBUG', 0);    // デバッグ設定を変更
@@ -379,31 +379,31 @@ class BlogPluginsController extends AdminController
   /**
    * テンプレートエクスポート
    */
-/*
-  public function export(Request $request)
-  {
+  /*
+    public function export(Request $request)
+    {
 
-    $id = $request->get('id');
-    $blog_id = $this->getBlogId($request);
+      $id = $request->get('id');
+      $blog_id = $this->getBlogId($request);
 
-    // 登録データの取得
-    if (!$blog_plugin=\Fc2blog\Model\Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect($request, array('action'=>'index'));
+      // 登録データの取得
+      if (!$blog_plugin=\Fc2blog\Model\Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id)) {
+        $this->redirect($request, array('action'=>'index'));
+      }
+
+      $json = array(
+        'title'       => $blog_plugin['title'],
+        'list'        => $blog_plugin['list'],
+        'contents'    => $blog_plugin['contents'],
+        'attribute'   => $blog_plugin['attribute'],
+        'device_type' => $blog_plugin['device_type'],
+      );
+      $json = json_encode($json);
+
+      $this->set('file_name', time() . '.json');
+      $this->set('data', $json);
+      $this->layout = 'download.php';
     }
-
-    $json = array(
-      'title'       => $blog_plugin['title'],
-      'list'        => $blog_plugin['list'],
-      'contents'    => $blog_plugin['contents'],
-      'attribute'   => $blog_plugin['attribute'],
-      'device_type' => $blog_plugin['device_type'],
-    );
-    $json = json_encode($json);
-
-    $this->set('file_name', time() . '.json');
-    $this->set('data', $json);
-    $this->layout = 'download.php';
-  }
-*/
+  */
 }
 

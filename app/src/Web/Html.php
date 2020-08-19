@@ -1,7 +1,7 @@
 <?php
 /**
-* HTMLの便利関数群
-*/
+ * HTMLの便利関数群
+ */
 
 namespace Fc2blog\Web;
 
@@ -24,9 +24,10 @@ class Html
    * @param bool $full_url
    * @return string
    */
-  public static function url(Request $request, $args=array(), $reused=false, $full_url=false){
+  public static function url(Request $request, $args = array(), $reused = false, $full_url = false)
+  {
     // 現在のURLの引数を引き継ぐ
-    if ($reused==true) {
+    if ($reused == true) {
       $gets = $request->getGet();
       unset($gets[Config::get('ARGS_CONTROLLER')]);
       unset($gets[Config::get('ARGS_ACTION')]);
@@ -55,7 +56,7 @@ class Html
     // URL/Controller/Methodの形で返却
     if (Config::get('URL_REWRITE') && !$full_url) {
       $params = array();
-      foreach($args as $key => $value){
+      foreach ($args as $key => $value) {
         $params[] = $key . '=' . $value;
       }
       if (!empty($device_name)) {
@@ -79,7 +80,7 @@ class Html
     $params = array();
     $params[] = Config::get('ARGS_CONTROLLER') . '=' . $controller;
     $params[] = Config::get('ARGS_ACTION') . '=' . $action;
-    foreach($args as $key => $value){
+    foreach ($args as $key => $value) {
       $params[] = $key . '=' . $value;
     }
     if (!empty($device_name)) {
@@ -101,10 +102,11 @@ class Html
     return $url;
   }
 
-  public static function input(Request $request, $name, $type, $attrs=array(), $option_attrs=array()){
+  public static function input(Request $request, $name, $type, $attrs = array(), $option_attrs = array())
+  {
     $default = isset($attrs['default']) ? $attrs['default'] : null;    // デフォルト文字列
     $options = isset($attrs['options']) ? $attrs['options'] : array(); // オプション
-    $label   = isset($attrs['label']) ? $attrs['label'] : '';          // ラベル
+    $label = isset($attrs['label']) ? $attrs['label'] : '';          // ラベル
     unset($attrs['default'], $attrs['options'], $attrs['label']);
 
     // Requestの親キー(default判定)
@@ -171,26 +173,26 @@ class Html
 
       case 'select':
         $html = '<select ' . $attr . '>';
-        foreach($options as $key => $option){
+        foreach ($options as $key => $option) {
           if (is_array($option)) {
             // オプショングループ付きSelect
             if (!isset($option['value'])) {
               $html .= '<optgroup label="' . $key . '">';
               foreach ($option as $k => $v) {
-                $html .= '<option value="' . $k . '" ' . ($rvalue!==null && $k==$rvalue ? 'selected="selected"' : '') . '>' . h($v) . '</option>';
+                $html .= '<option value="' . $k . '" ' . ($rvalue !== null && $k == $rvalue ? 'selected="selected"' : '') . '>' . h($v) . '</option>';
               }
               $html .= '</optgroup>';
-              continue ;
+              continue;
             }
             // 属性付きオプション
-            $optionAttr = ($rvalue!==null && $key==$rvalue ? 'selected="selected"' : '');
+            $optionAttr = ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '');
             if (!empty($option['disabled'])) {
               $optionAttr .= ' disabled="disabled" ';
             }
-            $html .= '<option value="' . $key . '" ' . $optionAttr . '>' . str_repeat('&nbsp;&nbsp;&nbsp;', $option['level']-1) . h($option['value']) . '</option>';
+            $html .= '<option value="' . $key . '" ' . $optionAttr . '>' . str_repeat('&nbsp;&nbsp;&nbsp;', $option['level'] - 1) . h($option['value']) . '</option>';
           } else {
             // 通常のオプション
-            $html .= '<option value="' . $key . '" ' . ($rvalue!==null && $key==$rvalue ? 'selected="selected"' : '') . '>' . h($option) . '</option>';
+            $html .= '<option value="' . $key . '" ' . ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '') . '>' . h($option) . '</option>';
           }
         }
         $html .= '</select>';
@@ -199,11 +201,11 @@ class Html
       case 'radio':
         $labelKey = 'sys-radio-' . str_replace(array('[', ']'), array('-', ''), $name) . '-';
         $html .= '<ul class="form-radio-list">';
-        $li_attr    = isset($option_attrs['li']) ? ' ' . $option_attrs['li'] : '';
+        $li_attr = isset($option_attrs['li']) ? ' ' . $option_attrs['li'] : '';
         $label_attr = isset($option_attrs['label']) ? ' ' . $option_attrs['label'] : '';
-        foreach($options as $key => $option){
+        foreach ($options as $key => $option) {
           $html .= '<li' . $li_attr . '>';
-          $html .= '<input type="radio" value="' . $key . '" ' . ($key==$rvalue ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
+          $html .= '<input type="radio" value="' . $key . '" ' . ($key == $rvalue ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
           $html .= ' <label for="' . $labelKey . $key . '"' . $label_attr . '>' . $option . '</label>';
           $html .= '</li>';
         }
@@ -214,7 +216,7 @@ class Html
         if (count($options)) {
           $labelKey = 'sys-checkbox-' . str_replace(array('[', ']'), array('-', ''), $name) . '-';
           $rvalue = is_array($rvalue) ? $rvalue : array();
-          foreach($options as $key => $option){
+          foreach ($options as $key => $option) {
             $html .= '<input type="checkbox" value="' . $key . '" ' . (in_array($key, $rvalue) ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
             $html .= '<label for="' . $labelKey . $key . '">' . $option . '</label>';
           }
@@ -237,24 +239,24 @@ class Html
    * @param $css
    * @param array $options
    */
-  public static function addCSS($css, $options=array())
+  public static function addCSS($css, $options = array())
   {
     self::$include_css[] = array($css, $options);
   }
 
   /**
-  * 追加されたCSSのHTMLを取得
-  */
+   * 追加されたCSSのHTMLを取得
+   */
   public static function getCSSHtml()
   {
     $css_html = '';
     foreach (self::$include_css as $css) {
       $attrs = array(
-        'rel'     => 'stylesheet',
-        'type'    => 'text/css',
-        'charset' => 'utf-8',
-        'media'   => 'all',
-      ) + $css[1];
+          'rel' => 'stylesheet',
+          'type' => 'text/css',
+          'charset' => 'utf-8',
+          'media' => 'all',
+        ) + $css[1];
       $css_html .= '<link href="' . $css[0] . '"';
       foreach ($attrs as $key => $value) {
         $css_html .= ' ' . $key . '="' . $value . '"';
@@ -269,22 +271,22 @@ class Html
    * @param $js
    * @param array $options
    */
-  public static function addJS($js, $options=array())
+  public static function addJS($js, $options = array())
   {
     self::$include_js[] = array($js, $options);
   }
 
   /**
-  * 追加されたJSのHTMLを取得
-  */
+   * 追加されたJSのHTMLを取得
+   */
   public static function getJSHtml()
   {
     $js_html = '';
     foreach (self::$include_js as $js) {
       $attrs = array(
-        'type'    => 'text/javascript',
-        'charset' => 'utf-8',
-      ) + $js[1];
+          'type' => 'text/javascript',
+          'charset' => 'utf-8',
+        ) + $js[1];
       $js_html .= '<script src="' . $js[0] . '"';
       foreach ($attrs as $key => $value) {
         $js_html .= ' ' . $key . '="' . $value . '"';

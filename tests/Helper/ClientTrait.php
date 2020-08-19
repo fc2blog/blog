@@ -28,10 +28,10 @@ trait ClientTrait
       null,
       null,
       [
-        'HTTP_USER_AGENT'=>'phpunit',
+        'HTTP_USER_AGENT' => 'phpunit',
       ]
     );
-    if($is_https){
+    if ($is_https) {
       $request->server['HTTPS'] = "on";
     }
     $router = new Router($request);

@@ -31,7 +31,7 @@ class Router
     // favicon.ico アクセス時に404をレスポンスし、ブラウザにリトライさせない。
     // しない場合、404扱いからのブログページへリダイレクトが発生し、無駄な資源を消費する。
     // 可能なら、httpd側でハンドルしたほうが良いのだが、可搬性のため。
-      if (preg_match('/\Afavicon\.ico/u', $request->uri)) {
+    if (preg_match('/\Afavicon\.ico/u', $request->uri)) {
       return null;
     }
 
@@ -48,9 +48,9 @@ class Router
       $args_action = Config::get('ARGS_ACTION');
 
       if ($request->isArgs($args_controller)) {
-        $this->className = "\\Fc2blog\\Web\\Controller\\Admin\\".pascalCase($request->get($args_controller))."Controller";
+        $this->className = "\\Fc2blog\\Web\\Controller\\Admin\\" . pascalCase($request->get($args_controller)) . "Controller";
       } elseif (isset($paths[1])) {
-        $this->className = "\\Fc2blog\\Web\\Controller\\Admin\\".pascalCase($paths[1])."Controller";
+        $this->className = "\\Fc2blog\\Web\\Controller\\Admin\\" . pascalCase($paths[1]) . "Controller";
       }
 
       if ($request->isArgs($args_action)) {

@@ -28,7 +28,7 @@ class TagsController extends AdminController
     $where = 'blog_id=?';
     $params = array($blog_id);
 
-    if ($name=$request->get('name')) {
+    if ($name = $request->get('name')) {
       $name = Model::escape_wildcard($name);
       $name = "%{$name}%";
       $where .= ' AND name LIKE ?';
@@ -38,17 +38,25 @@ class TagsController extends AdminController
     // 並び順
     $order = 'count DESC, id DESC';
     switch ($request->get('order')) {
-      default: case 'count_desc': break;
-      case 'count_asc': $order = 'count ASC, id ASC';  break;
-      case 'name_desc': $order = 'name DESC, id DESC'; break;
-      case 'name_asc':  $order = 'name ASC, id ASC';   break;
+      default:
+      case 'count_desc':
+        break;
+      case 'count_asc':
+        $order = 'count ASC, id ASC';
+        break;
+      case 'name_desc':
+        $order = 'name DESC, id DESC';
+        break;
+      case 'name_asc':
+        $order = 'name ASC, id ASC';
+        break;
     }
     $options = array(
-      'where'  => $where,
+      'where' => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', Config::get('TAG.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
-      'order'  => $order,
+      'limit' => $request->get('limit', Config::get('TAG.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+      'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'order' => $order,
     );
     if ($options['limit'] > max(array_keys(Config::get('TAG.LIMIT_LIST')))) {
       $options['limit'] = Config::get('TAG.DEFAULT_LIMIT');
@@ -75,8 +83,8 @@ class TagsController extends AdminController
     $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
 
-    if (!$tag=$tags_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect($request, array('action'=>'index'));
+    if (!$tag = $tags_model->findByIdAndBlogId($id, $blog_id)) {
+      $this->redirect($request, array('action' => 'index'));
     }
     $this->set('tag', $tag);
 
@@ -87,7 +95,7 @@ class TagsController extends AdminController
       if (!empty($back_url)) {
         $request->set('back_url', $request->getReferer());    // 戻る用のURL
       }
-      return ;
+      return;
     }
 
     // 更新処理
@@ -95,7 +103,7 @@ class TagsController extends AdminController
     $tag_request['id'] = $id;
     $tag_request['blog_id'] = $blog_id;
     $errors['tag'] = $tags_model->validate($tag_request, $data, array('name'));
-    if (empty($errors['tag'])){
+    if (empty($errors['tag'])) {
       if ($tags_model->updateByIdAndBlogId($data, $id, $blog_id)) {
         $this->setInfoMessage(__('I have updated the tag'));
 
@@ -104,7 +112,7 @@ class TagsController extends AdminController
         if (!empty($back_url)) {
           $this->redirect($request, $back_url);
         }
-        $this->redirect($request, array('action'=>'index'));
+        $this->redirect($request, array('action' => 'index'));
       }
     }
 
@@ -133,7 +141,7 @@ class TagsController extends AdminController
     if (!empty($back_url)) {
       $this->redirect($request, $back_url);
     }
-    $this->redirectBack($request, array('action'=>'index'));
+    $this->redirectBack($request, array('action' => 'index'));
   }
 
 }

@@ -1,7 +1,7 @@
 <?php
 /**
-* アプリ用のControllerの親クラス
-*/
+ * アプリ用のControllerの親クラス
+ */
 
 namespace Fc2blog\Web\Controller;
 
@@ -17,8 +17,8 @@ abstract class AppController extends Controller
 {
 
   /**
-  * 出力結果を装飾
-  */
+   * 出力結果を装飾
+   */
   protected function beforeRender()
   {
     $html = $this->output;
@@ -35,16 +35,16 @@ abstract class AppController extends Controller
   }
 
   /**
-  * CSSの置き換え引数
-  */
+   * CSSの置き換え引数
+   */
   public function includeCSS()
   {
     return '<!-- ' . "\xFF" . 'CSS_INCLUDE -->';
   }
 
   /**
-  * Javascriptの置き換え引数
-  */
+   * Javascriptの置き換え引数
+   */
   public function includeJS()
   {
     return '<!-- ' . "\xFF" . 'JS_INCLUDE -->';
@@ -61,8 +61,8 @@ abstract class AppController extends Controller
   }
 
   /**
-  * デバイスタイプを取得する
-  */
+   * デバイスタイプを取得する
+   */
   protected function getDeviceType()
   {
     return Config::get('DeviceType');
@@ -73,9 +73,9 @@ abstract class AppController extends Controller
    * @param null $key
    * @param string $name
    */
-  protected function setToken($key=null, $name='token')
+  protected function setToken($key = null, $name = 'token')
   {
-    if ($key===null) {
+    if ($key === null) {
       // 適当な値をトークンに設定
       $key = App::genRandomStringAlphaNum(32);
     }
@@ -88,7 +88,7 @@ abstract class AppController extends Controller
    * @param string $name
    * @return string|null
    */
-  protected function tokenValidate(Request $request, $name='token')
+  protected function tokenValidate(Request $request, $name = 'token')
   {
     $value = $request->get($name, '');
     $value = mb_convert_kana($value, 'n');
@@ -102,22 +102,22 @@ abstract class AppController extends Controller
    */
   public function debug(Request $request)
   {
-    if (Config::get('DEBUG')!=2 && Config::get('DEBUG') !=3) {
+    if (Config::get('DEBUG') != 2 && Config::get('DEBUG') != 3) {
       return $this->error404();
     }
     $key = $request->get('key');
 
     if (!is_file(Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
-      if(defined("THIS_IS_TEST")){
-        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
-      }else{
+      if (defined("THIS_IS_TEST")) {
+        throw new PseudoExit(__FILE__ . ":" . __LINE__ . " ");
+      } else {
         exit;
       }
     }
     include(Config::get('TEMP_DIR') . 'debug_html/' . $key);
-    if(defined("THIS_IS_TEST")){
-      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
-    }else{
+    if (defined("THIS_IS_TEST")) {
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ . " ");
+    } else {
       exit;
     }
   }

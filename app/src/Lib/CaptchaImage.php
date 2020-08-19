@@ -1,7 +1,7 @@
 <?php
 /**
-* 文字認証クラス
-*/
+ * 文字認証クラス
+ */
 
 namespace Fc2blog\Lib;
 
@@ -35,13 +35,14 @@ class CaptchaImage
    * @param bool $mini_mode
    * @throws Exception
    */
-  public function drawNumber($number, $mini_mode = false) {
+  public function drawNumber($number, $mini_mode = false)
+  {
     //memo. sjisの書体はサーバー環境によっては使えない
     $arr_fonts = array(
-      array( "path" => dirname(__FILE__)."/fonts/ume-ugo4.ttf",  "code" => "UTF-8", "min" => 10, "max" => 14 ),  //梅フォント
+      array("path" => dirname(__FILE__) . "/fonts/ume-ugo4.ttf", "code" => "UTF-8", "min" => 10, "max" => 14),  //梅フォント
     );
 
-    $hirakana = array (
+    $hirakana = array(
       "0" => "ぜろ",
       "1" => "いち",
       "2" => "に",
@@ -54,7 +55,7 @@ class CaptchaImage
       "9" => "きゅう",
     );
 
-    $katakana = array (
+    $katakana = array(
       "0" => "ゼロ",
       "1" => "イチ",
       "2" => "に",//"ニ", ← 判別むずかしいため
@@ -70,8 +71,8 @@ class CaptchaImage
     $tmp_str = sprintf("%d", $number);
     $im = imagecreatetruecolor($this->img_size_x, $this->img_size_y);
 
-    $white=imagecolorallocate($im, 255, 255, 255);
-    $black=imagecolorallocate($im, 0, 0, 0);
+    $white = imagecolorallocate($im, 255, 255, 255);
+    $black = imagecolorallocate($im, 0, 0, 0);
 
     // 背景の描画
     imagealphablending($im, true);
@@ -85,65 +86,65 @@ class CaptchaImage
 
     $cur_x = random_int(0, 6);
     $length = strlen($tmp_str);
-    for ($i=0; $i < $length; $i++) {
+    for ($i = 0; $i < $length; $i++) {
       if ($this->hirakana_mode) {
         //描画文字
-        if(random_int(0,1)) {
-          $char = $hirakana[ $tmp_str[$i] ];//ひらかな
-        }  else {
-          $char = $katakana[ $tmp_str[$i] ];//カタカナ
+        if (random_int(0, 1)) {
+          $char = $hirakana[$tmp_str[$i]];//ひらかな
+        } else {
+          $char = $katakana[$tmp_str[$i]];//カタカナ
         }
-      }  else {
+      } else {
         //日本語は使わず数字だけの場合
         $char = $tmp_str[$i];
       }
 
-      $angle = random_int( -10, 10 );// 角度
+      $angle = random_int(-10, 10);// 角度
       $font1 = $arr_fonts[$fid]["path"];
-      $code  = $arr_fonts[$fid]["code"];
+      $code = $arr_fonts[$fid]["code"];
 
       //フォントサイズ
       if (mb_strlen($char) > 2) {
         $font_size = $arr_fonts[$fid]["min"];
-      }  else {
-        $font_size = random_int( $arr_fonts[$fid]["min"] * 10, $arr_fonts[$fid]["max"] * 10) / 6;
+      } else {
+        $font_size = random_int($arr_fonts[$fid]["min"] * 10, $arr_fonts[$fid]["max"] * 10) / 6;
       }
 
       if ($mini_mode) $font_size = $font_size * 0.80;
 
       //フォントの文字コードにあわせる
-      if($code != "UTF-8"){
+      if ($code != "UTF-8") {
         $char = mb_convert_encoding($char, $code, "UTF-8");
       }
       $gd_info = gd_info();
       if (!empty($gd_info['JIS-mapped Japanese Font Support'])) {
         $char = mb_convert_encoding($char, "SJIS", "UTF-8");
       }
-      $arr_bbox = imagettfbbox($font_size, $angle, $font1, $char );
+      $arr_bbox = imagettfbbox($font_size, $angle, $font1, $char);
       $x1 = $arr_bbox[0] < $arr_bbox[6] ? $arr_bbox[0] : $arr_bbox[6];
       $y1 = $arr_bbox[5] < $arr_bbox[7] ? $arr_bbox[5] : $arr_bbox[7];
       $x2 = $arr_bbox[2] > $arr_bbox[4] ? $arr_bbox[2] : $arr_bbox[4];
       $y2 = $arr_bbox[1] > $arr_bbox[3] ? $arr_bbox[1] : $arr_bbox[3]; # TODO この変数は利用されていない
 
       imagettftext($im, $font_size, $angle, ($cur_x - $x1) + 1, (0 - $y1) + 5, $black, $font1, $char);
-      $cur_x += $x2 + random_int(0,8);
-      $tmp_pace = ($this->img_size_x / $length) * ($i + 1) ;
-      if ( $tmp_pace > $cur_x ) $cur_x += random_int(0, ($tmp_pace - $cur_x));
+      $cur_x += $x2 + random_int(0, 8);
+      $tmp_pace = ($this->img_size_x / $length) * ($i + 1);
+      if ($tmp_pace > $cur_x) $cur_x += random_int(0, ($tmp_pace - $cur_x));
     }
 
     // 可読性を下げる効果
-    $im2=imagecreatetruecolor($this->img_size_x, $this->img_size_y);
+    $im2 = imagecreatetruecolor($this->img_size_x, $this->img_size_y);
 
     // 背景色
-    $bg_r  = random_int(200,255);
-    $bg_g  = random_int(200,255);
-    $bg_b  = random_int(200,255);
+    $bg_r = random_int(200, 255);
+    $bg_g = random_int(200, 255);
+    $bg_b = random_int(200, 255);
     $bg_color = imagecolorallocate($im2, $bg_r, $bg_g, $bg_b);
 
     // フォント色
-    $fg_r  = random_int(0,100);
-    $fg_g  = random_int(0,100);
-    $fg_b  = random_int(0,100);
+    $fg_r = random_int(0, 100);
+    $fg_g = random_int(0, 100);
+    $fg_b = random_int(0, 100);
     $fg_color = imagecolorallocate($im2, $fg_r, $fg_g, $fg_b);
 
     imagefilledrectangle($im2, 0, 0, $this->img_size_x, $this->img_size_y, $bg_color);
@@ -151,18 +152,18 @@ class CaptchaImage
     $center = $this->img_size_x / 2;
 
     // periods
-    $rand1  = random_int(750000,1200000)/10000000;
-    $rand2  = random_int(750000,1200000)/10000000;
-    $rand3  = random_int(750000,1200000)/10000000;
-    $rand4  = random_int(750000,1200000)/10000000;
+    $rand1 = random_int(750000, 1200000) / 10000000;
+    $rand2 = random_int(750000, 1200000) / 10000000;
+    $rand3 = random_int(750000, 1200000) / 10000000;
+    $rand4 = random_int(750000, 1200000) / 10000000;
     // phases
-    $rand5  = random_int(0,31415926)/10000000;
-    $rand6  = random_int(0,31415926)/10000000;
-    $rand7  = random_int(0,31415926)/10000000;
-    $rand8  = random_int(0,31415926)/10000000;
+    $rand5 = random_int(0, 31415926) / 10000000;
+    $rand6 = random_int(0, 31415926) / 10000000;
+    $rand7 = random_int(0, 31415926) / 10000000;
+    $rand8 = random_int(0, 31415926) / 10000000;
     // amplitudes
-    $rand9  = random_int(330,420)/110;
-    $rand10 = random_int(330,450)/110;
+    $rand9 = random_int(330, 420) / 110;
+    $rand10 = random_int(330, 450) / 110;
 
     // 歪み処理
     for ($x = 0; $x < $this->img_size_x; $x++) {
@@ -173,21 +174,21 @@ class CaptchaImage
         if (($sx < 0) || ($sy < 0) || ($sx >= $this->img_size_x - 1) || ($sy >= $this->img_size_y - 1)) {
           continue;
         } else {
-          $color    = imagecolorat($im, $sx, $sy) & 0xFF;
-          $color_x  = imagecolorat($im, $sx+1, $sy) & 0xFF;
-          $color_y  = imagecolorat($im, $sx, $sy+1) & 0xFF;
-          $color_xy = imagecolorat($im, $sx+1, $sy+1) & 0xFF;
+          $color = imagecolorat($im, $sx, $sy) & 0xFF;
+          $color_x = imagecolorat($im, $sx + 1, $sy) & 0xFF;
+          $color_y = imagecolorat($im, $sx, $sy + 1) & 0xFF;
+          $color_xy = imagecolorat($im, $sx + 1, $sy + 1) & 0xFF;
         }
 
         if (($color == 255) && ($color_x == 255) && ($color_y == 255) && ($color_xy == 255)) {
           continue;
         } else if (($color == 0) && ($color_x == 0) && ($color_y == 0) && ($color_xy == 0)) {
-          $newred   = $fg_r;
+          $newred = $fg_r;
           $newgreen = $fg_g;
-          $newblue  = $fg_b;
+          $newblue = $fg_b;
         } else {
-          $frsx  = $sx - floor($sx);
-          $frsy  = $sy - floor($sy);
+          $frsx = $sx - floor($sx);
+          $frsy = $sy - floor($sy);
           $frsx1 = 1 - $frsx;
           $frsy1 = 1 - $frsy;
 
@@ -197,9 +198,9 @@ class CaptchaImage
           $newcolor = $newcolor / 255;
           $newcolor0 = 1 - $newcolor;
 
-          $newred   = $newcolor0 * $fg_r + $newcolor * $bg_r;
+          $newred = $newcolor0 * $fg_r + $newcolor * $bg_r;
           $newgreen = $newcolor0 * $fg_g + $newcolor * $bg_g;
-          $newblue  = $newcolor0 * $fg_b + $newcolor * $bg_b;
+          $newblue = $newcolor0 * $fg_b + $newcolor * $bg_b;
         }
 
         imagesetpixel($im2, $x, $y, imagecolorallocate($im2, $newred, $newgreen, $newblue));
@@ -207,32 +208,32 @@ class CaptchaImage
     }
 
     // 背景のノイズラインの描画
-    for ($i=0; $i < 4; $i++) {
-      $col = imagecolorallocate($im2, random_int(99,188), random_int(99,188), random_int(99,188));
-      imageline($im2, random_int(4, $this->img_size_x -1), 4, random_int(4, $this->img_size_x - 4), $this->img_size_y - 4, $col);
+    for ($i = 0; $i < 4; $i++) {
+      $col = imagecolorallocate($im2, random_int(99, 188), random_int(99, 188), random_int(99, 188));
+      imageline($im2, random_int(4, $this->img_size_x - 1), 4, random_int(4, $this->img_size_x - 4), $this->img_size_y - 4, $col);
     }
 
     if (!$mini_mode) {//背景色で横ダミーライン
       imageline($im2, 0, random_int(0, ($this->img_size_y - 1)), ($this->img_size_x - 1), random_int(0, ($this->img_size_y - 1)), $bg_color);
-      imageline($im2, random_int(0,$this->img_size_x -1), 0, random_int(0, $this->img_size_x / 2), $this->img_size_y -1, $bg_color);
-      imageline($im2, random_int(0,$this->img_size_x /2), 0, random_int(0, $this->img_size_x -1) , $this->img_size_y -1, $bg_color);
+      imageline($im2, random_int(0, $this->img_size_x - 1), 0, random_int(0, $this->img_size_x / 2), $this->img_size_y - 1, $bg_color);
+      imageline($im2, random_int(0, $this->img_size_x / 2), 0, random_int(0, $this->img_size_x - 1), $this->img_size_y - 1, $bg_color);
     }
 
     // ノイズドット
-    for ($i=0; $i < 12; $i++ ) {
-      $col = ImageColorAllocate ($im2, random_int(80,220), random_int(80,220), random_int(80,220) );
-      for ($j=0; $j < 12; $j++ ) {
-        imagesetpixel($im2, random_int(1,$this->img_size_x), random_int(1,$this->img_size_y), $col);
+    for ($i = 0; $i < 12; $i++) {
+      $col = ImageColorAllocate($im2, random_int(80, 220), random_int(80, 220), random_int(80, 220));
+      for ($j = 0; $j < 12; $j++) {
+        imagesetpixel($im2, random_int(1, $this->img_size_x), random_int(1, $this->img_size_y), $col);
       }
     }
 
-    if(!headers_sent()) { # UnitTestで受け取るため
+    if (!headers_sent()) { # UnitTestで受け取るため
       header("Content-type: image/gif");
     }
 
     imagegif($im2);
 
-    if(!defined("TEST_DONT_FLUSH_OUTPUT_BUFFER")) { # UnitTestで受け取るため
+    if (!defined("TEST_DONT_FLUSH_OUTPUT_BUFFER")) { # UnitTestで受け取るため
       ob_flush();
       flush();
     }

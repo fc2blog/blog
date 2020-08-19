@@ -22,11 +22,11 @@ class BlogsController extends AdminController
 
     // ブログの一覧取得
     $options = array(
-      'where'  => 'user_id=?',
+      'where' => 'user_id=?',
       'params' => array($this->getUserId()),
-      'limit'  => Config::get('BLOG.DEFAULT_LIMIT', 10),
-      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
-      'order'  => 'created_at DESC',
+      'limit' => Config::get('BLOG.DEFAULT_LIMIT', 10),
+      'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'order' => 'created_at DESC',
     );
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
       $options['page'] = 0;
@@ -49,7 +49,7 @@ class BlogsController extends AdminController
     // 初期表示時
     if (!$request->get('blog') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       Session::set('sig', App::genRandomString());
-      return ;
+      return;
     }
 
     /** @var BlogsModel $blogs_model */
@@ -60,9 +60,9 @@ class BlogsController extends AdminController
     $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, array('id', 'name', 'nickname'));
     if (empty($errors['blog'])) {
       $blog_data['user_id'] = $this->getUserId();
-      if ($id=$blogs_model->insert($blog_data)) {
+      if ($id = $blogs_model->insert($blog_data)) {
         $this->setInfoMessage(__('I created a blog'));
-        $this->redirect($request, array('action'=>'index'));
+        $this->redirect($request, array('action' => 'index'));
       }
     }
 
@@ -85,21 +85,21 @@ class BlogsController extends AdminController
     // 初期表示時に編集データの設定
     if (!$request->get('blog') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       Session::set('sig', App::genRandomString());
-      if (!$blog=$blogs_model->findById($blog_id)) {
-        $this->redirect($request, array('action'=>'index'));
+      if (!$blog = $blogs_model->findById($blog_id)) {
+        $this->redirect($request, array('action' => 'index'));
       }
       $request->set('blog', $blog);
-      return ;
+      return;
     }
 
     // 更新処理
     $white_list = array('name', 'introduction', 'nickname', 'timezone', 'blog_password', 'open_status', 'ssl_enable', 'redirect_status_code');
     $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, $white_list);
-    if (empty($errors['blog'])){
+    if (empty($errors['blog'])) {
       if ($blogs_model->updateById($blog_data, $blog_id)) {
-        $this->setBlog(array('id'=>$blog_id, 'nickname'=>$blog_data['nickname']));    // ニックネームの更新
+        $this->setBlog(array('id' => $blog_id, 'nickname' => $blog_data['nickname']));    // ニックネームの更新
         $this->setInfoMessage(__('I updated a blog'));
-        $this->redirect($request, array('action'=>'edit'));
+        $this->redirect($request, array('action' => 'edit'));
       }
     }
 
@@ -133,7 +133,7 @@ class BlogsController extends AdminController
     // 退会チェック
     if (!$request->get('blog.delete') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       Session::set('sig', App::genRandomString());
-      return ;
+      return;
     }
 
     $blog_id = $this->getBlogId($request);
@@ -141,15 +141,15 @@ class BlogsController extends AdminController
 
     // 削除データの取得
     $blogs_model = Model::load('Blogs');
-    if (!$blog=$blogs_model->findByIdAndUserId($blog_id, $user_id)) {
-      $this->redirect($request, array('action'=>'index'));
+    if (!$blog = $blogs_model->findByIdAndUserId($blog_id, $user_id)) {
+      $this->redirect($request, array('action' => 'index'));
     }
 
     // 削除処理
     $blogs_model->deleteByIdAndUserId($blog_id, $user_id);
     $this->setBlog(null);   // ログイン中のブログを削除したのでブログの選択中状態を外す
     $this->setInfoMessage(__('I removed the blog'));
-    $this->redirect($request, array('action'=>'index'));
+    $this->redirect($request, array('action' => 'index'));
   }
 
 }

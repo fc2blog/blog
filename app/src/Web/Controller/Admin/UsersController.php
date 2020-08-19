@@ -25,7 +25,7 @@ class UsersController extends AdminController
 
     $options = array(
       'limit' => Config::get('PAGE.USER.LIMIT', 10),
-      'page'  => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => 'id DESC',
     );
     $users_model = Model::load('Users');
@@ -49,7 +49,7 @@ class UsersController extends AdminController
 
     // 初期表示時
     if (!$request->get('user')) {
-      return ;
+      return;
     }
 
     /** @var UsersModel $users_model */
@@ -63,15 +63,15 @@ class UsersController extends AdminController
     $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, array('id', 'name', 'nickname'));
     if (empty($errors['user']) && empty($errors['blog'])) {
       $blog_data['user_id'] = $users_model->insert($user_data);
-      if ($blog_data['user_id'] && $blog_id=$blogs_model->insert($blog_data)) {
+      if ($blog_data['user_id'] && $blog_id = $blogs_model->insert($blog_data)) {
         $this->setInfoMessage(__('User registration is completed'));
-        $this->redirect($request, array('action'=>'login'));
+        $this->redirect($request, array('action' => 'login'));
       } else {
         // ブログ作成失敗時には登録したユーザーを削除
         $users_model->deleteById($blog_data['user_id']);
       }
       $this->setErrorMessage(__('I failed to register'));
-      return ;
+      return;
     }
 
     // エラー情報の設定
@@ -95,7 +95,7 @@ class UsersController extends AdminController
       $user = $users_model->findById($user_id);
       unset($user['password']);
       $request->set('user', $user);
-      return ;
+      return;
     }
 
     // 更新処理
@@ -105,7 +105,7 @@ class UsersController extends AdminController
     if (empty($errors['user'])) {
       if ($users_model->updateById($data_user, $user_id)) {
         $this->setInfoMessage(__('Update User Information'));
-        $this->redirect($request, array('action'=>'edit'));
+        $this->redirect($request, array('action' => 'edit'));
       }
     }
 
@@ -122,7 +122,7 @@ class UsersController extends AdminController
   {
     // 退会チェック
     if (!$request->get('user.delete')) {
-      return ;
+      return;
     }
 
     // 削除処理
@@ -145,7 +145,7 @@ class UsersController extends AdminController
 
     // 初期表示時
     if (!$request->get('user')) {
-      return ;
+      return;
     }
 
     /** @var UsersModel $users_model */
@@ -159,9 +159,9 @@ class UsersController extends AdminController
         // ログイン処理
         $blog = Model::load('Blogs')->getLoginBlog($user);
         $this->loginProcess($user, $blog);
-        $users_model->updateById(array('logged_at'=>date('Y-m-d H:i:s')), $user['id']);
+        $users_model->updateById(array('logged_at' => date('Y-m-d H:i:s')), $user['id']);
         if (!$this->isSelectedBlog()) {
-          $this->redirect($request, array('controller'=>'Blogs', 'action'=>'create'));
+          $this->redirect($request, array('controller' => 'Blogs', 'action' => 'create'));
         }
         $this->redirect($request, Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
       }
@@ -180,7 +180,7 @@ class UsersController extends AdminController
     if ($this->isLogin()) {
       Session::destroy($request);
     }
-    $this->redirect($request, array('action'=>'login'));
+    $this->redirect($request, array('action' => 'login'));
   }
 
 }

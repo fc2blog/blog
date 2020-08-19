@@ -1,8 +1,8 @@
 <?php
 /**
-* リクエストクラス
-* POST,GETへのアクセスを便利にするクラス
-*/
+ * リクエストクラス
+ * POST,GETへのアクセスを便利にするクラス
+ */
 
 namespace Fc2blog\Web;
 
@@ -11,24 +11,24 @@ use LogicException;
 
 class Request
 {
-  const VALID_NOT_EMPTY    = 0;    // 空チェック
+  const VALID_NOT_EMPTY = 0;    // 空チェック
   const VALID_UNSIGNED_INT = 1;    // 0以上の数値チェック
   const VALID_POSITIVE_INT = 2;    // 1以上の数値チェック
-  const VALID_IN_ARRAY     = 3;    // 配列内の値のどれかチェック
+  const VALID_IN_ARRAY = 3;    // 配列内の値のどれかチェック
 
-  private $path    = '';
-  private $query   = '';
+  private $path = '';
+  private $query = '';
   private $request = [];
-  private $get     = [];
-  private $post    = [];
-  private $files   = [];
+  private $get = [];
+  private $post = [];
+  private $files = [];
 
-  public $uri   = "";
-  public $method   = "";
-  public $session   = [];
-  public $server   = [];
-  public $env   = [];
-  public $cookie   = [];
+  public $uri = "";
+  public $method = "";
+  public $session = [];
+  public $server = [];
+  public $env = [];
+  public $cookie = [];
 
   public $className = CommonController::class;
   public $methodName = "index";
@@ -47,7 +47,7 @@ class Request
   {
     $this->method = $method ?? $_SERVER['REQUEST_METHOD'] ?? "GET";
     $this->uri = $uri ?? $_SERVER["REQUEST_URI"] ?? "GET";
-    if(isset($_SESSION)) {
+    if (isset($_SESSION)) {
       $this->session = $session ?? $_SESSION;
     }
     $this->post = $post ?? $_POST;
@@ -82,9 +82,10 @@ class Request
 //  }
 
   /**
-  * リファラーを返却 存在しない場合は空文字を返却
-  */
-  public static function getReferer(){
+   * リファラーを返却 存在しない場合は空文字を返却
+   */
+  public static function getReferer()
+  {
     // TODO
     if (!empty($_SERVER->server['HTTP_REFERER'])) {
       return $_SERVER['HTTP_REFERER'];
@@ -96,10 +97,10 @@ class Request
    * コマンドラインの引数をリクエストに設定
    * @param array $argv
    */
-  public function setCronParams($argv=array())
+  public function setCronParams($argv = array())
   {
     // DELME
-throw new LogicException("deprecated");
+    throw new LogicException("deprecated");
     //    if (count($argv) < 3) {
 //      // 1:ファイル名 2:コントローラー名 3:メソッド名 4...引数
 //      echo "コントローラー名、メソッド名が指定されておりません\n";
@@ -159,13 +160,13 @@ throw new LogicException("deprecated");
    * @param null $default
    * @return array|mixed|null
    */
-  public function file($key, $default=null)
+  public function file($key, $default = null)
   {
     if (!isset($this->files[$key])) {
       return $default;
     }
     $file = $this->files[$key];
-    if (!is_array($file['tmp_name'])){
+    if (!is_array($file['tmp_name'])) {
       return $file;
     }
     $files = array();
@@ -178,20 +179,20 @@ throw new LogicException("deprecated");
     return $files;
   }
 
-  public function get($key, $default=null, $valid=self::VALID_NOT_EMPTY, $options=null)
+  public function get($key, $default = null, $valid = self::VALID_NOT_EMPTY, $options = null)
   {
     // .区切りのキーを解釈
     $data = $this->request;
     $keys = explode('.', $key);
-    foreach($keys as $k){
-      if(!isset($data[$k])){
+    foreach ($keys as $k) {
+      if (!isset($data[$k])) {
         return $default;
       }
       $data = $data[$k];
     }
 
     // 値のチェック
-    switch($valid){
+    switch ($valid) {
       default:
       case self::VALID_NOT_EMPTY:
         if ($data === "" || $data === null) {
@@ -269,48 +270,48 @@ throw new LogicException("deprecated");
    */
   public function set($key, $value)
   {
-    if (strpos($key, '.')===false) {
+    if (strpos($key, '.') === false) {
       $this->request[$key] = $value;
-      return ;
+      return;
     }
     $keys = explode('.', $key);
     $this->_set($keys, $value, $this->request, count($keys));
   }
 
-  private function _set($keys, $value, &$request, $count, $i=0)
+  private function _set($keys, $value, &$request, $count, $i = 0)
   {
     $key = $keys[$i];
     if ($count == 1) {
       $request[$key] = $value;
-      return ;
+      return;
     }
     if (empty($request[$key]) || !is_array($request[$key])) {
       $request[$key] = array();
     }
-    $this->_set($keys, $value, $request[$key], $count-1, $i+1);
+    $this->_set($keys, $value, $request[$key], $count - 1, $i + 1);
   }
 
   public function delete($key)
   {
-    if (strpos($key, '.')===false) {
+    if (strpos($key, '.') === false) {
       unset($this->request[$key]);
-      return ;
+      return;
     }
     $keys = explode('.', $key);
     $this->_delete($keys, $this->request, count($keys));
   }
 
-  private function _delete($keys, &$request, $count, $i=0)
+  private function _delete($keys, &$request, $count, $i = 0)
   {
     $key = $keys[$i];
     if ($count == 1) {
       unset($request[$key]);
-      return ;
+      return;
     }
     if (empty($request[$key]) || !is_array($request[$key])) {
-      return ;
+      return;
     }
-    $this->_delete($keys, $request[$key], $count-1, $i+1);
+    $this->_delete($keys, $request[$key], $count - 1, $i + 1);
   }
 
   /**
@@ -329,9 +330,9 @@ throw new LogicException("deprecated");
    * キーの入れ替えを行う
    * @param array $comb
    */
-  public function combine($comb=array())
+  public function combine($comb = array())
   {
-    foreach($comb as $key => $value){
+    foreach ($comb as $key => $value) {
       $this->set($value, $this->get($key));
       $this->delete($key);
     }
@@ -362,7 +363,7 @@ throw new LogicException("deprecated");
    * @param string|array|null $default
    * @return string|array|null
    */
-  public function rawGet(string $key, $default=null)
+  public function rawGet(string $key, $default = null)
   {
     return isset($this->get[$key]) ? $this->get[$key] : $default;
   }
@@ -371,7 +372,7 @@ throw new LogicException("deprecated");
    * @param string $key
    * @return bool
    */
-  public function rawHasGet(string $key):bool
+  public function rawHasGet(string $key): bool
   {
     return isset($this->get[$key]);
   }
@@ -381,7 +382,7 @@ throw new LogicException("deprecated");
    * @param string|array|null $default
    * @return string|array|null
    */
-  public function rawPost(string $key, $default=null)
+  public function rawPost(string $key, $default = null)
   {
     return isset($this->post[$key]) ? $this->post[$key] : $default;
   }
@@ -390,7 +391,7 @@ throw new LogicException("deprecated");
    * @param string $key
    * @return bool
    */
-  public function rawHasPost(string $key):bool
+  public function rawHasPost(string $key): bool
   {
     return isset($this->post[$key]);
   }
@@ -400,7 +401,7 @@ throw new LogicException("deprecated");
    * @param string|array|null $default
    * @return string|array|null
    */
-  public function rawCookie(string $key, $default=null)
+  public function rawCookie(string $key, $default = null)
   {
     return isset($this->cookie[$key]) ? $this->cookie[$key] : $default;
   }
@@ -409,7 +410,7 @@ throw new LogicException("deprecated");
    * @param string $key
    * @return bool
    */
-  public function rawHasCookie(string $key):bool
+  public function rawHasCookie(string $key): bool
   {
     return isset($this->cookie[$key]);
   }

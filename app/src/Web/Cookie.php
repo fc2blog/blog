@@ -31,7 +31,7 @@ class Cookie
    * @param string $key
    * @return void
    */
-  public static function remove(Request $request, string $key):void
+  public static function remove(Request $request, string $key): void
   {
     self::set($request, $key, "", time() - 3600);
   }

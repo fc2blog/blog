@@ -1,7 +1,7 @@
 <?php
 /**
-* Controllerの親クラス
-*/
+ * Controllerの親クラス
+ */
 
 namespace Fc2blog\Web\Controller;
 
@@ -20,6 +20,7 @@ abstract class Controller
   protected $layout = 'default.php';  // 表示ページのレイアウトテンプレート
   protected $output = '';              // 出力タグ
   protected $request;
+
   public function __construct(Request $request, $method)
   {
     $this->request = $request;
@@ -66,11 +67,17 @@ abstract class Controller
     echo $this->output;
   }
 
-  protected function beforeFilter(Request $request){}
+  protected function beforeFilter(Request $request)
+  {
+  }
 
-  protected function afterFilter(Request $request){}
+  protected function afterFilter(Request $request)
+  {
+  }
 
-  protected function beforeRender(){}
+  protected function beforeRender()
+  {
+  }
 
   public function set($key, $value)
   {
@@ -105,9 +112,9 @@ abstract class Controller
     Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
     Debug::setSessionLogs();
 
-    if(!is_null($blog_id) && $full_url) {
+    if (!is_null($blog_id) && $full_url) {
       $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
-    }else{
+    } else {
       $status_code = 302;
     }
     if (!headers_sent()) {
@@ -116,9 +123,9 @@ abstract class Controller
     }
     $escaped_url = h($url);
     echo "redirect to {$escaped_url} status code:{$status_code}";
-    if(defined("THIS_IS_TEST")){
-      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." redirect to {$escaped_url} status code:{$status_code}");
-    }else{
+    if (defined("THIS_IS_TEST")) {
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ . " redirect to {$escaped_url} status code:{$status_code}");
+    } else {
       exit;
     }
   }
@@ -129,7 +136,7 @@ abstract class Controller
    * @param $url
    * @param string $hash
    */
-  protected function redirectBack(Request $request, $url, $hash='')
+  protected function redirectBack(Request $request, $url, $hash = '')
   {
     // 元のURLに戻す
     if (!empty($_SERVER['HTTP_REFERER'])) {
@@ -151,9 +158,9 @@ abstract class Controller
     $prefix = strtolower(Config::get('APP_PREFIX'));
 
     Debug::log('Layout[' . $this->layout . ']', false, 'system', __FILE__, __LINE__);
-    if ($this->layout=='') {
+    if ($this->layout == '') {
       // layoutが空の場合は表示処理を行わない
-      return ;
+      return;
     }
 
     $fw_template_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
@@ -175,7 +182,7 @@ abstract class Controller
    * @param array $fw_data
    * @param bool $fw_is_prefix
    */
-  public function display(Request $request, $fw_template, $fw_data=array(), $fw_is_prefix=true)
+  public function display(Request $request, $fw_template, $fw_data = array(), $fw_is_prefix = true)
   {
     $fw_template = snakeCase($fw_template);
     // データの設定
@@ -186,7 +193,7 @@ abstract class Controller
 
       // fw_dataがある場合は渡された値のみ展開
       extract($fw_data);
-    }else{
+    } else {
       // 定義済み変数に関しては展開させない
       unset($this->data['fw_template']);
       unset($this->data['fw_is_prefix']);
@@ -211,7 +218,7 @@ abstract class Controller
     } elseif (is_file($fw_template_path)) {
       Debug::log('Template[' . $fw_template_path . ']', false, 'system', __FILE__, __LINE__);
       include($fw_template_path);
-    }else{
+    } else {
       Debug::log('Not Found Template[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
     }
   }
@@ -224,7 +231,7 @@ abstract class Controller
    * @param bool $isPrefix
    * @return false|string
    */
-  public function fetch(Request $request, $template, $data=array(), $isPrefix=true)
+  public function fetch(Request $request, $template, $data = array(), $isPrefix = true)
   {
     ob_start();
     $this->display($request, $template, $data, $isPrefix);

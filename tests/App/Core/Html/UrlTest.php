@@ -20,8 +20,8 @@ class UrlTest extends TestCase
       null,
       null,
       [
-        'HTTP_USER_AGENT'=>'phpunit',
-        'HTTPS'=>"on"
+        'HTTP_USER_AGENT' => 'phpunit',
+        'HTTPS' => "on"
       ]
     );
     $url = Html::url($request, [
@@ -44,8 +44,8 @@ class UrlTest extends TestCase
       null,
       null,
       [
-        'HTTP_USER_AGENT'=>'phpunit',
-        'HTTPS'=>"on"
+        'HTTP_USER_AGENT' => 'phpunit',
+        'HTTPS' => "on"
       ]
     );
     $url = Html::url($request, [

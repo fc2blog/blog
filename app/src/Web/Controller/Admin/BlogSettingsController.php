@@ -64,7 +64,7 @@ class BlogSettingsController extends AdminController
       Session::set('sig', App::genRandomString());
       $blog_setting = $blog_settings_model->findByBlogId($blog_id);
       $request->set('blog_setting', $blog_setting);
-      return ;
+      return;
     }
 
     // 更新処理
@@ -74,8 +74,8 @@ class BlogSettingsController extends AdminController
       // コメント確認からコメントを確認せずそのまま表示に変更した場合既存の承認待ちを全て承認済みに変更する
       $blog_setting = $blog_settings_model->findByBlogId($blog_id);
       if ($blog_setting['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')
-          && isset($blog_setting_data['comment_confirm'])
-          && $blog_setting_data['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
+        && isset($blog_setting_data['comment_confirm'])
+        && $blog_setting_data['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
       ) {
         Model::load('Comments')->updateApproval($blog_id);
       }
@@ -84,7 +84,7 @@ class BlogSettingsController extends AdminController
       if ($blog_settings_model->updateByBlogId($blog_setting_data, $blog_id)) {
         // 一覧ページへ遷移
         $this->setInfoMessage(__("I have updated the configuration information of the blog"));
-        $this->redirect($request, array('action'=>$action));
+        $this->redirect($request, array('action' => $action));
       }
     }
 
