@@ -7,9 +7,12 @@
 namespace Fc2blog\Web\Router;
 
 use Fc2blog\Config;
+use Fc2blog\Web\Controller\Admin\AdminController;
+use Fc2blog\Web\Controller\Test\TestController;
 use Fc2blog\Web\Controller\User\BlogsController;
 use Fc2blog\Web\Controller\User\CommonController;
 use Fc2blog\Web\Controller\User\EntriesController;
+use Fc2blog\Web\Controller\User\UserController;
 use Fc2blog\Web\Request;
 
 class Router
@@ -20,14 +23,9 @@ class Router
 
   public function __construct(Request $request)
   {
+    $this->request = $request;
     // TODO if文ベースのルーターから、なんらかのルーターに切り替えたい（Config全廃が前提）
 
-    // TODO Denyの実装
-//    $denyClass = $prefix ? $prefix . 'Controller' : 'AppController';
-//    $denyMethod = ['process', 'display', 'fetch', 'set']; // このメソッドは外部からコールできない、Denyリスト
-//    $denyPattern = ['CommonController' => ['install']]; // このメソッドは外部からコールできない、Denyリスト
-
-    $this->request = $request;
     // favicon.ico アクセス時に404をレスポンスし、ブラウザにリトライさせない。
     // しない場合、404扱いからのブログページへリダイレクトが発生し、無駄な資源を消費する。
     // 可能なら、httpd側でハンドルしたほうが良いのだが、可搬性のため。
@@ -59,21 +57,15 @@ class Router
         $this->methodName = $paths[2];
       }
 
-    } elseif (preg_match('|\A/_for_unit_test_/|u', $request->uri)) { // Test routings
+    } elseif (preg_match('|\A/_for_unit_test_/|u', $request->uri)) { // Test routing
       Config::set('URL_REWRITE', true);
       Config::set('BASE_DIRECTORY', '/_for_unit_test_/');
       Config::set('APP_PREFIX', 'Test');
       $this->className = \Fc2blog\Web\Controller\Test\CommonController::class; // default controller.
 
       // 管理用のパラメータを設定する
-      $path = $request->getPath(); // full path with out query args.  # TODO この変数は利用されていない
       $paths = $request->getPaths(); // explode with `/`
-      $query = $request->getQuery(); // query args  # TODO この変数は利用されていない
       $args_controller = Config::get('ARGS_CONTROLLER');
-      $args_action = Config::get('ARGS_ACTION');  # TODO この変数は利用されていない
-
-      // argsa => method(action
-      // argsc => class
 
       // アクションのクラスは当座固定
       $request->set($args_controller, "common");
@@ -91,7 +83,7 @@ class Router
 
       }
 
-    } else { // User Routings
+    } else { // User Routing
 
       Config::set('URL_REWRITE', false);
       Config::set('BASE_DIRECTORY', '/');
@@ -101,14 +93,12 @@ class Router
       // ユーザー用のパラメータを設定する
       $path = $request->getPath();
       $paths = $request->getPaths();
-      $query = $request->getQuery();  # TODO この変数は利用されていない
       $args_controller = "mode";
       $args_action = "process";
 
       if ($request->get($args_controller) == "common") {
         $this->className = CommonController::class;
       }
-
 
       // blog_idの設定
       if (isset($paths[0]) && preg_match('|\A[0-9a-zA-Z]+\z|u', $paths[0])) {
@@ -129,7 +119,6 @@ class Router
       if ($request->isArgs('no') && $request->isArgs('m2')) {
         $this->methodName = 'view';
         $request->set('id', $request->get('no'));
-        return;
       }
 
       // プラグイン単体
@@ -189,7 +178,26 @@ class Router
         // 一つもかからなかったので
         $this->methodName = $request->get($args_action);
       }
+    }
 
+    // アクセス拒否パターン（親クラス直呼び出し）
+    // TODO パターンで表現されているが、Denyは構造で実現出来ているべきかと思われる
+    if (
+      (
+        $this->className === UserController::class ||
+        $this->className === AdminController::class ||
+        $this->className === TestController::class
+      ) ||
+      (
+        $this->methodName === 'process' ||
+        $this->methodName === 'display' ||
+        $this->methodName === 'fetch' ||
+        $this->methodName === 'set'
+      )
+    ) {
+      // 404に固定
+      $this->className = CommonController::class; // default controller.
+      $this->methodName = 'error404';
     }
   }
 
