@@ -15,52 +15,51 @@ use Fc2blog\Web\Request;
 
 abstract class Controller
 {
-
-  private $data = array();             // テンプレートへ渡す変数の保存領域
+  private $data = array();            // テンプレートへ渡す変数の保存領域
   protected $layout = 'default.php';  // 表示ページのレイアウトテンプレート
-  protected $output = '';              // 出力タグ
-  protected $request;
+  protected $output = '';             // 出力タグ
 
   public function __construct(Request $request, $method)
   {
-    $this->request = $request;
-
     $className = get_class($this);
 
     { // PSR-4 対応のためのTweak
+      // namespace付きクラス名から、クラス名へ
       $classNamePathList = explode('\\', $className);
       $className = $classNamePathList[count($classNamePathList) - 1];
     }
 
-    // コントローラー名の設定
+    // コントローラー名の設定（後でアクセス許可判定などに使われる
     $controllerName = explode('Controller', $className);
     Config::set('ControllerName', $controllerName[0]);
 
-    // メソッド名の設定
+    // メソッド名の設定（後でアクセス許可判定などに使われる
     Config::set('ActionName', $method);
 
-    // デバイスタイプの設定
+    // デバイスタイプの設定（TODO ここでなくても良さそうだが
     Config::set('DeviceType', App::getDeviceType($request));
 
-    // アプリプレフィックス
-    $prefix = Config::get('APP_PREFIX');
+    // アプリプレフィックス、テンプレートファイル名決定に使われる
+    $prefix = Config::get('APP_PREFIX'); // TODO Request に持たせられそう
 
     Debug::log('Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']', false, 'system', __FILE__, __LINE__);
 
     $this->beforeFilter($request);
 
+    // アクションの実行(返り値はテンプレートファイル名)
     $template = $this->$method($request);
 
+    // 空の場合は、規約に則ってテンプレートファイルを決定する
     if (empty($template)) {
       $template = substr($className, 0, strlen($className) - strlen('Controller')) . '/' . $method . '.php';
     }
 
-    $this->afterFilter($request);
-
+    // 後での置換のため、出力を一時変数へ
     ob_start();
     $this->layout($request, $template);
     $this->output = ob_get_clean();
 
+    // SSI的なインクルード処理など
     $this->beforeRender();
 
     // 結果を出力
@@ -68,10 +67,6 @@ abstract class Controller
   }
 
   protected function beforeFilter(Request $request)
-  {
-  }
-
-  protected function afterFilter(Request $request)
   {
   }
 
@@ -239,15 +234,16 @@ abstract class Controller
     return $html;
   }
 
+  // 存在しないアクションは404へ
   public function __call($name, $arguments)
   {
     return $this->error404();
   }
 
+  // 404 NotFound Action
   public function error404()
   {
     return 'Common/error404.php';
   }
-
 }
 
