@@ -24,7 +24,7 @@ define('PASSWORD_SALT', '0123456789abcdef');
 
 // publicとappの位置関係を修正した場合には変更してください
 // Please edit the path when change `app` and `public` relative path condition.
-define('WWW_DIR', __DIR__ . '/../public');
+define('WWW_DIR', __DIR__ . '/../public/'); // this path need finish with slash.
 
 // 設定クラス読み込み
 require(__DIR__ . '/core/bootstrap.php');
