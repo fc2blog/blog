@@ -100,53 +100,53 @@ function snakeCase($camel_case)
   return strtolower(preg_replace("/([A-Z])/u", "_$0", lcfirst($camel_case)));
 }
 
-/**
- * ルーティング用メソッド
- * @param string $config_file_name
- * @return \Fc2blog\Web\Request
- * @deprecated
- */
 // DELME
-function getRouting(string $config_file_name=""):\Fc2blog\Web\Request
-{
-  $request = new \Fc2blog\Web\Request();
-
-  if(strlen($config_file_name)>0) {
-    \Fc2blog\Config::read($config_file_name); // 環境設定読み込み
-  }
-
-  require(\Fc2blog\Config::get('CONFIG_DIR') . \Fc2blog\Config::get('ROUTING'));  // ルーティング設定を読み込み
-
-
-  $defaultClass = \Fc2blog\Config::get('DEFAULT_CLASS_NAME'); // ルーター定義に依存
-  $defaultMethod = 'index'; // DELME \Fc2blog\Config::get('DEFAULT_METHOD_NAME');
-  $prefix = \Fc2blog\Config::get('APP_PREFIX');
-  $classPrefix = \Fc2blog\Config::get('CLASS_PREFIX');
-
-  $denyClass = $prefix ? $prefix . 'Controller' : 'AppController';
-  $denyMethod = ['process', 'display', 'fetch', 'set']; // このメソッドは外部からコールできない、Denyリスト
-  $denyPattern = ['CommonController' => ['install']]; // このメソッドは外部からコールできない、Denyリスト
-
-  $args_controller = \Fc2blog\Config::get('ARGS_CONTROLLER');
-  $args_action = \Fc2blog\Config::get('ARGS_ACTION');
-
-  $className = pascalCase(basename($request->get($args_controller)));
-  $className = $className ? $className . 'Controller' : $defaultClass;
-  $methodName = $request->get($args_action, $defaultMethod);
-  $methodName = in_array($methodName, $denyMethod) ? $defaultMethod : $methodName;
-  if (
-    $className == $denyClass ||
-    (isset($denyPattern[$className]) && in_array($methodName, $denyPattern[$className]))
-  ) {
-    $className = $defaultClass;
-    $methodName = $defaultMethod;
-  }
-
-  $request->className = $classPrefix . $className;
-  $request->methodName = $methodName;
-
-  return $request;
-}
+///**
+// * ルーティング用メソッド
+// * @param string $config_file_name
+// * @return \Fc2blog\Web\Request
+// * @deprecated
+// */
+//function getRouting(string $config_file_name=""):\Fc2blog\Web\Request
+//{
+//  $request = new \Fc2blog\Web\Request();
+//
+//  if(strlen($config_file_name)>0) {
+//    \Fc2blog\Config::read($config_file_name); // 環境設定読み込み
+//  }
+//
+//  require(\Fc2blog\Config::get('CONFIG_DIR') . \Fc2blog\Config::get('ROUTING'));  // ルーティング設定を読み込み
+//
+//
+//  $defaultClass = \Fc2blog\Config::get('DEFAULT_CLASS_NAME'); // ルーター定義に依存
+//  $defaultMethod = 'index'; // DELME \Fc2blog\Config::get('DEFAULT_METHOD_NAME');
+//  $prefix = \Fc2blog\Config::get('APP_PREFIX');
+//  $classPrefix = \Fc2blog\Config::get('CLASS_PREFIX');
+//
+//  $denyClass = $prefix ? $prefix . 'Controller' : 'AppController';
+//  $denyMethod = ['process', 'display', 'fetch', 'set']; // このメソッドは外部からコールできない、Denyリスト
+//  $denyPattern = ['CommonController' => ['install']]; // このメソッドは外部からコールできない、Denyリスト
+//
+//  $args_controller = \Fc2blog\Config::get('ARGS_CONTROLLER');
+//  $args_action = \Fc2blog\Config::get('ARGS_ACTION');
+//
+//  $className = pascalCase(basename($request->get($args_controller)));
+//  $className = $className ? $className . 'Controller' : $defaultClass;
+//  $methodName = $request->get($args_action, $defaultMethod);
+//  $methodName = in_array($methodName, $denyMethod) ? $defaultMethod : $methodName;
+//  if (
+//    $className == $denyClass ||
+//    (isset($denyPattern[$className]) && in_array($methodName, $denyPattern[$className]))
+//  ) {
+//    $className = $defaultClass;
+//    $methodName = $defaultMethod;
+//  }
+//
+//  $request->className = $classPrefix . $className;
+//  $request->methodName = $methodName;
+//
+//  return $request;
+//}
 
 /**
 * 言語設定
