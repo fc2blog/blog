@@ -6,7 +6,7 @@ define('APP_DIR', realpath(__DIR__ . '/../') . '/'); // APPディレクトリの
 // DBの接続ライブラリ
 if (class_exists('mysqli')) {
   define('DB_CONNECT_LIB', 'mysqli');
-} else if(class_exists('PDO')) {
+} else if (class_exists('PDO')) {
   define('DB_CONNECT_LIB', 'PDO');
 }
 

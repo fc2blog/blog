@@ -8,19 +8,19 @@ $config['ROOT_DIR'] = realpath(dirname(__FILE__) . '/../../') . '/';
 
 $config['UPLOAD_DIR_NAME'] = 'uploads';
 
-$config['WWW_DIR']        = defined('WWW_DIR') ? WWW_DIR : $config['ROOT_DIR'] . 'public/';
+$config['WWW_DIR'] = defined('WWW_DIR') ? WWW_DIR : $config['ROOT_DIR'] . 'public/';
 $config['WWW_UPLOAD_DIR'] = $config['WWW_DIR'] . $config['UPLOAD_DIR_NAME'] . '/';
 
-$config['APP_DIR']           = defined('APP_DIR') ? APP_DIR : $config['ROOT_DIR'] . 'app/';
-$config['CORE_DIR']          = $config['APP_DIR']  . 'core/';
-$config['CONFIG_DIR']        = $config['APP_DIR']  . 'config/';
-$config['LOCALE_DIR']        = $config['APP_DIR']  . 'locale/';
-$config['CONTROLLER_DIR']    = $config['APP_DIR']  . 'controller/';
-$config['MODEL_DIR']         = $config['APP_DIR']  . 'model/';
-$config['VIEW_DIR']          = $config['APP_DIR']  . 'view/';
-$config['VIEW_COMMON_DIR']   = $config['VIEW_DIR'] . 'common/';
-$config['LIB_DIR']           = $config['APP_DIR']  . 'lib/';
-$config['TEMP_DIR']          = $config['APP_DIR']  . 'temp/';
+$config['APP_DIR'] = defined('APP_DIR') ? APP_DIR : $config['ROOT_DIR'] . 'app/';
+$config['CORE_DIR'] = $config['APP_DIR'] . 'core/';
+$config['CONFIG_DIR'] = $config['APP_DIR'] . 'config/';
+$config['LOCALE_DIR'] = $config['APP_DIR'] . 'locale/';
+$config['CONTROLLER_DIR'] = $config['APP_DIR'] . 'controller/';
+$config['MODEL_DIR'] = $config['APP_DIR'] . 'model/';
+$config['VIEW_DIR'] = $config['APP_DIR'] . 'view/';
+$config['VIEW_COMMON_DIR'] = $config['VIEW_DIR'] . 'common/';
+$config['LIB_DIR'] = $config['APP_DIR'] . 'lib/';
+$config['TEMP_DIR'] = $config['APP_DIR'] . 'temp/';
 $config['BLOG_TEMPLATE_DIR'] = $config['TEMP_DIR'] . 'blog_template/';
 
 // -------------------- DB関連 --------------------//
@@ -176,7 +176,7 @@ $config['APP'] = array(
 $config['USER'] = array(
   'TYPE' => array(
     'NORMAL' => 0,
-    'ADMIN'  => 1,
+    'ADMIN' => 1,
   ),
   'REGIST_SETTING' => array(
     'NONE' => 0,  // 登録は受け付けない
@@ -189,20 +189,20 @@ $config['USER'] = array(
 $config['BLOG'] = array(
   'START_PAGE' => array(
     'NOTICE' => 0,  // お知らせページ
-    'ENTRY'  => 1,  // 記事投稿ページ
+    'ENTRY' => 1,  // 記事投稿ページ
   ),
   'OPEN_STATUS' => array(
-    'PUBLIC'     => 0,  // 公開
-    'PRIVATE'    => 1,  // プライベートモード(パスワード保護)
+    'PUBLIC' => 0,  // 公開
+    'PRIVATE' => 1,  // プライベートモード(パスワード保護)
   ),
   'DEFAULT_LIMIT' => 10,
   'SSL_ENABLE' => array(
     'DISABLE' => 0,  // 無効
-    'ENABLE'  => 1,  // 有効
+    'ENABLE' => 1,  // 有効
   ),
   'REDIRECT_STATUS_CODE' => array(
     'MOVED_PERMANENTLY' => 301,
-    'FOUND'  => 302,
+    'FOUND' => 302,
   ),
 );
 
@@ -217,9 +217,9 @@ $config['BLOG_TEMPLATE'] = array(
 // ブログプラグイン
 $config['BLOG_PLUGIN'] = array(
   'CATEGORY' => array(
-    'FIRST'  => 1,     // 1番目
+    'FIRST' => 1,     // 1番目
     'SECOND' => 2,     // 2番目
-    'THIRD'  => 3,     // 3番目
+    'THIRD' => 3,     // 3番目
   ),
 );
 
@@ -227,35 +227,35 @@ $config['BLOG_PLUGIN'] = array(
 $config['ENTRY'] = array(
   // 公開設定
   'OPEN_STATUS' => array(
-    'OPEN'        => 1,  // 公開
-    'PASSWORD'    => 2,  // パスワード保護
-    'DRAFT'       => 3,  // 下書き
-    'LIMIT'       => 4,  // 期間限定
+    'OPEN' => 1,  // 公開
+    'PASSWORD' => 2,  // パスワード保護
+    'DRAFT' => 3,  // 下書き
+    'LIMIT' => 4,  // 期間限定
     'RESERVATION' => 5,  // 予約投稿
   ),
   // コメント受付
   'COMMENT_ACCEPTED' => array(
     'ACCEPTED' => 1,  // 受け付ける
-    'REJECT'   => 0,  // 受け付けない
+    'REJECT' => 0,  // 受け付けない
   ),
   // 自動改行
   'AUTO_LINEFEED' => array(
-    'USE'  => 1,  // 自動改行を行う
+    'USE' => 1,  // 自動改行を行う
     'NONE' => 0,  // 行わない
   ),
   // 記事の表示順
   'ORDER' => array(
-    'ASC'  => 0,
+    'ASC' => 0,
     'DESC' => 1,
   ),
   // 記事一覧の表示件数リスト
   'LIMIT_LIST' => array(
-    10   => '10' . __(' results'),
-    20   => '20' . __(' results'),
-    40   => '40' . __(' results'),
-    60   => '60' . __(' results'),
-    80   => '80' . __(' results'),
-    100  => '100' . __(' results'),
+    10 => '10' . __(' results'),
+    20 => '20' . __(' results'),
+    40 => '40' . __(' results'),
+    60 => '60' . __(' results'),
+    80 => '80' . __(' results'),
+    100 => '100' . __(' results'),
   ),
   'DEFAULT_LIMIT' => 20,
 );
@@ -263,7 +263,7 @@ $config['ENTRY'] = array(
 // コメント系
 $config['COMMENT'] = array(
   'OPEN_STATUS' => array(
-    'PUBLIC'  => 0,  // 全体公開
+    'PUBLIC' => 0,  // 全体公開
     'PENDING' => 2,  // 承認待ち
     'PRIVATE' => 1,  // 管理者のみ公開
   ),
@@ -280,27 +280,27 @@ $config['COMMENT'] = array(
   // コメント投稿時の名前、メールアドレス、URLを保存するかどうか
   'COMMENT_COOKIE_SAVE' => array(
     'NOT_SAVE' => 0,
-    'SAVE'     => 1,
+    'SAVE' => 1,
   ),
   // コメント投稿時のCAPTCHA有無
   'COMMENT_CAPTCHA' => array(
     'NOT_USE' => 0,
-    'USE'     => 1,
+    'USE' => 1,
   ),
   // コメントの表示順
   'ORDER' => array(
-    'ASC'  => 0,
+    'ASC' => 0,
     'DESC' => 1,
   ),
   // コメントの返信状態
   'REPLY_STATUS' => array(
     'UNREAD' => 1,  // 未読
-    'READ'   => 2,  // 既読
-    'REPLY'  => 3,  // 返信済み
+    'READ' => 2,  // 既読
+    'REPLY' => 3,  // 返信済み
   ),
   // コメントの引用を行うかどうか
   'QUOTE' => array(
-    'USE'  => 0,  // 引用を行う
+    'USE' => 0,  // 引用を行う
     'NONE' => 1,  // 行わない
   ),
 );
@@ -309,7 +309,7 @@ $config['COMMENT'] = array(
 $config['CATEGORY'] = array(
   // カテゴリーの表示順
   'ORDER' => array(
-    'ASC'  => 1,
+    'ASC' => 1,
     'DESC' => 0,
   ),
   'CREATE_LIMIT' => 100,
@@ -319,12 +319,12 @@ $config['CATEGORY'] = array(
 $config['TAG'] = array(
   // 記事一覧の表示件数リスト
   'LIMIT_LIST' => array(
-    10   => '10' . __(' results'),
-    20   => '20' . __(' results'),
-    40   => '40' . __(' results'),
-    60   => '60' . __(' results'),
-    80   => '80' . __(' results'),
-    100  => '100' . __(' results'),
+    10 => '10' . __(' results'),
+    20 => '20' . __(' results'),
+    40 => '40' . __(' results'),
+    60 => '60' . __(' results'),
+    80 => '80' . __(' results'),
+    100 => '100' . __(' results'),
   ),
   'DEFAULT_LIMIT' => 20,
 );
@@ -341,20 +341,20 @@ $config['PAGE'] = array(
   'FILE' => array(
     'DEFAULT' => array(
       'LIMIT' => 5,
-      'LIST'  => array(
-        5    => '5' . __(' results'),
-        10   => '10' . __(' results'),
-        20   => '20' . __(' results'),
-        40   => '40' . __(' results'),
-        60   => '60' . __(' results'),
-        80   => '80' . __(' results'),
-        100  => '100' . __(' results'),
+      'LIST' => array(
+        5 => '5' . __(' results'),
+        10 => '10' . __(' results'),
+        20 => '20' . __(' results'),
+        40 => '40' . __(' results'),
+        60 => '60' . __(' results'),
+        80 => '80' . __(' results'),
+        100 => '100' . __(' results'),
       ),
     ),
     'SP' => array(
       'LIMIT' => 15,
-      'LIST'  => array(
-        15  => '15' . __(' results'),
+      'LIST' => array(
+        15 => '15' . __(' results'),
       ),
     ),
   ),
