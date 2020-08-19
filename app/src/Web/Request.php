@@ -71,7 +71,7 @@ class Request
   public static function getReferer()
   {
     // TODO
-    if (!empty($_SERVER->server['HTTP_REFERER'])) {
+    if (!empty($_SERVER['HTTP_REFERER'])) {
       return $_SERVER['HTTP_REFERER'];
     }
     return '';
