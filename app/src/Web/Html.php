@@ -53,7 +53,7 @@ class Html
     }
 
     // URL/Controller/Methodの形で返却
-    if (Config::get('URL_REWRITE')) {
+    if (Config::get('URL_REWRITE') && !$full_url) {
       $params = array();
       foreach($args as $key => $value){
         $params[] = $key . '=' . $value;
@@ -233,8 +233,10 @@ class Html
   }
 
   /**
-  * CSSを追加する
-  */
+   * CSSを追加する
+   * @param $css
+   * @param array $options
+   */
   public static function addCSS($css, $options=array())
   {
     self::$include_css[] = array($css, $options);
@@ -263,8 +265,10 @@ class Html
   }
 
   /**
-  * JSを追加する
-  */
+   * JSを追加する
+   * @param $js
+   * @param array $options
+   */
   public static function addJS($js, $options=array())
   {
     self::$include_js[] = array($js, $options);

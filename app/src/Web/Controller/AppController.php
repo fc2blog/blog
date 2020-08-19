@@ -51,8 +51,10 @@ abstract class AppController extends Controller
   }
 
   /**
-  * blog_idからブログ情報を取得
-  */
+   * blog_idからブログ情報を取得
+   * @param $blog_id
+   * @return
+   */
   public function getBlog($blog_id)
   {
     return Model::load('Blogs')->findById($blog_id);
@@ -67,8 +69,10 @@ abstract class AppController extends Controller
   }
 
   /**
-  * token発行
-  */
+   * token発行
+   * @param null $key
+   * @param string $name
+   */
   protected function setToken($key=null, $name='token')
   {
     if ($key===null) {
@@ -79,8 +83,11 @@ abstract class AppController extends Controller
   }
 
   /**
-  * tokenチェック
-  */
+   * tokenチェック
+   * @param Request $request
+   * @param string $name
+   * @return string|null
+   */
   protected function tokenValidate(Request $request, $name='token')
   {
     $value = $request->get($name, '');
@@ -89,8 +96,10 @@ abstract class AppController extends Controller
   }
 
   /**
-  * Debug表示画面
-  */
+   * Debug表示画面
+   * @param Request $request
+   * @return string
+   */
   public function debug(Request $request)
   {
     if (Config::get('DEBUG')!=2 && Config::get('DEBUG') !=3) {

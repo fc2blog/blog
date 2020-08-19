@@ -11,8 +11,10 @@ abstract class UserController extends AppController
 {
 
   /**
-  * ブログID取得
-  */
+   * ブログID取得
+   * @param Request $request
+   * @return array|int|mixed|null
+   */
   public function getBlogId(Request $request)
   {
     return $request->get('blog_id');
@@ -35,8 +37,10 @@ abstract class UserController extends AppController
   }
 
   /**
-  * ログイン中のブログかどうかを返却
-  */
+   * ログイン中のブログかどうかを返却
+   * @param Request $request
+   * @return bool
+   */
   protected function isLoginBlog(Request $request){
     // ログイン中判定
     $admin_blog_id = $this->getAdminBlogId();
@@ -53,16 +57,21 @@ abstract class UserController extends AppController
   }
 
   /**
-  * ブログのパスワードキー
-  */
+   * ブログのパスワードキー
+   * @param $blog_id
+   * @return string
+   */
   protected function getBlogPasswordKey($blog_id)
   {
     return 'blog_password.' . $blog_id;
   }
 
   /**
-  * 記事のパスワードキー
-  */
+   * 記事のパスワードキー
+   * @param $blog_id
+   * @param $entry_id
+   * @return string
+   */
   protected function getEntryPasswordKey($blog_id, $entry_id)
   {
     return 'entry_password.' . $blog_id . '.' . $entry_id;

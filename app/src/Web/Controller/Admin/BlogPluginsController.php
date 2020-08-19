@@ -15,6 +15,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * 一覧表示
+   * @param $request
    */
   public function index($request)
   {
@@ -30,24 +31,31 @@ class BlogPluginsController extends AdminController
   }
 
   /**
-  * 公式プラグイン検索
-  */
-  public function official_search()
+   * 公式プラグイン検索
+   * @param Request $request
+   * @return string
+   */
+  public function official_search(Request $request)
   {
-    return $this->plugin_search(true);
+    return $this->plugin_search($request, true);
   }
 
   /**
-  * 共有プラグイン検索
-  */
-  public function share_search()
+   * 共有プラグイン検索
+   * @param Request $request
+   * @return string
+   */
+  public function share_search(Request $request)
   {
-    return $this->plugin_search(false);
+    return $this->plugin_search($request, false);
   }
 
   /**
-  * プラグイン検索
-  */
+   * プラグイン検索
+   * @param Request $request
+   * @param bool $is_official
+   * @return string
+   */
   private function plugin_search(Request $request, $is_official=true)
   {
     $plugins_model = Model::load('Plugins');
@@ -87,6 +95,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * 新規作成
+   * @param Request $request
    */
   public function create(Request $request)
   {
@@ -122,6 +131,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * 編集
+   * @param Request $request
    */
   public function edit(Request $request)
   {
@@ -161,6 +171,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
   public function delete(Request $request)
   {
@@ -185,6 +196,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * 登録
+   * @param Request $request
    */
   public function register(Request $request)
   {
@@ -237,6 +249,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * 登録済みのプラグイン削除
+   * @param Request $request
    */
   public function plugin_delete(Request $request)
   {
@@ -260,6 +273,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * プラグインのダウンロード
+   * @param Request $request
    */
   public function download(Request $request)
   {
@@ -295,6 +309,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * 並べ替え
+   * @param Request $request
    */
   public function sort(Request $request)
   {
@@ -315,6 +330,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * プラグインの表示設定
+   * @param Request $request
    */
   public function display_changes(Request $request)
   {
@@ -337,6 +353,7 @@ class BlogPluginsController extends AdminController
 
   /**
    * プラグインの表示設定
+   * @param Request $request
    */
   public function display_change(Request $request)
   {

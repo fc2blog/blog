@@ -60,6 +60,7 @@ class FilesController extends AdminController
 
   /**
    * 新規作成
+   * @param Request $request
    */
   public function upload(Request $request)
   {
@@ -138,6 +139,7 @@ class FilesController extends AdminController
 
   /**
    * 編集
+   * @param Request $request
    */
   public function edit(Request $request)
   {
@@ -164,7 +166,7 @@ class FilesController extends AdminController
     }
 
     if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      $request->clear();
+      $request = new Request();
       $this->redirect($request, array('action'=>'upload'));
     }
 
@@ -205,6 +207,7 @@ class FilesController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
   public function delete(Request $request)
   {
@@ -227,6 +230,7 @@ class FilesController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
   public function ajax_delete(Request $request)
   {

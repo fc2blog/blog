@@ -14,6 +14,7 @@ class CategoriesController extends AdminController
 
   /**
    * 新規作成
+   * @param Request $request
    */
   public function create(Request $request)
   {
@@ -62,6 +63,7 @@ class CategoriesController extends AdminController
 
   /**
    * 編集
+   * @param Request $request
    */
   public function edit(Request $request)
   {
@@ -103,6 +105,7 @@ class CategoriesController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
   public function delete(Request $request)
   {
@@ -112,7 +115,7 @@ class CategoriesController extends AdminController
     $blog_id = $this->getBlogId($request);
 
     if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      $request->clear();
+      $request = new Request();
       $this->redirect($request, array('action'=>'create'));
       return;
     }
@@ -129,8 +132,9 @@ class CategoriesController extends AdminController
   }
 
   /**
-  * ajax用のカテゴリ追加
-  */
+   * ajax用のカテゴリ追加
+   * @param Request $request
+   */
   public function ajax_add(Request $request)
   {
     Config::set('DEBUG', 0);    // デバッグなしに変更
@@ -142,7 +146,7 @@ class CategoriesController extends AdminController
     $json = array('status' => 0);
     
     if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      $request->clear();
+      $request = new Request();
       return;
     }
     

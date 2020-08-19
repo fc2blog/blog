@@ -161,8 +161,11 @@ class BlogSettingsModel extends Model
   }
 
   /**
-  * 主キーをキーにしてデータを取得
-  */
+   * 主キーをキーにしてデータを取得
+   * @param $blog_id
+   * @param array $options
+   * @return mixed
+   */
   public function findByBlogId($blog_id, $options=array()){
     $options['where'] = isset($options['where']) ? 'blog_id=? AND ' . $options['where'] : 'blog_id=?';
     $options['params'] = isset($options['params']) ? array_merge(array($blog_id), $options['params']) : array($blog_id);
@@ -171,15 +174,23 @@ class BlogSettingsModel extends Model
 
 
   /**
-  * idをキーとした更新
-  */
+   * idをキーとした更新
+   * @param $values
+   * @param $blog_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function updateByBlogId($values, $blog_id, $options=array()) {
     return $this->update($values, 'blog_id=?', array($blog_id), $options);
   }
 
   /**
-  * コメント返信の表示タイプ更新
-  */
+   * コメント返信の表示タイプ更新
+   * @param $device_type
+   * @param $reply_type
+   * @param $blog_id
+   * @return array|false|int|mixed
+   */
   public function updateReplyType($device_type, $reply_type, $blog_id){
     $values = array();
     $values[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $device_type)] = $reply_type;

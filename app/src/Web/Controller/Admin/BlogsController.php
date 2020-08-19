@@ -14,6 +14,7 @@ class BlogsController extends AdminController
 
   /**
    * 一覧表示
+   * @param Request $request
    */
   public function index(Request $request)
   {
@@ -41,6 +42,7 @@ class BlogsController extends AdminController
 
   /**
    * 新規作成
+   * @param Request $request
    */
   public function create(Request $request)
   {
@@ -71,6 +73,7 @@ class BlogsController extends AdminController
 
   /**
    * 編集
+   * @param Request $request
    */
   public function edit(Request $request)
   {
@@ -106,8 +109,9 @@ class BlogsController extends AdminController
   }
 
   /**
-  * ブログの切り替え
-  */
+   * ブログの切り替え
+   * @param Request $request
+   */
   public function choice(Request $request)
   {
     $blog_id = $request->get('blog_id');
@@ -122,6 +126,7 @@ class BlogsController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
   public function delete(Request $request)
   {

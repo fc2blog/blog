@@ -35,11 +35,13 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * 入力チェック処理
-  * @param array $data 入力データ
-  * @param array &$valid_data 入力チェック後の返却データ
-  * @param array $white_list 入力のチェック許可リスト
-  */
+   * 入力チェック処理
+   * @param array $data 入力データ
+   * @param array &$valid_data 入力チェック後の返却データ
+   * @param array $white_list 入力のチェック許可リスト
+   * @return array
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     $errors = array();
@@ -89,8 +91,10 @@ abstract class Model implements ModelInterface
 
 
   /**
-  * LIKE検索用にワイルドカードのエスケープ
-  */
+   * LIKE検索用にワイルドカードのエスケープ
+   * @param $str
+   * @return string
+   */
   public static function escape_wildcard($str)
   {
     return addcslashes($str, self::LIKE_WILDCARD);
@@ -98,8 +102,10 @@ abstract class Model implements ModelInterface
 
 
   /**
-  * 配列内が全て数値型かチェック
-  */
+   * 配列内が全て数値型かチェック
+   * @param $array
+   * @return bool
+   */
   public function is_numeric_array($array)
   {
     // 配列チェック
@@ -187,8 +193,11 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * 主キーをキーにしてデータを取得
-  */
+   * 主キーをキーにしてデータを取得
+   * @param $id
+   * @param array $options
+   * @return array|mixed
+   */
   public function findById($id, $options=array())
   {
     if (empty($id)) {
@@ -200,8 +209,12 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * idとblog_idの複合キーからデータを取得
-  */
+   * idとblog_idの複合キーからデータを取得
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return array|mixed
+   */
   public function findByIdAndBlogId($id, $blog_id, $options=array())
   {
     if (empty($id) || empty($blog_id)) {
@@ -213,8 +226,12 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * idとuser_idのキーからデータを取得
-  */
+   * idとuser_idのキーからデータを取得
+   * @param $id
+   * @param $user_id
+   * @param array $options
+   * @return array|mixed
+   */
   public function findByIdAndUserId($id, $user_id, $options=array())
   {
     if (empty($id) || empty($user_id)) {
@@ -226,16 +243,20 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * 存在するかどうかを取得
-  */
+   * 存在するかどうかを取得
+   * @param array $options
+   * @return bool
+   */
   public function isExist($options=array())
   {
     return !!$this->find('row', $options);
   }
 
   /**
-  * ページング用のデータ取得
-  */
+   * ページング用のデータ取得
+   * @param array $options
+   * @return array
+   */
   public function getPaging($options=array())
   {
     if (!isset($options['page']) || !isset($options['limit'])) {
@@ -270,8 +291,10 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * ページングのリストを表示する
-  */
+   * ページングのリストを表示する
+   * @param $paging
+   * @return array
+   */
   public static function getPageList($paging)
   {
     $pages = array();
@@ -335,8 +358,12 @@ abstract class Model implements ModelInterface
 
 
   /**
-  * idをキーとした更新
-  */
+   * idをキーとした更新
+   * @param $values
+   * @param $id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function updateById($values, $id, $options=array())
   {
     return $this->update($values, 'id=?', array($id), $options);
@@ -344,8 +371,13 @@ abstract class Model implements ModelInterface
 
 
   /**
-  * idとblog_idをキーとした更新
-  */
+   * idとblog_idをキーとした更新
+   * @param $values
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function updateByIdAndBlogId($values, $id, $blog_id, $options=array())
   {
     return $this->update($values, 'id=? AND blog_id=?', array($id, $blog_id), $options);
@@ -360,24 +392,35 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * idをキーとした更新
-  */
+   * idをキーとした更新
+   * @param $id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function deleteById($id, $options=array())
   {
     return $this->delete('id=?', array($id), $options);
   }
 
   /**
-  * idとblog_idをキーとした更新
-  */
+   * idとblog_idをキーとした更新
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function deleteByIdAndBlogId($id, $blog_id, $options=array())
   {
     return $this->delete('blog_id=? AND id=?', array($blog_id, $id), $options);
   }
 
   /**
-  * idとuser_idをキーとした更新
-  */
+   * idとuser_idをキーとした更新
+   * @param $id
+   * @param $user_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function deleteByIdAndUserId($id, $user_id, $options=array())
   {
     return $this->delete('id=? AND user_id=?', array($id, $user_id), $options);
@@ -414,8 +457,10 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * 階層構造の一覧取得
-  */
+   * 階層構造の一覧取得
+   * @param $options
+   * @return mixed
+   */
   public function findNode($options)
   {
     $options['order'] = 'lft ASC';
@@ -457,11 +502,13 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * 階層構造の追加
-  * @param array $data 追加するノード情報
-  * @param string $where 親ノード検索時のwhere句
-  * @param array $params 親ノード検索時のバインドデータ
-  */
+   * 階層構造の追加
+   * @param array $data 追加するノード情報
+   * @param string $where 親ノード検索時のwhere句
+   * @param array $params 親ノード検索時のバインドデータ
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function addNode($data=array(), $where='', $params=array(), $options=array())
   {
     // 親として末尾に追加する場合
@@ -502,8 +549,14 @@ SQL;
   }
 
   /**
-  * 階層構造の更新
-  */
+   * 階層構造の更新
+   * @param $data
+   * @param $id
+   * @param string $where
+   * @param array $params
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function updateNodeById($data, $id, $where='', $params=array(), $options=array())
   {
     $idWhere = $where ? 'id=? AND ' . $where : 'id=?';
@@ -542,13 +595,13 @@ SQL;
     // ノードの変更位置計算
     $self_lft = $self['lft'];
     $self_rgt = $self['rgt'];
-    $parent_lft = $parent['lft'];
+    $parent_lft = $parent['lft'];  # TODO この変数は利用されていない
     $parent_rgt = $parent['rgt'];
     $space = $self_rgt - $self_lft + 1;
 
     $table = $this->getTableName();
     $where = $where ? $where . ' AND ' : '';
-    $sql = '';
+    $sql = ''; # TODO この変数は利用されていない
     if ($self_rgt > $parent_rgt) {
       // 自身を左へ移動
       $move = $parent_rgt - $self_lft;
@@ -597,8 +650,13 @@ SQL;
   }
 
   /**
-  * 階層構造のノード削除
-  */
+   * 階層構造のノード削除
+   * @param $id
+   * @param string $where
+   * @param array $params
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function deleteNodeById($id, $where='', $params=array(), $options=array())
   {
     // 自身取得

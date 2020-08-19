@@ -14,6 +14,7 @@ class BlogSettingsController extends AdminController
 
   /**
    * コメント編集
+   * @param Request $request
    */
   public function comment_edit(Request $request)
   {
@@ -27,6 +28,7 @@ class BlogSettingsController extends AdminController
 
   /**
    * 記事編集
+   * @param Request $request
    */
   public function entry_edit(Request $request)
   {
@@ -36,6 +38,7 @@ class BlogSettingsController extends AdminController
 
   /**
    * その他編集
+   * @param Request $request
    */
   public function etc_edit(Request $request)
   {
@@ -44,8 +47,11 @@ class BlogSettingsController extends AdminController
   }
 
   /**
-  * ブログの設定変更処理
-  */
+   * ブログの設定変更処理
+   * @param Request $request
+   * @param $white_list
+   * @param $action
+   */
   private function settingEdit(Request $request, $white_list, $action)
   {
     /** @var BlogSettingsModel $blog_settings_model */

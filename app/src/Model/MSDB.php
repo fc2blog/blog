@@ -134,16 +134,20 @@ class MSDB implements DBInterface{
   }
 
   /**
-  * 複数の更新系SQL
-  */
+   * 複数の更新系SQL
+   * @param $sql
+   * @return bool
+   */
   public function multiExecute($sql)
   {
     return $this->getDB()->multiExecute($sql);
   }
 
   /**
-  * 接続処理
-  */
+   * 接続処理
+   * @param bool $is_charset
+   * @param bool $is_database
+   */
   public function connect($is_charset=true, $is_database=true){
     $this->getDB()->connect($is_charset, $is_database);
   }

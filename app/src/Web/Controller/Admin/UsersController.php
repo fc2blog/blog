@@ -14,6 +14,8 @@ class UsersController extends AdminController
 
   /**
    * 一覧表示(デバッグ用)
+   * @param Request $request
+   * @return string
    */
   public function index(Request $request)
   {
@@ -35,8 +37,10 @@ class UsersController extends AdminController
   }
 
   /**
-  * 新規作成
-  */
+   * 新規作成
+   * @param Request $request
+   * @return string|void
+   */
   public function register(Request $request)
   {
     if (Config::get('USER.REGIST_SETTING.FREE') != Config::get('USER.REGIST_STATUS')) {
@@ -76,8 +80,9 @@ class UsersController extends AdminController
   }
 
   /**
-  * ユーザー情報変更処理
-  */
+   * ユーザー情報変更処理
+   * @param Request $request
+   */
   public function edit(Request $request)
   {
     /** @var UsersModel $users_model */
@@ -111,6 +116,7 @@ class UsersController extends AdminController
 
   /**
    * 退会
+   * @param Request $request
    */
   public function withdrawal(Request $request)
   {
@@ -122,12 +128,13 @@ class UsersController extends AdminController
     // 削除処理
     Model::load('Users')->deleteById($this->getUserId());
     $this->setInfoMessage(__('Was completed withdrawal'));
-    $this->logout();
+    $this->logout($request);
   }
 
   /**
-  * ログイン
-  */
+   * ログイン
+   * @param Request $request
+   */
   public function login(Request $request)
   {
     if ($this->isLogin()) {
@@ -165,12 +172,13 @@ class UsersController extends AdminController
   }
 
   /**
-  * ログアウト
-  */
+   * ログアウト
+   * @param Request $request
+   */
   public function logout(Request $request)
   {
     if ($this->isLogin()) {
-      Session::destroy();
+      Session::destroy($request);
     }
     $this->redirect($request, array('action'=>'login'));
   }

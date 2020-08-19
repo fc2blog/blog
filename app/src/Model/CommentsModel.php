@@ -5,6 +5,7 @@ namespace Fc2blog\Model;
 use Fc2blog\Config;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Html;
+use Fc2blog\Web\Request;
 
 class CommentsModel extends Model
 {
@@ -105,8 +106,12 @@ class CommentsModel extends Model
   }
 
   /**
-  * 登録用のバリデート
-  */
+   * 登録用のバリデート
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function registerValidate($data, &$valid_data, $white_list=array())
   {
     // Validateの設定
@@ -116,8 +121,12 @@ class CommentsModel extends Model
   }
 
   /**
-  * 返信用のバリデート
-  */
+   * 返信用のバリデート
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function replyValidate($data, &$valid_data, $white_list=array())
   {
     // Validateの設定
@@ -127,8 +136,13 @@ class CommentsModel extends Model
   }
 
   /**
-  * 編集用のバリデート処理
-  */
+   * 編集用のバリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param $white_list
+   * @param $comment
+   * @return array
+   */
   public function editValidate($data, &$valid_data, $white_list, $comment)
   {
     // Validateの設定
@@ -141,8 +155,11 @@ class CommentsModel extends Model
   }
 
   /**
-  * 編集可能なコメント情報を取得
-  */
+   * 編集可能なコメント情報を取得
+   * @param $comment_id
+   * @param $blog_id
+   * @return array|mixed
+   */
   public function getEditableComment($comment_id, $blog_id)
   {
     $comment = $this->findByIdAndBlogId($comment_id, $blog_id);
@@ -156,8 +173,11 @@ class CommentsModel extends Model
   }
 
   /**
-  * 編集処理時のパスワードチェック
-  */
+   * 編集処理時のパスワードチェック
+   * @param $value
+   * @param $option
+   * @return bool|string
+   */
   public static function password_check($value, $option)
   {
     if (empty($option['password'])) {
@@ -180,17 +200,24 @@ class CommentsModel extends Model
   }
 
   /**
-  * 記事に付随する情報を削除
-  */
+   * 記事に付随する情報を削除
+   * @param $blog_id
+   * @param $entry_id
+   * @return array|false|int|mixed
+   */
   public function deleteEntryRelation($blog_id, $entry_id)
   {
     return $this->delete('blog_id=? AND entry_id=?', array($blog_id, $entry_id));
   }
 
   /**
-  * コメントの追加処理 + 記事のコメント数増加処理
-  */
-  public function insertByBlogSetting($data, $blog_setting)
+   * コメントの追加処理 + 記事のコメント数増加処理
+   * @param $request
+   * @param $data
+   * @param $blog_setting
+   * @return array|false|int|mixed
+   */
+  public function insertByBlogSetting($request, $data, $blog_setting)
   {
     // Entry記事数増加処理
     Model::load('Entries')->increaseCommentCount($data['blog_id'], $data['entry_id']);
@@ -213,14 +240,14 @@ class CommentsModel extends Model
 
     // 入力した名前,email,urlをCookieに登録
     if ($id && $blog_setting['comment_cookie_save']== Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
-      if (isset($data['name'])) Cookie::set('comment_name', $data['name']);
-      if (isset($data['mail'])) Cookie::set('comment_mail', $data['mail']);
-      if (isset($data['url']))  Cookie::set('comment_url',  $data['url']);
+      if (isset($data['name'])) Cookie::set($request,'comment_name', $data['name']);
+      if (isset($data['mail'])) Cookie::set($request,'comment_mail', $data['mail']);
+      if (isset($data['url']))  Cookie::set($request,'comment_url',  $data['url']);
     }
     return $id;
   }
 
-  public function updateByIdAndBlogIdAndBlogSetting($data, $comment_id, $blog_id, $blog_setting)
+  public function updateByIdAndBlogIdAndBlogSetting(Request $request, $data, $comment_id, $blog_id, $blog_setting)
   {
     // パスワードは更新しないので対象から削除
     unset($data['password']);
@@ -240,16 +267,20 @@ class CommentsModel extends Model
 
     // 入力した名前,email,urlをCookieに登録
     if ($ret && $blog_setting['comment_cookie_save']== Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
-      if (isset($data['name'])) Cookie::set('comment_name', $data['name']);
-      if (isset($data['mail'])) Cookie::set('comment_mail', $data['mail']);
-      if (isset($data['url']))  Cookie::set('comment_url',  $data['url']);
+      if (isset($data['name'])) Cookie::set($request, 'comment_name', $data['name']);
+      if (isset($data['mail'])) Cookie::set($request, 'comment_mail', $data['mail']);
+      if (isset($data['url']))  Cookie::set($request, 'comment_url',  $data['url']);
     }
     return $ret;
   }
 
   /**
-  * idとblog_idをキーとした削除 + 記事のコメント数減少処理
-  */
+   * idとblog_idをキーとした削除 + 記事のコメント数減少処理
+   * @param $comment_id
+   * @param $blog_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function deleteByIdAndBlogId($comment_id, $blog_id, $options=array())
   {
     $comment = $this->findByIdAndBlogId($comment_id, $blog_id);
@@ -265,9 +296,13 @@ class CommentsModel extends Model
   }
 
   /**
-  * idとblog_idをキーとした削除 + 付随情報も削除
-  */
-  public function deleteByIdsAndBlogId($ids=array(), $blog_id, $options=array())
+   * idとblog_idをキーとした削除 + 付随情報も削除
+   * @param array $ids
+   * @param $blog_id
+   * @param array $options
+   * @return bool
+   */
+  public function deleteByIdsAndBlogId($ids, $blog_id, $options=array())
   {
     // 単体ID対応
     if (is_numeric($ids)) {
@@ -287,8 +322,12 @@ class CommentsModel extends Model
   }
 
   /**
-  * ブログの設定情報からコメント一覧の設定情報を取得
-  */
+   * ブログの設定情報からコメント一覧の設定情報を取得
+   * @param $blog_id
+   * @param $entry_id
+   * @param $blog_setting
+   * @return array
+   */
   public function getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting)
   {
     $isDisplayApprovalComment = $blog_setting['comment_display_approval'] == Config::get('COMMENT.COMMENT_DISPLAY.SHOW');
@@ -319,8 +358,12 @@ class CommentsModel extends Model
   }
 
   /**
-  * コメント一覧の情報にブログの設定情報で装飾する
-  */
+   * コメント一覧の情報にブログの設定情報で装飾する
+   * @param $tmp_comments
+   * @param $blog_setting
+   * @param bool $self_blog
+   * @return array
+   */
   public function decorateByBlogSetting($tmp_comments, $blog_setting, $self_blog=false)
   {
     $flag_pending = Config::get('COMMENT.OPEN_STATUS.PENDING');
@@ -367,8 +410,13 @@ class CommentsModel extends Model
   }
 
   /**
-  * ブログの設定情報からコメント一覧取得
-  */
+   * ブログの設定情報からコメント一覧取得
+   * @param $blog_id
+   * @param $entry_id
+   * @param $blog_setting
+   * @param bool $self_blog
+   * @return array
+   */
   public function getCommentListByBlogSetting($blog_id, $entry_id, $blog_setting, $self_blog=false)
   {
     $options = $this->getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting);
@@ -377,8 +425,10 @@ class CommentsModel extends Model
   }
 
   /**
-  * 未読コメント数
-  */
+   * 未読コメント数
+   * @param $blog_id
+   * @return mixed
+   */
   public function getUnreadCount($blog_id)
   {
     $count = $this->find('count', array(
@@ -389,8 +439,10 @@ class CommentsModel extends Model
   }
 
   /**
-  * 未承認コメント数
-  */
+   * 未承認コメント数
+   * @param $blog_id
+   * @return mixed
+   */
   public function getUnapprovedCount($blog_id)
   {
     $count = $this->find('count', array(
@@ -401,10 +453,13 @@ class CommentsModel extends Model
   }
 
   /**
-  * 返信用のコメントを取得する
-  * ・記事のタイトル付与
-  * ・未読の場合既読に更新
-  */
+   * 返信用のコメントを取得する
+   * ・記事のタイトル付与
+   * ・未読の場合既読に更新
+   * @param $blog_id
+   * @param $comment_id
+   * @return array|mixed
+   */
   public function getReplyComment($blog_id, $comment_id){
     // 表示データの取得
     if (!$comment=$this->findByIdAndBlogId($comment_id, $blog_id)) {
@@ -426,8 +481,11 @@ class CommentsModel extends Model
   }
 
   /**
-  * 承認待ちコメントを承認済みに変更する
-  */
+   * 承認待ちコメントを承認済みに変更する
+   * @param $blog_id
+   * @param null $comment_id
+   * @return array|false|int|mixed
+   */
   public function updateApproval($blog_id, $comment_id=null)
   {
     $params = array($blog_id);
@@ -443,8 +501,12 @@ class CommentsModel extends Model
   }
 
   /**
-  * 返信ステータスを変更する
-  */
+   * 返信ステータスを変更する
+   * @param $blog_id
+   * @param $comment_id
+   * @param $reply_status
+   * @return array|false|int|mixed
+   */
   public function updateReplyStatus($blog_id, $comment_id, $reply_status)
   {
     $data = array('reply_status'=>$reply_status);
@@ -452,8 +514,11 @@ class CommentsModel extends Model
   }
 
   /**
-  * 返信処理
-  */
+   * 返信処理
+   * @param $data
+   * @param $comment
+   * @return array|false|int|mixed
+   */
   public function updateReply($data, $comment)
   {
     // 承認待ちの場合 全体公開への変更も行う
@@ -466,9 +531,13 @@ class CommentsModel extends Model
   }
 
   /**
-  * テンプレートで使用する新着コメント一覧を取得
-  */
-  public function getTemplateRecentCommentList($blog_id, $limit=0)
+   * テンプレートで使用する新着コメント一覧を取得
+   * @param Request $request
+   * @param $blog_id
+   * @param int $limit
+   * @return mixed
+   */
+  public function getTemplateRecentCommentList(Request $request, $blog_id, $limit=0)
   {
     if ($limit==0) {
       $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);

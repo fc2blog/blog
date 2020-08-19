@@ -16,14 +16,15 @@ class CommonController extends AdminController
 {
 
   /**
-  * 言語設定変更
-  */
+   * 言語設定変更
+   * @param Request $request
+   */
   public function lang(Request $request)
   {
     // 言語の設定
     $lang = $request->get('lang');
     if ($language= Config::get('LANGUAGES.' . $lang)) {
-      Cookie::set('lang', $lang);
+      Cookie::set($request, 'lang', $lang);
     }
 
     // TOPへ戻す
@@ -36,8 +37,9 @@ class CommonController extends AdminController
   }
 
   /**
-  * デバイス変更
-  */
+   * デバイス変更
+   * @param Request $request
+   */
   public function device_change(Request $request)
   {
     // デバイスの設定
@@ -47,11 +49,11 @@ class CommonController extends AdminController
       case 'pc': $device_type = Config::get('DEVICE_PC'); break;
       case 'sp': $device_type = Config::get('DEVICE_SP'); break;
       default:
-        Cookie::set('device', null);
+        Cookie::set($request, 'device', null);
         $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index'));
     }
 
-    Cookie::set('device', $device_type);
+    Cookie::set($request, 'device', $device_type);
     $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index'));
   }
 
@@ -84,8 +86,9 @@ class CommonController extends AdminController
   }
 
   /**
-  * お知らせ一覧画面
-  */
+   * お知らせ一覧画面
+   * @param Request $request
+   */
   public function notice(Request $request)
   {
     $blog_id = $this->getBlogId($request);
@@ -96,8 +99,10 @@ class CommonController extends AdminController
   }
 
   /**
-  * インストール画面
-  */
+   * インストール画面
+   * @param Request $request
+   * @return string|void
+   */
   public function install(Request $request)
   {
     $this->layout = 'default_nomenu.php';
@@ -154,6 +159,8 @@ class CommonController extends AdminController
         Model::load('Plugins')->addInitialOfficialPlugin();
 
         $this->redirect($request, Config::get('BASE_DIRECTORY') . 'install.php?state=2');
+
+        break;
 
       case 2:  // 管理者登録
         if (Model::load('Users')->isExistAdmin()) {

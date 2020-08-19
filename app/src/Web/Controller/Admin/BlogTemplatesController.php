@@ -35,8 +35,9 @@ class BlogTemplatesController extends AdminController
   }
 
   /**
-  * FC2のテンプレート一覧
-  */
+   * FC2のテンプレート一覧
+   * @param Request $request
+   */
   public function fc2_index(Request $request)
   {
     // デバイスタイプの設定
@@ -58,8 +59,10 @@ class BlogTemplatesController extends AdminController
   }
 
   /**
-  * FC2のテンプレート一覧
-  */
+   * FC2のテンプレート一覧
+   * @param Request $request
+   * @return string
+   */
   public function fc2_view(Request $request)
   {
     // 戻る用URLの設定
@@ -83,6 +86,7 @@ class BlogTemplatesController extends AdminController
 
   /**
    * 新規作成
+   * @param Request $request
    */
   public function create(Request $request)
   {
@@ -128,6 +132,7 @@ class BlogTemplatesController extends AdminController
 
   /**
    * 編集
+   * @param Request $request
    */
   public function edit(Request $request)
   {
@@ -167,8 +172,9 @@ class BlogTemplatesController extends AdminController
   }
 
   /**
-  * 対象のテンプレートをブログのテンプレートとして設定する
-  */
+   * 対象のテンプレートをブログのテンプレートとして設定する
+   * @param Request $request
+   */
   public function apply(Request $request)
   {
     $blog_templates_model = Model::load('BlogTemplates');
@@ -192,6 +198,8 @@ class BlogTemplatesController extends AdminController
 
   /**
    * テンプレートダウンロード
+   * @param Request $request
+   * @return string
    */
   public function download(Request $request)
   {
@@ -238,6 +246,7 @@ class BlogTemplatesController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
   public function delete(Request $request)
   {

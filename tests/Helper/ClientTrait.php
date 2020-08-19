@@ -20,15 +20,20 @@ trait ClientTrait
    */
   public static function resolve(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [])
   {
-    # 擬似的にアクセスURLをセットする
-    $_SERVER['HTTP_USER_AGENT'] = "phpunit";
-    $_SERVER['HTTPS'] = ($is_https) ? "on" : "";
-    $_SERVER["REQUEST_METHOD"] = $method;
-    $_SERVER['REQUEST_URI'] = $uri;
-    $_POST = $post;
-
-    $request = new Request();
-
+    $request = new Request(
+      $method,
+      $uri,
+      null,
+      $post,
+      null,
+      null,
+      [
+        'HTTP_USER_AGENT'=>'phpunit',
+      ]
+    );
+    if($is_https){
+      $request->server['HTTPS'] = "on";
+    }
     $router = new Router($request);
 
     return $router->resolve();
@@ -43,7 +48,6 @@ trait ClientTrait
     } catch (PseudoExit $e) {
       echo "\nUnexpected exit. {$e->getFile()}:{$e->getLine()} {$e->getMessage()}\n {$e->getTraceAsString()}";
     }
-    static::resetClient();
     return ob_get_clean();
   }
 
@@ -70,18 +74,6 @@ trait ClientTrait
       echo $ob;
       return $ob;
 
-    } finally {
-      static::resetClient();
     }
-  }
-
-  /**
-   * 都度、お掃除
-   */
-  public static function resetClient(): void
-  {
-    unset($_SERVER['REQUEST_URI'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTPS'], $_SERVER['REQUEST_URI']);
-    $_POST = [];
-    $_GET = [];
   }
 }

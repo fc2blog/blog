@@ -58,8 +58,10 @@ abstract class AdminController extends AppController
   }
 
   /**
-  * ログイン処理
-  */
+   * ログイン処理
+   * @param $user
+   * @param null $blog
+   */
   protected function loginProcess($user, $blog=null)
   {
     Session::regenerate();
@@ -115,16 +117,19 @@ abstract class AdminController extends AppController
   }
 
   /**
-  * ブログIDを取得する
-  */
-  protected function getBlogId($request)
+   * ブログIDを取得する
+   * @param Request $request
+   * @return mixed|null
+   */
+  protected function getBlogId(Request $request)
   {
     return Session::get('blog_id');
   }
 
   /**
-  * ブログIDを設定する
-  */
+   * ブログIDを設定する
+   * @param null $blog
+   */
   protected function setBlog($blog=null)
   {
     if ($blog) {
@@ -137,32 +142,37 @@ abstract class AdminController extends AppController
   }
 
   /**
-  * 情報用メッセージを設定する
-  */
+   * 情報用メッセージを設定する
+   * @param $message
+   */
   protected function setInfoMessage($message)
   {
     $this->setMessage($message, 'flash-message-info');
   }
 
   /**
-  * 警告用メッセージを設定する
-  */
+   * 警告用メッセージを設定する
+   * @param $message
+   */
   protected function setWarnMessage($message)
   {
     $this->setMessage($message, 'flash-message-warn');
   }
 
   /**
-  * エラー用メッセージを設定する
-  */
+   * エラー用メッセージを設定する
+   * @param $message
+   */
   protected function setErrorMessage($message)
   {
     $this->setMessage($message, 'flash-message-error');
   }
 
   /**
-  * メッセージを設定する
-  */
+   * メッセージを設定する
+   * @param $message
+   * @param $type
+   */
   protected function setMessage($message, $type)
   {
     $messages = Session::get($type, array());

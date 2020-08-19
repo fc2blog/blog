@@ -17,12 +17,12 @@ $config['fc2_template_foreach'] = array(
   // アーカイブ(プラグイン表示用)
   'archive'       => '<?php if(!isset($t_archives)) $t_archives = \Fc2blog\Model\Model::load(\'Entries\')->getArchives($blog_id); ?><?php if (!empty($t_archives)) foreach($t_archives as $t_archive) { ?>',
   // 新着順のコメント
-  'rcomment'      => '<?php if(!isset($t_comments)) $t_comments = \Fc2blog\Model\Model::load(\'Comments\')->getTemplateRecentCommentList($blog_id); ?><?php if (!empty($t_comments)) foreach($t_comments as $t_comment) { ?>',
+  'rcomment'      => '<?php if(!isset($t_comments)) $t_comments = \Fc2blog\Model\Model::load(\'Comments\')->getTemplateRecentCommentList($request, $blog_id); ?><?php if (!empty($t_comments)) foreach($t_comments as $t_comment) { ?>',
   // カテゴリー
   'category_multi_sub_end' => '<?php if(!empty($t_category) && isset($t_category[\'climb_hierarchy\'])) for($category_index=0;$category_index<$t_category[\'climb_hierarchy\'];$category_index++) { ?>',
   // カレンダー
-  'calendar'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
-  'calender'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
+  'calendar'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($request, $blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
+  'calender'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($request, $blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
   // タグ
   'ctag'          => '<?php if (!empty($t_tags)) foreach($t_tags as $t_tag) { ?>',
   // プラグイン系

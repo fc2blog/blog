@@ -32,8 +32,12 @@ class EntriesModel extends Model
   }
 
   /**
-  * バリデート処理
-  */
+   * バリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     // バリデートを定義
@@ -104,9 +108,11 @@ class EntriesModel extends Model
   }
 
   /**
-  * アーカイブ一覧を取得
-  * FC2テンプレートでの表示用
-  */
+   * アーカイブ一覧を取得
+   * FC2テンプレートでの表示用
+   * @param $blog_id
+   * @return mixed
+   */
   public function getArchives($blog_id)
   {
     // 表示項目リスト
@@ -134,8 +140,11 @@ SQL;
   }
 
   /**
-  * タグ、カテゴリーも含んだ記事を取得
-  */
+   * タグ、カテゴリーも含んだ記事を取得
+   * @param $id
+   * @param $blog_id
+   * @return array|mixed
+   */
   public function getEntry($id, $blog_id)
   {
     // 記事詳細取得
@@ -158,8 +167,10 @@ SQL;
   }
 
   /**
-  * 次の記事取得
-  */
+   * 次の記事取得
+   * @param $entry
+   * @return mixed
+   */
   public function nextEntry($entry)
   {
     $where = 'blog_id=? AND (posted_at>? OR (posted_at=? AND id>?))';
@@ -183,8 +194,10 @@ SQL;
   }
 
   /**
-  * 前の記事取得
-  */
+   * 前の記事取得
+   * @param $entry
+   * @return mixed
+   */
   public function prevEntry($entry)
   {
     $where = 'blog_id=? AND (posted_at<? OR (posted_at=? AND id<?))';
@@ -208,8 +221,11 @@ SQL;
   }
 
   /**
-  * コメント受付中の記事取得
-  */
+   * コメント受付中の記事取得
+   * @param $entry_id
+   * @param $blog_id
+   * @return array|mixed
+   */
   public function getCommentAcceptedEntry($entry_id, $blog_id)
   {
     return $this->findByIdAndBlogId($entry_id, $blog_id,
@@ -244,8 +260,10 @@ SQL;
   }
 
   /**
-  * 本文から最初に登場する画像を取得する
-  */
+   * 本文から最初に登場する画像を取得する
+   * @param $data
+   * @return mixed|string
+   */
   private function getFirstImage($data)
   {
     $html = $data['body'];
@@ -257,8 +275,12 @@ SQL;
   }
 
   /**
-  * idとblog_idをキーとした削除 + 付随情報も削除
-  */
+   * idとblog_idをキーとした削除 + 付随情報も削除
+   * @param $entry_id
+   * @param $blog_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function deleteByIdAndBlogId($entry_id, $blog_id, $options=array())
   {
     // コメント削除
@@ -275,9 +297,13 @@ SQL;
   }
 
   /**
-  * idとblog_idをキーとした削除 + 付随情報も削除
-  */
-  public function deleteByIdsAndBlogId($ids=array(), $blog_id, $options=array())
+   * idとblog_idをキーとした削除 + 付随情報も削除
+   * @param array $ids
+   * @param $blog_id
+   * @param array $options
+   * @return bool
+   */
+  public function deleteByIdsAndBlogId($ids, $blog_id, $options=array())
   {
     // 単体ID対応
     if (is_numeric($ids)) {
@@ -297,8 +323,9 @@ SQL;
   }
 
   /**
-  * 予約投稿エントリーの更新
-  */
+   * 予約投稿エントリーの更新
+   * @param null $blog_id
+   */
   public function updateReservation($blog_id=null)
   {
     $where = '';
@@ -323,8 +350,9 @@ SQL;
   }
 
   /**
-  * 期間限定エントリーの更新
-  */
+   * 期間限定エントリーの更新
+   * @param null $blog_id
+   */
   public function updateLimited($blog_id=null)
   {
     $where = '';
@@ -349,8 +377,11 @@ SQL;
   }
 
   /**
-  * コメント件数を増加させる処理
-  */
+   * コメント件数を増加させる処理
+   * @param $blog_id
+   * @param $entry_id
+   * @return array|false|int|mixed
+   */
   public function increaseCommentCount($blog_id, $entry_id)
   {
     $sql = 'UPDATE ' . $this->getTableName() . ' SET comment_count=comment_count+1 WHERE blog_id=? AND id=?';
@@ -360,8 +391,11 @@ SQL;
   }
 
   /**
-  * コメント件数を減少させる処理
-  */
+   * コメント件数を減少させる処理
+   * @param $blog_id
+   * @param $entry_id
+   * @return array|false|int|mixed
+   */
   public function decreaseCommentCount($blog_id, $entry_id)
   {
     $sql = 'UPDATE ' . $this->getTableName() . ' SET comment_count=comment_count-1 WHERE blog_id=? AND id=? AND comment_count>0';
@@ -371,9 +405,12 @@ SQL;
   }
 
   /**
-  * 最近の記事一覧を取得
-  * FC2テンプレートでの表示用
-  */
+   * 最近の記事一覧を取得
+   * FC2テンプレートでの表示用
+   * @param Request $request
+   * @param $blog_id
+   * @return mixed
+   */
   public function getTemplateRecents(Request $request, $blog_id)
   {
     $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
@@ -408,9 +445,14 @@ SQL;
   }
 
   /**
-  * テンプレート表示用のカレンダーデータを取得
-  */
-  public function getTemplateCalendar($blog_id, $year=null, $month=null)
+   * テンプレート表示用のカレンダーデータを取得
+   * @param Request $request
+   * @param $blog_id
+   * @param null $year
+   * @param null $month
+   * @return array
+   */
+  public function getTemplateCalendar(Request $request, $blog_id, $year=null, $month=null)
   {
     $year = $year == null ? date('Y') : $year;
     $month = $month == null ? date('m') : $month;
@@ -445,7 +487,7 @@ SQL;
           $calendar[$c][] = $day;
           continue ;
         }
-        $calendar[$c][] = '<a href="' . App::userURL($request,array('controller'=>'entries', 'action'=>'date',
+        $calendar[$c][] = '<a href="' . App::userURL($request, array('controller'=>'entries', 'action'=>'date',
           'blog_id'=>$blog_id, 'date'=>sprintf('%04d%02d%02d', $year, $month, $day))) . '">' . $day . '</a>';
       }
     }

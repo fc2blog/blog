@@ -83,6 +83,7 @@ class EntriesController extends AdminController
 
   /**
    * 新規作成
+   * @param Request $request
    */
   public function create(Request $request)
   {
@@ -129,6 +130,7 @@ class EntriesController extends AdminController
 
   /**
    * 編集
+   * @param Request $request
    */
   public function edit(Request $request)
   {
@@ -157,7 +159,6 @@ class EntriesController extends AdminController
     }
 
     if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      $request->clear();
       return;
     }
     
@@ -185,6 +186,7 @@ class EntriesController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
   public function delete(Request $request)
   {
@@ -197,8 +199,9 @@ class EntriesController extends AdminController
   }
 
   /**
-  * ajaxでメディアを表示する画面
-  */
+   * ajaxでメディアを表示する画面
+   * @param Request $request
+   */
   public function ajax_media_load(Request $request)
   {
     Config::set('DEBUG', 0);    // デバッグ設定を変更

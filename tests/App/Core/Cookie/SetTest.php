@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\Core\Cookie;
 
 use Fc2blog\Web\Cookie;
+use Fc2blog\Web\Request;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use TypeError;
@@ -15,15 +16,17 @@ class SetTest extends TestCase
     // Cookieの正しいテストはUnitTestでは困難です
     // echo '<?php setcookie("1","b");' | php-cgi
     // 等でテストができますが、php-cgiがない環境でテストが実行できません。
-    @Cookie::set("k", "v");
+    $request = new Request();
+    @Cookie::set($request, "k", "v");
     $this->assertTrue(true);
   }
 
   public function testSetInvalidType(): void
   {
+    $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
-      Cookie::set(true, "v");
+      Cookie::set($request, true, "v");
       $this->fail();
     } catch (TypeError $e) {
       $this->assertInstanceOf(TypeError::class, $e);
@@ -31,7 +34,7 @@ class SetTest extends TestCase
 
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
-      Cookie::set(1, "v");
+      Cookie::set($request, 1, "v");
       $this->fail();
     } catch (TypeError $e) {
       $this->assertInstanceOf(TypeError::class, $e);
@@ -39,7 +42,7 @@ class SetTest extends TestCase
 
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
-      Cookie::set("k", true);
+      Cookie::set($request, "k", true);
       $this->fail();
     } catch (TypeError $e) {
       $this->assertInstanceOf(TypeError::class, $e);
@@ -47,7 +50,7 @@ class SetTest extends TestCase
 
     try {
       /** @noinspection PhpStrictTypeCheckingInspection */
-      Cookie::set("k", 1);
+      Cookie::set($request, "k", 1);
       $this->fail();
     } catch (TypeError $e) {
       $this->assertInstanceOf(TypeError::class, $e);
@@ -57,28 +60,32 @@ class SetTest extends TestCase
   public function testDenyInvalidSamesite(): void
   {
     try {
-      @Cookie::set("k", "v", time(), "", "", false, false, "Lax");
+      $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
+      @Cookie::set($request, "k", "v", time(), "", "", false, false, "Lax");
       $this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
     }
+
     try {
-      @Cookie::set("k", "v", time(), "", "", false, false, "Strict");
+      $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
+      @Cookie::set($request, "k", "v", time(), "", "", false, false, "Strict");
       $this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
     }
+
     try {
-      $_SERVER['HTTPS'] = "on";
-      @Cookie::set("k", "v", time(), "", "", true, false, "None");
+      $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
+      @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");
       $this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
-    } finally {
-      unset($_SERVER['HTTPS']);
     }
+
     try {
-      @Cookie::set("k", "v", time(), "", "", false, false, "Wrong");
+      $request = new Request();
+      @Cookie::set($request, "k", "v", time(), "", "", false, false, "Wrong");
       $this->fail();
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
@@ -88,30 +95,26 @@ class SetTest extends TestCase
   public function testSamesiteNoneAndNotSecure(): void
   {
     try {
-      unset($_SERVER['HTTPS']);
-      @Cookie::set("k", "v", time(), "", "", true, false, "None");
+      $request = new Request();
+      @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");
       $this->fail();
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
     }
 
     try {
-      $_SERVER['HTTPS'] = "on";
-      @Cookie::set("k", "v", time(), "", "", false, false, "None");
+      $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
+      @Cookie::set($request, "k", "v", time(), "", "", false, false, "None");
       $this->fail();
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
-    } finally {
-      unset($_SERVER['HTTPS']);
     }
 
     try {
-      $_SERVER['HTTPS'] = "on";
-      @Cookie::set("k", "v", time(), "", "", true, false, "None");
+      $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
+      @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
-    } finally {
-      unset($_SERVER['HTTPS']);
     }
   }
 }

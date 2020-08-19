@@ -12,6 +12,7 @@ class CommentsController extends AdminController
 
   /**
    * 一覧表示
+   * @param Request $request
    */
   public function index(Request $request)
   {
@@ -84,8 +85,9 @@ class CommentsController extends AdminController
   }
 
   /**
-  * コメントの承認
-  */
+   * コメントの承認
+   * @param Request $request
+   */
   public function approval(Request $request)
   {
     $comments_model = Model::load('Comments');
@@ -116,8 +118,9 @@ class CommentsController extends AdminController
   }
 
   /**
-  * コメントの承認(ajax版)
-  */
+   * コメントの承認(ajax版)
+   * @param Request $request
+   */
   public function ajax_approval (Request $request) {
     Config::set('DEBUG', 0);
     $this->layout = 'json.php';
@@ -144,8 +147,10 @@ class CommentsController extends AdminController
   }
 
   /**
-  * 返信
-  */
+   * 返信
+   * @param Request $request
+   * @return string|void
+   */
   public function reply(Request $request)
   {
     /** @var CommentsModel $comments_model */
@@ -197,8 +202,10 @@ class CommentsController extends AdminController
   }
 
   /**
-  * ajax用の返信
-  */
+   * ajax用の返信
+   * @param Request $request
+   * @return string|void
+   */
   public function ajax_reply(Request $request){
     Config::set('DEBUG', 0);
     $this->layout = 'ajax.php';
@@ -230,7 +237,7 @@ class CommentsController extends AdminController
     $this->layout = 'json.php';
 
     // コメント投稿処理
-    $errors = array();
+    $errors = array(); # TODO この変数は利用されていない
     $errors = $comments_model->replyValidate($request->get('comment'), $data, array('reply_body'));
     if (empty($errors)) {
       if ($comments_model->updateReply($data, $comment)) {
@@ -244,6 +251,7 @@ class CommentsController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
   public function delete(Request $request)
   {

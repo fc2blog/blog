@@ -7,6 +7,7 @@
 namespace Fc2blog\Web;
 
 use Fc2blog\Web\Controller\Test\CommonController;
+use LogicException;
 
 class Request
 {
@@ -44,8 +45,8 @@ class Request
     array $cookie = null
   )
   {
-    $this->method = $method ?? $_SERVER['REQUEST_METHOD'];
-    $this->uri = $uri ?? $_SERVER["REQUEST_URI"];
+    $this->method = $method ?? $_SERVER['REQUEST_METHOD'] ?? "GET";
+    $this->uri = $uri ?? $_SERVER["REQUEST_URI"] ?? "GET";
     if(isset($_SESSION)) {
       $this->session = $session ?? $_SESSION;
     }
@@ -92,12 +93,13 @@ class Request
   }
 
   /**
-  * コマンドラインの引数をリクエストに設定
-  */
+   * コマンドラインの引数をリクエストに設定
+   * @param array $argv
+   */
   public function setCronParams($argv=array())
   {
     // DELME
-throw new \LogicException("deprecated");
+throw new LogicException("deprecated");
     //    if (count($argv) < 3) {
 //      // 1:ファイル名 2:コントローラー名 3:メソッド名 4...引数
 //      echo "コントローラー名、メソッド名が指定されておりません\n";
@@ -152,8 +154,11 @@ throw new \LogicException("deprecated");
 //  }
 
   /**
-  * $_FILESの中身を加工して取得する
-  */
+   * $_FILESの中身を加工して取得する
+   * @param $key
+   * @param null $default
+   * @return array|mixed|null
+   */
   public function file($key, $default=null)
   {
     if (!isset($this->files[$key])) {
@@ -227,8 +232,10 @@ throw new \LogicException("deprecated");
 
 
   /**
-  * intデータかチェック
-  */
+   * intデータかチェック
+   * @param $int
+   * @return bool
+   */
   private function is_integer($int)
   {
     return ((string)intval($int) === (string)$int);
@@ -236,8 +243,10 @@ throw new \LogicException("deprecated");
 
 
   /**
-  * 引数が存在するかチェック
-  */
+   * 引数が存在するかチェック
+   * @param $key
+   * @return bool
+   */
   public function isArgs($key)
   {
     // .区切りのキーを解釈
@@ -254,8 +263,10 @@ throw new \LogicException("deprecated");
   }
 
   /**
-  * 値をリクエストデータに設定する
-  */
+   * 値をリクエストデータに設定する
+   * @param $key
+   * @param $value
+   */
   public function set($key, $value)
   {
     if (strpos($key, '.')===false) {
@@ -307,7 +318,7 @@ throw new \LogicException("deprecated");
    */
   public function clear()
   {
-    throw new \LogicException("deprecated");
+    throw new LogicException("deprecated");
 //    $this->get     = array();
 //    $this->post    = array();
 //    $this->request = array();
@@ -315,8 +326,9 @@ throw new \LogicException("deprecated");
   }
 
   /**
-  * キーの入れ替えを行う
-  */
+   * キーの入れ替えを行う
+   * @param array $comb
+   */
   public function combine($comb=array())
   {
     foreach($comb as $key => $value){

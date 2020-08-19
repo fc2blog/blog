@@ -44,8 +44,8 @@ class Router
 
       // 管理用のパラメータを設定する
       $paths = $request->getPaths();
-      $args_controller = \Fc2blog\Config::get('ARGS_CONTROLLER');
-      $args_action = \Fc2blog\Config::get('ARGS_ACTION');
+      $args_controller = Config::get('ARGS_CONTROLLER');
+      $args_action = Config::get('ARGS_ACTION');
 
       if ($request->isArgs($args_controller)) {
         $this->className = "\\Fc2blog\\Web\\Controller\\Admin\\".pascalCase($request->get($args_controller))."Controller";
@@ -66,11 +66,11 @@ class Router
       $this->className = \Fc2blog\Web\Controller\Test\CommonController::class; // default controller.
 
       // 管理用のパラメータを設定する
-      $path = $request->getPath(); // full path with out query args.
+      $path = $request->getPath(); // full path with out query args.  # TODO この変数は利用されていない
       $paths = $request->getPaths(); // explode with `/`
-      $query = $request->getQuery(); // query args
-      $args_controller = \Fc2blog\Config::get('ARGS_CONTROLLER');
-      $args_action = \Fc2blog\Config::get('ARGS_ACTION');
+      $query = $request->getQuery(); // query args  # TODO この変数は利用されていない
+      $args_controller = Config::get('ARGS_CONTROLLER');
+      $args_action = Config::get('ARGS_ACTION');  # TODO この変数は利用されていない
 
       // argsa => method(action
       // argsc => class
@@ -101,7 +101,7 @@ class Router
       // ユーザー用のパラメータを設定する
       $path = $request->getPath();
       $paths = $request->getPaths();
-      $query = $request->getQuery();
+      $query = $request->getQuery();  # TODO この変数は利用されていない
       $args_controller = "mode";
       $args_action = "process";
 

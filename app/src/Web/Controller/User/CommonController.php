@@ -24,7 +24,7 @@ class CommonController extends UserController
     // 言語の設定
     $lang = $request->get('lang');
     if ($language= Config::get('LANGUAGES.' . $lang)) {
-      Cookie::set('lang', $lang);
+      Cookie::set($request, 'lang', $lang);
     }
 
     // 元のURLに戻す
@@ -44,11 +44,11 @@ class CommonController extends UserController
       case 'pc': $device_type = Config::get('DEVICE_PC'); break;
       case 'sp': $device_type = Config::get('DEVICE_SP'); break;
       default:
-        Cookie::set('device', null);
+        Cookie::set($request, 'device', null);
         $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)));
     }
 
-    Cookie::set('device', $device_type);
+    Cookie::set($request, 'device', $device_type);
     $this->redirectBack($request, array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)));
   }
 

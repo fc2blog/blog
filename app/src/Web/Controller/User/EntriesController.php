@@ -33,10 +33,10 @@ class EntriesController extends UserController
 
     // BlogのSSL_Enableの設定と食い違うなら強制リダイレクトする
     // URL構造そのままでリダイレクトするためにRequestUriを用いているがもっとベターな方法があるかもしれない
-    if(is_string($blog_id) && strlen($blog_id) > 0 && !BlogsModel::isCorrectHttpSchemaByBlogId($blog_id)){
-      $this->redirect($request, $_SERVER['REQUEST_URI'],'',true, $blog_id);
-    }else if(is_array($blog) && !BlogsModel::isCorrectHttpSchemaByBlogArray($blog)){
-      $this->redirect($request, $_SERVER['REQUEST_URI'],'',true, $blog['id']);
+    if (is_string($blog_id) && strlen($blog_id) > 0 && !BlogsModel::isCorrectHttpSchemaByBlogId($request, $blog_id)) {
+      $this->redirect($request, $request->uri, '', true, $blog_id);
+    } else if (is_array($blog) && !BlogsModel::isCorrectHttpSchemaByBlogArray($request, $blog)) {
+      $this->redirect($request, $request->uri, '', true, $blog['id']);
     }
 
     $this->set('blog', $blog);
@@ -89,8 +89,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * 検索
-  */
+   * 検索
+   * @param Request $request
+   * @return string
+   */
   public function search(Request $request)
   {
     $where = 'blog_id=?';
@@ -114,8 +116,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * カテゴリー検索
-  */
+   * カテゴリー検索
+   * @param Request $request
+   * @return string
+   */
   public function category(Request $request)
   {
     $blog_id     = $this->getBlogId($request);
@@ -146,8 +150,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * タグ検索
-  */
+   * タグ検索
+   * @param Request $request
+   * @return string
+   */
   public function tag(Request $request)
   {
     // タグ検索
@@ -177,8 +183,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * 年別,月別,日別表示
-  */
+   * 年別,月別,日別表示
+   * @param Request $request
+   * @return string
+   */
   public function date(Request $request)
   {
     // 開始日付と終了日付の計算
@@ -200,8 +208,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * アーカイブ表示
-  */
+   * アーカイブ表示
+   * @param Request $request
+   * @return string
+   */
   public function archive(Request $request)
   {
     // 記事一覧データ設定
@@ -221,6 +231,8 @@ class EntriesController extends UserController
 
   /**
    * プレビュー表示
+   * @param Request $request
+   * @return string
    */
   public function preview(Request $request)
   {
@@ -260,8 +272,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * FC2テンプレート用のプレビュー
-  */
+   * FC2テンプレート用のプレビュー
+   * @param Request $request
+   * @return string
+   */
   private function preview_fc2_template(Request $request)
   {
     $blog_id = $this->getBlogId($request);
@@ -298,8 +312,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * テンプレート用のプレビュー
-  */
+   * テンプレート用のプレビュー
+   * @param Request $request
+   * @return string
+   */
   private function preview_template(Request $request)
   {
     $blog_id = $this->getBlogId($request);
@@ -338,8 +354,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * プラグイン用のプレビュー
-  */
+   * プラグイン用のプレビュー
+   * @param Request $request
+   * @return string
+   */
   private function preview_plugin(Request $request)
   {
     $blog_id = $this->getBlogId($request);
@@ -424,8 +442,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * 記事用のプレビュー
-  */
+   * 記事用のプレビュー
+   * @param Request $request
+   * @return string
+   */
   private function preview_entry(Request $request)
   {
     $blog_id = $this->getBlogId($request);
@@ -475,6 +495,8 @@ class EntriesController extends UserController
 
   /**
    * 詳細表示
+   * @param Request $request
+   * @return string
    */
   public function view(Request $request)
   {
@@ -553,8 +575,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * プラグインページの表示
-  */
+   * プラグインページの表示
+   * @param Request $request
+   * @return string
+   */
   public function plugin(Request $request)
   {
     $blog_id = $this->getBlogId($request);
@@ -570,8 +594,9 @@ class EntriesController extends UserController
   }
 
   /**
-  * 記事のパスワード認証
-  */
+   * 記事のパスワード認証
+   * @param Request $request
+   */
   public function password(Request $request)
   {
     $blog_id = $this->getBlogId($request);
@@ -599,6 +624,7 @@ class EntriesController extends UserController
 
   /**
    * ブログのパスワード認証
+   * @param Request $request
    */
   public function blog_password(Request $request)
   {
@@ -622,6 +648,8 @@ class EntriesController extends UserController
 
   /**
    * コメント投稿
+   * @param Request $request
+   * @return string|void
    */
   public function comment_regist(Request $request)
   {
@@ -671,7 +699,7 @@ class EntriesController extends UserController
     $errors['token'] = $is_captcha ? $this->tokenValidate($request) : array();   // Token用のバリデート
     if (empty($errors['comment']) && empty($errors['token'])) {
       $data['blog_id'] = $blog_id;  // ブログIDの設定
-      if ($id=$comments_model->insertByBlogSetting($data, $blog_setting)) {
+      if ($id=$comments_model->insertByBlogSetting($request, $data, $blog_setting)) {
         $this->redirect($request, array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$entry_id), '#comment' . $id);
       }
     }
@@ -691,8 +719,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * コメント編集画面
-  */
+   * コメント編集画面
+   * @param Request $request
+   * @return string|void
+   */
   public function comment_edit(Request $request)
   {
     $blog_id = $this->getBlogId($request);
@@ -767,7 +797,7 @@ class EntriesController extends UserController
     $errors['comment'] = $comments_model->editValidate($request->get('comment'), $data, $white_list, $comment);
     $errors['token'] = $is_captcha ? $this->tokenValidate($request) : array();   // Token用のバリデート
     if (empty($errors['comment']) && empty($errors['token'])) {
-      if ($comments_model->updateByIdAndBlogIdAndBlogSetting($data, $comment_id, $blog_id, $blog_setting)) {
+      if ($comments_model->updateByIdAndBlogIdAndBlogSetting($request, $data, $comment_id, $blog_id, $blog_setting)) {
         $this->redirect($request, array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$entry_id), '#comment' . $comment_id);
       }
     }
@@ -787,8 +817,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * コメントの削除処理
-  */
+   * コメントの削除処理
+   * @param Request $request
+   * @return string
+   */
   public function comment_delete(Request $request)
   {
     /** @var CommentsModel $comments_model */
@@ -818,8 +850,11 @@ class EntriesController extends UserController
   }
 
   /**
-  * 一覧情報設定
-  */
+   * 一覧情報設定
+   * @param Request $request
+   * @param array $options
+   * @param array $areas
+   */
   private function setEntriesData(Request $request, $options=array(), $areas=array())
   {
     $entries_model = Model::load('Entries');
@@ -872,8 +907,9 @@ class EntriesController extends UserController
   }
 
   /**
-  * ページの表示可否設定を設定する
-  */
+   * ページの表示可否設定を設定する
+   * @param array $allows
+   */
   private function setPageData($allows=array())
   {
     $areas = array(
@@ -895,8 +931,12 @@ class EntriesController extends UserController
   }
 
   /**
-  * FC2用のテンプレートで表示処理を行う
-  */
+   * FC2用のテンプレートで表示処理を行う
+   * @param $blog_id
+   * @param null $html
+   * @param null $css
+   * @return string
+   */
   private function fc2template($blog_id, $html=null, $css=null)
   {
     $device_type = $this->getDeviceType();
@@ -924,8 +964,11 @@ class EntriesController extends UserController
   }
 
   /**
-  * FC2用のコメントエラーとデータ設定
-  */
+   * FC2用のコメントエラーとデータ設定
+   * @param $name
+   * @param $errors
+   * @param array $data
+   */
   private function fc2CommentError($name, $errors, $data=array())
   {
     // FC2テンプレートとDB側の違い吸収

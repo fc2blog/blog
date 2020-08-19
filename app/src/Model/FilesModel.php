@@ -51,8 +51,12 @@ class FilesModel extends Model
   }
 
   /**
-  * 追加用のバリデート処理
-  */
+   * 追加用のバリデート処理
+   * @param $file
+   * @param $request
+   * @param $valid_data
+   * @return array
+   */
   public function insertValidate($file, $request, &$valid_data)
   {
     // バリデートを定義
@@ -78,8 +82,13 @@ class FilesModel extends Model
   }
 
   /**
-  * 更新用のバリデート処理
-  */
+   * 更新用のバリデート処理
+   * @param $file
+   * @param $request
+   * @param $original_file
+   * @param $valid_data
+   * @return array
+   */
   public function updateValidate($file, $request, $original_file, &$valid_data)
   {
     // バリデートを定義
@@ -130,8 +139,10 @@ class FilesModel extends Model
   }
 
   /**
-  * File情報から削除する(実ファイル込み)
-  */
+   * File情報から削除する(実ファイル込み)
+   * @param $file
+   * @return array|false|int|mixed
+   */
   public function deleteByObject($file)
   {
     $flag = parent::deleteByIdAndBlogId($file['id'], $file['blog_id']);
@@ -145,9 +156,12 @@ class FilesModel extends Model
   }
 
   /**
-  * blogidと複数IDをキーとした削除
-  */
-  public function deleteByIdsAndBlogId($ids=array(), $blog_id)
+   * blogidと複数IDをキーとした削除
+   * @param array $ids
+   * @param $blog_id
+   * @return bool
+   */
+  public function deleteByIdsAndBlogId($ids, $blog_id)
   {
     // 単体ID対応
     if (is_numeric($ids)) {

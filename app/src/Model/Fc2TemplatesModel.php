@@ -25,9 +25,11 @@ class Fc2TemplatesModel extends Model
   }
 
   /**
-  * テンプレートを検索する
-  * TODO:後で取得できなかった場合などの例外処理を入れる
-  */
+   * テンプレートを検索する
+   * TODO:後で取得できなかった場合などの例外処理を入れる
+   * @param $condition
+   * @return mixed
+   */
   public function getListAndPaging($condition)
   {
     $url = 'https://admin.blog.fc2.com/oss_api.php?action=template_search';
@@ -59,9 +61,12 @@ class Fc2TemplatesModel extends Model
   }
 
   /**
-  * 単一テンプレートを取得する
-  * TODO:後で取得できなかった場合などの例外処理を入れる
-  */
+   * 単一テンプレートを取得する
+   * TODO:後で取得できなかった場合などの例外処理を入れる
+   * @param $id
+   * @param $device
+   * @return mixed
+   */
   public function findByIdAndDevice($id, $device)
   {
     $url = 'https://admin.blog.fc2.com/oss_api.php?action=template_view&id=' . $id . '&device=' . $device;

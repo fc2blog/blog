@@ -22,7 +22,7 @@ abstract class Controller
   protected $request;
   public function __construct(Request $request, $method)
   {
-    $this->requset = $request;
+    $this->request = $request;
 
     $className = get_class($this);
 
@@ -80,11 +80,11 @@ abstract class Controller
   /**
    * リダイレクト
    * MEMO: Blog idが特定できないときの強制的なSchemaがさだまらない
+   * @param Request $request
    * @param $url
    * @param string $hash
    * @param bool $full_url BlogIdが特定できるとき、http(s)://〜からのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
    * @param string|null $blog_id
-   * @throws PseudoExit
    */
   protected function redirect(Request $request, $url, $hash = '', bool $full_url = false, string $blog_id = null)
   {
@@ -124,8 +124,11 @@ abstract class Controller
   }
 
   /**
-  * 前のURLに戻す リファラーが取れなければ引数のURLに飛ばす
-  */
+   * 前のURLに戻す リファラーが取れなければ引数のURLに飛ばす
+   * @param Request $request
+   * @param $url
+   * @param string $hash
+   */
   protected function redirectBack(Request $request, $url, $hash='')
   {
     // 元のURLに戻す
@@ -214,8 +217,13 @@ abstract class Controller
   }
 
   /**
-  * 表示処理データを取得
-  */
+   * 表示処理データを取得
+   * @param Request $request
+   * @param $template
+   * @param array $data
+   * @param bool $isPrefix
+   * @return false|string
+   */
   public function fetch(Request $request, $template, $data=array(), $isPrefix=true)
   {
     ob_start();

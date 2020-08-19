@@ -42,8 +42,11 @@ class Session
   }
 
   /**
-  * セッションから情報を取得する
-  */
+   * セッションから情報を取得する
+   * @param $key
+   * @param null $default
+   * @return mixed|null
+   */
   public static function get($key, $default=null)
   {
     self::start();
@@ -54,8 +57,11 @@ class Session
   }
 
   /**
-  * セッションから情報を取得し破棄する
-  */
+   * セッションから情報を取得し破棄する
+   * @param $key
+   * @param null $default
+   * @return mixed|null
+   */
   public static function remove($key, $default=null)
   {
     self::start();
@@ -67,8 +73,10 @@ class Session
   }
 
   /**
-  * セッションに情報を保存する
-  */
+   * セッションに情報を保存する
+   * @param $key
+   * @param $value
+   */
   public static function set($key, $value)
   {
     self::start();
@@ -91,13 +99,14 @@ class Session
   }
 
   /**
-  * セッションを破棄
-  */
-  public static function destroy()
+   * セッションを破棄
+   * @param Request $request
+   */
+  public static function destroy(Request $request)
   {
     $_SESSION = array();
     if (isset($_COOKIE[Config::get('SESSION_NAME')])) {
-      Cookie::remove(Config::get('SESSION_NAME'));
+      Cookie::remove($request, Config::get('SESSION_NAME'));
     }
     session_destroy();
   }

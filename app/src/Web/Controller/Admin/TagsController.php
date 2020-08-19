@@ -14,6 +14,7 @@ class TagsController extends AdminController
 
   /**
    * 一覧表示
+   * @param Request $request
    */
   public function index(Request $request)
   {
@@ -64,6 +65,7 @@ class TagsController extends AdminController
 
   /**
    * 編集
+   * @param Request $request
    */
   public function edit(Request $request)
   {
@@ -113,6 +115,7 @@ class TagsController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
   public function delete(Request $request)
   {
