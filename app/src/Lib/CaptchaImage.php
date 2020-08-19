@@ -124,7 +124,6 @@ class CaptchaImage
       $x1 = $arr_bbox[0] < $arr_bbox[6] ? $arr_bbox[0] : $arr_bbox[6];
       $y1 = $arr_bbox[5] < $arr_bbox[7] ? $arr_bbox[5] : $arr_bbox[7];
       $x2 = $arr_bbox[2] > $arr_bbox[4] ? $arr_bbox[2] : $arr_bbox[4];
-      $y2 = $arr_bbox[1] > $arr_bbox[3] ? $arr_bbox[1] : $arr_bbox[3]; # TODO この変数は利用されていない
 
       imagettftext($im, $font_size, $angle, ($cur_x - $x1) + 1, (0 - $y1) + 5, $black, $font1, $char);
       $cur_x += $x2 + random_int(0, 8);
@@ -232,12 +231,6 @@ class CaptchaImage
     }
 
     imagegif($im2);
-
-    if (!defined("TEST_DONT_FLUSH_OUTPUT_BUFFER")) { # UnitTestで受け取るため
-      ob_flush();
-      flush();
-    }
-
     imagedestroy($im2);
   }
 
