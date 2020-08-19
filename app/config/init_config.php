@@ -113,9 +113,6 @@ $config['ARGS_CONTROLLER'] = 'mode'; // TODO mode以外の状態が存在しな�
 // Action引数
 $config['ARGS_ACTION'] = 'process'; // TODO process以外の状態が存在しない
 
-// ルーティング設定
-$config['ROUTING'] = 'routing.php'; // DELME
-
 // アプリプレフィックス(Controller,Viewのプレフィックス)
 $config['APP_PREFIX'] = null;
 

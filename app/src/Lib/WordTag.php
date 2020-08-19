@@ -13,9 +13,8 @@ class WordTag
     return (string)$replace;
   }
 
-  // DELME: unnecessary method
-//  private static function displayNone(): string
-//  {
-//    return '';
-//  }
+  private static function displayNone(): string
+  {
+    return '';
+  }
 }

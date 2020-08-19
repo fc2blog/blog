@@ -7,7 +7,6 @@
 namespace Fc2blog\Web;
 
 use Fc2blog\Web\Controller\Test\CommonController;
-use LogicException;
 
 class Request
 {
@@ -66,21 +65,6 @@ class Request
     $this->request = array_merge($this->get, $this->post);
   }
 
-  // DELME  private static $instance = null;
-  // DELME
-//  public static function getInstance()
-//  {
-//    if (self::$instance === null) {
-//      self::$instance = new static();
-//    }
-//    return self::$instance;
-//  }
-// DELME
-//  public static function resetInstanceForTesting()
-//  {
-//    self::$instance = null;
-//  }
-
   /**
    * リファラーを返却 存在しない場合は空文字を返却
    */
@@ -92,42 +76,6 @@ class Request
     }
     return '';
   }
-
-  /**
-   * コマンドラインの引数をリクエストに設定
-   * @param array $argv
-   */
-  public function setCronParams($argv = array())
-  {
-    // DELME
-    throw new LogicException("deprecated");
-    //    if (count($argv) < 3) {
-//      // 1:ファイル名 2:コントローラー名 3:メソッド名 4...引数
-//      echo "コントローラー名、メソッド名が指定されておりません\n";
-//      echo "cron.php [ControllerName] [MethodName] [...key=value]\n";
-//      if(defined("THIS_IS_TEST")){
-//        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
-//      }else{
-//        exit;
-//      }
-//    }
-//    array_shift($argv);
-//    $className = array_shift($argv);
-//    $methodName = array_shift($argv);
-//    $data = array();
-//    foreach($argv as $a){
-//      list($key, $value) = explode('=', $a);
-//      $data[$key] = $value;
-//    }
-//    $data[Config::get('ARGS_CONTROLLER')] = $className;
-//    $data[Config::get('ARGS_ACTION')] = $methodName;
-//    $this->request = $data;
-  }
-
-//  public function getRequest()
-//  {
-//    return $this->request;
-//  }
 
   public function getPath()
   {
@@ -148,11 +96,6 @@ class Request
   {
     return $this->get;
   }
-
-//  public function getPost()
-//  {
-//    return $this->post;
-//  }
 
   /**
    * $_FILESの中身を加工して取得する
@@ -315,18 +258,6 @@ class Request
   }
 
   /**
-   * @deprecated
-   */
-  public function clear()
-  {
-    throw new LogicException("deprecated");
-//    $this->get     = array();
-//    $this->post    = array();
-//    $this->request = array();
-//    $this->files   = array();
-  }
-
-  /**
    * キーの入れ替えを行う
    * @param array $comb
    */
@@ -337,17 +268,6 @@ class Request
       $this->delete($key);
     }
   }
-
-  // DELME
-//  /**
-//   * リクエストメソッドの判定を行う
-//   * @param string $method
-//   * @return bool
-//   */
-//  private function is(string $method): bool
-//  {
-//    return ($_SERVER["REQUEST_METHOD"] === $method);
-//  }
 
   /**
    * リクエストメソッドがGETか判定を行う
