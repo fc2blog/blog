@@ -200,7 +200,7 @@ abstract class Controller
     }
 
     // Template表示
-    $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? Config::get('APP_PREFIX') . '/' : '') . $fw_template;
+    $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? strtolower(Config::get('APP_PREFIX')) . '/' : '') . $fw_template;
     $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
