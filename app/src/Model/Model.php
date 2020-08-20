@@ -23,12 +23,15 @@ abstract class Model implements ModelInterface
     return false;
   }
 
-  public function getDB()
+  /**
+   * @return MSDB|null
+   */
+  public function getDB(): ?MSDB
   {
     return MSDB::getInstance();
   }
 
-  public function close()
+  public function close(): void
   {
     $db = $this->getDB();
     $db->close();
@@ -76,7 +79,7 @@ abstract class Model implements ModelInterface
   }
 
   /**
-   * Modelをロードする(requireとgetInstance)
+   * Modelをロードする(getInstance)
    * @param string $model
    * @return mixed
    */
@@ -125,6 +128,11 @@ abstract class Model implements ModelInterface
     return true;
   }
 
+  /**
+   * @param $type
+   * @param array $options
+   * @return array|false
+   */
   public function find($type, $options = array())
   {
     if (!isset($options['options'])) {
@@ -284,6 +292,7 @@ abstract class Model implements ModelInterface
 
   /**
    * SQL_CALC_FOUND_ROWSで見つかった件数を返却する
+   * @return array|false
    */
   public function getFoundRows()
   {
@@ -296,7 +305,7 @@ abstract class Model implements ModelInterface
    * @param $paging
    * @return array
    */
-  public static function getPageList($paging)
+  public static function getPageList($paging): array
   {
     $pages = array();
     $pages[0] = '1' . __(' page');
@@ -306,6 +315,12 @@ abstract class Model implements ModelInterface
     return $pages;
   }
 
+  /**
+   * @param $sql
+   * @param array $params
+   * @param array $options
+   * @return array|false
+   */
   public function findSql($sql, $params = array(), $options = array())
   {
     return $this->getDB()->find($sql, $params, $options);
@@ -314,7 +329,7 @@ abstract class Model implements ModelInterface
   /**
    * @param array $values
    * @param array $options
-   * @return false|int|mixed
+   * @return string|int|false 失敗時false, 成功時 last insert id
    */
   public function insert(array $values, array $options = [])
   {
@@ -342,6 +357,13 @@ abstract class Model implements ModelInterface
     return $this->executeSql($sql, $values, $options);
   }
 
+  /**
+   * @param $values
+   * @param $where
+   * @param array $params
+   * @param array $options
+   * @return false|int 失敗時False、成功時1
+   */
   public function update($values, $where, $params = array(), $options = array())
   {
     if (!count($values)) {
@@ -363,7 +385,7 @@ abstract class Model implements ModelInterface
    * @param $values
    * @param $id
    * @param array $options
-   * @return array|false|int|mixed
+   * @return false|int 失敗時False、成功時1
    */
   public function updateById($values, $id, $options = array())
   {
@@ -377,7 +399,7 @@ abstract class Model implements ModelInterface
    * @param $id
    * @param $blog_id
    * @param array $options
-   * @return array|false|int|mixed
+   * @return false|int 失敗時False、成功時1
    */
   public function updateByIdAndBlogId($values, $id, $blog_id, $options = array())
   {
@@ -385,7 +407,13 @@ abstract class Model implements ModelInterface
   }
 
 
-  public function delete($where, $params = array(), $options = array())
+  /**
+   * @param string $where
+   * @param array $params
+   * @param array $options
+   * @return int|false 1なら成功、Falseなら失敗
+   */
+  public function delete(string $where, array $params = [], array $options = [])
   {
     $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $where;
     $options['result'] = DBInterface::RESULT_SUCCESS;
@@ -404,7 +432,7 @@ abstract class Model implements ModelInterface
   }
 
   /**
-   * idとblog_idをキーとした更新
+   * idとblog_idをキーとした削除
    * @param $id
    * @param $blog_id
    * @param array $options
@@ -416,17 +444,24 @@ abstract class Model implements ModelInterface
   }
 
   /**
-   * idとuser_idをキーとした更新
+   * idとuser_idをキーとした削除
    * @param $id
    * @param $user_id
    * @param array $options
-   * @return array|false|int|mixed
+   * @return int|false false時失敗, 成功時は1
    */
   public function deleteByIdAndUserId($id, $user_id, $options = array())
   {
     return $this->delete('id=? AND user_id=?', array($id, $user_id), $options);
   }
 
+  /**
+   * バルクインサート
+   * @param array $columns
+   * @param array $params
+   * @param array $options
+   * @return string|int|false false時失敗, 成功時はlast insert idだが、複数INSERTなので活用は難しい
+   */
   public function multipleInsert($columns = array(), $params = array(), $options = array())
   {
     $sql = 'INSERT INTO ' . $this->getTableName() . ' (' . implode(',', $columns) . ') VALUES ';
@@ -450,7 +485,7 @@ abstract class Model implements ModelInterface
    * @param string $sql
    * @param array $params
    * @param array $options
-   * @return array|false|int|mixed
+   * @return mixed|false 失敗時False、成功時はOptionにより不定
    */
   public function executeSql(string $sql, array $params = [], array $options = [])
   {
