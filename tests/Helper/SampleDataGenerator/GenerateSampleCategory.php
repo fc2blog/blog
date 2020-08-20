@@ -3,26 +3,28 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\Helper\SampleDataGenerator;
 
-use Faker\Factory;
 use Fc2blog\Model\CategoriesModel;
 use InvalidArgumentException;
 use RuntimeException;
 
 class GenerateSampleCategory
 {
+  use FakerTrait;
+  use RandomUtilTrait;
+
   /**
    * @param string $blog_id
-   * @param $parent_id
+   * @param int $parent_id
    * @param int $num
    * @return array created result list
    */
-  public function generateSampleCategory(string $blog_id, $parent_id = 0, int $num = 10): array
+  public function generateSampleCategories(string $blog_id, $parent_id = 0, int $num = 10): array
   {
     $categories_model = new CategoriesModel();
     $result = [];
     $faker = $this->getFaker();
 
-    while ($num--) {
+    while ($num-- > 0) {
       $insert_data = [
         'blog_id' => $blog_id,
         'parent_id' => (string)$parent_id,
@@ -67,6 +69,9 @@ class GenerateSampleCategory
     return $categories_model->getList($blog_id);
   }
 
+  /**
+   * @param string $blog_id
+   */
   public function syncRemoveAllCategories(string $blog_id)
   {
     $categories_model = new CategoriesModel();
@@ -80,25 +85,5 @@ class GenerateSampleCategory
         throw new RuntimeException("delete failed, " . print_r($row, true));
       }
     }
-  }
-
-  public function getFaker()
-  {
-    return Factory::create('ja_JP');
-  }
-
-  static public function getRandomValue(array $array)
-  {
-    $_array = $array;
-    shuffle($_array);
-    return $_array[0];
-  }
-
-  static public function getRandomKey(array $array)
-  {
-    $_array = $array;
-    $_array = array_keys($_array);
-    shuffle($_array);
-    return $_array[0];
   }
 }

@@ -8,7 +8,7 @@ include __DIR__ . "/bootstrap.php";
 $generator = new GenerateSampleCategory();
 
 # データ生成例
-$generator->generateSampleCategory('testblog2');
+$generator->generateSampleCategories('testblog2');
 
 # リスト取得例
 $list = $generator->getCategoryList('testblog2');
