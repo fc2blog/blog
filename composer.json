@@ -15,7 +15,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^9.2",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "fzaninotto/faker": "^1.9"
   },
   "autoload": {
     "psr-4": {
