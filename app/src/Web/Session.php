@@ -91,12 +91,8 @@ class Session
   public static function regenerate()
   {
     self::start();
-    if (version_compare(PHP_VERSION, '5.1.0') >= 0) {
+    if(session_status()===PHP_SESSION_ACTIVE) {
       session_regenerate_id(true);
-    } else {
-      $sess_id = session_id();
-      session_regenerate_id();
-      unlink(session_save_path() . DIRECTORY_SEPARATOR . 'sess_' . $sess_id);
     }
   }
 
@@ -110,7 +106,9 @@ class Session
     if (isset($_COOKIE[Config::get('SESSION_NAME')])) {
       Cookie::remove($request, Config::get('SESSION_NAME'));
     }
-    session_destroy();
+    if(session_status() === PHP_SESSION_ACTIVE) {
+      session_destroy();
+    }
   }
 
 }
