@@ -53,6 +53,9 @@ class Request
     $this->get = $get ?? $_GET;
     $this->files = $files ?? $_FILES;
     $this->server = $server ?? $_SERVER;
+    if(!isset($this->server['HTTP_USER_AGENT'])){
+      $this->server['HTTP_USER_AGENT'] = "";
+    }
     $this->env = $env ?? $_ENV;
     $this->cookie = $cookie ?? $_COOKIE;
 
