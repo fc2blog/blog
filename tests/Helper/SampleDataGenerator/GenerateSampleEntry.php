@@ -8,6 +8,7 @@ use Fc2blog\Model\EntryCategoriesModel;
 use Fc2blog\Model\EntryTagsModel;
 use Fc2blog\Model\TagsModel;
 use InvalidArgumentException;
+use RuntimeException;
 
 class GenerateSampleEntry
 {
@@ -70,13 +71,13 @@ class GenerateSampleEntry
 
       $entry_id = $entries_model->insert($entry_insert_data);
       if ($entry_id === false) {
-        throw new \RuntimeException("entry insert failed");
+        throw new RuntimeException("entry insert failed");
       }
 
       // カテゴリと紐付
       $res = $entry_categories_model->save($blog_id, $entry_id, $entry_categories_data);
       if ($res === false) {
-        throw new \RuntimeException("insert category failed:");
+        throw new RuntimeException("insert category failed:");
       }
 
       // タグと紐付
