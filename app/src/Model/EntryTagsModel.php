@@ -70,10 +70,10 @@ class EntryTagsModel extends Model
    * タグの記事数の変動も行う
    * @param string $blog_id
    * @param int $entry_id
-   * @param string[] $tags
+   * @param ?string[] $tags
    * @return bool
    */
-  public function save(string $blog_id, int $entry_id, array $tags)
+  public function save(string $blog_id, int $entry_id, ?array $tags)
   {
     $tags_model = Model::load('Tags');
 
