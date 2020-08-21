@@ -57,7 +57,7 @@ abstract class Model implements ModelInterface
         continue;
       }
       foreach ($valid as $mKey => $options) {
-        $method = is_array($options) && isset($options['rule']) ? $options['rule'] : $mKey;
+        $method = (is_array($options) && isset($options['rule'])) ? $options['rule'] : $mKey;
         if (!isset($data[$key])) {
           $data[$key] = null;
         }
