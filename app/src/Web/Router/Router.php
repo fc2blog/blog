@@ -46,9 +46,9 @@ class Router
       $args_action = Config::get('ARGS_ACTION');
 
       if ($request->isArgs($args_controller)) {
-        $this->className = "\\Fc2blog\\Web\\Controller\\Admin\\" . pascalCase($request->get($args_controller)) . "Controller";
+        $this->className = "Fc2blog\\Web\\Controller\\Admin\\" . pascalCase($request->get($args_controller)) . "Controller";
       } elseif (isset($paths[1])) {
-        $this->className = "\\Fc2blog\\Web\\Controller\\Admin\\" . pascalCase($paths[1]) . "Controller";
+        $this->className = "Fc2blog\\Web\\Controller\\Admin\\" . pascalCase($paths[1]) . "Controller";
       }
 
       if ($request->isArgs($args_action)) {
@@ -199,6 +199,9 @@ class Router
       $this->className = CommonController::class; // default controller.
       $this->methodName = 'error404';
     }
+
+    $request->className = $this->className;
+    $request->methodName = $this->methodName;
   }
 
   public function resolve(): array
