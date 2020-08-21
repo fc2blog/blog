@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Core\Cookie;
 
+use ErrorException;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
 use InvalidArgumentException;
@@ -16,8 +17,12 @@ class SetTest extends TestCase
     // Cookieの正しいテストはUnitTestでは困難です
     // echo '<?php setcookie("1","b");' | php-cgi
     // 等でテストができますが、php-cgiがない環境でテストが実行できません。
+    // headerが送信されている状態でCookieをセットするため、エラーが発生しますが、例外に変換してキャッチしています。
     $request = new Request();
-    @Cookie::set($request, "k", "v");
+    try {
+      @Cookie::set($request, "k", "v");
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+    }
     $this->assertTrue(true);
   }
 
@@ -62,25 +67,28 @@ class SetTest extends TestCase
     try {
       $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
       @Cookie::set($request, "k", "v", time(), "", "", false, false, "Lax");
-      $this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+      $this->assertTrue(true);
     }
 
     try {
       $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
       @Cookie::set($request, "k", "v", time(), "", "", false, false, "Strict");
-      $this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+      $this->assertTrue(true);
     }
 
     try {
       $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
-      @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");
-      $this->assertTrue(true);
+      @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");$this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+      $this->assertTrue(true);
     }
 
     try {
@@ -115,6 +123,8 @@ class SetTest extends TestCase
       @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+      $this->assertTrue(true);
     }
   }
 }
