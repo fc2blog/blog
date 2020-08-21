@@ -71,7 +71,7 @@ class EntryCategoriesModel extends Model
    * @param $blog_id
    * @param $entry_id
    * @param $data
-   * @return bool
+   * @return bool 全体としての成功・失敗（トランザクションは無い）
    */
   public function save($blog_id, $entry_id, $data)
   {
@@ -108,7 +108,7 @@ class EntryCategoriesModel extends Model
         $values[] = $entry_id;
         $values[] = $categoryId;
       }
-      $ret = $ret && $this->multipleInsert($columns, $values);
+      $ret = $ret && ($this->multipleInsert($columns, $values) !== false);
       // カテゴリーの記事数増加処理
       $categories_model->increaseCount($blog_id, $insert_ids);
     }
