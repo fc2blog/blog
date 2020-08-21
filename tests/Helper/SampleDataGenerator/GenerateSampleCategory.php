@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\Helper\SampleDataGenerator;
 
+use Exception;
 use Fc2blog\Model\CategoriesModel;
 use InvalidArgumentException;
 use RuntimeException;
@@ -17,6 +18,7 @@ class GenerateSampleCategory
    * @param int $parent_id
    * @param int $num
    * @return array created result list
+   * @throws Exception
    */
   public function generateSampleCategories(string $blog_id, $parent_id = 0, int $num = 10): array
   {
@@ -54,6 +56,10 @@ class GenerateSampleCategory
         'parent_id' => $data['parent_id'],
         'name' => $data['name'],
       ];
+
+      if (1 === random_int(1, 3)) {
+        static::generateSampleCategories($blog_id, $id, 5);
+      }
     }
 
     return $result;
