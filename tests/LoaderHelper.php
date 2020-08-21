@@ -3,12 +3,20 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests;
 
+use ErrorException;
 use PHPUnit\Framework\TestCase;
 
 class LoaderHelper extends TestCase
 {
   public static function requireBootStrap()
   {
+    # Noticeを含むすべてのエラーをキャッチしてExceptionに変換
+    # TODO もっとふさわしい場所に移動
+    set_error_handler(function (int $severity, string $message, string $file, int $line) {
+      /** @noinspection PhpUnhandledExceptionInspection */
+      throw new ErrorException($message, 0, $severity, $file, $line);
+    });
+
     //TODO dotenvで外部化
     putenv('FC2_CONFIG_FROM_ENV=1');
     putenv('FC2_ENABLE_UNIT_TEST_ENDPOINT=1');
