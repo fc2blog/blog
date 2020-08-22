@@ -89,4 +89,22 @@ class GenerateSampleEntry
 
     return $entries;
   }
+
+  /**
+   * @param string $blog_id
+   * @return int delete row num
+   */
+  public function removeAllEntry(string $blog_id): int
+  {
+
+    $em = new EntriesModel();
+    $entries = $em->forTestGetAll($blog_id);
+
+    $i = 0;
+    foreach ($entries as $entry) {
+      $em->deleteByIdAndBlogId($entry['id'], $blog_id);
+      $i++;
+    }
+    return $i;
+  }
 }
