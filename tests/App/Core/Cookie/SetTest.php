@@ -108,6 +108,8 @@ class SetTest extends TestCase
       $this->fail();
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+      $this->assertTrue(true);
     }
 
     try {
