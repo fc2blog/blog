@@ -33,7 +33,7 @@ class IndexTest extends TestCase
     $this->assertCount(0, $c->get('comments'));
     $this->assertEquals(0, $c->get('paging')['count']);
     $this->assertEquals(0, $c->get('paging')['max_page']);
-    $this->assertEquals(0, $c->get('paging')['page']); // 指定していないから、0なのか？
+    $this->assertEquals(0, $c->get('paging')['page']); // page は 0-originである。つまり0=1ページ目
     $this->assertEquals(false, $c->get('paging')['is_next']);
     $this->assertEquals(false, $c->get('paging')['is_prev']);
   }
@@ -50,13 +50,13 @@ class IndexTest extends TestCase
     $generator->generateSampleComment('testblog2', 1, 1);
 
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1"]);
-    var_dump($c);
-    var_dump($c->get('comments'));
+//    var_dump($c);
+//    var_dump($c->get('comments'));
 
     $this->assertCount(1, $c->get('comments'));
     $this->assertEquals(1, $c->get('paging')['count']);
     $this->assertEquals(1, $c->get('paging')['max_page']);
-    $this->assertEquals(0, $c->get('paging')['page']); // page は 0-originである。つまり0=1ページ目
+    $this->assertEquals(0, $c->get('paging')['page']);
     $this->assertEquals(false, $c->get('paging')['is_next']);
     $this->assertEquals(false, $c->get('paging')['is_prev']);
   }
@@ -114,7 +114,7 @@ class IndexTest extends TestCase
     // == １ページ件数設定テスト
 
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1", "limit" => "1"]);
-    var_dump($c->get('paging'));
+//    var_dump($c->get('paging'));
     $this->assertCount(1, $c->get('comments'));
     $this->assertEquals(100, $c->get('paging')['count']);
     $this->assertEquals(100, $c->get('paging')['max_page']);
@@ -123,7 +123,7 @@ class IndexTest extends TestCase
     $this->assertEquals(false, $c->get('paging')['is_prev']);
 
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1", "limit" => "100"]);
-    var_dump($c->get('paging'));
+//    var_dump($c->get('paging'));
     $this->assertCount(100, $c->get('comments'));
     $this->assertEquals(100, $c->get('paging')['count']);
     $this->assertEquals(1, $c->get('paging')['max_page']);
@@ -177,21 +177,24 @@ class IndexTest extends TestCase
 
     $generator = new GenerateSampleComment();
     $generator->removeAllComments('testblog2', 1);
-    $generator->generateSampleComment('testblog2', 1, 5);
+    $generator->generateSampleComment('testblog2', 1, 20);
     $generator->removeAllComments('testblog2', 2); // 冪等のため
 
     // とりあえず、数が違えばなんらかフィルタがきいているであろう
     // もっとしっかり数える方が良いだろうが、それは問題が起きてからで。
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1"]);
-    $this->assertEquals(5, $c->get('paging')['count']);
+    $this->assertEquals(20, $c->get('paging')['count']);
     $count_all_status = $c->get('paging')['count'];
 
+    // TODO このあたり確率でコケる
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1", 'open_status' => 0]);
     $this->assertNotEquals($count_all_status, $c->get('paging')['count']);
 
+    // TODO このあたり確率でコケる
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1", 'open_status' => 1]);
     $this->assertNotEquals($count_all_status, $c->get('paging')['count']);
 
+    // TODO このあたり確率でコケる
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1", 'open_status' => 2]);
     $this->assertNotEquals($count_all_status, $c->get('paging')['count']);
 
