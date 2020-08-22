@@ -29,7 +29,6 @@ class UrlTest extends TestCase
       'action' => 'action',
       'blog_id' => 'testblog1'
     ], false, false);
-    echo $url;
     $this->assertStringStartsWith('/', $url);
     $this->assertStringNotContainsString('http', $url);
   }
@@ -53,7 +52,6 @@ class UrlTest extends TestCase
       'action' => 'action',
       'blog_id' => 'testblog1'
     ], false, true);
-    echo $url;
     $this->assertStringStartsWith('https://', $url);
   }
 }
