@@ -91,7 +91,7 @@ class Session
   public static function regenerate()
   {
     self::start();
-    if(session_status()===PHP_SESSION_ACTIVE) {
+    if (session_status() === PHP_SESSION_ACTIVE) {
       session_regenerate_id(true);
     }
   }
@@ -102,11 +102,12 @@ class Session
    */
   public static function destroy(Request $request)
   {
-    $_SESSION = array();
+    $_SESSION = [];
+    $request->session = [];
     if (isset($_COOKIE[Config::get('SESSION_NAME')])) {
       Cookie::remove($request, Config::get('SESSION_NAME'));
     }
-    if(session_status() === PHP_SESSION_ACTIVE) {
+    if (session_status() === PHP_SESSION_ACTIVE) {
       session_destroy();
     }
   }
