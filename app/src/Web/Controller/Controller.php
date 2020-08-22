@@ -26,14 +26,8 @@ abstract class Controller
 
   public function __construct(Request $request, $method)
   {
-    // タイムゾーン設定
-    date_default_timezone_set(\Fc2blog\Config::get('TIMEZONE'));
-
-    // 言語設定
+    // I18N設定
     setLanguage();
-
-    // 内部文字コードを設定
-    mb_internal_encoding(\Fc2blog\Config::get('INTERNAL_ENCODING', 'UTF-8'));
 
     $className = get_class($this);
 
