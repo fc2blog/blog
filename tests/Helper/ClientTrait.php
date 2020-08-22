@@ -16,10 +16,16 @@ use RuntimeException;
 trait ClientTrait
 {
   public $clientTraitSession = [];
+  public $clientTraitCookie = [];
 
   public function resetSession()
   {
     $this->clientTraitSession = [];
+  }
+
+  public function resetCookie()
+  {
+    $this->clientTraitCookie = [];
   }
 
   public function setSession(array $session)
@@ -57,6 +63,7 @@ trait ClientTrait
   ): AppController
   {
     $_SESSION = $this->clientTraitSession;
+    $_COOKIE = $this->clientTraitCookie;
     $_SERVER = [];
     if ($https) {
       $_SERVER['HTTPS'] = "on";
@@ -72,7 +79,9 @@ trait ClientTrait
       $postParams,
       $getParams,
       $filesParams,
-      $_SERVER
+      $_SERVER,
+      [],
+      $_COOKIE
     );
 
     $router = new Router($request);
@@ -80,7 +89,8 @@ trait ClientTrait
 
     $controller_instance = new $resolve['className']($resolve['request'], $resolve['methodName']);
 
-    $this->clientTraitSession = $_SESSION;
+    $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
+    $this->clientTraitCookie = array_merge($request->cookie, $_COOKIE);
 
     return $controller_instance;
   }
@@ -95,6 +105,7 @@ trait ClientTrait
   ): RedirectExit
   {
     $_SESSION = $this->clientTraitSession;
+    $_COOKIE = $this->clientTraitCookie;
     $_SERVER = [];
     if ($https) {
       $_SERVER['HTTPS'] = "on";
@@ -110,7 +121,9 @@ trait ClientTrait
       $postParams,
       $getParams,
       $filesParams,
-      $_SERVER
+      $_SERVER,
+      [],
+      $_COOKIE
     );
 
     $router = new Router($request);
@@ -124,7 +137,8 @@ trait ClientTrait
       $exception = $e;
     }
 
-    $this->clientTraitSession = $_SESSION;
+    $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
+    $this->clientTraitCookie = array_merge($request->cookie, $_COOKIE);
 
     return $exception;
   }
