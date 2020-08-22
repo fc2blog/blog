@@ -89,7 +89,12 @@ trait ClientTrait
 
     $controller_instance = new $resolve['className']($resolve['request'], $resolve['methodName']);
 
-    $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
+    if(empty($_SESSION)){
+      //おそらく、セッション全破棄がおこなわれたので、初期化
+      $this->clientTraitSession = [];
+    }else{
+      $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
+    }
     // Cookieは設定場所が明確で制御できているので、$_COOKIEが劣位である。
     $this->clientTraitCookie = array_merge($_COOKIE, $request->cookie);
 
@@ -138,7 +143,12 @@ trait ClientTrait
       $exception = $e;
     }
 
-    $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
+    if(empty($_SESSION)){
+      //おそらく、セッション全破棄がおこなわれたので、初期化
+      $this->clientTraitSession = [];
+    }else{
+      $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
+    }
     // Cookieは設定場所が明確で制御できているので、$_COOKIEが劣位である。
     $this->clientTraitCookie = array_merge($_COOKIE, $request->cookie);
 
