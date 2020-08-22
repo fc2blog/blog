@@ -495,5 +495,21 @@ SQL;
     return $calendar;
   }
 
+  /**
+   * テスト用、全記事を取得
+   * @param string $blog_id
+   * @return array
+   */
+  public function forTestGetAll(string $blog_id): array
+  {
+    $options = [
+      'where'  => 'blog_id=?',
+      'params' => [$blog_id],
+      'order'  => 'id',
+    ];
+
+    return $this->find('all', $options);
+  }
+
 }
 
