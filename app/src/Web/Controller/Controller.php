@@ -22,9 +22,12 @@ abstract class Controller
   private $templateFilePath = "";
   private $layoutFilePath = "";
   private $resolvedMethod = "";
+  private $request;
 
   public function __construct(Request $request, $method)
   {
+    $this->request = $request;
+
     // I18N設定
     $lang = setLanguage($request);
     $request->lang = $lang;
@@ -314,6 +317,14 @@ abstract class Controller
       throw new LogicException("the method is only for testing.");
     }
     return $this->resolvedMethod;
+  }
+
+  public function getRequest(): Request
+  {
+    if (!defined("THIS_IS_TEST")) {
+      throw new LogicException("the method is only for testing.");
+    }
+    return $this->request;
   }
 }
 
