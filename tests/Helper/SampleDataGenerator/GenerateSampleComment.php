@@ -61,4 +61,23 @@ class GenerateSampleComment
 
     return $comment_list;
   }
+
+  /**
+   * Blogと記事を指定してコメントを全削除
+   * @param string $blog_id
+   * @param int $entry_id
+   * @return int 削除した行数
+   */
+  public function removeAllComments(string $blog_id, int $entry_id): int
+  {
+    $cm = new CommentsModel();
+    $all_comments = $cm->find('all', $cm->forTestGetCommentListOptionsByBlogSetting($blog_id, $entry_id));
+
+    $i = 0;
+    foreach ($all_comments as $comment) {
+      $cm->deleteById($comment['id']);
+      $i++;
+    }
+    return $i;
+  }
 }
