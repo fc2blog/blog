@@ -32,7 +32,7 @@ class LoaderHelper extends TestCase
     putenv('FC2_HTTP_PORT=8080');
     putenv('FC2_HTTPS_PORT=8480');
     putenv('FC2_PASSWORD_SALT=7efe3a5b4d111b9e2148e24993c1cfdb');
-    putenv('FC2_DOCUMENT_ROOT_PATH='. __DIR__."/../public/");
+    putenv('FC2_DOCUMENT_ROOT_PATH=' . __DIR__ . "/../public/");
 
     if ((string)getenv("FC2_CONFIG_FROM_ENV") === "1") {
       require(TEST_APP_DIR . '/config_read_from_env.php');
