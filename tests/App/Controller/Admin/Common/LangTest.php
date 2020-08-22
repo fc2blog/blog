@@ -12,7 +12,7 @@ class LangTest extends TestCase
 {
   use ClientTrait;
 
-  public function testChangeLanguageToEn(): void
+  public function testChangeLanguageByRequest(): void
   {
     Session::destroy(new Request());
     $this->resetSession();
@@ -29,20 +29,8 @@ class LangTest extends TestCase
     // enか確認
     $c = $this->reqGet("/admin/users/login");
     $this->assertEquals("Login to Administration page", $c->get('html_title'));
-  }
 
-  public function testChangeLanguageToJp(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-
-    // enに設定
-    $this->clientTraitCookie['lang'] = "en";
-    $c = $this->reqGet("/admin/users/login");
-    $this->assertEquals("Login to Administration page", $c->get('html_title'));
-
-    // jaに設定
+    // jaに切り替えをリクエスト
     $this->reqGetBeRedirect("/admin/common/lang", ["lang" => "ja"]);
     $this->assertEquals('ja', $this->clientTraitCookie['lang']);
 
@@ -51,4 +39,27 @@ class LangTest extends TestCase
     $this->assertEquals("管理画面へログイン", $c->get('html_title'));
   }
 
+  public function testChangeLanguageByCookie(): void
+  {
+    Session::destroy(new Request());
+    $this->resetSession();
+    $this->resetCookie();
+
+    // jaに設定
+    $this->reqGetBeRedirect("/admin/common/lang", ["lang" => "ja"]);
+    $this->assertEquals('ja', $this->clientTraitCookie['lang']);
+
+    // jaか確認
+    $c = $this->reqGet("/admin/users/login");
+    $this->assertEquals("管理画面へログイン", $c->get('html_title'));
+
+    // enに設定
+    $this->clientTraitCookie['lang'] = "en";
+    $c = $this->reqGet("/admin/users/login");
+    $this->assertEquals("Login to Administration page", $c->get('html_title'));
+
+    // enか確認
+    $c = $this->reqGet("/admin/users/login");
+    $this->assertEquals("Login to Administration page", $c->get('html_title'));
+  }
 }
