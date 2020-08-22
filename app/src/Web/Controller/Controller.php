@@ -26,7 +26,8 @@ abstract class Controller
   public function __construct(Request $request, $method)
   {
     // I18N設定
-    setLanguage();
+    $lang = setLanguage($request);
+    $request->lang = $lang;
 
     $className = get_class($this);
 
@@ -129,7 +130,6 @@ abstract class Controller
       header('Location: ' . $url, true, $status_code);
     }
     $escaped_url = h($url);
-    echo "redirect to {$escaped_url} status code:{$status_code}";
     if (defined("THIS_IS_TEST")) {
       $e = new RedirectExit(__FILE__ . ":" . __LINE__ . " redirect to {$escaped_url} status code:{$status_code}");
       $e->redirectUrl = $url;

@@ -31,6 +31,7 @@ class Request
 
   public $className = CommonController::class;
   public $methodName = "index";
+  public $lang = "";
 
   public function __construct(
     string $method = null,
