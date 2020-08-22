@@ -1,6 +1,6 @@
 <?php header("Content-Type: text/html; charset=UTF-8"); ?>
 <!DOCTYPE html>
-<html lang="<?php echo \Fc2blog\Config::get('LANG'); ?>">
+<html lang="<?php echo $request->lang; ?>">
 <head>
   <meta charset="utf-8">
   <title><?php echo \Fc2blog\Web\Session::get('blog_id'); ?></title>
@@ -38,7 +38,7 @@
 
   <header class="clear">
     <div>
-      <?php $lang = \Fc2blog\Config::get('LANG'); ?>
+      <?php $lang = $request->lang; ?>
       <div id="switch_lang">
         <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
           <option value="ja" <?php if ($lang=='ja') : ?>selected="selected"<?php endif; ?>>日本語</option>

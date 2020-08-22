@@ -4,7 +4,7 @@ if(!headers_sent()){
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo \Fc2blog\Config::get('LANG'); ?>">
+<html lang="<?php echo $request->lang; ?>">
 <head>
   <meta charset="utf-8">
   <title><?php echo h($blog['name']); ?></title>
@@ -29,7 +29,7 @@ if(!headers_sent()){
         <span><?php echo \Fc2blog\Web\Session::get('nickname'); ?></span>
       <?php endif; ?>
 
-      <?php $lang = \Fc2blog\Config::get('LANG'); ?>
+      <?php $lang = $request->lang; ?>
       <div id="switch_lang">
         <select id="sys-language-setting">
           <option value="ja" <?php if ($lang=='ja') : ?>selected="selected"<?php endif; ?>>日本語</option>
