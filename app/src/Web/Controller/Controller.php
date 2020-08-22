@@ -8,7 +8,6 @@ namespace Fc2blog\Web\Controller;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Debug;
-use Fc2blog\Exception\PseudoExit;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Web\Html;
@@ -133,8 +132,8 @@ abstract class Controller
     echo "redirect to {$escaped_url} status code:{$status_code}";
     if (defined("THIS_IS_TEST")) {
       $e = new RedirectExit(__FILE__ . ":" . __LINE__ . " redirect to {$escaped_url} status code:{$status_code}");
-      $e->redirectUrl=$url;
-      $e->statusCode=$status_code;
+      $e->redirectUrl = $url;
+      $e->statusCode = $status_code;
       throw $e;
     } else {
       exit;
