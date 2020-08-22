@@ -12,9 +12,8 @@ class IndexTest extends TestCase
 
   public function testGet(): void
   {
-    $res = static::execute('/testblog1/?no=1', true);
-
-    $this->assertStringStartsWith("<!DOCTYPE html", $res);
-    $this->assertStringContainsString("testblog1", $res);
+    $c = $this->reqHttpsGet('/testblog1/?no=1');
+    $this->assertStringStartsWith("<!DOCTYPE html", $c->getOutput());
+    $this->assertStringContainsString("testblog1", $c->getOutput());
   }
 }

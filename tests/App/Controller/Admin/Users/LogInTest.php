@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Controller\Admin\Users;
 
-use Fc2blog\Tests\Helper\ClientTrait2;
+use Fc2blog\Tests\Helper\ClientTrait;
 use Fc2blog\Web\Controller\Admin\CommonController;
 use Fc2blog\Web\Controller\Admin\UsersController;
 use Fc2blog\Web\Request;
@@ -12,15 +12,15 @@ use PHPUnit\Framework\TestCase;
 
 class LogInTest extends TestCase
 {
-  use ClientTrait2;
+  use ClientTrait;
 
   public function testBeforeLoginRedirect(): void
   {
     Session::destroy(new Request());
     $this->resetSession();
-    $e = $this->reqGetWithExit("/admin/");
+    $r = $this->reqGetBeRedirect("/admin/");
 
-    $this->assertStringContainsString("/admin/users/login", $e->getMessage());
+    $this->assertEquals("/admin/users/login", $r->redirectUrl);
   }
 
   public function testLoginForm(): void
@@ -35,20 +35,21 @@ class LogInTest extends TestCase
 
   public function testLogin(): void
   {
-    $e = $this->reqPostWithExit("/admin/users/login", [
+    $r = $this->reqPostWithExit("/admin/users/login", [
       'user' => [
         'login_id' => 'testadmin',
         'password' => 'testadmin',
       ]
     ]);
 
-    $this->assertStringContainsString('redirect to /admin/ status code:302', $e->getMessage());
+    $this->assertEquals('/admin/', $r->redirectUrl);
+    $this->assertEquals(302, $r->statusCode);
 
-    $this->assertEquals(1, $_SESSION['user_id']);
-    $this->assertEquals('testadmin', $_SESSION['login_id']);
-    $this->assertEquals(1, $_SESSION['user_type']);
-    $this->assertEquals('testblog2', $_SESSION['blog_id']);
-    $this->assertEquals('testnick2', $_SESSION['nickname']);
+    $this->assertEquals(1, $this->clientTraitSession['user_id']);
+    $this->assertEquals('testadmin', $this->clientTraitSession['login_id']);
+    $this->assertEquals(1, $this->clientTraitSession['user_type']);
+    $this->assertEquals('testblog2', $this->clientTraitSession['blog_id']);
+    $this->assertEquals('testnick2', $this->clientTraitSession['nickname']);
   }
 
   public function testKeepLogin(): void
@@ -65,9 +66,10 @@ class LogInTest extends TestCase
   public function testLogout(): void
   {
     $this->mergeAdminSession();
-    $e = $this->reqGetWithExit("/admin/users/logout");
+    $r = $this->reqGetBeRedirect("/admin/users/logout");
 
-    $this->assertStringContainsString(' /admin/users/login ', $e->getMessage());
-    $this->assertEmpty($_SESSION);
+    $this->assertEquals('/admin/users/login', $r->redirectUrl);
+    $this->assertEquals(302, $r->statusCode);
+    $this->assertEmpty($this->clientTraitSession);
   }
 }
