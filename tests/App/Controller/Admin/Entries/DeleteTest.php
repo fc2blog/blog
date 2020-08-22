@@ -42,4 +42,40 @@ class DeleteTest extends TestCase
     $c = $this->reqGet("/admin/entries/index");
     $this->assertCount($entry_count - 1, $c->get('entries'));
   }
+
+  public function testMultiDelete():void
+  {
+    # 複数削除テストなので、一回３件に戻す
+    DBHelper::clearDbAndInsertFixture();
+
+    Session::destroy(new Request());
+    $this->resetSession();
+    $this->resetCookie();
+    $this->mergeAdminSession();
+
+    // get sig(CSRF Token) and entries
+    $c = $this->reqGet("/admin/entries/index");
+    $sig = $this->clientTraitSession['sig'];
+    $entries = $c->get('entries');
+    $entry_id_list = [];
+    foreach($entries as $entry){
+      $entry_id_list[] = $entry['id'];
+    }
+    $this->assertCount(3, $entries);
+
+    $request_data = [
+      "id" => $entry_id_list,
+      'mode'=>"entries",
+      'process'=>'delete',
+      'sig'=>$sig
+    ];
+
+    $r = $this->reqGetBeRedirect("/admin/entries/delete", $request_data);
+    $this->assertEquals("/admin/entries/index", $r->redirectUrl);
+
+    $c = $this->reqGet("/admin/entries/index");
+    $entries = $c->get('entries');
+
+    $this->assertCount(0, $entries);
+  }
 }
