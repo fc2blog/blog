@@ -72,10 +72,7 @@ class Router
 
       // → /_for_unit_test_/phpinfo
       //     ^- path[0]      ^- path[1]
-      if ($paths[1] === "phpinfo") {
-        $this->methodName = "phpinfo";
-
-      } else if ($paths[1] === "redirect_test_no_full_url") {
+      if ($paths[1] === "redirect_test_no_full_url") {
         $this->methodName = "redirect_test_no_full_url";
 
       } else if ($paths[1] === "redirect_test_full_url") {
