@@ -339,4 +339,11 @@ class Request
     return isset($this->cookie[$key]);
   }
 
+  /**
+   * @return array
+   */
+  public function getData(): array
+  {
+    return $this->request;
+  }
 }
