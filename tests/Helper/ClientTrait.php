@@ -90,7 +90,8 @@ trait ClientTrait
     $controller_instance = new $resolve['className']($resolve['request'], $resolve['methodName']);
 
     $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
-    $this->clientTraitCookie = array_merge($request->cookie, $_COOKIE);
+    // Cookieは設定場所が明確で制御できているので、$_COOKIEが劣位である。
+    $this->clientTraitCookie = array_merge($_COOKIE, $request->cookie);
 
     return $controller_instance;
   }
@@ -138,7 +139,8 @@ trait ClientTrait
     }
 
     $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
-    $this->clientTraitCookie = array_merge($request->cookie, $_COOKIE);
+    // Cookieは設定場所が明確で制御できているので、$_COOKIEが劣位である。
+    $this->clientTraitCookie = array_merge($_COOKIE, $request->cookie);
 
     return $exception;
   }
