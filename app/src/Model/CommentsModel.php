@@ -373,6 +373,26 @@ class CommentsModel extends Model
   }
 
   /**
+   * テスト用、あるエントリの全コメントを取得
+   * @param $blog_id
+   * @param $entry_id
+   * @return array
+   */
+  public function forTestGetCommentListOptionsByBlogSetting($blog_id, $entry_id)
+  {
+    $where = 'blog_id=? AND entry_id=?';
+    $params = array($blog_id, $entry_id);
+
+    // 記事のコメント取得
+    $options = array(
+      'where' => $where,
+      'params' => $params,
+      'order' => 'id ',
+    );
+    return $options;
+  }
+
+  /**
    * コメント一覧の情報にブログの設定情報で装飾する
    * @param $tmp_comments
    * @param $blog_setting
