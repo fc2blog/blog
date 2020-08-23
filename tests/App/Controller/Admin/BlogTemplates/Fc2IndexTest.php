@@ -64,7 +64,7 @@ class Fc2IndexTest extends TestCase
     $this->assertEquals('fc2_index', $c->getResolvedMethod());
 
     $d = $c->getData();
-    var_export($d);
+//    var_export($d);
 
     $this->assertIsArray($d['templates']);
     $this->assertGreaterThan(1, count($d['templates']));
