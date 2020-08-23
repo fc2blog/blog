@@ -5,6 +5,7 @@ namespace Fc2blog\Tests\App\Controller\Admin\Files;
 
 use Exception;
 use Fc2blog\Config;
+use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
 use Fc2blog\Web\Controller\Admin\FilesController;
 use Fc2blog\Web\Request;
@@ -29,19 +30,67 @@ class UploadTest extends TestCase
     $this->resetCookie();
     $this->mergeAdminSession();
 
-    // get sig(CSRF Token) and entries
-    // admin/files/uploadはガワの部分（アップロードフォームまで）
-    $c = $this->reqGet("/admin/files/upload");
-
-    $this->assertInstanceOf(FilesController::class, $c);
-
     // admin/files/ajax_indexは一覧の部分（「ファイル検索」を含んでそれ移行
     // なぜ分離されているんだろうか…？
     $c = $this->reqGet("/admin/files/ajax_index");
     $this->assertInstanceOf(FilesController::class, $c);
-    $sig = $this->clientTraitSession['sig'];
 
     $before_files_count = count($c->get('files'));
+
+    $filename = $this->uploadFile();
+
+    $c = $this->reqGet("/admin/files/ajax_index");
+    $this->assertInstanceOf(FilesController::class, $c);
+//    var_dump($c->get('files'));
+    $this->assertEquals($filename, $c->get('files')[0]['name']);
+
+    $this->assertCount($before_files_count + 1, $c->get('files'), "登録後なので1個増える");
+  }
+
+  public function testIndexSearch(): void
+  {
+    DBHelper::clearDbAndInsertFixture();
+    Session::destroy(new Request());
+    $this->resetSession();
+    $this->resetCookie();
+    $this->mergeAdminSession();
+
+    $f1 = $this->uploadFile();
+    $this->uploadFile();
+    $this->uploadFile();
+
+    ## search test.
+    $c = $this->reqGet("/admin/files/ajax_index", [
+      "limit" => "5",
+      "page" => "0",
+      "order" => "created_at_desc",
+      "keyword" => "",
+    ]);
+    $this->assertInstanceOf(FilesController::class, $c);
+    $this->assertCount(3, $c->get('files'));
+
+    ## search test.
+    $c = $this->reqGet("/admin/files/ajax_index", [
+      "limit" => "5",
+      "page" => "0",
+      "order" => "created_at_desc",
+      "keyword" => $f1,
+    ]);
+    $this->assertInstanceOf(FilesController::class, $c);
+    $this->assertCount(1, $c->get('files'));
+  }
+
+  private function uploadFile(string $file_name = null): string
+  {
+    // get sig(CSRF Token) and entries
+    // admin/files/uploadはガワの部分（アップロードフォームまで）
+    $c = $this->reqGet("/admin/files/upload");
+    $this->assertInstanceOf(FilesController::class, $c);
+    $sig = $this->clientTraitSession['sig'];
+
+    # test file upload.
+    $c = $this->reqGet("/admin/files/ajax_index");
+    $this->assertInstanceOf(FilesController::class, $c);
 
     try {
       $orig_file_path = realpath(__DIR__ . "/../../../../test_images/" . random_int(0, 9) . ".png");
@@ -61,7 +110,7 @@ class UploadTest extends TestCase
         "error" => ['file' => UPLOAD_ERR_OK],
       ]
     ];
-    $filename = "test" . microtime(true) . ".png";
+    $filename = (!is_null($file_name)) ? $file_name : "test" . microtime(true) . ".png";
     $request_data = [
       'file' => [
         "name" => $filename,
@@ -72,13 +121,9 @@ class UploadTest extends TestCase
 
     $r = $this->reqPostFileBeRedirect("/admin/files/upload", $request_data, $request_file);
     $this->assertEquals("/admin/files/upload", $r->redirectUrl);
-
-    $c = $this->reqGet("/admin/files/ajax_index");
-    $this->assertInstanceOf(FilesController::class, $c);
-//    var_dump($c->get('files'));
-    $this->assertEquals($filename, $c->get('files')[0]['name']);
-
-    $this->assertCount($before_files_count + 1, $c->get('files'), "登録後なので1個増える");
+    return $filename;
   }
+
+  // TODO ソート関連のファイル検索テスト拡充
 
 }
