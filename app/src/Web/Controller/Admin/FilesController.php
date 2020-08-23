@@ -93,7 +93,11 @@ class FilesController extends AdminController
           $data_file['id'] = $id;
           $move_file_path = App::getUserFilePath($data_file, true);
           App::mkdir($move_file_path);
-          move_uploaded_file($tmp_name, $move_file_path);
+          if(defined("THIS_IS_TEST")){
+            rename($tmp_name, $move_file_path);
+          }else {
+            move_uploaded_file($tmp_name, $move_file_path);
+          }
 
           $this->setInfoMessage(__('I have completed the upload of files'));
           $this->redirect($request, array('action' => 'upload'));
