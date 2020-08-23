@@ -326,5 +326,13 @@ abstract class Controller
     }
     return $this->request;
   }
+
+  public function getData(): array
+  {
+    if (!defined("THIS_IS_TEST")) {
+      throw new LogicException("the method is only for testing.");
+    }
+    return $this->data;
+  }
 }
 
