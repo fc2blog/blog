@@ -42,7 +42,7 @@ class EditTest extends TestCase
     $this->assertInstanceOf(FilesController::class, $c);
     $this->assertEquals('edit', $c->getResolvedMethod());
 
-    var_dump($c->getData()['file']);
+//    var_dump($c->getData()['file']);
 
     $this->assertEquals($files[0]['id'], $c->getData()['file']['id']);
     // TODO 増やすと良い
