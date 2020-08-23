@@ -33,7 +33,7 @@ class CreateTest extends TestCase
     $this->assertEquals('create', $c->getResolvedMethod());
 
     $data = $c->getData();
-    var_export($data);
+//    var_export($data);
 
     $this->assertArrayHasKey('category_parents', $data);
     $this->assertEquals('', $data['category_parents'][0]);
@@ -64,12 +64,11 @@ class CreateTest extends TestCase
 
     $c = $this->reqGet("/admin/categories/create");
     $data = $c->getData();
-    var_export($data);
+//    var_export($data);
 
     $this->assertEquals("test", $data['category_parents'][2]['value']);
     $this->assertEquals(1, $data['category_parents'][2]['level']);
     $this->assertArrayNotHasKey('disabled', $data['category_parents'][2]);
-
   }
 
   public function testDelete(): void
