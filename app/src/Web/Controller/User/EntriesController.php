@@ -237,7 +237,9 @@ class EntriesController extends UserController
   public function preview(Request $request)
   {
     // XSS-Protection無効
-    header("X-XSS-Protection: 0");
+    if(!defined("THIS_IS_TEST")) {
+      header("X-XSS-Protection: 0");
+    }
 
     // preview処理用
     $blog_id = $this->getBlogId($request);
