@@ -65,7 +65,7 @@ class EditTest extends TestCase
       ]
     ];
 
-    $r = $this->reqPostWithExit("/admin/entries/edit", $request_data);
+    $r = $this->reqPostBeRedirect("/admin/entries/edit", $request_data);
 
     $this->assertEquals("/admin/entries/index", $r->redirectUrl);
 

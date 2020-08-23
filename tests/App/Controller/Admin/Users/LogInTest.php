@@ -35,7 +35,7 @@ class LogInTest extends TestCase
 
   public function testLogin(): void
   {
-    $r = $this->reqPostWithExit("/admin/users/login", [
+    $r = $this->reqPostBeRedirect("/admin/users/login", [
       'user' => [
         'login_id' => 'testadmin',
         'password' => 'testadmin',

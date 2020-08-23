@@ -185,12 +185,12 @@ trait ClientTrait
     return static::reqBase(true, "POST", $path, $params);
   }
 
-  public function reqPostWithExit(string $path = "/", array $params = []): RedirectExit
+  public function reqPostBeRedirect(string $path = "/", array $params = []): RedirectExit
   {
     return static::reqBaseBeRedirect(false, "POST", $path, $params);
   }
 
-  public function reqHttpsPostWithExit(string $path = "/", array $params = []): RedirectExit
+  public function reqHttpsPostBeRedirect(string $path = "/", array $params = []): RedirectExit
   {
     return static::reqBaseBeRedirect(true, "POST", $path, $params);
   }

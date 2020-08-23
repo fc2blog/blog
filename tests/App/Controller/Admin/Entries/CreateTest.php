@@ -36,7 +36,7 @@ class CreateTest extends TestCase
     $this->reqGet("/admin/entries/create");
     $sig = $this->clientTraitSession['sig'];
 
-    $r = $this->reqPostWithExit("/admin/entries/create", [
+    $r = $this->reqPostBeRedirect("/admin/entries/create", [
       "sig" => $sig,
       "entry" => [ // 最低限の投稿
         "title" => "test",
