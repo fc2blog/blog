@@ -100,7 +100,7 @@ class UploadTest extends TestCase
       throw new RuntimeException("failed random_int");
     }
 
-    $tmp_file = __DIR__ . "/../../../../test_images/_tmpimg.png";
+    $tmp_file = __DIR__ . "/../../../../test_images/_temp_img.png";
     copy($orig_file_path, $tmp_file);
 
     $request_file = [
