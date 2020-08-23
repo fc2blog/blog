@@ -13,7 +13,7 @@ class GenerateSampleTemplate
   use FakerTrait;
   use RandomUtilTrait;
 
-  public function generateSampleTemplate(string $blog_id, int $num = 10): array
+  public function generateSampleTemplate(string $blog_id, int $num = 10, int $device_type = null): array
   {
     $faker = static::getFaker();
     $template_list = [];
@@ -24,7 +24,7 @@ class GenerateSampleTemplate
       $device_list = Config::get("DEVICES");
 
       $template_request = [
-        "device_type" => static::getRandomValue($device_list),
+        "device_type" => $device_type ?? static::getRandomValue($device_list),
         "title" => $faker->sentence(3),
         "html" => $faker->randomHtml(),
         "css" => "/* this is pseudo css " . $faker->text() . "*/",
