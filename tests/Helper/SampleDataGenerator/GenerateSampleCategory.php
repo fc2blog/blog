@@ -57,8 +57,8 @@ class GenerateSampleCategory
         'name' => $data['name'],
       ];
 
-      if (1 === random_int(1, 3)) {
-        static::generateSampleCategories($blog_id, $id, 5);
+      if (1 === random_int(1, 4)) {
+        static::generateSampleCategories($blog_id, $id, 2);
       }
     }
 
