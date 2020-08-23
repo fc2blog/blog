@@ -7,6 +7,7 @@ use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Web\Controller\AppController;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Router\Router;
+use Fc2blog\Web\Session;
 use RuntimeException;
 
 /**
@@ -208,5 +209,19 @@ trait ClientTrait
     // TODO コントローラでsigが作られていたりいなかったりするのをどうにかしたい。
     $this->reqGet("/admin/entries/index");
     return $this->clientTraitSession['sig'];
+  }
+
+  public function getFlashMessages(): array
+  {
+    $rtn = [
+      'error' => implode(",", Session::remove('flash-message-error') ?? []),
+      'info' => implode(",", Session::remove('flash-message-info') ?? []),
+      'warn' => implode(",", Session::remove('flash-message-warn') ?? []),
+    ];
+    $rtn['is_something'] = (strlen($rtn['error']) > 0) || (strlen($rtn['info']) > 0) || (strlen($rtn['warn']) > 0);
+    $rtn['is_info'] = strlen($rtn['info']) > 0;
+    $rtn['is_warn'] = strlen($rtn['warn']) > 0;
+    $rtn['is_error'] = strlen($rtn['error']) > 0;
+    return $rtn;
   }
 }
