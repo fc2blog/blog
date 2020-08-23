@@ -119,8 +119,8 @@ class Request
     $files = array();
     $keys = array_keys($file['tmp_name']);
     foreach ($keys as $key) {
-      foreach ($file as $colomn => $value) {
-        $files[$key][$colomn] = $value[$key];
+      foreach ($file as $column => $value) {
+        $files[$key][$column] = $value[$key];
       }
     }
     return $files;
