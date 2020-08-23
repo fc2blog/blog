@@ -128,4 +128,54 @@ class UploadTest extends TestCase
 
   // TODO ソート関連のファイル検索テスト拡充
 
+  public function testOrderBy(): void
+  {
+    DBHelper::clearDbAndInsertFixture();
+    Session::destroy(new Request());
+    $this->resetSession();
+    $this->resetCookie();
+    $this->mergeAdminSession();
+
+    $this->uploadFile();
+    $this->uploadFile();
+    $this->uploadFile();
+    $this->uploadFile();
+
+    $c = $this->reqGet("/admin/files/ajax_index", [
+      "limit" => "5",
+      "page" => "0",
+      "order" => "name_desc",
+      "keyword" => "",
+    ]);
+    $this->assertInstanceOf(FilesController::class, $c);
+    $this->assertCount(4, $c->get('files'));
+
+    $files = $c->getData()['files'];
+//    var_dump($files);
+
+    $name_desc_first_id = $files[0]['id'];
+    $name_desc_last_id = $files[3]['id'];
+
+    $c = $this->reqGet("/admin/files/ajax_index", [
+      "limit" => "5",
+      "page" => "0",
+      "order" => "name_asc",
+      "keyword" => "",
+    ]);
+    $this->assertInstanceOf(FilesController::class, $c);
+    $this->assertCount(4, $c->get('files'));
+
+    $files = $c->getData()['files'];
+//    var_dump($files);
+
+    $name_asc_first_id = $files[0]['id'];
+    $name_asc_last_id = $files[3]['id'];
+
+    $this->assertEquals($name_asc_first_id, $name_desc_last_id);
+    $this->assertEquals($name_asc_last_id, $name_desc_first_id);
+
+  }
+
+  // Todo 他のソート条件も追記していく
+
 }
