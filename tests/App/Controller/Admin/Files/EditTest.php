@@ -61,20 +61,21 @@ class EditTest extends TestCase
     $this->assertInstanceOf(FilesController::class, $c);
     $sig = $this->clientTraitSession['sig'];
 
+    $ut = new UploadTest();
+    $ut->uploadFile();
+
+    $fm = new FilesModel();
+    $files = $fm->find('all');
+    $before_count = count($files);
+
     try {
       $orig_file_path = realpath(__DIR__ . "/../../../../test_images/" . random_int(0, 9) . ".png");
     } catch (Exception $e) {
       throw new RuntimeException("failed random_int");
     }
-
     $tmp_file = __DIR__ . "/../../../../test_images/_temp_img.png";
     copy($orig_file_path, $tmp_file);
-    $ut = new UploadTest();
-    $ut->uploadFile();
-    $fm = new FilesModel();
-    $files = $fm->find('all');
-//    var_dump($files);
-    $before_count = count($files);
+    $tmp_file = realpath(__DIR__ . "/../../../../test_images/_temp_img.png");
 
     $request_file = [
       'file' => [
