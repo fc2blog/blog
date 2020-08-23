@@ -17,6 +17,7 @@ trait ClientTrait
 {
   public $clientTraitSession = [];
   public $clientTraitCookie = [];
+  public $output = "";
 
   public function resetSession()
   {
@@ -89,10 +90,10 @@ trait ClientTrait
 
     $controller_instance = new $resolve['className']($resolve['request'], $resolve['methodName']);
 
-    if(empty($_SESSION)){
+    if (empty($_SESSION)) {
       //おそらく、セッション全破棄がおこなわれたので、初期化
       $this->clientTraitSession = [];
-    }else{
+    } else {
       $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
     }
     // Cookieは設定場所が明確で制御できているので、$_COOKIEが劣位である。
@@ -137,16 +138,17 @@ trait ClientTrait
 
     $exception = null;
     try {
-      new $resolve['className']($resolve['request'], $resolve['methodName']);
+      $c = new $resolve['className']($resolve['request'], $resolve['methodName']);
+      echo $c->getOutput();
       throw new RuntimeException("It's not what I was expecting.");
     } catch (RedirectExit $e) {
       $exception = $e;
     }
 
-    if(empty($_SESSION)){
+    if (empty($_SESSION)) {
       //おそらく、セッション全破棄がおこなわれたので、初期化
       $this->clientTraitSession = [];
-    }else{
+    } else {
       $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
     }
     // Cookieは設定場所が明確で制御できているので、$_COOKIEが劣位である。
@@ -195,8 +197,16 @@ trait ClientTrait
     return static::reqBaseBeRedirect(true, "POST", $path, $params);
   }
 
-  public function reqPostFileBeRedirect(string $path = "/", array $params = [], array $files =[]): RedirectExit
+  public function reqPostFileBeRedirect(string $path = "/", array $params = [], array $files = []): RedirectExit
   {
     return static::reqBaseBeRedirect(false, "POST", $path, $params, [], $files);
+  }
+
+  public function getSig(): string
+  {
+    // sig(CSRF Token)を裏側で更新してそれを返す。
+    // TODO コントローラでsigが作られていたりいなかったりするのをどうにかしたい。
+    $this->reqGet("/admin/entries/index");
+    return $this->clientTraitSession['sig'];
   }
 }
