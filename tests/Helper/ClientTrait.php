@@ -194,4 +194,9 @@ trait ClientTrait
   {
     return static::reqBaseBeRedirect(true, "POST", $path, $params);
   }
+
+  public function reqPostFileBeRedirect(string $path = "/", array $params = [], array $files =[]): RedirectExit
+  {
+    return static::reqBaseBeRedirect(false, "POST", $path, $params, [], $files);
+  }
 }
