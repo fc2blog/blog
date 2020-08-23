@@ -80,8 +80,10 @@ class UploadTest extends TestCase
     $this->assertCount(1, $c->get('files'));
   }
 
-  private function uploadFile(string $file_name = null): string
+  public function uploadFile(string $file_name = null): string
   {
+    $this->mergeAdminSession();
+
     // get sig(CSRF Token) and entries
     // admin/files/uploadはガワの部分（アップロードフォームまで）
     $c = $this->reqGet("/admin/files/upload");
