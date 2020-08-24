@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
+
 declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Lib\CaptchaImage;

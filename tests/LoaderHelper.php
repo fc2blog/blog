@@ -10,7 +10,7 @@ class LoaderHelper extends TestCase
 {
   public static function requireBootStrap()
   {
-    # Noticeを含むすべてのエラーをキャッチしてExceptionに変換
+    # 細かなエラーを見逃さないために、Noticeを含むすべてのエラーをキャッチしてErrorExceptionに変換する
     # TODO もっとふさわしい場所に移動
     set_error_handler(function (int $severity, string $message, string $file, int $line) {
       /** @noinspection PhpUnhandledExceptionInspection */
