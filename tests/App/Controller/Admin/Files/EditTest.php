@@ -55,11 +55,8 @@ class EditTest extends TestCase
     $this->resetCookie();
     $this->mergeAdminSession();
 
-    // get sig(CSRF Token) and entries
-    // admin/files/uploadはガワの部分（アップロードフォームまで）
     $c = $this->reqGet("/admin/files/upload");
     $this->assertInstanceOf(FilesController::class, $c);
-    $sig = $this->clientTraitSession['sig'];
 
     $ut = new UploadTest();
     $ut->uploadFile();
@@ -76,6 +73,8 @@ class EditTest extends TestCase
     $tmp_file = __DIR__ . "/../../../../test_images/_temp_img.png";
     copy($orig_file_path, $tmp_file);
     $tmp_file = realpath(__DIR__ . "/../../../../test_images/_temp_img.png");
+
+    $sig = $this->getSig();
 
     $request_file = [
       'file' => [

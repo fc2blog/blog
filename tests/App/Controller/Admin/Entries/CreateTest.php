@@ -33,8 +33,7 @@ class CreateTest extends TestCase
     $entries = $em->forTestGetAll('testblog2');
     $entries_count = count($entries);
 
-    $this->reqGet("/admin/entries/create");
-    $sig = $this->clientTraitSession['sig'];
+    $sig = $this->getSig();
 
     $r = $this->reqPostBeRedirect("/admin/entries/create", [
       "sig" => $sig,

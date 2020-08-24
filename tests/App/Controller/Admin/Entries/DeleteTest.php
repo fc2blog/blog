@@ -28,17 +28,16 @@ class DeleteTest extends TestCase
     $this->resetCookie();
     $this->mergeAdminSession();
 
-    // get sig(CSRF Token) and entries
     $c = $this->reqGet("/admin/entries/index");
-    $sig = $this->clientTraitSession['sig'];
     $some_entry = $c->get('entries')[0];
     $entry_count = count($c->get('entries'));
+
+    $sig = $this->getSig();
 
     $r = $this->reqGetBeRedirect("/admin/entries/delete", ["id" => $some_entry['id'], "sig" => $sig]);
 
     $this->assertEquals("/admin/entries/index", $r->redirectUrl);
 
-    // get sig(CSRF Token) and entries
     $c = $this->reqGet("/admin/entries/index");
     $this->assertCount($entry_count - 1, $c->get('entries'));
   }
@@ -53,15 +52,14 @@ class DeleteTest extends TestCase
     $this->resetCookie();
     $this->mergeAdminSession();
 
-    // get sig(CSRF Token) and entries
     $c = $this->reqGet("/admin/entries/index");
-    $sig = $this->clientTraitSession['sig'];
     $entries = $c->get('entries');
     $entry_id_list = [];
     foreach($entries as $entry){
       $entry_id_list[] = $entry['id'];
     }
     $this->assertCount(3, $entries);
+    $sig = $this->getSig();
 
     $request_data = [
       "id" => $entry_id_list,

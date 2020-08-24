@@ -35,14 +35,14 @@ class DeleteTest extends TestCase
     $ut->uploadFile();
     $ut->uploadFile();
 
-    // get sig(CSRF Token) and entries
     // admin/files/uploadはガワの部分（アップロードフォームまで）
     $c = $this->reqGet("/admin/files/upload");
     $this->assertInstanceOf(FilesController::class, $c);
-    $sig = $this->clientTraitSession['sig'];
 
     $fm = new FilesModel();
     $before_files = $fm->find('all');
+
+    $sig = $this->getSig();
 
     $delete_file_id = $before_files[0]['id'];
     $r = $this->reqGetBeRedirect("/admin/files/delete", ['id' => $delete_file_id, 'sig' => $sig]);

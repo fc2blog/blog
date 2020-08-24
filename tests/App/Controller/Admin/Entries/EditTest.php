@@ -30,16 +30,14 @@ class EditTest extends TestCase
     $this->resetCookie();
     $this->mergeAdminSession();
 
-    // get sig(CSRF Token)
-    $this->reqGet("/admin/entries/index");
-    $sig = $this->clientTraitSession['sig'];
-
     $entry_id = 1;
     $c = $this->reqGet("/admin/entries/edit?id={$entry_id}");
 
     $this->assertInstanceOf(EntriesController::class, $c);
     $this->assertEquals('edit', $c->getResolvedMethod());
     $this->assertStringContainsString('記事の編集', $c->getOutput());
+
+    $sig = $this->getSig();
 
 //    var_dump($this->clientTraitSession);
 //    var_dump($c->getRequest()->getData());
