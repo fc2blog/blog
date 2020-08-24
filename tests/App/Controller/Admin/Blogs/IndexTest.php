@@ -42,4 +42,52 @@ class IndexTest extends TestCase
 
     $this->assertEquals('testblog1', $this->clientTraitSession['blog_id']);
   }
+
+  public function testCreateForm(): void
+  {
+    DBHelper::clearDbAndInsertFixture();
+    Session::destroy(new Request());
+    $this->resetSession();
+    $this->resetCookie();
+    $this->mergeAdminSession();
+
+    $c = $this->reqGet("/admin/blogs/create");
+    $this->assertInstanceOf(BlogsController::class, $c);
+    $this->assertEquals("create", $c->getResolvedMethod());
+  }
+
+  public function testCreate(): void
+  {
+    DBHelper::clearDbAndInsertFixture();
+    Session::destroy(new Request());
+    $this->resetSession();
+    $this->resetCookie();
+    $this->mergeAdminSession();
+    $sig = $this->getSig();
+
+    $request_params = [
+      'blog' => [
+        'id' => 'testblog3',
+        'name' => 'testblog3name',
+        'nickname' => 'testblog3nick',
+      ],
+      'sig' => $sig
+    ];
+
+    $r = $this->reqPostBeRedirect("/admin/blogs/create", $request_params);
+    $this->assertEquals('/admin/blogs/index', $r->redirectUrl);
+
+    $c = $this->reqGet('/admin/blogs/index');
+    $this->assertStringContainsString('testblog3name', $c->getOutput());
+//    var_export($c->getData());
+    $blogs = $c->getData()['blogs'];
+    $is_found = false;
+    foreach ($blogs as $blog) {
+      if ($blog['id'] === 'testblog3') {
+        $is_found = true;
+        break;
+      }
+    }
+    $this->assertTrue($is_found);
+  }
 }
