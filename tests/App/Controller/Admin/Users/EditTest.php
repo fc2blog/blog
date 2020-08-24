@@ -58,5 +58,7 @@ class EditTest extends TestCase
     $this->assertEquals('/admin/', $r->redirectUrl);
     $this->assertEquals(302, $r->statusCode);
     $this->assertEquals('testblog1', $this->clientTraitSession['blog_id']);
+
+    DBHelper::clearDbAndInsertFixture();
   }
 }

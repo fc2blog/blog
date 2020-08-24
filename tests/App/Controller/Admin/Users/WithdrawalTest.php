@@ -52,5 +52,7 @@ class WithdrawalTest extends TestCase
     ]);
     $this->assertInstanceOf(UsersController::class, $c);
     $this->assertEquals('login', $c->getResolvedMethod());
+
+    DBHelper::clearDbAndInsertFixture();
   }
 }
