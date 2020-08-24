@@ -6,7 +6,6 @@ namespace Fc2blog\Tests\App\Controller\Admin\Blogs;
 use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
 use Fc2blog\Web\Controller\Admin\BlogsController;
-use Fc2blog\Web\Controller\Admin\CommonController;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 use PHPUnit\Framework\TestCase;
