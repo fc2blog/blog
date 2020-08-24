@@ -21,7 +21,7 @@ class SetTest extends TestCase
     $request = new Request();
     try {
       @Cookie::set($request, "k", "v");
-    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ErrorException $e) {
     }
     $this->assertTrue(true);
   }
@@ -69,7 +69,7 @@ class SetTest extends TestCase
       @Cookie::set($request, "k", "v", time(), "", "", false, false, "Lax");
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
-    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ErrorException $e) {
       $this->assertTrue(true);
     }
 
@@ -78,16 +78,17 @@ class SetTest extends TestCase
       @Cookie::set($request, "k", "v", time(), "", "", false, false, "Strict");
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
-    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ErrorException $e) {
       $this->assertTrue(true);
     }
 
     try {
       $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => "on"]);
-      @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");$this->assertTrue(true);
+      @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");
+      $this->assertTrue(true);
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
-    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ErrorException $e) {
       $this->assertTrue(true);
     }
 
@@ -108,7 +109,7 @@ class SetTest extends TestCase
       $this->fail();
     } catch (InvalidArgumentException $e) {
       $this->assertTrue(true);
-    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ErrorException $e) {
       $this->assertTrue(true);
     }
 
@@ -125,7 +126,7 @@ class SetTest extends TestCase
       @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");
     } catch (InvalidArgumentException $e) {
       $this->fail($e->getMessage());
-    } /** @noinspection PhpRedundantCatchClauseInspection */ catch(ErrorException $e){
+    } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ErrorException $e) {
       $this->assertTrue(true);
     }
   }

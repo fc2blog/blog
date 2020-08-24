@@ -90,7 +90,7 @@ class CreateTest extends TestCase
     $sig = $this->getSig();
     $request_data = [
       'sig' => $sig,
-      'ig' => $list[count($list)-1]['id'],
+      'ig' => $list[count($list) - 1]['id'],
     ];
 
     $r = $this->reqPostBeRedirect("/admin/categories/delete", $request_data);

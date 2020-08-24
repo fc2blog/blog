@@ -50,7 +50,7 @@ class CreateTest extends TestCase
     $request_data = [
       'sig' => $sig,
       'blog_template' => [
-        'device_type'=>"1",
+        'device_type' => "1",
         'title' => "test template title",
         'html' => "<html lang='ja'><body>test template html</body></html>",
         'css' => "/*test template css*/",
@@ -68,10 +68,10 @@ class CreateTest extends TestCase
 //    var_export($d);
     $is_found = false;
     $device_blog_templates = $d['device_blog_templates'];
-    foreach($device_blog_templates[1]/*PC*/ as $device_blog_template){
+    foreach ($device_blog_templates[1]/*PC*/ as $device_blog_template) {
 //      var_export($device_blog_template);
-      if($device_blog_template['title'] === "test template title"){
-        $is_found=true;
+      if ($device_blog_template['title'] === "test template title") {
+        $is_found = true;
         $tm = new BlogTemplatesModel();
         $template = $tm->findByIdAndBlogId($device_blog_template['id'], 'testblog2');
 //        var_dump($template);

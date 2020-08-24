@@ -25,15 +25,15 @@ class GenerateSampleBlog
 
     while ($num-- > 0) {
       $request_data = [
-        "id" => $faker->word."blog",
-        "name" => $faker->sentence(2)."なブログ",
+        "id" => $faker->word . "blog",
+        "name" => $faker->sentence(2) . "なブログ",
         "nickname" => $faker->name
       ];
 
       // 新規登録処理
       $errors_blog = $blogs_model->validate($request_data, $blog_data, array('id', 'name', 'nickname'));
       if (count($errors_blog) > 0) {
-        throw new InvalidArgumentException("invalid request data:". print_r($errors_blog, true));
+        throw new InvalidArgumentException("invalid request data:" . print_r($errors_blog, true));
       }
 
       $blog_data['user_id'] = $user_id;

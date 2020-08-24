@@ -42,7 +42,7 @@ class DeleteTest extends TestCase
     $this->assertCount($entry_count - 1, $c->get('entries'));
   }
 
-  public function testMultiDelete():void
+  public function testMultiDelete(): void
   {
     # 複数削除テストなので、一回３件に戻す
     DBHelper::clearDbAndInsertFixture();
@@ -55,7 +55,7 @@ class DeleteTest extends TestCase
     $c = $this->reqGet("/admin/entries/index");
     $entries = $c->get('entries');
     $entry_id_list = [];
-    foreach($entries as $entry){
+    foreach ($entries as $entry) {
       $entry_id_list[] = $entry['id'];
     }
     $this->assertCount(3, $entries);
@@ -63,9 +63,9 @@ class DeleteTest extends TestCase
 
     $request_data = [
       "id" => $entry_id_list,
-      'mode'=>"entries",
-      'process'=>'delete',
-      'sig'=>$sig
+      'mode' => "entries",
+      'process' => 'delete',
+      'sig' => $sig
     ];
 
     $r = $this->reqGetBeRedirect("/admin/entries/delete", $request_data);
