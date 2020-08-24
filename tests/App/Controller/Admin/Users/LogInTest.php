@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Controller\Admin\Users;
 
+use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
 use Fc2blog\Web\Controller\Admin\CommonController;
 use Fc2blog\Web\Controller\Admin\UsersController;
@@ -35,6 +36,11 @@ class LogInTest extends TestCase
 
   public function testLogin(): void
   {
+    DBHelper::clearDbAndInsertFixture();
+    Session::destroy(new Request());
+    $this->resetSession();
+    $this->resetCookie();
+
     $r = $this->reqPostBeRedirect("/admin/users/login", [
       'user' => [
         'login_id' => 'testadmin',
