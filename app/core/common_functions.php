@@ -7,22 +7,22 @@
 
 /**
  * HTMLエスケープの短縮形
- * @param string $text
+ * @param string|null $text
  * @return string
  */
-function h(string $text): string
+function h(?string $text): string
 {
   return htmlentities($text, ENT_QUOTES, \Fc2blog\Config::get('INTERNAL_ENCODING'));
 }
 
 /**
  * マルチバイト対応のtruncate
- * @param string $text
+ * @param string|null $text
  * @param int $length
  * @param string $etc
  * @return string
  */
-function t(string $text, int $length = 10, string $etc = '...'): string
+function t(?string $text, int $length = 10, string $etc = '...'): string
 {
   if (!$length) {
     return '';
@@ -35,11 +35,11 @@ function t(string $text, int $length = 10, string $etc = '...'): string
 
 /**
  * 対象の内容が空文字列の場合代替内容を返却する
- * @param $text
+ * @param string|null $text
  * @param $default
  * @return string
  */
-function d(string $text, $default): string
+function d(?string $text, $default): string
 {
   if ($text === null || $text === '') {
     return $default;
@@ -49,22 +49,22 @@ function d(string $text, $default): string
 
 /**
  * t,hのエイリアス
- * @param $text
+ * @param string|null $text
  * @param int $length
  * @param string $etc
  * @return string
  */
-function th(string $text, int $length = 10, string $etc = '...'): string
+function th(?string $text, int $length = 10, string $etc = '...'): string
 {
   return h(t($text, $length, $etc));
 }
 
 /**
  * URLのエンコードエイリアス
- * @param $text
+ * @param string|null$text
  * @return string
  */
-function ue(string $text): string
+function ue(?string $text): string
 {
   return rawurlencode($text);
 }
@@ -82,10 +82,10 @@ function df($date, $format = 'Y/m/d H:i:s'): string
 
 /**
  * GettextのWrapper
- * @param $msg
+ * @param string|null $msg
  * @return string
  */
-function __($msg): string
+function __(?string $msg): string
 {
   return _($msg);
 }
