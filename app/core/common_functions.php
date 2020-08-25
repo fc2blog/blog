@@ -1,15 +1,6 @@
 <?php
 // the file will be load by composer autoloader.
 
-// lcfirst関数補完
-if (function_exists('lcfirst') === false) {
-  function lcfirst($str)
-  {
-    $str[0] = strtolower($str[0]);
-    return $str;
-  }
-}
-
 /**
  * 共通関数群
  */
@@ -132,18 +123,6 @@ function setLanguage(\Fc2blog\Web\Request $request)
   bindtextdomain('messages', \Fc2blog\Config::get('LOCALE_DIR'));
   textdomain('messages');
   return $lang;
-}
-
-/**
- * 引数がcount関数で数えられる値かどうかを調べる
- * ※PHP7.2よりcount関数の引数に数えられない値が指定された場合、E_WARNINGが発生
- * ※PHP7.3より本関数は追加されている
- */
-if (!function_exists('is_countable')) {
-  function is_countable($var)
-  {
-    return (is_array($var) || $var instanceof Countable);
-  }
 }
 
 function getServerUrl()
