@@ -10,6 +10,9 @@ class LoaderHelper extends TestCase
 {
   public static function requireBootStrap()
   {
+    # __()のロード
+    \Fc2blog\Util\I18n::registerFunction();
+
     # 細かなエラーを見逃さないために、Noticeを含むすべてのエラーをキャッチしてErrorExceptionに変換する
     # TODO もっとふさわしい場所に移動
     set_error_handler(function (int $severity, string $message, string $file, int $line) {

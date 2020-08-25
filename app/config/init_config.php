@@ -141,6 +141,7 @@ $config['DEVICE_FC2_KEY'] = array(
 );
 
 // デバイス毎の名称
+// TODO I18Nの都合で動的になっているので、静的にできないか
 $config['DEVICE_NAME'] = array(
   1 => __('PC'),             // PC
   4 => __('Smartphone'),     // スマフォ
@@ -248,6 +249,7 @@ $config['ENTRY'] = array(
     'ASC' => 0,
     'DESC' => 1,
   ),
+  // TODO I18Nの都合で動的になっているので、静的にできないか
   // 記事一覧の表示件数リスト
   'LIMIT_LIST' => array(
     10 => '10' . __(' results'),
@@ -318,6 +320,7 @@ $config['CATEGORY'] = array(
 // タグ系
 $config['TAG'] = array(
   // 記事一覧の表示件数リスト
+  // TODO I18Nの都合で動的になっているので、静的にできないか
   'LIMIT_LIST' => array(
     10 => '10' . __(' results'),
     20 => '20' . __(' results'),
@@ -342,6 +345,7 @@ $config['PAGE'] = array(
     'DEFAULT' => array(
       'LIMIT' => 5,
       'LIST' => array(
+        // TODO I18Nの都合で動的になっているので、静的にできないか
         5 => '5' . __(' results'),
         10 => '10' . __(' results'),
         20 => '20' . __(' results'),
@@ -354,6 +358,7 @@ $config['PAGE'] = array(
     'SP' => array(
       'LIMIT' => 15,
       'LIST' => array(
+        // TODO I18Nの都合で動的になっているので、静的にできないか
         15 => '15' . __(' results'),
       ),
     ),

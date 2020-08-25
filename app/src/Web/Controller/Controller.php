@@ -10,6 +10,7 @@ use Fc2blog\Config;
 use Fc2blog\Debug;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Util\I18n;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use LogicException;
@@ -28,8 +29,7 @@ abstract class Controller
   {
     $this->request = $request;
 
-    // I18N設定
-    $lang = setLanguage($request);
+    $lang = I18n::setLanguage($request);
     $request->lang = $lang;
 
     $className = get_class($this);
