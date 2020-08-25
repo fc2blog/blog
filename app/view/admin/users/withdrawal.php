@@ -3,6 +3,7 @@
 <?php $this->display($request, 'Users/tab.php', array('tab'=>'withdrawal')); ?>
 
 <form method="POST" id="sys-users-form" class="admin-form">
+<input type="hidden" name="sig" value="<?php echo \Fc2blog\Web\Session::get('sig'); ?>" />
 
 <table>
   <tbody>
