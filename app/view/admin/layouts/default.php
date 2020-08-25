@@ -121,7 +121,7 @@ if (!headers_sent()) {
           </ul>
         </div>
 
-        <?php if (\Fc2blog\Config::get('DEBUG')!=0): ?>
+        <?php if (\Fc2blog\Config::get('APP_DEBUG')!=0): ?>
           <div class="menu">
             <h3 style="background-color:#999;background-position: 2px -660px;">デバッグ用</h3>
             <ul>

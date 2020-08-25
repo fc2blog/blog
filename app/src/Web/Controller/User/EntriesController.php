@@ -9,6 +9,7 @@ use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\Model;
+use Fc2blog\Util\Log;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
@@ -946,17 +947,17 @@ class EntriesController extends UserController
 
     Model::load('BlogTemplates');
     $templateFilePath = BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $html);
-    Debug::log('Blog Template[' . $templateFilePath . ']', false, 'log', __FILE__, __LINE__);
+    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Blog Template[' . $templateFilePath . ']');
 
     if (!is_file($templateFilePath)) {
       // テンプレートファイルが生成されていなければ作成(CSSも同時に)
-      Debug::log('Template does not exist! Create', false, 'log', __FILE__, __LINE__);
+      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Template does not exist! Create');
 
       $blog = $this->getBlog($blog_id);
       $templateId = $blog[Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)];
       BlogTemplatesModel::createTemplate($templateId, $blog_id, $device_type, $html, $css);
 
-      Debug::log('Template generation completion', false, 'log', __FILE__, __LINE__);
+      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Template generation completion');
     }
 
     // CSSのURL

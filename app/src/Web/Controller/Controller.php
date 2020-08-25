@@ -10,6 +10,7 @@ use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\I18n;
+use Fc2blog\Util\Log;
 use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
@@ -53,7 +54,7 @@ abstract class Controller
     // アプリプレフィックス、テンプレートファイル名決定に使われる
     $prefix = Config::get('APP_PREFIX'); // TODO Request に持たせられそう
 
-    Debug::log('Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']', false, 'system', __FILE__, __LINE__);
+    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']');
 
     $this->beforeFilter($request);
 
@@ -120,7 +121,7 @@ abstract class Controller
     $url .= $hash;
 
     // デバッグ時にSessionにログを保存
-    Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
+    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Redirect[' . $url . ']');
 
     if (!is_null($blog_id) && $full_url) {
       $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
@@ -169,7 +170,7 @@ abstract class Controller
     // アプリプレフィックス
     $prefix = strtolower(Config::get('APP_PREFIX'));
 
-    Debug::log('Layout[' . $this->layout . ']', false, 'system', __FILE__, __LINE__);
+    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Layout[' . $this->layout . ']');
     if ($this->layout == '') {
       // layoutが空の場合は表示処理を行わない
       return;
@@ -190,7 +191,7 @@ abstract class Controller
       include($fw_template_path);
     } else {
       $this->layoutFilePath = ""; // テスト用に退避
-      Debug::log('Not Found Layout[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
+      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Not Found Layout[' . $fw_template_path . ']');
     }
   }
 
@@ -238,10 +239,10 @@ abstract class Controller
       }
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       include($fw_template_path);
-      Debug::log('Template[' . $fw_template_path . ']', false, 'system', __FILE__, __LINE__);
+      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Template[' . $fw_template_path . ']');
     } else {
       $this->templateFilePath = "";
-      Debug::log('Not Found Template[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
+      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Not Found Template[' . $fw_template_path . ']');
     }
   }
 

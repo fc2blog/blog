@@ -43,10 +43,9 @@ $config['SLAVE_DB'] = array(
   'DATABASE' => 'blog_slave',
 );
 
-// Log level
-$config['LOG_LEVEL'] = (defined("FC2_LOG_LEVEL")) ? FC2_LOG_LEVEL : 'ERROR';
-
-$config['DEBUG'] = 0;
+// Enable DEBUG log.
+$config['APP_DEBUG'] = defined("APP_DEBUG") ? APP_DEBUG : 0;
+$config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 
 // -------------------- 色々 --------------------//
 // 言語設定

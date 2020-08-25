@@ -7,6 +7,7 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Lib\CaptchaImage;
 use Fc2blog\Lib\ThumbnailImageMaker;
+use Fc2blog\Util\Log;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
 use RuntimeException;
@@ -139,7 +140,7 @@ class CommonController extends UserController
     $image = new ThumbnailImageMaker();
     $load_result = $image->load($file_path);
     if ($load_result !== true) {
-      Debug::log('Load image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+      Log::error_log(__FILE__ . ":" . __LINE__ ." ".'Load image fail[' . $file_path . ']');
       return $this->error404();
     }
     switch ($whs) {
@@ -158,7 +159,7 @@ class CommonController extends UserController
         break;
     }
     if ($resize_result !== true) {
-      Debug::log('Resize thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+      Log::error_log(__FILE__ . ":" . __LINE__ ." ".'Resize thumbnail image fail[' . $file_path . ']');
       return $this->error404();
     }
 
@@ -170,7 +171,7 @@ class CommonController extends UserController
     }
     $save_result = $image->save($save_file, $image->image_type, 90);
     if ($save_result !== true) {
-      Debug::log('Save thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+      Log::error_log(__FILE__ . ":" . __LINE__ ." ".'Save thumbnail image fail[' . $file_path . ']');
       return $this->error404();
     }
     chmod($save_file, 0777);

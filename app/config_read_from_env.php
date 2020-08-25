@@ -18,6 +18,12 @@ if ((string)getenv("FC2_ERROR_ON_DISPLAY") === "1") {
   ini_set('html_errors', '1');
 }
 
+// Log settings
+define('APP_LOG_PATH', (string)getenv('FC2_APP_LOG_PATH'));
+define('APP_LOG_LEVEL', (string)getenv('FC2_APP_LOG_LEVEL'));
+define('SQL_DEBUG', (bool)getenv('FC2_SQL_DEBUG'));
+define('APP_DEBUG', (bool)getenv('FC2_APP_DEBUG'));
+
 // DB settings
 define('DB_HOST', (string)getenv("FC2_DB_HOST"));
 define('DB_USER', (string)getenv("FC2_DB_USER"));
