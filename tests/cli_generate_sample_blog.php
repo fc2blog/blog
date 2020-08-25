@@ -12,8 +12,6 @@ require_once __DIR__ . "/../app/vendor/autoload.php";
 
 LoaderHelper::requireBootStrap();
 
-Config::set('DEBUG', 0); // suppress debug message.
-
 $generator = new GenerateSampleBlog();
 
 # データ生成例

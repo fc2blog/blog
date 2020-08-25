@@ -139,7 +139,6 @@ class CommentsController extends AdminController
    */
   public function ajax_approval(Request $request)
   {
-    Config::set('DEBUG', 0);
     $this->layout = 'json.php';
 
     $comments_model = Model::load('Comments');
@@ -225,7 +224,6 @@ class CommentsController extends AdminController
    */
   public function ajax_reply(Request $request)
   {
-    Config::set('DEBUG', 0);
     $this->layout = 'ajax.php';
 
     /** @var CommentsModel $comments_model */

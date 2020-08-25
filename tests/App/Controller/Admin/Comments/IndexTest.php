@@ -67,7 +67,6 @@ class IndexTest extends TestCase
     $this->resetSession();
     $this->resetCookie();
     $this->mergeAdminSession();
-    Config::set("DEBUG", 0);
 
     $generator = new GenerateSampleComment();
     $generator->removeAllComments('testblog2', 1);
@@ -139,7 +138,6 @@ class IndexTest extends TestCase
     $this->resetSession();
     $this->resetCookie();
     $this->mergeAdminSession();
-    Config::set("DEBUG", 0);
 
     $generator = new GenerateSampleComment();
     $generator->removeAllComments('testblog2', 1);
@@ -173,7 +171,6 @@ class IndexTest extends TestCase
     $this->resetSession();
     $this->resetCookie();
     $this->mergeAdminSession();
-    Config::set("DEBUG", 0);
 
     $generator = new GenerateSampleComment();
     $generator->removeAllComments('testblog2', 1);
@@ -206,7 +203,6 @@ class IndexTest extends TestCase
     $this->resetSession();
     $this->resetCookie();
     $this->mergeAdminSession();
-    Config::set("DEBUG", 0);
 
     $generator = new GenerateSampleComment();
     $generator->removeAllComments('testblog2', 1);
@@ -244,7 +240,6 @@ class IndexTest extends TestCase
     $this->resetSession();
     $this->resetCookie();
     $this->mergeAdminSession();
-    Config::set("DEBUG", 0);
 
     $generator = new GenerateSampleComment();
     $generator->removeAllComments('testblog2', 1);

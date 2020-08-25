@@ -7,7 +7,6 @@ namespace Fc2blog\Web\Controller;
 
 use Fc2blog\App;
 use Fc2blog\Config;
-use Fc2blog\Debug;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\I18n;
@@ -122,7 +121,6 @@ abstract class Controller
 
     // デバッグ時にSessionにログを保存
     Debug::log('Redirect[' . $url . ']', false, 'system', __FILE__, __LINE__);
-    Debug::setSessionLogs();
 
     if (!is_null($blog_id) && $full_url) {
       $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
@@ -224,11 +222,6 @@ abstract class Controller
     }
     // 展開完了後fw_dataは解除
     unset($fw_data);
-
-    // Debug用にテンプレートで使用可能な変数一覧表示
-    if (Config::get('DEBUG_TEMPLATE_VARS')) {
-      include(Config::get('VIEW_DIR') . 'Common/variables.php');
-    }
 
     // Template表示
     $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? strtolower(Config::get('APP_PREFIX')) . '/' : '') . $fw_template;

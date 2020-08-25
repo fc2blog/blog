@@ -19,7 +19,6 @@ class UploadTest extends TestCase
 
   public function setUp(): void
   {
-    Config::set("DEBUG", false);
     parent::setUp();
   }
 

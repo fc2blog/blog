@@ -6,15 +6,12 @@ declare(strict_types=1);
 define("TEST_APP_DIR", __DIR__ . "/../app");
 define("THIS_IS_TEST", true);
 
-use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Tests\LoaderHelper;
 
 require_once __DIR__ . "/../app/vendor/autoload.php";
 
 LoaderHelper::requireBootStrap();
-
-Config::set('DEBUG', 0); // suppress debug message.
 
 // CLI param check
 if ($argc !== 2) {

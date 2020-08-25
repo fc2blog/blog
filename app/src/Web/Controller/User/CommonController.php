@@ -5,7 +5,6 @@ namespace Fc2blog\Web\Controller\User;
 use Exception;
 use Fc2blog\App;
 use Fc2blog\Config;
-use Fc2blog\Debug;
 use Fc2blog\Lib\CaptchaImage;
 use Fc2blog\Lib\ThumbnailImageMaker;
 use Fc2blog\Web\Cookie;
@@ -83,7 +82,6 @@ class CommonController extends UserController
       throw new RuntimeException("drawNumber failed. {$e->getMessage()} {$e->getFile()}:{$e->getLine()}");
     }
 
-    Config::set('DEBUG', 0);
     $this->layout = 'none.php';
   }
 

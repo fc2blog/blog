@@ -137,7 +137,6 @@ class CategoriesController extends AdminController
    */
   public function ajax_add(Request $request)
   {
-    Config::set('DEBUG', 0);    // デバッグなしに変更
     /** @var CategoriesModel $categories_model */
     $categories_model = Model::load('Categories');
 

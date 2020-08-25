@@ -6,7 +6,6 @@
 
 namespace Fc2blog\Model;
 
-use Fc2blog\Debug;
 
 abstract class Model implements ModelInterface
 {

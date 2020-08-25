@@ -4,7 +4,6 @@ namespace Fc2blog\Web\Controller\User;
 
 use Fc2blog\App;
 use Fc2blog\Config;
-use Fc2blog\Debug;
 use Fc2blog\Model\BlogPluginsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
