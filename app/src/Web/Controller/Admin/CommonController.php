@@ -193,8 +193,13 @@ class CommonController extends AdminController
     $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, array('id', 'name', 'nickname'));
     if (empty($errors['user']) && empty($errors['blog'])) {
       $user_data['type'] = Config::get('USER.TYPE.ADMIN');
-      $blog_data['user_id'] = $users_model->insert($user_data);
-      if ($blog_data['user_id'] && $blog_id=$blogs_model->insert($blog_data)) {
+      $user_id = $users_model->insert($user_data);
+      $blog_data['user_id'] = $user_id;
+      if ($blog_data['user_id'] && $blog_id = $blogs_model->insert($blog_data)) {
+        // userのlogin_blog_idを更新
+        $user_data['login_blog_id'] = $blog_id;
+        $users_model->updateById($user_data, $user_id);
+
         $this->setInfoMessage(__('User registration is completed'));
         $this->redirect(Config::get('BASE_DIRECTORY') . 'install.php?state=3');
       } else {
