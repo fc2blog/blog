@@ -8,7 +8,8 @@
     "ext-gettext": "*",
     "ext-fileinfo": "*",
     "ext-json": "*",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "monolog/monolog": "^2.1"
   },
   "config": {
     "vendor-dir": "app/vendor"
