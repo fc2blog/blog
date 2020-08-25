@@ -135,8 +135,7 @@ ORDER BY posted_at DESC
 SQL;
     $params = array($blog_id);
     $options = array('result'=> DBInterface::RESULT_ALL);
-    $archives = $this->findSql($sql, $params, $options);
-    return $archives;
+    return $this->findSql($sql, $params, $options);
   }
 
   /**

@@ -142,7 +142,6 @@ class CategoriesModel extends Model
   public function getSearchList($blog_id)
   {
     $categories = $this->getList($blog_id);
-    $value = array();  # TODO この変数は利用されていない
     $options = array();
     foreach($categories as $category){
       $options[$category['id']] = array('value'=>$category['name'] . ' (' . $category['count'] . ')', 'level'=>$category['level']);

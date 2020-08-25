@@ -277,8 +277,6 @@ class BlogPluginsController extends AdminController
    */
   public function download(Request $request)
   {
-    $blog_plugins_model = Model::load('BlogPlugins');
-
     $id = $request->get('id');
     $plugin = Model::load('Plugins')->findById($id);
     if (empty($plugin)) {

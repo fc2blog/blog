@@ -331,7 +331,6 @@ class EntriesController extends UserController
     $this->setEntriesData($request, $options, $pages);
 
     // テンプレートのプレビュー
-    $html = $css = null;
     if ($request->get('template_id')) {
       $blog_template = Model::load('BlogTemplates')->findByIdAndBlogId($request->get('template_id'), $blog_id);
       $html = $blog_template['html'];
@@ -540,6 +539,7 @@ class EntriesController extends UserController
         // FC2用のテンプレートで表示
         $this->setPageData(array('comment_area'));
         return $this->fc2template($entry['blog_id']);
+        /** @noinspection PhpUnreachableStatementInspection */
         break;
 
       // コメント投稿表示(スマフォ)
@@ -547,6 +547,7 @@ class EntriesController extends UserController
         // FC2用のテンプレートで表示
         $this->setPageData(array('form_area'));
         return $this->fc2template($entry['blog_id']);
+        /** @noinspection PhpUnreachableStatementInspection */
         break;
 
       // 上記以外は通常の詳細表示として扱う

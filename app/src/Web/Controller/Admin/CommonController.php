@@ -139,7 +139,7 @@ class CommonController extends AdminController
           $msdb->close();
           $msdb->connect(false, false);
           $sql = 'CREATE DATABASE IF NOT EXISTS ' . DB_DATABASE . ' CHARACTER SET ' . DB_CHARSET;
-          $table = $msdb->execute($sql);
+          $msdb->execute($sql);
           $msdb->close();
         }
 

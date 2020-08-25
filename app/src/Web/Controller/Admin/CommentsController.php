@@ -253,7 +253,6 @@ class CommentsController extends AdminController
     $this->layout = 'json.php';
 
     // コメント投稿処理
-    $errors = array(); # TODO この変数は利用されていない
     $errors = $comments_model->replyValidate($request->get('comment'), $data, array('reply_body'));
     if (empty($errors)) {
       if ($comments_model->updateReply($data, $comment)) {

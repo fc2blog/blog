@@ -35,12 +35,4 @@ class I18n
     textdomain('messages');
     return $lang;
   }
-
-  static public function registerFunction(): bool
-  {
-    /**
-     * 多言語化 TODO:後で独自実装関数とすげ替える予定
-     */
-    return true;
-  }
 }

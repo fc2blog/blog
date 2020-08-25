@@ -140,7 +140,7 @@ class CommonController extends UserController
     $image = new ThumbnailImageMaker();
     $load_result = $image->load($file_path);
     if ($load_result !== true) {
-      Log::error_log(__FILE__ . ":" . __LINE__ ." ".'Load image fail[' . $file_path . ']');
+      Log::error(__FILE__ . ":" . __LINE__ ." ".'Load image fail[' . $file_path . ']');
       return $this->error404();
     }
     switch ($whs) {
@@ -159,7 +159,7 @@ class CommonController extends UserController
         break;
     }
     if ($resize_result !== true) {
-      Log::error_log(__FILE__ . ":" . __LINE__ ." ".'Resize thumbnail image fail[' . $file_path . ']');
+      Log::error(__FILE__ . ":" . __LINE__ ." ".'Resize thumbnail image fail[' . $file_path . ']');
       return $this->error404();
     }
 
@@ -171,13 +171,14 @@ class CommonController extends UserController
     }
     $save_result = $image->save($save_file, $image->image_type, 90);
     if ($save_result !== true) {
-      Log::error_log(__FILE__ . ":" . __LINE__ ." ".'Save thumbnail image fail[' . $file_path . ']');
+      Log::error(__FILE__ . ":" . __LINE__ ." ".'Save thumbnail image fail[' . $file_path . ']');
       return $this->error404();
     }
     chmod($save_file, 0777);
 
     // 作成したファイルへリダイレクト
     $this->redirect($request, $request->getPath() . '?' . $request->getQuery());
+    return "";
   }
 }
 

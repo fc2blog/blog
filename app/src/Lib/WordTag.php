@@ -13,6 +13,7 @@ class WordTag
     return (string)$replace;
   }
 
+  /** @noinspection PhpUnusedPrivateMethodInspection 不要に見えるが、テンプレートで使われている？*/
   private static function displayNone(): string
   {
     return '';

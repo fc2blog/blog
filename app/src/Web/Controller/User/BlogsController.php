@@ -8,7 +8,6 @@ use Fc2blog\Web\Request;
 
 class BlogsController extends UserController
 {
-
   /**
    * ランダムなブログにリダイレクト
    * プラグインインストールでポータル画面化予定
@@ -22,7 +21,6 @@ class BlogsController extends UserController
       return $this->error404();
     }
     $this->redirect($request, Config::get('BASE_DIRECTORY') . $blog['id'] . '/');
+    return "";
   }
-
 }
-

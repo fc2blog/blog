@@ -211,7 +211,6 @@ SQL;
     $options = array();
     $options['result'] = DBInterface::RESULT_ALL;
     $tags = $this->findSql($sql, $params, $options);
-    $entries_tags = array(); # TODO この変数は利用されていない
 
     $entries_tags = array();
     foreach ($entry_ids as $entry_id) {
@@ -319,9 +318,7 @@ SQL;
         'params' => array($blog_id),
         'order'  => 'count DESC, id DESC',
     ];
-    $tags = $this->find('all', $options);
-
-    return $tags;
+    return $this->find('all', $options);
   }
 }
 

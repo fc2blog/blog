@@ -44,7 +44,6 @@ abstract class Model implements ModelInterface
    * @param array &$valid_data 入力チェック後の返却データ
    * @param array $white_list 入力のチェック許可リスト
    * @return array
-   * @return array
    */
   public function validate($data, &$valid_data, $white_list = array())
   {
@@ -134,13 +133,13 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return array|false
    */
-  public function find($type, $options = array())
+  public function find($type, $options = [])
   {
     if (!isset($options['options'])) {
-      $options['options'] = array();
+      $options['options'] = [];
     }
     if (!isset($options['params'])) {
-      $options['params'] = array();
+      $options['params'] = [];
     }
     switch ($type) {
       case 'count':
@@ -206,15 +205,15 @@ abstract class Model implements ModelInterface
    * 主キーをキーにしてデータを取得
    * @param $id
    * @param array $options
-   * @return array|mixed
+   * @return array
    */
-  public function findById($id, $options = array())
+  public function findById($id, $options = [])
   {
     if (empty($id)) {
-      return array();
+      return [];
     }
     $options['where'] = isset($options['where']) ? 'id=? AND ' . $options['where'] : 'id=?';
-    $options['params'] = isset($options['params']) ? array_merge(array($id), $options['params']) : array($id);
+    $options['params'] = isset($options['params']) ? array_merge([$id], $options['params']) : [$id];
     return $this->find('row', $options);
   }
 
@@ -223,7 +222,7 @@ abstract class Model implements ModelInterface
    * @param $id
    * @param $blog_id
    * @param array $options
-   * @return array|mixed
+   * @return array
    */
   public function findByIdAndBlogId($id, $blog_id, $options = array())
   {
@@ -240,7 +239,7 @@ abstract class Model implements ModelInterface
    * @param $id
    * @param $user_id
    * @param array $options
-   * @return array|mixed
+   * @return array
    */
   public function findByIdAndUserId($id, $user_id, $options = array())
   {
@@ -632,13 +631,11 @@ SQL;
     // ノードの変更位置計算
     $self_lft = $self['lft'];
     $self_rgt = $self['rgt'];
-    $parent_lft = $parent['lft'];  # TODO この変数は利用されていない
     $parent_rgt = $parent['rgt'];
     $space = $self_rgt - $self_lft + 1;
 
     $table = $this->getTableName();
     $where = $where ? $where . ' AND ' : '';
-    $sql = ''; # TODO この変数は利用されていない
     if ($self_rgt > $parent_rgt) {
       // 自身を左へ移動
       $move = $parent_rgt - $self_lft;

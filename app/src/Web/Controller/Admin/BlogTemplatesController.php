@@ -82,6 +82,7 @@ class BlogTemplatesController extends AdminController
       return $this->error404();
     }
     $this->set('template', $template);
+    return "";
   }
 
   /**
@@ -141,9 +142,6 @@ class BlogTemplatesController extends AdminController
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
-
-    // 使用中のテンプレート判定
-    $blog = $this->getBlog($blog_id);
 
     // 初期表示時に編集データの取得&設定
     if (!$request->get('blog_template') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
@@ -242,6 +240,7 @@ class BlogTemplatesController extends AdminController
     // エラー情報の設定
     $this->setErrorMessage(__('There is a flaw in the template to be downloaded'));
     $this->redirectBack($request, array('controller' => 'blog_templates', 'action' => 'fc2_index', 'device_type' => $device_type));
+    return "";
   }
 
   /**

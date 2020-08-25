@@ -145,7 +145,6 @@ class CategoriesController extends AdminController
     $json = array('status' => 0);
 
     if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      $request = new Request();
       return;
     }
 
