@@ -326,13 +326,9 @@ UNLOCK TABLES;
 --
 
 LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users`
-    DISABLE KEYS */;
-INSERT INTO `users` (`id`, `login_id`, `password`, `login_blog_id`, `type`, `created_at`, `logged_at`)
-VALUES (1, 'testadmin', '0e7af7a36a0aa40460828e8160589c024c08b97425526984d455b6e40190d93d', NULL, 1,
-        '2020-07-24 11:48:03', '2020-07-24 12:03:39');
-/*!40000 ALTER TABLE `users`
-    ENABLE KEYS */;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` (`id`, `login_id`, `password`, `login_blog_id`, `type`, `created_at`, `logged_at`) VALUES (1,'testadmin','0e7af7a36a0aa40460828e8160589c024c08b97425526984d455b6e40190d93d','testblog2',1,'2020-07-24 11:48:03','2020-07-24 12:03:39');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;
 
