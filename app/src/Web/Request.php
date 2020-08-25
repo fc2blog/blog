@@ -31,6 +31,7 @@ class Request
 
   public $className = CommonController::class;
   public $methodName = "index";
+  public $lang = "";
 
   public function __construct(
     string $method = null,
@@ -53,6 +54,9 @@ class Request
     $this->get = $get ?? $_GET;
     $this->files = $files ?? $_FILES;
     $this->server = $server ?? $_SERVER;
+    if(!isset($this->server['HTTP_USER_AGENT'])){
+      $this->server['HTTP_USER_AGENT'] = "";
+    }
     $this->env = $env ?? $_ENV;
     $this->cookie = $cookie ?? $_COOKIE;
 
@@ -115,8 +119,8 @@ class Request
     $files = array();
     $keys = array_keys($file['tmp_name']);
     foreach ($keys as $key) {
-      foreach ($file as $colomn => $value) {
-        $files[$key][$colomn] = $value[$key];
+      foreach ($file as $column => $value) {
+        $files[$key][$column] = $value[$key];
       }
     }
     return $files;
@@ -335,4 +339,11 @@ class Request
     return isset($this->cookie[$key]);
   }
 
+  /**
+   * @return array
+   */
+  public function getData(): array
+  {
+    return $this->request;
+  }
 }

@@ -8,19 +8,30 @@ namespace Fc2blog\Web\Controller;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Debug;
-use Fc2blog\Exception\PseudoExit;
+use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
+use LogicException;
 
 abstract class Controller
 {
   private $data = array();            // テンプレートへ渡す変数の保存領域
   protected $layout = 'default.php';  // 表示ページのレイアウトテンプレート
   protected $output = '';             // 出力タグ
+  private $templateFilePath = "";
+  private $layoutFilePath = "";
+  private $resolvedMethod = "";
+  private $request;
 
   public function __construct(Request $request, $method)
   {
+    $this->request = $request;
+
+    // I18N設定
+    $lang = setLanguage($request);
+    $request->lang = $lang;
+
     $className = get_class($this);
 
     { // PSR-4 対応のためのTweak
@@ -47,6 +58,7 @@ abstract class Controller
     $this->beforeFilter($request);
 
     // アクションの実行(返り値はテンプレートファイル名)
+    $this->resolvedMethod = $method;
     $template = $this->$method($request);
 
     // 空の場合は、規約に則ってテンプレートファイルを決定する
@@ -63,7 +75,11 @@ abstract class Controller
     $this->beforeRender();
 
     // 結果を出力
-    echo $this->output;
+    if (!defined("THIS_IS_TEST")) {
+      echo $this->output;
+    }
+
+    return $this;
   }
 
   protected function beforeFilter(Request $request)
@@ -74,7 +90,7 @@ abstract class Controller
   {
   }
 
-  public function set($key, $value)
+  public function set(string $key, $value)
   {
     $this->data[$key] = $value;
   }
@@ -117,9 +133,11 @@ abstract class Controller
       header('Location: ' . $url, true, $status_code);
     }
     $escaped_url = h($url);
-    echo "redirect to {$escaped_url} status code:{$status_code}";
     if (defined("THIS_IS_TEST")) {
-      throw new PseudoExit(__FILE__ . ":" . __LINE__ . " redirect to {$escaped_url} status code:{$status_code}");
+      $e = new RedirectExit(__FILE__ . ":" . __LINE__ . " redirect to {$escaped_url} status code:{$status_code}");
+      $e->redirectUrl = $url;
+      $e->statusCode = $status_code;
+      throw $e;
     } else {
       exit;
     }
@@ -161,11 +179,18 @@ abstract class Controller
     $fw_template_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
     $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
+      if (defined("THIS_IS_TEST")) {
+        $this->layoutFilePath = $fw_template_path; // テスト用に退避
+      }
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       include($fw_template_device_path);
     } elseif (is_file($fw_template_path)) {
+      if (defined("THIS_IS_TEST")) {
+        $this->layoutFilePath = $fw_template_path; // テスト用に退避
+      }
       include($fw_template_path);
     } else {
+      $this->layoutFilePath = ""; // テスト用に退避
       Debug::log('Not Found Layout[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
     }
   }
@@ -208,12 +233,20 @@ abstract class Controller
     $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? strtolower(Config::get('APP_PREFIX')) . '/' : '') . $fw_template;
     $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
+      if (defined("THIS_IS_TEST")) {
+        $this->templateFilePath = $fw_template_device_path; // テスト用に退避
+      }
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       include($fw_template_device_path);
     } elseif (is_file($fw_template_path)) {
-      Debug::log('Template[' . $fw_template_path . ']', false, 'system', __FILE__, __LINE__);
+      if (defined("THIS_IS_TEST")) {
+        $this->templateFilePath = $fw_template_path; // テスト用に退避
+      }
+      // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       include($fw_template_path);
+      Debug::log('Template[' . $fw_template_path . ']', false, 'system', __FILE__, __LINE__);
     } else {
+      $this->templateFilePath = "";
       Debug::log('Not Found Template[' . $fw_template_path . ']', false, 'error', __FILE__, __LINE__);
     }
   }
@@ -244,6 +277,62 @@ abstract class Controller
   public function error404()
   {
     return 'Common/error404.php';
+  }
+
+  public function get(string $key)
+  {
+    if (!defined("THIS_IS_TEST")) {
+      throw new LogicException("the method is only for testing.");
+    }
+    return $this->data[$key];
+  }
+
+  public function getOutput(): string
+  {
+    if (!defined("THIS_IS_TEST")) {
+      throw new LogicException("the method is only for testing.");
+    }
+    return $this->output;
+  }
+
+  public function getLayoutFilePath(): string
+  {
+    if (!defined("THIS_IS_TEST")) {
+      throw new LogicException("the method is only for testing.");
+    }
+    return substr($this->layoutFilePath, strlen(Config::get('VIEW_DIR')));
+  }
+
+  public function getTemplateFilePath(): string
+  {
+    if (!defined("THIS_IS_TEST")) {
+      throw new LogicException("the method is only for testing.");
+    }
+    return substr($this->templateFilePath, strlen(Config::get('VIEW_DIR')));
+  }
+
+  public function getResolvedMethod(): string
+  {
+    if (!defined("THIS_IS_TEST")) {
+      throw new LogicException("the method is only for testing.");
+    }
+    return $this->resolvedMethod;
+  }
+
+  public function getRequest(): Request
+  {
+    if (!defined("THIS_IS_TEST")) {
+      throw new LogicException("the method is only for testing.");
+    }
+    return $this->request;
+  }
+
+  public function getData(): array
+  {
+    if (!defined("THIS_IS_TEST")) {
+      throw new LogicException("the method is only for testing.");
+    }
+    return $this->data;
   }
 }
 

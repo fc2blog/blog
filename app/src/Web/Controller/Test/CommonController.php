@@ -8,12 +8,7 @@ class CommonController extends TestController
 {
   public function index()
   {
-    echo "this is test";
-  }
-
-  public function phpinfo(Request $request)
-  {
-    phpinfo();
+    return "";
   }
 
   public function redirect_test_no_full_url(Request $request)

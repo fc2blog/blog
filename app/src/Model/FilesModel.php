@@ -36,7 +36,7 @@ class FilesModel extends Model
     if (isset($file['file']['name'])) {
       $name = $file['file']['name'];
       $file['name'] = $name;
-      $file['ext'] = strtolower(substr($name, strrpos($name, '.') + 1));
+      $file['ext'] = strtolower(pathinfo($name, PATHINFO_EXTENSION));
     }
     if (isset($request['name']) && $request['name']!=='') {
       $file['name'] = $request['name'];

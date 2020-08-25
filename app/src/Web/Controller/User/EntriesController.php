@@ -237,7 +237,9 @@ class EntriesController extends UserController
   public function preview(Request $request)
   {
     // XSS-Protection無効
-    header("X-XSS-Protection: 0");
+    if(!defined("THIS_IS_TEST")) {
+      header("X-XSS-Protection: 0");
+    }
 
     // preview処理用
     $blog_id = $this->getBlogId($request);
@@ -526,6 +528,7 @@ class EntriesController extends UserController
         // 記事のコメント取得(パスワード制限時はコメントを取得しない)
         if ($self_blog || $entry['open_status'] != Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
           // コメント一覧を取得(ページング用)
+          /** @var CommentsModel $comments_model */
           $comments_model = Model::load('Comments');
           $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $id, $blog_setting);
           $options['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);

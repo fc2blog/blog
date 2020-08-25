@@ -110,24 +110,28 @@ function snakeCase($camel_case)
 
 /**
  * 言語設定
+ * @param \Fc2blog\Web\Request $request
+ * @return string
  */
-function setLanguage($lang = null, $file = 'messages')
+function setLanguage(\Fc2blog\Web\Request $request)
 {
-  if ($lang == null) {
-    $lang = \Fc2blog\Web\Cookie::get('lang');
+  $cookie_lang = \Fc2blog\Web\Cookie::get('lang');
+  $cookie_language = \Fc2blog\Config::get('LANGUAGES.' . (string)$cookie_lang);
+  if (!is_null($cookie_lang) && !is_null($cookie_language)) {
+    $lang = $cookie_lang;
+    $language = $cookie_language;
+  }else{
+    $lang = \Fc2blog\Config::get('LANG');
+    $language = \Fc2blog\Config::get('LANGUAGE');
   }
-  if ($lang) {
-    // 言語チェック
-    if ($language = \Fc2blog\Config::get('LANGUAGES.' . $lang)) {
-      \Fc2blog\Config::set('LANG', $lang);
-      \Fc2blog\Config::set('LANGUAGE', $language);
-    }
-  }
+
   // 多言語化対応
-  putenv('LANG=' . \Fc2blog\Config::get('LANGUAGE'));
-  setlocale(LC_ALL, \Fc2blog\Config::get('LANGUAGE'));
-  bindtextdomain($file, \Fc2blog\Config::get('LOCALE_DIR'));
-  textdomain($file);
+  putenv('LANG=' . $language);
+  putenv('LANGUAGE=' . $language);
+  setlocale(LC_ALL, $language);
+  bindtextdomain('messages', \Fc2blog\Config::get('LOCALE_DIR'));
+  textdomain('messages');
+  return $lang;
 }
 
 /**

@@ -122,10 +122,10 @@ class EntriesController extends AdminController
     }
 
     // 新規登録処理
-    $errors = array();
-    $whitelist_entry = array('title', 'body', 'extend', 'open_status', 'password', 'auto_linefeed', 'comment_accepted', 'posted_at');
+    $errors = [];
+    $whitelist_entry = ['title', 'body', 'extend', 'open_status', 'password', 'auto_linefeed', 'comment_accepted', 'posted_at'];
     $errors['entry'] = $entries_model->validate($request->get('entry'), $entry_data, $whitelist_entry);
-    $errors['entry_categories'] = $entry_categories_model->validate($request->get('entry_categories'), $entry_categories_data, array('category_id'));
+    $errors['entry_categories'] = $entry_categories_model->validate($request->get('entry_categories'), $entry_categories_data, ['category_id']);
     if (empty($errors['entry']) && empty($errors['entry_categories'])) {
       $entry_data['blog_id'] = $blog_id;
       if ($id = $entries_model->insert($entry_data)) {

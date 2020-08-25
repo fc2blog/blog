@@ -12,4 +12,7 @@ $request = new \Fc2blog\Web\Request();
 \Fc2blog\Config::set('BASE_DIRECTORY', '/admin/');
 \Fc2blog\Config::set('APP_PREFIX', 'Admin');
 
+$request->className = \Fc2blog\Web\Controller\Admin\CommonController::class;
+$request->methodName = "install";
+
 $controller = new \Fc2blog\Web\Controller\Admin\CommonController($request, 'install');

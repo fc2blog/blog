@@ -103,11 +103,15 @@ class Cookie
       throw new InvalidArgumentException("samesite=None needs https.");
     }
 
-    setcookie(
-      $key,
-      $value,
-      $params
-    );
+    if(defined("THIS_IS_TEST")){
+      $request->cookie[$key] = $value;
+    }else{
+      setcookie(
+        $key,
+        $value,
+        $params
+      );
+    }
   }
 
   // Cookieのsamesiteパラメタに指定可能な値のバリエーション

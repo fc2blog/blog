@@ -102,17 +102,17 @@ class TagsModel extends Model
    * タグ名からタグ情報取得
    * @param $blog_id
    * @param array $tags
-   * @return array|mixed
+   * @return array
    */
-  public function getListByNames($blog_id, $tags=array())
+  public function getListByNames(string $blog_id, array $tags = []): array
   {
     if (!count($tags)) {
       return array();
     }
     $options = array(
       'fields' => 'id, name',
-      'where'  => 'blog_id=? AND name IN (' . implode(',',array_fill(0, count($tags), '?')) . ')',
-      'params' => array_merge(array($blog_id), $tags),
+      'where' => 'blog_id=? AND name IN (' . implode(',', array_fill(0, count($tags), '?')) . ')',
+      'params' => array_merge([$blog_id], $tags),
     );
     return $this->find('list', $options);
   }
@@ -227,9 +227,9 @@ SQL;
    * 件数を増加させる処理
    * @param $blog_id
    * @param array $ids
-   * @return array|false|int|mixed
+   * @return int|false
    */
-  public function increaseCount($blog_id, $ids=array())
+  public function increaseCount(string $blog_id, array $ids=array())
   {
     if (!count($ids)) {
       return 0;
@@ -241,20 +241,26 @@ SQL;
   }
 
   /**
-   * 件数を減少させる処理(0件のタグは削除)
+   * タグの件数を減少させる処理(0件のタグは削除)
    * @param $blog_id
    * @param array $ids
-   * @return bool|int
+   * @return bool
    */
-  public function decreaseCount($blog_id, $ids=array())
+  public function decreaseCount($blog_id, array $ids = [])
   {
-    if (!count($ids)) {
+    if (count($ids) === 0) {
       return 0;
     }
-    $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count-1 WHERE blog_id=? AND count>0 AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
-    $params = array_merge(array($blog_id), $ids);
+    $sql = 'UPDATE ' . $this->getTableName() .
+      ' SET count=count-1 WHERE blog_id=? AND count>0 AND id ' .
+      ' IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
+    $params = array_merge([$blog_id], $ids);
     $options['result'] = DBInterface::RESULT_SUCCESS;
-    return $this->executeSql($sql, $params, $options) && $this->delete('blog_id=? AND count<=0', array($blog_id));
+    return
+      # 有効タグ数の数え直し
+      $this->executeSql($sql, $params, $options) &&
+      # カウントが0件のtag行を削除
+      $this->delete('blog_id=? AND count<=0', [$blog_id]);
   }
 
   /**

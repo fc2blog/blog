@@ -71,8 +71,15 @@ class BlogTemplatesModel extends Model
    */
   public static function fc2TemplateSyntax($value)
   {
+    if(defined("THIS_IS_TEST")){
+      // テンプレート検証用にテンポラリディレクトリが必要だが、テストやCLIでSessionを汚染したくないので
+      $blog_id = "unittestorcliexecute";
+    }else{
+      $blog_id = Session::get('blog_id');
+    }
+
     // フォルダが存在しない場合作成
-    $templatePath = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer(Session::get('blog_id')) . '/syntax.php';
+    $templatePath = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/syntax.php';
     $templateDir = dirname($templatePath);
     if (!file_exists($templateDir)) {
       mkdir($templateDir, 0777, true);

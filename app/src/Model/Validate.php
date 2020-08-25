@@ -259,7 +259,7 @@ class Validate
    * @param $key
    * @param $data
    * @param $model
-   * @return
+   * @return mixed
    */
   public static function own(&$value, $option, $key, $data, $model)
   {

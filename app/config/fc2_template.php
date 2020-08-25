@@ -398,7 +398,7 @@ PHP
   '<%pno>'                     => '<?php if(isset($entry[\'id\'])) echo $entry[\'id\']; ?>',
   '<%sub_title>'               => '<?php if(isset($sub_title)) echo h($sub_title); ?>',
   '<%template_comment_js>'     => '<?php echo \'/js/template_comment.js\' ?>',
-  '<%template_copyright_date>' => date('Y', $_SERVER['REQUEST_TIME']),
+  '<%template_copyright_date>' => date('Y'),
   '<%ad>'                      => '',
   '<%ad2>'                     => '',
   '<%ad_overlay>'              => '',

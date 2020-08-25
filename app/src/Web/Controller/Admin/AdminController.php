@@ -23,11 +23,11 @@ abstract class AdminController extends AppController
     if (!$this->isLogin()) {
       // 未ログイン時は新規登録とログイン以外させない
       $allows = array(
-        'Users' => array('login', 'register'),
-        'Common' => array('lang', 'install', 'debug'),
+        UsersController::class => array('login', 'register'),
+        CommonController::class => array('lang', 'install', 'debug'),
       );
-      $controller_name = Config::get('ControllerName');
-      $action_name = Config::get('ActionName');
+      $controller_name = $request->className;
+      $action_name = $request->methodName;
       if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
         $this->redirect($request, array('controller' => 'Users', 'action' => 'login'));
       }
@@ -37,12 +37,12 @@ abstract class AdminController extends AppController
     if (!$this->isSelectedBlog()) {
       // ブログ未選択時はブログの新規、編集、削除、一覧、選択以外させない
       $allows = array(
-        'Users' => array('logout'),
-        'Blogs' => array('index', 'create', 'delete', 'choice'),
-        'Common' => array('lang', 'install'),
+        UsersController::class => array('logout'),
+        BlogsController::class => array('index', 'create', 'delete', 'choice'),
+        CommonController::class => array('lang', 'install'),
       );
-      $controller_name = Config::get('ControllerName');
-      $action_name = Config::get('ActionName');
+      $controller_name = $request->className;
+      $action_name = $request->methodName;
       if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
         $this->setWarnMessage(__('Please select a blog'));
         $this->redirect($request, array('controller' => 'Blogs', 'action' => 'index'));

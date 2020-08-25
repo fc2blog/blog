@@ -113,7 +113,7 @@ class MSDB implements DBInterface
    * @param string $sql
    * @param array $params
    * @param array $options
-   * @return mixed
+   * @return array|false
    */
   public function find(string $sql, array $params = [], array $options = [])
   {

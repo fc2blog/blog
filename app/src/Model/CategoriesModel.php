@@ -94,13 +94,15 @@ class CategoriesModel extends Model
   }
 
   /**
-  * カテゴリーの表示順
-  */
-  public static function getOrderList(){
-    return array(
+   * カテゴリーの表示順
+   * @return array
+   */
+  public static function getOrderList(): array
+  {
+    return [
       Config::get('CATEGORY.ORDER.DESC') => __('Latest order'),
-      Config::get('CATEGORY.ORDER.ASC')  => __('Oldest First'),
-    );
+      Config::get('CATEGORY.ORDER.ASC') => __('Oldest First'),
+    ];
   }
 
   /**
