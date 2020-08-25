@@ -5,7 +5,7 @@
 <?php if ($unread_count > 0) : ?>
   <?php $is_notice = true; ?>
   <p>
-    <a href="<?php echo \Fc2blog\Web\Html::url(array(
+    <a href="<?php echo \Fc2blog\Web\Html::url($request, array(
       'controller'   => 'Comments',
       'action'       => 'index',
       'reply_status' => \Fc2blog\Config::get('COMMENT.REPLY_STATUS.UNREAD'),
@@ -16,7 +16,7 @@
 <?php if ($unapproved_count > 0) : ?>
   <?php $is_notice = true; ?>
   <p>
-    <a href="<?php echo \Fc2blog\Web\Html::url(array(
+    <a href="<?php echo \Fc2blog\Web\Html::url($request, array(
       'controller'  => 'Comments',
       'action'      => 'index',
       'open_status' => \Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING'),

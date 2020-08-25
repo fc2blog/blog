@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\Helper;
 
 use Exception;
-use Fc2blog\Config;
 use Fc2blog\Exception\PseudoExit;
 use Fc2blog\Web\Request;
-use InvalidArgumentException;
+use Fc2blog\Web\Router\Router;
 
 trait ClientTrait
 {
@@ -17,47 +16,38 @@ trait ClientTrait
    * @param bool $is_https
    * @param string $method
    * @param array $post
-   * @param string $target user,admin,test
    * @return array
    */
-  public static function resolve(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user")
+  public static function resolve(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [])
   {
-    # 擬似的にアクセスURLをセットする
-    $_SERVER['HTTP_USER_AGENT'] = "phpunit";
-    $_SERVER['HTTPS'] = ($is_https) ? "on" : "";
-    $_SERVER["REQUEST_METHOD"] = $method;
-    $_SERVER['REQUEST_URI'] = $uri;
-    $_POST = $post;
-
-    # Requestはキャッシュされるので、都度消去する
-    Request::resetInstanceForTesting();
-
-    if ($target === "user") {
-      Config::read('user.php');
-    } else if ($target === "admin") {
-      Config::read('admin.php');
-    } else if ($target === "test") {
-      Config::read('test.php');
-    } else {
-      throw new InvalidArgumentException("target is wrong.");
+    $request = new Request(
+      $method,
+      $uri,
+      null,
+      $post,
+      null,
+      null,
+      [
+        'HTTP_USER_AGENT' => 'phpunit',
+      ]
+    );
+    if ($is_https) {
+      $request->server['HTTPS'] = "on";
     }
+    $router = new Router($request);
 
-    [$className, $methodName] = getRouting();
-
-
-    return [$className, $methodName];
+    return $router->resolve();
   }
 
-  public static function execute(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
+  public static function execute(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = []): string
   {
-    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post, $target);
+    $resolve = static::resolve($uri, $is_https, $method, $post);
     ob_start();
     try {
-      new $className($methodName); // すべての実行が行われる
+      new $resolve['className']($resolve['request'], $resolve['methodName']); // すべての実行が行われる
     } catch (PseudoExit $e) {
       echo "\nUnexpected exit. {$e->getFile()}:{$e->getLine()} {$e->getMessage()}\n {$e->getTraceAsString()}";
     }
-    static::resetClient();
     return ob_get_clean();
   }
 
@@ -67,16 +57,15 @@ trait ClientTrait
    * @param bool $is_https
    * @param string $method
    * @param array $post
-   * @param string $target
    * @return false|string
    * @throws Exception
    */
-  public static function executeWithShouldExit(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
+  public static function executeWithShouldExit(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = []): string
   {
-    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post, $target);
+    $resolve = static::resolve($uri, $is_https, $method, $post);
     try {
       ob_start();
-      new $className($methodName);
+      new $resolve['className']($resolve['request'], $resolve['methodName']); // すべての実行が行われる
       throw new Exception("Unexpected, no PseudoExit thrown.");
 
     } catch (PseudoExit $e) {
@@ -85,18 +74,6 @@ trait ClientTrait
       echo $ob;
       return $ob;
 
-    } finally {
-      static::resetClient();
     }
-  }
-
-  /**
-   * 都度、お掃除
-   */
-  public static function resetClient(): void
-  {
-    unset($_SERVER['REQUEST_URI'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTPS'], $_SERVER['REQUEST_URI']);
-    $_POST = [];
-    Request::resetInstanceForTesting();
   }
 }

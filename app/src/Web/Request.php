@@ -1,99 +1,80 @@
 <?php
 /**
-* リクエストクラス
-* POST,GETへのアクセスを便利にするクラス
-*/
+ * リクエストクラス
+ * POST,GETへのアクセスを便利にするクラス
+ */
 
 namespace Fc2blog\Web;
 
-use Fc2blog\Config;
-use Fc2blog\Exception\PseudoExit;
+use Fc2blog\Web\Controller\Test\CommonController;
 
 class Request
 {
-
-  const VALID_NOT_EMPTY    = 0;    // 空チェック
+  const VALID_NOT_EMPTY = 0;    // 空チェック
   const VALID_UNSIGNED_INT = 1;    // 0以上の数値チェック
   const VALID_POSITIVE_INT = 2;    // 1以上の数値チェック
-  const VALID_IN_ARRAY     = 3;    // 配列内の値のどれかチェック
+  const VALID_IN_ARRAY = 3;    // 配列内の値のどれかチェック
 
-  private $path    = '';
-  private $query   = '';
-  private $request = array();
-  private $get     = array();
-  private $post    = array();
-  private $files   = null;
+  private $path = '';
+  private $query = '';
+  private $request = [];
+  private $get = [];
+  private $post = [];
+  private $files = [];
 
-  private static $instance = null;
+  public $uri = "";
+  public $method = "";
+  public $session = [];
+  public $server = [];
+  public $env = [];
+  public $cookie = [];
 
-  private function __construct()
+  public $className = CommonController::class;
+  public $methodName = "index";
+
+  public function __construct(
+    string $method = null,
+    string $uri = null,
+    array $session = null,
+    array $post = null,
+    array $get = null,
+    array $files = null,
+    array $server = null,
+    array $env = null,
+    array $cookie = null
+  )
   {
-    $request_uri = $_SERVER['REQUEST_URI'];
-    $urls = parse_url($request_uri);
+    $this->method = $method ?? $_SERVER['REQUEST_METHOD'] ?? "GET";
+    $this->uri = $uri ?? $_SERVER["REQUEST_URI"] ?? "GET";
+    if (isset($_SESSION)) {
+      $this->session = $session ?? $_SESSION;
+    }
+    $this->post = $post ?? $_POST;
+    $this->get = $get ?? $_GET;
+    $this->files = $files ?? $_FILES;
+    $this->server = $server ?? $_SERVER;
+    $this->env = $env ?? $_ENV;
+    $this->cookie = $cookie ?? $_COOKIE;
+
+    $urls = parse_url($this->uri);
     $this->path = $urls['path'];
     if (isset($urls['query'])) {
       $this->query = $urls['query'];
       parse_str($urls['query'], $this->get);
     }
-    $this->post = $_POST;
     $this->request = array_merge($this->get, $this->post);
-    $this->files = $_FILES;
-  }
-
-  public static function getInstance()
-  {
-    if (self::$instance === null) {
-      self::$instance = new static();
-    }
-    return self::$instance;
-  }
-
-  public static function resetInstanceForTesting()
-  {
-    self::$instance = null;
   }
 
   /**
-  * リファラーを返却 存在しない場合は空文字を返却
-  */
-  public static function getReferer(){
+   * リファラーを返却 存在しない場合は空文字を返却
+   */
+  public static function getReferer()
+  {
+    // TODO
     if (!empty($_SERVER['HTTP_REFERER'])) {
       return $_SERVER['HTTP_REFERER'];
     }
     return '';
-  }
-
-  /**
-  * コマンドラインの引数をリクエストに設定
-  */
-  public function setCronParams($argv=array())
-  {
-    if (count($argv) < 3) {
-      // 1:ファイル名 2:コントローラー名 3:メソッド名 4...引数
-      echo "コントローラー名、メソッド名が指定されておりません\n";
-      echo "cron.php [ControllerName] [MethodName] [...key=value]\n";
-      if(defined("THIS_IS_TEST")){
-        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
-      }else{
-        exit;
-      }
-    }
-    array_shift($argv);
-    $className = array_shift($argv);
-    $methodName = array_shift($argv);
-    $data = array();
-    foreach($argv as $a){
-      list($key, $value) = explode('=', $a);
-      $data[$key] = $value;
-    }
-    $data[Config::get('ARGS_CONTROLLER')] = $className;
-    $data[Config::get('ARGS_ACTION')] = $methodName;
-    $this->request = $data;
-  }
-
-  public function getRequest()
-  {
-    return $this->request;
   }
 
   public function getPath()
@@ -116,21 +97,19 @@ class Request
     return $this->get;
   }
 
-  public function getPost()
-  {
-    return $this->post;
-  }
-
   /**
-  * $_FILESの中身を加工して取得する
-  */
-  public function file($key, $default=null)
+   * $_FILESの中身を加工して取得する
+   * @param $key
+   * @param null $default
+   * @return array|mixed|null
+   */
+  public function file($key, $default = null)
   {
     if (!isset($this->files[$key])) {
       return $default;
     }
     $file = $this->files[$key];
-    if (!is_array($file['tmp_name'])){
+    if (!is_array($file['tmp_name'])) {
       return $file;
     }
     $files = array();
@@ -143,20 +122,20 @@ class Request
     return $files;
   }
 
-  public function get($key, $default=null, $valid=self::VALID_NOT_EMPTY, $options=null)
+  public function get($key, $default = null, $valid = self::VALID_NOT_EMPTY, $options = null)
   {
     // .区切りのキーを解釈
     $data = $this->request;
     $keys = explode('.', $key);
-    foreach($keys as $k){
-      if(!isset($data[$k])){
+    foreach ($keys as $k) {
+      if (!isset($data[$k])) {
         return $default;
       }
       $data = $data[$k];
     }
 
     // 値のチェック
-    switch($valid){
+    switch ($valid) {
       default:
       case self::VALID_NOT_EMPTY:
         if ($data === "" || $data === null) {
@@ -197,8 +176,10 @@ class Request
 
 
   /**
-  * intデータかチェック
-  */
+   * intデータかチェック
+   * @param $int
+   * @return bool
+   */
   private function is_integer($int)
   {
     return ((string)intval($int) === (string)$int);
@@ -206,8 +187,10 @@ class Request
 
 
   /**
-  * 引数が存在するかチェック
-  */
+   * 引数が存在するかチェック
+   * @param $key
+   * @return bool
+   */
   public function isArgs($key)
   {
     // .区切りのキーを解釈
@@ -224,81 +207,66 @@ class Request
   }
 
   /**
-  * 値をリクエストデータに設定する
-  */
+   * 値をリクエストデータに設定する
+   * @param $key
+   * @param $value
+   */
   public function set($key, $value)
   {
-    if (strpos($key, '.')===false) {
+    if (strpos($key, '.') === false) {
       $this->request[$key] = $value;
-      return ;
+      return;
     }
     $keys = explode('.', $key);
     $this->_set($keys, $value, $this->request, count($keys));
   }
 
-  private function _set($keys, $value, &$request, $count, $i=0)
+  private function _set($keys, $value, &$request, $count, $i = 0)
   {
     $key = $keys[$i];
     if ($count == 1) {
       $request[$key] = $value;
-      return ;
+      return;
     }
     if (empty($request[$key]) || !is_array($request[$key])) {
       $request[$key] = array();
     }
-    $this->_set($keys, $value, $request[$key], $count-1, $i+1);
+    $this->_set($keys, $value, $request[$key], $count - 1, $i + 1);
   }
 
   public function delete($key)
   {
-    if (strpos($key, '.')===false) {
+    if (strpos($key, '.') === false) {
       unset($this->request[$key]);
-      return ;
+      return;
     }
     $keys = explode('.', $key);
     $this->_delete($keys, $this->request, count($keys));
   }
 
-  private function _delete($keys, &$request, $count, $i=0)
+  private function _delete($keys, &$request, $count, $i = 0)
   {
     $key = $keys[$i];
     if ($count == 1) {
       unset($request[$key]);
-      return ;
+      return;
     }
     if (empty($request[$key]) || !is_array($request[$key])) {
-      return ;
+      return;
     }
-    $this->_delete($keys, $request[$key], $count-1, $i+1);
-  }
-
-  public function clear()
-  {
-    $this->get     = array();
-    $this->post    = array();
-    $this->request = array();
-    $this->files   = array();
+    $this->_delete($keys, $request[$key], $count - 1, $i + 1);
   }
 
   /**
-  * キーの入れ替えを行う
-  */
-  public function combine($comb=array())
+   * キーの入れ替えを行う
+   * @param array $comb
+   */
+  public function combine($comb = array())
   {
-    foreach($comb as $key => $value){
+    foreach ($comb as $key => $value) {
       $this->set($value, $this->get($key));
       $this->delete($key);
     }
-  }
-
-  /**
-   * リクエストメソッドの判定を行う
-   * @param string $method
-   * @return bool
-   */
-  private function is(string $method): bool
-  {
-    return ($_SERVER["REQUEST_METHOD"] === $method);
   }
 
   /**
@@ -307,7 +275,64 @@ class Request
    */
   public function isGet(): bool
   {
-    return $this->is('GET');
+    return $this->method === 'GET';
+  }
+
+  /**
+   * @param string $key
+   * @param string|array|null $default
+   * @return string|array|null
+   */
+  public function rawGet(string $key, $default = null)
+  {
+    return isset($this->get[$key]) ? $this->get[$key] : $default;
+  }
+
+  /**
+   * @param string $key
+   * @return bool
+   */
+  public function rawHasGet(string $key): bool
+  {
+    return isset($this->get[$key]);
+  }
+
+  /**
+   * @param string $key
+   * @param string|array|null $default
+   * @return string|array|null
+   */
+  public function rawPost(string $key, $default = null)
+  {
+    return isset($this->post[$key]) ? $this->post[$key] : $default;
+  }
+
+  /**
+   * @param string $key
+   * @return bool
+   */
+  public function rawHasPost(string $key): bool
+  {
+    return isset($this->post[$key]);
+  }
+
+  /**
+   * @param string $key
+   * @param string|array|null $default
+   * @return string|array|null
+   */
+  public function rawCookie(string $key, $default = null)
+  {
+    return isset($this->cookie[$key]) ? $this->cookie[$key] : $default;
+  }
+
+  /**
+   * @param string $key
+   * @return bool
+   */
+  public function rawHasCookie(string $key): bool
+  {
+    return isset($this->cookie[$key]);
   }
 
 }

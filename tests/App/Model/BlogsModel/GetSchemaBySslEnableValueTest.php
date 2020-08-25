@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Model\BlogsModel;
 
-use Fc2blog\Model\BlogsModel;
 use Fc2blog\Config;
+use Fc2blog\Model\BlogsModel;
 use PHPUnit\Framework\TestCase;
 
 class GetSchemaBySslEnableValueTest extends TestCase

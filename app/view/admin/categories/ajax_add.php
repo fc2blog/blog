@@ -1,6 +1,5 @@
 <?php
-  $blog_id = $this->getBlogId();
-  $request = \Fc2blog\Web\Request::getInstance();
+  $blog_id = $this->getBlogId($request);
 
   $entry_categories = $request->get('entry_categories', array('category_id' => array()));
   $categories = \Fc2blog\Model\Model::load('Categories')->getList($blog_id);
@@ -167,7 +166,7 @@ $(function(){
     $('#sys-category-add').val('通信中');
 
     $.ajax({
-      url: '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Categories', 'action'=>'ajax_add')); ?>',
+      url: '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Categories', 'action'=>'ajax_add')); ?>',
       type: 'POST',
       data: {category: {parent_id: parent_id, name: name}, sig: "<?php echo \Fc2blog\Web\Session::get('sig'); ?>"},
       dataType: 'json',

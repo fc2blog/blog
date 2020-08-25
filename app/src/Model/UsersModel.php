@@ -26,8 +26,9 @@ class UsersModel extends Model
   }
 
   /**
-  * バリデートを設定
-  */
+   * バリデートを設定
+   * @param $white_list
+   */
   private function setValidate($white_list)
   {
     $this->validates = array(
@@ -51,8 +52,12 @@ class UsersModel extends Model
   }
 
   /**
-  * 登録用のバリデート処理
-  */
+   * 登録用のバリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function registerValidate($data, &$valid_data, $white_list=array())
   {
     // Validateの設定
@@ -72,8 +77,12 @@ class UsersModel extends Model
   }
 
   /**
-  * 更新用のバリデート
-  */
+   * 更新用のバリデート
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function updateValidate($data, &$valid_data, $white_list=array())
   {
     // Validateの設定
@@ -101,8 +110,12 @@ class UsersModel extends Model
   }
 
   /**
-  * ログイン用のバリデート処理
-  */
+   * ログイン用のバリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function loginValidate($data, &$valid_data, $white_list=array())
   {
     // Validateの設定
@@ -113,16 +126,21 @@ class UsersModel extends Model
 
 
   /**
-  * ユーザーパスワード用のハッシュを作成
-  */
+   * ユーザーパスワード用のハッシュを作成
+   * @param $password
+   * @return string
+   */
   public static function passwordHash($password)
   {
     return hash('sha256', $password . Config::get('PASSWORD_SALT'));
   }
 
   /**
-  * ログインIDとパスワードからユーザーを取得する
-  */
+   * ログインIDとパスワードからユーザーを取得する
+   * @param $id
+   * @param $password
+   * @return mixed
+   */
   public function findByLoginIdAndPassword($id, $password)
   {
     $options = array(
@@ -143,8 +161,11 @@ class UsersModel extends Model
   }
 
   /**
-  * 削除処理(付随する情報も全て削除)
-  */
+   * 削除処理(付随する情報も全て削除)
+   * @param $user_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function deleteById($user_id, $options=array())
   {
     $blogs_model = Model::load('Blogs');

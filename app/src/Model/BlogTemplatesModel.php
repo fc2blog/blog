@@ -32,8 +32,12 @@ class BlogTemplatesModel extends Model
   }
 
   /**
-  * バリデート処理
-  */
+   * バリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     // バリデートを定義
@@ -61,8 +65,10 @@ class BlogTemplatesModel extends Model
   }
 
   /**
-  * FC2テンプレートの構文チェック
-  */
+   * FC2テンプレートの構文チェック
+   * @param $value
+   * @return bool|string
+   */
   public static function fc2TemplateSyntax($value)
   {
     // フォルダが存在しない場合作成
@@ -87,32 +93,49 @@ class BlogTemplatesModel extends Model
   }
 
   /**
-  * テンプレートのパスを返却
-  */
+   * テンプレートのパスを返却
+   * @param $blog_id
+   * @param int $device_type
+   * @param bool $isPreview
+   * @return string
+   */
   public static function getTemplateFilePath($blog_id, $device_type=0, $isPreview=false)
   {
     return Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
   }
 
   /**
-  * CSSのパスを返却
-  */
+   * CSSのパスを返却
+   * @param $blog_id
+   * @param $device_type
+   * @param bool $isPreview
+   * @return string
+   */
   public static function getCssFilePath($blog_id, $device_type, $isPreview=false)
   {
     return Config::get('WWW_UPLOAD_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
   }
 
   /**
-  * CSSのURLを返却
-  */
+   * CSSのURLを返却
+   * @param $blog_id
+   * @param $device_type
+   * @param bool $isPreview
+   * @return string
+   */
   public static function getCssUrl($blog_id, $device_type, $isPreview=false)
   {
     return '/' . Config::get('UPLOAD_DIR_NAME') . '/' . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
   }
 
   /**
-  * テンプレートを作成
-  */
+   * テンプレートを作成
+   * @param $templateId
+   * @param $blog_id
+   * @param $device_type
+   * @param null $html
+   * @param null $css
+   */
   public static function createTemplate($templateId, $blog_id, $device_type, $html=null, $css=null)
   {
     $isPreview = !empty($html);   // HTMLの情報が入っている場合プレビュー用として作成
@@ -150,8 +173,11 @@ class BlogTemplatesModel extends Model
   }
 
   /**
-  * デバイス毎のテンプレート一覧
-  */
+   * デバイス毎のテンプレート一覧
+   * @param $blog_id
+   * @param int $device_type
+   * @return array
+   */
   public function getTemplatesOfDevice($blog_id, $device_type=0)
   {
     $options = array(
@@ -235,8 +261,10 @@ class BlogTemplatesModel extends Model
   }
 
   /**
-  * HTMLを解読しPHPテンプレートに変換する
-  */
+   * HTMLを解読しPHPテンプレートに変換する
+   * @param $html
+   * @return string|string[]|null
+   */
   public static function convertFC2Template($html)
   {
     // PHP文のエスケープ

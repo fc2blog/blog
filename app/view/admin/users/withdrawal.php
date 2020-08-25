@@ -1,6 +1,6 @@
 <header><h2><?php echo __('Withdrawal process'); ?></h2></header>
 
-<?php $this->display('Users/tab.php', array('tab'=>'withdrawal')); ?>
+<?php $this->display($request, 'Users/tab.php', array('tab'=>'withdrawal')); ?>
 
 <form method="POST" id="sys-users-form" class="admin-form">
 

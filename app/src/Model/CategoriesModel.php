@@ -30,8 +30,12 @@ class CategoriesModel extends Model
   }
 
   /**
-  * バリデート処理
-  */
+   * バリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     // バリデートを定義
@@ -57,9 +61,15 @@ class CategoriesModel extends Model
   }
 
   /**
-  * カテゴリ名のユニークチェック
-  * (blog_idとidがある前提)
-  */
+   * カテゴリ名のユニークチェック
+   * (blog_idとidがある前提)
+   * @param $value
+   * @param $option
+   * @param $key
+   * @param $data
+   * @param $model
+   * @return bool|string
+   */
   public static function uniqueName($value, $option, $key, $data, $model)
   {
     if (empty($data['blog_id'])) {
@@ -94,8 +104,11 @@ class CategoriesModel extends Model
   }
 
   /**
-  * 一覧リスト($idによる親判定付き)
-  */
+   * 一覧リスト($idによる親判定付き)
+   * @param $blog_id
+   * @param null $id
+   * @return array
+   */
   public function getParentList($blog_id, $id=null)
   {
     $categories = $this->getList($blog_id);
@@ -120,12 +133,14 @@ class CategoriesModel extends Model
   }
 
   /**
-  * 検索用の一覧取得
-  */
+   * 検索用の一覧取得
+   * @param $blog_id
+   * @return array
+   */
   public function getSearchList($blog_id)
   {
     $categories = $this->getList($blog_id);
-    $value = array();
+    $value = array();  # TODO この変数は利用されていない
     $options = array();
     foreach($categories as $category){
       $options[$category['id']] = array('value'=>$category['name'] . ' (' . $category['count'] . ')', 'level'=>$category['level']);
@@ -134,8 +149,11 @@ class CategoriesModel extends Model
   }
 
   /**
-  * 一覧を取得する
-  */
+   * 一覧を取得する
+   * @param $blog_id
+   * @param array $options
+   * @return mixed
+   */
   public function getList($blog_id, $options=array())
   {
     $options['where'] = (isset($options['where']) && $options['where']!='') ? 'blog_id=? AND '. $options['where'] : 'blog_id=?';
@@ -145,8 +163,11 @@ class CategoriesModel extends Model
   }
 
   /**
-  * 記事のカテゴリを取得する
-  */
+   * 記事のカテゴリを取得する
+   * @param $blog_id
+   * @param $entry_id
+   * @return mixed
+   */
   public function getEntryCategories($blog_id, $entry_id)
   {
     $sql = <<<SQL
@@ -164,8 +185,11 @@ SQL;
   }
 
   /**
-  * 記事のカテゴリを取得する
-  */
+   * 記事のカテゴリを取得する
+   * @param $blog_id
+   * @param array $entry_ids
+   * @return array
+   */
   public function getEntriesCategories($blog_id, $entry_ids=array())
   {
     if (!count($entry_ids)) {
@@ -197,8 +221,11 @@ SQL;
   }
 
   /**
-  * カテゴリーIDの配列からカテゴリー情報を取得する
-  */
+   * カテゴリーIDの配列からカテゴリー情報を取得する
+   * @param $ids
+   * @param $blog_id
+   * @return array|mixed
+   */
   public function findByIdsAndBlogId($ids, $blog_id)
   {
     if (!is_array($ids) || count($ids) < 1) {
@@ -211,8 +238,11 @@ SQL;
   }
 
   /**
-  * 件数を増加させる処理
-  */
+   * 件数を増加させる処理
+   * @param $blog_id
+   * @param array $ids
+   * @return array|false|int|mixed
+   */
   public function increaseCount($blog_id, $ids=array())
   {
     if (!count($ids)) {
@@ -225,8 +255,11 @@ SQL;
   }
 
   /**
-  * 件数を減少させる処理
-  */
+   * 件数を減少させる処理
+   * @param $blog_id
+   * @param array $ids
+   * @return array|false|int|mixed
+   */
   public function decreaseCount($blog_id, $ids=array())
   {
     if (!count($ids)) {
@@ -239,8 +272,11 @@ SQL;
   }
 
   /**
-  * idとblog_idをキーとした削除 + 付随情報も削除
-  */
+   * idとblog_idをキーとした削除 + 付随情報も削除
+   * @param $id
+   * @param $blog_id
+   * @return array|false|int|mixed
+   */
   public function deleteNodeByIdAndBlogId($id, $blog_id)
   {
     // 対象のカテゴリー取得
@@ -294,8 +330,10 @@ SQL;
   }
 
   /**
-  * テンプレートで使用するカテゴリー一覧を取得
-  */
+   * テンプレートで使用するカテゴリー一覧を取得
+   * @param $blog_id
+   * @return mixed
+   */
   public function getTemplateCategories($blog_id){
     $categories = $this->getList($blog_id);
     $parent = null;

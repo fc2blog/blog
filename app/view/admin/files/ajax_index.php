@@ -1,23 +1,23 @@
 
 <h3 id="entry_count">
   <?php echo __('File search'); ?>[<?php echo __('Hits'); ?>&nbsp;<?php echo $paging['count']; ?><?php echo __(' results'); ?>]
-  <?php echo \Fc2blog\Web\Html::input('limit', 'select', array('options'=>\Fc2blog\App::getPageList('FILE'), 'default'=>\Fc2blog\Config::get('FILE.DEFAULT_LIMIT'))); ?>
-  <?php echo \Fc2blog\Web\Html::input('page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'select', array('options'=>\Fc2blog\App::getPageList($request, 'FILE'), 'default'=>\Fc2blog\Config::get('FILE.DEFAULT_LIMIT'))); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
 </h3>
 <p><?php echo __('You can search to match the conditions file.'); ?></p>
 <div id="entry_search">
   <form method="GET" id="sys-search-form" onsubmit="return false;">
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Files" />
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="ajax_index" />
-    <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\App::getPageLimit('FILE'))); ?>
-    <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
-    <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'created_at_desc')); ?>
-    <br /><?php echo \Fc2blog\Web\Html::input('keyword', 'text', array('maxlength'=>100)); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'hidden', array('default'=>\Fc2blog\App::getPageLimit($request, 'FILE'))); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'page', 'hidden', array('default'=>0)); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'order', 'hidden', array('default'=>'created_at_desc')); ?>
+    <br /><?php echo \Fc2blog\Web\Html::input($request, 'keyword', 'text', array('maxlength'=>100)); ?>
     <input type="submit" value="<?php echo __('Search'); ?>" />
   </form>
 </div>
 
-<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+<?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 
 <table>
   <thead>
@@ -42,8 +42,8 @@
         </td>
         <td><?php echo df($file['created_at'], 'y/m/d'); ?></td>
         <td><a href="<?php echo \Fc2blog\App::getUserFilePath($file, false, true); ?>" target="_blank"><?php echo th($file['name'], 30); ?></a></td>
-        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'edit', 'id'=>$file['id'])); ?>"><?php echo __('Edit'); ?></a></td>
-        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$file['id'], 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
+        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'edit', 'id'=>$file['id'])); ?>"><?php echo __('Edit'); ?></a></td>
+        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'delete', 'id'=>$file['id'], 'sig'=>\Fc2blog\Web\Session::get('sig'))); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
       </tr>
       <?php endforeach; ?>
     <?php else: ?>
@@ -54,7 +54,7 @@
 
 <input type="button" id="sys-delete-button" value="<?php echo __('Remove what you have selected'); ?>" disabled="disabled" />
 
-<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+<?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 
 <script>
 $(function(){
@@ -97,7 +97,7 @@ $(function(){
 
     // Ajaxで削除処理
     $.ajax({
-      url: '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Files', 'action'=>'ajax_delete')); ?>',
+      url: '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Files', 'action'=>'ajax_delete')); ?>',
       type: 'POST',
       data: {id: ids, sig: '<?php echo \Fc2blog\Web\Session::get('sig'); ?>'},
       dataType: 'json',

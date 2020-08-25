@@ -1,7 +1,7 @@
 <?php
 /**
-* Sessionクラス
-*/
+ * Sessionクラス
+ */
 
 namespace Fc2blog\Web;
 
@@ -12,12 +12,14 @@ class Session
 
   private static $isStart = false;
 
-  private function __construct(){}
+  private function __construct()
+  {
+  }
 
   public static function start()
   {
     if (self::$isStart) {
-      return ;
+      return;
     }
     if (headers_sent()) {
       return;
@@ -42,24 +44,30 @@ class Session
   }
 
   /**
-  * セッションから情報を取得する
-  */
-  public static function get($key, $default=null)
+   * セッションから情報を取得する
+   * @param $key
+   * @param null $default
+   * @return mixed|null
+   */
+  public static function get($key, $default = null)
   {
     self::start();
-    if (isset($_SESSION[$key])){
+    if (isset($_SESSION[$key])) {
       return $_SESSION[$key];
     }
     return $default;
   }
 
   /**
-  * セッションから情報を取得し破棄する
-  */
-  public static function remove($key, $default=null)
+   * セッションから情報を取得し破棄する
+   * @param $key
+   * @param null $default
+   * @return mixed|null
+   */
+  public static function remove($key, $default = null)
   {
     self::start();
-    if (isset($_SESSION[$key])){
+    if (isset($_SESSION[$key])) {
       $default = $_SESSION[$key];
       unset($_SESSION[$key]);
     }
@@ -67,8 +75,10 @@ class Session
   }
 
   /**
-  * セッションに情報を保存する
-  */
+   * セッションに情報を保存する
+   * @param $key
+   * @param $value
+   */
   public static function set($key, $value)
   {
     self::start();
@@ -76,12 +86,12 @@ class Session
   }
 
   /**
-  * セッションID置き換え
-  */
+   * セッションID置き換え
+   */
   public static function regenerate()
   {
     self::start();
-    if (version_compare(PHP_VERSION, '5.1.0')>=0) {
+    if (version_compare(PHP_VERSION, '5.1.0') >= 0) {
       session_regenerate_id(true);
     } else {
       $sess_id = session_id();
@@ -91,13 +101,14 @@ class Session
   }
 
   /**
-  * セッションを破棄
-  */
-  public static function destroy()
+   * セッションを破棄
+   * @param Request $request
+   */
+  public static function destroy(Request $request)
   {
     $_SESSION = array();
     if (isset($_COOKIE[Config::get('SESSION_NAME')])) {
-      Cookie::remove(Config::get('SESSION_NAME'));
+      Cookie::remove($request, Config::get('SESSION_NAME'));
     }
     session_destroy();
   }

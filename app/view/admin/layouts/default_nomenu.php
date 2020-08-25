@@ -28,7 +28,7 @@
     <?php endif; ?>
     common.baseDirectory = '<?php echo \Fc2blog\Config::get('BASE_DIRECTORY'); ?>';
     common.deviceType = <?php echo $this->getDeviceType(); ?>;
-    common.deviceArgs = '<?php echo \Fc2blog\App::getArgsDevice(); ?>';
+    common.deviceArgs = '<?php echo \Fc2blog\App::getArgsDevice($request); ?>';
   </script>
 
   <?php echo $this->includeJS(); ?>
@@ -50,8 +50,8 @@
 
   <article>
     <article id="main-contents" style="margin-left: auto; margin-right: auto; float: none;">
-      <?php $this->display('Common/flash_message.php', array('messages'=>$this->removeMessage())); ?>
-      <?php $this->display($fw_template); ?>
+      <?php $this->display($request, 'Common/flash_message.php', array('messages'=>$this->removeMessage())); ?>
+      <?php $this->display($request, $fw_template); ?>
     </article>
   </article>
 

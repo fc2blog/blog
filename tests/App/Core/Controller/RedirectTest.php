@@ -14,16 +14,16 @@ class RedirectTest extends TestCase
 
   public function testTestTargetTest(): void
   {
-    $res = $this->execute(static::$testBase . "/phpinfo", true, "GET", [], "test");
+    $res = $this->execute(static::$testBase . "/phpinfo", true, "GET", []);
     $this->assertStringContainsString('phpinfo', $res);
   }
 
   public function testNotFullUriRedirect(): void
   {
-    $res = $this->executeWithShouldExit(static::$testBase . "/redirect_test_no_full_url", true, "GET", [], "test");
+    $res = $this->executeWithShouldExit(static::$testBase . "/redirect_test_no_full_url", true, "GET", []);
     $this->assertStringNotContainsString('http', $res);
 
-    $res = $this->executeWithShouldExit(static::$testBase . "/redirect_test_full_url?blog_id=testblog1", true, "GET", [], "test");
+    $res = $this->executeWithShouldExit(static::$testBase . "/redirect_test_full_url?blog_id=testblog1", true, "GET", []);
     $this->assertStringContainsString('http', $res);
   }
 }

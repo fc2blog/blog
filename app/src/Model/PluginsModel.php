@@ -25,8 +25,12 @@ class PluginsModel extends Model
   }
 
   /**
-  * バリデート処理
-  */
+   * バリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     // バリデートを定義
@@ -45,8 +49,11 @@ class PluginsModel extends Model
   }
 
   /**
-  * IDで検索(blog_pluginsのattribute属性付き
-  */
+   * IDで検索(blog_pluginsのattribute属性付き
+   * @param $id
+   * @param array $options
+   * @return array|mixed
+   */
   public function findById($id, $options=array())
   {
     $plugin = parent::findById($id, $options);
@@ -58,8 +65,12 @@ class PluginsModel extends Model
   }
 
   /**
-  * プラグインの登録
-  */
+   * プラグインの登録
+   * @param $blog_plugin
+   * @param $plugin_data
+   * @param int $user_id
+   * @return array|false|int|mixed
+   */
   public function register($blog_plugin, $plugin_data, $user_id=0)
   {
     // 登録データ作成
@@ -89,8 +100,12 @@ class PluginsModel extends Model
   }
 
   /**
-  * idとuser_idをキーとした更新
-  */
+   * idとuser_idをキーとした更新
+   * @param $id
+   * @param $user_id
+   * @param array $options
+   * @return false
+   */
   public function deleteByIdAndUserId($id, $user_id, $options=array())
   {
     if (!parent::deleteByIdAndUserId($id, $user_id, $options)) {

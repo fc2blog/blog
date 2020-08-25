@@ -6,6 +6,7 @@
 namespace Fc2blog;
 
 use Fc2blog\Web\Html;
+use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
 class Debug{
@@ -13,6 +14,16 @@ class Debug{
   private static $logs = array();
 
   public static function log($msg, $params=array(), $class='log', $file=null, $line=null){
+    if(!isset($_SERVER['REQUEST_URI'])) {
+      // おそらくダミーリクエストなので、ダミーを生成
+      $request = new Request(
+        'GET', '/this_is_dummy', null, null, null, null,
+        ['HTTP_USER_AGENT' => 'phpunit']
+      );
+    }else{
+      $request = new Request();
+    }
+
     switch(Config::get('DEBUG')){
       // Debug文の表示はしない
       default: case 0:
@@ -34,7 +45,7 @@ class Debug{
 
       // htmlでデバッグ文を表示
       case 2: case 3:
-        self::initLogs();    // ログの初期化
+        self::initLogs($request);    // ログの初期化
         if (!$file || !$line) {
           $traces = debug_backtrace();    // file,line取得
           $file = $traces[0]['file'];
@@ -84,24 +95,35 @@ class Debug{
   * ログを取得
   */
   public static function getLogs(){
-    self::initLogs();    // ログの初期化
+    if(!isset($_SERVER['REQUEST_URI'])) {
+      // おそらくダミーリクエストなので、ダミーを生成
+      $request = new Request(
+        'GET', '/this_is_dummy', null, null, null, null,
+        ['HTTP_USER_AGENT' => 'phpunit']
+      );
+    }else{
+      $request = new Request();
+    }
+
+    self::initLogs($request);    // ログの初期化
     Session::start();
     $logs = self::$logs;
     return $logs;
   }
 
   /**
-  * ログの初期化
-  */
-  private static function initLogs(){
+   * ログの初期化
+   * @param Request $request
+   */
+  private static function initLogs(Request $request){
     if (!count(self::$logs)) {
       // redirect用にセッションからログを取得
       self::$logs = self::removeSessionLogs();
 
       // ログの初期値としてURLをログとして追加
       if (!defined("THIS_IS_TEST")) {
-        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
-        $url .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $url = (isset($request->server['HTTPS']) && $request->server['HTTPS'] == 'on') ? 'https://' : 'http://';
+        $url .= $_SERVER['HTTP_HOST'] . $request->uri;
         $params = array(
           'GET' => $_GET,
           'POST' => $_POST,
@@ -133,9 +155,11 @@ class Debug{
   }
 
   /**
-  * DebugLogのアウトプットを行う
-  */
-  public static function output($controller){
+   * DebugLogのアウトプットを行う
+   * @param Request $request
+   * @param $controller
+   */
+  public static function output(Request $request, $controller){
     $debug = Config::get('DEBUG');
     if (!($debug==2 || $debug==3)) {
       // htmlでデバッグ以外は何も処理を行わない
@@ -146,7 +170,7 @@ class Debug{
     Config::set('DEBUG_TEMPLATE_VARS', 0);  // デバッグ用テンプレートには使用可能変数一覧は非表示
 
     // logsデータを元にdebug用htmlをfetch
-    $html = $controller->fetch('Common/debug.php', array('logs'=>self::getLogs()), false);
+    $html = $controller->fetch($request, 'Common/debug.php', array('logs'=>self::getLogs()), false);
 
     // 10分前以前のファイルは削除
     $cmd = "find " . Config::get('TEMP_DIR') . 'debug_html/' . " -amin +10 -name '*.html' | xargs rm -f";
@@ -158,7 +182,7 @@ class Debug{
     file_put_contents($filePath, $html);    // 結果をデバッグ用HTMLに書き込み
     chmod($filePath, 0777);
 
-    $url = Html::url(array('controller'=>'common', 'action'=>'debug', 'key'=> $key));
+    $url = Html::url($request, array('controller'=>'common', 'action'=>'debug', 'key'=> $key));
     if ($debug==2) {
       // iframeで表示
       echo <<<HTML

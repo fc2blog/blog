@@ -13,19 +13,19 @@ class FilesController extends AdminController
 
   /**
    * 一覧表示
+   * @param Request $request
    */
-  public function ajax_index()
+  public function ajax_index(Request $request)
   {
-    $request = Request::getInstance();
     $files_model = Model::load('Files');
 
-    $blog_id = $this->getBlogId();
-    
+    $blog_id = $this->getBlogId($request);
+
     // 検索条件
     $where = 'blog_id=?';
     $params = array($blog_id);
 
-    if ($keyword=$request->get('keyword')) {
+    if ($keyword = $request->get('keyword')) {
       $keyword = Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND name LIKE ?';
@@ -35,18 +35,26 @@ class FilesController extends AdminController
     // 並び順
     $order = 'created_at DESC, id DESC';
     switch ($request->get('order')) {
-      default: case 'created_at_desc': break;
-      case 'created_at_asc': $order = 'created_at ASC, id ASC'; break;
-      case 'name_desc':      $order = 'name DESC, id DESC';     break;
-      case 'name_asc':       $order = 'name ASC, id ASC';       break;
+      default:
+      case 'created_at_desc':
+        break;
+      case 'created_at_asc':
+        $order = 'created_at ASC, id ASC';
+        break;
+      case 'name_desc':
+        $order = 'name DESC, id DESC';
+        break;
+      case 'name_asc':
+        $order = 'name ASC, id ASC';
+        break;
     }
 
     $options = array(
-      'where'  => $where,
+      'where' => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', App::getPageLimit('FILE'), Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
-      'order'  => $order,
+      'limit' => $request->get('limit', App::getPageLimit($request, 'FILE'), Request::VALID_POSITIVE_INT),
+      'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'order' => $order,
     );
     $files = $files_model->find('all', $options);
     $paging = $files_model->getPaging($options);
@@ -60,17 +68,17 @@ class FilesController extends AdminController
 
   /**
    * 新規作成
+   * @param Request $request
    */
-  public function upload()
+  public function upload(Request $request)
   {
-    $request = Request::getInstance();
     /** @var FilesModel $files_model */
     $files_model = Model::load('Files');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     Session::set('sig', App::genRandomString());
-     
+
     // 初期表示時
     if ($request->file('file')) {
       // 新規登録処理
@@ -80,7 +88,7 @@ class FilesController extends AdminController
         $data_file['blog_id'] = $blog_id;
         $tmp_name = $data_file['tmp_name'];
         unset($data_file['tmp_name']);
-        if ($id=$files_model->insert($data_file)) {
+        if ($id = $files_model->insert($data_file)) {
           // ファイルの移動
           $data_file['id'] = $id;
           $move_file_path = App::getUserFilePath($data_file, true);
@@ -88,26 +96,26 @@ class FilesController extends AdminController
           move_uploaded_file($tmp_name, $move_file_path);
 
           $this->setInfoMessage(__('I have completed the upload of files'));
-          $this->redirect(array('action'=>'upload'));
+          $this->redirect($request, array('action' => 'upload'));
         }
       }
 
       // エラー情報の設定
       $this->setErrorMessage(__('Input error exists'));
       $this->set('errors', $errors);
-      return ;
+      return;
     }
 
     // PCの場合はajaxでファイル情報を取得するので以下の処理は不要
     if (App::isPC()) {
-      return ;
+      return;
     }
 
     // 検索条件
     $where = 'blog_id=?';
     $params = array($blog_id);
 
-    if ($keyword=$request->get('keyword')) {
+    if ($keyword = $request->get('keyword')) {
       $keyword = Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND name LIKE ?';
@@ -117,18 +125,26 @@ class FilesController extends AdminController
     // 並び順
     $order = 'created_at DESC, id DESC';
     switch ($request->get('order')) {
-      default: case 'created_at_desc': break;
-      case 'created_at_asc': $order = 'created_at ASC, id ASC'; break;
-      case 'name_desc':      $order = 'name DESC, id DESC';     break;
-      case 'name_asc':       $order = 'name ASC, id ASC';       break;
+      default:
+      case 'created_at_desc':
+        break;
+      case 'created_at_asc':
+        $order = 'created_at ASC, id ASC';
+        break;
+      case 'name_desc':
+        $order = 'name DESC, id DESC';
+        break;
+      case 'name_asc':
+        $order = 'name ASC, id ASC';
+        break;
     }
 
     $options = array(
-      'where'  => $where,
+      'where' => $where,
       'params' => $params,
-      'limit'  => $request->get('limit', App::getPageLimit('FILE'), Request::VALID_POSITIVE_INT),
-      'page'   => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
-      'order'  => $order,
+      'limit' => $request->get('limit', App::getPageLimit($request, 'FILE'), Request::VALID_POSITIVE_INT),
+      'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'order' => $order,
     );
     $files = $files_model->find('all', $options);
     $paging = $files_model->getPaging($options);
@@ -139,19 +155,19 @@ class FilesController extends AdminController
 
   /**
    * 編集
+   * @param Request $request
    */
-  public function edit()
+  public function edit(Request $request)
   {
-    $request = Request::getInstance();
     /** @var FilesModel $files_model */
     $files_model = Model::load('Files');
 
     $id = $request->get('id');
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 詳細データの取得
-    if (!$file=$files_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect(array('action'=>'index'));
+    if (!$file = $files_model->findByIdAndBlogId($id, $blog_id)) {
+      $this->redirect($request, array('action' => 'index'));
     }
     $this->set('file', $file);
 
@@ -162,12 +178,12 @@ class FilesController extends AdminController
         $request->set('back_url', $back_url);    // 戻る用のURL
       }
       Session::set('sig', App::genRandomString());
-      return ;
+      return;
     }
 
     if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      $request->clear();
-      $this->redirect(array('action'=>'upload'));
+      $request = new Request();
+      $this->redirect($request, array('action' => 'upload'));
     }
 
     // 新規登録処理
@@ -189,9 +205,9 @@ class FilesController extends AdminController
         $this->setInfoMessage(__('I have updated the file'));
         $back_url = $request->get('back_url');
         if (!empty($back_url)) {
-          $this->redirect($back_url);
+          $this->redirect($request, $back_url);
         }
-        $this->redirect(array('action'=>'upload'));
+        $this->redirect($request, array('action' => 'upload'));
       }
     }
 
@@ -207,14 +223,13 @@ class FilesController extends AdminController
 
   /**
    * 削除
+   * @param Request $request
    */
-  public function delete()
+  public function delete(Request $request)
   {
-    $request = Request::getInstance();
-
     if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
       // 削除処理
-      if (Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
+      if (Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
         $this->setInfoMessage(__('I removed the file'));
       } else {
         $this->setErrorMessage(__('I failed to remove'));
@@ -224,22 +239,21 @@ class FilesController extends AdminController
     // 元の画面へ戻る
     $back_url = $request->get('back_url');
     if (!empty($back_url)) {
-      $this->redirect($back_url);
+      $this->redirect($request, $back_url);
     }
-    $this->redirect(array('action'=>'upload'));
+    $this->redirect($request, array('action' => 'upload'));
   }
 
   /**
    * 削除
+   * @param Request $request
    */
-  public function ajax_delete()
+  public function ajax_delete(Request $request)
   {
-    $request = Request::getInstance();
-
     // 削除処理
-    $json = array('status'=>0);
-    if (!Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId())) {
-      $json = array('status'=>1);
+    $json = array('status' => 0);
+    if (!Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
+      $json = array('status' => 1);
     }
 
     $this->layout = 'json.php';
