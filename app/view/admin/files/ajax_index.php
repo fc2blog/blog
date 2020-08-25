@@ -47,7 +47,7 @@
       </tr>
       <?php endforeach; ?>
     <?php else: ?>
-      <tr><td colspan="5"><?php echo __('The target file does not exist'); ?></td></tr>
+      <tr><td colspan="6"><?php echo __('The target file does not exist'); ?></td></tr>
     <?php endif; ?>
   </tbody>
 </table>
