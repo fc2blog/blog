@@ -2,6 +2,7 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
@@ -91,7 +92,8 @@ class UsersController extends AdminController
     $user_id = $this->getUserId();
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('user')) {
+    if (!$request->get('user') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+      Session::set('sig', App::genRandomString());
       $user = $users_model->findById($user_id);
       unset($user['password']);
       $request->set('user', $user);
