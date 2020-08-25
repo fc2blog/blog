@@ -88,11 +88,3 @@ function snakeCase($camel_case)
 {
   return strtolower(preg_replace("/([A-Z])/u", "_$0", lcfirst($camel_case)));
 }
-
-function getServerUrl()
-{
-  $url = (empty($_SERVER["HTTPS"])) ? 'http://' : 'https://';
-  $url .= \Fc2blog\Config::get('DOMAIN');
-
-  return $url;
-}

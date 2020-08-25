@@ -296,5 +296,11 @@ class Html
     return $js_html;
   }
 
+  public static function getServerUrl()
+  {
+    $url = (empty($_SERVER["HTTPS"])) ? 'http://' : 'https://';
+    $url .= Config::get('DOMAIN');
+    return $url;
+  }
 }
 
