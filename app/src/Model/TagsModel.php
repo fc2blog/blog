@@ -28,8 +28,12 @@ class TagsModel extends Model
   }
 
   /**
-  * バリデート処理(タグの名前更新のみの予定)
-  */
+   * バリデート処理(タグの名前更新のみの予定)
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     // バリデートを定義
@@ -47,9 +51,15 @@ class TagsModel extends Model
   }
 
   /**
-  * タグ名のユニークチェック
-  * (blog_idとidがある前提)
-  */
+   * タグ名のユニークチェック
+   * (blog_idとidがある前提)
+   * @param $value
+   * @param $option
+   * @param $key
+   * @param $data
+   * @param $model
+   * @return bool|string
+   */
   public static function uniqueName($value, $option, $key, $data, $model)
   {
     if (empty($data['id']) || empty($data['blog_id'])) {
@@ -67,8 +77,10 @@ class TagsModel extends Model
   }
 
   /**
-  * 検索用の一覧取得
-  */
+   * 検索用の一覧取得
+   * @param $blog_id
+   * @return array
+   */
   public function getSearchList($blog_id)
   {
     $options = array(
@@ -87,25 +99,32 @@ class TagsModel extends Model
 
 
   /**
-  * タグ名からタグ情報取得
-  */
-  public function getListByNames($blog_id, $tags=array())
+   * タグ名からタグ情報取得
+   * @param $blog_id
+   * @param array $tags
+   * @return array
+   */
+  public function getListByNames(string $blog_id, array $tags = []): array
   {
     if (!count($tags)) {
       return array();
     }
     $options = array(
       'fields' => 'id, name',
-      'where'  => 'blog_id=? AND name IN (' . implode(',',array_fill(0, count($tags), '?')) . ')',
-      'params' => array_merge(array($blog_id), $tags),
+      'where' => 'blog_id=? AND name IN (' . implode(',', array_fill(0, count($tags), '?')) . ')',
+      'params' => array_merge([$blog_id], $tags),
     );
     return $this->find('list', $options);
   }
 
 
   /**
-  * nameとblog_idの複合キーからデータを取得
-  */
+   * nameとblog_idの複合キーからデータを取得
+   * @param $name
+   * @param $blog_id
+   * @param array $options
+   * @return mixed
+   */
   public function findByNameAndBlogId($name, $blog_id, $options=array())
   {
     $options['where'] = isset($options['where']) ? 'name=? AND blog_id=? AND ' . $options['where'] : 'name=? AND blog_id=?';
@@ -114,8 +133,11 @@ class TagsModel extends Model
   }
 
   /**
-  * 良く使用するタグ一覧を取得する
-  */
+   * 良く使用するタグ一覧を取得する
+   * @param $blog_id
+   * @param array $options
+   * @return mixed
+   */
   public function getWellUsedTags($blog_id, $options=array())
   {
     $options['fields'] = 'id, name';
@@ -127,8 +149,11 @@ class TagsModel extends Model
   }
 
   /**
-  * 記事のタグを文字列で取得する
-  */
+   * 記事のタグを文字列で取得する
+   * @param $blog_id
+   * @param $entry_id
+   * @return array
+   */
   public function getEntryTagNames($blog_id, $entry_id)
   {
     $tags = $this->getEntryTags($blog_id, $entry_id);
@@ -140,8 +165,11 @@ class TagsModel extends Model
   }
 
   /**
-  * 記事のタグを取得する
-  */
+   * 記事のタグを取得する
+   * @param $blog_id
+   * @param $entry_id
+   * @return mixed
+   */
   public function getEntryTags($blog_id, $entry_id)
   {
     $sql = <<<SQL
@@ -159,8 +187,11 @@ SQL;
   }
 
   /**
-  * 記事のタグを取得する
-  */
+   * 記事のタグを取得する
+   * @param $blog_id
+   * @param $entry_ids
+   * @return array
+   */
   public function getEntriesTags($blog_id, $entry_ids)
   {
     if (!count($entry_ids)) {
@@ -180,7 +211,7 @@ SQL;
     $options = array();
     $options['result'] = DBInterface::RESULT_ALL;
     $tags = $this->findSql($sql, $params, $options);
-    $entries_tags = array();
+    $entries_tags = array(); # TODO この変数は利用されていない
 
     $entries_tags = array();
     foreach ($entry_ids as $entry_id) {
@@ -193,9 +224,12 @@ SQL;
   }
 
   /**
-  * 件数を増加させる処理
-  */
-  public function increaseCount($blog_id, $ids=array())
+   * 件数を増加させる処理
+   * @param $blog_id
+   * @param array $ids
+   * @return int|false
+   */
+  public function increaseCount(string $blog_id, array $ids=array())
   {
     if (!count($ids)) {
       return 0;
@@ -207,22 +241,35 @@ SQL;
   }
 
   /**
-  * 件数を減少させる処理(0件のタグは削除)
-  */
-  public function decreaseCount($blog_id, $ids=array())
+   * タグの件数を減少させる処理(0件のタグは削除)
+   * @param $blog_id
+   * @param array $ids
+   * @return bool
+   */
+  public function decreaseCount($blog_id, array $ids = [])
   {
-    if (!count($ids)) {
+    if (count($ids) === 0) {
       return 0;
     }
-    $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count-1 WHERE blog_id=? AND count>0 AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
-    $params = array_merge(array($blog_id), $ids);
+    $sql = 'UPDATE ' . $this->getTableName() .
+      ' SET count=count-1 WHERE blog_id=? AND count>0 AND id ' .
+      ' IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
+    $params = array_merge([$blog_id], $ids);
     $options['result'] = DBInterface::RESULT_SUCCESS;
-    return $this->executeSql($sql, $params, $options) && $this->delete('blog_id=? AND count<=0', array($blog_id));
+    return
+      # 有効タグ数の数え直し
+      $this->executeSql($sql, $params, $options) &&
+      # カウントが0件のtag行を削除
+      $this->delete('blog_id=? AND count<=0', [$blog_id]);
   }
 
   /**
-  * idとblog_idをキーとした削除 + 付随情報も削除
-  */
+   * idとblog_idをキーとした削除 + 付随情報も削除
+   * @param $tag_id
+   * @param $blog_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function deleteByIdAndBlogId($tag_id, $blog_id, $options=array())
   {
     // タグの紐付け情報削除
@@ -233,9 +280,13 @@ SQL;
   }
 
   /**
-  * idとblog_idをキーとした削除 + 付随情報も削除
-  */
-  public function deleteByIdsAndBlogId($ids=array(), $blog_id, $options=array())
+   * idとblog_idをキーとした削除 + 付随情報も削除
+   * @param array $ids
+   * @param $blog_id
+   * @param array $options
+   * @return bool
+   */
+  public function deleteByIdsAndBlogId($ids, $blog_id, $options=array())
   {
     // 単体ID対応
     if (is_numeric($ids)) {

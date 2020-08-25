@@ -1,7 +1,7 @@
 <?php
 /**
-* アプリ用のControllerの親クラス
-*/
+ * アプリ用のControllerの親クラス
+ */
 
 namespace Fc2blog\Web\Controller;
 
@@ -17,8 +17,8 @@ abstract class AppController extends Controller
 {
 
   /**
-  * 出力結果を装飾
-  */
+   * 出力結果を装飾
+   */
   protected function beforeRender()
   {
     $html = $this->output;
@@ -35,43 +35,47 @@ abstract class AppController extends Controller
   }
 
   /**
-  * CSSの置き換え引数
-  */
+   * CSSの置き換え引数
+   */
   public function includeCSS()
   {
     return '<!-- ' . "\xFF" . 'CSS_INCLUDE -->';
   }
 
   /**
-  * Javascriptの置き換え引数
-  */
+   * Javascriptの置き換え引数
+   */
   public function includeJS()
   {
     return '<!-- ' . "\xFF" . 'JS_INCLUDE -->';
   }
 
   /**
-  * blog_idからブログ情報を取得
-  */
+   * blog_idからブログ情報を取得
+   * @param $blog_id
+   * @return
+   */
   public function getBlog($blog_id)
   {
     return Model::load('Blogs')->findById($blog_id);
   }
 
   /**
-  * デバイスタイプを取得する
-  */
+   * デバイスタイプを取得する
+   */
   protected function getDeviceType()
   {
     return Config::get('DeviceType');
   }
 
   /**
-  * token発行
-  */
-  protected function setToken($key=null, $name='token')
+   * token発行
+   * @param null $key
+   * @param string $name
+   */
+  protected function setToken($key = null, $name = 'token')
   {
-    if ($key===null) {
+    if ($key === null) {
       // 適当な値をトークンに設定
       $key = App::genRandomStringAlphaNum(32);
     }
@@ -79,37 +83,41 @@ abstract class AppController extends Controller
   }
 
   /**
-  * tokenチェック
-  */
-  protected function tokenValidate($name='token')
+   * tokenチェック
+   * @param Request $request
+   * @param string $name
+   * @return string|null
+   */
+  protected function tokenValidate(Request $request, $name = 'token')
   {
-    $request = Request::getInstance();
     $value = $request->get($name, '');
     $value = mb_convert_kana($value, 'n');
     return Session::remove($name) == $value ? null : __('Token authentication is invalid');
   }
 
   /**
-  * Debug表示画面
-  */
-  public function debug()
+   * Debug表示画面
+   * @param Request $request
+   * @return string
+   */
+  public function debug(Request $request)
   {
-    if (Config::get('DEBUG')!=2 && Config::get('DEBUG') !=3) {
+    if (Config::get('DEBUG') != 2 && Config::get('DEBUG') != 3) {
       return $this->error404();
     }
-    $key = Request::getInstance()->get('key');
+    $key = $request->get('key');
 
     if (!is_file(Config::get('TEMP_DIR') . 'debug_html/' . $key)) {
-      if(defined("THIS_IS_TEST")){
-        throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
-      }else{
+      if (defined("THIS_IS_TEST")) {
+        throw new PseudoExit(__FILE__ . ":" . __LINE__ . " ");
+      } else {
         exit;
       }
     }
     include(Config::get('TEMP_DIR') . 'debug_html/' . $key);
-    if(defined("THIS_IS_TEST")){
-      throw new PseudoExit(__FILE__ . ":" . __LINE__ ." ");
-    }else{
+    if (defined("THIS_IS_TEST")) {
+      throw new PseudoExit(__FILE__ . ":" . __LINE__ . " ");
+    } else {
       exit;
     }
   }

@@ -16,48 +16,51 @@ class CommonController extends UserController
 {
 
   /**
-  * 言語設定変更
-  */
-  public function lang()
+   * 言語設定変更
+   * @param Request $request
+   */
+  public function lang(Request $request)
   {
-    $request = Request::getInstance();
-
     // 言語の設定
     $lang = $request->get('lang');
-    if ($language= Config::get('LANGUAGES.' . $lang)) {
-      Cookie::set('lang', $lang);
+    if ($language = Config::get('LANGUAGES.' . $lang)) {
+      Cookie::set($request, 'lang', $lang);
     }
 
     // 元のURLに戻す
-    $this->redirectBack('/');
+    $this->redirectBack($request, '/');
   }
 
   /**
-  * デバイス変更
-  */
-  public function device_change()
+   * デバイス変更
+   * @param Request $request
+   */
+  public function device_change(Request $request)
   {
-    $request = Request::getInstance();
-
     // 言語の設定
     $device_type = 0;
     $device = $request->get('device');
     switch ($device) {
-      case 'pc': $device_type = Config::get('DEVICE_PC'); break;
-      case 'sp': $device_type = Config::get('DEVICE_SP'); break;
+      case 'pc':
+        $device_type = Config::get('DEVICE_PC');
+        break;
+      case 'sp':
+        $device_type = Config::get('DEVICE_SP');
+        break;
       default:
-        Cookie::set('device', null);
-        $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId()));
+        Cookie::set($request, 'device', null);
+        $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)));
     }
 
-    Cookie::set('device', $device_type);
-    $this->redirectBack(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId()));
+    Cookie::set($request, 'device', $device_type);
+    $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)));
   }
 
   /**
-  * 画像認証
-  */
-  public function captcha()
+   * 画像認証
+   * @param Request $request
+   */
+  public function captcha(Request $request)
   {
     $size_x = 200;
     $size_y = 40;
@@ -72,7 +75,7 @@ class CommonController extends UserController
       }
     }
     $this->setToken($key);    // トークン設定
-    $isJa = Config::get('LANG')=='ja'; // 日本語以外は数字のみを表示
+    $isJa = Config::get('LANG') == 'ja'; // 日本語以外は数字のみを表示
     $captcha = new CaptchaImage($size_x, $size_y, Config::get('PASSWORD_SALT'), $isJa);
     try {
       $captcha->drawNumber($key, true);
@@ -85,23 +88,23 @@ class CommonController extends UserController
   }
 
   /**
-  * サムネイル処理
-  */
-  public function thumbnail()
+   * サムネイル処理
+   * @param Request $request
+   * @return string
+   */
+  public function thumbnail(Request $request)
   {
-    $request = Request::getInstance();
-
     $blog_id = $request->get('blog_id');
-    $id      = $request->get('id');
-    $ext     = $request->get('ext');
-    $size    = $request->get('size');
-    $whs     = $request->get('whs', 's');
-    $width   = $request->get('width');
-    $height  = $request->get('height');
+    $id = $request->get('id');
+    $ext = $request->get('ext');
+    $size = $request->get('size');
+    $whs = $request->get('whs', 's');
+    $width = $request->get('width');
+    $height = $request->get('height');
     $file = array(
       'blog_id' => $blog_id,
-      'id'      => $id,
-      'ext'     => $ext,
+      'id' => $id,
+      'ext' => $ext,
     );
     $file_path = App::getUserFilePath($file, true);
     if (!file_exists($file_path)) {
@@ -128,7 +131,7 @@ class CommonController extends UserController
         }
         break;
       default:
-        if ($size!=72) {
+        if ($size != 72) {
           return $this->error404();
         }
         break;
@@ -137,22 +140,26 @@ class CommonController extends UserController
     // サムネイル出力処理
     $image = new ThumbnailImageMaker();
     $load_result = $image->load($file_path);
-    if($load_result!==true){
-        Debug::log('Load image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
-        return $this->error404();
+    if ($load_result !== true) {
+      Debug::log('Load image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
+      return $this->error404();
     }
     switch ($whs) {
       default:
         $whs = '';
         $resize_result = $image->resize($size, $size, false);
         break;
-      case 'w': $resize_result = $image->resizeToWidth($size, false);  break;
-      case 'h': $resize_result = $image->resizeToHeight($size, false); break;
+      case 'w':
+        $resize_result = $image->resizeToWidth($size, false);
+        break;
+      case 'h':
+        $resize_result = $image->resizeToHeight($size, false);
+        break;
       case 'wh':
-        $resize_result = $image->resizeToWidthInCenter($width, $height,false);
+        $resize_result = $image->resizeToWidthInCenter($width, $height, false);
         break;
     }
-    if($resize_result!==true){
+    if ($resize_result !== true) {
       Debug::log('Resize thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
       return $this->error404();
     }
@@ -164,14 +171,14 @@ class CommonController extends UserController
       $save_file = $matches[1] . '_' . $whs . $size . '.' . $matches[2];
     }
     $save_result = $image->save($save_file, $image->image_type, 90);
-    if($save_result!==true){
+    if ($save_result !== true) {
       Debug::log('Save thumbnail image fail[' . $file_path . ']', false, 'error', __FILE__, __LINE__);
       return $this->error404();
     }
     chmod($save_file, 0777);
 
     // 作成したファイルへリダイレクト
-    $this->redirect($request->getPath() . '?' . $request->getQuery());
+    $this->redirect($request, $request->getPath() . '?' . $request->getQuery());
   }
 }
 

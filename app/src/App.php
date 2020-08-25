@@ -6,7 +6,6 @@
 namespace Fc2blog;
 
 use Fc2blog\Model\BlogsModel;
-use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
 use Exception;
 use InvalidArgumentException;
@@ -16,16 +15,22 @@ class App
 {
 
   /**
-  * ブログIDから階層別フォルダ作成
-  */
+   * ブログIDから階層別フォルダ作成
+   * @param $blog_id
+   * @return string
+   */
   public static function getBlogLayer($blog_id)
   {
     return $blog_id[0] . '/' . $blog_id[1] . '/' . $blog_id[2] . '/' . $blog_id;
   }
 
   /**
-  * ユーザーのアップロードしたファイルパスを返す
-  */
+   * ユーザーのアップロードしたファイルパスを返す
+   * @param $file
+   * @param bool $abs
+   * @param bool $timestamp
+   * @return string
+   */
   public static function getUserFilePath($file, $abs=false, $timestamp=false)
   {
     $file_path = static::getBlogLayer($file['blog_id']) . '/file/' . $file['id'] . '.' . $file['ext'];
@@ -33,9 +38,13 @@ class App
   }
 
   /**
-  * サムネイル画像のパスを返却する
-  * 対象外の場合は元のパスを返却する
-  */
+   * サムネイル画像のパスを返却する
+   * 対象外の場合は元のパスを返却する
+   * @param $url
+   * @param int $size
+   * @param string $whs
+   * @return string
+   */
   public static function getThumbnailPath($url, $size=72, $whs=''){
     if (empty($url)) {
       return $url;
@@ -49,6 +58,11 @@ class App
   /**
    * 中央切り抜きのサムネイル画像のパスを返却する
    * 対象外の場合は元のパスを返却する
+   * @param $url
+   * @param int $width
+   * @param int $heght
+   * @param string $whs
+   * @return string
    */
   public static function getCenterThumbnailPath($url, $width=760, $heght=420, $whs=''){
     if (empty($url)) {
@@ -61,8 +75,10 @@ class App
   }
 
   /**
-  * ブログIDとIDに紐づくファイルを削除する
-  */
+   * ブログIDとIDに紐づくファイルを削除する
+   * @param $blog_id
+   * @param $id
+   */
   public static function deleteFile($blog_id, $id){
     $dir_path = Config::get('WWW_UPLOAD_DIR') . static::getBlogLayer($blog_id) . '/file/';
     $files = scandir($dir_path);
@@ -79,16 +95,20 @@ class App
   }
 
   /**
-  * プラグインへのファイルパス
-  */
+   * プラグインへのファイルパス
+   * @param $blog_id
+   * @param $id
+   * @return string
+   */
   public static function getPluginFilePath($blog_id, $id)
   {
     return Config::get('BLOG_TEMPLATE_DIR') . static::getBlogLayer($blog_id) . '/plugins/' . $id . '.php';
   }
 
   /**
-  * ファイルパスまでのフォルダを作成する
-  */
+   * ファイルパスまでのフォルダを作成する
+   * @param $file_path
+   */
   public static function mkdir($file_path)
   {
     $folder_dir = dirname($file_path);
@@ -98,8 +118,9 @@ class App
   }
 
   /**
-  * ブログディレクトリを削除
-  */
+   * ブログディレクトリを削除
+   * @param $blog_id
+   */
   public static function removeBlogDirectory($blog_id)
   {
     $upload_path = Config::get('WWW_UPLOAD_DIR') . '/' .  static::getBlogLayer($blog_id);
@@ -110,9 +131,13 @@ class App
   }
 
   /**
-  * 開始日と終了日を計算する
-  * 存在しない日付の場合は本日として解釈する
-  */
+   * 開始日と終了日を計算する
+   * 存在しない日付の場合は本日として解釈する
+   * @param int $year
+   * @param int $month
+   * @param int $day
+   * @return array|string[]
+   */
   public static function calcStartAndEndDate($year=0, $month=0, $day=0)
   {
     if (!$year) {
@@ -145,12 +170,13 @@ class App
   }
 
   /**
-  * デバイスタイプを取得する
-  */
-  public static function getDeviceType()
+   * デバイスタイプを取得する
+   * @param Request $request
+   * @return array|mixed|object|string|null
+   */
+  public static function getDeviceType(Request $request)
   {
     // パラメータによりデバイスタイプを変更(FC2の引数順守)
-    $request = Request::getInstance();
     if ($request->isArgs('pc')) {
       return Config::get('DEVICE_PC');
     }
@@ -159,7 +185,7 @@ class App
     }
 
     // Cookieからデバイスタイプを取得
-    $device_type = Cookie::get('device');
+    $device_type = $request->rawCookie('device');
     $devices = [
       Config::get('DEVICE_PC'),
       Config::get('DEVICE_SP'),
@@ -169,7 +195,7 @@ class App
     }
 
     // ユーザーエージェントからデバイスタイプを取得
-    $ua = $_SERVER['HTTP_USER_AGENT'];
+    $ua = $request->server['HTTP_USER_AGENT'];
 
     $devices = array('iPhone', 'iPod', 'Android');
     foreach ($devices as $device) {
@@ -181,11 +207,13 @@ class App
   }
 
   /**
-  * 現在のデバイスタイプをPC,SPの形で取得する
-  */
-  public static function getDeviceKey()
+   * 現在のデバイスタイプをPC,SPの形で取得する
+   * @param Request $request
+   * @return string
+   */
+  public static function getDeviceKey(Request $request)
   {
-    $device_type = self::getDeviceType();
+    $device_type = self::getDeviceType($request);
     switch ($device_type) {
       default:
       case 1: return 'PC';
@@ -194,20 +222,17 @@ class App
   }
 
   /**
-  * 引数のデバイスタイプを取得する
-  */
-  public static function getArgsDevice(){
+   * 引数のデバイスタイプを取得する
+   * @param Request $request
+   * @return string|null
+   */
+  public static function getArgsDevice(Request $request){
     static $device_name = null;   // 良く使用するのでキャッシュ
     if ($device_name===null) {
-      $request = Request::getInstance();
       if ($request->isArgs('pc')) {
         $device_name = 'pc';
       } else if ($request->isArgs('sp')) {
         $device_name = 'sp';
-      } else if ($request->isArgs('tb')) {
-        $device_name = 'tb';
-      } else if ($request->isArgs('m')) {
-        $device_name = 'm';
       } else {
         $device_name = '';
       }
@@ -248,13 +273,18 @@ class App
   }
 
   /**
-  * ユーザー画面用のURL
-  */
-  public static function userURL($args=array(), $reused=false, $abs=false)
+   * ユーザー画面用のURL
+   * @param Request $request
+   * @param array $args
+   * @param bool $reused
+   * @param bool $abs
+   * @return string
+   */
+  public static function userURL(Request $request, $args=array(), $reused=false, $abs=false)
   {
     // 現在のURLの引数を引き継ぐ
     if ($reused==true) {
-      $gets = Request::getInstance()->getGet();
+      $gets = $request->getGet();
       unset($gets[Config::get('ARGS_CONTROLLER')]);
       unset($gets[Config::get('ARGS_ACTION')]);
       $args = array_merge($gets, $args);
@@ -280,7 +310,7 @@ class App
     }
 
     // 引数のデバイスタイプを取得
-    $device_name = self::getArgsDevice();
+    $device_name = self::getArgsDevice($request);
     if (!empty($device_name) && isset($args[$device_name])) {
       unset($args[$device_name]);
     }
@@ -354,19 +384,25 @@ class App
   }
 
   /**
-  * ページ毎、デバイス毎の初期制限件数
-  */
-  public static function getPageLimit($key)
+   * ページ毎、デバイス毎の初期制限件数
+   * @param Request $request
+   * @param $key
+   * @return mixed|object|null
+   */
+  public static function getPageLimit(Request $request, $key)
   {
-    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey() . '.LIMIT', Config::get('PAGE.' . $key . '.DEFAULT.LIMIT', 10));
+    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIMIT', Config::get('PAGE.' . $key . '.DEFAULT.LIMIT', 10));
   }
 
   /**
-  * ページ毎、デバイス毎の件数一覧
-  */
-  public static function getPageList($key)
+   * ページ毎、デバイス毎の件数一覧
+   * @param Request $request
+   * @param $key
+   * @return mixed|object|null
+   */
+  public static function getPageList(Request $request, $key)
   {
-    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey() . '.LIST', Config::get('PAGE.' . $key . '.DEFAULT.LIST', array()));
+    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIST', Config::get('PAGE.' . $key . '.DEFAULT.LIST', array()));
   }
 
   /**

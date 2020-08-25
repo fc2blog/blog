@@ -8,7 +8,7 @@
     <?php $devices = \Fc2blog\Config::get('DEVICE_NAME'); ?>
     <select onchange="location.href=$(this).val();">
       <?php foreach ($devices as $type => $name) : ?>
-        <option value="<?php echo \Fc2blog\Web\Html::url(array('device_type'=>$type)); ?>" <?php if($device_type==$type): ?>selected="selected"<?php endif; ?>><?php echo h($name) ?></option>
+        <option value="<?php echo \Fc2blog\Web\Html::url($request, array('device_type'=>$type)); ?>" <?php if($device_type==$type): ?>selected="selected"<?php endif; ?>><?php echo h($name) ?></option>
       <?php endforeach; ?>
     </select>
   </div>
@@ -30,7 +30,7 @@
     <ul class="link_list ui-sortable">
       <?php foreach($blog_plugins as $blog_plugin): ?>
         <li class="link_list_item">
-          <a class="common_next_link next_bg" href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'edit', 'id'=>$blog_plugin['id'])); ?>">
+          <a class="common_next_link next_bg" href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'edit', 'id'=>$blog_plugin['id'])); ?>">
             <span class="plugin_title"><?php echo th($blog_plugin['title'], 20); ?></span>
             <span class="contents_status"><span class="check_icon_text"><?php if ($blog_plugin['display']==\Fc2blog\Config::get('APP.DISPLAY.SHOW')): ?><i class="green_check_icon btn_icon"></i><?php echo __('Show'); ?><?php else: ?><?php echo __('Hide'); ?><?php endif; ?></span></span>
           </a>
@@ -45,8 +45,8 @@
     </ul>
     <div class="btn_area plugin_detail_show">
       <ul class="btn_area_inner">
-        <li><button class="btn_contents touch" onclick="location.href='<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogPlugins','action'=>'official_search', 'device_type'=>$device_type, 'category'=>$category)); ?>';"><i class="btn_icon"></i><?php echo __('Official Plugin Search'); ?></button></li>
-        <li><button class="btn_contents touch" onclick="location.href='<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogPlugins','action'=>'share_search', 'device_type'=>$device_type, 'category'=>$category)); ?>';"><i class="btn_icon"></i><?php echo __('Share Plugin Search'); ?></button></li>
+        <li><button class="btn_contents touch" onclick="location.href='<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogPlugins','action'=>'official_search', 'device_type'=>$device_type, 'category'=>$category)); ?>';"><i class="btn_icon"></i><?php echo __('Official Plugin Search'); ?></button></li>
+        <li><button class="btn_contents touch" onclick="location.href='<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogPlugins','action'=>'share_search', 'device_type'=>$device_type, 'category'=>$category)); ?>';"><i class="btn_icon"></i><?php echo __('Share Plugin Search'); ?></button></li>
       </ul>
     </div>
   <?php endforeach; ?>
@@ -62,11 +62,11 @@
     </ul>
   </div>
 
-  <form action="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'blog_plugins', 'action'=>'display_changes')); ?>" method="POST" id="sys-display">
+  <form action="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'blog_plugins', 'action'=>'display_changes')); ?>" method="POST" id="sys-display">
     <input type="hidden" name="device_type" value="<?php echo $device_type; ?>" />
     <input type="hidden" name="sig" value="<?php echo \Fc2blog\Web\Session::get('sig'); ?>" />
   </form>
-  <form action="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'blog_plugins', 'action'=>'sort')); ?>" method="POST" id="sys-order">
+  <form action="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'blog_plugins', 'action'=>'sort')); ?>" method="POST" id="sys-order">
     <input type="hidden" name="device_type" value="<?php echo $device_type; ?>" />
     <input type="hidden" name="sig" value="<?php echo \Fc2blog\Web\Session::get('sig'); ?>" />
   </form>

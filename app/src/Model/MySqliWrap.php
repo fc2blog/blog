@@ -139,6 +139,7 @@ class MySqliWrap implements DBInterface{
   }
 
   public function connect($is_charset=true, $is_database=true){
+    // TODO Show Warning message on connect failed. but mysqli throw error, not exception...
     if ($this->db == null) {
       if ($is_database) {
         $this->db = new \mysqli($this->host, $this->user, $this->password, $this->database);

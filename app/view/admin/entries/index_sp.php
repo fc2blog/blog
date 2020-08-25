@@ -4,16 +4,16 @@
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Entries" />
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="index" />
     <dl class="input_search">
-      <dt class="lineform_text_wrap common_input_text"><?php echo \Fc2blog\Web\Html::input('keyword', 'text'); ?></dt>
+      <dt class="lineform_text_wrap common_input_text"><?php echo \Fc2blog\Web\Html::input($request, 'keyword', 'text'); ?></dt>
       <dd class="lineform_btn_wrap"><button type="submit" value="<?php echo __('Search'); ?>" class="lineform_btn touch"><?php echo __('Search'); ?></button></dd>
     </dl>
     <div class="select_search">
-      <?php echo \Fc2blog\Web\Html::input('category_id', 'select', array('options'=>array(''=>__('Category name')) + \Fc2blog\Model\Model::load('Categories')->getSearchList($this->getBlogId()))); ?>
-      <?php echo \Fc2blog\Web\Html::input('tag_id', 'select', array('options'=>array(''=>__('Tag name')) + \Fc2blog\Model\Model::load('Tags')->getSearchList($this->getBlogId()))); ?>
-      <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\EntriesModel::getOpenStatusList())); ?>
-      <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-      <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
-      <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'category_id', 'select', array('options'=>array(''=>__('Category name')) + \Fc2blog\Model\Model::load('Categories')->getSearchList($this->getBlogId($request)))); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'tag_id', 'select', array('options'=>array(''=>__('Tag name')) + \Fc2blog\Model\Model::load('Tags')->getSearchList($this->getBlogId($request)))); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\EntriesModel::getOpenStatusList())); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'page', 'hidden', array('default'=>0)); ?>
+      <?php echo \Fc2blog\Web\Html::input($request, 'order', 'hidden', array('default'=>'posted_at_desc')); ?>
     </div>
   </form>
 </div>
@@ -24,7 +24,7 @@
   <ul class="link_list">
   <?php foreach($entries as $entry): ?>
     <li class="link_list_item">
-      <a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'edit', 'id'=>$entry['id'])); ?>" class="common_next_link next_bg">
+      <a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'edit', 'id'=>$entry['id'])); ?>" class="common_next_link next_bg">
         <dl>
           <dt class="item_title"><?php echo th($entry['title'], 10); ?></dt>
           <dd class="item_time"><i class="entry_time detail_icon"></i><time><?php echo df($entry['posted_at'], 'y-m-d'); ?></time></dd>
@@ -40,5 +40,5 @@
   <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="delete" />
 </form>
 
-<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+<?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 

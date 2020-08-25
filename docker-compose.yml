@@ -2,14 +2,15 @@ version: '3'
 
 services:
   db:
-    image: mysql:5.7
+    build:
+      context: docker/mysqld
+      dockerfile: Dockerfile
     container_name: fc2blog-mysql
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_DATABASE: dev_fc2blog
       MYSQL_USER: docker
       MYSQL_PASSWORD: docker
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - ./docker/mysqld/data:/var/lib/mysql
     ports:
@@ -19,7 +20,6 @@ services:
     build:
       context: docker/apache
       dockerfile: Dockerfile
-    image: php:7.4-apache
     container_name: fc2blog-apache
     environment:
       FC2_CONFIG_FROM_ENV: 1

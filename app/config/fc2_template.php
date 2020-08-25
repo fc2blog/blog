@@ -11,18 +11,18 @@ $config['fc2_template_foreach'] = array(
   'category_list' => '<?php if(!empty($entry[\'categories\'])) foreach($entry[\'categories\'] as $category) { ?>',
   'tag_list'      => '<?php if(!empty($entry[\'tags\'])) foreach($entry[\'tags\'] as $tag) { ?>',
   // 最新記事一覧(プラグイン表示用)
-  'recent'        => '<?php if(!isset($t_recents)) $t_recents = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateRecents($blog_id); ?><?php if (!empty($t_recents)) foreach($t_recents as $t_recent) { ?>',
+  'recent'        => '<?php if(!isset($t_recents)) $t_recents = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateRecents($request, $blog_id); ?><?php if (!empty($t_recents)) foreach($t_recents as $t_recent) { ?>',
   // カテゴリー(プラグイン表示用)
   'category'      => '<?php if(!isset($t_categories)) $t_categories = \Fc2blog\Model\Model::load(\'Categories\')->getTemplateCategories($blog_id); ?><?php if (!empty($t_categories)) foreach($t_categories as $t_category) { ?>',
   // アーカイブ(プラグイン表示用)
   'archive'       => '<?php if(!isset($t_archives)) $t_archives = \Fc2blog\Model\Model::load(\'Entries\')->getArchives($blog_id); ?><?php if (!empty($t_archives)) foreach($t_archives as $t_archive) { ?>',
   // 新着順のコメント
-  'rcomment'      => '<?php if(!isset($t_comments)) $t_comments = \Fc2blog\Model\Model::load(\'Comments\')->getTemplateRecentCommentList($blog_id); ?><?php if (!empty($t_comments)) foreach($t_comments as $t_comment) { ?>',
+  'rcomment'      => '<?php if(!isset($t_comments)) $t_comments = \Fc2blog\Model\Model::load(\'Comments\')->getTemplateRecentCommentList($request, $blog_id); ?><?php if (!empty($t_comments)) foreach($t_comments as $t_comment) { ?>',
   // カテゴリー
   'category_multi_sub_end' => '<?php if(!empty($t_category) && isset($t_category[\'climb_hierarchy\'])) for($category_index=0;$category_index<$t_category[\'climb_hierarchy\'];$category_index++) { ?>',
   // カレンダー
-  'calendar'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
-  'calender'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
+  'calendar'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($request, $blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
+  'calender'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($request, $blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
   // タグ
   'ctag'          => '<?php if (!empty($t_tags)) foreach($t_tags as $t_tag) { ?>',
   // プラグイン系
@@ -129,8 +129,8 @@ $template_vars = array(
   '<%titlelist_category_no>'  => '<?php if(!isset($entry[\'categories\'][0][\'id\'])){}else if(!empty($category) && $category[\'entry_id\']==$entry[\'categories\'][0][\'entry_id\']){'
                                 .' echo $category[\'id\'];}else{echo $entry[\'categories\'][0][\'id\'];} ?>',
   '<%titlelist_category_url>' => '<?php if(!isset($entry[\'categories\'][0][\'id\'])){}else if(!empty($category) && $category[\'entry_id\']==$entry[\'categories\'][0][\'entry_id\']){'
-                                .' echo \Fc2blog\Web\Html::url(array(\'action\'=>\'category\', \'blog_id\'=>$entry[\'blog_id\'], \'cat\'=>$category[\'id\']));}else{'
-                                .' echo \Fc2blog\Web\Html::url(array(\'action\'=>\'category\', \'blog_id\'=>$entry[\'blog_id\'], \'cat\'=>$entry[\'categories\'][0][\'id\']));} ?>',
+                                .' echo \Fc2blog\Web\Html::url($request, array(\'action\'=>\'category\', \'blog_id\'=>$entry[\'blog_id\'], \'cat\'=>$category[\'id\']));}else{'
+                                .' echo \Fc2blog\Web\Html::url($request, array(\'action\'=>\'category\', \'blog_id\'=>$entry[\'blog_id\'], \'cat\'=>$entry[\'categories\'][0][\'id\']));} ?>',
   '<%titlelist_category>'     => '<?php if(!isset($entry[\'categories\'][0][\'name\'])){}else if(!empty($category) && $category[\'entry_id\']==$entry[\'categories\'][0][\'entry_id\']){'
                                 .' echo h($category[\'name\']);}else{echo h($entry[\'categories\'][0][\'name\']);} ?>',
   // 記事一覧
@@ -190,8 +190,8 @@ PHP
   '<%topentry_category_no>'        => '<?php if(!isset($entry[\'categories\'][0][\'id\'])){}else if(!empty($category) && $category[\'entry_id\']==$entry[\'categories\'][0][\'entry_id\']){'
                                      .' echo $category[\'id\'];}else{echo $entry[\'categories\'][0][\'id\'];} ?>',
   '<%topentry_category_link>'      => '<?php if(!isset($entry[\'categories\'][0][\'id\'])){}else if(!empty($category) && $category[\'entry_id\']==$entry[\'categories\'][0][\'entry_id\']){'
-                                     .' echo \Fc2blog\Web\Html::url(array(\'action\'=>\'category\', \'blog_id\'=>$entry[\'blog_id\'], \'cat\'=>$category[\'id\']));}else{'
-                                     .' echo \Fc2blog\Web\Html::url(array(\'action\'=>\'category\', \'blog_id\'=>$entry[\'blog_id\'], \'cat\'=>$entry[\'categories\'][0][\'id\']));} ?>',
+                                     .' echo \Fc2blog\Web\Html::url($request, array(\'action\'=>\'category\', \'blog_id\'=>$entry[\'blog_id\'], \'cat\'=>$category[\'id\']));}else{'
+                                     .' echo \Fc2blog\Web\Html::url($request, array(\'action\'=>\'category\', \'blog_id\'=>$entry[\'blog_id\'], \'cat\'=>$entry[\'categories\'][0][\'id\']));} ?>',
   '<%topentry_category>'           => '<?php if(!isset($entry[\'categories\'][0][\'name\'])){}else if(!empty($category) && $category[\'entry_id\']==$entry[\'categories\'][0][\'entry_id\']){'
                                      .' echo h($category[\'name\']);}else{echo h($entry[\'categories\'][0][\'name\']);} ?>',
   // 記事のタグ系
@@ -306,11 +306,11 @@ PHP
   // カテゴリー一覧(プラグイン系)
   '<%category_no>'     => '<?php if(!empty($t_category)) echo $t_category[\'id\']; ?>',
   '<%category_number>' => '<?php if(!empty($t_category)) echo $t_category[\'id\']; ?>',
-  '<%category_link>'   => '<?php if(!empty($t_category)) echo \Fc2blog\Web\Html::url(array(\'action\'=>\'category\', \'blog_id\'=>$t_category[\'blog_id\'], \'cat\'=>$t_category[\'id\'])); ?>',
+  '<%category_link>'   => '<?php if(!empty($t_category)) echo \Fc2blog\Web\Html::url($request, array(\'action\'=>\'category\', \'blog_id\'=>$t_category[\'blog_id\'], \'cat\'=>$t_category[\'id\'])); ?>',
   '<%category_name>'   => '<?php if(!empty($t_category)) echo $t_category[\'name\']; ?>',
   '<%category_count>'  => '<?php if(!empty($t_category)) echo $t_category[\'count\']; ?>',
   // アーカイブ一覧(プラグイン系)
-  '<%archive_link>'     => '<?php if(!empty($t_archive)) echo \Fc2blog\Web\Html::url(array(\'blog_id\'=>$blog_id, \'action\'=>\'date\', \'date\'=>$t_archive[\'year\'] . $t_archive[\'month\'])); ?>',
+  '<%archive_link>'     => '<?php if(!empty($t_archive)) echo \Fc2blog\Web\Html::url($request, array(\'blog_id\'=>$blog_id, \'action\'=>\'date\', \'date\'=>$t_archive[\'year\'] . $t_archive[\'month\'])); ?>',
   '<%archive_count>'    => '<?php if(!empty($t_archive)) echo $t_archive[\'count\']; ?>',
   '<%archive_year>'     => '<?php if(!empty($t_archive)) echo $t_archive[\'year\']; ?>',
   '<%archive_month>'    => '<?php if(!empty($t_archive)) echo $t_archive[\'month\']; ?>',
@@ -351,8 +351,8 @@ PHP
   '<%rcomment_mail+name>' => '<?php if(!isset($t_comment[\'name\'])){}else if(!empty($t_comment[\'mail\'])){ echo \'<a href="mailto:\' . $t_comment[\'mail\'] . \'">\' . $t_comment[\'name\'] . \'</a>\'; }else{ echo $t_comment[\'name\']; } ?>',
   '<%rcomment_url+name>'  => '<?php if(!isset($t_comment[\'name\'])){}else if(!empty($t_comment[\'url\'])){ echo \'<a href="\' . $t_comment[\'url\'] . \'">\' . $t_comment[\'name\'] . \'</a>\'; }else{ echo $t_comment[\'name\']; } ?>',
   // ページング系
-  '<%nextpage_url>'         => '<?php if(!empty($paging) && $paging[\'is_next\']) echo \Fc2blog\Web\Html::url(array(\'page\'=>$paging[\'page\']+1, \'blog_id\'=>$blog_id), true); ?>',
-  '<%prevpage_url>'         => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo \Fc2blog\Web\Html::url(array(\'page\'=>$paging[\'page\']-1, \'blog_id\'=>$blog_id), true); ?>',
+  '<%nextpage_url>'         => '<?php if(!empty($paging) && $paging[\'is_next\']) echo \Fc2blog\Web\Html::url($request, array(\'page\'=>$paging[\'page\']+1, \'blog_id\'=>$blog_id), true); ?>',
+  '<%prevpage_url>'         => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo \Fc2blog\Web\Html::url($request, array(\'page\'=>$paging[\'page\']-1, \'blog_id\'=>$blog_id), true); ?>',
   '<%days>'                 => '<?php echo date(\'d\', strtotime($now_date)); ?>',
   '<%now_year>'             => '<?php echo date(\'Y\', strtotime($now_date)); ?>',
   '<%now_month>'            => '<?php echo date(\'m\', strtotime($now_date)); ?>',
@@ -360,16 +360,16 @@ PHP
   '<%prev_year>'            => '<?php echo date(\'Y\', strtotime($prev_month_date)); ?>',
   '<%next_month>'           => '<?php echo date(\'m\', strtotime($next_month_date)); ?>',
   '<%next_year>'            => '<?php echo date(\'Y\', strtotime($next_month_date)); ?>',
-  '<%prev_month_link>'      => '<?php echo \Fc2blog\Web\Html::url(array(\'blog_id\'=>$blog_id, \'action\'=>\'date\', \'date\'=>date(\'Ym\', strtotime($prev_month_date)))); ?>',
-  '<%next_month_link>'      => '<?php echo \Fc2blog\Web\Html::url(array(\'blog_id\'=>$blog_id, \'action\'=>\'date\', \'date\'=>date(\'Ym\', strtotime($next_month_date)))); ?>',
-  '<%nextentry_url>'        => '<?php if(!empty($next_entry)) echo \Fc2blog\App::userURL(array(\'id\'=>$next_entry[\'id\'], \'blog_id\'=>$blog_id)); ?>',
+  '<%prev_month_link>'      => '<?php echo \Fc2blog\Web\Html::url($request, array(\'blog_id\'=>$blog_id, \'action\'=>\'date\', \'date\'=>date(\'Ym\', strtotime($prev_month_date)))); ?>',
+  '<%next_month_link>'      => '<?php echo \Fc2blog\Web\Html::url($request, array(\'blog_id\'=>$blog_id, \'action\'=>\'date\', \'date\'=>date(\'Ym\', strtotime($next_month_date)))); ?>',
+  '<%nextentry_url>'        => '<?php if(!empty($next_entry)) echo \Fc2blog\App::userURL($request,array(\'id\'=>$next_entry[\'id\'], \'blog_id\'=>$blog_id)); ?>',
   '<%nextentry_title>'      => '<?php if(!empty($next_entry)) echo h($next_entry[\'title\']); ?>',
-  '<%preventry_url>'        => '<?php if(!empty($prev_entry)) echo \Fc2blog\App::userURL(array(\'id\'=>$prev_entry[\'id\'], \'blog_id\'=>$blog_id)); ?>',
+  '<%preventry_url>'        => '<?php if(!empty($prev_entry)) echo \Fc2blog\App::userURL($request,array(\'id\'=>$prev_entry[\'id\'], \'blog_id\'=>$blog_id)); ?>',
   '<%preventry_title>'      => '<?php if(!empty($prev_entry)) echo h($prev_entry[\'title\']); ?>',
   '<%firstpage_num>'        => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo 1; ?>',
   '<%lastpage_num>'         => '<?php if(!empty($paging) && $paging[\'is_next\']) echo $paging[\'max_page\']; ?>',
-  '<%firstpage_url>'        => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo \Fc2blog\Web\Html::url(array(\'page\'=>0, \'blog_id\'=>$blog_id), true); ?>',
-  '<%lastpage_url>'         => '<?php if(!empty($paging) && $paging[\'is_next\']) echo \Fc2blog\Web\Html::url(array(\'page\'=>$paging[\'max_page\']-1, \'blog_id\'=>$blog_id), true); ?>',
+  '<%firstpage_url>'        => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo \Fc2blog\Web\Html::url($request, array(\'page\'=>0, \'blog_id\'=>$blog_id), true); ?>',
+  '<%lastpage_url>'         => '<?php if(!empty($paging) && $paging[\'is_next\']) echo \Fc2blog\Web\Html::url($request, array(\'page\'=>$paging[\'max_page\']-1, \'blog_id\'=>$blog_id), true); ?>',
   '<%current_page_num>'     => '<?php if(!empty($paging)) echo $paging[\'page\']+1; ?>',
   '<%total_pages>'          => '<?php if(!empty($paging)) echo $paging[\'max_page\']; ?>',
   '<%total_num>'            => '<?php if(!empty($paging)) echo $paging[\'count\']; ?>',
@@ -379,10 +379,10 @@ PHP
   '<%template_pager3>'      => getFc2PagingPHP(3),
   '<%template_pager4>'      => getFc2PagingPHP(4),
   '<%template_pager5>'      => getFc2PagingPHP(5),
-  '<%res_nextpage_url>'     => '<?php if(!empty($paging) && $paging[\'is_next\']) echo \Fc2blog\Web\Html::url(array(\'page\'=>$paging[\'page\']+1, \'blog_id\'=>$blog_id), true); ?>',
-  '<%res_prevpage_url>'     => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo \Fc2blog\Web\Html::url(array(\'page\'=>$paging[\'page\']-1, \'blog_id\'=>$blog_id), true); ?>',
-  '<%res_firstpage_url>'    => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo \Fc2blog\Web\Html::url(array(\'page\'=>0, \'blog_id\'=>$blog_id), true); ?>',
-  '<%res_lastpage_url>'     => '<?php if(!empty($paging) && $paging[\'is_next\']) echo \Fc2blog\Web\Html::url(array(\'page\'=>$paging[\'max_page\']-1, \'blog_id\'=>$blog_id), true); ?>',
+  '<%res_nextpage_url>'     => '<?php if(!empty($paging) && $paging[\'is_next\']) echo \Fc2blog\Web\Html::url($request, array(\'page\'=>$paging[\'page\']+1, \'blog_id\'=>$blog_id), true); ?>',
+  '<%res_prevpage_url>'     => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo \Fc2blog\Web\Html::url($request, array(\'page\'=>$paging[\'page\']-1, \'blog_id\'=>$blog_id), true); ?>',
+  '<%res_firstpage_url>'    => '<?php if(!empty($paging) && $paging[\'is_prev\']) echo \Fc2blog\Web\Html::url($request, array(\'page\'=>0, \'blog_id\'=>$blog_id), true); ?>',
+  '<%res_lastpage_url>'     => '<?php if(!empty($paging) && $paging[\'is_next\']) echo \Fc2blog\Web\Html::url($request, array(\'page\'=>$paging[\'max_page\']-1, \'blog_id\'=>$blog_id), true); ?>',
   '<%res_template_pager1>'  => getFc2PagingPHP(1),
   '<%res_template_pager2>'  => getFc2PagingPHP(2),
   '<%res_template_pager3>'  => getFc2PagingPHP(3),
@@ -398,7 +398,7 @@ PHP
   '<%pno>'                     => '<?php if(isset($entry[\'id\'])) echo $entry[\'id\']; ?>',
   '<%sub_title>'               => '<?php if(isset($sub_title)) echo h($sub_title); ?>',
   '<%template_comment_js>'     => '<?php echo \'/js/template_comment.js\' ?>',
-  '<%template_copyright_date>' => date('Y', $_SERVER['REQUEST_TIME']),
+  '<%template_copyright_date>' => date('Y'),
   '<%ad>'                      => '',
   '<%ad2>'                     => '',
   '<%ad_overlay>'              => '',
@@ -503,10 +503,10 @@ function getFc2PagingPHP($page_num){
   global $blog_id;
   $html  = '<?php if(!empty($paging)): ?>';
   $html .= '<?php for ($i=max(0, $paging[\'page\']-' . $page_num . ');$i<$paging[\'page\'];$i++) ';
-  $html .= 'echo \'<a href="\' . \Fc2blog\Web\Html::url(array(\'page\'=>$i, \'blog_id\'=>$blog_id), true) . \'">\' . ($i+1) . \'</a>\'; ?>';
+  $html .= 'echo \'<a href="\' . \Fc2blog\Web\Html::url($request, array(\'page\'=>$i, \'blog_id\'=>$blog_id), true) . \'">\' . ($i+1) . \'</a>\'; ?>';
   $html .= '<strong><?php echo $paging[\'page\']+1; ?></strong>';
   $html .= '<?php for ($i=$paging[\'page\']+1;$i<$paging[\'max_page\'] && $i<$paging[\'page\']+1+' . $page_num . ';$i++) ';
-  $html .= 'echo \'<a href="\' . \Fc2blog\Web\Html::url(array(\'page\'=>$i, \'blog_id\'=>$blog_id), true) . \'">\' . ($i+1) . \'</a>\'; ?>';
+  $html .= 'echo \'<a href="\' . \Fc2blog\Web\Html::url($request, array(\'page\'=>$i, \'blog_id\'=>$blog_id), true) . \'">\' . ($i+1) . \'</a>\'; ?>';
   $html .= '<?php endif; ?>';
   return $html;
 }

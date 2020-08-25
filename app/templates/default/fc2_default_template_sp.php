@@ -161,7 +161,7 @@
         <div class="page_title">
           <h2>コメントを書く</h2>
         </div>
-        <form method="post" name="form1" action="../../config">
+        <form method="post" name="form1" action="./">
           <dl class="form">
             <dt>名前</dt>
             <dd><input type="text" name="comment[name]" /></dd>

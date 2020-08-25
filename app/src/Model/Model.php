@@ -1,8 +1,8 @@
 <?php
 /**
-* ControllerとModelの中間ぐらいの位置(ActiveRecordではありません)
-* Sql群の書き出しクラス 子クラスでSingletonで呼び出し予定
-*/
+ * ControllerとModelの中間ぐらいの位置(ActiveRecordではありません)
+ * Sql群の書き出しクラス 子クラスでSingletonで呼び出し予定
+ */
 
 namespace Fc2blog\Model;
 
@@ -16,31 +16,36 @@ abstract class Model implements ModelInterface
   public $validates = array();
 
   /**
-  * 複合キーのAutoIncrement対応
-  */
+   * 複合キーのAutoIncrement対応
+   */
   protected function getAutoIncrementCompositeKey()
   {
     return false;
   }
 
-  public function getDB()
+  /**
+   * @return MSDB|null
+   */
+  public function getDB(): ?MSDB
   {
     return MSDB::getInstance();
   }
 
-  public function close()
+  public function close(): void
   {
     $db = $this->getDB();
     $db->close();
   }
 
   /**
-  * 入力チェック処理
-  * @param array $data 入力データ
-  * @param array &$valid_data 入力チェック後の返却データ
-  * @param array $white_list 入力のチェック許可リスト
-  */
-  public function validate($data, &$valid_data, $white_list=array())
+   * 入力チェック処理
+   * @param array $data 入力データ
+   * @param array &$valid_data 入力チェック後の返却データ
+   * @param array $white_list 入力のチェック許可リスト
+   * @return array
+   * @return array
+   */
+  public function validate($data, &$valid_data, $white_list = array())
   {
     $errors = array();
     $valid_data = array();
@@ -49,10 +54,10 @@ abstract class Model implements ModelInterface
     foreach ($this->validates as $key => $valid) {
       // カラムのホワイトリストチェック
       if ($isWhiteList && !in_array($key, $white_list)) {
-        continue ;
+        continue;
       }
       foreach ($valid as $mKey => $options) {
-        $method = is_array($options) && isset($options['rule']) ? $options['rule'] : $mKey;
+        $method = (is_array($options) && isset($options['rule'])) ? $options['rule'] : $mKey;
         if (!isset($data[$key])) {
           $data[$key] = null;
         }
@@ -74,7 +79,7 @@ abstract class Model implements ModelInterface
   }
 
   /**
-   * Modelをロードする(requireとgetInstance)
+   * Modelをロードする(getInstance)
    * @param string $model
    * @return mixed
    */
@@ -89,8 +94,10 @@ abstract class Model implements ModelInterface
 
 
   /**
-  * LIKE検索用にワイルドカードのエスケープ
-  */
+   * LIKE検索用にワイルドカードのエスケープ
+   * @param $str
+   * @return string
+   */
   public static function escape_wildcard($str)
   {
     return addcslashes($str, self::LIKE_WILDCARD);
@@ -98,8 +105,10 @@ abstract class Model implements ModelInterface
 
 
   /**
-  * 配列内が全て数値型かチェック
-  */
+   * 配列内が全て数値型かチェック
+   * @param $array
+   * @return bool
+   */
   public function is_numeric_array($array)
   {
     // 配列チェック
@@ -119,7 +128,12 @@ abstract class Model implements ModelInterface
     return true;
   }
 
-  public function find($type, $options=array())
+  /**
+   * @param $type
+   * @param array $options
+   * @return array|false
+   */
+  public function find($type, $options = array())
   {
     if (!isset($options['options'])) {
       $options['options'] = array();
@@ -127,7 +141,7 @@ abstract class Model implements ModelInterface
     if (!isset($options['params'])) {
       $options['params'] = array();
     }
-    switch($type){
+    switch ($type) {
       case 'count':
         $options['fields'] = 'COUNT(*)';
         $options['limit'] = 1;
@@ -147,7 +161,8 @@ abstract class Model implements ModelInterface
       case 'all':
         $options['options']['result'] = DBInterface::RESULT_ALL;
         break;
-      case 'statment': default:
+      case 'statment':
+      default:
         $options['options']['result'] = DBInterface::RESULT_STAT;
         break;
     }
@@ -166,13 +181,13 @@ abstract class Model implements ModelInterface
         $sql .= ', ' . $options['from'];
       }
     }
-    if (isset($options['where']) && $options['where']!="") {
+    if (isset($options['where']) && $options['where'] != "") {
       $sql .= ' WHERE ' . $options['where'];
     }
-    if (isset($options['group']) && $options['group']!="") {
+    if (isset($options['group']) && $options['group'] != "") {
       $sql .= ' GROUP BY ' . $options['group'];
     }
-    if (isset($options['order']) && $options['order']!="") {
+    if (isset($options['order']) && $options['order'] != "") {
       $sql .= ' ORDER BY ' . $options['order'];
     }
     if (!empty($options['limit'])) {
@@ -187,9 +202,12 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * 主キーをキーにしてデータを取得
-  */
-  public function findById($id, $options=array())
+   * 主キーをキーにしてデータを取得
+   * @param $id
+   * @param array $options
+   * @return array|mixed
+   */
+  public function findById($id, $options = array())
   {
     if (empty($id)) {
       return array();
@@ -200,9 +218,13 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * idとblog_idの複合キーからデータを取得
-  */
-  public function findByIdAndBlogId($id, $blog_id, $options=array())
+   * idとblog_idの複合キーからデータを取得
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return array|mixed
+   */
+  public function findByIdAndBlogId($id, $blog_id, $options = array())
   {
     if (empty($id) || empty($blog_id)) {
       return array();
@@ -213,9 +235,13 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * idとuser_idのキーからデータを取得
-  */
-  public function findByIdAndUserId($id, $user_id, $options=array())
+   * idとuser_idのキーからデータを取得
+   * @param $id
+   * @param $user_id
+   * @param array $options
+   * @return array|mixed
+   */
+  public function findByIdAndUserId($id, $user_id, $options = array())
   {
     if (empty($id) || empty($user_id)) {
       return array();
@@ -226,17 +252,21 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * 存在するかどうかを取得
-  */
-  public function isExist($options=array())
+   * 存在するかどうかを取得
+   * @param array $options
+   * @return bool
+   */
+  public function isExist($options = array())
   {
     return !!$this->find('row', $options);
   }
 
   /**
-  * ページング用のデータ取得
-  */
-  public function getPaging($options=array())
+   * ページング用のデータ取得
+   * @param array $options
+   * @return array
+   */
+  public function getPaging($options = array())
   {
     if (!isset($options['page']) || !isset($options['limit'])) {
       Debug::log('getPaging options["page"] or options["limit"]が設定されておりません', array(), 'error');
@@ -261,28 +291,37 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * SQL_CALC_FOUND_ROWSで見つかった件数を返却する
-  */
+   * SQL_CALC_FOUND_ROWSで見つかった件数を返却する
+   * @return array|false
+   */
   public function getFoundRows()
   {
     $sql = 'SELECT FOUND_ROWS()';
-    return $this->findSql($sql, array(), array('result'=> DBInterface::RESULT_ONE));
+    return $this->findSql($sql, array(), array('result' => DBInterface::RESULT_ONE));
   }
 
   /**
-  * ページングのリストを表示する
-  */
-  public static function getPageList($paging)
+   * ページングのリストを表示する
+   * @param $paging
+   * @return array
+   */
+  public static function getPageList($paging): array
   {
     $pages = array();
     $pages[0] = '1' . __(' page');
     for ($i = 1; $i < $paging['max_page']; $i++) {
-      $pages[$i] = ($i+1) . __(' page');
+      $pages[$i] = ($i + 1) . __(' page');
     }
     return $pages;
   }
 
-  public function findSql($sql, $params=array(), $options=array())
+  /**
+   * @param $sql
+   * @param array $params
+   * @param array $options
+   * @return array|false
+   */
+  public function findSql($sql, $params = array(), $options = array())
   {
     return $this->getDB()->find($sql, $params, $options);
   }
@@ -290,9 +329,9 @@ abstract class Model implements ModelInterface
   /**
    * @param array $values
    * @param array $options
-   * @return false|int|mixed
+   * @return string|int|false 失敗時false, 成功時 last insert id
    */
-  public function insert(array $values, array $options=[])
+  public function insert(array $values, array $options = [])
   {
     if (!count($values)) {
       return 0;
@@ -302,12 +341,12 @@ abstract class Model implements ModelInterface
     if ($compositeKey && empty($values['id']) && !empty($values[$compositeKey])) {
       // 複合キーのauto_increment対応
       $sql = 'INSERT INTO ' . $tableName . ' (id, ' . implode(',', array_keys($values)) . ') '
-           . 'VALUES ((SELECT LAST_INSERT_ID(COALESCE(MAX(id), 0)+1) FROM ' . $tableName . ' as auto_increment_temp '
-           . 'WHERE ' . $compositeKey . '=?), ' . implode(',', array_fill(0, count($values), '?')) . ')';
+        . 'VALUES ((SELECT LAST_INSERT_ID(COALESCE(MAX(id), 0)+1) FROM ' . $tableName . ' as auto_increment_temp '
+        . 'WHERE ' . $compositeKey . '=?), ' . implode(',', array_fill(0, count($values), '?')) . ')';
       $value = $values[$compositeKey];
       $values = array_values($values);
       array_unshift($values, $value);
-    }else{
+    } else {
       // 通常のINSERT
       $sql = 'INSERT INTO ' . $tableName . ' (' . implode(',', array_keys($values)) . ') VALUES (' . implode(',', array_fill(0, count($values), '?')) . ')';
       $values = array_values($values);
@@ -318,13 +357,20 @@ abstract class Model implements ModelInterface
     return $this->executeSql($sql, $values, $options);
   }
 
-  public function update($values, $where, $params=array(), $options=array())
+  /**
+   * @param $values
+   * @param $where
+   * @param array $params
+   * @param array $options
+   * @return false|int 失敗時False、成功時1
+   */
+  public function update($values, $where, $params = array(), $options = array())
   {
     if (!count($values)) {
       return 0;
     }
     $sets = array();
-    foreach($values as $key => $value){
+    foreach ($values as $key => $value) {
       $sets[] = $key . '=?';
     }
     $sql = 'UPDATE ' . $this->getTableName() . ' SET ' . implode(',', $sets) . ' WHERE ' . $where;
@@ -335,24 +381,39 @@ abstract class Model implements ModelInterface
 
 
   /**
-  * idをキーとした更新
-  */
-  public function updateById($values, $id, $options=array())
+   * idをキーとした更新
+   * @param $values
+   * @param $id
+   * @param array $options
+   * @return false|int 失敗時False、成功時1
+   */
+  public function updateById($values, $id, $options = array())
   {
     return $this->update($values, 'id=?', array($id), $options);
   }
 
 
   /**
-  * idとblog_idをキーとした更新
-  */
-  public function updateByIdAndBlogId($values, $id, $blog_id, $options=array())
+   * idとblog_idをキーとした更新
+   * @param $values
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return false|int 失敗時False、成功時1
+   */
+  public function updateByIdAndBlogId($values, $id, $blog_id, $options = array())
   {
     return $this->update($values, 'id=? AND blog_id=?', array($id, $blog_id), $options);
   }
 
 
-  public function delete($where, $params=array(), $options=array())
+  /**
+   * @param string $where
+   * @param array $params
+   * @param array $options
+   * @return int|false 1なら成功、Falseなら失敗
+   */
+  public function delete(string $where, array $params = [], array $options = [])
   {
     $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $where;
     $options['result'] = DBInterface::RESULT_SUCCESS;
@@ -360,43 +421,61 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * idをキーとした更新
-  */
-  public function deleteById($id, $options=array())
+   * idをキーとした更新
+   * @param $id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
+  public function deleteById($id, $options = array())
   {
     return $this->delete('id=?', array($id), $options);
   }
 
   /**
-  * idとblog_idをキーとした更新
-  */
-  public function deleteByIdAndBlogId($id, $blog_id, $options=array())
+   * idとblog_idをキーとした削除
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
+  public function deleteByIdAndBlogId($id, $blog_id, $options = array())
   {
     return $this->delete('blog_id=? AND id=?', array($blog_id, $id), $options);
   }
 
   /**
-  * idとuser_idをキーとした更新
-  */
-  public function deleteByIdAndUserId($id, $user_id, $options=array())
+   * idとuser_idをキーとした削除
+   * @param $id
+   * @param $user_id
+   * @param array $options
+   * @return int|false false時失敗, 成功時は1
+   */
+  public function deleteByIdAndUserId($id, $user_id, $options = array())
   {
     return $this->delete('id=? AND user_id=?', array($id, $user_id), $options);
   }
 
-  public function multipleInsert($columns=array(), $params=array(), $options=array())
+  /**
+   * バルクインサート
+   * @param array $columns
+   * @param array $params
+   * @param array $options
+   * @return string|int|false false時失敗, 成功時はlast insert idだが、複数INSERTなので活用は難しい
+   */
+  public function multipleInsert($columns = array(), $params = array(), $options = array())
   {
     $sql = 'INSERT INTO ' . $this->getTableName() . ' (' . implode(',', $columns) . ') VALUES ';
     $len = count($params) / count($columns);
     $sqls = array();
     for ($i = 0; $i < $len; $i++) {
-      $sqls[] = '(' . implode(',',array_fill(0, count($columns), '?')) . ')';
+      $sqls[] = '(' . implode(',', array_fill(0, count($columns), '?')) . ')';
     }
     $sql .= implode(',', $sqls);
     $options['result'] = DBInterface::RESULT_INSERT_ID;
     return $this->executeSql($sql, $params, $options);
   }
 
-  public function insertSql($sql, $params=array(), $options=array())
+  public function insertSql($sql, $params = array(), $options = array())
   {
     $options['result'] = DBInterface::RESULT_INSERT_ID;
     return $this->executeSql($sql, $params, $options);
@@ -406,16 +485,18 @@ abstract class Model implements ModelInterface
    * @param string $sql
    * @param array $params
    * @param array $options
-   * @return array|false|int|mixed
+   * @return mixed|false 失敗時False、成功時はOptionにより不定
    */
-  public function executeSql(string $sql, array $params=[], array $options=[])
+  public function executeSql(string $sql, array $params = [], array $options = [])
   {
     return $this->getDB()->execute($sql, $params, $options);
   }
 
   /**
-  * 階層構造の一覧取得
-  */
+   * 階層構造の一覧取得
+   * @param $options
+   * @return mixed
+   */
   public function findNode($options)
   {
     $options['order'] = 'lft ASC';
@@ -426,28 +507,28 @@ abstract class Model implements ModelInterface
     $levels = array();
     foreach ($nodes as $key => $value) {
       // 最初のノード
-      if ($level==0){
+      if ($level == 0) {
         $levels[] = $value;
         $nodes[$key]['level'] = $level = count($levels);
         continue;
       }
       // left=left+1であれば子供ノードとして解釈
-      if ($value['lft']==$levels[$level-1]['lft']+1) {
+      if ($value['lft'] == $levels[$level - 1]['lft'] + 1) {
         $levels[] = $value;
         $nodes[$key]['level'] = $level = count($levels);
         continue;
       }
       // left=right+1であれば兄弟ノードとして解釈
-      if ($value['lft']==$levels[$level-1]['rgt']+1) {
-        $levels[$level-1] = $value;
+      if ($value['lft'] == $levels[$level - 1]['rgt'] + 1) {
+        $levels[$level - 1] = $value;
         $nodes[$key]['level'] = $level;
         continue;
       }
       // 兄弟ノードになるまで階層を遡る
-      while(array_pop($levels)){
+      while (array_pop($levels)) {
         $level = count($levels);
-        if ($value['lft']==$levels[$level-1]['rgt']+1) {
-          $levels[$level-1] = $value;
+        if ($value['lft'] == $levels[$level - 1]['rgt'] + 1) {
+          $levels[$level - 1] = $value;
           $nodes[$key]['level'] = $level;
           break;
         }
@@ -457,16 +538,18 @@ abstract class Model implements ModelInterface
   }
 
   /**
-  * 階層構造の追加
-  * @param array $data 追加するノード情報
-  * @param string $where 親ノード検索時のwhere句
-  * @param array $params 親ノード検索時のバインドデータ
-  */
-  public function addNode($data=array(), $where='', $params=array(), $options=array())
+   * 階層構造の追加
+   * @param array $data 追加するノード情報
+   * @param string $where 親ノード検索時のwhere句
+   * @param array $params 親ノード検索時のバインドデータ
+   * @param array $options
+   * @return array|false|int|mixed
+   */
+  public function addNode($data = array(), $where = '', $params = array(), $options = array())
   {
     // 親として末尾に追加する場合
     if (empty($data['parent_id'])) {
-      $max_right = $this->find('one', array('fields'=>'MAX(rgt)', 'where'=>$where, 'params'=>$params, 'options'=>$options));
+      $max_right = $this->find('one', array('fields' => 'MAX(rgt)', 'where' => $where, 'params' => $params, 'options' => $options));
       // 親として末尾に追加
       $data['lft'] = $max_right + 1;
       $data['rgt'] = $max_right + 2;
@@ -474,7 +557,7 @@ abstract class Model implements ModelInterface
     }
 
     // 親の子供として末尾に追加する場合
-    $parent = $this->findById($data['parent_id'], array('fields'=>'rgt', 'where'=>$where, 'params'=>$params, 'options'=>$options));
+    $parent = $this->findById($data['parent_id'], array('fields' => 'rgt', 'where' => $where, 'params' => $params, 'options' => $options));
     if (!$parent) {
       return false;
     }
@@ -502,21 +585,27 @@ SQL;
   }
 
   /**
-  * 階層構造の更新
-  */
-  public function updateNodeById($data, $id, $where='', $params=array(), $options=array())
+   * 階層構造の更新
+   * @param $data
+   * @param $id
+   * @param string $where
+   * @param array $params
+   * @param array $options
+   * @return array|false|int|mixed
+   */
+  public function updateNodeById($data, $id, $where = '', $params = array(), $options = array())
   {
     $idWhere = $where ? 'id=? AND ' . $where : 'id=?';
 
     // 自身取得
     $self_params = array_merge(array($id), $params);
-    $self = $this->find('row', array('where'=>$idWhere, 'params'=>$self_params, 'options'=>$options));
+    $self = $this->find('row', array('where' => $idWhere, 'params' => $self_params, 'options' => $options));
     if (!$self) {
       return false;
     }
 
     // 親が変更されていない場合そのまま更新
-    if ($self['parent_id']==$data['parent_id']) {
+    if ($self['parent_id'] == $data['parent_id']) {
       return $this->update($data, $idWhere, $self_params, $options);
     }
 
@@ -524,11 +613,11 @@ SQL;
     if ($self['parent_id'] && empty($data['parent_id'])) {
       // 親から外れた時
       $parent = array();
-      $parent['lft'] = $parent['rgt'] = $this->find('one', array('fields'=>'MAX(rgt)', 'where'=>$where, 'params'=>$params, 'options'=>$options)) + 1;
-    }else{
+      $parent['lft'] = $parent['rgt'] = $this->find('one', array('fields' => 'MAX(rgt)', 'where' => $where, 'params' => $params, 'options' => $options)) + 1;
+    } else {
       // 変更先の親を取得
       $parent_params = array_merge(array($data['parent_id']), $params);
-      $parent = $this->find('row', array('where'=>$idWhere, 'params'=>$parent_params, 'options'=>$options));
+      $parent = $this->find('row', array('where' => $idWhere, 'params' => $parent_params, 'options' => $options));
       if (!$parent) {
         return false;
       }
@@ -542,13 +631,13 @@ SQL;
     // ノードの変更位置計算
     $self_lft = $self['lft'];
     $self_rgt = $self['rgt'];
-    $parent_lft = $parent['lft'];
+    $parent_lft = $parent['lft'];  # TODO この変数は利用されていない
     $parent_rgt = $parent['rgt'];
     $space = $self_rgt - $self_lft + 1;
 
     $table = $this->getTableName();
     $where = $where ? $where . ' AND ' : '';
-    $sql = '';
+    $sql = ''; # TODO この変数は利用されていない
     if ($self_rgt > $parent_rgt) {
       // 自身を左へ移動
       $move = $parent_rgt - $self_lft;
@@ -567,7 +656,7 @@ rgt = CASE WHEN rgt >= $parent_rgt AND rgt < $self_lft
 WHERE $where
   rgt >= $parent_rgt AND lft < $self_rgt
 SQL;
-    }else{
+    } else {
       // 自身を右へ移動
       $move = $parent_rgt - $self_rgt - 1;
       $sql = <<<SQL
@@ -588,7 +677,7 @@ SQL;
     }
 
     // 親の位置変更処理
-    if (!$this->executeSql($sql, $params, $options)){
+    if (!$this->executeSql($sql, $params, $options)) {
       return false;
     }
 
@@ -597,14 +686,19 @@ SQL;
   }
 
   /**
-  * 階層構造のノード削除
-  */
-  public function deleteNodeById($id, $where='', $params=array(), $options=array())
+   * 階層構造のノード削除
+   * @param $id
+   * @param string $where
+   * @param array $params
+   * @param array $options
+   * @return array|false|int|mixed
+   */
+  public function deleteNodeById($id, $where = '', $params = array(), $options = array())
   {
     // 自身取得
     $idWhere = $where ? 'id=? AND ' . $where : 'id=?';
     $self_params = array_merge(array($id), $params);
-    $self = $this->find('row', array('where'=>$idWhere, 'params'=>$self_params, 'options'=>$options));
+    $self = $this->find('row', array('where' => $idWhere, 'params' => $self_params, 'options' => $options));
 
     if (!$self) {
       return false;
@@ -619,7 +713,7 @@ SQL;
 
     // 削除処理
     $sql = 'DELETE FROM ' . $table . ' WHERE ' . $where . ' lft >= ' . $self_lft . ' AND rgt <= ' . $self_rgt;
-    if (!$this->executeSql($sql, $params, $options)){
+    if (!$this->executeSql($sql, $params, $options)) {
       return false;
     }
 

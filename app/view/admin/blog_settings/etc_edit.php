@@ -1,6 +1,6 @@
 <header><h2><?php echo __('Other Settings'); ?></h2></header>
 
-<?php $this->display('BlogSettings/tab.php', array('tab'=>'etc_edit')); ?>
+<?php $this->display($request, 'BlogSettings/tab.php', array('tab'=>'etc_edit')); ?>
 
 <form method="POST" id="sys-blog-template-form" class="admin-form">
 
@@ -9,7 +9,7 @@
     <tr>
       <th><?php echo __('Initial display page'); ?></th>
       <td>
-        <?php echo \Fc2blog\Web\Html::input('blog_setting[start_page]', 'select', array('options'=>\Fc2blog\Model\BlogSettingsModel::getStartPageList())); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'blog_setting[start_page]', 'select', array('options'=>\Fc2blog\Model\BlogSettingsModel::getStartPageList())); ?>
         <?php if (isset($errors['blog_setting']['start_page'])): ?><p class="error"><?php echo $errors['blog_setting']['start_page']; ?></p><?php endif; ?>
       </td>
     </tr>

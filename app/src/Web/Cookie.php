@@ -13,6 +13,9 @@ class Cookie
 
   /**
    * クッキーから情報を取得する
+   * @param $key
+   * @param null $default
+   * @return mixed|null
    */
   public static function get($key, $default = null)
   {
@@ -24,16 +27,18 @@ class Cookie
 
   /**
    * クッキーから情報を取得し破棄する
+   * @param Request $request
    * @param string $key
    * @return void
    */
-  public static function remove(string $key):void
+  public static function remove(Request $request, string $key): void
   {
-    self::set($key, "", time() - 3600);
+    self::set($request, $key, "", time() - 3600);
   }
 
   /**
    * クッキーに情報を保存する
+   * @param Request $request
    * @param string $key
    * @param string $value
    * @param int $expires
@@ -43,16 +48,18 @@ class Cookie
    * @param bool $httponly
    * @param string $samesite
    *
-   * NOTE: httpアクセスも許可する仕様がなければ、secureを$_SERVER['https']をみてtrueにすべきではないか
+   * NOTE: httpアクセスも許可する仕様がなければ、secureを$request->server['https']をみてtrueにすべきではないか
    */
-  public static function set(string $key,
-                             string $value,
-                             int $expires = 0,
-                             string $path = "/",
-                             string $domain = "",
-                             bool $secure = false,
-                             bool $httponly = true,
-                             string $samesite = "Lax")
+  public static function set(
+    Request $request,
+    string $key,
+    string $value,
+    int $expires = 0,
+    string $path = "/",
+    string $domain = "",
+    bool $secure = false,
+    bool $httponly = true,
+    string $samesite = "Lax")
   {
     $params = [];
     $params['expires'] = $expires;
@@ -61,7 +68,7 @@ class Cookie
 
     // SSLターミネーションがある環境においては検討が必要
     if ($secure === true) {
-      if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== "on") {
+      if (!isset($request->server['HTTPS']) || $request->server['HTTPS'] !== "on") {
         throw new InvalidArgumentException("secure=true needs https.");
       }
       $params['secure'] = true;
@@ -90,17 +97,21 @@ class Cookie
       $samesite === "None" &&
       (
         $secure !== true ||
-        (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== "on")
+        (!isset($request->server['HTTPS']) || $request->server['HTTPS'] !== "on")
       )
     ) {
       throw new InvalidArgumentException("samesite=None needs https.");
     }
 
-    setcookie(
-      $key,
-      $value,
-      $params
-    );
+    if(defined("THIS_IS_TEST")){
+      $request->cookie[$key] = $value;
+    }else{
+      setcookie(
+        $key,
+        $value,
+        $params
+      );
+    }
   }
 
   // Cookieのsamesiteパラメタに指定可能な値のバリエーション

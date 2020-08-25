@@ -9,8 +9,11 @@ class Validate
 {
 
   /**
-  * 必須チェック
-  */
+   * 必須チェック
+   * @param $value
+   * @param $options
+   * @return bool|string
+   */
   public static function required($value, $options)
   {
     if ($value==null || $value==='') {
@@ -25,8 +28,11 @@ class Validate
   }
 
   /**
-  * 数値チェック
-  */
+   * 数値チェック
+   * @param $value
+   * @param $options
+   * @return bool|mixed|string
+   */
   public static function numeric($value, $options)
   {
     $tmp = intval($value);
@@ -37,8 +43,11 @@ class Validate
   }
 
   /**
-  * 半角英数チェック
-  */
+   * 半角英数チェック
+   * @param $value
+   * @param $options
+   * @return bool|mixed|string
+   */
   public static function alphanumeric($value, $options)
   {
     if (preg_match("/^[a-zA-Z0-9]+$/", $value)) {
@@ -48,10 +57,12 @@ class Validate
   }
 
   /**
-  * 最大文字列チェック
-  * @param string $value
-  * @param array $options [*max] 最大文字列
-  */
+   * 最大文字列チェック
+   * @param string $value
+   * @param array $options [*max] 最大文字列
+   * @return bool|string
+   * @return bool|string
+   */
   public static function maxlength($value, $options)
   {
     if (mb_strlen($value) <= $options['max']) {
@@ -62,10 +73,12 @@ class Validate
   }
 
   /**
-  * 最小文字列チェック
-  * @param string $value
-  * @param array $options [*min] 最小文字列
-  */
+   * 最小文字列チェック
+   * @param string $value
+   * @param array $options [*min] 最小文字列
+   * @return bool|string
+   * @return bool|string
+   */
   public static function minlength($value, $options)
   {
     if (mb_strlen($value) >= $options['min']) {
@@ -76,10 +89,12 @@ class Validate
   }
 
   /**
-  * 最大値チェック
-  * @param string $value
-  * @param array $options [*max] 最大値
-  */
+   * 最大値チェック
+   * @param string $value
+   * @param array $options [*max] 最大値
+   * @return bool|string
+   * @return bool|string
+   */
   public static function max($value, $options)
   {
     if ($value <= $options['max']) {
@@ -90,10 +105,12 @@ class Validate
   }
 
   /**
-  * 最小値チェック
-  * @param string $value
-  * @param array $options [*min] 最小値
-  */
+   * 最小値チェック
+   * @param string $value
+   * @param array $options [*min] 最小値
+   * @return bool|string
+   * @return bool|string
+   */
   public static function min($value, $options)
   {
     if ($value >= $options['min']) {
@@ -104,8 +121,11 @@ class Validate
   }
 
   /**
-  * 日時チェック
-  */
+   * 日時チェック
+   * @param $value
+   * @param $options
+   * @return bool|mixed|string
+   */
   public static function datetime($value, $options)
   {
     $format = isset($options['format']) ? $options['format'] : '%Y-%m-%d %H:%M:%S';
@@ -116,8 +136,11 @@ class Validate
   }
 
   /**
-  * メールアドレスチェック
-  */
+   * メールアドレスチェック
+   * @param $value
+   * @param $options
+   * @return bool|mixed|string
+   */
   public static function email($value, $options)
   {
     if (preg_match('/^(?:(?:(?:(?:[a-zA-Z0-9_!#\$\%&\'*+\/=?\^`{}~|\-]+)(?:\.(?:[a-zA-Z0-9_!#\$\%&\'*+\/=?\^`{}~|\-]+))*)|(?:"(?:\\[^\r\n]|[^\\"])*")))\@(?:(?:(?:(?:[a-zA-Z0-9_!#\$\%&\'*+\/=?\^`{}~|\-]+)(?:\.(?:[a-zA-Z0-9_!#\$\%&\'*+\/=?\^`{}~|\-]+))*)|(?:\[(?:\\\S|[\x21-\x5a\x5e-\x7e])*\])))$/', $value)) {
@@ -127,8 +150,11 @@ class Validate
   }
 
   /**
-  * URLチェック
-  */
+   * URLチェック
+   * @param $value
+   * @param $options
+   * @return bool|mixed|string
+   */
   public static function url($value, $options)
   {
     if (preg_match('/^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/', $value)) {
@@ -138,8 +164,14 @@ class Validate
   }
 
   /**
-  * ユニークチェック
-  */
+   * ユニークチェック
+   * @param $value
+   * @param $options
+   * @param $key
+   * @param $data
+   * @param $model
+   * @return bool|mixed|string
+   */
   public static function unique($value, $options, $key, $data, $model)
   {
     if (!$model->isExist(array('where'=>$key . '=?', 'params'=>array($value)))) {
@@ -150,8 +182,11 @@ class Validate
 
 
   /**
-  * 配列に存在する値かチェック
-  */
+   * 配列に存在する値かチェック
+   * @param $value
+   * @param $options
+   * @return bool|mixed|string
+   */
   public static function in_array($value, $options)
   {
     if (is_scalar($value)) {
@@ -165,8 +200,11 @@ class Validate
 
 
   /**
-  * Fileチェック
-  */
+   * Fileチェック
+   * @param $value
+   * @param $option
+   * @return bool|string
+   */
   public static function file($value, $option)
   {
     switch ($value['error']) {
@@ -215,8 +253,14 @@ class Validate
 
 
   /**
-  * 独自チェック
-  */
+   * 独自チェック
+   * @param $value
+   * @param $option
+   * @param $key
+   * @param $data
+   * @param $model
+   * @return mixed
+   */
   public static function own(&$value, $option, $key, $data, $model)
   {
     $method = $option['method'];
@@ -225,8 +269,14 @@ class Validate
 
 
   /**
-  * 配列チェック関数
-  */
+   * 配列チェック関数
+   * @param $values
+   * @param $valid
+   * @param $k
+   * @param $d
+   * @param $model
+   * @return bool
+   */
   public static function multiple(&$values, $valid, $k, $d, $model)
   {
     if (!is_array($values)) {
@@ -248,8 +298,10 @@ class Validate
   }
 
   /**
-  * 空白除去処理
-  */
+   * 空白除去処理
+   * @param $value
+   * @return bool
+   */
   public static function trim(&$value)
   {
     if (is_string($value)) {
@@ -259,8 +311,10 @@ class Validate
   }
 
   /**
-  * int型に変換
-  */
+   * int型に変換
+   * @param $value
+   * @return bool
+   */
   public static function int(&$value)
   {
     $value = intval($value);
@@ -268,8 +322,10 @@ class Validate
   }
 
   /**
-  * 小文字に変換
-  */
+   * 小文字に変換
+   * @param $value
+   * @return bool
+   */
   public static function strtolower(&$value)
   {
     $value = strtolower($value);
@@ -277,8 +333,11 @@ class Validate
   }
 
   /**
-  * 配列内重複排除
-  */
+   * 配列内重複排除
+   * @param $values
+   * @param $options
+   * @return bool
+   */
   public static function array_unique(&$values, $options)
   {
     if (!is_array($values)) {
@@ -291,8 +350,11 @@ class Validate
 
 
   /**
-  * デフォルトデータ設定
-  */
+   * デフォルトデータ設定
+   * @param $value
+   * @param $default
+   * @return bool
+   */
   public static function default_value(&$value, $default)
   {
     if ($value===null || $value==="") {
@@ -302,8 +364,11 @@ class Validate
   }
 
   /**
-  * データを置き換える
-  */
+   * データを置き換える
+   * @param $value
+   * @param $replaces
+   * @return bool
+   */
   public static function replace(&$value, $replaces)
   {
     $value = str_replace(array_keys($replaces), array_values($replaces), $value);
