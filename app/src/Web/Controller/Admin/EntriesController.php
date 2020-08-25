@@ -103,11 +103,6 @@ class EntriesController extends AdminController
    */
   public function create(Request $request)
   {
-    // IE11のエディター対応
-    if (stristr($_SERVER['HTTP_USER_AGENT'], 'trident')) {
-      header('X-UA-Compatible: IE=EmulateIE10');
-    }
-
     /** @var EntriesModel $entries_model */
     $entries_model = Model::load('Entries');
     /** @var EntryCategoriesModel $entry_categories_model */
@@ -150,11 +145,6 @@ class EntriesController extends AdminController
    */
   public function edit(Request $request)
   {
-    // IE11のエディター対応
-    if (stristr($_SERVER['HTTP_USER_AGENT'], 'trident')) {
-      header('X-UA-Compatible: IE=EmulateIE10');
-    }
-
     /** @var EntriesModel $entries_model */
     $entries_model = Model::load('Entries');
     /** @var EntryCategoriesModel $entry_categories_model */
