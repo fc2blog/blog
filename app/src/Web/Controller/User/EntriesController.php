@@ -17,45 +17,46 @@ class EntriesController extends UserController
 {
 
   /**
-  * 記事系統の前処理
-  */
-  protected function beforeFilter()
+   * 記事系統の前処理
+   * @param Request $request
+   */
+  protected function beforeFilter(Request $request)
   {
-    parent::beforeFilter();
+    parent::beforeFilter($request);
 
     // ブログ情報取得&設定
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     $blog = null;
-    if (!$blog_id || !$blog=$this->getBlog($blog_id)) {
-      $this->redirect(array('controller'=>'Blogs', 'action'=>'index'));
+    if (!$blog_id || !$blog = $this->getBlog($blog_id)) {
+      $this->redirect($request, array('controller' => 'Blogs', 'action' => 'index'));
     }
 
     // BlogのSSL_Enableの設定と食い違うなら強制リダイレクトする
     // URL構造そのままでリダイレクトするためにRequestUriを用いているがもっとベターな方法があるかもしれない
-    if(is_string($blog_id) && strlen($blog_id) > 0 && !BlogsModel::isCorrectHttpSchemaByBlogId($blog_id)){
-      $this->redirect($_SERVER['REQUEST_URI'],'',true, $blog_id);
-    }else if(is_array($blog) && !BlogsModel::isCorrectHttpSchemaByBlogArray($blog)){
-      $this->redirect($_SERVER['REQUEST_URI'],'',true, $blog['id']);
+    if (is_string($blog_id) && strlen($blog_id) > 0 && !BlogsModel::isCorrectHttpSchemaByBlogId($request, $blog_id)) {
+      $this->redirect($request, $request->uri, '', true, $blog_id);
+    } else if (is_array($blog) && !BlogsModel::isCorrectHttpSchemaByBlogArray($request, $blog)) {
+      $this->redirect($request, $request->uri, '', true, $blog['id']);
     }
 
     $this->set('blog', $blog);
     $this->set('blog_setting', Model::load('BlogSettings')->findByBlogId($blog_id));
 
     // 自身の所持しているブログ判定
-    $self_blog = $this->isLoginBlog();
+    $self_blog = $this->isLoginBlog($request);
     $this->set('self_blog', $self_blog);
 
     // 非公開モードの場合はパスワード認証画面へ遷移
-    if ($blog['open_status']== Config::get('BLOG.OPEN_STATUS.PRIVATE')
+    if ($blog['open_status'] == Config::get('BLOG.OPEN_STATUS.PRIVATE')
       && !Session::get($this->getBlogPasswordKey($blog['id']))
-      && Config::get('ActionName')!='blog_password'
+      && Config::get('ActionName') != 'blog_password'
       && !$self_blog
     ) {
-      $this->redirect(array('action'=>'blog_password', 'blog_id'=>$blog_id));
+      $this->redirect($request, array('action' => 'blog_password', 'blog_id' => $blog_id));
     }
 
     // 予約投稿と期間投稿エントリーの更新処理
-    if (Config::get('CRON')===false) {
+    if (Config::get('CRON') === false) {
       $entries_model = Model::load('Entries');
       $entries_model->updateReservation($blog_id);
       $entries_model->updateLimited($blog_id);
@@ -64,19 +65,20 @@ class EntriesController extends UserController
 
   /**
    * 一覧表示
+   * @param Request $request
+   * @return string
    */
-  public function index()
+  public function index(Request $request)
   {
-    $request = Request::getInstance();
-
+    $blog_id = $this->getBlogId($request);
     // 記事一覧データ設定
     $options = array(
-      'where'  => 'blog_id=?',
-      'params' => array($this->getBlogId()),
+      'where' => 'blog_id=?',
+      'params' => array($blog_id),
     );
     $pages = $request->get('page') ? array() : array('index_area');
-    $this->setEntriesData($options, $pages);
-    return $this->fc2template($this->getBlogId());
+    $this->setEntriesData($request, $options, $pages);
+    return $this->fc2template($this->getBlogId($request));
   }
 
   /**
@@ -87,17 +89,17 @@ class EntriesController extends UserController
   }
 
   /**
-  * 検索
-  */
-  public function search()
+   * 検索
+   * @param Request $request
+   * @return string
+   */
+  public function search(Request $request)
   {
-    $request = Request::getInstance();
-
     $where = 'blog_id=?';
-    $params = array($this->getBlogId());
+    $params = array($this->getBlogId($request));
 
     // 検索ワード取得
-    if ($keyword=$request->get('q')) {
+    if ($keyword = $request->get('q')) {
       $this->set('sub_title', $request->get('q'));
       $keyword = Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
@@ -106,21 +108,21 @@ class EntriesController extends UserController
     }
 
     $options = array(
-      'where'  => $where,
+      'where' => $where,
       'params' => $params,
     );
-    $this->setEntriesData($options, array('search_area'));
-    return $this->fc2template($this->getBlogId());
+    $this->setEntriesData($request, $options, array('search_area'));
+    return $this->fc2template($this->getBlogId($request));
   }
 
   /**
-  * カテゴリー検索
-  */
-  public function category()
+   * カテゴリー検索
+   * @param Request $request
+   * @return string
+   */
+  public function category(Request $request)
   {
-    $request = Request::getInstance();
-
-    $blog_id     = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     $category_id = $request->get('cat');
 
     // カテゴリー名取得
@@ -128,7 +130,7 @@ class EntriesController extends UserController
     $this->set('sub_title', $category['name']);
 
     // 記事一覧データ設定
-    $where  = 'entries.blog_id=?';
+    $where = 'entries.blog_id=?';
     $where .= ' AND entry_categories.blog_id=?';
     $where .= ' AND entry_categories.category_id=?';
     $where .= ' AND entries.id=entry_categories.entry_id';
@@ -138,24 +140,24 @@ class EntriesController extends UserController
 
     $options = array(
       'fields' => 'entries.*',
-      'where'  => $where,
-      'from'   => 'entry_categories',
+      'where' => $where,
+      'from' => 'entry_categories',
       'params' => $params,
       'order' => 'entries.posted_at ' . $order . ', entries.id ' . $order,
     );
-    $this->setEntriesData($options, array('category_area'));
-    return $this->fc2template($this->getBlogId());
+    $this->setEntriesData($request, $options, array('category_area'));
+    return $this->fc2template($this->getBlogId($request));
   }
 
   /**
-  * タグ検索
-  */
-  public function tag()
+   * タグ検索
+   * @param Request $request
+   * @return string
+   */
+  public function tag(Request $request)
   {
-    $request = Request::getInstance();
-
     // タグ検索
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     $tag_name = $request->get('tag');
 
     $tag = Model::load('Tags')->findByNameAndBlogId($tag_name, $blog_id);
@@ -164,7 +166,7 @@ class EntriesController extends UserController
     $this->set('sub_title', $tag_name);
 
     // 記事一覧データ設定
-    $where  = 'entries.blog_id=?';
+    $where = 'entries.blog_id=?';
     $where .= ' AND entry_tags.blog_id=?';
     $where .= ' AND entry_tags.tag_id=?';
     $where .= ' AND entries.id=entry_tags.entry_id';
@@ -172,21 +174,21 @@ class EntriesController extends UserController
 
     $options = array(
       'fields' => 'entries.*',
-      'where'  => $where,
-      'from'   => 'entry_tags',
+      'where' => $where,
+      'from' => 'entry_tags',
       'params' => $params,
     );
-    $this->setEntriesData($options, array('tag_area'));
-    return $this->fc2template($this->getBlogId());
+    $this->setEntriesData($request, $options, array('tag_area'));
+    return $this->fc2template($this->getBlogId($request));
   }
 
   /**
-  * 年別,月別,日別表示
-  */
-  public function date()
+   * 年別,月別,日別表示
+   * @param Request $request
+   * @return string
+   */
+  public function date(Request $request)
   {
-    $request = Request::getInstance();
-
     // 開始日付と終了日付の計算
     preg_match('/^([0-9]{4})([0-9]{2})?([0-9]{2})?$/', $request->get('date'), $matches);
     $dates = $matches + array('', date('Y'), 0, 0);
@@ -194,21 +196,23 @@ class EntriesController extends UserController
 
     // 記事一覧データ設定
     $where = 'blog_id=? AND ?<=posted_at AND posted_at<=?';
-    $params = array($this->getBlogId(), $start, $end);
+    $params = array($this->getBlogId($request), $start, $end);
 
     $options = array(
-      'where'  => $where,
+      'where' => $where,
       'params' => $params,
     );
-    $this->setEntriesData($options, array('date_area'));
+    $this->setEntriesData($request, $options, array('date_area'));
     $this->set('now_date', date('Y-m-d', strtotime($start)));
-    return $this->fc2template($this->getBlogId());
+    return $this->fc2template($this->getBlogId($request));
   }
 
   /**
-  * アーカイブ表示
-  */
-  public function archive()
+   * アーカイブ表示
+   * @param Request $request
+   * @return string
+   */
+  public function archive(Request $request)
   {
     // 記事一覧データ設定
     $options = array(
@@ -217,49 +221,52 @@ class EntriesController extends UserController
         Config::get('ENTRY.AUTO_LINEFEED.NONE') . ' as auto_linefeed',
         'SUBSTRING(body, 1, 20) as body'
       ),
-      'where'  => 'blog_id=?',
-      'params' => array($this->getBlogId()),
+      'where' => 'blog_id=?',
+      'params' => array($this->getBlogId($request)),
     );
-    $this->setEntriesData($options, array('titlelist_area'));
+    $this->setEntriesData($request, $options, array('titlelist_area'));
     $this->set('sub_title', __("List of articles"));
-    return $this->fc2template($this->getBlogId());
+    return $this->fc2template($this->getBlogId($request));
   }
 
   /**
    * プレビュー表示
+   * @param Request $request
+   * @return string
    */
-  public function preview()
+  public function preview(Request $request)
   {
     // XSS-Protection無効
-    header("X-XSS-Protection: 0");
+    if(!defined("THIS_IS_TEST")) {
+      header("X-XSS-Protection: 0");
+    }
 
     // preview処理用
-    $request = Request::getInstance();
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 投稿者のブログIDチェック
-    if ($blog_id!=$this->getAdminBlogId() && !Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id)) {
+    if ($blog_id != $this->getAdminBlogId() && !Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id)) {
       return $this->error404();
     }
 
     // 記事のプレビュー
     if ($request->get('entry')) {
-      return $this->preview_entry();
+      return $this->preview_entry($request);
     }
 
     // FC2テンプレートのプレビュー
     if ($request->get('fc2_id') && $request->get('device_type')) {
-      return $this->preview_fc2_template();
+      return $this->preview_fc2_template($request);
     }
 
     // テンプレートのプレビュー
     if ($request->get('blog_template') || $request->get('template_id')) {
-      return $this->preview_template();
+      return $this->preview_template($request);
     }
 
     // プラグインのプレビュー
     if ($request->get('blog_plugin') || $request->get('plugin_id')) {
-      return $this->preview_plugin();
+      return $this->preview_plugin($request);
     }
 
     // 当てはまらない場合は404画面を表示
@@ -267,20 +274,21 @@ class EntriesController extends UserController
   }
 
   /**
-  * FC2テンプレート用のプレビュー
-  */
-  private function preview_fc2_template()
+   * FC2テンプレート用のプレビュー
+   * @param Request $request
+   * @return string
+   */
+  private function preview_fc2_template(Request $request)
   {
-    $request = Request::getInstance();
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 記事一覧データ設定
     $options = array(
-      'where'  => 'blog_id=?',
-      'params' => array($this->getBlogId()),
+      'where' => 'blog_id=?',
+      'params' => array($this->getBlogId($request)),
     );
     $pages = $request->get('page') ? array() : array('index_area');
-    $this->setEntriesData($options, $pages);
+    $this->setEntriesData($request, $options, $pages);
 
     // テンプレートのプレビュー
     $device_key = Config::get('DEVICE_FC2_KEY.' . $request->get('device_type'));
@@ -290,7 +298,7 @@ class EntriesController extends UserController
     }
 
     $html = $template['html'];
-    $css  = $template['css'];
+    $css = $template['css'];
 
     // テンプレートのシンタックスチェック
     Model::load('BlogTemplates');
@@ -306,20 +314,21 @@ class EntriesController extends UserController
   }
 
   /**
-  * テンプレート用のプレビュー
-  */
-  private function preview_template()
+   * テンプレート用のプレビュー
+   * @param Request $request
+   * @return string
+   */
+  private function preview_template(Request $request)
   {
-    $request = Request::getInstance();
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // 記事一覧データ設定
     $options = array(
-      'where'  => 'blog_id=?',
-      'params' => array($this->getBlogId()),
+      'where' => 'blog_id=?',
+      'params' => array($this->getBlogId($request)),
     );
     $pages = $request->get('page') ? array() : array('index_area');
-    $this->setEntriesData($options, $pages);
+    $this->setEntriesData($request, $options, $pages);
 
     // テンプレートのプレビュー
     $html = $css = null;
@@ -329,7 +338,7 @@ class EntriesController extends UserController
       $css = $blog_template['css'];
     } else {
       $html = $request->get('blog_template.html');
-      $css  = $request->get('blog_template.css');
+      $css = $request->get('blog_template.css');
     }
 
     // テンプレートのシンタックスチェック
@@ -347,12 +356,13 @@ class EntriesController extends UserController
   }
 
   /**
-  * プラグイン用のプレビュー
-  */
-  private function preview_plugin()
+   * プラグイン用のプレビュー
+   * @param Request $request
+   * @return string
+   */
+  private function preview_plugin(Request $request)
   {
-    $request = Request::getInstance();
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // プラグインのプレビュー情報取得
     $preview_plugin = null;
@@ -382,24 +392,24 @@ class EntriesController extends UserController
     $category = $preview_plugin['category'];
     $device_type = $preview_plugin['device_type'];
     $plugin = array(
-      'id'             => 'preview',
-      'blog_id'        => $blog_id,
-      'title'          => $preview_plugin['title'],
-      'title_align'    => $preview_plugin['title_align'],
-      'title_color'    => $preview_plugin['title_color'],
-      'list'           => $preview_plugin['list'],
-      'contents'       => $preview_plugin['contents'],
+      'id' => 'preview',
+      'blog_id' => $blog_id,
+      'title' => $preview_plugin['title'],
+      'title_align' => $preview_plugin['title_align'],
+      'title_color' => $preview_plugin['title_color'],
+      'list' => $preview_plugin['list'],
+      'contents' => $preview_plugin['contents'],
       'contents_align' => $preview_plugin['contents_align'],
       'contents_color' => $preview_plugin['contents_color'],
-      'attribute'      => $preview_plugin['attribute'],
-      'device_type'    => $device_type,
-      'category'       => $category,
-      'created_at'     => date('Y-m-d H:i:s'),
-      'updated_at'     => date('Y-m-d H:i:s'),
+      'attribute' => $preview_plugin['attribute'],
+      'device_type' => $device_type,
+      'category' => $category,
+      'created_at' => date('Y-m-d H:i:s'),
+      'updated_at' => date('Y-m-d H:i:s'),
     );
 
     // スマフォ版のプラグインのプレビュー表示
-    if ($device_type== Config::get('DEVICE_SP')) {
+    if ($device_type == Config::get('DEVICE_SP')) {
       $this->set('s_plugin', $plugin);
       $this->setPageData(array('spplugin_area'));
       return $this->fc2template($blog_id);
@@ -407,11 +417,11 @@ class EntriesController extends UserController
 
     // 記事一覧データ設定(スマフォ版以外のプレビュー表示)
     $options = array(
-      'where'  => 'blog_id=?',
-      'params' => array($this->getBlogId()),
+      'where' => 'blog_id=?',
+      'params' => array($this->getBlogId($request)),
     );
     $pages = $request->get('page') ? array() : array('index_area');
-    $this->setEntriesData($options, $pages);
+    $this->setEntriesData($request, $options, $pages);
 
     // 通常のプラグインリストに追加する
     $plugins = Model::load('BlogPlugins')->findByDeviceTypeAndCategory($this->getDeviceType(), $category, $blog_id);
@@ -422,7 +432,7 @@ class EntriesController extends UserController
     } else {
       // 編集の場合は上書きする
       foreach ($plugins as $key => $value) {
-        if ($value['id']==$id) {
+        if ($value['id'] == $id) {
           $plugins[$key] = $plugin;
         }
       }
@@ -434,25 +444,26 @@ class EntriesController extends UserController
   }
 
   /**
-  * 記事用のプレビュー
-  */
-  private function preview_entry()
+   * 記事用のプレビュー
+   * @param Request $request
+   * @return string
+   */
+  private function preview_entry(Request $request)
   {
-    $request = Request::getInstance();
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // DBの代わりにリクエストから取得
     $entry = array(
-      'id'            => 0,
-      'blog_id'       => $blog_id,
-      'title'         => $request->get('entry.title'),
-      'body'          => $request->get('entry.body'),
-      'extend'        => $request->get('entry.extend'),
-      'posted_at'     => $request->get('entry.posted_at', date('Y-m-d H:i:s')),
+      'id' => 0,
+      'blog_id' => $blog_id,
+      'title' => $request->get('entry.title'),
+      'body' => $request->get('entry.body'),
+      'extend' => $request->get('entry.extend'),
+      'posted_at' => $request->get('entry.posted_at', date('Y-m-d H:i:s')),
       'auto_linefeed' => $request->get('entry.auto_linefeed'),
-      'open_status'   => Config::get('ENTRY.OPEN_STATUS.OPEN'),
-      'created_at'    => date('Y-m-d H:i:s'),
-      'updated_at'    => date('Y-m-d H:i:s'),
+      'open_status' => Config::get('ENTRY.OPEN_STATUS.OPEN'),
+      'created_at' => date('Y-m-d H:i:s'),
+      'updated_at' => date('Y-m-d H:i:s'),
     );
     $entry['categories'] = Model::load('Categories')->findByIdsAndBlogId($request->get('entry_categories.category_id'), $blog_id);
     foreach ($entry['categories'] as $key => $value) {
@@ -463,10 +474,10 @@ class EntriesController extends UserController
     if (is_countable($tags) && count($tags)) {
       foreach ($tags as $tag) {
         $entry['tags'][] = array(
-          'id'      => 0,
+          'id' => 0,
           'blog_id' => $blog_id,
-          'name'    => $tag,
-          'count'   => 0,
+          'name' => $tag,
+          'count' => 0,
         );
       }
     }
@@ -486,13 +497,14 @@ class EntriesController extends UserController
 
   /**
    * 詳細表示
+   * @param Request $request
+   * @return string
    */
-  public function view()
+  public function view(Request $request)
   {
-    $request = Request::getInstance();
     $entries_model = Model::load('Entries');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     $id = $request->get('id');
     $comment_view = $request->get('m2');    // スマフォ用のコメント投稿＆閲覧判定
 
@@ -504,7 +516,7 @@ class EntriesController extends UserController
     $this->set('entry', $entry);
     $this->set('sub_title', $entry['title']);
 
-    $self_blog = $this->isLoginBlog();
+    $self_blog = $this->isLoginBlog($request);
 
     // スマフォのコメント投稿、閲覧分岐処理
     switch ($comment_view) {
@@ -514,8 +526,9 @@ class EntriesController extends UserController
         $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
 
         // 記事のコメント取得(パスワード制限時はコメントを取得しない)
-        if ($self_blog || $entry['open_status']!= Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
+        if ($self_blog || $entry['open_status'] != Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
           // コメント一覧を取得(ページング用)
+          /** @var CommentsModel $comments_model */
           $comments_model = Model::load('Comments');
           $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $id, $blog_setting);
           $options['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
@@ -537,7 +550,8 @@ class EntriesController extends UserController
         break;
 
       // 上記以外は通常の詳細表示として扱う
-      default: break;
+      default:
+        break;
     }
 
     // 表示画面判定
@@ -547,7 +561,7 @@ class EntriesController extends UserController
     $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
 
     // 記事のコメント取得(パスワード制限時はコメントを取得しない)
-    if ($self_blog || $entry['open_status']!= Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
+    if ($self_blog || $entry['open_status'] != Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
       if (App::isPC()) {
         $areas[] = 'comment_area';
         $this->set('comments', Model::load('Comments')->getCommentListByBlogSetting($blog_id, $id, $blog_setting, $self_blog));
@@ -565,13 +579,13 @@ class EntriesController extends UserController
   }
 
   /**
-  * プラグインページの表示
-  */
-  public function plugin()
+   * プラグインページの表示
+   * @param Request $request
+   * @return string
+   */
+  public function plugin(Request $request)
   {
-    $request = Request::getInstance();
-
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     $id = $request->get('id');
 
     // プラグイン取得
@@ -584,55 +598,53 @@ class EntriesController extends UserController
   }
 
   /**
-  * 記事のパスワード認証
-  */
-  public function password()
+   * 記事のパスワード認証
+   * @param Request $request
+   */
+  public function password(Request $request)
   {
-    $request = Request::getInstance();
-
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     $id = $request->get('id');
 
     // 記事詳細取得
     $entry = Model::load('Entries')->findByIdAndBlogId($id, $blog_id);
     if (!$entry) {
-      $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
+      $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
     }
 
     // パスワード入力チェック
-    if ($entry['password']==='') {
+    if ($entry['password'] === '') {
       // パスワード未設定の場合は全体のパスワードを設定
       $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
       $entry['password'] = $blog_setting['entry_password'];
     }
-    if ($entry['password']===$request->get('password', '')) {
+    if ($entry['password'] === $request->get('password', '')) {
       // パスワードが合致すればセッションに記録
       Session::set($this->getEntryPasswordKey($entry['blog_id'], $entry['id']), true);
     }
 
-    $this->redirect(array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$id));
+    $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $id));
   }
 
   /**
    * ブログのパスワード認証
+   * @param Request $request
    */
-  public function blog_password()
+  public function blog_password(Request $request)
   {
-    $request = Request::getInstance();
-
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     $blog = $this->getBlog($blog_id);
 
-    if ($blog['open_status']!= Config::get('BLOG.OPEN_STATUS.PRIVATE') || Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog()) {
-      $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
+    if ($blog['open_status'] != Config::get('BLOG.OPEN_STATUS.PRIVATE') || Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog($request)) {
+      $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
     }
 
     if ($request->get('blog')) {
-      if ($request->get('blog.password')==$blog['blog_password']) {
+      if ($request->get('blog.password') == $blog['blog_password']) {
         Session::set($this->getBlogPasswordKey($blog['id']), true);
-        $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
+        $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
       }
-      $this->set('errors', array('password'=>__('The password is incorrect!')));
+      $this->set('errors', array('password' => __('The password is incorrect!')));
     }
 
     $this->set('blog', $blog);
@@ -640,17 +652,18 @@ class EntriesController extends UserController
 
   /**
    * コメント投稿
+   * @param Request $request
+   * @return string|void
    */
-  public function comment_regist()
+  public function comment_regist(Request $request)
   {
-    $blog_id  = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // ブログの設定情報取得(captchaの使用可否で画面切り替え)
     $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
-    $is_captcha = $blog_setting['comment_captcha']== Config::get('COMMENT.COMMENT_CAPTCHA.USE');
+    $is_captcha = $blog_setting['comment_captcha'] == Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートにリクエスト情報を合わせる
-    $request = Request::getInstance();
     if (!$is_captcha || !$request->isArgs('token')) {
       $pattern = [
         'comment.no' => 'comment.entry_id',
@@ -658,7 +671,7 @@ class EntriesController extends UserController
         'comment.himitu' => 'comment.open_status',
       ];
       $request->combine($pattern); // 引数のキーを入れ替える
-      if ($request->get('comment.open_status')=='on') {
+      if ($request->get('comment.open_status') == 'on') {
         $request->set('comment.open_status', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
       }
     }
@@ -668,12 +681,12 @@ class EntriesController extends UserController
     // 記事詳細取得
     $entry = Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id);
     if (!$entry) {
-      $this->redirect(array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$entry_id));
+      $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id));
     }
 
     // CAPTCHA用に確認画面を挟む
     if ($is_captcha && !$request->isArgs('token')) {
-      return ;
+      return;
     }
 
     // 記事のカテゴリ一覧を取得 TODO:後でcacheを使用する形に
@@ -687,18 +700,18 @@ class EntriesController extends UserController
     $errors = array();
     $white_list = array('entry_id', 'name', 'title', 'mail', 'url', 'body', 'password', 'open_status');
     $errors['comment'] = $comments_model->registerValidate($request->get('comment'), $data, $white_list);
-    $errors['token'] = $is_captcha ? $this->tokenValidate() : array();   // Token用のバリデート
+    $errors['token'] = $is_captcha ? $this->tokenValidate($request) : array();   // Token用のバリデート
     if (empty($errors['comment']) && empty($errors['token'])) {
       $data['blog_id'] = $blog_id;  // ブログIDの設定
-      if ($id=$comments_model->insertByBlogSetting($data, $blog_setting)) {
-        $this->redirect(array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$entry_id), '#comment' . $id);
+      if ($id = $comments_model->insertByBlogSetting($request, $data, $blog_setting)) {
+        $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id), '#comment' . $id);
       }
     }
 
     // Captcha使用時のエラー画面
     if ($is_captcha) {
       $this->set('errors', $errors);
-      return ;
+      return;
     }
 
     // コメント投稿エラー
@@ -710,18 +723,19 @@ class EntriesController extends UserController
   }
 
   /**
-  * コメント編集画面
-  */
-  public function comment_edit()
+   * コメント編集画面
+   * @param Request $request
+   * @return string|void
+   */
+  public function comment_edit(Request $request)
   {
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // ブログの設定情報を取得
     $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
-    $is_captcha = $blog_setting['comment_captcha']== Config::get('COMMENT.COMMENT_CAPTCHA.USE');
+    $is_captcha = $blog_setting['comment_captcha'] == Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートの引数を受け側で合わせる
-    $request = Request::getInstance();
     if (!$is_captcha || !$request->isArgs('token')) {
       $pattern = [
         'edit.rno' => 'comment.id',
@@ -735,7 +749,7 @@ class EntriesController extends UserController
         'edit.delete' => 'comment.delete',
       ];
       $request->combine($pattern);
-      if ($request->get('comment.open_status')=='on') {
+      if ($request->get('comment.open_status') == 'on') {
         $request->set('comment.open_status', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
       }
     }
@@ -747,18 +761,18 @@ class EntriesController extends UserController
     $comments_model = Model::load('Comments');
     $comment = $comments_model->getEditableComment($comment_id, $blog_id);
     if (empty($comment)) {
-      $this->redirect(array('action'=>'index', 'blog_id'=>$blog_id));
+      $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
     }
 
     // 編集対象の親記事
     $entry_id = $comment['entry_id'];
-    if (!($entry= Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id))) {
-      $this->redirect(array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$entry_id));
+    if (!($entry = Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id))) {
+      $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id));
     }
     $this->set('edit_entry', $entry);
 
     // 初期表示処理
-    if(!$request->get('comment.id')){
+    if (!$request->get('comment.id')) {
       $this->set('edit_comment', $comment);
 
       // FC2用のテンプレートで表示
@@ -768,12 +782,12 @@ class EntriesController extends UserController
 
     // 削除ボタンを押された場合の処理
     if ($request->get('comment.delete')) {
-      return $this->comment_delete();
+      return $this->comment_delete($request);
     }
 
     // Captcha画面の初期表示処理
     if ($is_captcha && !$request->isArgs('token')) {
-      return ;
+      return;
     }
 
     // FC2テンプレート編集時
@@ -785,21 +799,21 @@ class EntriesController extends UserController
     $errors = array();
     $white_list = array('name', 'title', 'mail', 'url', 'body', 'password', 'open_status');
     $errors['comment'] = $comments_model->editValidate($request->get('comment'), $data, $white_list, $comment);
-    $errors['token'] = $is_captcha ? $this->tokenValidate() : array();   // Token用のバリデート
+    $errors['token'] = $is_captcha ? $this->tokenValidate($request) : array();   // Token用のバリデート
     if (empty($errors['comment']) && empty($errors['token'])) {
-      if ($comments_model->updateByIdAndBlogIdAndBlogSetting($data, $comment_id, $blog_id, $blog_setting)) {
-        $this->redirect(array('action'=>'view', 'blog_id'=>$blog_id, 'id'=>$entry_id), '#comment' . $comment_id);
+      if ($comments_model->updateByIdAndBlogIdAndBlogSetting($request, $data, $comment_id, $blog_id, $blog_setting)) {
+        $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id), '#comment' . $comment_id);
       }
     }
 
     // Captcha使用時のエラー画面
     if ($is_captcha) {
       $this->set('errors', $errors);
-      return ;
+      return;
     }
 
     // コメント投稿エラー
-    $this->fc2CommentError('edit', $errors['comment'], array('open_status'=>$data['open_status']));
+    $this->fc2CommentError('edit', $errors['comment'], array('open_status' => $data['open_status']));
 
     // FC2用のテンプレートで表示
     $this->setPageData(array('edit_area'));
@@ -807,19 +821,20 @@ class EntriesController extends UserController
   }
 
   /**
-  * コメントの削除処理
-  */
-  public function comment_delete()
+   * コメントの削除処理
+   * @param Request $request
+   * @return string
+   */
+  public function comment_delete(Request $request)
   {
-    $request = Request::getInstance();
     /** @var CommentsModel $comments_model */
     $comments_model = Model::load('Comments');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
     $comment_id = $request->get('comment.id');
     $comment = "";
-    if (!$comment_id || !($comment=$comments_model->findByIdAndBlogId($comment_id, $blog_id)) || empty($comment['password'])) {
-      $this->redirect(array('controller'=>'Entries', 'action'=>'index', 'blog_id'=>$blog_id));
+    if (!$comment_id || !($comment = $comments_model->findByIdAndBlogId($comment_id, $blog_id)) || empty($comment['password'])) {
+      $this->redirect($request, array('controller' => 'Entries', 'action' => 'index', 'blog_id' => $blog_id));
     }
 
     // コメント削除処理
@@ -827,11 +842,11 @@ class EntriesController extends UserController
     $errors['comment'] = $comments_model->editValidate($request->get('comment'), $data, array('password'), $comment);
     if (empty($errors['comment'])) {
       $comments_model->deleteByIdAndBlogId($comment['id'], $comment['blog_id']);
-      $this->redirect(array('action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id']));
+      $this->redirect($request, array('action' => 'view', 'blog_id' => $comment['blog_id'], 'id' => $comment['entry_id']));
     }
 
     // コメント投稿エラー
-    $this->fc2CommentError('edit', $errors['comment'], array('open_status'=>$comment['open_status']));
+    $this->fc2CommentError('edit', $errors['comment'], array('open_status' => $comment['open_status']));
 
     // FC2用のテンプレートで表示
     $this->setPageData(array('edit_area'));
@@ -839,14 +854,16 @@ class EntriesController extends UserController
   }
 
   /**
-  * 一覧情報設定
-  */
-  private function setEntriesData($options=array(), $areas=array())
+   * 一覧情報設定
+   * @param Request $request
+   * @param array $options
+   * @param array $areas
+   */
+  private function setEntriesData(Request $request, $options = array(), $areas = array())
   {
-    $request = Request::getInstance();
     $entries_model = Model::load('Entries');
 
-    $blog_id = $this->getBlogId();
+    $blog_id = $this->getBlogId($request);
 
     // FIXME どこかの処理で失敗すると、$blog_setting==false（削除した?）状態のBlogがあり得る模様。
     $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
@@ -854,7 +871,7 @@ class EntriesController extends UserController
 
     $options = array_merge(array(
       'limit' => $blog_setting['entry_display_count'],
-      'page'  => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
+      'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => 'entries.posted_at ' . $order . ', entries.id ' . $order,
     ), $options);
 
@@ -876,12 +893,12 @@ class EntriesController extends UserController
 
     // 記事のカテゴリーとタグを一括で取得＆振り分け
     $entry_ids = array();
-    foreach($entries as $key => $entry){
+    foreach ($entries as $key => $entry) {
       $entry_ids[] = $entry['id'];
     }
     $entries_categories = $categories_model->getEntriesCategories($blog_id, $entry_ids);
     $entries_tags = $tags_model->getEntriesTags($blog_id, $entry_ids);
-    foreach($entries as $key => $entry){
+    foreach ($entries as $key => $entry) {
       $entries[$key]['categories'] = $entries_categories[$entry['id']];
       $entries[$key]['tags'] = $entries_tags[$entry['id']];
     }
@@ -894,9 +911,10 @@ class EntriesController extends UserController
   }
 
   /**
-  * ページの表示可否設定を設定する
-  */
-  private function setPageData($allows=array())
+   * ページの表示可否設定を設定する
+   * @param array $allows
+   */
+  private function setPageData($allows = array())
   {
     $areas = array(
       'index_area',     // トップページ
@@ -917,9 +935,13 @@ class EntriesController extends UserController
   }
 
   /**
-  * FC2用のテンプレートで表示処理を行う
-  */
-  private function fc2template($blog_id, $html=null, $css=null)
+   * FC2用のテンプレートで表示処理を行う
+   * @param $blog_id
+   * @param null $html
+   * @param null $css
+   * @return string
+   */
+  private function fc2template($blog_id, $html = null, $css = null)
   {
     $device_type = $this->getDeviceType();
 
@@ -946,12 +968,15 @@ class EntriesController extends UserController
   }
 
   /**
-  * FC2用のコメントエラーとデータ設定
-  */
-  private function fc2CommentError($name, $errors, $data=array())
+   * FC2用のコメントエラーとデータ設定
+   * @param $name
+   * @param $errors
+   * @param array $data
+   */
+  private function fc2CommentError($name, $errors, $data = array())
   {
     // FC2テンプレートとDB側の違い吸収
-    $conbine = array('password'=>'pass', 'open_status'=>'himitu');
+    $conbine = array('password' => 'pass', 'open_status' => 'himitu');
     foreach ($conbine as $key => $value) {
       if (isset($errors[$key]) && $errors[$key]) {
         $errors[$value] = $errors[$key];

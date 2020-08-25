@@ -23,8 +23,12 @@ class EntryTagsModel extends Model
   }
 
   /**
-  * バリデート処理
-  */
+   * バリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     // バリデートを定義
@@ -42,8 +46,11 @@ class EntryTagsModel extends Model
   }
 
   /**
-  * 記事のタグID一覧を取得
-  */
+   * 記事のタグID一覧を取得
+   * @param $blog_id
+   * @param $entry_id
+   * @return array
+   */
   public function getTagIds($blog_id, $entry_id)
   {
     $tags = $this->find('all', array(
@@ -59,10 +66,14 @@ class EntryTagsModel extends Model
   }
 
   /**
-  * 記事とタグの紐付けを保存する
-  * タグの記事数の変動も行う
-  */
-  public function save($blog_id, $entry_id, $tags)
+   * 記事とタグの紐付けを保存する
+   * タグの記事数の変動も行う
+   * @param string $blog_id
+   * @param int $entry_id
+   * @param ?string[] $tags
+   * @return bool
+   */
+  public function save(string $blog_id, int $entry_id, ?array $tags)
   {
     $tags_model = Model::load('Tags');
 
@@ -131,8 +142,11 @@ class EntryTagsModel extends Model
   }
 
   /**
-  * 記事に付随する情報を削除
-  */
+   * 記事に付随する情報を削除
+   * @param $blog_id
+   * @param $entry_id
+   * @return array|false|int|mixed
+   */
   public function deleteEntryRelation($blog_id, $entry_id)
   {
     $tag_ids = $this->getTagIds($blog_id, $entry_id);

@@ -6,48 +6,48 @@
   <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Entries" />
   <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="comment_edit" />
 
-  <?php echo \Fc2blog\Web\Html::input('comment[id]', 'hidden'); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'comment[id]', 'hidden'); ?>
 
   <fieldset class="vertical-form">
     <dl class="form">
       <dt><?php echo __('Name'); ?></dt>
       <dd>
-        <?php echo \Fc2blog\Web\Html::input('comment[name]', 'text'); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'comment[name]', 'text'); ?>
         <?php if (isset($errors['comment']['name'])): ?><p class="error"><?php echo $errors['comment']['name']; ?></p><?php endif; ?>
       </dd>
     </dl>
     <dl class="form">
       <dt><?php echo __('Title'); ?></dt>
       <dd>
-        <?php echo \Fc2blog\Web\Html::input('comment[title]', 'text'); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'comment[title]', 'text'); ?>
         <?php if (isset($errors['comment']['title'])): ?><p class="error"><?php echo $errors['comment']['title']; ?></p><?php endif; ?>
       </dd>
     </dl>
     <dl class="form">
       <dt><?php echo __('E-mail'); ?></dt>
       <dd>
-        <?php echo \Fc2blog\Web\Html::input('comment[mail]', 'text'); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'comment[mail]', 'text'); ?>
         <?php if (isset($errors['comment']['mail'])): ?><p class="error"><?php echo $errors['comment']['mail']; ?></p><?php endif; ?>
       </dd>
     </dl>
     <dl class="form">
       <dt>URL</dt>
       <dd>
-        <?php echo \Fc2blog\Web\Html::input('comment[url]', 'text'); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'comment[url]', 'text'); ?>
         <?php if (isset($errors['comment']['url'])): ?><p class="error"><?php echo $errors['comment']['url']; ?></p><?php endif; ?>
       </dd>
     </dl>
     <dl class="form">
       <dt><?php echo __('Comment'); ?></dt>
       <dd>
-        <?php echo \Fc2blog\Web\Html::input('comment[body]', 'textarea'); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'comment[body]', 'textarea'); ?>
         <?php if (isset($errors['comment']['body'])): ?><p class="error"><?php echo $errors['comment']['body']; ?></p><?php endif; ?>
       </dd>
     </dl>
     <dl class="form">
       <dt><?php echo __('Password'); ?></dt>
       <dd>
-        <?php echo \Fc2blog\Web\Html::input('comment[password]', 'password'); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'comment[password]', 'password'); ?>
         <?php if (isset($errors['comment']['password'])): ?><p class="error"><?php echo $errors['comment']['password']; ?></p><?php endif; ?>
       </dd>
     </dl>
@@ -55,17 +55,17 @@
       <dt><?php echo __('Secret'); ?></dt>
       <dd>
         <?php \Fc2blog\Model\Model::load('Comments'); ?>
-        <?php echo \Fc2blog\Web\Html::input('comment[open_status]', 'select', array('options'=>\Fc2blog\Model\CommentsModel::getOpenStatusUserList())); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'comment[open_status]', 'select', array('options'=>\Fc2blog\Model\CommentsModel::getOpenStatusUserList())); ?>
         <?php if (isset($errors['comment']['open_status'])): ?><p class="error"><?php echo $errors['comment']['open_status']; ?></p><?php endif; ?>
       </dd>
     </dl>
     <dl class="form">
       <dt><?php echo __('Authentication keyword'); ?></dt>
       <dd>
-        <img src="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'common', 'action'=>'captcha')); ?>" />
-        <span class="capcha_reload"><a href="javascript(0); return false;" onclick="$(this).parent().prev().attr('src', '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'common', 'action'=>'captcha')); ?>'); return false;"><?php echo __('Update authentication image'); ?></a></span>
+        <img src="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'common', 'action'=>'captcha')); ?>" />
+        <span class="capcha_reload"><a href="javascript(0); return false;" onclick="$(this).parent().prev().attr('src', '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'common', 'action'=>'captcha')); ?>'); return false;"><?php echo __('Update authentication image'); ?></a></span>
         <p><?php echo __('Please enter the numbers written on the image'); ?></p>
-        <?php echo \Fc2blog\Web\Html::input('token', 'captcha'); ?>
+        <?php echo \Fc2blog\Web\Html::input($request, 'token', 'captcha'); ?>
         <?php if (isset($errors['token'])): ?><p class="error"><?php echo $errors['token']; ?></p><?php endif; ?>
       </dd>
     </dl>

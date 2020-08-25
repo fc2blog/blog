@@ -18,45 +18,44 @@ class HttpsHttpRedirectTest extends TestCase
 
   public function testRedirect(): void
   {
-    $res = $this->executeWithShouldExit('/');
+    $r = $this->reqGetBeRedirect('/');
     # ブログのIDがランダムに出てくる
-    $this->assertStringContainsString("testblog", $res);
+    $this->assertStringContainsString("testblog", $r->redirectUrl);
   }
 
   public function testHttpToHttpsRedirect(): void
   {
-    $res = $this->executeWithShouldExit(static::$https_blog_id_path, false);
-    $this->assertStringContainsString('https://', $res);
+    $r = $this->reqGetBeRedirect(static::$https_blog_id_path);
+    $this->assertStringContainsString('https://', $r->redirectUrl);
   }
 
   public function testHttpsToHttpRedirect(): void
   {
-    $res = $this->executeWithShouldExit(static::$http_blog_id_path, true);
-    $this->assertStringContainsString('http://', $res);
+    $res = $this->reqHttpsGetBeRedirect(static::$http_blog_id_path);
+    $this->assertStringContainsString('http://', $res->redirectUrl);
   }
 
   public function testHttpsToHttpsNoRedirect(): void
   {
-    $res = $this->execute(static::$https_blog_id_path, true);
-    $this->assertStringStartsWith('<!DOCTYPE html', $res);
+    $res = $this->reqHttpsGet(static::$https_blog_id_path);
+    $this->assertStringStartsWith('<!DOCTYPE html', $res->getOutput());
   }
 
   public function testHttpToHttpNoRedirect(): void
   {
-    $res = $this->execute(static::$http_blog_id_path, false);
-    $this->assertStringStartsWith('<!DOCTYPE html', $res);
+    $res = $this->reqget(static::$http_blog_id_path);
+    $this->assertStringStartsWith('<!DOCTYPE html', $res->getOutput());
   }
 
   public function testRedirectWithStatusCode301(): void
   {
-    $res = $this->executeWithShouldExit(static::$statusCode302SettledBlogId, false);
-    $this->assertStringContainsString('302', $res);
+    $res = $this->reqGetBeRedirect(static::$statusCode302SettledBlogId);
+    $this->assertEquals(302, $res->statusCode);
   }
 
   public function testRedirectWithStatusCode302(): void
   {
-    $res = $this->executeWithShouldExit(static::$statusCode301SettledBlogId, true);
-    $this->assertStringContainsString('301', $res);
+    $res = $this->reqHttpsGetBeRedirect(static::$statusCode301SettledBlogId);
+    $this->assertEquals(301, $res->statusCode);
   }
-
 }

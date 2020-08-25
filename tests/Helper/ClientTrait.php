@@ -3,100 +3,225 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\Helper;
 
-use Exception;
-use Fc2blog\Config;
-use Fc2blog\Exception\PseudoExit;
+use Fc2blog\Exception\RedirectExit;
+use Fc2blog\Web\Controller\AppController;
 use Fc2blog\Web\Request;
-use InvalidArgumentException;
+use Fc2blog\Web\Router\Router;
+use Fc2blog\Web\Session;
+use RuntimeException;
 
+/**
+ * Trait ClientTrait2 なるだけ再利用できるようにのWrapper（ショートカットではない）
+ * @package Fc2blog\Tests\Helper
+ */
 trait ClientTrait
 {
-  /**
-   * ルーティングを解決し、実行クラスやパラメタを準備する
-   * @param string $uri GETパラメタもここに含める必要がある
-   * @param bool $is_https
-   * @param string $method
-   * @param array $post
-   * @param string $target user,admin,test
-   * @return array
-   */
-  public static function resolve(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user")
+  public $clientTraitSession = [];
+  public $clientTraitCookie = [];
+  public $output = "";
+
+  public function resetSession()
   {
-    # 擬似的にアクセスURLをセットする
-    $_SERVER['HTTP_USER_AGENT'] = "phpunit";
-    $_SERVER['HTTPS'] = ($is_https) ? "on" : "";
-    $_SERVER["REQUEST_METHOD"] = $method;
-    $_SERVER['REQUEST_URI'] = $uri;
-    $_POST = $post;
+    $this->clientTraitSession = [];
+  }
 
-    # Requestはキャッシュされるので、都度消去する
-    Request::resetInstanceForTesting();
+  public function resetCookie()
+  {
+    $this->clientTraitCookie = [];
+  }
 
-    if ($target === "user") {
-      Config::read('user.php');
-    } else if ($target === "admin") {
-      Config::read('admin.php');
-    } else if ($target === "test") {
-      Config::read('test.php');
+  public function setSession(array $session)
+  {
+    $this->clientTraitSession = $session;
+  }
+
+  public function mergeAdminSession()
+  {
+    $this->clientTraitSession = array_merge(
+      [
+        'user_id' => 1,
+        'login_id' => 'testadmin',
+        'user_type' => 1,
+        'blog_id' => 'testblog2',
+        'nickname' => 'testnick2',
+      ],
+      $this->clientTraitSession
+    );
+  }
+
+  public function setPlainAdminSession()
+  {
+    $this->resetSession();
+    $this->mergeAdminSession();
+  }
+
+  public function reqBase(
+    bool $https,
+    string $method,
+    string $path,
+    array $postParams = [],
+    array $getParams = [],
+    array $filesParams = []
+  ): AppController
+  {
+    $_SESSION = $this->clientTraitSession;
+    $_COOKIE = $this->clientTraitCookie;
+    $_SERVER = [];
+    if ($https) {
+      $_SERVER['HTTPS'] = "on";
     } else {
-      throw new InvalidArgumentException("target is wrong.");
+      unset($_SERVER['HTTPS']);
     }
+    $_SERVER['HTTP_USER_AGENT'] = "phpunit";
 
-    [$className, $methodName] = getRouting();
+    $request = new Request(
+      $method,
+      $path,
+      $_SESSION,
+      $postParams,
+      $getParams,
+      $filesParams,
+      $_SERVER,
+      [],
+      $_COOKIE
+    );
 
+    $router = new Router($request);
+    $resolve = $router->resolve();
 
-    return [$className, $methodName];
+    $controller_instance = new $resolve['className']($resolve['request'], $resolve['methodName']);
+
+    if (empty($_SESSION)) {
+      //おそらく、セッション全破棄がおこなわれたので、初期化
+      $this->clientTraitSession = [];
+    } else {
+      $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
+    }
+    // Cookieは設定場所が明確で制御できているので、$_COOKIEが劣位である。
+    $this->clientTraitCookie = array_merge($_COOKIE, $request->cookie);
+
+    return $controller_instance;
   }
 
-  public static function execute(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
+  public function reqBaseBeRedirect(
+    bool $https,
+    string $method,
+    string $path,
+    array $postParams = [],
+    array $getParams = [],
+    array $filesParams = []
+  ): RedirectExit
   {
-    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post, $target);
-    ob_start();
+    $_SESSION = $this->clientTraitSession;
+    $_COOKIE = $this->clientTraitCookie;
+    $_SERVER = [];
+    if ($https) {
+      $_SERVER['HTTPS'] = "on";
+    } else {
+      unset($_SERVER['HTTPS']);
+    }
+    $_SERVER['HTTP_USER_AGENT'] = "phpunit";
+
+    $request = new Request(
+      $method,
+      $path,
+      $_SESSION,
+      $postParams,
+      $getParams,
+      $filesParams,
+      $_SERVER,
+      [],
+      $_COOKIE
+    );
+
+    $router = new Router($request);
+    $resolve = $router->resolve();
+
+    $exception = null;
     try {
-      new $className($methodName); // すべての実行が行われる
-    } catch (PseudoExit $e) {
-      echo "\nUnexpected exit. {$e->getFile()}:{$e->getLine()} {$e->getMessage()}\n {$e->getTraceAsString()}";
+      $c = new $resolve['className']($resolve['request'], $resolve['methodName']);
+      echo $c->getOutput();
+      throw new RuntimeException("It's not what I was expecting.");
+    } catch (RedirectExit $e) {
+      $exception = $e;
     }
-    static::resetClient();
-    return ob_get_clean();
+
+    if (empty($_SESSION)) {
+      //おそらく、セッション全破棄がおこなわれたので、初期化
+      $this->clientTraitSession = [];
+    } else {
+      $this->clientTraitSession = array_merge($this->clientTraitSession, $_SESSION);
+    }
+    // Cookieは設定場所が明確で制御できているので、$_COOKIEが劣位である。
+    $this->clientTraitCookie = array_merge($_COOKIE, $request->cookie);
+
+    return $exception;
   }
 
-  /**
-   * 疑似終了を期待するリクエスト
-   * @param string $uri
-   * @param bool $is_https
-   * @param string $method
-   * @param array $post
-   * @param string $target
-   * @return false|string
-   * @throws Exception
-   */
-  public static function executeWithShouldExit(string $uri = "/", bool $is_https = true, string $method = "GET", array $post = [], string $target = "user"): string
+  public function reqGet(string $path = "/", array $params = []): AppController
   {
-    [$className, $methodName] = static::resolve($uri, $is_https, $method, $post, $target);
-    try {
-      ob_start();
-      new $className($methodName);
-      throw new Exception("Unexpected, no PseudoExit thrown.");
-
-    } catch (PseudoExit $e) {
-      // \Fc2blog\Exception\PseudoExit は正常終了と同義
-      $ob = ob_get_clean();
-      echo $ob;
-      return $ob;
-
-    } finally {
-      static::resetClient();
-    }
+    return static::reqBase(false, "GET", $path, [], $params);
   }
 
-  /**
-   * 都度、お掃除
-   */
-  public static function resetClient(): void
+  public function reqHttpsGet(string $path = "/", array $params = []): AppController
   {
-    unset($_SERVER['REQUEST_URI'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['HTTPS'], $_SERVER['REQUEST_URI']);
-    $_POST = [];
-    Request::resetInstanceForTesting();
+    return static::reqBase(true, "GET", $path, [], $params);
+  }
+
+  public function reqGetBeRedirect(string $path = "/", array $params = []): RedirectExit
+  {
+    return static::reqBaseBeRedirect(false, "GET", $path, [], $params);
+  }
+
+  public function reqHttpsGetBeRedirect(string $path = "/", array $params = []): RedirectExit
+  {
+    return static::reqBaseBeRedirect(true, "GET", $path, [], $params);
+  }
+
+  public function reqPost(string $path = "/", array $params = []): AppController
+  {
+    return static::reqBase(false, "POST", $path, $params);
+  }
+
+  public function reqHttpsPost(string $path = "/", array $params = []): AppController
+  {
+    return static::reqBase(true, "POST", $path, $params);
+  }
+
+  public function reqPostBeRedirect(string $path = "/", array $params = []): RedirectExit
+  {
+    return static::reqBaseBeRedirect(false, "POST", $path, $params);
+  }
+
+  public function reqHttpsPostBeRedirect(string $path = "/", array $params = []): RedirectExit
+  {
+    return static::reqBaseBeRedirect(true, "POST", $path, $params);
+  }
+
+  public function reqPostFileBeRedirect(string $path = "/", array $params = [], array $files = []): RedirectExit
+  {
+    return static::reqBaseBeRedirect(false, "POST", $path, $params, [], $files);
+  }
+
+  public function getSig(): string
+  {
+    // sig(CSRF Token)を裏側で更新してそれを返す。
+    // TODO コントローラでsigが作られていたりいなかったりするのをどうにかしたい。
+    $this->reqGet("/admin/entries/index");
+    return $this->clientTraitSession['sig'];
+  }
+
+  public function getFlashMessages(): array
+  {
+    $rtn = [
+      'error' => implode(",", Session::remove('flash-message-error') ?? []),
+      'info' => implode(",", Session::remove('flash-message-info') ?? []),
+      'warn' => implode(",", Session::remove('flash-message-warn') ?? []),
+    ];
+    $rtn['is_something'] = (strlen($rtn['error']) > 0) || (strlen($rtn['info']) > 0) || (strlen($rtn['warn']) > 0);
+    $rtn['is_info'] = strlen($rtn['info']) > 0;
+    $rtn['is_warn'] = strlen($rtn['warn']) > 0;
+    $rtn['is_error'] = strlen($rtn['error']) > 0;
+    return $rtn;
   }
 }

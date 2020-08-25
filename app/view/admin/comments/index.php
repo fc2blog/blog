@@ -2,27 +2,27 @@
 
 <h3 id="entry_count">
   <?php echo __('Comment search'); ?>[<?php echo __('Hits'); ?>&nbsp;<?php echo $paging['count']; ?><?php echo __(' results'); ?>]
-  <?php echo \Fc2blog\Web\Html::input('limit', 'select', array('options'=>\Fc2blog\Config::get('ENTRY.LIMIT_LIST'), 'default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-  <?php echo \Fc2blog\Web\Html::input('page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'select', array('options'=>\Fc2blog\Config::get('ENTRY.LIMIT_LIST'), 'default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+  <?php echo \Fc2blog\Web\Html::input($request, 'page', 'select', array('options'=>\Fc2blog\Model\Model::getPageList($paging), 'default'=>0)); ?>
 </h3>
 <p><?php echo __('You can search in accordance with the conditions of the past comments.'); ?></p>
 <div id="entry_search">
   <form method="GET" id="sys-search-form">
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_CONTROLLER'); ?>" value="Comments" />
     <input type="hidden" name="<?php echo \Fc2blog\Config::get('ARGS_ACTION'); ?>" value="index" />
-    <?php echo \Fc2blog\Web\Html::input('entry_id', 'hidden'); ?>
-    <?php echo \Fc2blog\Web\Html::input('open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\CommentsModel::getOpenStatusList())); ?>
-    <?php echo \Fc2blog\Web\Html::input('reply_status', 'select', array('options'=>array(''=>__('Reply state')) + \Fc2blog\Model\CommentsModel::getReplyStatusList())); ?>
-    <?php echo \Fc2blog\Web\Html::input('limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
-    <?php echo \Fc2blog\Web\Html::input('page', 'hidden', array('default'=>0)); ?>
-    <?php echo \Fc2blog\Web\Html::input('order', 'hidden', array('default'=>'posted_at_desc')); ?>
-    <br /><?php echo \Fc2blog\Web\Html::input('keyword', 'text'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'entry_id', 'hidden'); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'open_status', 'select', array('options'=>array(''=>__('Public state')) + \Fc2blog\Model\CommentsModel::getOpenStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'reply_status', 'select', array('options'=>array(''=>__('Reply state')) + \Fc2blog\Model\CommentsModel::getReplyStatusList())); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'limit', 'hidden', array('default'=>\Fc2blog\Config::get('ENTRY.DEFAULT_LIMIT'))); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'page', 'hidden', array('default'=>0)); ?>
+    <?php echo \Fc2blog\Web\Html::input($request, 'order', 'hidden', array('default'=>'posted_at_desc')); ?>
+    <br /><?php echo \Fc2blog\Web\Html::input($request, 'keyword', 'text'); ?>
     <input type="submit" value="<?php echo __('Search'); ?>" />
   </form>
 </div>
 <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
 
-<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+<?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 
 <?php $reply_status_list = \Fc2blog\Model\CommentsModel::getReplyStatusList(); ?>
 <form method="POST" id="sys-list-form">
@@ -47,8 +47,8 @@
           <input type="hidden" value="<?php echo $comment['reply_status']; ?>" id="sys-reply-status-value-<?php echo $comment['id']; ?>" />
         </td>
         <td class="s_cell center">
-          <a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
-          <a href="<?php echo \Fc2blog\Web\Html::url(array('entry_id'=>$comment['entry_id']), true); ?>"><?php echo __('Narrowing'); ?></a>
+          <a href="<?php echo \Fc2blog\Model\BlogsModel::getFullHostUrlByBlogId($comment['blog_id'], \Fc2blog\Config::get('DOMAIN_USER')); ?><?php echo \Fc2blog\App::userURL($request,array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['entry_id'])); ?>" target="_blank"><?php echo __('Article'); ?></a><br />
+          <a href="<?php echo \Fc2blog\Web\Html::url($request, array('entry_id'=>$comment['entry_id']), true); ?>"><?php echo __('Narrowing'); ?></a>
         </td>
         <td>
           <?php echo df($comment['updated_at'], 'y/m/d'); ?><br />
@@ -64,7 +64,7 @@
             <?php if ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PUBLIC')) : ?>
               <span class="published"><?php echo __('Published'); ?></span>
             <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PENDING')) : ?>
-              <span class="approval"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;"><?php echo __('Approval'); ?></a></span>
+              <span class="approval"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'approval', 'id'=>$comment['id'])); ?>" onclick="reply.approval(<?php echo $comment['id']; ?>); return false;"><?php echo __('Approval'); ?></a></span>
             <?php elseif ($comment['open_status']==\Fc2blog\Config::get('COMMENT.OPEN_STATUS.PRIVATE')) : ?>
               <span class="private"><?php echo __('Only exposed administrator'); ?></span>
             <?php endif; ?>
@@ -81,7 +81,7 @@
             <?php endif; ?>
           </p>
         </td>
-        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url(array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
+        <td class="center s_cell"><a href="<?php echo \Fc2blog\Web\Html::url($request, array('action'=>'delete', 'id'=>$comment['id'])); ?>" onclick="return confirm('<?php echo __('Are you sure you want to delete?'); ?>');"><?php echo __('Delete'); ?></a></td>
       </tr>
       <?php endforeach; ?>
     </tbody>
@@ -92,7 +92,7 @@
   <input type="button" id="sys-delete-button" value="<?php echo __('Remove what you have selected'); ?>" onclick="if(confirm('<?php echo __('Are you sure you want to delete?'); ?>')) $('#sys-list-form').submit();" disabled="disabled" />
 </form>
 
-<?php $this->display('Common/paging.php', array('paging' => $paging)); ?>
+<?php $this->display($request, 'Common/paging.php', array('paging' => $paging)); ?>
 
 <!-- コメント返信用ダイアログ -->
 <div id="sys-comment-reply-dialog" title="<?php echo __('Reply Comments'); ?>"></div>

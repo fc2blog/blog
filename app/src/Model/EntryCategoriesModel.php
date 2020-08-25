@@ -23,8 +23,12 @@ class EntryCategoriesModel extends Model
   }
 
   /**
-  * バリデート処理
-  */
+   * バリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     // バリデートを定義
@@ -42,8 +46,11 @@ class EntryCategoriesModel extends Model
   }
 
   /**
-  * 記事のカテゴリID一覧を取得
-  */
+   * 記事のカテゴリID一覧を取得
+   * @param $blog_id
+   * @param $entry_id
+   * @return array
+   */
   public function getCategoryIds($blog_id, $entry_id)
   {
     $categories = $this->find('all', array(
@@ -59,9 +66,13 @@ class EntryCategoriesModel extends Model
   }
 
   /**
-  * 記事とカテゴリの紐付けを保存する
-  * カテゴリの記事数の変動も行う
-  */
+   * 記事とカテゴリの紐付けを保存する
+   * カテゴリの記事数の変動も行う
+   * @param $blog_id
+   * @param $entry_id
+   * @param $data
+   * @return bool 全体としての成功・失敗（トランザクションは無い）
+   */
   public function save($blog_id, $entry_id, $data)
   {
     $categories_model = Model::load('Categories');
@@ -97,7 +108,7 @@ class EntryCategoriesModel extends Model
         $values[] = $entry_id;
         $values[] = $categoryId;
       }
-      $ret = $ret && $this->multipleInsert($columns, $values);
+      $ret = $ret && ($this->multipleInsert($columns, $values) !== false);
       // カテゴリーの記事数増加処理
       $categories_model->increaseCount($blog_id, $insert_ids);
     }
@@ -106,8 +117,11 @@ class EntryCategoriesModel extends Model
   }
 
   /**
-  * 記事に付随する情報を削除
-  */
+   * 記事に付随する情報を削除
+   * @param $blog_id
+   * @param $entry_id
+   * @return array|false|int|mixed
+   */
   public function deleteEntryRelation($blog_id, $entry_id)
   {
     $category_ids = $this->getCategoryIds($blog_id, $entry_id);

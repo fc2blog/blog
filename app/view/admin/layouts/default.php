@@ -1,6 +1,10 @@
-<?php header("Content-Type: text/html; charset=UTF-8"); ?>
+<?php
+if (!headers_sent()) {
+  header("Content-Type: text/html; charset=UTF-8");
+}
+?>
 <!DOCTYPE html>
-<html lang="<?php echo \Fc2blog\Config::get('LANG'); ?>">
+<html lang="<?php echo $request->lang; ?>">
 <head>
   <meta charset="utf-8">
   <title><?php if(isset($html_title)) {echo h($html_title);} else {echo h(\Fc2blog\Web\Session::get('blog_id'));} ?></title>
@@ -28,7 +32,7 @@
     <?php endif; ?>
     common.baseDirectory = '<?php echo \Fc2blog\Config::get('BASE_DIRECTORY'); ?>';
     common.deviceType = <?php echo $this->getDeviceType(); ?>;
-    common.deviceArgs = '<?php echo \Fc2blog\App::getArgsDevice(); ?>';
+    common.deviceArgs = '<?php echo \Fc2blog\App::getArgsDevice($request); ?>';
   </script>
 
   <?php echo $this->includeJS(); ?>
@@ -48,7 +52,7 @@
         <?php $blogSelectList = \Fc2blog\Model\Model::load('Blogs')->getSelectList($this->getUserId()); ?>
         <select id="sys-blog-change">
           <?php foreach ($blogSelectList as $key => $value) : ?>
-            <option value="<?php echo $key; ?>" <?php if($key==$this->getBlogId()): ?>selected="selected"<?php endif; ?>><?php echo h($value) ?></option>
+            <option value="<?php echo $key; ?>" <?php if($key==$this->getBlogId($request)): ?>selected="selected"<?php endif; ?>><?php echo h($value) ?></option>
           <?php endforeach; ?>
           <option disabled="disabled">--------------</option>
           <option value=""><?php echo __('Create a new blog'); ?></option>
@@ -58,7 +62,7 @@
             $('#sys-blog-change').change(function(){
               var value = $('#sys-blog-change').val();
               if (value=='') {
-                location.href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Blogs', 'action'=>'create')); ?>";
+                location.href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Blogs', 'action'=>'create')); ?>";
               }else{
                 location.href = common.fwURL('blogs', 'choice', {blog_id: value});
               }
@@ -68,7 +72,7 @@
       </div>
       <?php endif; ?>
 
-      <?php $lang = \Fc2blog\Config::get('LANG'); ?>
+      <?php $lang = $request->lang ?>
       <div id="switch_lang">
         <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
           <option value="ja" <?php if ($lang=='ja') : ?>selected="selected"<?php endif; ?>>日本語</option>
@@ -87,23 +91,23 @@
           <div class="menu">
             <h3 class="home"><?php echo __('Home'); ?></h3>
             <ul>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Common','action'=>'notice')); ?>"><?php echo __('Notice'); ?></a></li>
-              <li><a href="<?php echo \Fc2blog\App::userURL(array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId())); ?>" target="_blank"><?php echo __('Checking the blog'); ?></a></li>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries','action'=>'create')); ?>"><?php echo __('New article'); ?></a></li>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'index')); ?>"><?php echo __('List of articles'); ?></a></li>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Comments', 'action'=>'index')); ?>"><?php echo __('List of comments'); ?></a></li>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Files', 'action'=>'upload')); ?>"><?php echo __('Upload file'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Common','action'=>'notice')); ?>"><?php echo __('Notice'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\App::userURL($request,array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request))); ?>" target="_blank"><?php echo __('Checking the blog'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Entries','action'=>'create')); ?>"><?php echo __('New article'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Entries', 'action'=>'index')); ?>"><?php echo __('List of articles'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Comments', 'action'=>'index')); ?>"><?php echo __('List of comments'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Files', 'action'=>'upload')); ?>"><?php echo __('Upload file'); ?></a></li>
             </ul>
           </div>
 
           <div class="menu">
             <h3 class="setting"><?php echo __('Setting'); ?></h3>
             <ul>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogTemplates', 'action'=>'index')); ?>"><?php echo __('Template management'); ?></a></li>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'blog_plugins', 'action'=>'index')); ?>"><?php echo __('Plugin management'); ?></a></li>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Categories','action'=>'create')); ?>"><?php echo __('Category management'); ?></a></li>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Tags', 'action'=>'index')); ?>"><?php echo __('List of tags'); ?></a></li>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Blogs', 'action'=>'edit')); ?>"><?php echo __('Blog setting'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogTemplates', 'action'=>'index')); ?>"><?php echo __('Template management'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'blog_plugins', 'action'=>'index')); ?>"><?php echo __('Plugin management'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Categories','action'=>'create')); ?>"><?php echo __('Category management'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Tags', 'action'=>'index')); ?>"><?php echo __('List of tags'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Blogs', 'action'=>'edit')); ?>"><?php echo __('Blog setting'); ?></a></li>
             </ul>
           </div>
         <?php endif; ?>
@@ -111,9 +115,9 @@
         <div class="menu">
           <h3 class="account"><?php echo __('User Menu'); ?></h3>
           <ul>
-            <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Blogs', 'action'=>'index')); ?>"><?php echo __('List of blogs'); ?></a></li>
-            <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Users', 'action'=>'edit')); ?>"><?php echo __('User setting'); ?></a></li>
-            <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Users', 'action'=>'logout')); ?>"><?php echo __('Logout'); ?></a></li>
+            <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Blogs', 'action'=>'index')); ?>"><?php echo __('List of blogs'); ?></a></li>
+            <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Users', 'action'=>'edit')); ?>"><?php echo __('User setting'); ?></a></li>
+            <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Users', 'action'=>'logout')); ?>"><?php echo __('Logout'); ?></a></li>
           </ul>
         </div>
 
@@ -121,7 +125,7 @@
           <div class="menu">
             <h3 style="background-color:#999;background-position: 2px -660px;">デバッグ用</h3>
             <ul>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Users', 'action'=>'index')); ?>">ユーザー一覧</a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Users', 'action'=>'index')); ?>">ユーザー一覧</a></li>
             </ul>
           </div>
         <?php endif; ?>
@@ -132,9 +136,9 @@
           <h3 style="background-color:#999;background-position: 2px -660px;"><?php echo __('User Menu'); ?></h3>
           <ul>
             <?php if (\Fc2blog\Config::get('USER.REGIST_SETTING.FREE') == \Fc2blog\Config::get('USER.REGIST_STATUS')): ?>
-              <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Users', 'action'=>'register')); ?>"><?php echo __('User registration'); ?></a></li>
+              <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Users', 'action'=>'register')); ?>"><?php echo __('User registration'); ?></a></li>
             <?php endif; ?>
-            <li><a href="<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Users', 'action'=>'login')); ?>"><?php echo __('Login'); ?></a></li>
+            <li><a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Users', 'action'=>'login')); ?>"><?php echo __('Login'); ?></a></li>
           </ul>
         </div>
 
@@ -142,8 +146,8 @@
     </nav>
 
     <article id="main-contents">
-      <?php $this->display('Common/flash_message.php', array('messages'=>$this->removeMessage())); ?>
-      <?php $this->display($fw_template); ?>
+      <?php $this->display($request, 'Common/flash_message.php', array('messages'=>$this->removeMessage())); ?>
+      <?php $this->display($request, $fw_template); ?>
     </article>
 
   </article>

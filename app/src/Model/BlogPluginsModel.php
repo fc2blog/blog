@@ -32,8 +32,12 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * バリデート処理
-  */
+   * バリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     // バリデートを定義
@@ -107,8 +111,10 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * 文字色の設定
-  */
+   * 文字色の設定
+   * @param bool $text
+   * @return array
+   */
   public static function getAttributeColor($text=false)
   {
     if ($text) {
@@ -138,8 +144,10 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * FC2テンプレートの構文チェック
-  */
+   * FC2テンプレートの構文チェック
+   * @param $value
+   * @return bool|string
+   */
   public static function fc2PluginSyntax($value)
   {
     // フォルダが存在しない場合作成
@@ -165,8 +173,11 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * カテゴリー毎のプラグイン一覧
-  */
+   * カテゴリー毎のプラグイン一覧
+   * @param $blog_id
+   * @param $device_type
+   * @return array[]
+   */
   public function getCategoryPlugins($blog_id, $device_type)
   {
     $options = array(
@@ -188,9 +199,13 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * idとblog_idの複合キーからデータを取得
-  * attributeデータを振り分け
-  */
+   * idとblog_idの複合キーからデータを取得
+   * attributeデータを振り分け
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return array|mixed
+   */
   public function findByIdAndBlogId($id, $blog_id, $options=array())
   {
     $data = parent::findByIdAndBlogId($id, $blog_id, $options);
@@ -212,8 +227,12 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * デバイスタイプとカテゴリーの条件にマッチしたプラグインを返却
-  */
+   * デバイスタイプとカテゴリーの条件にマッチしたプラグインを返却
+   * @param $device_type
+   * @param $category
+   * @param $blog_id
+   * @return mixed
+   */
   public function findByDeviceTypeAndCategory($device_type, $category, $blog_id)
   {
     $options = array(
@@ -238,8 +257,12 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * 最後の表示順を取得する
-  */
+   * 最後の表示順を取得する
+   * @param $blog_id
+   * @param $device_type
+   * @param $category
+   * @return int|mixed
+   */
   public function getNextPluginOrder($blog_id, $device_type, $category) {
     $plugin_order = $this->find('one', array(
       'fields' => 'plugin_order',
@@ -255,8 +278,11 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * テンプレートの作成
-  */
+   * テンプレートの作成
+   * @param $values
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function insert($values, $options=array())
   {
     $default_values = [
@@ -276,8 +302,13 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * テンプレートの更新
-  */
+   * テンプレートの更新
+   * @param $values
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return bool
+   */
   public function updateByIdAndBlogId($values, $id, $blog_id, $options=array())
   {
     $values['updated_at'] = date('Y-m-d H:i:s');
@@ -292,9 +323,12 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * 表示方法の変更を行う
-  *  params => array([id=>display],...)の形式
-  */
+   * 表示方法の変更を行う
+   *  params => array([id=>display],...)の形式
+   * @param $params
+   * @param $blog_id
+   * @return bool
+   */
   public function updateDisplay($params, $blog_id)
   {
     if (!count($params)) {
@@ -324,8 +358,12 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * idとblog_idをキーとした削除 + ファイル削除も行う
-  */
+   * idとblog_idをキーとした削除 + ファイル削除も行う
+   * @param $id
+   * @param $blog_id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function deleteByIdAndBlogId($id, $blog_id, $options=array())
   {
     // プラグインファイルの削除
@@ -337,9 +375,12 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * 並べ替え
-  *  [id] => array(order=>x, category=>x)の形
-  */
+   * 並べ替え
+   *  [id] => array(order=>x, category=>x)の形
+   * @param $sort_values
+   * @param $device_type
+   * @param $blog_id
+   */
   public function sort($sort_values, $device_type, $blog_id) {
     $blog_plugins = $this->find('all', array(
       'fields' => array('id, plugin_order, category'),
@@ -367,8 +408,11 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * テンプレートを作成
-  */
+   * テンプレートを作成
+   * @param $html
+   * @param $blog_id
+   * @param string $id
+   */
   public static function createPlugin($html, $blog_id, $id='preview')
   {
     // フォルダが存在しない場合作成

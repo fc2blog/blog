@@ -5,6 +5,7 @@ namespace Fc2blog\Model;
 use DateTimeZone;
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Web\Request;
 use InvalidArgumentException;
 use OutOfBoundsException;
 
@@ -29,8 +30,13 @@ class BlogsModel extends Model
   }
 
   /**
-  * プライベートモード時のパスワード必須チェック
-  */
+   * プライベートモード時のパスワード必須チェック
+   * @param $value
+   * @param $valid
+   * @param $k
+   * @param $d
+   * @return bool|string
+   */
   public static function privateCheck($value, $valid, $k, $d)
   {
     if ($value==null || $value==='') {
@@ -42,8 +48,10 @@ class BlogsModel extends Model
   }
 
   /**
-  * ディレクトリとして使用済みかどうか
-  */
+   * ディレクトリとして使用済みかどうか
+   * @param $value
+   * @return bool|string
+   */
   public static function useDirectory($value)
   {
     if (is_dir(Config::get('WWW_DIR') . $value)) {
@@ -53,8 +61,12 @@ class BlogsModel extends Model
   }
 
   /**
-  * バリデート処理
-  */
+   * バリデート処理
+   * @param $data
+   * @param $valid_data
+   * @param array $white_list
+   * @return array
+   */
   public function validate($data, &$valid_data, $white_list=array())
   {
     // バリデートを定義
@@ -175,8 +187,10 @@ class BlogsModel extends Model
   }
 
   /**
-  * 現在使用中のテンプレートID一覧を取得する
-  */
+   * 現在使用中のテンプレートID一覧を取得する
+   * @param $blog
+   * @return array
+   */
   public static function getTemplateIds($blog){
     $columns = Config::get('BLOG_TEMPLATE_COLUMN');
     return [
@@ -186,8 +200,10 @@ class BlogsModel extends Model
   }
 
   /**
-  * ブログの一覧(SelectBox用)
-  */
+   * ブログの一覧(SelectBox用)
+   * @param $user_id
+   * @return mixed
+   */
   public function getSelectList($user_id)
   {
     return $this->find('list', array(
@@ -199,8 +215,12 @@ class BlogsModel extends Model
   }
 
   /**
-  * ブログIDをキーにユーザーIDを条件としてブログを取得
-  */
+   * ブログIDをキーにユーザーIDを条件としてブログを取得
+   * @param $blog_id
+   * @param $user_id
+   * @param array $options
+   * @return mixed
+   */
   public function findByIdAndUserId($blog_id, $user_id, $options=array())
   {
     $options['where'] = isset($options['where']) ? 'id=? AND user_id=? AND ' . $options['where'] : 'id=? AND user_id=?';
@@ -209,8 +229,11 @@ class BlogsModel extends Model
   }
 
   /**
-  * ユーザーIDをキーにしてブログを取得
-  */
+   * ユーザーIDをキーにしてブログを取得
+   * @param $user_id
+   * @param array $options
+   * @return mixed
+   */
   public function findByUserId ($user_id, $options=array())
   {
     $options['where'] = isset($options['where']) ? 'user_id=? AND ' . $options['where'] : 'user_id=?';
@@ -230,8 +253,10 @@ class BlogsModel extends Model
   }
 
   /**
-  * ログイン後最初に表示するブログを取得する
-  */
+   * ログイン後最初に表示するブログを取得する
+   * @param $user
+   * @return mixed
+   */
   public function getLoginBlog($user){
     // ログイン後のブログIDが設定されていれば対象のブログを取得
     if (!empty($user['login_blog_id'])) {
@@ -252,8 +277,10 @@ class BlogsModel extends Model
   }
 
   /**
-  * ユーザーIDをキーにブログのリストを取得
-  */
+   * ユーザーIDをキーにブログのリストを取得
+   * @param $user_id
+   * @return mixed
+   */
   public function getListByUserId($user_id)
   {
     return $this->find('list', array(
@@ -264,8 +291,11 @@ class BlogsModel extends Model
   }
 
   /**
-  * ユーザーが対象のブログIDを所持しているかチェック
-  */
+   * ユーザーが対象のブログIDを所持しているかチェック
+   * @param $user_id
+   * @param $blog_id
+   * @return bool|mixed
+   */
   public function isUserHaveBlogId($user_id, $blog_id){
     static $is_list = array();    // キャッシュ用
 
@@ -403,8 +433,12 @@ class BlogsModel extends Model
   }
 
   /**
-  * idをキーとした更新
-  */
+   * idをキーとした更新
+   * @param $values
+   * @param $id
+   * @param array $options
+   * @return array|false|int|mixed
+   */
   public function updateById($values, $id, $options=array())
   {
     $values['updated_at'] = date('Y-m-d H:i:s');
@@ -412,8 +446,10 @@ class BlogsModel extends Model
   }
 
   /**
-  * 最終投稿日時更新
-  */
+   * 最終投稿日時更新
+   * @param $id
+   * @return array|false|int|mixed
+   */
   public function updateLastPostedAt($id)
   {
     $values = array('last_posted_at' => date('Y-m-d H:i:s'));
@@ -421,8 +457,11 @@ class BlogsModel extends Model
   }
 
   /**
-  * テンプレートの切り替え
-  */
+   * テンプレートの切り替え
+   * @param $blog_template
+   * @param $blog_id
+   * @return array|false|int|mixed
+   */
   public function switchTemplate($blog_template, $blog_id)
   {
     $device_type = $blog_template['device_type'];
@@ -452,8 +491,12 @@ class BlogsModel extends Model
   }
 
   /**
-  * ブログの削除処理
-  */
+   * ブログの削除処理
+   * @param $blog_id
+   * @param $user_id
+   * @param array $options
+   * @return bool|int
+   */
   public function deleteByIdAndUserId($blog_id, $user_id, $options=array())
   {
     if (!parent::deleteById($blog_id, array('where'=>'user_id=?', 'params'=>array($user_id)))){
@@ -510,23 +553,25 @@ class BlogsModel extends Model
 
   /**
    * Blog 設定が今アクセスしているSchemaと一致しているか確認
+   * @param Request $request
    * @param array $blog blog array
    * @return bool
    */
-  static public function isCorrectHttpSchemaByBlogArray(array $blog): bool
+  static public function isCorrectHttpSchemaByBlogArray(Request $request, array $blog): bool
   {
-    $is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
+    $is_https = (isset($request->server['HTTPS']) && $request->server['HTTPS'] == 'on');
     return ($blog['ssl_enable'] === 1 && $is_https) || ($blog['ssl_enable'] === 0 && !$is_https);
   }
 
   /**
    * Blog 設定が今アクセスしているSchemaと一致しているか確認
+   * @param Request $request
    * @param string $blog_id
    * @return bool
    */
-  static public function isCorrectHttpSchemaByBlogId(string $blog_id): bool
+  static public function isCorrectHttpSchemaByBlogId(Request $request, string $blog_id): bool
   {
-    $is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on');
+    $is_https = (isset($request->server['HTTPS']) && $request->server['HTTPS'] === 'on');
     $schema = static::getSchemaByBlogId($blog_id);
     return ($schema === "http:" && $is_https===false) || ($schema === "https:" && $is_https===true);
   }

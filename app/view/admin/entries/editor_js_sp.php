@@ -132,7 +132,7 @@ $(function(){
   // プレビュー処理を行う
   $('#sys-entry-form-preview').click(function(){
     var action = '//<?php echo \Fc2blog\Config::get('DOMAIN_USER'); ?>';
-    action    += '<?php echo \Fc2blog\App::userURL(array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId())); ?>';
+    action    += '<?php echo \Fc2blog\App::userURL($request,array('controller'=>'Entries', 'action'=>'preview', 'blog_id'=>$this->getBlogId($request))); ?>';
     $('#sys-entry-form').prop('action', action);
     $('#sys-entry-form').prop('target', '_preview');
     $('#sys-entry-form').submit();
@@ -142,9 +142,9 @@ $(function(){
   $('#sys-entry-form-submit').click(function(){
     var action = '';
     if ($('#sys-entry-form').find('input[name=id]').val()) {
-      action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'edit')); ?>';
+      action = '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Entries', 'action'=>'edit')); ?>';
     } else {
-      action = '<?php echo \Fc2blog\Web\Html::url(array('controller'=>'Entries', 'action'=>'create')); ?>';
+      action = '<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Entries', 'action'=>'create')); ?>';
     }
     $('#sys-entry-form').prop('action', action);
     $('#sys-entry-form').prop('target', '_self');

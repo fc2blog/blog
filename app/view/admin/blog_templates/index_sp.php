@@ -5,7 +5,7 @@
     <?php $devices = \Fc2blog\Config::get('DEVICE_NAME'); ?>
     <select onchange="location.href=$(this).val();">
       <?php foreach ($devices as $key => $device): ?>
-        <option value="<?php echo \Fc2blog\Web\Html::url(array('device_type'=>$key)); ?>" <?php if ($request->get('device_type')==$key) echo 'selected="selected"'; ?>><?php echo $device; ?></option>
+        <option value="<?php echo \Fc2blog\Web\Html::url($request, array('device_type'=>$key)); ?>" <?php if ($request->get('device_type')==$key) echo 'selected="selected"'; ?>><?php echo $device; ?></option>
       <?php endforeach; ?>
     </select>
   </div>
@@ -15,7 +15,7 @@
 <?php foreach($device_blog_templates as $device_type => $blog_templates): ?>
   <div class="btn_area sp_no_template">
     <ul class="btn_area_inner">
-      <li><button class="btn_contents touch" onclick="location.href='<?php echo \Fc2blog\Web\Html::url(array('controller'=>'BlogTemplates','action'=>'fc2_index', 'device_type'=>$device_type)); ?>'"><i class="btn_icon"></i><?php echo __('Template Search'); ?></button></li>
+      <li><button class="btn_contents touch" onclick="location.href='<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogTemplates','action'=>'fc2_index', 'device_type'=>$device_type)); ?>'"><i class="btn_icon"></i><?php echo __('Template Search'); ?></button></li>
     </ul>
   </div>
   <h2><span class="h2_inner"><?php echo $devices[$device_type]; ?></span></h2>

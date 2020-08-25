@@ -32,6 +32,6 @@ class DBHelper extends TestCase
   {
     $pdo = new PDO("mysql:host=" . Config::get('MASTER_DB.HOST') . ";port=3306;dbname=" . Config::get('MASTER_DB.DATABASE') . ";charset=utf8mb4", Config::get('MASTER_DB.USER'), Config::get('MASTER_DB.PASSWORD'));
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->query(file_get_contents(__DIR__."/test_drop_all_table.sql"));
+    $pdo->query(file_get_contents(__DIR__ . "/test_drop_all_table.sql"));
   }
 }

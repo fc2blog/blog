@@ -7,4 +7,4 @@ if(!file_exists($app_dir_path)){
   die("please edit public/admin/index.php");
 }
 
-require($app_dir_path . "/include/admin_index_include.php");
+require($app_dir_path . "/include/index_include.php");

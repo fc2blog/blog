@@ -14,7 +14,7 @@ describe("crawl admin pages", () => {
   const nick_name = "nickname";
 
   beforeAll(async () => {
-    const stdout = execSync(__dirname + "/../../tests/cli_drop_all_table.php");
+    execSync(__dirname + "/../../tests/cli_drop_all_table.php");
     if (fs.existsSync(__dirname + "/../../app/temp/installed.lock")) {
       fs.unlinkSync(__dirname + "/../../app/temp/installed.lock");
     }
@@ -35,6 +35,9 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
+
+    const title_text = await c.page.$eval("h2", elm=>elm.textContent);
+    expect(/環境チェック/.exec(title_text)).toBeTruthy();
   });
 
   it("move to form", async()=>{
@@ -67,13 +70,15 @@ describe("crawl admin pages", () => {
   });
 
   it("form input correctly", async()=>{
+    await c.getSS("install_form_before_input");
+
     await c.page.type("#id_form input[name='user[login_id]']", admin_id);
     await c.page.type("#id_form input[name='user[password]']", admin_pass);
     await c.page.type("#id_form input[name='blog[id]']", blog_id);
     await c.page.type("#id_form input[name='blog[name]']", blog_name);
     await c.page.type("#id_form input[name='blog[nickname]']", nick_name);
 
-    await c.getSS("aaa");
+    await c.getSS("install_form_after_input");
 
     const [response] = await Promise.all([
       c.waitLoad(),
