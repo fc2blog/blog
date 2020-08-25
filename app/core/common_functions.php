@@ -7,16 +7,22 @@
 
 /**
  * HTMLエスケープの短縮形
+ * @param string $text
+ * @return string
  */
-function h($text)
+function h(string $text): string
 {
   return htmlentities($text, ENT_QUOTES, \Fc2blog\Config::get('INTERNAL_ENCODING'));
 }
 
 /**
  * マルチバイト対応のtruncate
+ * @param string $text
+ * @param int $length
+ * @param string $etc
+ * @return string
  */
-function t($text, $length = 10, $etc = '...')
+function t(string $text, int $length = 10, string $etc = '...'): string
 {
   if (!$length) {
     return '';
@@ -29,8 +35,11 @@ function t($text, $length = 10, $etc = '...')
 
 /**
  * 対象の内容が空文字列の場合代替内容を返却する
+ * @param $text
+ * @param $default
+ * @return string
  */
-function d($text, $default)
+function d(string $text, $default): string
 {
   if ($text === null || $text === '') {
     return $default;
@@ -40,51 +49,43 @@ function d($text, $default)
 
 /**
  * t,hのエイリアス
+ * @param $text
+ * @param int $length
+ * @param string $etc
+ * @return string
  */
-function th($text, $length = 10, $etc = '...')
+function th(string $text, int $length = 10, string $etc = '...'): string
 {
   return h(t($text, $length, $etc));
 }
 
 /**
  * URLのエンコードエイリアス
+ * @param $text
+ * @return string
  */
-function ue($text)
+function ue(string $text): string
 {
   return rawurlencode($text);
 }
 
 /**
  * 日付のフォーマット変更
+ * @param $date
+ * @param string $format
+ * @return false|string
  */
-function df($date, $format = 'Y/m/d H:i:s')
+function df($date, $format = 'Y/m/d H:i:s'): string
 {
   return date($format, strtotime($date));
 }
 
 /**
- * パスカルケースへの変換
+ * GettextのWrapper
+ * @param $msg
+ * @return string
  */
-function pascalCase($snake_case)
+function __($msg): string
 {
-  $snake_case = str_replace('_', ' ', $snake_case);
-  $snake_case = ucwords($snake_case);
-  $snake_case = str_replace(' ', '', $snake_case);
-  return $snake_case;
-}
-
-/**
- * キャメルケースへの変換
- */
-function camelCase($snake_case)
-{
-  return lcfirst(pascalCase($snake_case));
-}
-
-/**
- * スネークケースへの変換
- */
-function snakeCase($camel_case)
-{
-  return strtolower(preg_replace("/([A-Z])/u", "_$0", lcfirst($camel_case)));
+  return _($msg);
 }

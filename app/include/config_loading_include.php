@@ -20,9 +20,6 @@ HTML;
   exit;
 }
 
-// __()のロード
-\Fc2blog\Util\I18n::registerFunction();
-
 if ((string)getenv("FC2_CONFIG_FROM_ENV") === "1") {
   require(__DIR__ . '/../config_read_from_env.php');
 } else {
