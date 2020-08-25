@@ -11,6 +11,7 @@ use Fc2blog\Debug;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\I18n;
+use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use LogicException;
@@ -204,7 +205,7 @@ abstract class Controller
    */
   public function display(Request $request, $fw_template, $fw_data = array(), $fw_is_prefix = true)
   {
-    $fw_template = snakeCase($fw_template);
+    $fw_template = StringCaseConverter::snakeCase($fw_template);
     // データの設定
     if (count($fw_data)) {
       // 定義済み変数に関しては展開させない

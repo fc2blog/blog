@@ -6,6 +6,7 @@
 namespace Fc2blog;
 
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Request;
 use Exception;
 use InvalidArgumentException;
@@ -416,8 +417,8 @@ class App
     static $controller_name = null;
     static $method_name = null;
     if ($controller_name==null) {
-      $controller_name = snakeCase(Config::get('ControllerName'));
-      $method_name = snakeCase(Config::get('ActionName'));
+      $controller_name = StringCaseConverter::snakeCase(Config::get('ControllerName'));
+      $method_name = StringCaseConverter::snakeCase(Config::get('ActionName'));
     }
 
     if (is_string($params)) {
@@ -430,7 +431,7 @@ class App
       if (lcfirst($c_name) != $controller_name) {
         continue ;
       }
-      if (!empty($m_name) && snakeCase($m_name) != $method_name) {
+      if (!empty($m_name) && StringCaseConverter::snakeCase($m_name) != $method_name) {
         continue ;
       }
       return true;
