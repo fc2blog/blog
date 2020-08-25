@@ -124,7 +124,8 @@ class UsersController extends AdminController
     $request = Request::getInstance();
 
     // 退会チェック
-    if (!$request->get('user.delete')) {
+    if (!$request->get('user.delete') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+      Session::set('sig', App::genRandomString());
       return ;
     }
 
