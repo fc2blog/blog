@@ -9,7 +9,7 @@ describe("crawl admin pages", () => {
     await c.init();
   });
 
-  const start_url = "http://localhost:8080/admin/install.php";
+  const start_url = "http://localhost:8080/admin/common/install";
 
   it("open login page", async () => {
     const [response] = await Promise.all([

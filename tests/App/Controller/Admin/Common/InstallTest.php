@@ -107,7 +107,7 @@ class InstallTest extends TestCase
     $this->resetCookie();
 
     $r = $this->reqPostBeRedirect("/admin/common/install", ['state' => 1]);
-    $this->assertEquals('/admin/install.php?state=2', $r->redirectUrl);
+    $this->assertEquals('/admin/common/install?state=2', $r->redirectUrl);
   }
 
   public function testInstallState2Check(): void
@@ -143,7 +143,7 @@ class InstallTest extends TestCase
     ];
 
     $r = $this->reqPostBeRedirect("/admin/common/install", $request_data);
-    $this->assertEquals('/admin/install.php?state=3', $r->redirectUrl);
+    $this->assertEquals('/admin/common/install?state=3', $r->redirectUrl);
   }
 
   public function testInstallState3Check(): void
