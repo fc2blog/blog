@@ -11,7 +11,9 @@ class BlogPluginsModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -21,12 +23,12 @@ class BlogPluginsModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'blog_plugins';
   }
 
-  public function getAutoIncrementCompositeKey()
+  public function getAutoIncrementCompositeKey(): string
   {
     return 'blog_id';
   }
@@ -38,42 +40,42 @@ class BlogPluginsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list=array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
       'title' => array(
-        'required'  => true,
+        'required' => true,
         'maxlength' => array('max' => 50),
       ),
       'title_align' => array(
         'default_value' => 'left',
-        'in_array'      => array('values'=>array_keys(self::getAttributeAlign())),
+        'in_array' => array('values' => array_keys(self::getAttributeAlign())),
       ),
       'title_color' => array(
         'default_value' => '',
-        'in_array'      => array('values'=>array_keys(self::getAttributeColor())),
+        'in_array' => array('values' => array_keys(self::getAttributeColor())),
       ),
       'contents' => array(
-        'required'  => true,
+        'required' => true,
         'maxlength' => array('max' => 100000),
-        'own'       => array('method' => 'fc2PluginSyntax')
+        'own' => array('method' => 'fc2PluginSyntax')
       ),
       'contents_align' => array(
         'default_value' => 'left',
-        'in_array'      => array('values'=>array_keys(self::getAttributeAlign())),
+        'in_array' => array('values' => array_keys(self::getAttributeAlign())),
       ),
       'contents_color' => array(
         'default_value' => '',
-        'in_array'      => array('values'=>array_keys(self::getAttributeColor())),
+        'in_array' => array('values' => array_keys(self::getAttributeColor())),
       ),
       'device_type' => array(
         'default_value' => Config::get('DEVICE_PC'),
-        'in_array'      => array('values'=>array_keys(Config::get('DEVICE_NAME'))),
+        'in_array' => array('values' => array_keys(Config::get('DEVICE_NAME'))),
       ),
       'category' => array(
         'default_value' => 1,
-        'in_array'      => array('values'=>array(1, 2, 3)),
+        'in_array' => array('values' => array(1, 2, 3)),
       ),
     );
 
@@ -84,11 +86,11 @@ class BlogPluginsModel extends Model
 
     // title_align,title_color...をattributesに纏める
     if (in_array('title_align', $white_list) || in_array('title_color', $white_list)
-        || in_array('contents_align', $white_list) || in_array('contents_color', $white_list)
+      || in_array('contents_align', $white_list) || in_array('contents_color', $white_list)
     ) {
       $attribute = array(
-        'title_align'    => $valid_data['title_align'],
-        'title_color'    => $valid_data['title_color'],
+        'title_align' => $valid_data['title_align'],
+        'title_color' => $valid_data['title_color'],
         'contents_align' => $valid_data['contents_align'],
         'contents_color' => $valid_data['contents_color'],
       );
@@ -99,14 +101,14 @@ class BlogPluginsModel extends Model
   }
 
   /**
-  * 文字方向の設定
-  */
+   * 文字方向の設定
+   */
   public static function getAttributeAlign()
   {
     return array(
-      'left'   => __('Flush left'),
+      'left' => __('Flush left'),
       'center' => __('Center justification'),
-      'right'  => __('Right justification'),
+      'right' => __('Right justification'),
     );
   }
 
@@ -115,31 +117,31 @@ class BlogPluginsModel extends Model
    * @param bool $text
    * @return array
    */
-  public static function getAttributeColor($text=false)
+  public static function getAttributeColor($text = false)
   {
     if ($text) {
       return array(
-        ''       => __('Nothing'),
-        'red'    => __('Red'),
-        'green'  => __('Green'),
-        'blue'   => __('Blue'),
+        '' => __('Nothing'),
+        'red' => __('Red'),
+        'green' => __('Green'),
+        'blue' => __('Blue'),
         'purple' => __('Purple'),
-        'pink'   => __('Pink'),
+        'pink' => __('Pink'),
         'orange' => __('Orange'),
-        'navy'   => __('Navy'),
-        'gray'   => __('Gray'),
+        'navy' => __('Navy'),
+        'gray' => __('Gray'),
       );
     }
     return array(
-      ''       => __('Nothing'),
-      'red'    => '<span style="color:red">■</span>',
-      'green'  => '<span style="color:green">■</span>',
-      'blue'   => '<span style="color:blue">■</span>',
+      '' => __('Nothing'),
+      'red' => '<span style="color:red">■</span>',
+      'green' => '<span style="color:green">■</span>',
+      'blue' => '<span style="color:blue">■</span>',
       'purple' => '<span style="color:purple">■</span>',
-      'pink'   => '<span style="color:pink">■</span>',
+      'pink' => '<span style="color:pink">■</span>',
       'orange' => '<span style="color:orange">■</span>',
-      'navy'   => '<span style="color:navy">■</span>',
-      'gray'   => '<span style="color:gray">■</span>',
+      'navy' => '<span style="color:navy">■</span>',
+      'gray' => '<span style="color:gray">■</span>',
     );
   }
 
@@ -166,7 +168,7 @@ class BlogPluginsModel extends Model
     // PHPのシンタックスチェック
     $cmd = 'php -l ' . $plugin_path;
     $ret = shell_exec($cmd);
-    if (strpos($ret, 'No syntax errors detected')!==false) {
+    if (strpos($ret, 'No syntax errors detected') !== false) {
       return true;
     }
     return __('There may be a problem with the template or plug-in, installed in the blog.');
@@ -181,16 +183,16 @@ class BlogPluginsModel extends Model
   public function getCategoryPlugins($blog_id, $device_type)
   {
     $options = array(
-      'where'  => 'blog_id=? AND device_type=?',
+      'where' => 'blog_id=? AND device_type=?',
       'params' => array($blog_id, $device_type),
-      'order'  => 'category ASC, plugin_order ASC',
+      'order' => 'category ASC, plugin_order ASC',
     );
     $blog_plugins = $this->find('all', $options);
 
-    $category_blog_plugins = array(1=>array());
-    if ($device_type== Config::get('DEVICE_PC')) {
+    $category_blog_plugins = array(1 => array());
+    if ($device_type == Config::get('DEVICE_PC')) {
       // PC版のみ3つまでカテゴリーが存在する
-      $category_blog_plugins = array(1=>array(), 2=>array(), 3=>array());
+      $category_blog_plugins = array(1 => array(), 2 => array(), 3 => array());
     }
     foreach ($blog_plugins as $blog_plugin) {
       $category_blog_plugins[$blog_plugin['category']][] = $blog_plugin;
@@ -206,7 +208,7 @@ class BlogPluginsModel extends Model
    * @param array $options
    * @return array|mixed
    */
-  public function findByIdAndBlogId($id, $blog_id, $options=array())
+  public function findByIdAndBlogId($id, $blog_id, $options = []): array
   {
     $data = parent::findByIdAndBlogId($id, $blog_id, $options);
     if (empty($data)) {
@@ -236,9 +238,9 @@ class BlogPluginsModel extends Model
   public function findByDeviceTypeAndCategory($device_type, $category, $blog_id)
   {
     $options = array(
-      'where'  => 'blog_id=? AND device_type=? AND category=? AND display=' . Config::get('APP.DISPLAY.SHOW'),
+      'where' => 'blog_id=? AND device_type=? AND category=? AND display=' . Config::get('APP.DISPLAY.SHOW'),
       'params' => array($blog_id, $device_type, $category),
-      'order'  => 'plugin_order ASC',
+      'order' => 'plugin_order ASC',
     );
     $plugins = $this->find('all', $options);
     foreach ($plugins as $key => $value) {
@@ -263,13 +265,14 @@ class BlogPluginsModel extends Model
    * @param $category
    * @return int|mixed
    */
-  public function getNextPluginOrder($blog_id, $device_type, $category) {
+  public function getNextPluginOrder($blog_id, $device_type, $category)
+  {
     $plugin_order = $this->find('one', array(
       'fields' => 'plugin_order',
-      'where'  => 'blog_id=? AND device_type=? AND category=?',
+      'where' => 'blog_id=? AND device_type=? AND category=?',
       'params' => array($blog_id, $device_type, $category),
-      'order'  => 'plugin_order DESC',
-      'limit'  => 1,
+      'order' => 'plugin_order DESC',
+      'limit' => 1,
     ));
     if (empty($plugin_order)) {
       return 0;
@@ -283,11 +286,11 @@ class BlogPluginsModel extends Model
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function insert($values, $options=array())
+  public function insert($values, $options = array())
   {
     $default_values = [
-        'list' => '',
-        'attribute' => '',
+      'list' => '',
+      'attribute' => '',
     ];
     $values += $default_values;
 
@@ -309,10 +312,10 @@ class BlogPluginsModel extends Model
    * @param array $options
    * @return bool
    */
-  public function updateByIdAndBlogId($values, $id, $blog_id, $options=array())
+  public function updateByIdAndBlogId($values, $id, $blog_id, $options = array())
   {
     $values['updated_at'] = date('Y-m-d H:i:s');
-    if (!parent::updateByIdAndBlogId($values, $id, $blog_id, $options)){
+    if (!parent::updateByIdAndBlogId($values, $id, $blog_id, $options)) {
       return false;
     }
     // プラグインのPHPファイル作成
@@ -348,10 +351,10 @@ class BlogPluginsModel extends Model
     $ret = true;
     foreach ($displays as $display => $values) {
       if (!count($values)) {
-        continue ;
+        continue;
       }
       $where = 'blog_id=? AND id IN (' . implode(',', array_fill(0, count($values), '?')) . ')';
-      $ret = $ret && $this->update(array('display'=>$display), $where, array_merge(array($blog_id), $values));
+      $ret = $ret && $this->update(array('display' => $display), $where, array_merge(array($blog_id), $values));
     }
 
     return $ret;
@@ -364,7 +367,7 @@ class BlogPluginsModel extends Model
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function deleteByIdAndBlogId($id, $blog_id, $options=array())
+  public function deleteByIdAndBlogId($id, $blog_id, $options = array())
   {
     // プラグインファイルの削除
     $plugin_file = App::getPluginFilePath($blog_id, $id);
@@ -381,27 +384,28 @@ class BlogPluginsModel extends Model
    * @param $device_type
    * @param $blog_id
    */
-  public function sort($sort_values, $device_type, $blog_id) {
+  public function sort($sort_values, $device_type, $blog_id)
+  {
     $blog_plugins = $this->find('all', array(
       'fields' => array('id, plugin_order, category'),
-      'where'  => 'blog_id=? AND device_type=?',
+      'where' => 'blog_id=? AND device_type=?',
       'params' => array($blog_id, $device_type),
     ));
     $ids = array_keys($sort_values);
     foreach ($blog_plugins as $blog_plugin) {
       if (!in_array($blog_plugin['id'], $ids)) {
         $this->deleteByIdAndBlogId($blog_plugin['id'], $blog_id);
-        continue ;
+        continue;
       }
       $values = $sort_values[$blog_plugin['id']];
-      if ($blog_plugin['plugin_order']==$values['order'] && $blog_plugin['category']==$values['category']) {
+      if ($blog_plugin['plugin_order'] == $values['order'] && $blog_plugin['category'] == $values['category']) {
         // 順序、カテゴリーに変更なし
         continue;
       }
       // 並べ替えの順序で更新
       $params = array(
         'plugin_order' => intval($values['order']),
-        'category'     => intval($values['category']),
+        'category' => intval($values['category']),
       );
       $this->updateByIdAndBlogId($params, $blog_plugin['id'], $blog_id);
     }
@@ -413,7 +417,7 @@ class BlogPluginsModel extends Model
    * @param $blog_id
    * @param string $id
    */
-  public static function createPlugin($html, $blog_id, $id='preview')
+  public static function createPlugin($html, $blog_id, $id = 'preview')
   {
     // フォルダが存在しない場合作成
     $plugin_path = App::getPluginFilePath($blog_id, $id);
@@ -428,6 +432,4 @@ class BlogPluginsModel extends Model
     file_put_contents($plugin_path, $html);
     chmod($plugin_path, 0777);
   }
-
 }
-

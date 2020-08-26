@@ -1,8 +1,8 @@
 <?php
 /**
-* FC2テンプレートを取得する
-* データソース元はAPIの予定
-*/
+ * FC2テンプレートを取得する
+ * データソース元はAPIの予定
+ */
 
 namespace Fc2blog\Model;
 
@@ -19,7 +19,7 @@ class Fc2TemplatesModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'fc2_templates';
   }
@@ -77,6 +77,4 @@ class Fc2TemplatesModel extends Model
 
     return $json;
   }
-
 }
-

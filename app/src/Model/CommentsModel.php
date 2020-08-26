@@ -24,12 +24,12 @@ class CommentsModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'comments';
   }
 
-  public function getAutoIncrementCompositeKey()
+  public function getAutoIncrementCompositeKey(): string
   {
     return 'blog_id';
   }
@@ -611,6 +611,4 @@ class CommentsModel extends Model
     }
     return $comments;
   }
-
 }
-

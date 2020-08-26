@@ -7,7 +7,9 @@ class TagsModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -17,12 +19,12 @@ class TagsModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'tags';
   }
 
-  public function getAutoIncrementCompositeKey()
+  public function getAutoIncrementCompositeKey(): string
   {
     return 'blog_id';
   }
@@ -34,7 +36,7 @@ class TagsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list=array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
@@ -43,7 +45,7 @@ class TagsModel extends Model
         'trim' => true,
         'minlength' => array('min' => 1),
         'maxlength' => array('max' => 45),
-        'own'       => array('method' => 'uniqueName'),
+        'own' => array('method' => 'uniqueName'),
       ),
     );
 
@@ -85,13 +87,13 @@ class TagsModel extends Model
   {
     $options = array(
       'fields' => 'id, name, count',
-      'where'  => 'blog_id=?',
+      'where' => 'blog_id=?',
       'params' => array($blog_id),
-      'order'  => 'count DESC, id DESC',
+      'order' => 'count DESC, id DESC',
     );
     $tags = $this->find('all', $options);
     $options = array();
-    foreach($tags as $tag){
+    foreach ($tags as $tag) {
       $options[$tag['id']] = $tag['name'] . ' (' . $tag['count'] . ')';
     }
     return $options;
@@ -125,7 +127,7 @@ class TagsModel extends Model
    * @param array $options
    * @return mixed
    */
-  public function findByNameAndBlogId($name, $blog_id, $options=array())
+  public function findByNameAndBlogId($name, $blog_id, $options = array())
   {
     $options['where'] = isset($options['where']) ? 'name=? AND blog_id=? AND ' . $options['where'] : 'name=? AND blog_id=?';
     $options['params'] = isset($options['params']) ? array_merge(array($name, $blog_id), $options['params']) : array($name, $blog_id);
@@ -138,10 +140,10 @@ class TagsModel extends Model
    * @param array $options
    * @return mixed
    */
-  public function getWellUsedTags($blog_id, $options=array())
+  public function getWellUsedTags($blog_id, $options = array())
   {
     $options['fields'] = 'id, name';
-    $options['where'] = (isset($options['where']) && $options['where']!="") ? 'blog_id=? AND '. $options['where'] : 'blog_id=?';
+    $options['where'] = (isset($options['where']) && $options['where'] != "") ? 'blog_id=? AND ' . $options['where'] : 'blog_id=?';
     $options['params'] = isset($options['params']) ? array_merge(array($blog_id), $options['params']) : array($blog_id);
     $options['limit'] = 6;
     $options['order'] = 'count DESC';
@@ -228,7 +230,7 @@ SQL;
    * @param array $ids
    * @return int|false
    */
-  public function increaseCount(string $blog_id, array $ids=array())
+  public function increaseCount(string $blog_id, array $ids = array())
   {
     if (!count($ids)) {
       return 0;
@@ -269,7 +271,7 @@ SQL;
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function deleteByIdAndBlogId($tag_id, $blog_id, $options=array())
+  public function deleteByIdAndBlogId($tag_id, $blog_id, $options = array())
   {
     // タグの紐付け情報削除
     Model::load('EntryTags')->delete('blog_id=? AND tag_id=?', array($blog_id, $tag_id));
@@ -285,7 +287,7 @@ SQL;
    * @param array $options
    * @return bool
    */
-  public function deleteByIdsAndBlogId($ids, $blog_id, $options=array())
+  public function deleteByIdsAndBlogId($ids, $blog_id, $options = array())
   {
     // 単体ID対応
     if (is_numeric($ids)) {
@@ -313,12 +315,11 @@ SQL;
   public function getTemplateTags($blog_id): array
   {
     $options = [
-        'fields' => 'id, name, count',
-        'where'  => 'blog_id=?',
-        'params' => array($blog_id),
-        'order'  => 'count DESC, id DESC',
+      'fields' => 'id, name, count',
+      'where' => 'blog_id=?',
+      'params' => array($blog_id),
+      'order' => 'count DESC, id DESC',
     ];
     return $this->find('all', $options);
   }
 }
-

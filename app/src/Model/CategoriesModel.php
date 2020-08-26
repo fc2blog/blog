@@ -9,7 +9,9 @@ class CategoriesModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -19,12 +21,12 @@ class CategoriesModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'categories';
   }
 
-  public function getAutoIncrementCompositeKey()
+  public function getAutoIncrementCompositeKey(): string
   {
     return 'blog_id';
   }
@@ -36,7 +38,7 @@ class CategoriesModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list=array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
@@ -49,11 +51,11 @@ class CategoriesModel extends Model
         'trim' => true,
         'minlength' => array('min' => 1),
         'maxlength' => array('max' => 50),
-        'own'       => array('method' => 'uniqueName')
+        'own' => array('method' => 'uniqueName')
       ),
       'category_order' => array(
         'default_value' => Config::get('CATEGORY.ORDER.ASC'),
-        'in_array' => array('values'=>array_keys($this->getOrderList())),
+        'in_array' => array('values' => array_keys($this->getOrderList())),
       ),
     );
 
@@ -84,7 +86,7 @@ class CategoriesModel extends Model
       $params[] = $data['id'];
     }
     $options = array(
-      'where'  => $where,
+      'where' => $where,
       'params' => $params,
     );
     if ($model->isExist($options)) {
@@ -111,23 +113,23 @@ class CategoriesModel extends Model
    * @param null $id
    * @return array
    */
-  public function getParentList($blog_id, $id=null)
+  public function getParentList($blog_id, $id = null)
   {
     $categories = $this->getList($blog_id);
     $value = array();
     $options = array();
-    foreach($categories as $category){
-      $options[$category['id']] = array('value'=>$category['name'], 'level'=>$category['level']);
-      if ($category['id'] == 1 || $id==1) {
+    foreach ($categories as $category) {
+      $options[$category['id']] = array('value' => $category['name'], 'level' => $category['level']);
+      if ($category['id'] == 1 || $id == 1) {
         $options[$category['id']]['disabled'] = true;
       }
       if (!$id) {
-        continue ;
+        continue;
       }
-      if ($category['id']==$id) {
+      if ($category['id'] == $id) {
         $value = $category;
       }
-      if ($value && $value['lft']<=$category['lft'] && $value['rgt']>=$category['rgt']) {
+      if ($value && $value['lft'] <= $category['lft'] && $value['rgt'] >= $category['rgt']) {
         $options[$category['id']]['disabled'] = true;
       }
     }
@@ -143,8 +145,8 @@ class CategoriesModel extends Model
   {
     $categories = $this->getList($blog_id);
     $options = array();
-    foreach($categories as $category){
-      $options[$category['id']] = array('value'=>$category['name'] . ' (' . $category['count'] . ')', 'level'=>$category['level']);
+    foreach ($categories as $category) {
+      $options[$category['id']] = array('value' => $category['name'] . ' (' . $category['count'] . ')', 'level' => $category['level']);
     }
     return $options;
   }
@@ -155,9 +157,9 @@ class CategoriesModel extends Model
    * @param array $options
    * @return mixed
    */
-  public function getList($blog_id, $options=array())
+  public function getList($blog_id, $options = array())
   {
-    $options['where'] = (isset($options['where']) && $options['where']!='') ? 'blog_id=? AND '. $options['where'] : 'blog_id=?';
+    $options['where'] = (isset($options['where']) && $options['where'] != '') ? 'blog_id=? AND ' . $options['where'] : 'blog_id=?';
     $options['params'] = isset($options['params']) ? array_merge(array($blog_id), $options['params']) : array($blog_id);
     $options['order'] = isset($options['order']) ? $options['order'] : 'categories.lft';
     return $this->findNode($options);
@@ -191,7 +193,7 @@ SQL;
    * @param array $entry_ids
    * @return array
    */
-  public function getEntriesCategories($blog_id, $entry_ids=array())
+  public function getEntriesCategories($blog_id, $entry_ids = array())
   {
     if (!count($entry_ids)) {
       return array();
@@ -233,7 +235,7 @@ SQL;
       return array();
     }
     return $this->find('all', array(
-      'where'  => 'blog_id=? AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')',
+      'where' => 'blog_id=? AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')',
       'params' => array_merge(array($blog_id), $ids),
     ));
   }
@@ -244,7 +246,7 @@ SQL;
    * @param array $ids
    * @return array|false|int|mixed
    */
-  public function increaseCount($blog_id, $ids=array())
+  public function increaseCount($blog_id, $ids = array())
   {
     if (!count($ids)) {
       return 0;
@@ -261,7 +263,7 @@ SQL;
    * @param array $ids
    * @return array|false|int|mixed
    */
-  public function decreaseCount($blog_id, $ids=array())
+  public function decreaseCount($blog_id, $ids = array())
   {
     if (!count($ids)) {
       return 0;
@@ -320,11 +322,11 @@ SQL;
     // 未分類エントリーの件数を更新
     $options = array(
       'fields' => 'COUNT(*)',
-      'where'  => 'blog_id=? AND category_id=1',
+      'where' => 'blog_id=? AND category_id=1',
       'params' => array($blog_id),
     );
     $count = Model::load('EntryCategories')->find('one', $options);
-    $this->updateByIdAndBlogId(array('count'=>$count), 1, $blog_id);
+    $this->updateByIdAndBlogId(array('count' => $count), 1, $blog_id);
 
     // カテゴリー削除
     return parent::deleteNodeById($id, 'blog_id=?', array($blog_id));
@@ -335,7 +337,8 @@ SQL;
    * @param $blog_id
    * @return mixed
    */
-  public function getTemplateCategories($blog_id){
+  public function getTemplateCategories($blog_id)
+  {
     $categories = $this->getList($blog_id);
     $parent = null;
     foreach ($categories as $key => $category) {
@@ -344,20 +347,18 @@ SQL;
       }
       $categories[$key]['is_parent'] = ($category['rgt'] - $category['lft']) > 1;
       $categories[$key]['is_nosub'] = ($category['rgt'] - $category['lft']) == 1;
-      $categories[$key]['is_sub_begin'] = $category['parent_id'] != 0 && !empty($categories[$key-1]) && ($categories[$key-1]['lft']+1==$category['lft']);
-      $categories[$key]['is_sub_end'] = $category['parent_id'] != 0 && (empty($categories[$key+1]) || $categories[$key+1]['lft']!=$category['rgt']+1);
+      $categories[$key]['is_sub_begin'] = $category['parent_id'] != 0 && !empty($categories[$key - 1]) && ($categories[$key - 1]['lft'] + 1 == $category['lft']);
+      $categories[$key]['is_sub_end'] = $category['parent_id'] != 0 && (empty($categories[$key + 1]) || $categories[$key + 1]['lft'] != $category['rgt'] + 1);
       if ($categories[$key]['is_sub_end']) {
-        if (empty($categories[$key+1])) {
+        if (empty($categories[$key + 1])) {
           $categories[$key]['climb_hierarchy'] = $category['level'] - 1;
         } else {
-          $categories[$key]['climb_hierarchy'] = $category['level'] - $categories[$key+1]['level'];
+          $categories[$key]['climb_hierarchy'] = $category['level'] - $categories[$key + 1]['level'];
         }
-        $categories[$key]['is_sub_end'] = !empty($parent) && (empty($categories[$key+1]) || $categories[$key+1]['lft']>$parent['rgt']);
+        $categories[$key]['is_sub_end'] = !empty($parent) && (empty($categories[$key + 1]) || $categories[$key + 1]['lft'] > $parent['rgt']);
       }
       $categories[$key]['is_sub_hasnext'] = $category['parent_id'] != 0 && !$categories[$key]['is_sub_end'];
     }
     return $categories;
   }
-
 }
-

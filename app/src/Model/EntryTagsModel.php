@@ -7,7 +7,9 @@ class EntryTagsModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -17,7 +19,7 @@ class EntryTagsModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'entry_tags';
   }
@@ -29,14 +31,14 @@ class EntryTagsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list=array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
       'tag_id' => array(
         'multiple' => array(
           'int' => true,            // int型にキャスト
-          'min' => array('min'=>0), // 0以上
+          'min' => array('min' => 0), // 0以上
         ),
         'array_unique' => true,     // 重複排除
       ),
@@ -55,11 +57,11 @@ class EntryTagsModel extends Model
   {
     $tags = $this->find('all', array(
       'fields' => 'tag_id',
-      'where'  => 'blog_id=? AND entry_id=?',
+      'where' => 'blog_id=? AND entry_id=?',
       'params' => array($blog_id, $entry_id)
     ));
     $ids = array();
-    foreach($tags as $tag) {
+    foreach ($tags as $tag) {
       $ids[] = $tag['tag_id'];
     }
     return $ids;
@@ -83,8 +85,8 @@ class EntryTagsModel extends Model
       $tags = array();
     }
     $temp_tags = array();
-    foreach($tags as $key => $tag){
-      if (is_string($tag) && $tag!='') {
+    foreach ($tags as $key => $tag) {
+      if (is_string($tag) && $tag != '') {
         // 文字列のみ許可
         $temp_tags[] = $tag;
       }
@@ -96,12 +98,12 @@ class EntryTagsModel extends Model
 
     // 存在していないタグを作成
     foreach ($tags as $tag) {
-      if ($tag!=='' && !in_array($tag, $now_tag_values)) {
+      if ($tag !== '' && !in_array($tag, $now_tag_values)) {
         // タグが存在していないので作成
         $data_tag = array(
           'blog_id' => $blog_id,
-          'name'    => $tag,
-          'count'   => 0,
+          'name' => $tag,
+          'count' => 0,
         );
         $tag_id = $tags_model->insert($data_tag);
         $now_tags[$tag_id] = $tag;
@@ -128,7 +130,7 @@ class EntryTagsModel extends Model
     if (count($insert_ids)) {
       $columns = array('blog_id', 'entry_id', 'tag_id');
       $values = array();
-      foreach($insert_ids as $tag_id){
+      foreach ($insert_ids as $tag_id) {
         $values[] = $blog_id;
         $values[] = $entry_id;
         $values[] = $tag_id;
@@ -155,6 +157,4 @@ class EntryTagsModel extends Model
     }
     return $this->delete('blog_id=? AND entry_id=?', array($blog_id, $entry_id));
   }
-
 }
-

@@ -1,7 +1,7 @@
 <?php
 /**
-* 入力エラーチェッククラス
-*/
+ * 入力エラーチェッククラス
+ */
 
 namespace Fc2blog\Model;
 
@@ -16,9 +16,9 @@ class Validate
    */
   public static function required($value, $options)
   {
-    if ($value==null || $value==='') {
+    if ($value == null || $value === '') {
       // データが存在しない場合
-      if ($options===false) {
+      if ($options === false) {
         return false;
       }
       return __('Please be sure to input');
@@ -31,7 +31,7 @@ class Validate
    * 数値チェック
    * @param $value
    * @param $options
-   * @return bool|mixed|string
+   * @return bool|string
    */
   public static function numeric($value, $options)
   {
@@ -46,7 +46,7 @@ class Validate
    * 半角英数チェック
    * @param $value
    * @param $options
-   * @return bool|mixed|string
+   * @return bool|string
    */
   public static function alphanumeric($value, $options)
   {
@@ -60,7 +60,6 @@ class Validate
    * 最大文字列チェック
    * @param string $value
    * @param array $options [*max] 最大文字列
-   * @return bool|string
    * @return bool|string
    */
   public static function maxlength($value, $options)
@@ -77,7 +76,6 @@ class Validate
    * @param string $value
    * @param array $options [*min] 最小文字列
    * @return bool|string
-   * @return bool|string
    */
   public static function minlength($value, $options)
   {
@@ -92,7 +90,6 @@ class Validate
    * 最大値チェック
    * @param string $value
    * @param array $options [*max] 最大値
-   * @return bool|string
    * @return bool|string
    */
   public static function max($value, $options)
@@ -109,7 +106,6 @@ class Validate
    * @param string $value
    * @param array $options [*min] 最小値
    * @return bool|string
-   * @return bool|string
    */
   public static function min($value, $options)
   {
@@ -124,12 +120,12 @@ class Validate
    * 日時チェック
    * @param $value
    * @param $options
-   * @return bool|mixed|string
+   * @return bool|string
    */
   public static function datetime($value, $options)
   {
     $format = isset($options['format']) ? $options['format'] : '%Y-%m-%d %H:%M:%S';
-    if (strptime($value, $format)===false || strtotime($value)===false) {
+    if (strptime($value, $format) === false || strtotime($value) === false) {
       return isset($options['message']) ? $options['message'] : __('Please enter the date and time');
     }
     return true;
@@ -139,7 +135,7 @@ class Validate
    * メールアドレスチェック
    * @param $value
    * @param $options
-   * @return bool|mixed|string
+   * @return bool|string
    */
   public static function email($value, $options)
   {
@@ -153,7 +149,7 @@ class Validate
    * URLチェック
    * @param $value
    * @param $options
-   * @return bool|mixed|string
+   * @return bool|string
    */
   public static function url($value, $options)
   {
@@ -170,11 +166,11 @@ class Validate
    * @param $key
    * @param $data
    * @param $model
-   * @return bool|mixed|string
+   * @return bool|string
    */
   public static function unique($value, $options, $key, $data, $model)
   {
-    if (!$model->isExist(array('where'=>$key . '=?', 'params'=>array($value)))) {
+    if (!$model->isExist(array('where' => $key . '=?', 'params' => array($value)))) {
       return true;
     }
     return isset($options['message']) ? $options['message'] : __('Is already in use');
@@ -185,7 +181,7 @@ class Validate
    * 配列に存在する値かチェック
    * @param $value
    * @param $options
-   * @return bool|mixed|string
+   * @return bool|string
    */
   public static function in_array($value, $options)
   {
@@ -208,7 +204,8 @@ class Validate
   public static function file($value, $option)
   {
     switch ($value['error']) {
-      case UPLOAD_ERR_OK: break;  // OK
+      case UPLOAD_ERR_OK:
+        break;  // OK
 
       case UPLOAD_ERR_NO_FILE:
         if (empty($option['required'])) {
@@ -251,7 +248,6 @@ class Validate
     return true;
   }
 
-
   /**
    * 独自チェック
    * @param $value
@@ -266,7 +262,6 @@ class Validate
     $method = $option['method'];
     return $model->$method($value, $option, $key, $data, $model);
   }
-
 
   /**
    * 配列チェック関数
@@ -357,7 +352,7 @@ class Validate
    */
   public static function default_value(&$value, $default)
   {
-    if ($value===null || $value==="") {
+    if ($value === null || $value === "") {
       $value = $default;
     }
     return true;
@@ -374,6 +369,4 @@ class Validate
     $value = str_replace(array_keys($replaces), array_values($replaces), $value);
     return true;
   }
-
 }
-

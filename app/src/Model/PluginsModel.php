@@ -9,7 +9,9 @@ class PluginsModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -19,7 +21,7 @@ class PluginsModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'plugins';
   }
@@ -31,16 +33,16 @@ class PluginsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list=array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
       'title' => array(
-        'required'  => true,
+        'required' => true,
         'maxlength' => array('max' => 50),
       ),
       'body' => array(
-        'required'  => true,
+        'required' => true,
         'maxlength' => array('max' => 2000),
       ),
     );
@@ -54,7 +56,7 @@ class PluginsModel extends Model
    * @param array $options
    * @return array|mixed
    */
-  public function findById($id, $options=array())
+  public function findById($id, $options = []): array
   {
     $plugin = parent::findById($id, $options);
     if (!empty($plugin)) {
@@ -71,18 +73,18 @@ class PluginsModel extends Model
    * @param int $user_id
    * @return array|false|int|mixed
    */
-  public function register($blog_plugin, $plugin_data, $user_id=0)
+  public function register($blog_plugin, $plugin_data, $user_id = 0)
   {
     // 登録データ作成
     $values = array(
-      'title'       => $plugin_data['title'],
-      'body'        => $plugin_data['body'],
-      'list'        => $blog_plugin['list'],
-      'contents'    => $blog_plugin['contents'],
-      'attribute'   => $blog_plugin['attribute'],
+      'title' => $plugin_data['title'],
+      'body' => $plugin_data['body'],
+      'list' => $blog_plugin['list'],
+      'contents' => $blog_plugin['contents'],
+      'attribute' => $blog_plugin['attribute'],
       'device_type' => $blog_plugin['device_type'],
     );
-    if ($blog_plugin['plugin_id']!=0) {
+    if ($blog_plugin['plugin_id'] != 0) {
       // プラグインIDがある場合は更新
       $values['updated_at'] = date('Y-m-d H:i:s');
       return $this->updateById($values, $blog_plugin['plugin_id']);
@@ -96,7 +98,7 @@ class PluginsModel extends Model
       return $id;
     }
     // 作成したプラグインIDで更新
-    return Model::load('BlogPlugins')->updateByIdAndBlogId(array('plugin_id'=>$id), $blog_plugin['id'], $blog_plugin['blog_id']);
+    return Model::load('BlogPlugins')->updateByIdAndBlogId(array('plugin_id' => $id), $blog_plugin['id'], $blog_plugin['blog_id']);
   }
 
   /**
@@ -106,18 +108,18 @@ class PluginsModel extends Model
    * @param array $options
    * @return false
    */
-  public function deleteByIdAndUserId($id, $user_id, $options=array())
+  public function deleteByIdAndUserId($id, $user_id, $options = array())
   {
     if (!parent::deleteByIdAndUserId($id, $user_id, $options)) {
       return false;
     }
     // 登録状態(id<>0)のプラグインを未登録(id=0)に戻す
-    return Model::load('BlogPlugins')->update(array('plugin_id'=>0), 'plugin_id=?', array($id));
+    return Model::load('BlogPlugins')->update(array('plugin_id' => 0), 'plugin_id=?', array($id));
   }
 
   /**
-  * 初期公式プラグインの追加処理
-  */
+   * 初期公式プラグインの追加処理
+   */
   public function addInitialOfficialPlugin()
   {
     $this->delete('user_id=0');
@@ -131,6 +133,4 @@ class PluginsModel extends Model
       $this->insert($plugin);
     }
   }
-
 }
-

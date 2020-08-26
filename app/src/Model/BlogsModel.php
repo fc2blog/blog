@@ -14,7 +14,9 @@ class BlogsModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -24,7 +26,7 @@ class BlogsModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'blogs';
   }
@@ -39,8 +41,8 @@ class BlogsModel extends Model
    */
   public static function privateCheck($value, $valid, $k, $d)
   {
-    if ($value==null || $value==='') {
-      if ($d['open_status']== Config::get('BLOG.OPEN_STATUS.PRIVATE')) {
+    if ($value == null || $value === '') {
+      if ($d['open_status'] == Config::get('BLOG.OPEN_STATUS.PRIVATE')) {
         return __('Please Be sure to set the password if you want to private');
       }
     }
@@ -67,21 +69,21 @@ class BlogsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list=array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
       'id' => array(
-        'required'     => true,
-        'minlength'    => array('min' => 3),
-        'maxlength'    => array('max' => 50),
+        'required' => true,
+        'minlength' => array('min' => 3),
+        'maxlength' => array('max' => 50),
         'alphanumeric' => array(),
-        'strtolower'   => array(),
-        'own'          => array('method' => 'useDirectory'),
-        'unique'       => array(),
+        'strtolower' => array(),
+        'own' => array('method' => 'useDirectory'),
+        'unique' => array(),
       ),
       'name' => array(
-        'required'  => true,
+        'required' => true,
         'minlength' => array('min' => 1),
         'maxlength' => array('max' => 50),
       ),
@@ -95,21 +97,21 @@ class BlogsModel extends Model
         'maxlength' => array('max' => 255),
       ),
       'timezone' => array(
-        'required'  => true,
-        'in_array'  => array('values'=>array_values(DateTimeZone::listIdentifiers())),
+        'required' => true,
+        'in_array' => array('values' => array_values(DateTimeZone::listIdentifiers())),
       ),
       'open_status' => array(
-        'in_array' => array('values'=>array_keys($this->getOpenStatusList())),
+        'in_array' => array('values' => array_keys($this->getOpenStatusList())),
       ),
       'ssl_enable' => array(
-        'in_array' => array('values'=>array_keys($this->getSSLEnableSettingList())),
+        'in_array' => array('values' => array_keys($this->getSSLEnableSettingList())),
       ),
       'redirect_status_code' => array(
-        'in_array' => array('values'=>array_keys($this->getRedirectStatusCodeSettingList())),
+        'in_array' => array('values' => array_keys($this->getRedirectStatusCodeSettingList())),
       ),
       'blog_password' => array(
         'maxlength' => array('max' => 50),
-        'own'       => array('method' => 'privateCheck'),
+        'own' => array('method' => 'privateCheck'),
       ),
     );
 
@@ -131,19 +133,19 @@ class BlogsModel extends Model
   }
 
   /**
-  * ブログの公開状態のリストを取得
-  */
+   * ブログの公開状態のリストを取得
+   */
   public static function getOpenStatusList()
   {
     return array(
-        Config::get('BLOG.OPEN_STATUS.PUBLIC')  => __('Public'),
-        Config::get('BLOG.OPEN_STATUS.PRIVATE') => __('Private'),
+      Config::get('BLOG.OPEN_STATUS.PUBLIC') => __('Public'),
+      Config::get('BLOG.OPEN_STATUS.PRIVATE') => __('Private'),
     );
   }
 
   /**
-  * タイムゾーン一覧
-  */
+   * タイムゾーン一覧
+   */
   public static function getTimezoneList()
   {
     $timezone_identifiers = DateTimeZone::listIdentifiers();
@@ -191,7 +193,8 @@ class BlogsModel extends Model
    * @param $blog
    * @return array
    */
-  public static function getTemplateIds($blog){
+  public static function getTemplateIds($blog)
+  {
     $columns = Config::get('BLOG_TEMPLATE_COLUMN');
     return [
       $blog[$columns[1]],
@@ -208,9 +211,9 @@ class BlogsModel extends Model
   {
     return $this->find('list', array(
       'fields' => array('id', 'name'),
-      'where'  => 'user_id=?',
+      'where' => 'user_id=?',
       'params' => array($user_id),
-      'order'  => 'created_at DESC',
+      'order' => 'created_at DESC',
     ));
   }
 
@@ -221,7 +224,7 @@ class BlogsModel extends Model
    * @param array $options
    * @return mixed
    */
-  public function findByIdAndUserId($blog_id, $user_id, $options=array())
+  public function findByIdAndUserId($blog_id, $user_id, $options = []):array
   {
     $options['where'] = isset($options['where']) ? 'id=? AND user_id=? AND ' . $options['where'] : 'id=? AND user_id=?';
     $options['params'] = isset($options['params']) ? array_merge(array($blog_id, $user_id), $options['params']) : array($blog_id, $user_id);
@@ -234,7 +237,7 @@ class BlogsModel extends Model
    * @param array $options
    * @return mixed
    */
-  public function findByUserId ($user_id, $options=array())
+  public function findByUserId($user_id, $options = array())
   {
     $options['where'] = isset($options['where']) ? 'user_id=? AND ' . $options['where'] : 'user_id=?';
     $options['params'] = isset($options['params']) ? array_merge(array($user_id), $options['params']) : array($user_id);
@@ -242,8 +245,8 @@ class BlogsModel extends Model
   }
 
   /**
-  * ランダムに１件ブログを取得する
-  */
+   * ランダムに１件ブログを取得する
+   */
   public function findByRandom()
   {
     $options = array(
@@ -257,11 +260,12 @@ class BlogsModel extends Model
    * @param $user
    * @return mixed
    */
-  public function getLoginBlog($user){
+  public function getLoginBlog($user)
+  {
     // ログイン後のブログIDが設定されていれば対象のブログを取得
     if (!empty($user['login_blog_id'])) {
       $blog = $this->find('row', array(
-        'where'  => 'id=? AND user_id=?',
+        'where' => 'id=? AND user_id=?',
         'params' => array($user['login_blog_id'], $user['id']),
       ));
       if ($blog) {
@@ -270,9 +274,9 @@ class BlogsModel extends Model
     }
     // 未設定の場合最後に作ったブログを取得
     return $this->find('row', array(
-      'where'  => 'user_id=?',
+      'where' => 'user_id=?',
       'params' => array($user['id']),
-      'order'  => 'created_at DESC',
+      'order' => 'created_at DESC',
     ));
   }
 
@@ -285,7 +289,7 @@ class BlogsModel extends Model
   {
     return $this->find('list', array(
       'fields' => array('id', 'name'),
-      'where'  => 'user_id=?',
+      'where' => 'user_id=?',
       'params' => array($user_id),
     ));
   }
@@ -296,7 +300,8 @@ class BlogsModel extends Model
    * @param $blog_id
    * @return bool|mixed
    */
-  public function isUserHaveBlogId($user_id, $blog_id){
+  public function isUserHaveBlogId($user_id, $blog_id)
+  {
     static $is_list = array();    // キャッシュ用
 
     $key = $user_id . '_' . $blog_id;
@@ -305,7 +310,7 @@ class BlogsModel extends Model
     }
     return $is_list[$key] = $this->isExist(array(
       'fields' => 'id',
-      'where'  => 'id=? AND user_id=?',
+      'where' => 'id=? AND user_id=?',
       'params' => array($blog_id, $user_id),
     ));
   }
@@ -398,9 +403,9 @@ class BlogsModel extends Model
 
     $blog_templates_device_id_list = array_keys($blog_templates);
 
-    foreach($blog_templates_device_id_list as $device_id){
-      foreach($blog_templates[$device_id] as $template){
-        if($template['title'] !== '初期テンプレート') continue;
+    foreach ($blog_templates_device_id_list as $device_id) {
+      foreach ($blog_templates[$device_id] as $template) {
+        if ($template['title'] !== '初期テンプレート') continue;
 
         $template_path = BlogTemplatesModel::getPathDefaultTemplateWithDevice($device_id);
         $css_path = BlogTemplatesModel::getPathDefaultCssWithDevice($device_id);
@@ -421,7 +426,7 @@ class BlogsModel extends Model
           $blog['id']
         );
 
-        if (!$blogs_model->isAppliedTemplate($template['id'], $blog_id, $device_id)){
+        if (!$blogs_model->isAppliedTemplate($template['id'], $blog_id, $device_id)) {
           // 初期テンプレートが適用ではないので、初期テンプレートを適用する
           $blogs_model->switchTemplate(
             array_merge($blog_templates_data_common, $template),
@@ -439,7 +444,7 @@ class BlogsModel extends Model
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function updateById($values, $id, $options=array())
+  public function updateById($values, $id, $options = array())
   {
     $values['updated_at'] = date('Y-m-d H:i:s');
     return parent::updateById($values, $id, $options);
@@ -497,9 +502,9 @@ class BlogsModel extends Model
    * @param array $options
    * @return bool|int
    */
-  public function deleteByIdAndUserId($blog_id, $user_id, $options=array())
+  public function deleteByIdAndUserId($blog_id, $user_id, $options = array())
   {
-    if (!parent::deleteById($blog_id, array('where'=>'user_id=?', 'params'=>array($user_id)))){
+    if (!parent::deleteById($blog_id, array('where' => 'user_id=?', 'params' => array($user_id)))) {
       return 0;
     }
 
@@ -508,7 +513,7 @@ class BlogsModel extends Model
       'entries', 'entry_tags', 'tags', 'entry_categories', 'categories', 'comments',
       'files', 'blog_settings', 'blog_templates'
     );
-    foreach($tables as $table){
+    foreach ($tables as $table) {
       $sql = 'DELETE FROM ' . $table . ' WHERE blog_id=?';
       $this->executeSql($sql, array($blog_id));
     }
@@ -573,7 +578,7 @@ class BlogsModel extends Model
   {
     $is_https = (isset($request->server['HTTPS']) && $request->server['HTTPS'] === 'on');
     $schema = static::getSchemaByBlogId($blog_id);
-    return ($schema === "http:" && $is_https===false) || ($schema === "https:" && $is_https===true);
+    return ($schema === "http:" && $is_https === false) || ($schema === "https:" && $is_https === true);
   }
 
   /**
@@ -582,9 +587,10 @@ class BlogsModel extends Model
    * @param null $domain 省略時、\Fc2blog\Config::get("DOMAIN")
    * @return string
    */
-  static public function getFullHostUrlByBlogId(string $blog_id, $domain=null){
+  static public function getFullHostUrlByBlogId(string $blog_id, $domain = null)
+  {
     $schema = static::getSchemaByBlogId($blog_id);
-    if(is_null($domain)) {
+    if (is_null($domain)) {
       $domain = Config::get("DOMAIN");
     }
     $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
@@ -596,12 +602,13 @@ class BlogsModel extends Model
    * @param string $blog_id
    * @return string
    */
-  static public function getSchemaByBlogId(string $blog_id){
-    if(!static::isValidBlogId($blog_id)) throw new InvalidArgumentException("invalid blog id :{$blog_id}");
+  static public function getSchemaByBlogId(string $blog_id)
+  {
+    if (!static::isValidBlogId($blog_id)) throw new InvalidArgumentException("invalid blog id :{$blog_id}");
     $blogs_model = static::getInstance();
     $blog_array = $blogs_model->findById($blog_id);
 
-    if(!is_array($blog_array) || !isset($blog_array['ssl_enable'])) {
+    if (!is_array($blog_array) || !isset($blog_array['ssl_enable'])) {
       throw new InvalidArgumentException("blog id `{$blog_id}` notfound.");
     }
 
@@ -613,7 +620,8 @@ class BlogsModel extends Model
    * @param int $value
    * @return string
    */
-  static public function getSchemaBySslEnableValue(int $value){
+  static public function getSchemaBySslEnableValue(int $value)
+  {
     return ($value === Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http:' : 'https:';
   }
 
@@ -622,12 +630,13 @@ class BlogsModel extends Model
    * @param string $blog_id
    * @return int
    */
-  static public function getRedirectStatusCodeByBlogId(string $blog_id):int{
-    if(!static::isValidBlogId($blog_id)) throw new InvalidArgumentException("invalid blog id :{$blog_id}");
+  static public function getRedirectStatusCodeByBlogId(string $blog_id): int
+  {
+    if (!static::isValidBlogId($blog_id)) throw new InvalidArgumentException("invalid blog id :{$blog_id}");
     $blogs_model = static::getInstance();
     $blog_array = $blogs_model->findById($blog_id);
 
-    if(!is_array($blog_array) || !isset($blog_array['redirect_status_code'])) {
+    if (!is_array($blog_array) || !isset($blog_array['redirect_status_code'])) {
       throw new InvalidArgumentException("blog id `{$blog_id}` notfound.");
     }
 
