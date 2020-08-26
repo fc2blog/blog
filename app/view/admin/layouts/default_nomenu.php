@@ -1,4 +1,8 @@
-<?php header("Content-Type: text/html; charset=UTF-8"); ?>
+<?php
+if(!headers_sent()){
+header("Content-Type: text/html; charset=UTF-8");
+}
+?>
 <!DOCTYPE html>
 <html lang="<?php echo $request->lang; ?>">
 <head>
