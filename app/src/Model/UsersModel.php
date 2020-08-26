@@ -168,12 +168,15 @@ class UsersModel extends Model
    */
   public function deleteById($user_id, $options=array())
   {
-    $blogs_model = Model::load('Blogs');
+    $blogs_model = new BlogsModel();
 
-    // ユーザーが所持しているブログを全て削除
+    // ユーザーが所持しているブログがあればすべて削除
     $blogs = $blogs_model->findByUserId($user_id);
-    foreach ($blogs as $blog) {
-      $blogs_model->deleteByIdAndUserId($blog['id'], $user_id);
+
+    if(is_array($blogs)) {
+      foreach ($blogs as $blog) {
+        $blogs_model->deleteByIdAndUserId($blog['id'], $user_id);
+      }
     }
 
     return parent::deleteById($user_id, $options);
