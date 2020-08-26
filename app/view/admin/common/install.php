@@ -43,7 +43,7 @@ table#db
   }
 </style>
 <ul class="check">
-  <?php $is_write_temp = is_writable(\Fc2blog\Config::get('TEMP_DIR') . '.'); ?>
+  <?php //$is_write_temp = is_writable(\Fc2blog\Config::get('TEMP_DIR') . '.'); ?>
   <li class="<?php echo $is_write_temp ? 'ok' : 'ng'; ?>">
     <?php echo __('Write access to the temporary directory'); ?> . . .
     <?php if ($is_write_temp): ?>
@@ -55,7 +55,6 @@ table#db
     <?php endif; ?>
   </li>
 
-  <?php $is_write_upload = is_writable(\Fc2blog\Config::get('WWW_UPLOAD_DIR') . '.'); ?>
   <li class="<?php echo $is_write_upload ? 'ok' : 'ng'; ?>">
     <?php echo __('Write access to the upload directory'); ?> . . .
     <?php if ($is_write_upload): ?>
@@ -79,16 +78,6 @@ table#db
     <?php endif; ?>
   </li>
 
-  <?php
-    $is_connect = true;
-    $connect_message = '';
-    try{
-      \Fc2blog\Model\MSDB::getInstance()->connect(false, false);
-    }catch(Exception $e){
-      $is_connect = false;
-      $connect_message = $e->getMessage();
-    }
-  ?>
   <li class="<?php echo $is_connect ? 'ok' : 'ng'; ?>">
     <?php echo __('Check connection to the MySQL'); ?> . . .
     <?php if ($is_connect): ?>
@@ -124,7 +113,6 @@ table#db
   </li>
 
   <?php if ($is_connect): ?>
-  <?php $is_character = version_compare(\Fc2blog\Model\MSDB::getInstance()->getVersion(), '5.5.0')>=0 || DB_CHARSET!='UTF8MB4'; ?>
   <li class="<?php echo $is_character ? 'ok' : 'ng'; ?>">
     <?php echo __('Character code check of MySQL'); ?> . . .
     <?php if ($is_character): ?>
@@ -141,7 +129,6 @@ table#db
   </li>
   <?php endif; ?>
 
-  <?php $is_domain = DOMAIN!='domain'; ?>
   <li class="<?php echo $is_domain ? 'ok' : 'ng'; ?>">
     <?php echo __('Check the configuration of the domain'); ?> . . .
     <?php if ($is_domain): ?>
@@ -157,7 +144,6 @@ table#db
     <?php endif; ?>
   </li>
 
-  <?php $is_salt = PASSWORD_SALT!='0123456789abcdef'; ?>
   <li class="<?php echo $is_salt ? 'ok' : 'ng'; ?>">
     <?php echo __('Check the configuration of the salt value'); ?> . . .
     <?php if ($is_salt): ?>
@@ -173,7 +159,6 @@ table#db
     <?php endif; ?>
   </li>
 
-  <?php $is_gd = function_exists('gd_info'); ?>
   <li class="<?php echo $is_gd ? 'ok' : 'warning'; ?>">
     <?php echo __('Check the configuration of the GD library'); ?> . . .
     <?php if ($is_gd): ?>
@@ -191,7 +176,7 @@ table#db
   </li>
 </ul>
 
-<?php if ($is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_character && $is_domain && $is_salt): ?>
+<?php if ($is_all_ok): ?>
   <form>
     <input type="hidden" name="state" value="1" />
     <p class="form-button">
