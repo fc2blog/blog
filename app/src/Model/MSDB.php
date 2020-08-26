@@ -22,9 +22,9 @@ class MSDB implements DBInterface
   {
   }
 
-  public static function getInstance()
+  public static function getInstance(bool $rebuild=false)
   {
-    if (self::$instance === null) {
+    if (self::$instance === null || $rebuild) {
       self::$instance = new MSDB();
     }
     return self::$instance;
