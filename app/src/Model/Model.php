@@ -204,9 +204,9 @@ abstract class Model implements ModelInterface
    * 主キーをキーにしてデータを取得
    * @param $id
    * @param array $options
-   * @return array
+   * @return array|false
    */
-  public function findById($id, $options = []): array
+  public function findById($id, $options = [])
   {
     if (empty($id)) {
       return [];
@@ -221,9 +221,9 @@ abstract class Model implements ModelInterface
    * @param $id
    * @param $blog_id
    * @param array $options
-   * @return array
+   * @return array|false
    */
-  public function findByIdAndBlogId($id, $blog_id, $options = []): array
+  public function findByIdAndBlogId($id, $blog_id, $options = [])
   {
     if (empty($id) || empty($blog_id)) {
       return [];
@@ -238,9 +238,9 @@ abstract class Model implements ModelInterface
    * @param $id
    * @param $user_id
    * @param array $options
-   * @return array
+   * @return array|false
    */
-  public function findByIdAndUserId($id, $user_id, $options = []): array
+  public function findByIdAndUserId($id, $user_id, $options = [])
   {
     if (empty($id) || empty($user_id)) {
       return [];
