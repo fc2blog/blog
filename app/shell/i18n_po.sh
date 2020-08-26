@@ -1,3 +1,4 @@
+#!/bin/bash
 echo " ===== Start create po file ===== "
 SELF_DIR=`dirname $0`
 xgettext --keyword=__ --language php --from-code=UTF-8 --output messages.pot `find ${SELF_DIR}/../ -name \*.php -o -name \*.html -type f | grep -v /temp/`

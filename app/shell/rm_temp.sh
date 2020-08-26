@@ -1,3 +1,4 @@
+#!/bin/bash
 echo " ===== Start Temp Directory File ===== "
 SELF_DIR=`dirname $0`
 echo "rm debug_html"
