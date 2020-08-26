@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Controller\Admin\Files;
 
-use Fc2blog\Config;
 use Fc2blog\Model\FilesModel;
 use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;

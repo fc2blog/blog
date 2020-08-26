@@ -9,6 +9,7 @@ define("TEST_APP_DIR", __DIR__ . "/../App");
 
 require_once __DIR__ . "/../app/vendor/autoload.php";
 
+/** @noinspection PhpUnhandledExceptionInspection */
 LoaderHelper::requireBootStrap();
 
 $generator = new GenerateSampleComment();
