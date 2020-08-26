@@ -74,6 +74,9 @@ class MySqliWrap implements DBInterface{
     return $this->result($stmt, $options['result']);
   }
 
+  /**
+   * 複数の更新系SQL
+   */
   public function multiExecute($sql)
   {
     $sql = preg_replace('/^--.*?\n/m', '', $sql);
@@ -81,19 +84,22 @@ class MySqliWrap implements DBInterface{
     $sqls = explode(';', $sql);
     $execute_sqls = array();
     foreach ($sqls as $sql) {
-      if (trim($sql)!=='') {
+      if (trim($sql) !== '') {
         $execute_sqls[] = $sql;
       }
     }
-    $ret = true;
+
     foreach ($execute_sqls as $sql) {
-      $ret = $ret && $this->execute($sql);
+      if($this->execute($sql) === false) {
+        return false;
+      }
     }
-    return $ret;
+    return true;
   }
 
   /**
    * SQLの実行
+   * @throws \Exception
    */
   private function query($sql, $params=array(), $types=''){
     $mtime = 0;    // SQL実行結果時間取得用
@@ -107,7 +113,7 @@ class MySqliWrap implements DBInterface{
       // SQL文をそのまま実行
       $stmt = $this->db->query($sql);
       if (getType($stmt) == 'boolean' && !$stmt) {
-        throw new \Exception('[query Error]' . $sql);
+        throw new \Exception('[query Error]' . print_r($this->db->error, true) .$sql);
       }
       if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
         $mtime = sprintf('%0.2fms', (microtime(true) - $mtime)*1000);
