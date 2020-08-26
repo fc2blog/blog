@@ -375,7 +375,7 @@ describe("crawl some blog", () => {
 
   });
 
-  it("comment delete succss", async () => {
+  it("comment delete success", async () => {
 
     await c.page.type("#pass", "pass_is_pass");
 
