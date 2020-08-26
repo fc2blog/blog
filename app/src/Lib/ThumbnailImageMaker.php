@@ -19,7 +19,7 @@ class ThumbnailImageMaker
   private $height;
   public $image_type;
 
-  public function load($file_path)
+  public function load($file_path): bool
   {
     $image_info = getimagesize($file_path);
     if ($image_info === FALSE) return FALSE;
@@ -39,7 +39,7 @@ class ThumbnailImageMaker
     return TRUE;
   }
 
-  private function setImageResource($image_resource)
+  private function setImageResource($image_resource): bool
   {
     if ($image_resource === FALSE) return FALSE;
 
@@ -52,7 +52,7 @@ class ThumbnailImageMaker
     return TRUE;
   }
 
-  public function resize($to_width, $to_height, $allow_expand = TRUE)
+  public function resize($to_width, $to_height, $allow_expand = TRUE): bool
   {
     if (!$allow_expand && $to_width >= $this->width && $to_height >= $this->height) return TRUE;
 
@@ -70,7 +70,7 @@ class ThumbnailImageMaker
     return $this->setImageResource($new_image);
   }
 
-  public function resizeToHeight($to_height, $allow_expand = TRUE)
+  public function resizeToHeight($to_height, $allow_expand = TRUE): bool
   {
     if (!$allow_expand && $to_height >= $this->height) return TRUE;
     $aspect_ratio = $to_height / $this->height;
@@ -78,7 +78,7 @@ class ThumbnailImageMaker
     return $this->resize($to_width, $to_height);
   }
 
-  public function resizeToWidth($to_width, $allow_expand = TRUE)
+  public function resizeToWidth($to_width, $allow_expand = TRUE): bool
   {
     if (!$allow_expand && $to_width >= $this->width) return TRUE;
     $aspect_ratio = $to_width / $this->width;
@@ -86,7 +86,7 @@ class ThumbnailImageMaker
     return $this->resize($to_width, $to_height);
   }
 
-  public function resizeToWidthInCenter($to_width, $to_height, $allow_expand = TRUE)
+  public function resizeToWidthInCenter($to_width, $to_height, $allow_expand = TRUE): bool
   {
     if (!$allow_expand && $to_width >= $this->width && $to_height >= $this->height) return TRUE;
 
@@ -116,7 +116,7 @@ class ThumbnailImageMaker
     return $this->setImageResource($new_image);
   }
 
-  function save($filename, $image_type = IMAGETYPE_JPEG, $jpeg_compression = 75)
+  function save($filename, $image_type = IMAGETYPE_JPEG, $jpeg_compression = 75): bool
   {
     if ($image_type === IMAGETYPE_JPEG) {
       $write_result = imagejpeg($this->image_resource, $filename, $jpeg_compression);
@@ -131,5 +131,4 @@ class ThumbnailImageMaker
 
     return TRUE;
   }
-
 }
