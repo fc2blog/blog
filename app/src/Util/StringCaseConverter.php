@@ -12,7 +12,7 @@ class StringCaseConverter
    * @param string $snake_case
    * @return string
    */
-  public static function pascalCase(string $snake_case):string
+  public static function pascalCase(string $snake_case): string
   {
     $snake_case = str_replace('_', ' ', $snake_case);
     $snake_case = ucwords($snake_case);

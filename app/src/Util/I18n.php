@@ -15,7 +15,7 @@ class I18n
    * @param Request $request
    * @return string
    */
-  static public function setLanguage(Request $request)
+  static public function setLanguage(Request $request): string
   {
     $cookie_lang = Cookie::get('lang');
     $cookie_language = Config::get('LANGUAGES.' . (string)$cookie_lang);
