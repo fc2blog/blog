@@ -10,6 +10,7 @@ use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Request;
 use InvalidArgumentException;
+use League\Flysystem\Adapter\Local;
 use RuntimeException;
 
 class App
@@ -127,11 +128,13 @@ class App
    */
   public static function removeBlogDirectory(string $blog_id): void
   {
+    $fs = new Local(__DIR__ . "/../../");
+
     $upload_path = Config::get('WWW_UPLOAD_DIR') . '/' . static::getBlogLayer($blog_id);
-    system("rm -fr " . $upload_path); // TODO systemではない方法に置き換える
+    $fs->deleteDir($upload_path);
 
     $template_path = Config::get('BLOG_TEMPLATE_DIR') . static::getBlogLayer($blog_id);
-    system("rm -fr " . $template_path); // TODO systemではない方法に置き換える
+    $fs->deleteDir($template_path);
   }
 
   /**
