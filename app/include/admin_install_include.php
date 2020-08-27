@@ -15,4 +15,6 @@ $request = new \Fc2blog\Web\Request();
 $request->className = \Fc2blog\Web\Controller\Admin\CommonController::class;
 $request->methodName = "install";
 
-$controller = new \Fc2blog\Web\Controller\Admin\CommonController($request, 'install');
+$c = new \Fc2blog\Web\Controller\Admin\CommonController($request);
+$c->execute($request->methodName);
+$c->emit();

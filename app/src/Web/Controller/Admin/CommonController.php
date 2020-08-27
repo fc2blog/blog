@@ -126,9 +126,9 @@ class CommonController extends AdminController
         // 環境チェック確認
 
         // ディレクトリ書き込みパーミッション確認
-        $is_write_temp = is_writable(\Fc2blog\Config::get('TEMP_DIR') . '.');
+        $is_write_temp = is_writable(Config::get('TEMP_DIR') . '.');
         $this->set('is_write_temp', $is_write_temp);
-        $is_write_upload = is_writable(\Fc2blog\Config::get('WWW_UPLOAD_DIR') . '.');
+        $is_write_upload = is_writable(Config::get('WWW_UPLOAD_DIR') . '.');
         $this->set('is_write_upload', $is_write_upload);
 
         // DBライブラリ確認
@@ -166,7 +166,7 @@ class CommonController extends AdminController
         $is_all_ok = $is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_character && $is_domain && $is_salt;
         $this->set('is_all_ok', $is_all_ok);
 
-        return;
+        return "";
 
       case 1:
         // 各種初期設定、DB テーブル作成、ディレクトリ作成

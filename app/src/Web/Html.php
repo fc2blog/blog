@@ -35,7 +35,7 @@ class Html
       $args = array_merge($gets, $args);
     }
 
-    $controller = Config::get('ControllerName');
+    $controller = $request->shortControllerName;
     if (isset($args['controller'])) {
       $controller = $args['controller'];
       unset($args['controller']);

@@ -320,7 +320,7 @@ class BlogPluginsController extends AdminController
     $blog_plugins_model->sort($request->get('blog_plugins', array()), $device_type, $blog_id);
 
     $this->setInfoMessage(__('I have completed the sorting'));
-    if (App::isSP()) {
+    if (App::isSP($request)) {
       $this->redirect($request, array('action' => 'index', 'device_type' => $device_type, 'state' => 'sort'));
     }
     $this->redirect($request, array('action' => 'index', 'device_type' => $device_type));
@@ -343,7 +343,7 @@ class BlogPluginsController extends AdminController
       $this->setInfoMessage(__('I changed the display settings'));
     }
 
-    if (App::isSP()) {
+    if (App::isSP($request)) {
       $this->redirect($request, array('action' => 'index', 'device_type' => $device_type, 'state' => 'display'));
     }
     $this->redirect($request, array('action' => 'index', 'device_type' => $device_type));

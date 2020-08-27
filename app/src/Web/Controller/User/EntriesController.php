@@ -487,7 +487,7 @@ class EntriesController extends UserController
 
     // FC2用のテンプレートで表示
     $areas = array('permanent_area');
-    if (App::isPC()) {
+    if (App::isPC($request)) {
       $areas[] = 'comment_area';
     }
     $this->setPageData($areas);
@@ -532,7 +532,7 @@ class EntriesController extends UserController
           $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $id, $blog_setting);
           $options['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
           $comments = $comments_model->find('all', $options);
-          $this->set('comments', $comments_model->decorateByBlogSetting($comments, $blog_setting, $self_blog));
+          $this->set('comments', $comments_model->decorateByBlogSetting($request, $comments, $blog_setting, $self_blog));
           $this->set('paging', $comments_model->getPaging($options));
         }
 
@@ -563,9 +563,9 @@ class EntriesController extends UserController
 
     // 記事のコメント取得(パスワード制限時はコメントを取得しない)
     if ($self_blog || $entry['open_status'] != Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
-      if (App::isPC()) {
+      if (App::isPC($request)) {
         $areas[] = 'comment_area';
-        $this->set('comments', Model::load('Comments')->getCommentListByBlogSetting($blog_id, $id, $blog_setting, $self_blog));
+        $this->set('comments', Model::load('Comments')->getCommentListByBlogSetting($request, $blog_id, $id, $blog_setting, $self_blog));
       }
     }
 
@@ -719,7 +719,7 @@ class EntriesController extends UserController
     $this->fc2CommentError('comment', $errors['comment'], $data);
 
     // FC2用のテンプレートで表示
-    $this->setPageData(array(App::isPC() ? 'comment_area' : 'form_area'));
+    $this->setPageData(array(App::isPC($request) ? 'comment_area' : 'form_area'));
     return $this->fc2template($entry['blog_id']);
   }
 

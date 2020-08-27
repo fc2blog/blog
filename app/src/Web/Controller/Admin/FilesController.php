@@ -111,7 +111,7 @@ class FilesController extends AdminController
     }
 
     // PCの場合はajaxでファイル情報を取得するので以下の処理は不要
-    if (App::isPC()) {
+    if (App::isPC($request)) {
       return;
     }
 

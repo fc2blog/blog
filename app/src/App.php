@@ -252,38 +252,42 @@ class App
 
   /**
    * IOSかどうかを判定
+   * @param Request $request
    * @return bool
    */
-  public static function isIOS(): bool
+  public static function isIOS(Request $request): bool
   {
-    return self::isSP() && strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false;
+    return self::isSP($request) && strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false;
   }
 
   /**
    * Androidかどうかを判定
+   * @param Request $request
    * @return bool
    */
-  public static function isAndroid(): bool
+  public static function isAndroid(Request $request): bool
   {
-    return self::isSP() && strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
+    return self::isSP($request) && strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
   }
 
   /**
    * PC環境下どうかを調べる
+   * @param Request $request
    * @return bool
    */
-  public static function isPC(): bool
+  public static function isPC(Request $request): bool
   {
-    return Config::get('DeviceType') == Config::get('DEVICE_PC');
+    return $request->deviceType == Config::get('DEVICE_PC');
   }
 
   /**
    * SP環境下どうかを調べる
+   * @param Request $request
    * @return bool
    */
-  public static function isSP(): bool
+  public static function isSP(Request $request): bool
   {
-    return Config::get('DeviceType') == Config::get('DEVICE_SP');
+    return $request->deviceType == Config::get('DEVICE_SP');
   }
 
   /**
@@ -304,7 +308,7 @@ class App
       $args = array_merge($gets, $args);
     }
 
-    $controller = Config::get('ControllerName');
+    $controller = $controller = $request->shortControllerName;
     if (isset($args['controller'])) {
       $controller = $args['controller'];
       unset($args['controller']);
@@ -421,19 +425,15 @@ class App
 
   /**
    * 現在選択中のメニューかどうかを返す
+   * @param Request $request
    * @param array params = array('entries/create', 'entries/edit', ...),
    * @return bool
    * TODO Configの削減
    */
-  public static function isActiveMenu(array $params): bool
+  public static function isActiveMenu(Request $request, array $params): bool
   {
-    // コントローラー名とメソッド名を取得
-    static $controller_name = null;
-    static $method_name = null;
-    if ($controller_name == null) {
-      $controller_name = StringCaseConverter::snakeCase(Config::get('ControllerName'));
-      $method_name = StringCaseConverter::snakeCase(Config::get('ActionName'));
-    }
+    $controller_name = StringCaseConverter::snakeCase($request->shortControllerName);
+    $method_name = StringCaseConverter::snakeCase($request->methodName);
 
     if (is_string($params)) {
       $params = array($params);
