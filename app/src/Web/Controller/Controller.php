@@ -30,8 +30,8 @@ abstract class Controller
   {
     $this->request = $request;
 
-    $lang = I18n::setLanguage($request);
-    $request->lang = $lang;
+    $lang = I18n::setLanguage($request); // TODO Bootstrapへ移動
+    $request->lang = $lang; // TODO インラインへ
 
     $className = get_class($this);
 
@@ -43,41 +43,46 @@ abstract class Controller
 
     // コントローラー名の設定（後でアクセス許可判定などに使われる
     $controllerName = explode('Controller', $className);
-    Config::set('ControllerName', $controllerName[0]);
+    Config::set('ControllerName', $controllerName[0]); // TODO \Fc2blog\App::isActiveMenu 改修で $requestに寄せられる
 
     // メソッド名の設定（後でアクセス許可判定などに使われる
-    Config::set('ActionName', $method);
+    Config::set('ActionName', $method); // TODO \Fc2blog\App::isActiveMenu 改修で $requestに寄せられる
 
     // デバイスタイプの設定（TODO ここでなくても良さそうだが
-    Config::set('DeviceType', App::getDeviceType($request));
+    Config::set('DeviceType', App::getDeviceType($request)); // TODO DeviceTypeはRequestに持たせたいが、最悪Controllerに持たせることで削減できそう
 
     // アプリプレフィックス、テンプレートファイル名決定に使われる
     $prefix = Config::get('APP_PREFIX'); // TODO Request に持たせられそう
 
-    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']');
+    // TODO 実質アクセスログなので、Routerに移動
+    Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']');
 
-    $this->beforeFilter($request);
+    { // TODO 実行系、外だししても良いのではないか
+      $this->beforeFilter($request);
 
-    // アクションの実行(返り値はテンプレートファイル名)
-    $this->resolvedMethod = $method;
-    $template = $this->$method($request);
+      // アクションの実行(返り値はテンプレートファイル名)
+      $this->resolvedMethod = $method;
+      $template = $this->$method($request);
 
-    // 空の場合は、規約に則ってテンプレートファイルを決定する
-    if (empty($template)) {
-      $template = substr($className, 0, strlen($className) - strlen('Controller')) . '/' . $method . '.php';
+      // 空の場合は、規約に則ってテンプレートファイルを決定する
+      if (empty($template)) {
+        $template = substr($className, 0, strlen($className) - strlen('Controller')) . '/' . $method . '.php';
+      }
+
+      // 後での置換のため、出力を一時変数へ
+      ob_start();
+      $this->layout($request, $template);
+      $this->output = ob_get_clean();
+
+      // SSI的なインクルード処理など（現状活用されていない）
+      $this->beforeRender();
     }
 
-    // 後での置換のため、出力を一時変数へ
-    ob_start();
-    $this->layout($request, $template);
-    $this->output = ob_get_clean();
-
-    // SSI的なインクルード処理など
-    $this->beforeRender();
-
-    // 結果を出力
-    if (!defined("THIS_IS_TEST")) {
-      echo $this->output;
+    { // TODO 出力系、外だし（外部でemit）して良いのではないか
+      // 結果を出力
+      if (!defined("THIS_IS_TEST")) {
+        echo $this->output;
+      }
     }
 
     return $this;
@@ -122,7 +127,7 @@ abstract class Controller
     $url .= $hash;
 
     // デバッグ時にSessionにログを保存
-    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Redirect[' . $url . ']');
+    Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Redirect[' . $url . ']');
 
     if (!is_null($blog_id) && $full_url) {
       $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
@@ -171,7 +176,7 @@ abstract class Controller
     // アプリプレフィックス
     $prefix = strtolower(Config::get('APP_PREFIX'));
 
-    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Layout[' . $this->layout . ']');
+    Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Layout[' . $this->layout . ']');
     if ($this->layout == '') {
       // layoutが空の場合は表示処理を行わない
       return;
@@ -194,7 +199,7 @@ abstract class Controller
       include($fw_template_path);
     } else {
       $this->layoutFilePath = ""; // テスト用に退避
-      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Not Found Layout[' . $fw_template_path . ']');
+      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Not Found Layout[' . $fw_template_path . ']');
     }
   }
 
@@ -244,10 +249,10 @@ abstract class Controller
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       /** @noinspection PhpIncludeInspection */
       include($fw_template_path);
-      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Template[' . $fw_template_path . ']');
+      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Template[' . $fw_template_path . ']');
     } else {
       $this->templateFilePath = "";
-      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Not Found Template[' . $fw_template_path . ']');
+      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Not Found Template[' . $fw_template_path . ']');
     }
   }
 
