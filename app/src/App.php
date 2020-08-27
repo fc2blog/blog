@@ -423,6 +423,7 @@ class App
    * 現在選択中のメニューかどうかを返す
    * @param array params = array('entries/create', 'entries/edit', ...),
    * @return bool
+   * TODO Configの削減
    */
   public static function isActiveMenu(array $params): bool
   {
