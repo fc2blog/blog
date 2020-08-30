@@ -21,6 +21,7 @@ $ sudo su
 ## mysql
 ```
 $ sudo mysql_secure_installation
+$ sudo mysql -u root
 > create user 'fc2blog'@'localhost' identified by 'topsecretpasswordforyoursafe';
 > grant all on fc2blog.* to 'fc2blog'@'localhost' with grant option;
 > flush privileges;
