@@ -1,0 +1,18 @@
+## ログ設定
+### エラーを画面に表示する、可能ならば本番時はコメントアウト推奨
+#php_value display_errors on
+#php_value display_startup_errors On
+#php_value error_reporting -1
+### エラーをログする、本番時も有効化推奨
+php_value log_errors On
+
+## mod_rewirte 設定、通常修正不要
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule . - [L]
+
+RewriteRule . index.php [L]
+
