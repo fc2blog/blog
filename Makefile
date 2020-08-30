@@ -26,7 +26,7 @@ build-dist-zip:
 	chmod 777 $(tmpdir)/public/uploads/
 	rm -r $(tmpdir)/public/_for_unit_test_
 	rm -r $(tmpdir)/public/.htaccess
-	cp -r app/resource/apache/.htaccess.production $(tmpdir)/public/.htaccess
+	cp -r app/docs/apache/.htaccess.production $(tmpdir)/public/.htaccess
 	cp LICENSE.txt README.md $(tmpdir)/app
 	zip -r $(tmpdir).zip $(tmpdir)
 	rm -r $(tmpdir)
