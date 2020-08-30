@@ -19,6 +19,7 @@ build-dist-zip:
 	mkdir $(tmpdir)
 	composer install --no-dev --optimize-autoloader
 	cp -a app $(tmpdir)
+	cp LICENSE.txt $(tmpdir)/app
 	rm -r $(tmpdir)/app/temp/*
 	chmod 777 $(tmpdir)/app/temp/
 	cp -a public $(tmpdir)
