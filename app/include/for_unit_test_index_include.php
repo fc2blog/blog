@@ -6,7 +6,7 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 require(__DIR__ . '/config_loading_include.php');
 
-// test endpoint work in only DEBUG mode.
+// test endpoint work in only TEST mode.
 if ((string)getenv("FC2_ENABLE_UNIT_TEST_ENDPOINT") !== "1") {
   die("If you want use this, please set FC2_ENABLE_UNIT_TEST_ENDPOINT ENV.");
 }

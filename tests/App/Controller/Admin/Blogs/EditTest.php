@@ -27,7 +27,7 @@ class EditTest extends TestCase
     $this->assertEquals("edit", $c->getResolvedMethod());
 
     $d = $c->getRequest()->get('blog');
-    var_export($d);
+//    var_export($d);
 
     $this->assertEquals("testblog2", $d['name']);
     $this->assertEquals("", $d['introduction']);

@@ -8,7 +8,6 @@ set_error_handler(function (int $severity, string $message, string $file, int $l
   throw new ErrorException($message, 0, $severity, $file, $line);
 });
 
-use Fc2blog\Config;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleEntry;
 use Fc2blog\Tests\LoaderHelper;
 
@@ -17,8 +16,6 @@ define("TEST_APP_DIR", __DIR__ . "/../app");
 require_once __DIR__ . "/../app/vendor/autoload.php";
 
 LoaderHelper::requireBootStrap();
-
-Config::set('DEBUG', 0); // suppress debug message.
 
 $generator = new GenerateSampleEntry();
 

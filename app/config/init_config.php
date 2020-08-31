@@ -43,10 +43,9 @@ $config['SLAVE_DB'] = array(
   'DATABASE' => 'blog_slave',
 );
 
-// -------------------- Debug関連 --------------------//
-// Debug 0 = false 1 = echo 2 = html 3 = link
-$config['DEBUG'] = (defined("THIS_IS_TEST")) ? 5 : 0;                  // Debugの表示可否
-$config['DEBUG_TEMPLATE_VARS'] = 0;    // テンプレートで使用可能な変数の一覧表示
+// Enable DEBUG log.
+$config['APP_DEBUG'] = defined("APP_DEBUG") ? APP_DEBUG : 0;
+$config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 
 // -------------------- 色々 --------------------//
 // 言語設定

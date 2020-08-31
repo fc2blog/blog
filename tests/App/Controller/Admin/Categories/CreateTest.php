@@ -85,7 +85,7 @@ class CreateTest extends TestCase
     $c = $this->reqGet("/admin/categories/create");
     $data = $c->getData();
     $old_count = count($data['category_parents']);
-    echo $old_count;
+//    echo $old_count;
 
     $sig = $this->getSig();
     $request_data = [

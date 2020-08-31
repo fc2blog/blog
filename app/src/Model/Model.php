@@ -6,7 +6,8 @@
 
 namespace Fc2blog\Model;
 
-use Fc2blog\Debug;
+
+use Fc2blog\Util\Log;
 
 abstract class Model implements ModelInterface
 {
@@ -269,7 +270,7 @@ abstract class Model implements ModelInterface
   public function getPaging($options = array())
   {
     if (!isset($options['page']) || !isset($options['limit'])) {
-      Debug::log('getPaging options["page"] or options["limit"]が設定されておりません', array(), 'error');
+      Log::old_log('getPaging options["page"] or options["limit"]が設定されておりません', array(), 'error');
       return array();
     }
 

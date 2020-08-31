@@ -42,8 +42,8 @@ class MySqliWrap implements DBInterface{
     try{
       $stmt = $this->query($sql, $params, $options['types']);
     }catch(\Exception $e){
-      if (\Fc2blog\Config::get('DEBUG', 0)) {
-        \Fc2blog\Debug::log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
+      if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
+        \Fc2blog\Util\Log::old_log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
       return false;
     }
@@ -67,8 +67,8 @@ class MySqliWrap implements DBInterface{
     try{
       $stmt = $this->query($sql, $params, $options['types']);
     }catch(\Exception $e){
-      if (\Fc2blog\Config::get('DEBUG', 0)) {
-        \Fc2blog\Debug::log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
+      if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
+        \Fc2blog\Util\Log::old_log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
       return false;
     }
@@ -98,7 +98,7 @@ class MySqliWrap implements DBInterface{
    */
   private function query($sql, $params=array(), $types=''){
     $mtime = 0;    // SQL実行結果時間取得用
-    if (\Fc2blog\Config::get('DEBUG', 0)) {
+    if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
       $mtime = microtime(true);
     }
 
@@ -110,9 +110,9 @@ class MySqliWrap implements DBInterface{
       if (getType($stmt) == 'boolean' && !$stmt) {
         throw new \Exception('[query Error]' . $sql);
       }
-      if (\Fc2blog\Config::get('DEBUG', 0)) {
-        $mtime = sprintf('%f', microtime(true) - $mtime);
-        \Fc2blog\Debug::log('実行時間：' . $mtime . '<br />' . $sql, $params, 'sql', __FILE__, __LINE__);
+      if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
+        $mtime = sprintf('%0.2fms', (microtime(true) - $mtime)*1000);
+        \Fc2blog\Util\Log::old_log('実行時間：' . $mtime . ' ' . $sql, $params, 'sql', __FILE__, __LINE__);
       }
       return $stmt;
     }
@@ -131,9 +131,9 @@ class MySqliWrap implements DBInterface{
     if (!$stmt->execute()) {
       throw new \Exception('[execute Error]' . $sql);
     }
-    if (\Fc2blog\Config::get('DEBUG', 0)) {
-      $mtime = sprintf('%f', microtime(true) - $mtime);
-      \Fc2blog\Debug::log('実行時間：' . $mtime . '<br />' . $sql, $params, 'sql', __FILE__, __LINE__);
+    if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
+      $mtime = sprintf('%0.2fms', (microtime(true) - $mtime)*1000);
+      \Fc2blog\Util\Log::old_log('実行時間：' . $mtime . ' ' . $sql, $params, 'sql', __FILE__, __LINE__);
     }
     return $stmt;
   }

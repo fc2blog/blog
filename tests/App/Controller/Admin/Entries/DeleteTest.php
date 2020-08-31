@@ -17,7 +17,6 @@ class DeleteTest extends TestCase
   public function setUp(): void
   {
     DBHelper::clearDbAndInsertFixture();
-    Config::set("DEBUG", false);
     parent::setUp();
   }
 

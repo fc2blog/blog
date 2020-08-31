@@ -24,7 +24,7 @@ abstract class AdminController extends AppController
       // 未ログイン時は新規登録とログイン以外させない
       $allows = array(
         UsersController::class => array('login', 'register'),
-        CommonController::class => array('lang', 'install', 'debug'),
+        CommonController::class => array('lang', 'install'),
       );
       $controller_name = $request->className;
       $action_name = $request->methodName;

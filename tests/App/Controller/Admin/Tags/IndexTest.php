@@ -33,7 +33,7 @@ class IndexTest extends TestCase
     $this->assertEquals('index', $c->getResolvedMethod());
 
     $data = $c->getData();
-    var_export($data);
+//    var_export($data);
 
     $this->assertArrayHasKey("tags", $data);
     $this->assertEquals("alphnum", $data['tags'][0]['name']);

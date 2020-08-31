@@ -210,8 +210,6 @@ class EntriesController extends AdminController
    */
   public function ajax_media_load(Request $request)
   {
-    Config::set('DEBUG', 0);    // デバッグ設定を変更
-
     $files_model = Model::load('Files');
 
     $blog_id = $this->getBlogId($request);

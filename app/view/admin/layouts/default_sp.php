@@ -146,7 +146,7 @@
             <li <?php if (\Fc2blog\App::isActiveMenu('blogs/index')) echo 'class="selected"'; ?>><a class="touch" href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Blogs', 'action'=>'index')); ?>"><span><i class="sidemenu_myblog"></i></span><span><?php echo __('List of blogs'); ?></span></a></li>
             <li <?php if (\Fc2blog\App::isActiveMenu(array('users/edit', 'users/withdrawal'))) echo 'class="selected"'; ?>><a class="touch" href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Users', 'action'=>'edit')); ?>"><span><i class="sidemenu_setting"></i></span><span><?php echo __('User setting'); ?></span></a></li>
             <li><a class="touch" href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Users', 'action'=>'logout')); ?>"><span><i class="sidemenu_logout"></i></span><span><?php echo __('Logout'); ?></span></a></li>
-            <?php if (\Fc2blog\Config::get('DEBUG')!=0): ?>
+            <?php if (\Fc2blog\Config::get('APP_DEBUG')!=0): ?>
               <li class="list_titile">デバッグ用</li>
               <li><a class="touch" href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'Users', 'action'=>'index')); ?>"><span><i class="sidemenu_history"></i></span><span>ユーザー一覧</span></a></li>
             <?php endif; ?>

@@ -372,7 +372,6 @@ class BlogPluginsController extends AdminController
     $blog_plugins_model->updateByIdAndBlogId(array('display' => $display), $id, $blog_id);
 //    $blog_plugins_model->updateDisplay(array($id=>$request->get('display')), $blog_id);   // TODO:後でこちらに置き換え
 
-    Config::set('DEBUG', 0);    // デバッグ設定を変更
     $this->layout = 'ajax.php';
   }
 

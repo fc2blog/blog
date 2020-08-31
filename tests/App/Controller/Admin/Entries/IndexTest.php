@@ -20,7 +20,6 @@ class IndexTest extends TestCase
   public function setUp(): void
   {
     DBHelper::clearDbAndInsertFixture();
-    Config::set("DEBUG", false);
     parent::setUp();
   }
 
@@ -145,7 +144,6 @@ class IndexTest extends TestCase
     $this->resetSession();
     $this->resetCookie();
     $this->mergeAdminSession();
-    Config::set("DEBUG", 0);
 
     $generator = new GenerateSampleEntry();
     $generator->removeAllEntry('testblog2');

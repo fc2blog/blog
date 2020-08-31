@@ -128,7 +128,6 @@ class CommonController extends AdminController
       case 1:
         // フォルダの作成
         !file_exists(Config::get('TEMP_DIR') . 'blog_template') && mkdir(Config::get('TEMP_DIR') . 'blog_template', 0777, true);
-        !file_exists(Config::get('TEMP_DIR') . 'debug_html') && mkdir(Config::get('TEMP_DIR') . 'debug_html', 0777, true);
         !file_exists(Config::get('TEMP_DIR') . 'log') && mkdir(Config::get('TEMP_DIR') . 'log', 0777, true);
 
         $msdb = MSDB::getInstance();
