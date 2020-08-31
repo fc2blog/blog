@@ -1,15 +1,16 @@
 <?php
 /**
-* アプリ用の便利関数群
-*/
+ * アプリ用の便利関数群
+ */
 
 namespace Fc2blog;
 
+use Exception;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Request;
-use Exception;
 use InvalidArgumentException;
+use League\Flysystem\Adapter\Local;
 use RuntimeException;
 
 class App
@@ -17,22 +18,22 @@ class App
 
   /**
    * ブログIDから階層別フォルダ作成
-   * @param $blog_id
+   * @param string $blog_id
    * @return string
    */
-  public static function getBlogLayer($blog_id)
+  public static function getBlogLayer(string $blog_id): string
   {
     return $blog_id[0] . '/' . $blog_id[1] . '/' . $blog_id[2] . '/' . $blog_id;
   }
 
   /**
    * ユーザーのアップロードしたファイルパスを返す
-   * @param $file
+   * @param array $file
    * @param bool $abs
    * @param bool $timestamp
    * @return string
    */
-  public static function getUserFilePath($file, $abs=false, $timestamp=false)
+  public static function getUserFilePath(array $file, $abs = false, $timestamp = false): string
   {
     $file_path = static::getBlogLayer($file['blog_id']) . '/file/' . $file['id'] . '.' . $file['ext'];
     return ($abs ? Config::get('WWW_UPLOAD_DIR') : '/' . Config::get('UPLOAD_DIR_NAME') . '/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
@@ -41,12 +42,13 @@ class App
   /**
    * サムネイル画像のパスを返却する
    * 対象外の場合は元のパスを返却する
-   * @param $url
+   * @param string $url
    * @param int $size
    * @param string $whs
    * @return string
    */
-  public static function getThumbnailPath($url, $size=72, $whs=''){
+  public static function getThumbnailPath(string $url, int $size = 72, string $whs = ''): string
+  {
     if (empty($url)) {
       return $url;
     }
@@ -59,28 +61,30 @@ class App
   /**
    * 中央切り抜きのサムネイル画像のパスを返却する
    * 対象外の場合は元のパスを返却する
-   * @param $url
+   * @param string $url
    * @param int $width
-   * @param int $heght
+   * @param int $height
    * @param string $whs
    * @return string
    */
-  public static function getCenterThumbnailPath($url, $width=760, $heght=420, $whs=''){
+  public static function getCenterThumbnailPath(string $url, $width = 760, $height = 420, $whs = ''): string
+  {
     if (empty($url)) {
       return $url;
     }
     if (!preg_match('{(/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]+/file/[0-9]+)\.(png|gif|jpe?g)(\?t=[0-9]+)?$}', $url, $matches)) {
       return $url;
     }
-    return $matches[1] . '_' . $whs . $width . '_' . $heght. '.' . $matches[2] . (isset($matches[3]) ? $matches[3] : '');
+    return $matches[1] . '_' . $whs . $width . '_' . $height . '.' . $matches[2] . (isset($matches[3]) ? $matches[3] : '');
   }
 
   /**
    * ブログIDとIDに紐づくファイルを削除する
-   * @param $blog_id
-   * @param $id
+   * @param string $blog_id
+   * @param string $id
    */
-  public static function deleteFile($blog_id, $id){
+  public static function deleteFile(string $blog_id, string $id): void
+  {
     $dir_path = Config::get('WWW_UPLOAD_DIR') . static::getBlogLayer($blog_id) . '/file/';
     $files = scandir($dir_path);
     foreach ($files as $file_name) {
@@ -97,11 +101,11 @@ class App
 
   /**
    * プラグインへのファイルパス
-   * @param $blog_id
-   * @param $id
+   * @param string $blog_id
+   * @param string $id
    * @return string
    */
-  public static function getPluginFilePath($blog_id, $id)
+  public static function getPluginFilePath(string $blog_id, string $id)
   {
     return Config::get('BLOG_TEMPLATE_DIR') . static::getBlogLayer($blog_id) . '/plugins/' . $id . '.php';
   }
@@ -110,7 +114,7 @@ class App
    * ファイルパスまでのフォルダを作成する
    * @param $file_path
    */
-  public static function mkdir($file_path)
+  public static function mkdir(string $file_path): void
   {
     $folder_dir = dirname($file_path);
     if (!file_exists($folder_dir)) {
@@ -120,15 +124,17 @@ class App
 
   /**
    * ブログディレクトリを削除
-   * @param $blog_id
+   * @param string $blog_id
    */
-  public static function removeBlogDirectory($blog_id)
+  public static function removeBlogDirectory(string $blog_id): void
   {
-    $upload_path = Config::get('WWW_UPLOAD_DIR') . '/' .  static::getBlogLayer($blog_id);
-    system("rm -fr " . $upload_path);
+    $fs = new Local(__DIR__ . "/../../");
+
+    $upload_path = Config::get('WWW_UPLOAD_DIR') . '/' . static::getBlogLayer($blog_id);
+    $fs->deleteDir($upload_path);
 
     $template_path = Config::get('BLOG_TEMPLATE_DIR') . static::getBlogLayer($blog_id);
-    system("rm -fr " . $template_path);
+    $fs->deleteDir($template_path);
   }
 
   /**
@@ -139,7 +145,7 @@ class App
    * @param int $day
    * @return array|string[]
    */
-  public static function calcStartAndEndDate($year=0, $month=0, $day=0)
+  public static function calcStartAndEndDate(int $year = 0, int $month = 0, int $day = 0): array
   {
     if (!$year) {
       // 年が存在しない場合本日を開始、終了日時として割り当てる
@@ -148,17 +154,17 @@ class App
     $start = $end = $year . '-';
     if ($month) {
       $start .= $month . '-';
-      $end   .= $month . '-';
+      $end .= $month . '-';
       if ($day) {
         $start .= $day;
-        $end   .= $day;
+        $end .= $day;
       } else {
         $start .= '01';
-        $end   .= date('t', mktime(0, 0, 0, $month, 1, $year));
+        $end .= date('t', mktime(0, 0, 0, $month, 1, $year));
       }
     } else {
       $start .= '01-01';
-      $end   .= '12-31';
+      $end .= '12-31';
     }
     $dates = explode('-', $start);
     if (!checkdate($dates[1], $dates[2], $dates[0])) {
@@ -166,16 +172,16 @@ class App
       $start = $end = date('Y-m-d');
     }
     $start .= ' 00:00:00';
-    $end   .= ' 23:59:59';
+    $end .= ' 23:59:59';
     return array($start, $end);
   }
 
   /**
    * デバイスタイプを取得する
    * @param Request $request
-   * @return array|mixed|object|string|null
+   * @return string|null
    */
-  public static function getDeviceType(Request $request)
+  public static function getDeviceType(Request $request): string
   {
     // パラメータによりデバイスタイプを変更(FC2の引数順守)
     if ($request->isArgs('pc')) {
@@ -200,7 +206,7 @@ class App
 
     $devices = array('iPhone', 'iPod', 'Android');
     foreach ($devices as $device) {
-      if (strpos($ua, $device)!==false) {
+      if (strpos($ua, $device) !== false) {
         return Config::get('DEVICE_SP');
       }
     }
@@ -212,24 +218,27 @@ class App
    * @param Request $request
    * @return string
    */
-  public static function getDeviceKey(Request $request)
+  public static function getDeviceKey(Request $request): string
   {
     $device_type = self::getDeviceType($request);
     switch ($device_type) {
       default:
-      case 1: return 'PC';
-      case 4: return 'SP';
+      case 1:
+        return 'PC';
+      case 4:
+        return 'SP';
     }
   }
 
   /**
    * 引数のデバイスタイプを取得する
    * @param Request $request
-   * @return string|null
+   * @return string
    */
-  public static function getArgsDevice(Request $request){
+  public static function getArgsDevice(Request $request): string
+  {
     static $device_name = null;   // 良く使用するのでキャッシュ
-    if ($device_name===null) {
+    if ($device_name === null) {
       if ($request->isArgs('pc')) {
         $device_name = 'pc';
       } else if ($request->isArgs('sp')) {
@@ -242,33 +251,37 @@ class App
   }
 
   /**
-  * IOSかどうかを判定
-  */
-  public static function isIOS()
+   * IOSかどうかを判定
+   * @return bool
+   */
+  public static function isIOS(): bool
   {
-    return self::isSP() && strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false;
+    return self::isSP() && strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false;
   }
 
   /**
-  * Androidかどうかを判定
-  */
-  public static function isAndroid()
+   * Androidかどうかを判定
+   * @return bool
+   */
+  public static function isAndroid(): bool
   {
-    return self::isSP() && strpos($_SERVER['HTTP_USER_AGENT'], 'Android')!==false;
+    return self::isSP() && strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
   }
 
   /**
-  * PC環境下どうかを調べる
-  */
-  public static function isPC()
+   * PC環境下どうかを調べる
+   * @return bool
+   */
+  public static function isPC(): bool
   {
     return Config::get('DeviceType') == Config::get('DEVICE_PC');
   }
 
   /**
-  * SP環境下どうかを調べる
-  */
-  public static function isSP()
+   * SP環境下どうかを調べる
+   * @return bool
+   */
+  public static function isSP(): bool
   {
     return Config::get('DeviceType') == Config::get('DEVICE_SP');
   }
@@ -281,10 +294,10 @@ class App
    * @param bool $abs
    * @return string
    */
-  public static function userURL(Request $request, $args=array(), $reused=false, $abs=false)
+  public static function userURL(Request $request, array $args = [], bool $reused = false, bool $abs = false): string
   {
     // 現在のURLの引数を引き継ぐ
-    if ($reused==true) {
+    if ($reused == true) {
       $gets = $request->getGet();
       unset($gets[Config::get('ARGS_CONTROLLER')]);
       unset($gets[Config::get('ARGS_ACTION')]);
@@ -320,11 +333,11 @@ class App
     $full_domain = ($abs) ? BlogsModel::getFullHostUrlByBlogId($blog_id) : "";
 
     // TOPページの場合
-    if (strtolower($controller)=='entries' && strtolower($action)=='index' && !empty($blog_id)) {
+    if (strtolower($controller) == 'entries' && strtolower($action) == 'index' && !empty($blog_id)) {
       $url = '/';
 
       $params = array();
-      foreach($args as $key => $value){
+      foreach ($args as $key => $value) {
         $params[] = $key . '=' . $value;
       }
       if (!empty($device_name)) {
@@ -341,13 +354,13 @@ class App
     }
 
     // 固定記事の場合
-    if (strtolower($controller)=='entries' && strtolower($action)=='view' && !empty($args['id'])) {
+    if (strtolower($controller) == 'entries' && strtolower($action) == 'view' && !empty($args['id'])) {
 //      $url = '/blog-entry-' . $args['id'] . '.html';
       $url = '/?no=' . $args['id'];
       unset($args['id']);
 
       $params = array();
-      foreach($args as $key => $value){
+      foreach ($args as $key => $value) {
         $params[] = $key . '=' . $value;
       }
       if (!empty($device_name)) {
@@ -366,14 +379,14 @@ class App
     $params = array();
     $params[] = Config::get('ARGS_CONTROLLER') . '=' . lcfirst($controller);
     $params[] = Config::get('ARGS_ACTION') . '=' . $action;
-    foreach($args as $key => $value){
+    foreach ($args as $key => $value) {
       $params[] = $key . '=' . $value;
     }
     if (!empty($device_name)) {
       $params[] = $device_name;
     }
 
-    $url = '/'. Config::get('DIRECTORY_INDEX');
+    $url = '/' . Config::get('DIRECTORY_INDEX');
     if (count($params)) {
       $url .= '?' . implode('&', $params);
     }
@@ -388,9 +401,9 @@ class App
    * ページ毎、デバイス毎の初期制限件数
    * @param Request $request
    * @param $key
-   * @return mixed|object|null
+   * @return int
    */
-  public static function getPageLimit(Request $request, $key)
+  public static function getPageLimit(Request $request, string $key): int
   {
     return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIMIT', Config::get('PAGE.' . $key . '.DEFAULT.LIMIT', 10));
   }
@@ -399,11 +412,11 @@ class App
    * ページ毎、デバイス毎の件数一覧
    * @param Request $request
    * @param $key
-   * @return mixed|object|null
+   * @return array
    */
-  public static function getPageList(Request $request, $key)
+  public static function getPageList(Request $request, string $key): array
   {
-    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIST', Config::get('PAGE.' . $key . '.DEFAULT.LIST', array()));
+    return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIST', Config::get('PAGE.' . $key . '.DEFAULT.LIST', []));
   }
 
   /**
@@ -411,12 +424,12 @@ class App
    * @param array params = array('entries/create', 'entries/edit', ...),
    * @return bool
    */
-  public static function isActiveMenu($params)
+  public static function isActiveMenu(array $params): bool
   {
     // コントローラー名とメソッド名を取得
     static $controller_name = null;
     static $method_name = null;
-    if ($controller_name==null) {
+    if ($controller_name == null) {
       $controller_name = StringCaseConverter::snakeCase(Config::get('ControllerName'));
       $method_name = StringCaseConverter::snakeCase(Config::get('ActionName'));
     }
@@ -429,10 +442,10 @@ class App
     foreach ($params as $value) {
       list($c_name, $m_name) = explode('/', $value);
       if (lcfirst($c_name) != $controller_name) {
-        continue ;
+        continue;
       }
       if (!empty($m_name) && StringCaseConverter::snakeCase($m_name) != $method_name) {
-        continue ;
+        continue;
       }
       return true;
     }
@@ -457,7 +470,7 @@ class App
     for ($i = 0; $i < $length; $i++) {
       try {
         $str .= $charList[random_int(0, $charListLen - 1)];
-      }catch(Exception $e){
+      } catch (Exception $e) {
         throw new RuntimeException("random_int thrown exception. {$e->getMessage()}");
       }
     }

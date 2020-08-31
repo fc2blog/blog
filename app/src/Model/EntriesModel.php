@@ -11,7 +11,9 @@ class EntriesModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -21,12 +23,12 @@ class EntriesModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'entries';
   }
 
-  public function getAutoIncrementCompositeKey()
+  public function getAutoIncrementCompositeKey(): string
   {
     return 'blog_id';
   }
@@ -38,7 +40,7 @@ class EntriesModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list=array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
@@ -52,28 +54,28 @@ class EntriesModel extends Model
       'extend' => array(
         'maxlength' => array('max' => 50000),
       ),
-      'tag'  => array(
+      'tag' => array(
         'trim' => true,
         'maxlength' => array('max' => 255),
       ),
-      'open_status'  => array(
+      'open_status' => array(
         'default_value' => Config::get('ENTRY.OPEN_STATUS.OPEN'),
-        'in_array'      => array('values'=>array_keys(self::getOpenStatusList())),
+        'in_array' => array('values' => array_keys(self::getOpenStatusList())),
       ),
-      'password'  => array(
+      'password' => array(
         'maxlength' => array('max' => 50),
       ),
-      'auto_linefeed'  => array(
+      'auto_linefeed' => array(
         'default_value' => Config::get('ENTRY.AUTO_LINEFEED.USE'),
-        'in_array'      => array('values'=>array_keys(self::getAutoLinefeedList())),
+        'in_array' => array('values' => array_keys(self::getAutoLinefeedList())),
       ),
-      'comment_accepted'  => array(
+      'comment_accepted' => array(
         'default_value' => Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'),
-        'in_array'      => array('values'=>array_keys(self::getCommentAcceptedList())),
+        'in_array' => array('values' => array_keys(self::getCommentAcceptedList())),
       ),
-      'posted_at'  => array(
+      'posted_at' => array(
         'default_value' => date('Y-m-d H:i:s'),
-        'datetime'      => array(),
+        'datetime' => array(),
       ),
     );
 
@@ -83,10 +85,10 @@ class EntriesModel extends Model
   public static function getOpenStatusList()
   {
     return array(
-      Config::get('ENTRY.OPEN_STATUS.OPEN')        => __('Publication'),
-      Config::get('ENTRY.OPEN_STATUS.DRAFT')       => __('Draft'),
-      Config::get('ENTRY.OPEN_STATUS.PASSWORD')    => __('Password Protection'),
-      Config::get('ENTRY.OPEN_STATUS.LIMIT')       => __('Limited time offer'),
+      Config::get('ENTRY.OPEN_STATUS.OPEN') => __('Publication'),
+      Config::get('ENTRY.OPEN_STATUS.DRAFT') => __('Draft'),
+      Config::get('ENTRY.OPEN_STATUS.PASSWORD') => __('Password Protection'),
+      Config::get('ENTRY.OPEN_STATUS.LIMIT') => __('Limited time offer'),
       Config::get('ENTRY.OPEN_STATUS.RESERVATION') => __('Reservations Posts'),
     );
   }
@@ -95,14 +97,14 @@ class EntriesModel extends Model
   {
     return array(
       Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED') => __('Be accepted'),
-      Config::get('ENTRY.COMMENT_ACCEPTED.REJECT')   => __('Reject'),
+      Config::get('ENTRY.COMMENT_ACCEPTED.REJECT') => __('Reject'),
     );
   }
 
   public static function getAutoLinefeedList()
   {
     return array(
-      Config::get('ENTRY.AUTO_LINEFEED.USE')  => __('I do automatic line feed'),
+      Config::get('ENTRY.AUTO_LINEFEED.USE') => __('I do automatic line feed'),
       Config::get('ENTRY.AUTO_LINEFEED.NONE') => __('HTML tags only a new line'),
     );
   }
@@ -134,9 +136,8 @@ GROUP BY DATE_FORMAT(posted_at, '%Y-%m')
 ORDER BY posted_at DESC
 SQL;
     $params = array($blog_id);
-    $options = array('result'=> DBInterface::RESULT_ALL);
-    $archives = $this->findSql($sql, $params, $options);
-    return $archives;
+    $options = array('result' => DBInterface::RESULT_ALL);
+    return $this->findSql($sql, $params, $options);
   }
 
   /**
@@ -154,7 +155,7 @@ SQL;
     }
 
     if ($entry['open_status'] == Config::get('ENTRY.OPEN_STATUS.DRAFT')
-        || $entry['open_status'] == Config::get('ENTRY.OPEN_STATUS.RESERVATION')
+      || $entry['open_status'] == Config::get('ENTRY.OPEN_STATUS.RESERVATION')
     ) {
       return array();
     }
@@ -177,9 +178,9 @@ SQL;
     $params = array($entry['blog_id'], $entry['posted_at'], $entry['posted_at'], $entry['id']);
     $options = array(
       'fields' => array('id', 'title'),
-      'where'  => $where,
+      'where' => $where,
       'params' => $params,
-      'order'  => 'posted_at ASC, id ASC'
+      'order' => 'posted_at ASC, id ASC'
     );
 
     // 表示項目リスト
@@ -204,9 +205,9 @@ SQL;
     $params = array($entry['blog_id'], $entry['posted_at'], $entry['posted_at'], $entry['id']);
     $options = array(
       'fields' => array('id', 'title'),
-      'where'  => $where,
+      'where' => $where,
       'params' => $params,
-      'order'  => 'posted_at DESC, id DESC'
+      'order' => 'posted_at DESC, id DESC'
     );
 
     // 表示項目リスト
@@ -229,10 +230,10 @@ SQL;
   public function getCommentAcceptedEntry($entry_id, $blog_id)
   {
     return $this->findByIdAndBlogId($entry_id, $blog_id,
-      array('where'=>'comment_accepted=' . Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED')));
+      array('where' => 'comment_accepted=' . Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED')));
   }
 
-  public function insert($data, $options=array())
+  public function insert($data, $options = array())
   {
     // 最初に登場する画像を設定
     $data['first_image'] = $this->getFirstImage($data);
@@ -248,7 +249,7 @@ SQL;
     return $flag;
   }
 
-  public function updateByIdAndBlogId($data, $comment_id, $blog_id, $options=array())
+  public function updateByIdAndBlogId($data, $comment_id, $blog_id, $options = array())
   {
     // 最初に登場する画像を設定
     $data['first_image'] = $this->getFirstImage($data);
@@ -281,7 +282,7 @@ SQL;
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function deleteByIdAndBlogId($entry_id, $blog_id, $options=array())
+  public function deleteByIdAndBlogId($entry_id, $blog_id, $options = array())
   {
     // コメント削除
     Model::load('Comments')->deleteEntryRelation($blog_id, $entry_id);
@@ -303,7 +304,7 @@ SQL;
    * @param array $options
    * @return bool
    */
-  public function deleteByIdsAndBlogId($ids, $blog_id, $options=array())
+  public function deleteByIdsAndBlogId($ids, $blog_id, $options = array())
   {
     // 単体ID対応
     if (is_numeric($ids)) {
@@ -326,7 +327,7 @@ SQL;
    * 予約投稿エントリーの更新
    * @param null $blog_id
    */
-  public function updateReservation($blog_id=null)
+  public function updateReservation($blog_id = null)
   {
     $where = '';
     $params = array();
@@ -337,15 +338,15 @@ SQL;
     $where .= ' open_status=' . Config::get('ENTRY.OPEN_STATUS.RESERVATION') . ' ';
     $where .= " AND posted_at <= '" . date('Y-m-d H:i:s') . "'";
 
-    $options = array('where'=>$where, 'params'=>$params);
+    $options = array('where' => $where, 'params' => $params);
     $count = $this->find('count', $options);
     if (!$count) {
       // 該当ファイル無し
-      return ;
+      return;
     }
 
     // 予約投稿のエントリーを公開に変更
-    $data = array('open_status'=> Config::get('ENTRY.OPEN_STATUS.OPEN'));
+    $data = array('open_status' => Config::get('ENTRY.OPEN_STATUS.OPEN'));
     $this->update($data, $where, $params);
   }
 
@@ -353,7 +354,7 @@ SQL;
    * 期間限定エントリーの更新
    * @param null $blog_id
    */
-  public function updateLimited($blog_id=null)
+  public function updateLimited($blog_id = null)
   {
     $where = '';
     $params = array();
@@ -364,15 +365,15 @@ SQL;
     $where .= ' open_status=' . Config::get('ENTRY.OPEN_STATUS.LIMIT') . ' ';
     $where .= " AND posted_at <= '" . date('Y-m-d H:i:s') . "'";
 
-    $options = array('where'=>$where, 'params'=>$params);
+    $options = array('where' => $where, 'params' => $params);
     $count = $this->find('count', $options);
     if (!$count) {
       // 該当ファイル無し
-      return ;
+      return;
     }
 
     // 期間限定投稿のエントリーを下書きに変更
-    $data = array('open_status'=> Config::get('ENTRY.OPEN_STATUS.DRAFT'));
+    $data = array('open_status' => Config::get('ENTRY.OPEN_STATUS.DRAFT'));
     $this->update($data, $where, $params);
   }
 
@@ -415,10 +416,10 @@ SQL;
   {
     $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
     $options = array(
-      'where'  => 'blog_id=?',
+      'where' => 'blog_id=?',
       'params' => array($blog_id),
-      'limit'  => $blog_setting['entry_recent_display_count'],
-      'order'  => 'entries.posted_at DESC, entries.id DESC',
+      'limit' => $blog_setting['entry_recent_display_count'],
+      'order' => 'entries.posted_at DESC, entries.id DESC',
     );
 
     // 表示項目リスト
@@ -433,7 +434,7 @@ SQL;
     // テンプレート用変数追加
     foreach ($entries as $key => $value) {
       $entries[$key]['title'] = strip_tags($value['title']);
-      $entries[$key]['link'] = App::userURL($request,array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$value['blog_id'], 'id'=>$value['id']));
+      $entries[$key]['link'] = App::userURL($request, array('controller' => 'Entries', 'action' => 'view', 'blog_id' => $value['blog_id'], 'id' => $value['id']));
 
       list($entries[$key]['year'], $entries[$key]['month'], $entries[$key]['day'],
         $entries[$key]['hour'], $entries[$key]['minute'], $entries[$key]['second'], $entries[$key]['youbi'], $entries[$key]['month_short']
@@ -452,17 +453,17 @@ SQL;
    * @param null $month
    * @return array
    */
-  public function getTemplateCalendar(Request $request, $blog_id, $year=null, $month=null)
+  public function getTemplateCalendar(Request $request, $blog_id, $year = null, $month = null)
   {
     $year = $year == null ? date('Y') : $year;
     $month = $month == null ? date('m') : $month;
     $timestamp = strtotime($year . '-' . $month . '-01 00:00:00');
     $options = array(
       'fields' => 'DAY(posted_at) as day',
-      'where'  => 'blog_id=? AND ? <= posted_at AND posted_at <= ?',
+      'where' => 'blog_id=? AND ? <= posted_at AND posted_at <= ?',
       'params' => array($blog_id, date('Y-m-01 00:00:00', $timestamp), date('Y-m-t 23:59:59', $timestamp)),
-      'group'  => 'DAY(posted_at), posted_at',
-      'order'  => 'posted_at ASC',
+      'group' => 'DAY(posted_at), posted_at',
+      'order' => 'posted_at ASC',
     );
     $days = $this->find('all', $options);
 
@@ -475,20 +476,20 @@ SQL;
     $first_day = date('w', $timestamp);
 
     $last_day = date('t', $timestamp);
-    for ($i=1-$first_day,$c=0;$i<=$last_day;$i+=7,$c++) {
+    for ($i = 1 - $first_day, $c = 0; $i <= $last_day; $i += 7, $c++) {
       $calendar[$c] = array();
-      for ($j=0;$j<7;$j++) {
+      for ($j = 0; $j < 7; $j++) {
         $day = $i + $j;
         if ($day < 1 || $last_day < $day) {
           $calendar[$c][] = '-';
-          continue ;
+          continue;
         }
         if (!in_array($day, $exist_days)) {
           $calendar[$c][] = $day;
-          continue ;
+          continue;
         }
-        $calendar[$c][] = '<a href="' . App::userURL($request, array('controller'=>'entries', 'action'=>'date',
-          'blog_id'=>$blog_id, 'date'=>sprintf('%04d%02d%02d', $year, $month, $day))) . '">' . $day . '</a>';
+        $calendar[$c][] = '<a href="' . App::userURL($request, array('controller' => 'entries', 'action' => 'date',
+            'blog_id' => $blog_id, 'date' => sprintf('%04d%02d%02d', $year, $month, $day))) . '">' . $day . '</a>';
       }
     }
 
@@ -503,13 +504,11 @@ SQL;
   public function forTestGetAll(string $blog_id): array
   {
     $options = [
-      'where'  => 'blog_id=?',
+      'where' => 'blog_id=?',
       'params' => [$blog_id],
-      'order'  => 'id',
+      'order' => 'id',
     ];
 
     return $this->find('all', $options);
   }
-
 }
-

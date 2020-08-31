@@ -50,7 +50,6 @@ class MySqliWrap implements DBInterface{
     return $this->result($stmt, $options['result']);
   }
 
-
   /**
    * 更新系SQL
    * @param string $sql
@@ -325,6 +324,4 @@ class MySqliWrap implements DBInterface{
     $version = explode('-', $this->db->server_info);
     return $version[0];
   }
-
 }
-

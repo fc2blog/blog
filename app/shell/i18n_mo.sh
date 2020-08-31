@@ -1,3 +1,4 @@
+#!/bin/bash
 echo " ===== Start convert mo file ===== "
 SELF_DIR=`dirname $0`
 for DIR_LIST in `ls -l ${SELF_DIR}/../locale/ | awk '$1 ~/d/ {print $9}'`

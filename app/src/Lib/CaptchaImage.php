@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection SpellCheckingInspection */
+
 /**
  * 文字認証クラス
  */
@@ -31,11 +32,12 @@ class CaptchaImage
   }
 
   /**
+   * Captcha Imageを描画し、送信
    * @param $number
    * @param bool $mini_mode
    * @throws Exception
    */
-  public function drawNumber($number, $mini_mode = false)
+  public function drawNumber($number, $mini_mode = false): void
   {
     //memo. sjisの書体はサーバー環境によっては使えない
     $arr_fonts = array(
@@ -118,7 +120,7 @@ class CaptchaImage
       }
       $gd_info = gd_info();
       if (!empty($gd_info['JIS-mapped Japanese Font Support'])) {
-        $char = mb_convert_encoding($char, "SJIS", "UTF-8");
+        $char = mb_convert_encoding($char, "SJIS-win", "UTF-8");
       }
       $arr_bbox = imagettfbbox($font_size, $angle, $font1, $char);
       $x1 = $arr_bbox[0] < $arr_bbox[6] ? $arr_bbox[0] : $arr_bbox[6];
@@ -233,6 +235,4 @@ class CaptchaImage
     imagegif($im2);
     imagedestroy($im2);
   }
-
 }
-

@@ -11,7 +11,9 @@ class BlogTemplatesModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -21,12 +23,12 @@ class BlogTemplatesModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'blog_templates';
   }
 
-  public function getAutoIncrementCompositeKey()
+  public function getAutoIncrementCompositeKey(): string
   {
     return 'blog_id';
   }
@@ -38,26 +40,26 @@ class BlogTemplatesModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list=array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
       'title' => array(
-        'required'  => true,
+        'required' => true,
         'maxlength' => array('max' => 50),
       ),
       'html' => array(
-        'required'  => true,
+        'required' => true,
         'maxlength' => array('max' => 100000),
-        'own'       => array('method' => 'fc2TemplateSyntax')
+        'own' => array('method' => 'fc2TemplateSyntax')
       ),
       'css' => array(
-        'required'  => false,
+        'required' => false,
         'maxlength' => array('max' => 100000),
       ),
       'device_type' => array(
         'default_value' => Config::get('DEVICE_PC'),
-        'in_array'      => array('values'=>array_keys(Config::get('DEVICE_NAME'))),
+        'in_array' => array('values' => array_keys(Config::get('DEVICE_NAME'))),
       ),
     );
 
@@ -71,10 +73,10 @@ class BlogTemplatesModel extends Model
    */
   public static function fc2TemplateSyntax($value)
   {
-    if(defined("THIS_IS_TEST")){
+    if (defined("THIS_IS_TEST")) {
       // テンプレート検証用にテンポラリディレクトリが必要だが、テストやCLIでSessionを汚染したくないので
       $blog_id = "unittestorcliexecute";
-    }else{
+    } else {
       $blog_id = Session::get('blog_id');
     }
 
@@ -93,7 +95,7 @@ class BlogTemplatesModel extends Model
     // PHPのシンタックスチェック
     $cmd = 'php -l ' . $templatePath;
     $ret = shell_exec($cmd);
-    if (strpos($ret, 'No syntax errors detected')!==false) {
+    if (strpos($ret, 'No syntax errors detected') !== false) {
       return true;
     }
     return __('There may be a problem with the template or plug-in, installed in the blog.');
@@ -106,7 +108,7 @@ class BlogTemplatesModel extends Model
    * @param bool $isPreview
    * @return string
    */
-  public static function getTemplateFilePath($blog_id, $device_type=0, $isPreview=false)
+  public static function getTemplateFilePath($blog_id, $device_type = 0, $isPreview = false)
   {
     return Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
   }
@@ -118,7 +120,7 @@ class BlogTemplatesModel extends Model
    * @param bool $isPreview
    * @return string
    */
-  public static function getCssFilePath($blog_id, $device_type, $isPreview=false)
+  public static function getCssFilePath($blog_id, $device_type, $isPreview = false)
   {
     return Config::get('WWW_UPLOAD_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
   }
@@ -130,7 +132,7 @@ class BlogTemplatesModel extends Model
    * @param bool $isPreview
    * @return string
    */
-  public static function getCssUrl($blog_id, $device_type, $isPreview=false)
+  public static function getCssUrl($blog_id, $device_type, $isPreview = false)
   {
     return '/' . Config::get('UPLOAD_DIR_NAME') . '/' . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
   }
@@ -143,7 +145,7 @@ class BlogTemplatesModel extends Model
    * @param null $html
    * @param null $css
    */
-  public static function createTemplate($templateId, $blog_id, $device_type, $html=null, $css=null)
+  public static function createTemplate($templateId, $blog_id, $device_type, $html = null, $css = null)
   {
     $isPreview = !empty($html);   // HTMLの情報が入っている場合プレビュー用として作成
 
@@ -185,13 +187,13 @@ class BlogTemplatesModel extends Model
    * @param int $device_type
    * @return array
    */
-  public function getTemplatesOfDevice($blog_id, $device_type=0)
+  public function getTemplatesOfDevice($blog_id, $device_type = 0)
   {
     $options = array(
       'fields' => array('id', 'blog_id', 'template_id', 'title', 'device_type', 'created_at', 'updated_at'),
-      'where'  => 'blog_id=?',
+      'where' => 'blog_id=?',
       'params' => array($blog_id),
-      'order'  => 'device_type ASC, title ASC',
+      'order' => 'device_type ASC, title ASC',
     );
     if ($device_type) {
       $options['where'] .= ' AND device_type=?';
@@ -235,7 +237,7 @@ class BlogTemplatesModel extends Model
    * @param array $options
    * @return bool
    */
-  public function updateByIdAndBlogId($values, $id, $blog_id, $options=array())
+  public function updateByIdAndBlogId($values, $id, $blog_id, $options = array())
   {
     $values['updated_at'] = date('Y-m-d H:i:s');
     if (!parent::updateByIdAndBlogId($values, $id, $blog_id, $options)) {
@@ -243,7 +245,7 @@ class BlogTemplatesModel extends Model
     }
 
     // デバイスタイプを取得
-    if (!$blogTemplate=$this->findByIdAndBlogId($id, $blog_id, array('fields'=>'device_type'))) {
+    if (!$blogTemplate = $this->findByIdAndBlogId($id, $blog_id, array('fields' => 'device_type'))) {
       return false;
     }
     $device_type = $blogTemplate['device_type'];
@@ -259,7 +261,7 @@ class BlogTemplatesModel extends Model
     if (Model::load('Blogs')->isAppliedTemplate($id, $blog_id, $device_type)) {
       // コメントの表示タイプをテンプレートから判断
       $reply_type = strstr($values['html'], '<%comment_reply_body>') ?
-          Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+        Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
       // コメントの表示タイプを更新
       Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
     }
@@ -294,44 +296,44 @@ class BlogTemplatesModel extends Model
     $loop = Config::get('fc2_template_foreach');
     foreach ($loop as $key => $value) {
       $ambiguous[] = $key;
-      do{
-        $html= preg_replace('/<!--' . $key . '-->(.*?)<!--\/' . $key . '-->/s', $value . '$1<?php } ?>', $html, -1, $count);
-      }while($count);
+      do {
+        $html = preg_replace('/<!--' . $key . '-->(.*?)<!--\/' . $key . '-->/s', $value . '$1<?php } ?>', $html, -1, $count);
+      } while ($count);
     }
 
     // 条件判断文用の置き換え
     $cond = Config::get('fc2_template_if');
     foreach ($cond as $key => $value) {
       $ambiguous[] = $key;
-      do{
-        $html= preg_replace('/<!--' . $key . '-->(.*?)<!--\/' . $key . '-->/s', $value . '$1<?php } ?>', $html, -1, $count);
-      }while($count);
+      do {
+        $html = preg_replace('/<!--' . $key . '-->(.*?)<!--\/' . $key . '-->/s', $value . '$1<?php } ?>', $html, -1, $count);
+      } while ($count);
     }
 
     // 既存FC2テンプレートの曖昧置換
     $ambiguous = implode('|', $ambiguous);
     // <!--topentry--><!--/edit_area--> 左記を許容する
     foreach ($loop as $key => $value) {
-      do{
-        $html= preg_replace('/<!--' . $key . '-->(.*?)<!--\/(' . $ambiguous . ')-->/s', $value . '$1<?php } ?>', $html, -1, $count);
-      }while($count);
+      do {
+        $html = preg_replace('/<!--' . $key . '-->(.*?)<!--\/(' . $ambiguous . ')-->/s', $value . '$1<?php } ?>', $html, -1, $count);
+      } while ($count);
     }
     foreach ($cond as $key => $value) {
-      do{
-        $html= preg_replace('/<!--' . $key . '-->(.*?)<!--\/(' . $ambiguous . ')-->/s', $value . '$1<?php } ?>', $html, -1, $count);
-      }while($count);
+      do {
+        $html = preg_replace('/<!--' . $key . '-->(.*?)<!--\/(' . $ambiguous . ')-->/s', $value . '$1<?php } ?>', $html, -1, $count);
+      } while ($count);
     }
     // <!--/topentry--><!--topentry--> 左記を許容する(テンプレートによってシンタックスエラーが発生する可能性あり)
     // 代わりに既存FC2で動作しているテンプレートでタグの相互がおかしいテンプレートも動作する
     foreach ($loop as $key => $value) {
-      do{
-        $html= preg_replace('/<!--\/(' . $ambiguous . ')-->(.*?)<!--' . $key . '-->/s', '<?php } ?>$2' . $value, $html, -1, $count);
-      }while($count);
+      do {
+        $html = preg_replace('/<!--\/(' . $ambiguous . ')-->(.*?)<!--' . $key . '-->/s', '<?php } ?>$2' . $value, $html, -1, $count);
+      } while ($count);
     }
     foreach ($cond as $key => $value) {
-      do{
-        $html= preg_replace('/<!--\/(' . $ambiguous . ')-->(.*?)<!--' . $key . '-->/s', '<?php } ?>$2' . $value, $html, -1, $count);
-      }while($count);
+      do {
+        $html = preg_replace('/<!--\/(' . $ambiguous . ')-->(.*?)<!--' . $key . '-->/s', '<?php } ?>$2' . $value, $html, -1, $count);
+      } while ($count);
     }
 
     // 変数の置き換え
@@ -359,6 +361,4 @@ class BlogTemplatesModel extends Model
   {
     return Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
   }
-
 }
-

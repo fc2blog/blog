@@ -23,7 +23,7 @@ abstract class Controller
   protected $output = '';             // 出力タグ
   private $templateFilePath = "";
   private $layoutFilePath = "";
-  private $resolvedMethod = "";
+  private $resolvedMethod;
   private $request;
 
   public function __construct(Request $request, $method)
@@ -104,6 +104,7 @@ abstract class Controller
    * @param string $hash
    * @param bool $full_url BlogIdが特定できるとき、http(s)://〜からのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
    * @param string|null $blog_id
+   * @throws RedirectExit
    */
   protected function redirect(Request $request, $url, $hash = '', bool $full_url = false, string $blog_id = null)
   {
@@ -183,11 +184,13 @@ abstract class Controller
         $this->layoutFilePath = $fw_template_path; // テスト用に退避
       }
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
+      /** @noinspection PhpIncludeInspection */
       include($fw_template_device_path);
     } elseif (is_file($fw_template_path)) {
       if (defined("THIS_IS_TEST")) {
         $this->layoutFilePath = $fw_template_path; // テスト用に退避
       }
+      /** @noinspection PhpIncludeInspection */
       include($fw_template_path);
     } else {
       $this->layoutFilePath = ""; // テスト用に退避
@@ -232,12 +235,14 @@ abstract class Controller
         $this->templateFilePath = $fw_template_device_path; // テスト用に退避
       }
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
+      /** @noinspection PhpIncludeInspection */
       include($fw_template_device_path);
     } elseif (is_file($fw_template_path)) {
       if (defined("THIS_IS_TEST")) {
         $this->templateFilePath = $fw_template_path; // テスト用に退避
       }
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
+      /** @noinspection PhpIncludeInspection */
       include($fw_template_path);
       Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Template[' . $fw_template_path . ']');
     } else {
@@ -258,8 +263,7 @@ abstract class Controller
   {
     ob_start();
     $this->display($request, $template, $data, $isPrefix);
-    $html = ob_get_clean();
-    return $html;
+    return ob_get_clean();
   }
 
   // 存在しないアクションは404へ

@@ -20,7 +20,7 @@ class UsersModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName():string
   {
     return 'users';
   }
@@ -178,6 +178,4 @@ class UsersModel extends Model
 
     return parent::deleteById($user_id, $options);
   }
-
 }
-

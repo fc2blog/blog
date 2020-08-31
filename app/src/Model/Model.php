@@ -6,22 +6,21 @@
 
 namespace Fc2blog\Model;
 
-
 use Fc2blog\Util\Log;
 
 abstract class Model implements ModelInterface
 {
   const LIKE_WILDCARD = '\\_%'; // MySQL用
 
-  private static $loaded = array();
-  public $validates = array();
+  private static $loaded = [];
+  public $validates = [];
 
   /**
    * 複合キーのAutoIncrement対応
    */
-  protected function getAutoIncrementCompositeKey()
+  protected function getAutoIncrementCompositeKey(): string
   {
-    return false;
+    return "";
   }
 
   /**
@@ -44,12 +43,11 @@ abstract class Model implements ModelInterface
    * @param array &$valid_data 入力チェック後の返却データ
    * @param array $white_list 入力のチェック許可リスト
    * @return array
-   * @return array
    */
-  public function validate($data, &$valid_data, $white_list = array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
-    $errors = array();
-    $valid_data = array();
+    $errors = [];
+    $valid_data = [];
 
     $isWhiteList = !!count($white_list);
     foreach ($this->validates as $key => $valid) {
@@ -99,7 +97,7 @@ abstract class Model implements ModelInterface
    * @param $str
    * @return string
    */
-  public static function escape_wildcard($str)
+  public static function escape_wildcard($str): string
   {
     return addcslashes($str, self::LIKE_WILDCARD);
   }
@@ -110,7 +108,7 @@ abstract class Model implements ModelInterface
    * @param $array
    * @return bool
    */
-  public function is_numeric_array($array)
+  public function is_numeric_array($array): bool
   {
     // 配列チェック
     if (!is_array($array)) {
@@ -134,13 +132,13 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return array|false
    */
-  public function find($type, $options = array())
+  public function find($type, $options = [])
   {
     if (!isset($options['options'])) {
-      $options['options'] = array();
+      $options['options'] = [];
     }
     if (!isset($options['params'])) {
-      $options['params'] = array();
+      $options['params'] = [];
     }
     switch ($type) {
       case 'count':
@@ -206,15 +204,15 @@ abstract class Model implements ModelInterface
    * 主キーをキーにしてデータを取得
    * @param $id
    * @param array $options
-   * @return array|mixed
+   * @return array
    */
-  public function findById($id, $options = array())
+  public function findById($id, $options = []): array
   {
     if (empty($id)) {
-      return array();
+      return [];
     }
     $options['where'] = isset($options['where']) ? 'id=? AND ' . $options['where'] : 'id=?';
-    $options['params'] = isset($options['params']) ? array_merge(array($id), $options['params']) : array($id);
+    $options['params'] = isset($options['params']) ? array_merge([$id], $options['params']) : [$id];
     return $this->find('row', $options);
   }
 
@@ -223,15 +221,15 @@ abstract class Model implements ModelInterface
    * @param $id
    * @param $blog_id
    * @param array $options
-   * @return array|mixed
+   * @return array
    */
-  public function findByIdAndBlogId($id, $blog_id, $options = array())
+  public function findByIdAndBlogId($id, $blog_id, $options = []): array
   {
     if (empty($id) || empty($blog_id)) {
-      return array();
+      return [];
     }
     $options['where'] = isset($options['where']) ? 'blog_id=? AND id=? AND ' . $options['where'] : 'blog_id=? AND id=?';
-    $options['params'] = isset($options['params']) ? array_merge(array($blog_id, $id), $options['params']) : array($blog_id, $id);
+    $options['params'] = isset($options['params']) ? array_merge([$blog_id, $id], $options['params']) : [$blog_id, $id];
     return $this->find('row', $options);
   }
 
@@ -240,15 +238,15 @@ abstract class Model implements ModelInterface
    * @param $id
    * @param $user_id
    * @param array $options
-   * @return array|mixed
+   * @return array
    */
-  public function findByIdAndUserId($id, $user_id, $options = array())
+  public function findByIdAndUserId($id, $user_id, $options = []): array
   {
     if (empty($id) || empty($user_id)) {
-      return array();
+      return [];
     }
     $options['where'] = isset($options['where']) ? 'id=? AND user_id=? AND ' . $options['where'] : 'id=? AND user_id=?';
-    $options['params'] = isset($options['params']) ? array_merge(array($id, $user_id), $options['params']) : array($id, $user_id);
+    $options['params'] = isset($options['params']) ? array_merge([$id, $user_id], $options['params']) : [$id, $user_id];
     return $this->find('row', $options);
   }
 
@@ -257,7 +255,7 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return bool
    */
-  public function isExist($options = array())
+  public function isExist($options = []): bool
   {
     return !!$this->find('row', $options);
   }
@@ -267,11 +265,11 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return array
    */
-  public function getPaging($options = array())
+  public function getPaging($options = []): array
   {
     if (!isset($options['page']) || !isset($options['limit'])) {
-      Log::old_log('getPaging options["page"] or options["limit"]が設定されておりません', array(), 'error');
-      return array();
+      Log::error('getPaging options["page"] or options["limit"]が設定されておりません');
+      return [];
     }
 
     $page = $options['page'];
@@ -282,7 +280,7 @@ abstract class Model implements ModelInterface
 //    $count = $this->find('one', $options);
     $count = $this->getFoundRows();
 
-    $pages = array();
+    $pages = [];
     $pages['count'] = $count;
     $pages['max_page'] = ceil($count / $limit);
     $pages['page'] = $page;
@@ -298,17 +296,17 @@ abstract class Model implements ModelInterface
   public function getFoundRows()
   {
     $sql = 'SELECT FOUND_ROWS()';
-    return $this->findSql($sql, array(), array('result' => DBInterface::RESULT_ONE));
+    return $this->findSql($sql, [], array('result' => DBInterface::RESULT_ONE));
   }
 
   /**
    * ページングのリストを表示する
-   * @param $paging
+   * @param array $paging
    * @return array
    */
-  public static function getPageList($paging): array
+  public static function getPageList(array $paging): array
   {
-    $pages = array();
+    $pages = [];
     $pages[0] = '1' . __(' page');
     for ($i = 1; $i < $paging['max_page']; $i++) {
       $pages[$i] = ($i + 1) . __(' page');
@@ -317,12 +315,12 @@ abstract class Model implements ModelInterface
   }
 
   /**
-   * @param $sql
+   * @param string $sql
    * @param array $params
    * @param array $options
    * @return array|false
    */
-  public function findSql($sql, $params = array(), $options = array())
+  public function findSql(string $sql, $params = [], $options = [])
   {
     return $this->getDB()->find($sql, $params, $options);
   }
@@ -330,7 +328,7 @@ abstract class Model implements ModelInterface
   /**
    * @param array $values
    * @param array $options
-   * @return string|int|false 失敗時false, 成功時 last insert id
+   * @return string|int|false 失敗時:false, 成功時 last insert id
    */
   public function insert(array $values, array $options = [])
   {
@@ -363,14 +361,14 @@ abstract class Model implements ModelInterface
    * @param $where
    * @param array $params
    * @param array $options
-   * @return false|int 失敗時False、成功時1
+   * @return false|int 失敗時:false, 成功時:1
    */
-  public function update($values, $where, $params = array(), $options = array())
+  public function update($values, $where, $params = [], $options = [])
   {
     if (!count($values)) {
       return 0;
     }
-    $sets = array();
+    $sets = [];
     foreach ($values as $key => $value) {
       $sets[] = $key . '=?';
     }
@@ -386,9 +384,9 @@ abstract class Model implements ModelInterface
    * @param $values
    * @param $id
    * @param array $options
-   * @return false|int 失敗時False、成功時1
+   * @return false|int 失敗時:false, 成功時:1
    */
-  public function updateById($values, $id, $options = array())
+  public function updateById($values, $id, $options = [])
   {
     return $this->update($values, 'id=?', array($id), $options);
   }
@@ -402,7 +400,7 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return false|int 失敗時False、成功時1
    */
-  public function updateByIdAndBlogId($values, $id, $blog_id, $options = array())
+  public function updateByIdAndBlogId($values, $id, $blog_id, $options = [])
   {
     return $this->update($values, 'id=? AND blog_id=?', array($id, $blog_id), $options);
   }
@@ -412,7 +410,7 @@ abstract class Model implements ModelInterface
    * @param string $where
    * @param array $params
    * @param array $options
-   * @return int|false 1なら成功、Falseなら失敗
+   * @return int|false 失敗時:false, 成功時:1
    */
   public function delete(string $where, array $params = [], array $options = [])
   {
@@ -425,9 +423,9 @@ abstract class Model implements ModelInterface
    * idをキーとした更新
    * @param $id
    * @param array $options
-   * @return array|false|int|mixed
+   * @return false|int 失敗時:false, 成功時:1
    */
-  public function deleteById($id, $options = array())
+  public function deleteById($id, $options = [])
   {
     return $this->delete('id=?', array($id), $options);
   }
@@ -437,9 +435,9 @@ abstract class Model implements ModelInterface
    * @param $id
    * @param $blog_id
    * @param array $options
-   * @return array|false|int|mixed
+   * @return false|int 失敗時:false, 成功時:1
    */
-  public function deleteByIdAndBlogId($id, $blog_id, $options = array())
+  public function deleteByIdAndBlogId($id, $blog_id, array $options = [])
   {
     return $this->delete('blog_id=? AND id=?', array($blog_id, $id), $options);
   }
@@ -449,9 +447,9 @@ abstract class Model implements ModelInterface
    * @param $id
    * @param $user_id
    * @param array $options
-   * @return int|false false時失敗, 成功時は1
+   * @return false|int 失敗時:false, 成功時:1
    */
-  public function deleteByIdAndUserId($id, $user_id, $options = array())
+  public function deleteByIdAndUserId($id, $user_id, array $options = [])
   {
     return $this->delete('id=? AND user_id=?', array($id, $user_id), $options);
   }
@@ -463,11 +461,11 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return string|int|false false時失敗, 成功時はlast insert idだが、複数INSERTなので活用は難しい
    */
-  public function multipleInsert($columns = array(), $params = array(), $options = array())
+  public function multipleInsert(array $columns = [], array $params = [], array $options = [])
   {
     $sql = 'INSERT INTO ' . $this->getTableName() . ' (' . implode(',', $columns) . ') VALUES ';
     $len = count($params) / count($columns);
-    $sqls = array();
+    $sqls = [];
     for ($i = 0; $i < $len; $i++) {
       $sqls[] = '(' . implode(',', array_fill(0, count($columns), '?')) . ')';
     }
@@ -476,7 +474,13 @@ abstract class Model implements ModelInterface
     return $this->executeSql($sql, $params, $options);
   }
 
-  public function insertSql($sql, $params = array(), $options = array())
+  /**
+   * @param string $sql
+   * @param array $params
+   * @param array $options
+   * @return false|mixed
+   */
+  public function insertSql(string $sql, array $params = [], array $options = [])
   {
     $options['result'] = DBInterface::RESULT_INSERT_ID;
     return $this->executeSql($sql, $params, $options);
@@ -496,16 +500,16 @@ abstract class Model implements ModelInterface
   /**
    * 階層構造の一覧取得
    * @param $options
-   * @return mixed
+   * @return array|false
    */
-  public function findNode($options)
+  public function findNode(array $options)
   {
     $options['order'] = 'lft ASC';
     $nodes = $this->find('all', $options);
 
     // levelを付与
     $level = 0;
-    $levels = array();
+    $levels = [];
     foreach ($nodes as $key => $value) {
       // 最初のノード
       if ($level == 0) {
@@ -544,9 +548,9 @@ abstract class Model implements ModelInterface
    * @param string $where 親ノード検索時のwhere句
    * @param array $params 親ノード検索時のバインドデータ
    * @param array $options
-   * @return array|false|int|mixed
+   * @return string|int|false falseか、Last insert id
    */
-  public function addNode($data = array(), $where = '', $params = array(), $options = array())
+  public function addNode(array $data = [], string $where = '', array $params = [], array $options = [])
   {
     // 親として末尾に追加する場合
     if (empty($data['parent_id'])) {
@@ -587,14 +591,14 @@ SQL;
 
   /**
    * 階層構造の更新
-   * @param $data
-   * @param $id
+   * @param array $data
+   * @param string|int $id
    * @param string $where
    * @param array $params
    * @param array $options
-   * @return array|false|int|mixed
+   * @return false|int
    */
-  public function updateNodeById($data, $id, $where = '', $params = array(), $options = array())
+  public function updateNodeById(array $data, string $id, string $where = '', array $params = [], $options = [])
   {
     $idWhere = $where ? 'id=? AND ' . $where : 'id=?';
 
@@ -613,7 +617,7 @@ SQL;
     $parent = null;
     if ($self['parent_id'] && empty($data['parent_id'])) {
       // 親から外れた時
-      $parent = array();
+      $parent = [];
       $parent['lft'] = $parent['rgt'] = $this->find('one', array('fields' => 'MAX(rgt)', 'where' => $where, 'params' => $params, 'options' => $options)) + 1;
     } else {
       // 変更先の親を取得
@@ -632,13 +636,11 @@ SQL;
     // ノードの変更位置計算
     $self_lft = $self['lft'];
     $self_rgt = $self['rgt'];
-    $parent_lft = $parent['lft'];  # TODO この変数は利用されていない
     $parent_rgt = $parent['rgt'];
     $space = $self_rgt - $self_lft + 1;
 
     $table = $this->getTableName();
     $where = $where ? $where . ' AND ' : '';
-    $sql = ''; # TODO この変数は利用されていない
     if ($self_rgt > $parent_rgt) {
       // 自身を左へ移動
       $move = $parent_rgt - $self_lft;
@@ -694,7 +696,7 @@ SQL;
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function deleteNodeById($id, $where = '', $params = array(), $options = array())
+  public function deleteNodeById($id, string $where = '', array $params = [], array $options = [])
   {
     // 自身取得
     $idWhere = $where ? 'id=? AND ' . $where : 'id=?';
@@ -732,6 +734,4 @@ WHERE $where
 SQL;
     return $this->executeSql($sql, $params, $options);
   }
-
 }
-

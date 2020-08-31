@@ -124,7 +124,7 @@ class PDOWrap implements DBInterface
         throw new \Exception('[query Error]' . $sql);
       }
       if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
-        $mtime = sprintf('%0.2fms', (microtime(true) - $mtime)*1000);
+        $mtime = sprintf('%0.2fms', (microtime(true) - $mtime) * 1000);
         \Fc2blog\Util\Log::old_log('実行時間：' . $mtime . ' ' . $sql, $params, 'sql', __FILE__, __LINE__);
       }
       return $stmt;
@@ -137,7 +137,7 @@ class PDOWrap implements DBInterface
     }
     $stmt->execute($params);
     if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
-      $mtime = sprintf('%0.2fms', (microtime(true) - $mtime)*1000);
+      $mtime = sprintf('%0.2fms', (microtime(true) - $mtime) * 1000);
       \Fc2blog\Util\Log::old_log('実行時間：' . $mtime . ' ' . $sql, $params, 'sql', __FILE__, __LINE__);
     }
     return $stmt;
@@ -232,6 +232,4 @@ class PDOWrap implements DBInterface
     $version = explode('-', $this->db->getAttribute(\PDO::ATTR_SERVER_VERSION));
     return $version[0];
   }
-
 }
-

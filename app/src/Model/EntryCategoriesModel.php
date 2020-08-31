@@ -7,7 +7,9 @@ class EntryCategoriesModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -17,7 +19,7 @@ class EntryCategoriesModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'entry_categories';
   }
@@ -29,14 +31,14 @@ class EntryCategoriesModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list=array())
+  public function validate($data, &$valid_data, $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
       'category_id' => array(
         'multiple' => array(
           'int' => true,            // int型にキャスト
-          'min' => array('min'=>0), // 0以上
+          'min' => array('min' => 0), // 0以上
         ),
         'array_unique' => true,     // 重複排除
       ),
@@ -55,11 +57,11 @@ class EntryCategoriesModel extends Model
   {
     $categories = $this->find('all', array(
       'fields' => 'category_id',
-      'where'  => 'blog_id=? AND entry_id=?',
+      'where' => 'blog_id=? AND entry_id=?',
       'params' => array($blog_id, $entry_id)
     ));
     $ids = array();
-    foreach($categories as $category) {
+    foreach ($categories as $category) {
       $ids[] = $category['category_id'];
     }
     return $ids;
@@ -103,7 +105,7 @@ class EntryCategoriesModel extends Model
     if (count($insert_ids)) {
       $columns = array('blog_id', 'entry_id', 'category_id');
       $values = array();
-      foreach($insert_ids as $categoryId){
+      foreach ($insert_ids as $categoryId) {
         $values[] = $blog_id;
         $values[] = $entry_id;
         $values[] = $categoryId;
@@ -130,6 +132,4 @@ class EntryCategoriesModel extends Model
     }
     return $this->delete('blog_id=? AND entry_id=?', array($blog_id, $entry_id));
   }
-
 }
-

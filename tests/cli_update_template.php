@@ -11,6 +11,7 @@ use Fc2blog\Tests\LoaderHelper;
 
 require_once __DIR__ . "/../app/vendor/autoload.php";
 
+/** @noinspection PhpUnhandledExceptionInspection */
 LoaderHelper::requireBootStrap();
 
 // CLI param check

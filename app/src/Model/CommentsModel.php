@@ -24,12 +24,12 @@ class CommentsModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'comments';
   }
 
-  public function getAutoIncrementCompositeKey()
+  public function getAutoIncrementCompositeKey(): string
   {
     return 'blog_id';
   }
@@ -350,6 +350,7 @@ class CommentsModel extends Model
 
     $where = 'blog_id=? AND entry_id=?';
     $params = array($blog_id, $entry_id);
+    /** @noinspection PhpStatementHasEmptyBodyInspection */
     if ($isDisplayApprovalComment == true && $isDisplayPrivateComment == true) {
       // 全て表示する場合はwhere条件追加無し
     } elseif ($isDisplayApprovalComment) {
@@ -364,12 +365,11 @@ class CommentsModel extends Model
     }
 
     // 記事のコメント取得
-    $options = array(
+    return [
       'where' => $where,
       'params' => $params,
       'order' => 'id ' . ($blog_setting['comment_order'] == Config::get('COMMENT.ORDER.ASC') ? 'ASC' : 'DESC'),
-    );
-    return $options;
+    ];
   }
 
   /**
@@ -381,15 +381,14 @@ class CommentsModel extends Model
   public function forTestGetCommentListOptionsByBlogSetting($blog_id, $entry_id)
   {
     $where = 'blog_id=? AND entry_id=?';
-    $params = array($blog_id, $entry_id);
+    $params = [$blog_id, $entry_id];
 
     // 記事のコメント取得
-    $options = array(
+    return [
       'where' => $where,
       'params' => $params,
       'order' => 'id ',
-    );
-    return $options;
+    ];
   }
 
   /**
@@ -466,11 +465,10 @@ class CommentsModel extends Model
    */
   public function getUnreadCount($blog_id)
   {
-    $count = $this->find('count', array(
+    return $this->find('count', [
       'where' => 'blog_id=? AND reply_status=?',
-      'params' => array($blog_id, Config::get('COMMENT.REPLY_STATUS.UNREAD')),
-    ));
-    return $count;
+      'params' => [$blog_id, Config::get('COMMENT.REPLY_STATUS.UNREAD')],
+    ]);
   }
 
   /**
@@ -480,11 +478,10 @@ class CommentsModel extends Model
    */
   public function getUnapprovedCount($blog_id)
   {
-    $count = $this->find('count', array(
+    return $this->find('count', [
       'where' => 'blog_id=? AND open_status=?',
-      'params' => array($blog_id, Config::get('COMMENT.OPEN_STATUS.PENDING')),
-    ));
-    return $count;
+      'params' => [$blog_id, Config::get('COMMENT.OPEN_STATUS.PENDING')],
+    ]);
   }
 
   /**
@@ -614,6 +611,4 @@ class CommentsModel extends Model
     }
     return $comments;
   }
-
 }
-

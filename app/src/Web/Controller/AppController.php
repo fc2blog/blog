@@ -7,8 +7,7 @@ namespace Fc2blog\Web\Controller;
 
 use Fc2blog\App;
 use Fc2blog\Config;
-use Fc2blog\Exception\PseudoExit;
-use Fc2blog\Model\Model;
+use Fc2blog\Model\BlogsModel;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -53,11 +52,11 @@ abstract class AppController extends Controller
   /**
    * blog_idからブログ情報を取得
    * @param $blog_id
-   * @return
+   * @return array|false|mixed
    */
   public function getBlog($blog_id)
   {
-    return Model::load('Blogs')->findById($blog_id);
+    return (new BlogsModel())->findById($blog_id);
   }
 
   /**

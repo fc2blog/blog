@@ -15,12 +15,12 @@ class Request
   const VALID_POSITIVE_INT = 2;    // 1以上の数値チェック
   const VALID_IN_ARRAY = 3;    // 配列内の値のどれかチェック
 
-  private $path = '';
+  private $path;
   private $query = '';
-  private $request = [];
-  private $get = [];
-  private $post = [];
-  private $files = [];
+  private $request;
+  private $get;
+  private $post;
+  private $files;
 
   public $uri = "";
   public $method = "";

@@ -10,7 +10,9 @@ class FilesModel extends Model
 
   public static $instance = null;
 
-  public function __construct(){}
+  public function __construct()
+  {
+  }
 
   public static function getInstance()
   {
@@ -20,12 +22,12 @@ class FilesModel extends Model
     return self::$instance;
   }
 
-  public function getTableName()
+  public function getTableName(): string
   {
     return 'files';
   }
 
-  public function getAutoIncrementCompositeKey()
+  public function getAutoIncrementCompositeKey(): string
   {
     return 'blog_id';
   }
@@ -38,7 +40,7 @@ class FilesModel extends Model
       $file['name'] = $name;
       $file['ext'] = strtolower(pathinfo($name, PATHINFO_EXTENSION));
     }
-    if (isset($request['name']) && $request['name']!=='') {
+    if (isset($request['name']) && $request['name'] !== '') {
       $file['name'] = $request['name'];
     }
     $errors = $this->validate($file, $valid_data, array('name', 'ext', 'file'));
@@ -61,20 +63,20 @@ class FilesModel extends Model
   {
     // バリデートを定義
     $this->validates = array(
-      'name'  => array(
+      'name' => array(
         'maxlength' => array('max' => 100),
       ),
-      'ext'   => array(
+      'ext' => array(
         'in_array' => array(
-          'values'   => array('jpg', 'jpeg', 'png', 'gif'),
-          'message'  => __('Please upload an image file'),
+          'values' => array('jpg', 'jpeg', 'png', 'gif'),
+          'message' => __('Please upload an image file'),
         ),
       ),
       'file' => array(
         'file' => array(
-          'required'  => true,
+          'required' => true,
           'mime_type' => array('image/jpeg', 'image/png', 'image/gif'),
-          'size'      => Config::get('FILE.MAX_SIZE'),
+          'size' => Config::get('FILE.MAX_SIZE'),
         ),
       ),
     );
@@ -93,27 +95,27 @@ class FilesModel extends Model
   {
     // バリデートを定義
     $this->validates = array(
-      'name'  => array(
+      'name' => array(
         'maxlength' => array('max' => 100),
       ),
-      'ext'   => array(
-        'required'  => false,
-        'in_array'  => array(
-          'values'    => array('jpg', 'jpeg', 'png', 'gif'),
-          'message'   => __('Please upload an image file'),
+      'ext' => array(
+        'required' => false,
+        'in_array' => array(
+          'values' => array('jpg', 'jpeg', 'png', 'gif'),
+          'message' => __('Please upload an image file'),
         ),
       ),
       'file' => array(
         'file' => array(
           'mime_type' => array('image/jpeg', 'image/png', 'image/gif'),
-          'size'      => Config::get('FILE.MAX_SIZE'),
+          'size' => Config::get('FILE.MAX_SIZE'),
         ),
       ),
     );
     $errors = $this->fileValidate($file, $request, $valid_data);
     if (empty($errors) && !empty($file['file']['tmp_name'])) {
       // アップロード画像と元画像の拡張子が違う場合
-      if ($valid_data['ext']!=$original_file['ext']) {
+      if ($valid_data['ext'] != $original_file['ext']) {
         $errors['ext'] = __('Extension and the original file is different');
         return $errors;
       }
@@ -124,13 +126,13 @@ class FilesModel extends Model
     return $errors;
   }
 
-  public function insert($data, $options=array())
+  public function insert($data, $options = array())
   {
     $data['updated_at'] = $data['created_at'] = date('Y-m-d H:i:s');
     return parent::insert($data, $options);
   }
 
-  public function updateByIdAndBlogId($data, $id, $blog_id, $options=array())
+  public function updateByIdAndBlogId($data, $id, $blog_id, $options = array())
   {
     // 更新日時を設定
     $data['updated_at'] = date('Y-m-d H:i:s');
@@ -174,7 +176,7 @@ class FilesModel extends Model
 
     // 削除対象のファイルを取得(ファイル情報を使用する為取得)
     $files = $this->find('all', array(
-      'where'  => 'blog_id=? AND id IN (' . implode(',',array_fill(0, count($ids), '?')) . ')',
+      'where' => 'blog_id=? AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')',
       'params' => array_merge(array($blog_id), $ids),
     ));
     if (!count($files)) {
@@ -188,6 +190,4 @@ class FilesModel extends Model
     }
     return $flag;
   }
-
 }
-

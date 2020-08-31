@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Controller\Admin\Entries;
 
-use Fc2blog\Config;
 use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
 use Fc2blog\Web\Request;

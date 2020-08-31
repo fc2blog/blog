@@ -35,6 +35,7 @@ class UsersController extends AdminController
 
     $this->set('users', $users);
     $this->set('paging', $paging);
+    return "";
   }
 
   /**

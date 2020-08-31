@@ -10,6 +10,7 @@ require_once __DIR__ . "/../app/vendor/autoload.php";
 define("TEST_APP_DIR", __DIR__ . "/../app");
 define("THIS_IS_TEST", true);
 
+/** @noinspection PhpUnhandledExceptionInspection */
 LoaderHelper::requireBootStrap();
 
 // DB初期化
