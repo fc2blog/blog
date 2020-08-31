@@ -6,6 +6,9 @@
 
 namespace Fc2blog\Model;
 
+use Exception;
+use PDOStatement;
+
 class PDOWrap implements DBInterface
 {
 
@@ -44,7 +47,7 @@ class PDOWrap implements DBInterface
     $options = array_merge($_options, $options);
     try {
       $stmt = $this->query($sql, $params, $options['types']);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
         \Fc2blog\Util\Log::old_log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
@@ -70,7 +73,7 @@ class PDOWrap implements DBInterface
     $options = array_merge($_options, $options);
     try {
       $stmt = $this->query($sql, $params, $options['types']);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
         \Fc2blog\Util\Log::old_log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
       }
@@ -93,11 +96,13 @@ class PDOWrap implements DBInterface
         $execute_sqls[] = $sql;
       }
     }
-    $ret = true;
+
     foreach ($execute_sqls as $sql) {
-      $ret = $ret && $this->execute($sql);
+      if($this->execute($sql) === false) {
+        return false;
+      }
     }
-    return $ret;
+    return true;
   }
 
   /**
@@ -106,7 +111,7 @@ class PDOWrap implements DBInterface
    * @param array $params
    * @param string $types
    * @return PDOStatement|mixed 成功時PDOStatement
-   * @throws \Exception
+   * @throws Exception
    */
   private function query($sql, $params = array(), $types = '')
   {
@@ -121,7 +126,7 @@ class PDOWrap implements DBInterface
       // SQL文をそのまま実行
       $stmt = $this->db->query($sql);
       if (getType($stmt) == 'boolean' && !$stmt) {
-        throw new \Exception('[query Error]' . $sql);
+        throw new Exception('[query Error]' . print_r($this->db->errorInfo(), true) . $sql);
       }
       if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
         $mtime = sprintf('%0.2fms', (microtime(true) - $mtime) * 1000);
@@ -133,7 +138,7 @@ class PDOWrap implements DBInterface
     // プリペアドステートメント
     $stmt = $this->db->prepare($sql);
     if (!$stmt) {
-      throw new \Exception('[prepare Error]' . $sql);
+      throw new Exception('[prepare Error]' . $sql);
     }
     $stmt->execute($params);
     if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {

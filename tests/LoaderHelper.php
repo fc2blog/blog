@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Tests;
 
 use ErrorException;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
 class LoaderHelper extends TestCase
@@ -22,6 +23,10 @@ class LoaderHelper extends TestCase
     putenv('FC2_ENABLE_UNIT_TEST_ENDPOINT=1');
     putenv('FC2_STRICT_ERROR_REPORT=1');
     putenv('FC2_ERROR_LOG_PATH=php://stderr');
+    putenv('FC2_APP_LOG_PATH=php://stderr');
+    putenv('FC2_APP_LOG_LEVEL='.Logger::WARNING);
+    putenv('FC2_SQL_DEBUG=php://stderr');
+    putenv('FC2_APP_DEBUG=php://stderr');
     putenv('FC2_ERROR_ON_DISPLAY=0');
     putenv('FC2_DB_HOST=127.0.0.1');
     putenv('FC2_DB_USER=docker');

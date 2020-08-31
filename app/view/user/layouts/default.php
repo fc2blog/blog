@@ -7,7 +7,7 @@ if(!headers_sent()){
 <html lang="<?php echo $request->lang; ?>">
 <head>
   <meta charset="utf-8">
-  <title><?php echo h($blog['name']); ?></title>
+  <title><?php echo isset($blog['name']) && h($blog['name']); ?></title>
   <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
   <link rel="stylesheet" href="/css/normalize.css" type="text/css" media="all">
   <link rel="stylesheet" href="/css/user-fc2.css" type="text/css" media="all">

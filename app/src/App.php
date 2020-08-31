@@ -128,7 +128,7 @@ class App
    */
   public static function removeBlogDirectory(string $blog_id): void
   {
-    $fs = new Local(__DIR__ . "/../../");
+    $fs = new Local("/");
 
     $upload_path = Config::get('WWW_UPLOAD_DIR') . '/' . static::getBlogLayer($blog_id);
     $fs->deleteDir($upload_path);

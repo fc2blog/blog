@@ -17,7 +17,7 @@ class Log
   public static function getLogger(): LoggerInterface
   {
     if (!isset(static::$logger)) {
-      if (defined('APP_LOG_LEVEL') && strlen(APP_LOG_LEVEL) > 0) {
+      if (defined('APP_LOG_LEVEL') && APP_LOG_LEVEL > 0) {
         static::$logLevel = APP_LOG_LEVEL;
       }
 
@@ -40,7 +40,7 @@ class Log
    * @param string $filename
    * @param int $line
    */
-  public static function old_log(string $message, $context, string $class = 'log', string $filename = "-", int $line = 0) :void
+  public static function old_log(string $message, $context, string $class = 'log', string $filename = "-", int $line = 0): void
   {
     $logger = static::getLogger();
     $logger->debug("[{$class}]{$filename}:{$line} {$message}", [$context]);
@@ -50,7 +50,7 @@ class Log
    * @param string $message
    * @param array $context
    */
-  public static function debug_log(string $message, array $context = []) :void
+  public static function debug_log(string $message, array $context = []): void
   {
     static::getLogger()->debug($message, $context);
   }
@@ -59,7 +59,7 @@ class Log
    * @param string $message
    * @param array $context
    */
-  public static function error(string $message, array $context = []) :void
+  public static function error(string $message, array $context = []): void
   {
     static::getLogger()->error($message, $context);
   }
