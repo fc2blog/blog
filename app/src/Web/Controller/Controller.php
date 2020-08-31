@@ -5,6 +5,7 @@
 
 namespace Fc2blog\Web\Controller;
 
+use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
@@ -12,7 +13,14 @@ use Fc2blog\Util\Log;
 use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
+use InvalidArgumentException;
 use LogicException;
+use RuntimeException;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
@@ -33,7 +41,7 @@ abstract class Controller
   {
     $this->beforeFilter($this->request);
 
-    // アクションの実行(返り値はテンプレートファイル名)
+    // アクションの実行(返り値はテンプレートファイル名、レンダリング用データは$this->data)
     $this->resolvedMethod = $method;
     $template = $this->$method($this->request);
 
@@ -43,12 +51,18 @@ abstract class Controller
       $template = strtolower($this->request->shortControllerName) . '/' . $method . '.php';
     }
 
-    // 出力を一時変数へ（後ほどemit()すること）
-    ob_start();
-    $this->layout($this->request, $template);
-    $this->output = ob_get_clean();
+    // 出力を$this->outputで保持。後ほどemit()すること。
+    // TODO PHPテンプレートとTwigテンプレートの移行中なので、テンプレートファイル名で切り分ける
+    if(preg_match("/\.twig\z/u", $template)){
+      $this->renderByTwig($this->request, $template);
+    }else{
+      ob_start();
+      $this->layout($this->request, $template);
+      $this->output = ob_get_clean();
+    }
 
     // SSI的なインクルード処理など（現状活用されていない）
+    // TODO 必要になるまで削除して良いと思われる
     $this->beforeRender();
   }
 
@@ -59,7 +73,6 @@ abstract class Controller
 
   public function getShortClassName()
   {
-
   }
 
   protected function beforeFilter(Request $request)
@@ -139,7 +152,48 @@ abstract class Controller
     $this->redirect($request, $url, $hash);
   }
 
-  private function layout(Request $request, $fw_template)
+  /**
+   * TwigテンプレートエンジンでHTMLをレンダリング
+   * 結果は $this->output に保管される
+   * @param Request $request
+   * @param string $twig_template
+   */
+  private function renderByTwig(Request $request, string $twig_template): void
+  {
+    $base_path = __DIR__ . "/../../../twig_templates";
+    $loader = new FilesystemLoader($base_path);
+    $twig = new Environment($loader);
+
+    $twig_template_path = $twig_template;
+    $twig_template_device_path = preg_replace("/\.twig\z/u", '_' . App::getDeviceTypeStr($request) . '.twig', $twig_template_path);
+
+    if (is_file($base_path . $twig_template_device_path)) { // デバイス用ファイルがある
+      $twig_template_path = $twig_template_device_path;
+    }
+
+    if (!is_file($twig_template_path)) {
+      throw new InvalidArgumentException("Twig error: missing template: {$twig_template_path}");
+    }
+
+    $this->data['request'] = $request; // TODO Adhocに追加しているので、どこか適切な場所に移動する
+
+    try {
+      $this->output = $twig->render($twig_template_path, $this->data);
+    } catch (LoaderError $e) {
+      throw new RuntimeException("Twig error: {$e->getMessage()}");
+    } catch (RuntimeError $e) {
+      throw new RuntimeException("Twig error: {$e->getMessage()}");
+    } catch (SyntaxError $e) {
+      throw new RuntimeException("Twig error: {$e->getMessage()}");
+    }
+  }
+
+  /**
+   * PHPを用いたテンプレートエンジンでHTMLをレンダリング
+   * @param Request $request
+   * @param string|null $fw_template スコープ変数として、 include(〜)の中で利用されている
+   */
+  private function layout(Request $request, ?string $fw_template)
   {
     // 定義済み変数に関しては展開させない
     unset($this->data['fw_template']);
@@ -178,7 +232,7 @@ abstract class Controller
   }
 
   /**
-   * 画面表示処理
+   * PHPを用いたテンプレートエンジンで本文部分の画面HTMLをレンダリング
    * @param Request $request
    * @param $fw_template
    * @param array $fw_data

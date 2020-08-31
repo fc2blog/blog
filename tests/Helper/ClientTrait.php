@@ -86,11 +86,9 @@ trait ClientTrait
       $_COOKIE
     );
 
-    $router = new Router($request);
-    $resolve = $router->resolve();
-
-    $controller_instance = new $resolve['className']($resolve['request'], $resolve['methodName']);
-
+    $c = new $request->className($request);
+    $c->execute($request->methodName);
+    
     if (empty($_SESSION)) {
       //おそらく、セッション全破棄がおこなわれたので、初期化
       $this->clientTraitSession = [];
@@ -100,7 +98,7 @@ trait ClientTrait
     // Cookieは設定場所が明確で制御できているので、$_COOKIEが劣位である。
     $this->clientTraitCookie = array_merge($_COOKIE, $request->cookie);
 
-    return $controller_instance;
+    return $c;
   }
 
   public function reqBaseBeRedirect(
@@ -134,13 +132,12 @@ trait ClientTrait
       $_COOKIE
     );
 
-    $router = new Router($request);
-    $resolve = $router->resolve();
+    $c = new $request->className($request);
 
     $exception = null;
     try {
-      $c = new $resolve['className']($resolve['request'], $resolve['methodName']);
-      echo $c->getOutput();
+      $c->execute($request->methodName);
+      $c->emit();
       throw new RuntimeException("It's not what I was expecting.");
     } catch (RedirectExit $e) {
       $exception = $e;
