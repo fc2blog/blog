@@ -5,7 +5,7 @@
 <?php \Fc2blog\Web\Html::addJS('/js/elrte/js/elrte.full.js'); ?>
 
 <!-- elRTE translation messages -->
-<?php \Fc2blog\Web\Html::addJS('/js/elrte/src/elrte/js/elRTE.options.js'); ?>
+<?php \Fc2blog\Web\Html::addJS('/js/elrte/js/elRTE.options.js'); ?>
 <?php \Fc2blog\Web\Html::addJS('/js/elrte/js/i18n/elrte.' . \Fc2blog\Config::get('LANG_ELRTE.' . \Fc2blog\Config::get('LANG')) . '.js'); ?>
 
 <!-- timepicker-addon -->
