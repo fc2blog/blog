@@ -49,7 +49,7 @@ class EntriesController extends UserController
     // 非公開モードの場合はパスワード認証画面へ遷移
     if ($blog['open_status'] == Config::get('BLOG.OPEN_STATUS.PRIVATE')
       && !Session::get($this->getBlogPasswordKey($blog['id']))
-      && Config::get('ActionName') != 'blog_password'
+      && $request->methodName != 'blog_password'
       && !$self_blog
     ) {
       $this->redirect($request, array('action' => 'blog_password', 'blog_id' => $blog_id));

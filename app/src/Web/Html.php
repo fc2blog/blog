@@ -42,7 +42,7 @@ class Html
     }
     $controller = StringCaseConverter::snakeCase($controller);
 
-    $action = Config::get('ActionName');
+    $action = $request->methodName;
     if (isset($args['action'])) {
       $action = $args['action'];
       unset($args['action']);

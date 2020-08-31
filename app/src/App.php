@@ -314,7 +314,7 @@ class App
       unset($args['controller']);
     }
 
-    $action = Config::get('ActionName');
+    $action = $request->methodName;
     if (isset($args['action'])) {
       $action = $args['action'];
       unset($args['action']);
