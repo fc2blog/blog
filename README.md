@@ -12,13 +12,13 @@ Open Source Blog
 
 1. Download the .git or .zip file, and extract it to the server.  
 app  
-public [public directory]  
+public [public directory]
 　  
 2. Change the name of the settings file, and store the DB or Server information.  
 app/config.sample.php -> app/config.php  
 
  *If the `app` directory does not exist on the same level as the `public` directory,
-you will need to amend the path from the following area in the `index.php`, `admin/index.php`, `admin/install.php` files.  
+you will need to amend the path from the following area in the `index.php`, `admin/index.php` files.  
 
 ```
 $app_dir_path = __DIR__ . "/../app";
@@ -27,7 +27,7 @@ $app_dir_path = "/path/to/your/www/app";
 ```
 　  
 3. Access the Installation Screen  
-[DOMAIN]/admin/install.php  
+[DOMAIN]/admin/common/install
 　  
 4. Follow the instructions and complete installation.  
 　  
@@ -37,6 +37,6 @@ $app_dir_path = "/path/to/your/www/app";
 #### development with Docker.
 
 1. `docker-compose up` at repo root directory. wait startup.
-2. open `http://localhost:8080/admin/install.php`
+2. open `http://localhost:8080/admin/common/install`
 
-* If you want to test https. open `https://localhost:8480/admin/install.php` .
+* If you want to test https. open `https://localhost:8480/admin/common/install` .
