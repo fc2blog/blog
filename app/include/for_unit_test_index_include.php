@@ -19,8 +19,6 @@ if (!preg_match("/\A(127.0.0.|172.24.)/u", $_SERVER['REMOTE_ADDR'])) {
 
 $request = new \Fc2blog\Web\Request();
 
-$router = new \Fc2blog\Web\Router\Router($request);
-
-$resolve = $router->resolve();
-
-new $resolve['className']($request, $resolve['methodName']);
+$c = new $request->className($request);
+$c->execute($request->methodName);
+$c->emit();

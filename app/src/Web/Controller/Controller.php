@@ -5,11 +5,9 @@
 
 namespace Fc2blog\Web\Controller;
 
-use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
-use Fc2blog\Util\I18n;
 use Fc2blog\Util\Log;
 use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Html;
@@ -24,68 +22,44 @@ abstract class Controller
   private $templateFilePath = "";
   private $layoutFilePath = "";
   private $resolvedMethod;
-  private $request;
+  protected $request;
 
-  public function __construct(Request $request, $method)
+  public function __construct(Request $request)
   {
     $this->request = $request;
+  }
 
-    $lang = I18n::setLanguage($request); // TODO Bootstrapへ移動
-    $request->lang = $lang; // TODO インラインへ
+  public function execute($method)
+  {
+    $this->beforeFilter($this->request);
 
-    $className = get_class($this);
+    // アクションの実行(返り値はテンプレートファイル名)
+    $this->resolvedMethod = $method;
+    $template = $this->$method($this->request);
 
-    { // PSR-4 対応のためのTweak
-      // namespace付きクラス名から、クラス名へ
-      $classNamePathList = explode('\\', $className);
-      $className = $classNamePathList[count($classNamePathList) - 1];
+    // 空の場合は、規約に則ってテンプレートファイルを決定する
+    if (empty($template)) {
+      // TODO prefixもつけて、ここでフルパスにしたほうがよくないか？（後でPrefixをわざわざつけている）
+      $template = strtolower($this->request->shortControllerName) . '/' . $method . '.php';
     }
 
-    // コントローラー名の設定（後でアクセス許可判定などに使われる
-    $controllerName = explode('Controller', $className);
-    Config::set('ControllerName', $controllerName[0]); // TODO \Fc2blog\App::isActiveMenu 改修で $requestに寄せられる
+    // 出力を一時変数へ（後ほどemit()すること）
+    ob_start();
+    $this->layout($this->request, $template);
+    $this->output = ob_get_clean();
 
-    // メソッド名の設定（後でアクセス許可判定などに使われる
-    Config::set('ActionName', $method); // TODO \Fc2blog\App::isActiveMenu 改修で $requestに寄せられる
+    // SSI的なインクルード処理など（現状活用されていない）
+    $this->beforeRender();
+  }
 
-    // デバイスタイプの設定（TODO ここでなくても良さそうだが
-    Config::set('DeviceType', App::getDeviceType($request)); // TODO DeviceTypeはRequestに持たせたいが、最悪Controllerに持たせることで削減できそう
+  public function emit()
+  {
+    echo $this->output;
+  }
 
-    // アプリプレフィックス、テンプレートファイル名決定に使われる
-    $prefix = Config::get('APP_PREFIX'); // TODO Request に持たせられそう
+  public function getShortClassName()
+  {
 
-    // TODO 実質アクセスログなので、Routerに移動
-    Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']');
-
-    { // TODO 実行系、外だししても良いのではないか
-      $this->beforeFilter($request);
-
-      // アクションの実行(返り値はテンプレートファイル名)
-      $this->resolvedMethod = $method;
-      $template = $this->$method($request);
-
-      // 空の場合は、規約に則ってテンプレートファイルを決定する
-      if (empty($template)) {
-        $template = substr($className, 0, strlen($className) - strlen('Controller')) . '/' . $method . '.php';
-      }
-
-      // 後での置換のため、出力を一時変数へ
-      ob_start();
-      $this->layout($request, $template);
-      $this->output = ob_get_clean();
-
-      // SSI的なインクルード処理など（現状活用されていない）
-      $this->beforeRender();
-    }
-
-    { // TODO 出力系、外だし（外部でemit）して良いのではないか
-      // 結果を出力
-      if (!defined("THIS_IS_TEST")) {
-        echo $this->output;
-      }
-    }
-
-    return $this;
   }
 
   protected function beforeFilter(Request $request)
@@ -183,7 +157,7 @@ abstract class Controller
     }
 
     $fw_template_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
+    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       if (defined("THIS_IS_TEST")) {
         $this->layoutFilePath = $fw_template_path; // テスト用に退避
@@ -234,7 +208,7 @@ abstract class Controller
 
     // Template表示
     $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? strtolower(Config::get('APP_PREFIX')) . '/' : '') . $fw_template;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
+    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       if (defined("THIS_IS_TEST")) {
         $this->templateFilePath = $fw_template_device_path; // テスト用に退避

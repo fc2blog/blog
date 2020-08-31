@@ -6,7 +6,11 @@
 
 namespace Fc2blog\Web;
 
+use Fc2blog\App;
+use Fc2blog\Util\I18n;
+use Fc2blog\Util\Log;
 use Fc2blog\Web\Controller\Test\CommonController;
+use Fc2blog\Web\Router\Router;
 
 class Request
 {
@@ -31,7 +35,9 @@ class Request
 
   public $className = CommonController::class;
   public $methodName = "index";
+  public $shortControllerName = "Common";
   public $lang = "";
+  public $deviceType="";
 
   public function __construct(
     string $method = null,
@@ -67,6 +73,26 @@ class Request
       parse_str($urls['query'], $this->get);
     }
     $this->request = array_merge($this->get, $this->post);
+
+    // リクエストからの言語規定
+    $this->lang = I18n::setLanguage($this);
+    // リクエストからのデバイス種類規定
+    $this->deviceType = App::getDeviceType($this);
+
+    // ルートの解決
+    $router = new Router($this);
+    $resolve = $router->resolve();
+
+    $this->methodName = $resolve['methodName']; // ここまでRequestに持たせるのは少々責務範囲が広いか？
+    $this->className = $resolve['className']; // ここまでRequestに持たせるのは少々責務範囲が広いか？
+    { // Common など短いコントローラ名の生成
+      $classNamePathList = explode('\\', $this->className);
+      $className = $classNamePathList[count($classNamePathList) - 1];
+      $this->shortControllerName = explode('Controller', $className)[0];
+    }
+
+    // デバッグ用アクセス（リゾルブ結果）ログ
+    Log::debug_log(__FILE__ . ":" . __LINE__ . " Controller[{$this->className}] Method[{$method}'] Device['{$this->deviceType}]");
   }
 
   /**
