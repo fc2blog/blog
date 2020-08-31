@@ -34,8 +34,10 @@ class EditTest extends TestCase
     $this->resetSession();
     $this->resetCookie();
     $this->mergeAdminSession();
+    $sig = $this->getSig();
 
     $request_data = [
+      'sig' => $sig,
       'user' => [
         "login_blog_id" => "testblog1",
         "password" => "password123",

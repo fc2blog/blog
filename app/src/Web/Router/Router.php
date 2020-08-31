@@ -7,6 +7,7 @@
 namespace Fc2blog\Web\Router;
 
 use Fc2blog\Config;
+use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Controller\Admin\AdminController;
 use Fc2blog\Web\Controller\Test\TestController;
 use Fc2blog\Web\Controller\User\BlogsController;
@@ -46,9 +47,9 @@ class Router
       $args_action = Config::get('ARGS_ACTION');
 
       if ($request->isArgs($args_controller)) {
-        $this->className = "Fc2blog\\Web\\Controller\\Admin\\" . pascalCase($request->get($args_controller)) . "Controller";
+        $this->className = "Fc2blog\\Web\\Controller\\Admin\\" . StringCaseConverter::pascalCase($request->get($args_controller)) . "Controller";
       } elseif (isset($paths[1])) {
-        $this->className = "Fc2blog\\Web\\Controller\\Admin\\" . pascalCase($paths[1]) . "Controller";
+        $this->className = "Fc2blog\\Web\\Controller\\Admin\\" . StringCaseConverter::pascalCase($paths[1]) . "Controller";
       }
 
       if ($request->isArgs($args_action)) {

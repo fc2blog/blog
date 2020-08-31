@@ -108,7 +108,7 @@ $config['fc2_template_if'] = array(
 );
 
 $template_vars = array(
-  '<%server_url>' => '<?php echo getServerUrl() . \'/\'; ?>',
+  '<%server_url>' => '<?php echo \Fc2blog\Web\Html::getServerUrl() . \'/\'; ?>',
   '<%blog_id>'    => '<?php echo $blog_id; ?>',
   // タイトルリスト一覧
   '<%titlelist_eno>'          => '<?php if(isset($entry[\'id\'])) echo $entry[\'id\']; ?>',
@@ -183,8 +183,8 @@ PHP
   '<%topentry_image>'              => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . $entry[\'first_image\'] . \'" />\'; ?>',
   '<%topentry_image_72>'           => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . \Fc2blog\App::getThumbnailPath($entry[\'first_image\'], 72) . \'" />\'; ?>',
   '<%topentry_image_w300>'         => '<?php if(!empty($entry[\'first_image\'])) echo \'<img src="\' . \Fc2blog\App::getThumbnailPath($entry[\'first_image\'], 300, \'w\') . \'" />\'; ?>',
-  '<%topentry_image_url>'          => '<?php if(!empty($entry[\'first_image\'])) echo getServerUrl() . $entry[\'first_image\']; ?>',
-  '<%topentry_image_url_760x420>'  => '<?php if(!empty($entry[\'first_image\'])) echo getServerUrl() . \Fc2blog\App::getCenterThumbnailPath($entry[\'first_image\'], 760, 420, \'wh\'); ?>',
+  '<%topentry_image_url>'          => '<?php if(!empty($entry[\'first_image\'])) echo \Fc2blog\Web\Html::getServerUrl() . $entry[\'first_image\']; ?>',
+  '<%topentry_image_url_760x420>'  => '<?php if(!empty($entry[\'first_image\'])) echo \Fc2blog\Web\Html::getServerUrl() . \Fc2blog\App::getCenterThumbnailPath($entry[\'first_image\'], 760, 420, \'wh\'); ?>',
   '<%topentry_comment_num>'        => '<?php if(isset($entry[\'comment_count\'])) echo $entry[\'comment_count\']; ?>',
   // 記事のカテゴリー系
   '<%topentry_category_no>'        => '<?php if(!isset($entry[\'categories\'][0][\'id\'])){}else if(!empty($category) && $category[\'entry_id\']==$entry[\'categories\'][0][\'entry_id\']){'

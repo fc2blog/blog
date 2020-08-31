@@ -8,6 +8,7 @@ namespace Fc2blog\Web;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Util\StringCaseConverter;
 
 class Html
 {
@@ -39,7 +40,7 @@ class Html
       $controller = $args['controller'];
       unset($args['controller']);
     }
-    $controller = snakeCase($controller);
+    $controller = StringCaseConverter::snakeCase($controller);
 
     $action = Config::get('ActionName');
     if (isset($args['action'])) {
@@ -296,5 +297,11 @@ class Html
     return $js_html;
   }
 
+  public static function getServerUrl()
+  {
+    $url = (empty($_SERVER["HTTPS"])) ? 'http://' : 'https://';
+    $url .= Config::get('DOMAIN');
+    return $url;
+  }
 }
 

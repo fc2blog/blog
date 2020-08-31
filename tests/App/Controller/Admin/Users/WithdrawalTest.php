@@ -34,8 +34,10 @@ class WithdrawalTest extends TestCase
     $this->resetSession();
     $this->resetCookie();
     $this->mergeAdminSession();
+    $sig = $this->getSig();
 
     $request_data = [
+      'sig' => $sig,
       'user' => [
         "delete" => "on",
       ]
