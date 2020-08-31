@@ -214,6 +214,18 @@ class App
   }
 
   /**
+   * デバイスタイプを取得する
+   * @param Request $request
+   * @return string|null
+   */
+  public static function getDeviceTypeStr(Request $request): string
+  {
+    $device_id = static::getDeviceType($request);
+    $device_table = Config::get("DEVICE_FC2_KEY");
+    return $device_table[$device_id];
+  }
+
+  /**
    * 現在のデバイスタイプをPC,SPの形で取得する
    * @param Request $request
    * @return string
