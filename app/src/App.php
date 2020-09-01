@@ -444,8 +444,7 @@ class App
    */
   public static function isActiveMenu(Request $request, array $params): bool
   {
-    $controller_name = StringCaseConverter::snakeCase($request->shortControllerName);
-    $method_name = StringCaseConverter::snakeCase($request->methodName);
+    [$controller_name, $method_name] = explode( '/', static::getActiveMenu($request));
 
     if (is_string($params)) {
       $params = array($params);
@@ -453,7 +452,7 @@ class App
 
     // コントローラー名とメソッド名を判定
     foreach ($params as $value) {
-      list($c_name, $m_name) = explode('/', $value);
+      [$c_name, $m_name] = explode('/', $value);
       if (lcfirst($c_name) != $controller_name) {
         continue;
       }
@@ -463,6 +462,19 @@ class App
       return true;
     }
     return false;
+  }
+
+  /**
+   * 現在選択中のメニューを返す
+   * @param Request $request
+   * @return string
+   */
+  public static function getActiveMenu(Request $request):string
+  {
+    $controller_name = StringCaseConverter::snakeCase($request->shortControllerName);
+    $method_name = StringCaseConverter::snakeCase($request->methodName);
+
+    return "{$controller_name}/{$method_name}";
   }
 
   /**
