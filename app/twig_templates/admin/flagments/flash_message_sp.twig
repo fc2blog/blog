@@ -1,6 +1,6 @@
 {% if flash_messages.error %}
     <!-- エラー -->
-    <div class="flash-message flash-message-error">
+    <div class="flash-message flash-message-error" style="display: none;">
         {% for flash_error in flash_messages.error %}
             <p>{{ flash_error }}</p>
         {% endfor %}
@@ -9,7 +9,7 @@
 
 {% if flash_messages.warn %}
     <!-- 警告 -->
-    <div class="flash-message flash-message-warn">
+    <div class="flash-message flash-message-warn" style="display: none;">
         {% for flash_warn in flash_messages.warn %}
             <p>{{ flash_warn }}</p>
         {% endfor %}
@@ -18,9 +18,20 @@
 
 {% if flash_messages.info %}
     <!-- インフォメーション -->
-    <div class="flash-message flash-message-info">
+    <div class="flash-message flash-message-info" style="display: none;">
         {% for flash_info in flash_messages.info %}
             <p>{{ flash_info }}</p>
         {% endfor %}
     </div>
 {% endif %}
+
+<script>
+    $(function () {
+        // flash-messageをタイトルの下に移動
+        let after = $('#contents > header').next('.accordion_contents')
+        if (!after.length) {
+            after = $('#contents > header');
+        }
+        $('.flash-message').insertAfter(after).show();
+    });
+</script>

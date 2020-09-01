@@ -185,9 +185,14 @@ abstract class Controller
       throw new InvalidArgumentException("Twig error: missing template: {$base_path}{$twig_template_path}");
     }
 
+    // TODO remove me. this is test.
+//    $this->setInfoMessage("test info");
+//    $this->setWarnMessage("test warn");
+//    $this->setErrorMessage("test error");
+
     $this->data['request'] = $request; // TODO Adhocに追加しているので、どこか適切な場所に移動する
     $blogs_model = new BlogsModel();
-    $data = [
+    $data = [ // 各種ベースとなるデータ
       'req' => $request,
       'debug' => \Fc2blog\Config::get('APP_DEBUG') != 0,
       'preview_active_blog_url' => \Fc2blog\App::userURL($request,array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request))),
@@ -202,6 +207,7 @@ abstract class Controller
       'flash_messages' => $this->removeMessage(), // TODO admin 以外ではどうするか
       'js_common' => [
         'isURLRewrite' => \Fc2blog\Config::get('URL_REWRITE'),
+        'baseDirectory' => \Fc2blog\Config::get('BASE_DIRECTORY'),
         'deviceType' => $request->deviceType,
         'deviceArgs' => \Fc2blog\App::getArgsDevice($request)
       ],
