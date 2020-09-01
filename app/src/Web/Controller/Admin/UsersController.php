@@ -138,41 +138,43 @@ class UsersController extends AdminController
   /**
    * ログイン
    * @param Request $request
+   * @return string
    */
-  public function login(Request $request)
+  public function login(Request $request): string
   {
+    $template = 'admin/users/login.twig';
+
     if ($this->isLogin()) {
       $this->redirect($request, Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
     }
 
-    $this->set('html_title', __('Login to Administration page'));
-
     // 初期表示時
     if (!$request->get('user')) {
-      return;
+      return $template;
     }
 
-    /** @var UsersModel $users_model */
-    $users_model = Model::load('Users');
+    $users_model = new UsersModel();
 
     // ログインフォームのバリデート
-    $errors = $users_model->loginValidate($request->get('user'), $data, array('login_id', 'password'));
+    $errors = $users_model->loginValidate($request->get('user'), $data, ['login_id', 'password']);
     if (empty($errors)) {
       $user = $users_model->findByLoginIdAndPassword($data['login_id'], $data['password']);
       if ($user) {
         // ログイン処理
         $blog = Model::load('Blogs')->getLoginBlog($user);
         $this->loginProcess($user, $blog);
-        $users_model->updateById(array('logged_at' => date('Y-m-d H:i:s')), $user['id']);
+        $users_model->updateById(['logged_at' => date('Y-m-d H:i:s')], $user['id']);
         if (!$this->isSelectedBlog()) {
-          $this->redirect($request, array('controller' => 'Blogs', 'action' => 'create'));
+          $this->redirect($request, ['controller' => 'Blogs', 'action' => 'create']);
         }
         $this->redirect($request, Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
       }
-      $errors = array('login_id' => __('Login ID or password is incorrect'));
+      $errors = ['login_id' => __('Login ID or password is incorrect')];
     }
+
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return $template;
   }
 
   /**

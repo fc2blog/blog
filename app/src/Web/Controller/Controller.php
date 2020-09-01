@@ -11,6 +11,8 @@ use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\Log;
 use Fc2blog\Util\StringCaseConverter;
+use Fc2blog\Util\Twig\GetTextHelper;
+use Fc2blog\Util\Twig\HtmlHelper;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use InvalidArgumentException;
@@ -53,9 +55,9 @@ abstract class Controller
 
     // 出力を$this->outputで保持。後ほどemit()すること。
     // TODO PHPテンプレートとTwigテンプレートの移行中なので、テンプレートファイル名で切り分ける
-    if(preg_match("/\.twig\z/u", $template)){
+    if (preg_match("/\.twig\z/u", $template)) {
       $this->renderByTwig($this->request, $template);
-    }else{
+    } else {
       ob_start();
       $this->layout($this->request, $template);
       $this->output = ob_get_clean();
@@ -160,9 +162,17 @@ abstract class Controller
    */
   private function renderByTwig(Request $request, string $twig_template): void
   {
-    $base_path = __DIR__ . "/../../../twig_templates";
+    $base_path = realpath(__DIR__ . "/../../../twig_templates/") . "/";
     $loader = new FilesystemLoader($base_path);
     $twig = new Environment($loader);
+
+    foreach (
+      array_merge(
+        (new GetTextHelper())->getFunctions(),
+        (new HtmlHelper())->getFunctions(),
+      ) as $function) {
+      $twig->addFunction($function);
+    }
 
     $twig_template_path = $twig_template;
     $twig_template_device_path = preg_replace("/\.twig\z/u", '_' . App::getDeviceTypeStr($request) . '.twig', $twig_template_path);
@@ -171,14 +181,35 @@ abstract class Controller
       $twig_template_path = $twig_template_device_path;
     }
 
-    if (!is_file($twig_template_path)) {
-      throw new InvalidArgumentException("Twig error: missing template: {$twig_template_path}");
+    if (!is_file($base_path . $twig_template_path)) {
+      throw new InvalidArgumentException("Twig error: missing template: {$base_path}{$twig_template_path}");
     }
 
     $this->data['request'] = $request; // TODO Adhocに追加しているので、どこか適切な場所に移動する
+    $blogs_model = new BlogsModel();
+    $data = [
+      'req' => $request,
+      'debug' => \Fc2blog\Config::get('APP_DEBUG') != 0,
+      'preview_active_blog_url' => \Fc2blog\App::userURL($request,array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request))),
+      'is_register_able' => (\Fc2blog\Config::get('USER.REGIST_SETTING.FREE') == \Fc2blog\Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
+      'active_menu'=> \Fc2blog\App::getActiveMenu($request),
+      'isLogin' => $this->isLogin(), // TODO admin 以外ではどうするか
+      'nick_name' => $this->getNickName(), // TODO admin 以外ではどうするか
+      'blog_list' => $blogs_model->getSelectList($this->getUserId()),  // TODO admin 以外ではどうするか
+      'blog_id' => $this->getBlogId($request), // TODO admin以外ではどうするか
+      'is_selected_blog' => $this->isSelectedBlog(), // TODO admin以外ではどうするか
+      'lang' => $request->lang,
+      'flash_messages' => $this->removeMessage(), // TODO admin 以外ではどうするか
+      'js_common' => [
+        'isURLRewrite' => \Fc2blog\Config::get('URL_REWRITE'),
+        'deviceType' => $request->deviceType,
+        'deviceArgs' => \Fc2blog\App::getArgsDevice($request)
+      ],
+    ];
+    $data = array_merge($data, $this->data);
 
     try {
-      $this->output = $twig->render($twig_template_path, $this->data);
+      $this->output = $twig->render($twig_template_path, $data);
     } catch (LoaderError $e) {
       throw new RuntimeException("Twig error: {$e->getMessage()}");
     } catch (RuntimeError $e) {

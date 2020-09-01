@@ -1,0 +1,26 @@
+{% if flash_errors %}
+    <!-- エラー -->
+    <div class="flash-message flash-message-error">
+        {% for flash_error in flash_errors %}
+            <p>{{ flash_error }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if flash_warns %}
+    <!-- 警告 -->
+    <div class="flash-message flash-message-warn">
+        {% for flash_warn in flash_warns %}
+            <p>{{ flash_warn }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if flash_infos %}
+    <!-- インフォメーション -->
+    <div class="flash-message flash-message-info">
+        {% for flash_info in flash_infos %}
+            <p>{{ flash_info }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
