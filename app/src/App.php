@@ -438,11 +438,11 @@ class App
   /**
    * 現在選択中のメニューかどうかを返す
    * @param Request $request
-   * @param array params = array('entries/create', 'entries/edit', ...),
+   * @param array|string params = array('entries/create', 'entries/edit', ...),
    * @return bool
    * TODO Configの削減
    */
-  public static function isActiveMenu(Request $request, array $params): bool
+  public static function isActiveMenu(Request $request, $params): bool
   {
     [$controller_name, $method_name] = explode( '/', static::getActiveMenu($request));
 
