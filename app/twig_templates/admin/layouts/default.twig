@@ -22,7 +22,7 @@
     <script type="text/javascript" src="/js/common.js"></script>
     <script>
         // フレームワーク用のjsの設定
-        let common = {{ js_common|json_encode()|raw }};
+        common = Object.assign(common, {{ js_common|json_encode()|raw }});
     </script>
 
     {# <?php echo $this->includeJS() }}  管理画面には不要？ #}
@@ -51,7 +51,7 @@
                         $('#sys-blog-change').change(function () {
                             let value = $('#sys-blog-change').val();
                             if (value == '') { // TODO ふさわしい判定式に
-                                location.href = "{{ url(req, {'controller': 'Blogs', 'action': 'create' }) }}";
+                                location.href = "{{ url(req, 'Blogs', 'create' ) }}";
                             } else {
                                 location.href = common.fwURL('blogs', 'choice', {blog_id: value});
                             }
@@ -70,31 +70,28 @@
 </header>
 
 <article>
-
     <nav id="left-nav">
         {% if isLogin %}
-
             {% if is_selected_blog %}
                 <div class="menu">
                     <h3 class="home">{{ _('Home') }}</h3>
                     <ul>
-                        <li><a href="{{ url(req, {'controller': 'Common', 'action': 'notice' }) }}">{{ _('Notice') }}</a></li>
+                        <li><a href="{{ url(req, 'Common', 'notice') }}">{{ _('Notice') }}</a></li>
                         <li><a href="{{ preview_active_blog_url }}" target="_blank">{{ _('Checking the blog') }}</a></li>
-                        <li><a href="{{ url(req, {'controller': 'Entries', 'action': 'create' }) }}">{{ _('New article') }}</a></li>
-                        <li><a href="{{ url(req, {'controller': 'Entries', 'action': 'index' }) }}">{{ _('List of articles') }}</a></li>
-                        <li><a href="{{ url(req, {'controller': 'Comments', 'action': 'index' }) }}">{{ _('List of comments') }}</a></li>
-                        <li><a href="{{ url(req, {'controller': 'Files', 'action': 'upload' }) }}">{{ _('Upload file') }}</a></li>
+                        <li><a href="{{ url(req, 'Entries', 'create') }}">{{ _('New article') }}</a></li>
+                        <li><a href="{{ url(req, 'Entries', 'index') }}">{{ _('List of articles') }}</a></li>
+                        <li><a href="{{ url(req, 'Comments', 'index') }}">{{ _('List of comments') }}</a></li>
+                        <li><a href="{{ url(req, 'Files', 'upload') }}">{{ _('Upload file') }}</a></li>
                     </ul>
                 </div>
-
                 <div class="menu">
                     <h3 class="setting">{{ _('Setting') }}</h3>
                     <ul>
-                        <li><a href="{{ url(req, {'controller': 'BlogTemplates', 'action': 'index' }) }}">{{ _('Template management') }}</a></li>
-                        <li><a href="{{ url(req, {'controller': 'blog_plugins', 'action': 'index' }) }}">{{ _('Plugin management') }}</a></li>
-                        <li><a href="{{ url(req, {'controller': 'Categories', 'action': 'create' }) }}">{{ _('Category management') }}</a></li>
-                        <li><a href="{{ url(req, {'controller': 'Tags', 'action': 'index' }) }}">{{ _('List of tags') }}</a></li>
-                        <li><a href="{{ url(req, {'controller': 'Blogs', 'action': 'edit' }) }}">{{ _('Blog setting') }}</a></li>
+                        <li><a href="{{ url(req, 'BlogTemplates', 'index') }}">{{ _('Template management') }}</a></li>
+                        <li><a href="{{ url(req, 'blog_plugins', 'index') }}">{{ _('Plugin management') }}</a></li>
+                        <li><a href="{{ url(req, 'Categories', 'create') }}">{{ _('Category management') }}</a></li>
+                        <li><a href="{{ url(req, 'Tags', 'index') }}">{{ _('List of tags') }}</a></li>
+                        <li><a href="{{ url(req, 'Blogs', 'edit') }}">{{ _('Blog setting') }}</a></li>
                     </ul>
                 </div>
             {% endif %}
@@ -102,9 +99,9 @@
             <div class="menu">
                 <h3 class="account">{{ _('User Menu') }}</h3>
                 <ul>
-                    <li><a href="{{ url(req, {'controller': 'Blogs', 'action': 'index' }) }}">{{ _('List of blogs') }}</a></li>
-                    <li><a href="{{ url(req, {'controller': 'Users', 'action': 'edit' }) }}">{{ _('User setting') }}</a></li>
-                    <li><a href="{{ url(req, {'controller': 'Users', 'action': 'logout' }) }}">{{ _('Logout') }}</a></li>
+                    <li><a href="{{ url(req, 'Blogs', 'index') }}">{{ _('List of blogs') }}</a></li>
+                    <li><a href="{{ url(req, 'Users', 'edit') }}">{{ _('User setting') }}</a></li>
+                    <li><a href="{{ url(req, 'Users', 'logout') }}">{{ _('Logout') }}</a></li>
                 </ul>
             </div>
 
@@ -112,7 +109,7 @@
                 <div class="menu">
                     <h3 style="background-color:#999;background-position: 2px -660px;">デバッグ用</h3>
                     <ul>
-                        <li><a href="{{ url(req, {'controller': 'Users', 'action': 'index' }) }}">ユーザー一覧</a></li>
+                        <li><a href="{{ url(req, 'Users', 'index') }}">ユーザー一覧</a></li>
                     </ul>
                 </div>
             {% endif %}
@@ -123,9 +120,9 @@
                 <h3 style="background-color:#999;background-position: 2px -660px;">{{ _('User Menu') }}</h3>
                 <ul>
                     {% if is_register_able %}
-                        <li><a href="{{ url(req, {'controller': 'Users', 'action': 'register'}) }}">{{ _('User registration') }}</a></li>
+                        <li><a href="{{ url(req, 'Users', 'register') }}">{{ _('User registration') }}</a></li>
                     {% endif %}
-                    <li><a href="{{ url(req, {'controller': 'Users', 'action': 'login'}) }}">{{ _('Login') }}</a></li>
+                    <li><a href="{{ url(req, 'Users', 'login') }}">{{ _('Login') }}</a></li>
                 </ul>
             </div>
         {% endif %}
