@@ -157,6 +157,7 @@ abstract class Controller
   /**
    * TwigテンプレートエンジンでHTMLをレンダリング
    * 結果は $this->output に保管される
+   * 現状、Admin用画面のみでの利用を想定
    * @param Request $request
    * @param string $twig_template
    */
@@ -192,12 +193,12 @@ abstract class Controller
 
     $this->data['request'] = $request; // TODO Adhocに追加しているので、どこか適切な場所に移動する
     $blogs_model = new BlogsModel();
-    $data = [ // 各種ベースとなるデータ
+    $data = [ // 各種ベースとなるデータ // TODO 整理共通化リファクタリング
       'req' => $request,
-      'debug' => \Fc2blog\Config::get('APP_DEBUG') != 0,
-      'preview_active_blog_url' => \Fc2blog\App::userURL($request,array('controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request))),
-      'is_register_able' => (\Fc2blog\Config::get('USER.REGIST_SETTING.FREE') == \Fc2blog\Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
-      'active_menu'=> \Fc2blog\App::getActiveMenu($request),
+      'debug' => Config::get('APP_DEBUG') != 0,
+      'preview_active_blog_url' => App::userURL($request,['controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)]),
+      'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
+      'active_menu'=> App::getActiveMenu($request),
       'isLogin' => $this->isLogin(), // TODO admin 以外ではどうするか
       'nick_name' => $this->getNickName(), // TODO admin 以外ではどうするか
       'blog_list' => $blogs_model->getSelectList($this->getUserId()),  // TODO admin 以外ではどうするか
@@ -206,10 +207,10 @@ abstract class Controller
       'lang' => $request->lang,
       'flash_messages' => $this->removeMessage(), // TODO admin 以外ではどうするか
       'js_common' => [
-        'isURLRewrite' => \Fc2blog\Config::get('URL_REWRITE'),
-        'baseDirectory' => \Fc2blog\Config::get('BASE_DIRECTORY'),
+        'isURLRewrite' => Config::get('URL_REWRITE'),
+        'baseDirectory' => Config::get('BASE_DIRECTORY'),
         'deviceType' => $request->deviceType,
-        'deviceArgs' => \Fc2blog\App::getArgsDevice($request)
+        'deviceArgs' => App::getArgsDevice($request)
       ],
     ];
     $data = array_merge($data, $this->data);
@@ -217,11 +218,11 @@ abstract class Controller
     try {
       $this->output = $twig->render($twig_template_path, $data);
     } catch (LoaderError $e) {
-      throw new RuntimeException("Twig error: {$e->getMessage()}");
+      throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
     } catch (RuntimeError $e) {
-      throw new RuntimeException("Twig error: {$e->getMessage()}");
+      throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
     } catch (SyntaxError $e) {
-      throw new RuntimeException("Twig error: {$e->getMessage()}");
+      throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
     }
   }
 
