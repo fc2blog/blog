@@ -27,7 +27,12 @@ class HtmlHelper extends AbstractExtension
           return Html::url($request, $args, $reused, $full_url);
         }
       ),
+      new TwigFunction(
+        '_s',
+        function (string $str, ...$args) {
+          return sprintf(__($str), ...$args);
+        }
+      ),
     ];
   }
-
 }

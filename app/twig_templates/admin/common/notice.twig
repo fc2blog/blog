@@ -1,0 +1,25 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Login to Administration page') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Notice') }}</h2></header>
+    {% if unread_count %}
+        <p>
+            <a href="{{ url(req, {'controller': 'Comments', 'action': 'index', 'reply_status': reply_status_unread }) }}">
+                {{ _s('There %d reviews unread comments', unread_count) }}
+            </a>
+        </p>
+    {% endif %}
+
+    {% if unapproved_count %}
+        <p>
+            <a href="{{ url(req, {'controller': 'Comments', 'action': 'index', 'reply_status': reply_status_pending }) }}">
+                {{ _s('There %d reviews unapproved comment', unapproved_count) }}
+            </a>
+        </p>
+    {% endif %}
+
+    {% if not unread_count %}
+        <p>{{ _('There is no notice') }}</p>
+    {% endif %}
+{% endblock %}

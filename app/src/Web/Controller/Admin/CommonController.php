@@ -6,6 +6,7 @@ use Exception;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\MSDB;
 use Fc2blog\Model\PluginsModel;
@@ -93,14 +94,18 @@ class CommonController extends AdminController
   /**
    * お知らせ一覧画面
    * @param Request $request
+   * @return string
    */
   public function notice(Request $request)
   {
     $blog_id = $this->getBlogId($request);
 
-    $comments_model = Model::load('Comments');
+    $comments_model = new CommentsModel();
     $this->set('unread_count', $comments_model->getUnreadCount($blog_id));
     $this->set('unapproved_count', $comments_model->getUnapprovedCount($blog_id));
+    $this->set('reply_status_unread', Config::get('COMMENT.REPLY_STATUS.UNREAD'));
+    $this->set('reply_status_pending', Config::get('COMMENT.OPEN_STATUS.PENDING'));
+    return "admin/common/notice.twig";
   }
 
   /**
