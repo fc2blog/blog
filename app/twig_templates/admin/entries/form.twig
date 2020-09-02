@@ -1,0 +1,102 @@
+<table>
+    <tbody>
+    <tr>
+        <th>{{ _('Title') }}</th>
+        <td>
+            {{ input(req, 'entry[title]', 'text') }}
+            {% if error.entry.title %}<p class="error">{{ error.entry.title }}</p>{% endif %}
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>{{ _('Body') }}</h3>
+<div>
+    {{ input(req, 'entry[body]', 'textarea', {'id' : 'sys-entry-body'}) }}
+    {% if error.entry.body %}<p class="error">{{ error.entry.body }}</p>{% endif %}
+</div>
+
+<h3 class="accordion_head" id="sys-accordion-extend">{{ _('Edit a postscript') }}<span>▼{{ _('Click to open/close') }}</span></h3>
+<div {{ ifCookie(req, 'js_entry_hide_extend', 'style="visibility: hidden;"') }}>
+    {{ input(req, 'entry[extend]', 'textarea', {'id' : 'sys-entry-extend'}) }}
+    {% if error.entry.extend %}<p class="error">{{ error.entry.extend }}</p>{% endif %}
+</div>
+
+<h3 class="accordion_head" id="sys-accordion-setting">{{ _('Entry settings') }}<span>▼{{ _('Click to open/close') }}</span></h3>
+<div {{ ifCookie(req, 'js_entry_hide_setting', 'style="display: none;"') }}>
+
+    {{ include('admin/categories/ajax_add.twig') }}
+
+    <table>
+        <tbody>
+        <tr>
+            <th>{{ _('User tags') }}</th>
+            <td>
+                <input type="text" id="sys-add-tag-text"/>
+                <input type="button" value="{{ _('Add') }}" id="sys-add-tag-button"/>
+                <ul id="sys-add-tags"></ul>
+                <ul id="sys-use-well-tags">
+                    {% for tag in tags %}
+                        <li>{{ tag }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>{{ _('Date and time') }}</th>
+            <td>
+                {{ input(req, 'entry[posted_at]', 'text', {'class' : 'date-time-picker'}) }}
+                {{ _('Date and time of submission will be set when it is not input') }}<br/>
+                {% if error.entry.posted_at %}<p class="error">{{ error.entry.posted_at }}</p>{% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ _('Post type') }}</th>
+            <td>
+                {{ input(req, 'entry[open_status]', 'radio', {'options' : open_status_list, 'default' : open_status_open}) }}
+                {% if error.entry.open_status %}<p class="error">{{ error.entry.open_status }}</p>{% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th class="sys-entry-password">{{ _('Set Password') }}</th>
+            <td class="sys-entry-password">
+                {{ input(req, 'entry[password]', 'text') }}
+                {% if error.entry.password %}<p class="error">{{ error.entry.password }}</p>{% endif %}
+                <p>
+                    <?php echo __('They are authenticated with a password of the entire If empty');  ?><br/>
+                    <a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank">{{ _('Passwords in the whole place') }}</a><br/>
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>{{ _('New paragraph') }}</th>
+            <td>
+                {{ input(req, 'entry[auto_linefeed]', 'radio', {'options' : auto_line_feed_list, 'default' : auto_line_feed_use}) }}
+                {% if error.entry.auto_linefeed %}<p class="error">{{ error.entry.auto_linefeed }}</p>{% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ _('Accept comments') }}</th>
+            <td>
+                {{ input(req, 'entry[comment_accepted]', 'radio', {'options' : comment_accepted_list, 'default' : comment_accepted_accepted}) }}
+                {% if error.entry.comment_accepted %}<p class="error">{{ error.entry.comment_accepted }}</p>{% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<p class="form-button">
+    <input type="submit" value="{{ _('Save this entry') }}" id="sys-entry-form-submit"/>
+    <input type="button" value="{{ _('Preview') }}" id="sys-entry-form-preview"/>
+</p>

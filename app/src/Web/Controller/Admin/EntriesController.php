@@ -4,9 +4,12 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\CategoriesModel;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\EntryCategoriesModel;
+use Fc2blog\Model\EntryTagsModel;
 use Fc2blog\Model\Model;
+use Fc2blog\Model\TagsModel;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
@@ -100,20 +103,32 @@ class EntriesController extends AdminController
   /**
    * 新規作成
    * @param Request $request
+   * @return string
    */
-  public function create(Request $request)
+  public function create(Request $request): string
   {
-    /** @var EntriesModel $entries_model */
-    $entries_model = Model::load('Entries');
-    /** @var EntryCategoriesModel $entry_categories_model */
-    $entry_categories_model = Model::load('EntryCategories');
-
+    $entries_model = new EntriesModel();
+    $entry_categories_model = new EntryCategoriesModel();
+    $entry_tags_model = new EntryTagsModel();
+    $tags_model = new TagsModel();
+    $categories_model = new CategoriesModel();
     $blog_id = $this->getBlogId($request);
 
     // 初期表示時
-    if (!$request->get('entry') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
-      return;
+    if (!$request->get('entry') || !$request->isValidSig()) {
+      $request->generateNewSig();
+      $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
+      $this->set('open_status_list', EntriesModel::getOpenStatusList());
+      $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
+      $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
+      $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
+      $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
+      $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
+      $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
+      $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+      $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
+      $this->set('categories', $categories_model->getList($blog_id));
+      return "admin/entries/create.twig";
     }
 
     // 新規登録処理
@@ -127,16 +142,17 @@ class EntriesController extends AdminController
         // カテゴリと紐付
         $entry_categories_model->save($blog_id, $id, $entry_categories_data);
         // タグと紐付
-        Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
+        $entry_tags_model->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I created a entry'));
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, array('action' => 'index')); // 保存成功
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return "admin/entries/create.twig";
   }
 
   /**
