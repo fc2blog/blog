@@ -50,6 +50,13 @@ class HtmlHelper extends AbstractExtension
           }
         }
       ),
+      new TwigFunction(
+        'spaceIndent',
+        function (int $num, string $str = '&nbsp;&nbsp;&nbsp;', bool $zero_base = true) {
+          if ($zero_base) $num--;
+          return str_repeat($str, $num);
+        }
+      ),
       new TwigFunction( // TODO refactoring.
         'renderCategoriesTree',
         function (array $categories, array $entry_categories) {
