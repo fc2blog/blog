@@ -53,6 +53,7 @@ class Request
   {
     $this->method = $method ?? $_SERVER['REQUEST_METHOD'] ?? "GET";
     $this->uri = $uri ?? $_SERVER["REQUEST_URI"] ?? "GET";
+    Session::start();
     if (isset($_SESSION)) {
       $this->session = $session ?? $_SESSION;
     }
@@ -92,7 +93,7 @@ class Request
     }
 
     // デバッグ用アクセス（リゾルブ結果）ログ
-    Log::debug_log(__FILE__ . ":" . __LINE__ . " Controller[{$this->className}] Method[{$method}'] Device['{$this->deviceType}]");
+    Log::debug_log(__FILE__ . ":" . __LINE__ . " Controller[{$this->className}] Method[{$this->methodName}] Device[{$this->deviceType}]");
   }
 
   /**
@@ -371,5 +372,41 @@ class Request
   public function getData(): array
   {
     return $this->request;
+  }
+
+  /**
+   * @param string $cookie_name
+   * @return mixed|null
+   */
+  public function getCookie(string $cookie_name)
+  {
+    return $this->cookie[$cookie_name] ?? null;
+  }
+
+  public function isValidSig():bool
+  {
+    if(
+      !isset($this->session['sig']) ||
+      strlen($this->session['sig'])===0
+    ) {
+      error_log("session did not have sig.");
+      return false;
+    }
+    if(
+      !is_string($this->get('sig', null)) ||
+      strlen($this->get('sig', "")===0)
+    ){
+      error_log("request did not have sig.");
+      return false;
+    }
+
+    return $this->session['sig'] === $this->get('sig');
+  }
+
+  public function generateNewSig():void
+  {
+    $sig = App::genRandomString();
+    $this->session['sig'] = $sig;
+    Session::set('sig', $sig);
   }
 }
