@@ -40,6 +40,52 @@ class HtmlHelper extends AbstractExtension
           return sprintf(__($str), ...$args);
         }
       ),
+      new TwigFunction(
+        'ifCookie',
+        function (Request $request, string $cookie_name, string $str) {
+          if ($request->getCookie($cookie_name)) {
+            return $str;
+          } else {
+            return null;
+          }
+        }
+      ),
+      new TwigFunction( // TODO refactoring.
+        'renderCategoriesTree',
+        function (array $categories, array $entry_categories) {
+          $level = 1;
+          foreach ($categories as $category){
+            if ($level < $category['level']) {
+              $level = $category['level'];
+              echo "<li><ul>";
+            }
+
+            if ($level > $category['level']) {
+              for (; $level > $category['level']; $level--){
+                echo "</ul>";
+              }
+            }
+
+            if ($level == $category['level']){ ?>
+                <li
+                  <?php if (in_array($category['id'], $entry_categories['category_id'])) : ?>class="active"<?php endif; ?>>
+                    <input id="sys-entry-categories-id-<?php echo $category['id']; ?>"
+                           type="checkbox" name="entry_categories[category_id][]"
+                           value="<?php echo $category['id']; ?>"
+                           <?php if (in_array($category['id'], $entry_categories['category_id'])) : ?>checked="checked"<?php endif; ?>
+                           onclick="categoryChange(this);"
+                    />
+                    <label for="sys-entry-categories-id-<?php echo $category['id']; ?>"><?php echo h($category['name']); ?></label>
+                </li>
+            <?php
+            }
+          }
+          // タグを全部閉じる
+          for (;$level>1;$level--){
+            echo "</li></ul>";
+          }
+        }
+      ),
     ];
   }
 }
