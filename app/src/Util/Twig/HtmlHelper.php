@@ -16,14 +16,21 @@ class HtmlHelper extends AbstractExtension
     return [
       new TwigFunction(
         'input',
-        function (Request $request, $name, $type, $attrs = [], $option_attrs = []) {
+        function (Request $request, $name, $type, array $attrs = [], array $option_attrs = []) {
           return Html::input($request, $name, $type, $attrs, $option_attrs);
         },
         ['is_safe' => ['html']]
       ),
       new TwigFunction(
         'url',
-        function (Request $request, $args = [], $reused = false, $full_url = false) {
+        function (Request $request, string $controller, string $action, array $args = [], $reused = false, $full_url = false) {
+          $args = array_merge(
+            [
+              'controller' => $controller,
+              'action' => $action
+            ],
+            $args
+          );
           return Html::url($request, $args, $reused, $full_url);
         }
       ),
