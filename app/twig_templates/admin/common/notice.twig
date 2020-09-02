@@ -5,7 +5,7 @@
     <header><h2>{{ _('Notice') }}</h2></header>
     {% if unread_count %}
         <p>
-            <a href="{{ url(req, {'controller': 'Comments', 'action': 'index', 'reply_status': reply_status_unread }) }}">
+            <a href="{{ url(req, 'Comments', 'index', {'reply_status': reply_status_unread }) }}">
                 {{ _s('There %d reviews unread comments', unread_count) }}
             </a>
         </p>
@@ -13,13 +13,13 @@
 
     {% if unapproved_count %}
         <p>
-            <a href="{{ url(req, {'controller': 'Comments', 'action': 'index', 'reply_status': reply_status_pending }) }}">
+            <a href="{{ url(req, 'Comments', 'index', {'reply_status': reply_status_pending }) }}">
                 {{ _s('There %d reviews unapproved comment', unapproved_count) }}
             </a>
         </p>
     {% endif %}
 
-    {% if not unread_count %}
+    {% if not unread_count and not unapproved_count %}
         <p>{{ _('There is no notice') }}</p>
     {% endif %}
 {% endblock %}

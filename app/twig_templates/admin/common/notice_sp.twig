@@ -1,0 +1,40 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Login to Administration page') }}{% endblock %}
+
+{% block content %}
+
+    <header><h1 class="sh_heading_main_b">{{ blog.name }}</h1></header>
+    <div id="top_menu_wrap">
+        <ul id="top_menu">
+            <li class="main_btn_list touch"><a href="{{ url(req, 'Entries', 'create') }}" class="main_btn"><i class="editor_btn"></i>{{ _('New article') }}</a></li>
+            <li class="main_btn_list touch"><a href="{{ url(req, 'Entries', 'index') }}" class="main_btn"><i class="entry_btn"></i>{{ _('List of articles') }}</a></li>
+            <li class="main_btn_list touch"><a href="{{ blog_url }}" target="_blank" class="main_btn"><i class="myblog_btn"></i>{{ _('Checking the blog') }}</a></li>
+        </ul>
+    </div>
+
+    <header><h1 class="sh_heading_main_b">{{ _('Notice') }}</h1></header>
+
+    <ul class="link_list">
+        {% if unread_count %}
+            <?php $is_notice = true; ?>
+            <li class="link_list_item">
+                <a href="{{ url(req, 'Entries', 'index', {'reply_status': reply_status_unread}) }}" class="common_next_link next_bg">
+                    {{ _s('There %d reviews unread comments', unread_count) }}
+                </a>
+            </li>
+        {% endif %}
+
+        {% if unapproved_count %}
+            <li class="link_list_item">
+                <a href="{{ url(req, 'Entries', 'index', {'reply_status': reply_status_pending}) }}" class="common_next_link next_bg">
+                    {{ _s('There %d reviews unapproved comment', unapproved_count) }}
+                </a>
+            </li>
+        {% endif %}
+
+        {% if not unread_count and not unaproved_count %}
+            <li class="no_item">{{ _('There is no notice') }}</li>
+        {% endif %}
+    </ul>
+
+{% endblock %}

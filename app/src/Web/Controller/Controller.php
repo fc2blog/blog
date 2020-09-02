@@ -195,16 +195,17 @@ abstract class Controller
     $blogs_model = new BlogsModel();
     $data = [ // 各種ベースとなるデータ // TODO 整理共通化リファクタリング
       'req' => $request,
+      'lang' => $request->lang,
       'debug' => Config::get('APP_DEBUG') != 0,
-      'preview_active_blog_url' => App::userURL($request,['controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)]),
+      'preview_active_blog_url' => App::userURL($request,['controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)]), // 代用できそう
       'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
       'active_menu'=> App::getActiveMenu($request),
       'isLogin' => $this->isLogin(), // TODO admin 以外ではどうするか
       'nick_name' => $this->getNickName(), // TODO admin 以外ではどうするか
+      'blog' => $this->getBlog($this->getBlogId($request)),  // TODO admin 以外ではどうするか
       'blog_list' => $blogs_model->getSelectList($this->getUserId()),  // TODO admin 以外ではどうするか
-      'blog_id' => $this->getBlogId($request), // TODO admin以外ではどうするか
+      'blog_id' => $this->getBlogId($request), // TODO admin以外ではどうするか // blog['id']で代用できそう
       'is_selected_blog' => $this->isSelectedBlog(), // TODO admin以外ではどうするか
-      'lang' => $request->lang,
       'flash_messages' => $this->removeMessage(), // TODO admin 以外ではどうするか
       'js_common' => [
         'isURLRewrite' => Config::get('URL_REWRITE'),
@@ -213,6 +214,11 @@ abstract class Controller
         'deviceArgs' => App::getArgsDevice($request)
       ],
     ];
+    // ログインしていないと確定しない変数
+    if(is_string($this->getBlogId($request))){
+      // TODO blogにいれられないものか？
+      $data['blog_url'] = $blogs_model::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) ."/" . $this->getBlogId($request) ."/";
+    }
     $data = array_merge($data, $this->data);
 
     try {
