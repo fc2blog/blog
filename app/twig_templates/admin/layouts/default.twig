@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="/css/main.css" type="text/css" media="all">
     <link rel="stylesheet" href="/css/admin_style.css" type="text/css" media="all">
 
-    {# <?php echo $this->includeCSS() }}  管理画面には不要？ #}
+    {% if block('head_include_css') is defined %}
+        {{ block('head_include_css') }}
+    {% endif %}
 
     <script type="text/javascript" src="/js/jquery/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="/js/jquery/jquery-migrate-1.2.1.min.js"></script>
@@ -25,7 +27,9 @@
         common = Object.assign(common, {{ js_common|json_encode()|raw }});
     </script>
 
-    {# <?php echo $this->includeJS() }}  管理画面には不要？ #}
+    {% if block('head_include_js') is defined %}
+        {{ block('head_include_js') }}
+    {% endif %}
 
 </head>
 <body>
