@@ -15,6 +15,7 @@ use Fc2blog\Util\Twig\GetTextHelper;
 use Fc2blog\Util\Twig\HtmlHelper;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
@@ -195,6 +196,7 @@ abstract class Controller
     $blogs_model = new BlogsModel();
     $data = [ // 各種ベースとなるデータ // TODO 整理共通化リファクタリング
       'req' => $request,
+      'sig' => Session::get('sig'),
       'lang' => $request->lang,
       'debug' => Config::get('APP_DEBUG') != 0,
       'preview_active_blog_url' => App::userURL($request,['controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)]), // 代用できそう
@@ -213,6 +215,10 @@ abstract class Controller
         'deviceType' => $request->deviceType,
         'deviceArgs' => App::getArgsDevice($request)
       ],
+      'cookie_common' => [
+        'expire' => \Fc2blog\Config::get('COOKIE_EXPIRE'),
+        'domain' => \Fc2blog\Config::get('COOKIE_DEFAULT_DOMAIN')
+      ]
     ];
     // ログインしていないと確定しない変数
     if(is_string($this->getBlogId($request))){
