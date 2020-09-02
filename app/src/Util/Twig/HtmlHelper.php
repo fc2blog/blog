@@ -54,19 +54,19 @@ class HtmlHelper extends AbstractExtension
         'renderCategoriesTree',
         function (array $categories, array $entry_categories) {
           $level = 1;
-          foreach ($categories as $category){
+          foreach ($categories as $category) {
             if ($level < $category['level']) {
               $level = $category['level'];
               echo "<li><ul>";
             }
 
             if ($level > $category['level']) {
-              for (; $level > $category['level']; $level--){
+              for (; $level > $category['level']; $level--) {
                 echo "</ul>";
               }
             }
 
-            if ($level == $category['level']){ ?>
+            if ($level == $category['level']) { ?>
                 <li
                   <?php if (in_array($category['id'], $entry_categories['category_id'])) : ?>class="active"<?php endif; ?>>
                     <input id="sys-entry-categories-id-<?php echo $category['id']; ?>"
@@ -77,11 +77,11 @@ class HtmlHelper extends AbstractExtension
                     />
                     <label for="sys-entry-categories-id-<?php echo $category['id']; ?>"><?php echo h($category['name']); ?></label>
                 </li>
-            <?php
+              <?php
             }
           }
           // タグを全部閉じる
-          for (;$level>1;$level--){
+          for (; $level > 1; $level--) {
             echo "</li></ul>";
           }
         }
