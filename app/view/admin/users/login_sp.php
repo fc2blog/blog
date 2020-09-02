@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title"><?php echo __('Login'); ?></span></h1></header>
 
 <form method="POST" class="admin-form">

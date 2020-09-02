@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('Notice'); ?></h2></header>
 
 <?php $is_notice = false; // お知らせが合ったかどうかフラグ ?>

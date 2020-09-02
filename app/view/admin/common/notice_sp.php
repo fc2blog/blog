@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <?php $blog = $this->getBlog($this->getBlogId($request)); ?>
 <header><h1 class="sh_heading_main_b"><?php echo $blog['name']; ?></h1></header>
 <div id="top_menu_wrap">
