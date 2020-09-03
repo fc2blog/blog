@@ -1,0 +1,166 @@
+<!-- メディアを追加する -->
+<div id="sys-add-media-dialog" title="{{ _('Add Media') }}">
+    <!-- Search Area -->
+    <div class="form_area">
+        <div class="form_contents">
+            <dl class="input_search">
+                <dt class="lineform_text_wrap common_input_text"><input type="text" id="sys-add-media-search-keyword"/></dt>
+                <dd class="lineform_btn_wrap">
+                    <button type="button" id="sys-add-media-search-button" class="lineform_btn touch">{{ _('Search') }}</button>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <hr/>
+
+    <!-- Media Area -->
+    <div id="sys-add-media-load"></div>
+</div>
+
+<script>
+    $(function () {
+        // form内でEnterしてもsubmitさせない
+        common.formEnterNonSubmit('sys-entry-form');
+
+        // 追記と記事の設定の開閉処理
+        var cookie_config = {
+            expires: {{ cookie_common.expire }},
+            domain: '{{ cookie_common.domain }}',
+            path: '/',
+            sameSite: 'Lax'
+        };
+        $('#sys-accordion-extend').on('click', function () {
+            var next = $(this).next();
+            if (next.is(':visible')) {
+                next.slideUp('fast');
+                Cookies.set('js_entry_hide_extend', true, cookie_config);
+            } else {
+                next.slideDown('fast');
+                Cookies.remove('js_entry_hide_extend', cookie_config);
+            }
+        });
+        $('#sys-accordion-setting').on('click', function () {
+            var next = $(this).next();
+            if (next.is(':visible')) {
+                next.slideUp('fast');
+                Cookies.set('js_entry_hide_setting', true, cookie_config);
+            } else {
+                next.slideDown('fast');
+                Cookies.remove('js_entry_hide_setting', cookie_config);
+            }
+        });
+
+        // 公開区分による表示処理変更
+        $('input[name="entry[open_status]"]').on('change', function () {
+            var open_status = $('input[name="entry[open_status]"]:checked').val();
+            if (open_status == '{{ entry_open_status_password }}') {
+                $('.sys-entry-password').slideDown('fast');
+            } else {
+                $('.sys-entry-password').slideUp('fast');
+            }
+        });
+        $('input[name="entry[open_status]"]:checked').change();
+
+        // date time picker
+        $('.date-time-picker').datetimepicker({
+            dateFormat: 'yy-mm-dd',
+            timeFormat: 'HH:mm:ss'
+        });
+
+        // ユーザータグ
+        // タグ追加(登録済みは登録しない)
+        function addUserTag(tag) {
+            tag = jQuery.trim(tag);
+            if (tag == "") {
+                return;
+            }
+            var tags = getTags();
+            for (var i = 0; i < tags.length; i++) {
+                if (tags[i] == tag) {
+                    return;
+                }
+            }
+            tag = tag.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            var html = $('<li><span class="ui-icon ui-icon-circle-close"></span><input type="hidden" name="entry_tags[]" value="' + tag + '" />' + tag + '</li>');
+            html.on('click', function () {
+                $(this).closest('li').remove();
+            });
+            $('#sys-add-tags').append(html);
+        }
+
+        // タグ一覧をテキストの配列で取得
+        function getTags() {
+            var tags = [];
+            $('#sys-add-tags > li > input').each(function () {
+                tags.push($(this).val());
+            });
+            return tags;
+        }
+
+        // タグの追加イベント
+        $('#sys-add-tag-text').on('keypress', function (e) {
+            if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
+                $('#sys-add-tag-button').click();
+            }
+        });
+        $('#sys-add-tag-button').on('click', function () {
+            var tags = $('#sys-add-tag-text').val().split(',');
+            for (var i = 0; i < tags.length; i++) {
+                addUserTag(tags[i]);
+            }
+            $('#sys-add-tag-text').val('');
+            return false;
+        });
+        $('#sys-use-well-tags > li').on('click', function () {
+            addUserTag($(this).html());
+        });
+
+        // タグの初期設定(編集用)
+        let tags = {};
+        tags = {{ entry_tags|json_encode()|raw }};
+        for (let key in tags) {
+            addUserTag(tags[key]);
+        }
+
+        // プレビュー処理を行う
+        $('#sys-entry-form-preview').click(function () {
+            var action = '{{ user_url|raw }}';
+            $('#sys-entry-form').prop('action', action);
+            $('#sys-entry-form').prop('target', '_preview');
+            $('#sys-entry-form').submit();
+        });
+
+        // submit処理を行う
+        $('#sys-entry-form-submit').click(function () {
+            var action;
+            if ($('#sys-entry-form').find('input[name=id]').val()) {
+                action = '{{ url(req, 'Entries', 'edit') }}';
+            } else {
+                action = '{{ url(req, 'Entries', 'create') }}';
+            }
+            $('#sys-entry-form').prop('action', action);
+            $('#sys-entry-form').prop('target', '_self');
+        });
+
+        // メディア追加ボタンを追加する
+        function addEditorMenu(key) {
+            // メニュー作成
+            var html = '';
+            html += '<ul class="add-editor-menu">';
+            html += '<li><input type="button" value="{{ _('Add Media') }}" id="sys-add-image-' + key + '" /></li>';
+            html += '</ul>';
+            $('#sys-entry-' + key).before(html);
+
+            // 追加したメニューにイベント追加
+            $('#sys-add-image-' + key).click(function () {
+                addMedia.open(key, {
+                    Add: '{{ _('Add') }}',
+                    elrte: false
+                });
+            });
+        }
+
+        addEditorMenu('body');
+        addEditorMenu('extend');
+    });
+</script>

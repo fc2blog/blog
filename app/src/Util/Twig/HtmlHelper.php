@@ -90,7 +90,7 @@ class HtmlHelper extends AbstractExtension
       ),
       new TwigFunction( // TODO refactoring.
         'renderCategoriesTree',
-        function (array $categories, array $entry_categories) {
+        function (array $categories, array $entry_categories, bool $is_sp = false) {
           $level = 1;
           foreach ($categories as $category) {
             if ($level < $category['level']) {
@@ -100,22 +100,42 @@ class HtmlHelper extends AbstractExtension
 
             if ($level > $category['level']) {
               for (; $level > $category['level']; $level--) {
-                echo "</ul>";
+                if ($is_sp) {
+                  echo "</li></ul>";
+                } else {
+                  echo "</ul>";
+                }
               }
             }
 
-            if ($level == $category['level']) { ?>
-                <li
-                  <?php if (in_array($category['id'], $entry_categories['category_id'])) : ?>class="active"<?php endif; ?>>
-                    <input id="sys-entry-categories-id-<?php echo $category['id']; ?>"
-                           type="checkbox" name="entry_categories[category_id][]"
-                           value="<?php echo $category['id']; ?>"
-                           <?php if (in_array($category['id'], $entry_categories['category_id'])) : ?>checked="checked"<?php endif; ?>
-                           onclick="categoryChange(this);"
-                    />
-                    <label for="sys-entry-categories-id-<?php echo $category['id']; ?>"><?php echo h($category['name']); ?></label>
-                </li>
-              <?php
+            if ($level == $category['level']) {
+              if ($is_sp) { ?>
+                  <label for="sys-entry-categories-id-<?php echo $category['id']; ?>">
+                      <input id="sys-entry-categories-id-<?php echo $category['id']; ?>"
+                             class="checkbox_btn_input"
+                             type="checkbox" name="entry_categories[category_id][]"
+                             value="<?php echo $category['id']; ?>"
+                             <?php if (in_array($category['id'], $entry_categories['category_id'])) : ?>checked="checked"<?php endif; ?>
+                             onchange="categoryChange(this);"
+                      />
+                    <?php echo h($category['name']); ?>
+                  </label>
+                <?php
+              } else {
+                ?>
+
+                  <li
+                    <?php if (in_array($category['id'], $entry_categories['category_id'])) : ?>class="active"<?php endif; ?>>
+                      <input id="sys-entry-categories-id-<?php echo $category['id']; ?>"
+                             type="checkbox" name="entry_categories[category_id][]"
+                             value="<?php echo $category['id']; ?>"
+                             <?php if (in_array($category['id'], $entry_categories['category_id'])) : ?>checked="checked"<?php endif; ?>
+                             onclick="categoryChange(this);"
+                      />
+                      <label for="sys-entry-categories-id-<?php echo $category['id']; ?>"><?php echo h($category['name']); ?></label>
+                  </li>
+                <?php
+              }
             }
           }
           // タグを全部閉じる
