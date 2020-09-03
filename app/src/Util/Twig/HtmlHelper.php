@@ -51,6 +51,26 @@ class HtmlHelper extends AbstractExtension
         }
       ),
       new TwigFunction(
+        'ifReqGet',
+        function (Request $request, string $key_name, string $str) {
+          if ($request->get($key_name)) {
+            return $str;
+          } else {
+            return null;
+          }
+        }
+      ),
+      new TwigFunction(
+        'ifNotReqGet',
+        function (Request $request, string $key_name, string $str) {
+          if (!$request->get($key_name)) {
+            return $str;
+          } else {
+            return null;
+          }
+        }
+      ),
+      new TwigFunction(
         'spaceIndent',
         function (int $num, string $str = '&nbsp;&nbsp;&nbsp;', bool $zero_base = true) {
           if ($zero_base) $num--;
