@@ -71,6 +71,17 @@ class HtmlHelper extends AbstractExtension
         }
       ),
       new TwigFunction(
+        'getNumRangeOptionTags',
+        function (string $start, string $end) {
+          $html = "";
+          for ($i = $start; $i <= $end; $i++) {
+            $html .= '<option value="' . sprintf('%02d', $i) . '">' . sprintf('%02d', $i) . '</option>';
+          }
+          return $html;
+        },
+        ['is_safe' => ['html']]
+      ),
+      new TwigFunction(
         'spaceIndent',
         function (int $num, string $str = '&nbsp;&nbsp;&nbsp;', bool $zero_base = true) {
           if ($zero_base) $num--;
