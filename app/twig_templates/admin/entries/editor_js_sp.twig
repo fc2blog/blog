@@ -53,7 +53,7 @@
         // 公開区分による表示処理変更
         $('input[name="entry[open_status]"]').on('change', function () {
             var open_status = $('input[name="entry[open_status]"]:checked').val();
-            if (open_status == '{{ entry_open_status_password }}') {
+            if (open_status == '{{ open_status_password }}') {
                 $('.sys-entry-password').slideDown('fast');
             } else {
                 $('.sys-entry-password').slideUp('fast');

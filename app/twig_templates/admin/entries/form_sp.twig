@@ -22,8 +22,8 @@
         $('input[name="entry[open_status]"]').on('click', function () {
             var open_status = $(this).val();
             switch (open_status) {
-                case '{{ entry_open_status_open }}':
-                case '{{ entry_open_status_password }}':
+                case '{{ open_status_open }}':
+                case '{{ open_status_password }}':
                 case '{{ entry_open_status_draft }}':
                     $('#sys-input-posted_at').hide();
                     $('#sys-select-posted_at').show();
