@@ -1,4 +1,4 @@
-
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <!-- elRTE -->
 <?php \Fc2blog\Web\Html::addCSS('/js/elrte/css/elrte.min.css', array('media'=>'screen')); ?>
 <?php //\Fc2blog\Web\Html::addJS('/js/elrte/js/elrte.min.js'); ?>

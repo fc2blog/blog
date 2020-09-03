@@ -1,4 +1,4 @@
-
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <table>
   <tbody>
     <tr>

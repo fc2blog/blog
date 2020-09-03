@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <?php
   $blog_id = $this->getBlogId($request);
 

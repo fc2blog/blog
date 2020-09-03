@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <?php \Fc2blog\Web\Html::addCSS('/css/sp/entry_sp.css'); ?>
 
 <script type="text/javascript" src="/js/jquery/jquery.fc2tab.js"></script>

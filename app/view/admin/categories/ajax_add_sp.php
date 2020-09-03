@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <?php \Fc2blog\Web\Html::addCSS('/css/sp/category_sp.css', array('media'=>'all')); ?>
 
 <?php

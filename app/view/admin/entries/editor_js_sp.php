@@ -1,4 +1,4 @@
-
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <!-- timepicker-addon -->
 <?php \Fc2blog\Web\Html::addJS('/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js'); ?>
 <?php if (\Fc2blog\Config::get('LANG')!='en'): ?>
