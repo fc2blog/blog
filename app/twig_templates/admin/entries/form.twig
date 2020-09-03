@@ -69,7 +69,7 @@
                 {% if error.entry.password %}<p class="error">{{ error.entry.password }}</p>{% endif %}
                 <p>
                     {{ _('They are authenticated with a password of the entire If empty') }}<br/>
-                    <a href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'BlogSettings', 'action'=>'entry_edit')); ?>" target="_blank">{{ _('Passwords in the whole place') }}</a><br/>
+                    <a href="{{ url(req, 'BlogSettings', 'entry_edit') }}" target="_blank">{{ _('Passwords in the whole place') }}</a><br/>
                 </p>
             </td>
         </tr>
