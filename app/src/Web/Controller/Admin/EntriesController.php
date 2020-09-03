@@ -133,8 +133,6 @@ class EntriesController extends AdminController
       $now = $now === false ? time() : $now;
       $date_list = explode('/', date('Y/m/d/H/i/s', $now));
       $this->set('entry_date_list', $date_list);
-      $this->set('entry_open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
-      $this->set('entry_open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
       $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
       $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
       $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
