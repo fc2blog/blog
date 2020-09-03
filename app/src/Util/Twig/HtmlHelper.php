@@ -86,7 +86,8 @@ class HtmlHelper extends AbstractExtension
         function (int $num, string $str = '&nbsp;&nbsp;&nbsp;', bool $zero_base = true) {
           if ($zero_base) $num--;
           return str_repeat($str, $num);
-        }
+        },
+        ['is_safe' => ['html']]
       ),
       new TwigFunction( // TODO refactoring.
         'renderCategoriesTree',
@@ -142,7 +143,7 @@ class HtmlHelper extends AbstractExtension
           for (; $level > 1; $level--) {
             echo "</li></ul>";
           }
-        }
+        },
       ),
     ];
   }
