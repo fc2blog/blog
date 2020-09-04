@@ -43,6 +43,18 @@ class HtmlHelper extends AbstractExtension
         ['is_safe' => ['html']]
       ),
       new TwigFunction(
+        't',
+        function (string $text, int $length = 10, string $etc = '...') {
+          if (!$length) {
+            return '';
+          }
+          if (mb_strlen($text, "UTF-8") > $length) {
+            return mb_substr($text, 0, $length, "UTF-8") . $etc;
+          }
+          return $text;
+        },
+      ),
+      new TwigFunction(
         '_s',
         function (string $str, ...$args) {
           return sprintf(__($str), ...$args);
