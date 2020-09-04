@@ -33,7 +33,8 @@ class HtmlHelper extends AbstractExtension
             $args
           );
           return Html::url($request, $args, $reused, $full_url);
-        }
+        },
+        ['is_safe' => ['html']]
       ),
       new TwigFunction(
         'entryUrl',
