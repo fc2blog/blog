@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Util\Twig;
 
+use Fc2blog\App;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use Twig\Extension\AbstractExtension;
@@ -33,6 +34,13 @@ class HtmlHelper extends AbstractExtension
           );
           return Html::url($request, $args, $reused, $full_url);
         }
+      ),
+      new TwigFunction(
+        'entryUrl',
+        function (Request $request, $blog_id, $entry_id) {
+          return App::userURL($request, array('controller' => 'Entries', 'action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id, false, true));
+        },
+        ['is_safe' => ['html']]
       ),
       new TwigFunction(
         '_s',
