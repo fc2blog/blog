@@ -128,31 +128,32 @@ class EntriesController extends AdminController
     $categories_model = new CategoriesModel();
     $blog_id = $this->getBlogId($request);
 
+    // data load
+    $request->generateNewSig();
+    $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
+    $this->set('open_status_list', EntriesModel::getOpenStatusList());
+    $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
+    $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
+    $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
+    $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
+    $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
+    $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
+    $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+    $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
+    $this->set('categories', $categories_model->getList($blog_id));
+    // 以下はSPテンプレ用で追加
+    $now = strtotime($request->get('entry.posted_at'));
+    $now = $now === false ? time() : $now;
+    $date_list = explode('/', date('Y/m/d/H/i/s', $now));
+    $this->set('entry_date_list', $date_list);
+    $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
+    $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
+    $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
+    $this->set('domain_user', Config::get('DOMAIN_USER'));
+    $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogId($request)], false, true));
+
     // 初期表示時
     if (!$request->get('entry') || !$request->isValidSig()) {
-      $request->generateNewSig();
-      $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
-      $this->set('open_status_list', EntriesModel::getOpenStatusList());
-      $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
-      $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
-      $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
-      $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
-      $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
-      $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
-      $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
-      $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
-      $this->set('categories', $categories_model->getList($blog_id));
-      // 以下はSPテンプレ用で追加
-      $now = strtotime($request->get('entry.posted_at'));
-      $now = $now === false ? time() : $now;
-      $date_list = explode('/', date('Y/m/d/H/i/s', $now));
-      $this->set('entry_date_list', $date_list);
-      $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
-      $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
-      $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
-      $this->set('domain_user', Config::get('DOMAIN_USER'));
-      $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogId($request)], false, true));
-
       return "admin/entries/create.twig";
     }
 
@@ -183,52 +184,78 @@ class EntriesController extends AdminController
   /**
    * 編集
    * @param Request $request
+   * @return string
    */
-  public function edit(Request $request)
+  public function edit(Request $request):string
   {
-    /** @var EntriesModel $entries_model */
-    $entries_model = Model::load('Entries');
-    /** @var EntryCategoriesModel $entry_categories_model */
-    $entry_categories_model = Model::load('EntryCategories');
+    $entries_model = new EntriesModel();
+    $entry_categories_model = new EntryCategoriesModel();
+    $entry_tags_model = new EntryTagsModel();
+    $tags_model = new TagsModel();
+    $categories_model = new CategoriesModel();
 
-    $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
+    $id = $request->get('id');
 
-    // 初期表示時に編集データの取得&設定
-    if (!$request->get('entry')) {
-      if (!$entry = $entries_model->findByIdAndBlogId($id, $blog_id)) {
-        $this->redirect($request, array('action' => 'index'));
-      }
-      $request->set('entry', $entry);
-      $request->set('entry_categories', array('category_id' => $entry_categories_model->getCategoryIds($blog_id, $id)));
-      $request->set('entry_tags', Model::load('Tags')->getEntryTagNames($blog_id, $id));   // タグの文字列をテーブルから取得
-      return;
+    if (!$entry = $entries_model->findByIdAndBlogId($id, $blog_id)) {
+      $this->redirect($request, array('action' => 'index'));
     }
 
-    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      return;
+    // data load
+    $request->generateNewSig();
+    $request->set('entry', $entry);
+    $request->set('entry_categories', array('category_id' => $entry_categories_model->getCategoryIds($blog_id, $id)));
+    $request->set('entry_tags',$tags_model->getEntryTagNames($blog_id, $id));   // タグの文字列をテーブルから取得
+
+    $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
+    $this->set('open_status_list', EntriesModel::getOpenStatusList());
+    $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
+    $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
+    $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
+    $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
+    $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
+    $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
+    $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+    $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
+    $this->set('categories', $categories_model->getList($blog_id));
+    // 以下はSPテンプレ用で追加
+    $this->set('entry', $entry);
+    $now = strtotime($request->get('entry.posted_at'));
+    $now = $now === false ? time() : $now;
+    $date_list = explode('/', date('Y/m/d/H/i/s', $now));
+    $this->set('entry_date_list', $date_list);
+    $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
+    $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
+    $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
+    $this->set('domain_user', Config::get('DOMAIN_USER'));
+    $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogId($request)], false, true));
+
+    // 編集画面の表示
+    if (!$request->get('entry') || !$request->isValidSig()) {
+      return "admin/entries/edit.twig";
     }
 
     // 更新処理
-    $errors = array();
-    $whitelist_entry = array('title', 'body', 'extend', 'open_status', 'password', 'auto_linefeed', 'comment_accepted', 'posted_at');
+    $errors = [];
+    $whitelist_entry = ['title', 'body', 'extend', 'open_status', 'password', 'auto_linefeed', 'comment_accepted', 'posted_at'];
     $errors['entry'] = $entries_model->validate($request->get('entry'), $entry_data, $whitelist_entry);
-    $errors['entry_categories'] = $entry_categories_model->validate($request->get('entry_categories'), $entry_categories_data, array('category_id'));
+    $errors['entry_categories'] = $entry_categories_model->validate($request->get('entry_categories'), $entry_categories_data, ['category_id']);
     if (empty($errors['entry']) && empty($errors['entry_categories'])) {
       if ($entries_model->updateByIdAndBlogId($entry_data, $id, $blog_id)) {
         // カテゴリと紐付
         $entry_categories_model->save($blog_id, $id, $entry_categories_data);
         // タグと紐付
-        Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
+        $entry_tags_model->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I have updated the entry'));
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, ['action' => 'index']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return "admin/entries/exit.twig";
   }
 
   /**
