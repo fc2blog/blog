@@ -1,0 +1,60 @@
+{% if files %}
+
+    <ul class="sys-form-add-media">
+        {% for file in files %}
+            <li>
+                <label for="sys-form-add-media-check-{{ file.id }}">
+                    <img src="{{ file.path }}"/>
+                </label>
+                <p>
+                    <input type="checkbox" id="sys-form-add-media-check-{{ file.id }}"/>
+                    <label for="sys-form-add-media-check-{{ file.id }}">
+                        {{ t(file.name, 10) }}
+                    </label>
+                </p>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- paging -->
+    <ul class="paging">
+        {% if paging.is_prev %}
+            <li><a onclick="addMedia.load({page: {{ paging.page-1 }}, keyword: '{{ ue(req.get('keyword')) }}'})">前のページ</a></li>{# TODO 多国語対応していない #}
+        {% endif %}
+
+        {% if 0 < paging.start %}
+            <li><a onclick="addMedia.load({page: 0, keyword: '{{ ue(req.get('keyword')) }}'})">1</a></li>
+        {% endif %}
+
+        {% if 1 < paging.start %}
+            <li>...</li>
+        {% endif %}
+
+        {% for i in range(paging.start, paging.end-1) %}
+            {% if paging.page == i %}
+                <li class="active">{{ i+1 }}</li>
+            {% endif %}
+            {% if paging.page != i %}
+                <li><a onclick="addMedia.load({page: {{ i }}, keyword: '{{ ue(req.get('keyword')) }}'})">{{ i+1 }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if paging.end < (paging.max_page-1) %}
+            <li>...</li>
+        {% endif %}
+
+        {% if paging.end < paging.max_page %}
+            <li><a onclick="addMedia.load({page: {{ paging.max_page-1 }}, keyword: '{{ ue(req.get('keyword')) }}'})">{{ paging.max_page }}</a></li>
+        {% endif %}
+
+        {% if paging.is_next %}
+            <li><a onclick="addMedia.load({page: {{ paging.page+1 }}, keyword: '{{ ue(req.get('keyword')) }}'})">次のページ</a></li>{# TODO 多国語対応していない #}
+        {% endif %}
+    </ul>
+
+{% endif %}
+{% if not files %}
+
+    <p>対象のファイルは存在しません</p>{# TODO 多国語対応していない #}
+
+{% endif %}

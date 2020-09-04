@@ -8,6 +8,7 @@ use Fc2blog\Model\CategoriesModel;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\EntryCategoriesModel;
 use Fc2blog\Model\EntryTagsModel;
+use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\TagsModel;
 use Fc2blog\Web\Request;
@@ -275,35 +276,39 @@ class EntriesController extends AdminController
   /**
    * ajaxでメディアを表示する画面
    * @param Request $request
+   * @return string
    */
   public function ajax_media_load(Request $request)
   {
-    $files_model = Model::load('Files');
-
+    $files_model = new FilesModel();
     $blog_id = $this->getBlogId($request);
 
     // 検索条件
     $where = 'blog_id=?';
-    $params = array($blog_id);
+    $params = [$blog_id];
     if ($request->get('keyword')) {
       $where .= ' AND name like ?';
       $params[] = '%' . $request->get('keyword') . '%';
     }
 
-    $options = array(
+    $options = [
       'where' => $where,
       'params' => $params,
       'limit' => Config::get('PAGE.FILE.LIMIT', App::getPageLimit($request, 'FILE_AJAX')),
       'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => 'id DESC',
-    );
+    ];
     $files = $files_model->find('all', $options);
     $paging = $files_model->getPaging($options);
+
+    foreach($files as &$file){
+      $file['path']  = App::getUserFilePath($file);
+    }
 
     $this->set('files', $files);
     $this->set('paging', $paging);
 
-    $this->layout = 'ajax.php';
+    return 'admin/entries/ajax_media_load.twig';
   }
 
 }
