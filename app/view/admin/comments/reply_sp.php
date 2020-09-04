@@ -1,3 +1,5 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
+
 <header><h1 class="detail sh_heading_main_b"><?php echo __('Comment'); ?><a href="#jamp1" class="btn_contents page_scroll touch"><?php echo __('Reply'); ?></a></h1></header>
 
 <h2><span class="h2_inner"><?php echo __('Details of comment'); ?></span></h2>

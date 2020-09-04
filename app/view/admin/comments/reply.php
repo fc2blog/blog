@@ -1,3 +1,5 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
+
 <header><h2 class="editor_title"><?php echo __('Details of comment'); ?></h2></header>
 
 <table><tbody>

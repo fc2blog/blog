@@ -1,3 +1,5 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
+
 <table><tbody>
   <tr>
     <th><?php echo __('Article name'); ?></th>
