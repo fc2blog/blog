@@ -112,14 +112,19 @@ class CommentsController extends AdminController
     $this->set('limit', Config::get('ENTRY.DEFAULT_LIMIT'));
     $this->set('reply_status_list', CommentsModel::getReplyStatusList());
 
+    $this->setStatusDataList();
+
+    return 'admin/comments/index.twig';
+  }
+
+  public function setStatusDataList():void
+  {
     $this->set('comment_open_status_public', Config::get('COMMENT.OPEN_STATUS.PUBLIC'));
     $this->set('comment_open_status_pending', Config::get('COMMENT.OPEN_STATUS.PENDING'));
     $this->set('comment_open_status_private', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
     $this->set('comment_reply_status_unread', Config::get('COMMENT.REPLY_STATUS.UNREAD'));
     $this->set('comment_reply_status_read', Config::get('COMMENT.REPLY_STATUS.READ'));
     $this->set('comment_reply_status_reply', Config::get('COMMENT.REPLY_STATUS.REPLY'));
-
-    return 'admin/comments/index.twig';
   }
 
   /**
