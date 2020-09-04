@@ -30,7 +30,7 @@
         <ul class="link_list">
             {% for entry in entries %}
                 <li class="link_list_item">
-                    <a href="{{ url(req, req.shortControllerName, req.methodName, {'id':entry.id}) }}" class="common_next_link next_bg">
+                    <a href="{{ url(req, req.shortControllerName, 'edit', {'id':entry.id}) }}" class="common_next_link next_bg">
                         <dl>
                             <dt class="item_title">{{ t(entry.title, 10) }}</dt>
                             <dd class="item_time"><i class="entry_time detail_icon"></i>
