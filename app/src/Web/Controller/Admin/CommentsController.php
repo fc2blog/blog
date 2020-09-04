@@ -4,6 +4,7 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
@@ -16,7 +17,7 @@ class CommentsController extends AdminController
    * @param Request $request
    * @return string
    */
-  public function index(Request $request):string
+  public function index(Request $request): string
   {
     $comments_model = new CommentsModel();
     $blog_id = $this->getBlogId($request);
@@ -117,7 +118,7 @@ class CommentsController extends AdminController
     return 'admin/comments/index.twig';
   }
 
-  public function setStatusDataList():void
+  public function setStatusDataList(): void
   {
     $this->set('comment_open_status_public', Config::get('COMMENT.OPEN_STATUS.PUBLIC'));
     $this->set('comment_open_status_pending', Config::get('COMMENT.OPEN_STATUS.PENDING'));
@@ -192,26 +193,27 @@ class CommentsController extends AdminController
   /**
    * 返信
    * @param Request $request
-   * @return string|void
+   * @return string
    */
   public function reply(Request $request)
   {
-    /** @var CommentsModel $comments_model */
-    $comments_model = Model::load('Comments');
+    $comments_model = new CommentsModel();
 
     $comment_id = $request->get('id');
     $blog_id = $this->getBlogId($request);
+    $this->setStatusDataList();
 
     // 返信用のコメント取得
     $comment = $comments_model->getReplyComment($blog_id, $comment_id);
     if (!$comment) {
-      return $this->error404();
+      return "admin/common/error404.twig";
     }
     $this->set('comment', $comment);
 
     // コメントの初期表示時入力データ設定
     if (!$request->get('comment')) {
-      $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+      $blog_setting_model = new BlogSettingsModel();
+      $blog_setting = $blog_setting_model->findByBlogId($blog_id);
       if ($comment['reply_status'] != Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote'] == Config::get('COMMENT.QUOTE.USE')) {
         $comment['reply_body'] = '> ' . str_replace("\n", "\n> ", $comment['body']) . "\n";
       }
@@ -220,11 +222,11 @@ class CommentsController extends AdminController
       if (!empty($back_url)) {
         $request->set('back_url', $request->getReferer());    // 戻る用のURL
       }
-      return;
+      return 'admin/comments/reply.twig';
     }
 
     // コメント投稿処理
-    $errors = array();
+    $errors = [];
     $errors['comment'] = $comments_model->replyValidate($request->get('comment'), $data, array('reply_body'));
     if (empty($errors['comment'])) {
       if ($comments_model->updateReply($data, $comment)) {
@@ -235,13 +237,15 @@ class CommentsController extends AdminController
         if (!empty($back_url)) {
           $this->redirect($request, $back_url);
         }
-        $this->redirectBack($request, array('action' => 'index'));
+        $this->redirectBack($request, ['action' => 'index']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+
+    return 'admin/comments/reply.twig';
   }
 
   /**

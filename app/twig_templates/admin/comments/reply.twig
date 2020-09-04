@@ -1,0 +1,96 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Details of comment') }}{% endblock %}
+
+{% block content %}
+    <header><h2 class="editor_title">{{ _('Details of comment') }}</h2></header>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>{{ _('Article name') }}</th>
+            <td><a href="{{ entryUrl(req, comment.blog_id, comment.entry_id) }}" target="_blank">{{ comment.entry_title }}</a></td>
+        </tr>
+        <tr>
+            <th>{{ _('Contributor') }}</th>
+            <td>{{ comment.name }}</td>
+        </tr>
+        <tr>
+            <th>{{ _('Title') }}</th>
+            <td>{{ comment.title }}</td>
+        </tr>
+        <tr>
+            <th>{{ _('Body') }}</th>
+            <td>{{ comment.body|nl2br }}</td>
+        </tr>
+        {% if comment.mail %}
+            <tr>
+                <th>{{ _('E-mail address') }}</th>
+                <td>{{ comment.mail }}</td>
+            </tr>
+        {% endif %}
+        {% if comment.url %}
+            <tr>
+                <th>URL</th>
+                <td><a href="{{ comment.url }}" target="_blank">{{ comment.url }}</a></td>
+            </tr>
+        {% endif %}
+        <tr>
+            <th>{{ _('Public state') }}</th>
+            <td id="sys-open-status">
+                {% if comment.open_status == comment_open_status_public %}
+                    {{ _('Published') }}
+                {% endif %}
+                {% if comment.open_status == comment_open_status_pending %}
+                    {{ _('Approval pending') }}
+                {% endif %}
+                {% if comment.open_status == comment_open_status_private %}
+                    {{ _('Only exposed administrator') }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ _('Updated date') }}</th>
+            <td>{{ comment.updated_at|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        {% if comment.reply_status == comment_reply_status_reply %}
+            <tr>
+                <th>{{ _('Response time') }}</th>
+                <td>{{ comment.reply_updated_at|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    {% if comment.open_status == comment_open_status_pending %}
+        <h3>{{ _('I moderate comments') }}</h3>
+        <a href="{{ url(req, 'comments', 'approval', {id: comment.id, back_url: req.get('back_url')}) }}"
+           onclick="return confirm('{{ _('Are you sure you want to be approved?') }}');">{{ _('Approval') }}</a>
+    {% endif %}
+
+    {% if comment.open_status == comment_open_status_private %}
+        <h3>{{ _('I will reply to comments') }}</h3>
+        <form method="POST" id="sys-comment-form" class="admin-form">
+            {{ input(req, 'back_url', 'hidden', {'default': req.get('back_url')}) }}
+            {{ input(req, 'comment[reply_body]', 'textarea', {'style': 'width: 95%; height: 200px;'}) }}
+            {% if errors.comment.reply_body %}<p class="error">{{ errors.comment.reply_body }}</p>{% endif %}
+            <p class="mb20">
+                {% if comment.reply_status == comment_reply_status_reply %}
+                    <input type="submit" value="{{ _('Update') }}"/>
+                {% endif %}
+                {% if comment.reply_status != comment_reply_status_reply %}
+
+                    <input type="submit" value="{{ _('Reply') }}"/><br/>
+                    {% if comment.open_status == comment_open_status_pending %}
+                        ※{{ _('When you press the reply button, the message will be approved') }}
+                    {% endif %}
+                {% endif %}
+            </p>
+        </form>
+    {% endif %}
+
+    <h3>{{ _('Delete Comment') }}</h3>
+    <div id="comment_dell" class="mb20">
+        <p class="mb10">{{ _('You can delete a comment by pressing the button below.') }}</p>
+        <a class="admin_common_btn dell_btn" href="{{ url(req, 'comments', 'delete', {id: comment.id, back_url: req.get('back_url')}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a>
+    </div>
+{% endblock %}
