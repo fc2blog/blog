@@ -1,0 +1,26 @@
+{# @var req \Fc2blog\Web\Request #}
+
+<div class="page">
+    <div class="btn_area">
+
+        <p class="page_num"><span class="page_num_inner">{{ paging.page+1 }} / {{ paging.max_page }}</span></p>
+
+        <ul class="pager btn_contents">
+            {% if paging.is_prev %}
+                <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':paging.page-1}, true) }}">{{ _('Previous page') }}</a></li>
+            {% endif %}
+            {% if not paging.is_prev %}
+            <li><span>{{ _('Previous page') }}</span></li>
+            {% endif %}
+
+            {% if paging.is_next %}
+                <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':paging.page+1}, true) }}">{{ _('Next page') }}</a></li>
+            {% endif %}
+            {% if not paging.is_next %}
+                <li><span>{{ _('Next page') }}</span></li>
+            {% endif %}
+        </ul>
+
+    </div>
+</div>
+

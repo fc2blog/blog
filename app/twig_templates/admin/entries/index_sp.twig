@@ -1,0 +1,52 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('List of articles') }}{% endblock %}
+{# @var req \Fc2blog\Web\Request #}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('List of articles') }}</span><span class="accordion_btn"><i class="search_icon btn_icon"></i></span></h1></header>
+    <div id="entry_search" class="accordion_contents" style="display:none;">
+        <form method="GET" id="sys-search-form">
+            <input type="hidden" name="mode" value="Entries"/>
+            <input type="hidden" name="process" value="index"/>
+            <dl class="input_search">
+                <dt class="lineform_text_wrap common_input_text">{{ input(req, 'keyword', 'text') }}</dt>
+                <dd class="lineform_btn_wrap">
+                    <button type="submit" value="{{ _('Search') }}" class="lineform_btn touch">{{ _('Search') }}</button>
+                </dd>
+            </dl>
+            <div class="select_search">
+                {{ input(req, 'category_id', 'select', {'options' : category_list_w}) }}
+                {{ input(req, 'tag_id', 'select', {'options': tag_list_w }) }}
+                {{ input(req, 'open_status', 'select', {'options': open_status_list_w }) }}
+                {{ input(req, 'limit', 'hidden', {'default' : entry_default_limit}) }}
+                {{ input(req, 'page', 'hidden', {'default' : '0'}) }}
+                {{ input(req, 'order', 'hidden', {'default' : 'posted_at_desc'}) }}
+            </div>
+        </form>
+    </div>
+    <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
+
+    <form method="POST" id="sys-list-form">
+        <ul class="link_list">
+            {% for entry in entries %}
+                <li class="link_list_item">
+                    <a href="{{ url(req, req.shortControllerName, req.methodName, {'id':entry.id}) }}" class="common_next_link next_bg">
+                        <dl>
+                            <dt class="item_title">{{ t(entry.title, 10) }}</dt>
+                            <dd class="item_time"><i class="entry_time detail_icon"></i>
+                                <time>{{ entry.posted_at|date('Y-m-d') }}</time>
+                            </dd>
+                            <dd class="state"><i class="entry_state detail_icon"></i>{{ open_status_list[entry.open_status] }}</dd>
+                            <dd class="comment"><i class="entry_comment detail_icon"></i>{{ entry.comment_count }}</dd>
+                        </dl>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <input type="hidden" name="mode" value="Entries"/>
+        <input type="hidden" name="process" value="delete"/>
+    </form>
+
+    {% include('admin/common/paging_sp.twig') %}
+{% endblock %}
