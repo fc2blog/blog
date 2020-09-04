@@ -38,7 +38,7 @@ class HtmlHelper extends AbstractExtension
       new TwigFunction(
         'entryUrl',
         function (Request $request, $blog_id, $entry_id) {
-          return App::userURL($request, array('controller' => 'Entries', 'action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id, false, true));
+          return App::userURL($request, array('controller' => 'Entries', 'action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id), false, true);
         },
         ['is_safe' => ['html']]
       ),
