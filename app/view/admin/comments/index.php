@@ -1,3 +1,5 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
+
 <header><h2><?php echo __('List of comments'); ?></h2></header>
 
 <h3 id="entry_count">
