@@ -1,3 +1,5 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
+
 <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title"><?php echo __('List of articles'); ?></span><span class="accordion_btn"><i class="search_icon btn_icon"></i></span></h1></header>
 <div id="entry_search" class="accordion_contents" style="display:none;">
   <form method="GET" id="sys-search-form">
