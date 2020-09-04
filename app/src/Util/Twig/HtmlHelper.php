@@ -62,6 +62,15 @@ class HtmlHelper extends AbstractExtension
         },
       ),
       new TwigFunction(
+        'd',
+        function (?string $text, $default="") {
+          if ($text === null || $text === '') {
+            return $default;
+          }
+          return $text;
+        },
+      ),
+      new TwigFunction(
         '_s',
         function (string $str, ...$args) {
           return sprintf(__($str), ...$args);
