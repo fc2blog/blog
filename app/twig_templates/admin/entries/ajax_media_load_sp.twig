@@ -1,0 +1,53 @@
+{% if files %}
+
+    <div class="form_contents">
+        <div class="btn">
+            <button type="button" class="btn_contents positive touch" onclick="addMedia.add();"><i class="positive_add_icon btn_icon"></i>{{ _('Add') }}</button>
+        </div>
+    </div>
+
+    <ul class="sys-form-add-media file_table">
+        {% for file in files %}
+            <li class="file_table_cell">
+                <label for="sys-form-add-media-check-{{ file.id }}">
+                    <img src="{{ file.path }}"/>
+                    <span class="img_name">{{ t(file.name, 10) }}</span>
+                </label>
+                <p>
+                    <input type="checkbox" id="sys-form-add-media-check-{{ file.id }}"/>
+                    <label for="sys-form-add-media-check-{{ file.id }}">
+                        {{ t(file.name, 10) }}
+                    </label>
+                </p>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- paging -->
+    <div class="page">
+        <div class="btn_area">
+            <p class="page_num"><span class="page_num_inner">{{ paging.page+1 }} / {{ paging.max_page }}</span></p>
+            <ul class="pager btn_contents">
+                {% if paging.is_prev %}
+                    <li><a onclick="addMedia.load({page: {{ paging.page-1 }}, keyword: '{{ ue(req.get('keyword')) }}'})">{{ _('Previous page') }}</a></li>
+                {% endif %}
+                {% if not paging.is_prev %}
+                    <li><span>{{ _('Previous page') }}</span></li>
+                {% endif %}
+
+                {% if paging.is_next %}
+                    <li><a onclick="addMedia.load({page: {{ paging.page+1 }}, keyword: '{{ ue(req.get('keyword')) }}'})">{{ _('Next page') }}</a></li>
+                {% endif %}
+                {% if not paging.is_next %}
+                    <li><span>{{ _('Next page') }}</span></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+{% endif %}
+{% if not files %}
+
+    <p>対象のファイルは存在しません</p>{# TODO 多国語対応していない #}
+
+{% endif %}
