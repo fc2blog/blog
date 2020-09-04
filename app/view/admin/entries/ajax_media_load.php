@@ -1,3 +1,5 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
+
 <?php if (count($files)): ?>
 
   <ul class="sys-form-add-media">
