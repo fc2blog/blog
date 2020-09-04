@@ -19,23 +19,24 @@ class EntriesController extends AdminController
   /**
    * 一覧表示
    * @param Request $request
+   * @return string
    */
-  public function index(Request $request)
+  public function index(Request $request): string
   {
-    $entries_model = Model::load('Entries');
-
+    $entries_model = new EntriesModel();
     $blog_id = $this->getBlogId($request);
 
     // 検索条件
     $where = 'entries.blog_id=?';
-    $params = array($blog_id);
-    $from = array();
+    $params = [$blog_id];
+    $from = [];
 
+    // クエリの生成
     if ($keyword = $request->get('keyword')) {
       $keyword = Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND (entries.title LIKE ? OR entries.body LIKE ? OR entries.extend LIKE ?)';
-      $params = array_merge($params, array($keyword, $keyword, $keyword));
+      $params = array_merge($params, [$keyword, $keyword, $keyword]);
     }
     if ($open_status = $request->get('open_status')) {
       $where .= ' AND entries.open_status=?';
@@ -43,12 +44,12 @@ class EntriesController extends AdminController
     }
     if ($category_id = $request->get('category_id')) {
       $where .= ' AND entry_categories.blog_id=? AND entry_categories.category_id=? AND entries.id=entry_categories.entry_id';
-      $params = array_merge($params, array($blog_id, $category_id));
+      $params = array_merge($params, [$blog_id, $category_id]);
       $from[] = 'entry_categories';
     }
     if ($tag_id = $request->get('tag_id')) {
       $where .= ' AND entry_tags.blog_id=? AND entry_tags.tag_id=? AND entries.id=entry_tags.entry_id';
-      $params = array_merge($params, array($blog_id, $tag_id));
+      $params = array_merge($params, [$blog_id, $tag_id]);
       $from[] = 'entry_tags';
     }
 
@@ -81,10 +82,10 @@ class EntriesController extends AdminController
         break;
     }
 
-    Session::set('sig', App::genRandomString());
+    $request->generateNewSig();
 
     // オプション設定
-    $options = array(
+    $options = [
       'fields' => 'entries.*',
       'where' => $where,
       'params' => $params,
@@ -92,12 +93,25 @@ class EntriesController extends AdminController
       'limit' => $request->get('limit', Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
       'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => $order,
-    );
+    ];
+
     $entries = $entries_model->find('all', $options);
     $paging = $entries_model->getPaging($options);
-
     $this->set('entries', $entries);
     $this->set('paging', $paging);
+
+    $this->set('entry_limit_list', Config::get('ENTRY.LIMIT_LIST'));
+    $this->set('entry_default_limit', Config::get('ENTRY.DEFAULT_LIMIT'));
+    $this->set('page_list', Model::getPageList($paging));
+
+    $categories_model = new CategoriesModel();
+    $tags_model = new TagsModel();
+    $entries_model = new EntriesModel();
+    $this->set('category_list_w', ['' => __('Category name')] + $categories_model->getSearchList($this->getBlogId($request)));
+    $this->set('tag_list_w', ['' => _('Tag name')] + $tags_model->getSearchList($this->getBlogId($request)));
+    $this->set('open_status_list_w', ['' => __('Public state')] + $entries_model::getOpenStatusList());
+    $this->set('open_status_list', $entries_model::getOpenStatusList());
+    return "admin/entries/index.twig";
   }
 
   /**
