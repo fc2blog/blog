@@ -103,8 +103,8 @@ $config['fc2_template_if'] = array(
   'res_nextpage_area'  => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>',
   'res_prevpage_area'  => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>',
   // デバイスタイプ
-  'ios'     => '<?php if(\Fc2blog\App::isIOS()) { ?>',
-  'android' => '<?php if(\Fc2blog\App::isAndroid()) { ?>',
+  'ios'     => '<?php if(\Fc2blog\App::isIOS($request)) { ?>',
+  'android' => '<?php if(\Fc2blog\App::isAndroid($request)) { ?>',
 );
 
 $template_vars = array(
