@@ -1,0 +1,68 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('List of comments') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('List of comments') }}</span><span class="accordion_btn"><i class="search_icon btn_icon"></i></span></h1></header>
+
+    <div id="entry_search" class="accordion_contents" style="display: none;">
+        <form method="GET" id="sys-search-form">
+            <input type="hidden" name="mode" value="Comments"/>
+            <input type="hidden" name="process" value="index"/>
+            <dl class="input_search">
+                <dt class="lineform_text_wrap common_input_text">{{ input(req, 'keyword', 'text') }}</dt>
+                <dd class="lineform_btn_wrap">
+                    <button type="submit" value="{{ _('Search') }}" class="lineform_btn touch">{{ _('Search') }}</button>
+                </dd>
+            </dl>
+            <div class="select_search">
+                {{ input(req, 'entry_id', 'hidden') }}
+                {{ input(req, 'open_status', 'select', {'options': open_status_w}) }}
+                {{ input(req, 'reply_status', 'select', {'options': reply_status_w}) }}
+                {{ input(req, 'limit', 'hidden', {'default': entry_default_limit}) }}
+                {{ input(req, 'page', 'hidden', {'default': 0}) }}
+                {{ input(req, 'order', 'hidden', {'default': 'posted_at_desc'}) }}
+            </div>
+        </form>
+    </div>
+    <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
+
+    <ul class="link_list">
+        {% for comment in comments %}
+            <li class="link_list_item">
+                <a href="{{ url(req, 'comments', 'reply', {id: comment.id}) }}" class="common_next_link next_bg">
+                    <dl>
+                        <dt class="item_title">{% if reply_status == comment_reply_status_unread %}<span class="red new">New</span>{% endif %}{{ d(t(comment.title, 20), _('No title')) }}</dt>
+                        <dd class="item_time"><i class="entry_time detail_icon"></i>
+                            <time>{{ comment.updated_at|date('y-m-d') }}</time>
+                        </dd>
+                        <dd class="comment"><i class="entry_user detail_icon"></i>
+                            {% if comment.name %}{{ t(comment.name, 10) }}{% endif %}
+                            {% if not comment.name %}{{ _('Unknown') }}{% endif %}
+                        </dd>
+                        <dd class="state cm_entry"><i class="entry_state detail_icon"></i>{{ t(comment.entry_title, 20) }}</dd>
+                        <dd class="state">
+                            {% if comment.reply_status == comment_reply_status_unread %}
+                                <span class="no_reply">{{ _('Not yet read') }}</span>
+                            {% endif %}
+                            {% if comment.reply_status == comment_reply_status_read %}
+                                {% if comment.open_status == comment_open_status_private %}
+
+                                    <span class="private">{{ _('Reply not') }}</span>
+                                {% endif %}
+                                {% if comment.open_status != comment_open_status_private %}
+                                    <span class="no_reply">{{ _('Unanswered') }}</span>
+                                {% endif %}
+                            {% endif %}
+                            {% if comment.reply_status == comment_reply_status_reply %}
+                                <span class="replied">{{ _('Answered') }}</span>
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% include('admin/common/paging_sp.twig') %}
+
+{% endblock %}
