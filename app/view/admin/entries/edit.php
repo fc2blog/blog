@@ -1,3 +1,5 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
+
 <header><h2 class="editor_title"><?php echo __('Edit this entry.'); ?></h2></header>
 
 <form method="POST" id="sys-entry-form" class="admin-form">
