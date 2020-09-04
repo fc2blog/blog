@@ -2,6 +2,7 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\Model;
@@ -13,11 +14,11 @@ class CommentsController extends AdminController
   /**
    * 一覧表示
    * @param Request $request
+   * @return string
    */
-  public function index(Request $request)
+  public function index(Request $request):string
   {
-    $comments_model = Model::load('Comments');
-
+    $comments_model = new CommentsModel();
     $blog_id = $this->getBlogId($request);
 
     // 検索条件
@@ -96,8 +97,29 @@ class CommentsController extends AdminController
     $comments = $comments_model->find('all', $options);
     $paging = $comments_model->getPaging($options);
 
+    foreach ($comments as &$comment) {
+      $comment['entry_url'] = App::userURL($request, ['controller' => 'Entries', 'action' => 'view', 'blog_id' => $comment['blog_id'], 'id' => $comment['entry_id']], false, true);
+    }
+
     $this->set('comments', $comments);
     $this->set('paging', $paging);
+
+    $this->set('open_status_w', ['' => __('Public state')] + CommentsModel::getOpenStatusList());
+    $this->set('entry_limit_list', Config::get('ENTRY.LIMIT_LIST'));
+    $this->set('entry_default_limit', Config::get('ENTRY.DEFAULT_LIMIT'));
+    $this->set('page_list', Model::getPageList($paging));
+    $this->set('reply_status_w', ['' => __('Reply state')] + CommentsModel::getReplyStatusList());
+    $this->set('limit', Config::get('ENTRY.DEFAULT_LIMIT'));
+    $this->set('reply_status_list', CommentsModel::getReplyStatusList());
+
+    $this->set('comment_open_status_public', Config::get('COMMENT.OPEN_STATUS.PUBLIC'));
+    $this->set('comment_open_status_pending', Config::get('COMMENT.OPEN_STATUS.PENDING'));
+    $this->set('comment_open_status_private', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
+    $this->set('comment_reply_status_unread', Config::get('COMMENT.REPLY_STATUS.UNREAD'));
+    $this->set('comment_reply_status_read', Config::get('COMMENT.REPLY_STATUS.READ'));
+    $this->set('comment_reply_status_reply', Config::get('COMMENT.REPLY_STATUS.REPLY'));
+
+    return 'admin/comments/index.twig';
   }
 
   /**

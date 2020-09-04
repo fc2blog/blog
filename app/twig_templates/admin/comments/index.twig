@@ -1,0 +1,209 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('List of comments') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('List of comments') }}</h2></header>
+
+    <h3 id="entry_count">
+        {{ _('Comment search') }}[{{ _('Hits') }}&nbsp;{{ paging.count }}{{ _(' results') }}]
+        {{ input(req, 'limit', 'select', {'options': entry_limit_list, 'default': entry_default_limit}) }}
+        {{ input(req, 'page', 'select', {'options': page_list, 'default': 0}) }}
+    </h3>
+    <p>{{ _('You can search in accordance with the conditions of the past comments.') }}</p>
+    <div id="entry_search">
+        <form method="GET" id="sys-search-form">
+            <input type="hidden" name="mode" value="Comments"/>
+            <input type="hidden" name="process" value="index"/>
+            {{ input(req, 'entry_id', 'hidden') }}
+            {{ input(req, 'open_status', 'select', {'options': open_status_w}) }}
+            {{ input(req, 'reply_status', 'select', {'options': reply_status_w}) }}
+            {{ input(req, 'limit', 'hidden', {'default': limit}) }}
+            {{ input(req, 'page', 'hidden', {'default': 0}) }}
+            {{ input(req, 'order', 'hidden', {'default': 'posted_at_desc'}) }}
+            <br/>{{ input(req, 'keyword', 'text') }}
+            <input type="submit" value="{{ _('Search') }}"/>
+        </form>
+    </div>
+    <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
+
+    {% include('admin/common/paging.twig') %}
+
+    <form method="POST" id="sys-list-form">
+        <table>
+            <thead>
+            <tr>
+                <th><input type="checkbox" onclick="common.fullCheck(this);"/></th>
+                <th><a href="javascript:void(0);" onclick="orderChange('entry_id_desc'); return false;">{{ _('Article') }}</a></th>
+                <th><a href="javascript:void(0);" onclick="orderChange('created_at_desc'); return false;">{{ _('Date') }}</a></th>
+                <th><a href="javascript:void(0);" onclick="orderChange('name_asc'); return false;">{{ _('Contributor') }}</a></th>
+                <th><a href="javascript:void(0);" onclick="orderChange('body_asc'); return false;">{{ _('Body') }}</a></th>
+                <th>{{ _('State') }}</th>
+                <th>{{ _('Delete') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for comment in comments %}
+                <tr>
+                    <td class="center ss_cell">
+                        <input type="checkbox" name="id[]" value="{{ comment.id }}"/><br/>
+                        {{ comment.entry_id }}
+                        <input type="hidden" value="{{ comment.reply_status }}" id="sys-reply-status-value-{{ comment.id }}"/>
+                    </td>
+                    <td class="s_cell center">
+                        <a href="{{ comment.entry_url }}" target="_blank">{{ _('Article') }}</a><br/>
+                        <a href="{{ url(req, 'comments', 'index', {entry_id: comment.entry_id}) }}">{{ _('Narrowing') }}</a>
+                    </td>
+                    <td>
+                        {{ comment.updated_at|date('y/m/d') }}<br/>
+                        {{ comment.updated_at|date('H:i:s') }}
+                    </td>
+                    <td>{{ t(comment.name,8) }}</td>
+                    <td>
+                        {% if reply_status == comment_reply_status_unread %}<span id="sys-new-icon-{{ comment.id }}" class="red new">{{ _('New') }}</span>{% endif %}{{ t(comment.body, 16) }}<br/>
+                        <a href="javascript:void(0); return false;"
+                           onclick="reply.open({{ comment.id }}, {% if comment.open_status == comment_open_status_private %}true{% endif %}{% if comment.open_status != comment_open_status_private %}false{% endif %}); return false;"
+                        >{{ _('I see the comment') }}</a>{# TODO refactoring #}
+                    </td>
+                    <td class="cm_status">
+                        <p id="sys-open-status-{{ comment.id }}">
+                            {% if comment.open_status == comment_open_status_public %}
+                                <span class="published">{{ _('Published') }}</span>
+                            {% endif %}
+                            {% if comment.open_status == comment_open_status_pending %}
+                                <span class="approval"><a href="{{ url(req, 'comments', 'approval', {id: comment.id}) }}" onclick="reply.approval({{ comment.id }}); return false;">{{ _('Approval') }}</a></span>
+                            {% endif %}
+                            {% if comment.open_status == comment_open_status_private %}
+                                <span class="private">{{ _('Only exposed administrator') }}</span>
+                            {% endif %}
+                        </p>
+                        <p id="sys-reply-status-{{ comment.id }}">
+
+                            {% if comment.reply_status == comment_reply_status_unread %}
+                                <span class="no_reply">{{ _('Not yet read') }}</span>
+                            {% endif %}
+                            {% if comment.reply_status == comment_reply_status_read %}
+                                {% if comment.open_status != comment_open_status_private %}
+                                    <span class="private">{{ _('Reply not') }}</span>
+                                {% endif %}
+                            {% endif %}
+                            {% if comment.reply_status == comment_reply_status_reply %}
+                                <span class="replied">{{ _('Answered') }}</span>
+                            {% endif %}
+                            {% if comment.reply_status != comment_reply_status_reply %}
+                                {% if comment.open_status != comment_open_status_private %}
+                                    <span class="no_reply">{{ _('Unanswered') }}</span>
+                                {% endif %}
+                            {% endif %}
+
+                        </p>
+                    </td>
+                    <td class="center s_cell"><a href="{{ url(req, 'comments', 'delete', {'id': comment.id}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <input type="hidden" name="mode" value="comments"/>
+        <input type="hidden" name="process" value="delete"/>
+        <input type="button" id="sys-delete-button" value="{{ _('Remove what you have selected') }}" onclick="if(confirm('{{ _('Are you sure you want to delete?') }}')) $('#sys-list-form').submit();" disabled="disabled"/>
+    </form>
+
+    {% include("admin/common/paging.twig") %}
+
+    <!-- コメント返信用ダイアログ -->
+    <div id="sys-comment-reply-dialog" title="{{ _('Reply Comments') }}"></div>
+
+    <script>
+        var reply = {};
+        reply.id = null;
+        // 既読状態に変更
+        reply.updateReadStatus = function (is_private) {
+            var status = $('#sys-reply-status-value-' + reply.id);
+            if (status.val() !={{ comment_reply_status_unread }}) {
+                return;
+            }
+            status.val({{ comment_reply_status_read }});
+            $('#sys-new-icon-' + reply.id).hide();
+            $('#sys-reply-status-' + reply.id).html(is_private ? '<span class="private">{{ _('Reply not') }}</span>' : '<span class="no_reply">{{ _('Unanswered') }}</span>');
+        };
+        // 返信状態に変更
+        reply.updateReplyStatus = function () {
+            $('#sys-reply-status-value-' + reply.id).val({{ comment_reply_status_reply }});
+            $('#sys-reply-status-' + reply.id).html('<span class="replied">{{ _('Answered') }}</span>');
+        };
+        // コメント返信画面を開く
+        reply.open = function (id, is_private) {
+            reply.id = id;
+            var option = {
+                modal: true,
+                resizable: false,
+                draggable: false,
+                width: $(window).width() - 100,
+                position: ['center', 50]
+            };
+            $('#sys-comment-reply-dialog').dialog(option);
+            $('#sys-comment-reply-dialog').html('now loading..');
+            $('#sys-comment-reply-dialog').load(common.fwURL('Comments', 'ajax_reply', {id: id}))
+            reply.updateReadStatus(is_private);
+        };
+        // コメントを閉じる処理
+        reply.close = function () {
+            $('#sys-comment-reply-dialog').dialog('close');
+        };
+        // コメントの返信処理
+        reply.submit = function (id) {
+            $('#sys-reply-button').hide();
+            $('#sys-reply-message').show();
+            $.ajax({
+                type: 'POST',
+                url: common.fwURL('comments', 'ajax_reply', {id: id}),
+                data: {comment: {reply_body: $('textarea[name="comment[reply_body]"]').val()}},
+                dataType: 'json',
+                success: function (json) {
+                    if (json.success) {
+                        $('#sys-open-status-' + id).html('<span class="published">{{ _('Published') }}</span>');
+                        reply.updateReplyStatus();
+                        reply.close();
+                        return;
+                    }
+                    $('#sys-reply-button').show();
+                    $('#sys-reply-message').hide();
+                    $('#sys-reply-error').html(json.error);
+                    $('#sys-reply-error').show();
+                }
+            });
+        };
+        // コメントの承認処理(ajax)
+        reply.approval = function (id) {
+            if (!confirm('{{ _('Are you sure you want to be approved?') }}')) {
+                return;
+            }
+            $('#sys-comment-approval').hide();
+            $('#sys-open-status-' + id + ' > *').fadeOut('fast', function () {
+                $.ajax({
+                    type: 'GET',
+                    url: common.fwURL('comments', 'ajax_approval', {id: id}),
+                    dataType: 'json',
+                    success: function (json) {
+                        if (json.success) {
+                            $('#sys-open-status-' + id).html('<span class="published">{{ _('Published') }}</span>');
+                            $('#sys-open-status').html('<span class="published">{{ _('Published') }}</span>');
+                            return;
+                        }
+                        $('#sys-open-status-' + id + ' > *').show();
+                        $('#sys-comment-approval').show();
+                        alert(json.error);
+                    }
+                });
+            });
+        };
+
+        $(function () {
+            // 削除用のチェックボックスがチェックされている時だけ削除ボタンを有効化する
+            $('input[type=checkbox][name="id[]"]').on('change', function () {
+                $('#sys-delete-button').prop('disabled', !$('input[type=checkbox][name="id[]"]:checked').length);
+            });
+        });
+    </script>
+
+{% endblock %}
