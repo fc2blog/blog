@@ -124,6 +124,7 @@ abstract class Controller
     } else {
       $status_code = 302;
     }
+    // TODO Twig化が完了したら、Redirectをここで行わずに上位で行えるようにしたい（途中でのexitをなくしたい）
     if (!headers_sent()) {
       // full url指定時のリダイレクトは、Blogの設定がもつステータスコードを利用する
       header('Location: ' . $url, true, $status_code);
