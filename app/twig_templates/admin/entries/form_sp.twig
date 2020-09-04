@@ -1,3 +1,19 @@
+{% block head_include_css %}
+    <link rel="stylesheet" href="/css/sp/category_sp.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/sp/entry_sp.css" type="text/css">
+{% endblock %}
+{% block head_include_js %}
+    <!-- timepicker-addon -->
+    <script type="text/javascript" src="/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js"></script>
+    {% if lang != 'en' %}
+        <script type="text/javascript" src="/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-{{ lang }}.js"></script>
+    {% endif %}
+    <!-- /timepicker-addon -->
+
+    <script type="text/javascript" src="/js/js.cookie.js"></script>
+    <script type="text/javascript" src="/js/admin/entry_editor.js"></script>
+{% endblock %}
+
 <script type="text/javascript" src="/js/jquery/jquery.fc2tab.js"></script>
 <script type="text/javascript">
     $(function () {
@@ -200,3 +216,5 @@
         </li>
     </ul>
 </div>
+
+{{ include('admin/entries/editor_js_sp.twig') }}
