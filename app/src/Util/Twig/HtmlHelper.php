@@ -38,8 +38,12 @@ class HtmlHelper extends AbstractExtension
       ),
       new TwigFunction(
         'entryUrl',
-        function (Request $request, $blog_id, $entry_id) {
-          return App::userURL($request, array('controller' => 'Entries', 'action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id), false, true);
+        function (Request $request, $blog_id, $entry_id, $is_sp = false) {
+          $opt = ['controller' => 'Entries', 'action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id];
+          if ($is_sp) {
+            $opt['sp'] = "1";
+          }
+          return App::userURL($request, $opt, false, true);
         },
         ['is_safe' => ['html']]
       ),
@@ -64,7 +68,7 @@ class HtmlHelper extends AbstractExtension
       ),
       new TwigFunction(
         'd',
-        function (?string $text, $default="") {
+        function (?string $text, $default = "") {
           if ($text === null || $text === '') {
             return $default;
           }
