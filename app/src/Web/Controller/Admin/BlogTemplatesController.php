@@ -22,7 +22,11 @@ class BlogTemplatesController extends AdminController
   {
     $request->generateNewSig();
     $blog_id = $this->getBlogId($request);
-    $device_type = $request->get('device_type', 0);
+    if(App::isPC($request)) {
+      $device_type = $request->get('device_type', 0);
+    }else{
+      $device_type = $request->get('device_type', 1);
+    }
 
     $blog = $this->getBlog($blog_id);
     $blogs_model = new BlogsModel();
@@ -31,9 +35,9 @@ class BlogTemplatesController extends AdminController
     // デバイス毎に分けられたテンプレート一覧を取得
     $blog_template = new BlogTemplatesModel();
     $device_blog_templates = $blog_template->getTemplatesOfDevice($blog_id, $device_type);
-    foreach ($device_blog_templates as $device_type => &$blog_templates) {
+    foreach ($device_blog_templates as $_device_type => &$blog_templates) {
       foreach ($blog_templates as &$blog_template) {
-        $blog_template['device_key'] = Config::get('DEVICE_FC2_KEY.' . $device_type);
+        $blog_template['device_key'] = Config::get('DEVICE_FC2_KEY.' . $_device_type);
       }
     }
     $this->set('device_blog_templates', $device_blog_templates);
