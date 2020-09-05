@@ -130,6 +130,13 @@ class HtmlHelper extends AbstractExtension
         },
         ['is_safe' => ['html']]
       ),
+      new TwigFunction(
+        'inArray',
+        function (string $needle, array $list): bool {
+          return in_array($needle, $list);
+        },
+        ['is_safe' => ['html']]
+      ),
       new TwigFunction( // TODO refactoring.
         'renderCategoriesTree',
         function (array $categories, array $entry_categories, bool $is_sp = false) {
