@@ -75,11 +75,11 @@ class BlogTemplatesController extends AdminController
   }
 
   /**
-   * FC2のテンプレート一覧
+   * FC2のテンプレート詳細（スマホ用）
    * @param Request $request
    * @return string
    */
-  public function fc2_view(Request $request)
+  public function fc2_view(Request $request): string
   {
     // 戻る用URLの設定
     $back_url = $request->getReferer();
@@ -98,7 +98,8 @@ class BlogTemplatesController extends AdminController
       return $this->error404();
     }
     $this->set('template', $template);
-    return "";
+
+    return "admin/blog_templates/fc2_view.twig"; // これはSP版しかないページです
   }
 
   /**

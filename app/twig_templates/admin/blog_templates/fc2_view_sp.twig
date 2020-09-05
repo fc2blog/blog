@@ -1,0 +1,41 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('FC2 Template detail') }}{% endblock %}
+
+{% block content %}
+
+    <header><h1 class="sh_heading_main_b">{{ _('FC2 Template detail') }}[{{ attribute(devices, req.get('device_type')) }}]</h1></header>
+    <h2><span class="h2_inner">テンプレートの詳細</span></h2>
+
+    <div class="template_detail ">
+        <div class="left_column">
+            <p class="template_img">
+                <img class="template_img" src="{{ template.image }}" width="135" height="90" alt="{{ template.name }}"/>
+            </p>
+        </div>
+        <div class="right_column">
+            <p>
+                <a class="btn_contents touch" href="{{ url(req, 'Entries', 'preview', {blog_id: blog_id, fc2_id: template.id, device_type: req.get('device_type')}, false, true) }}" target="_blank">{{ _('Preview') }}</a>
+            </p>
+            <p>
+                <a class="btn_contents touch" href="{{ url(req, 'blog_templates', 'download', {fc2_id: template.id, device_type: req.get('device_type'), sig: sig}) }}">{{ _('Download') }}</a>
+            </p>
+        </div>
+        <h3><span class="h3_inner">{{ _('Name') }}</span></h3>
+        <p class="output_contents">{{ template.name }}</p>
+        <h3><span class="h3_inner">{{ _('Summary') }}</span></h3>
+        <p class="output_contents">{{ template.discription|raw }}</p>
+        <div class="btn_area">
+            <ul class="btn_area_inner">
+                <li>
+                    <a class="btn_contents touch"
+                       href="{% if req.isArgs('back_url') %}{{ req.get('back_url') }}{% endif %}{% if not req.isArgs('back_url') %}{{ url(req, 'blog_template', 'fc2_index') }}{% endif %}"
+                    ><i class="return_icon btn_icon"></i>{{ _('I Back to List') }}</a>
+                </li>
+                <li>
+                    <a class="btn_contents touch" href="{{ url(req, 'blog_templates', 'download', {fc2_id: template.id, device_type: req.get('device_type'), sig: sig}) }}"><i class="add_icon btn_icon"></i>{{ _('Download') }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
