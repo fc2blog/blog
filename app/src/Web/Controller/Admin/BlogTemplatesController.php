@@ -156,39 +156,40 @@ class BlogTemplatesController extends AdminController
   /**
    * 編集
    * @param Request $request
+   * @return string
    */
-  public function edit(Request $request)
+  public function edit(Request $request): string
   {
-    /** @var BlogTemplatesModel $blog_templates_model */
-    $blog_templates_model = Model::load('BlogTemplates');
+    $blog_templates_model = new BlogTemplatesModel();
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('blog_template') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('blog_template') || !$request->isValidSig()) {
       if (!$blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, ['action' => 'index']);
       }
       $request->set('blog_template', $blog_template);
-      Session::set('sig', App::genRandomString());
-      return;
+      $request->generateNewSig();
+      return "admin/blog_templates/edit.twig";
     }
 
     // 更新処理
-    $errors = array();
-    $white_list = array('title', 'html', 'css');
+    $errors = [];
+    $white_list = ['title', 'html', 'css'];
     $errors['blog_template'] = $blog_templates_model->validate($request->get('blog_template'), $blog_template_data, $white_list);
     if (empty($errors['blog_template'])) {
       if ($blog_templates_model->updateByIdAndBlogId($blog_template_data, $id, $blog_id)) {
         $this->setInfoMessage(__('I have updated the template'));
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, ['action' => 'index']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return "admin/blog_templates/edit.twig";
   }
 
   /**
