@@ -22,9 +22,9 @@ class BlogTemplatesController extends AdminController
   {
     $request->generateNewSig();
     $blog_id = $this->getBlogId($request);
-    if(App::isPC($request)) {
+    if (App::isPC($request)) {
       $device_type = $request->get('device_type', 0);
-    }else{
+    } else {
       $device_type = $request->get('device_type', 1);
     }
 
