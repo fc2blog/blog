@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h1 class="sh_heading_main_b"><?php echo __('Template management'); ?></h1></header>
 
 <div class="form_area">

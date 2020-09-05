@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <?php \Fc2blog\Web\Html::addJS('/js/admin/syntax_check.js'); ?>
 
 <script>

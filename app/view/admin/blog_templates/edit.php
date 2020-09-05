@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('I want to edit the template'); ?></h2></header>
 
 <form method="POST" id="sys-blog-template-form" class="admin-form">

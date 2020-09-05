@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('FC2 Template list'); ?>[<?php echo \Fc2blog\Config::get('DEVICE_NAME.' . $request->get('device_type')); ?>]</h2></header>
 
 <?php if (!empty($templates)): ?>

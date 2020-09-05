@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('Template management'); ?></h2></header>
 
 <?php $devices = \Fc2blog\Config::get('DEVICE_NAME'); ?>
