@@ -1,0 +1,47 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('File upload') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Edit File') }}</h2></header>
+
+    <form method="POST" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
+
+        <input type="hidden" name="MAX_FILE_SIZE" value="{{ file_max_size }}"/>
+        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+
+        <a href="{{ file['path'] }}" target="_blank"><img src="{{ file['thumbnail_path'] }}" alt="{{ file.name }}"/></a>
+
+        {% if errors.file.ext %}
+            <p class="error">{{ errors.file.ext }}</p>
+        {% endif %}
+        {% if errors.file.file %}
+            <p class="error">{{ errors.file.file }}</p>
+        {% endif %}
+        {% if errors.file.name %}
+            <p class="error">{{ errors.file.name }}</p>
+        {% endif %}
+
+        <dl class="form_item">
+            <dt>{{ _('Upload file') }}：</dt>
+            <dd>
+                {{ input(req, 'file[name]', 'text', {'id': 'sys-file-name'}) }}
+                {{ input(req, 'file[file]', 'file', {'style': 'opacity: 0; position: absolute; width: 120px;', 'onchange': "$('#sys-file-name').val($(this).val().split('\\\\').pop());"}) }}
+                <input type="button" value="{{ _('File selection') }}" onclick="$(this).prev().click();" style="width: 120px;"/>
+            </dd>
+        </dl>
+
+        <p class="form-button">
+            <input type="submit" value="{{ _('Upload') }}"/>
+        </p>
+
+    </form>
+
+    <script>
+        $(function () {
+            // form内でEnterしてもsubmitさせない
+            common.formEnterNonSubmit('sys-file-form');
+        });
+    </script>
+
+{% endblock %}
