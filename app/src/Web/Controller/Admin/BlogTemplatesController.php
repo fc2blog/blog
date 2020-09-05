@@ -49,8 +49,9 @@ class BlogTemplatesController extends AdminController
   /**
    * FC2のテンプレート一覧
    * @param Request $request
+   * @return string
    */
-  public function fc2_index(Request $request)
+  public function fc2_index(Request $request): string
   {
     // デバイスタイプの設定
     $device_type = $request->get('device_type', Config::get('DEVICE_PC'));
@@ -68,6 +69,9 @@ class BlogTemplatesController extends AdminController
 
     $this->set('templates', $templates);
     $this->set('paging', $paging);
+    $this->set('devices', Config::get('DEVICE_NAME'));
+
+    return "admin/blog_templates/fc2_index.twig";
   }
 
   /**
