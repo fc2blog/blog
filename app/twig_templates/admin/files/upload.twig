@@ -1,0 +1,106 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('File upload') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('File upload') }}</h2></header>
+
+    <form method="POST" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
+
+        <input type="hidden" name="MAX_FILE_SIZE" value="{{ file_max_size }}"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+
+        {% if errors.file.ext %}
+            <p class="error">{{ errors.file.ext }}</p>
+        {% endif %}
+        {% if errors.file.file %}
+            <p class="error">{{ errors.file.file }}</p>
+        {% endif %}
+        {% if errors.file.name %}
+            <p class="error">{{ errors.file.name }}</p>
+        {% endif %}
+
+        <dl class="form_item">
+            <dt>{{ _('Upload file') }}：</dt>
+            <dd>
+                {{ input(req, 'file[name]', 'text', {'id': 'sys-file-name'}) }}
+                {{ input(req, 'file[file]', 'file', {'style': 'opacity: 0; position: absolute; width: 120px;', 'onchange': "$('#sys-file-name').val($(this).val().split('\\\\').pop());"}) }}
+                <input type="button" value="{{ _('File selection') }}" onclick="$(this).prev().click();" style="width: 120px;"/>
+            </dd>
+        </dl>
+
+        <p class="form-button">
+            <input type="submit" value="{{ _('Upload') }}"/>
+        </p>
+
+    </form>
+
+    <div id="sys-ajax-files-index"></div>
+
+    <script>
+        $(function () {
+            // form内でEnterしてもsubmitさせない
+            common.formEnterNonSubmit('sys-file-form');
+
+            // ajaxで一覧情報をロード
+            $('#sys-ajax-files-index').load('{{ url(req, 'Files', 'ajax_index') }}')
+        });
+
+        // ページ数初期化有無フラグ
+        var isPageChange = false;
+        // ajaxサブミットの実行できるかどうか
+        var isAjaxSubmit = true;
+
+        // ajaxのサブミット処理
+        function ajaxSubmit(url) {
+            if (!isAjaxSubmit) {
+                return;
+            }
+            isAjaxSubmit = false;
+
+            if (url) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        $('#sys-ajax-files-index').html(res);
+                        isAjaxSubmit = true;
+                    }
+                });
+                return;
+            }
+
+            if (isPageChange == false) {
+                $('input[name=page]').val(0);
+            }
+            var formData = {
+                limit: $('#sys-search-form input[name=limit]').val(),
+                page: $('#sys-search-form input[name=page]').val(),
+                order: $('#sys-search-form input[name=order]').val(),
+                keyword: $('#sys-search-form input[name=keyword]').val()
+            };
+            $.ajax({
+                url: '{{ url(req, 'Files', 'ajax_index') }}',
+                type: 'GET',
+                data: formData,
+                success: function (res) {
+                    $('#sys-ajax-files-index').html(res);
+                    isAjaxSubmit = true;
+                }
+            });
+        }
+
+        // 順序変更用関数
+        function orderChange(order) {
+            var now = $('input[name=order]').val();
+            // 現在の順序と同じ場合はdescとascを逆順に変更する
+            if (now == order) {
+                var matches = order.match('^(.*?)([^_]+)$');
+                if (matches && matches.length == 3) {
+                    order = matches[1] + (matches[2] == 'desc' ? 'asc' : 'desc')
+                }
+            }
+            $('input[name=order]').val(order);
+            ajaxSubmit();
+        }
+    </script>
+{% endblock %}
