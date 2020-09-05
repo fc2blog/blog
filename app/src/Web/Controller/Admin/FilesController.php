@@ -14,13 +14,17 @@ class FilesController extends AdminController
   /**
    * 一覧表示
    * @param Request $request
+   * @return string
    */
-  public function ajax_index(Request $request)
+  public function ajax_index(Request $request): string
   {
-    $files_model = Model::load('Files');
+    $files_model = new FilesModel();
 
     $blog_id = $this->getBlogId($request);
 
+    $this->set('file_default_limit', Config::get('FILE.DEFAULT_LIMIT'));
+    $this->set('page_list_file', App::getPageList($request, 'FILE'));
+    $this->set('page_limit_file', App::getPageLimit($request, 'FILE'));
     // 検索条件
     $where = 'blog_id=?';
     $params = array($blog_id);
@@ -59,11 +63,15 @@ class FilesController extends AdminController
     $files = $files_model->find('all', $options);
     $paging = $files_model->getPaging($options);
 
+    foreach ($files as &$file) {
+      $file['path'] = App::getUserFilePath($file, false, true);
+    }
+
     $this->set('files', $files);
     $this->set('paging', $paging);
+    $this->set('page_list_paging', Model::getPageList($paging));
 
-    // ajax表示
-    $this->layout = 'ajax.php';
+    return 'admin/files/ajax_index.twig';
   }
 
   /**
