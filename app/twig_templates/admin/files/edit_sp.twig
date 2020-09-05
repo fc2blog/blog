@@ -1,0 +1,51 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Details of file') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="detail sh_heading_main_b">{{ _('Details of file') }}</h1></header>
+    <h2><span class="h2_inner">{{ _('Checking file ') }}</span></h2>
+    <p class="editor_img">
+        <a href="{{ file.path }}" target="_blank"><img src="{{ file.thumbnail_path }}" alt="{{ file.name }}"/></a>
+    </p>
+
+    <h3><span class="h3_inner">{{ _('Information in the file') }}</span></h3>
+    <ul class="link_list">
+        <li class="link_list_item common_next_link">{{ file.name }}</li>
+        <li class="link_list_item common_next_link">{{ file.created_at|date('Y-m-d H:i:s') }}</li>
+    </ul>
+
+    <h2><span class="h2_inner">{{ _('Edit File') }}</span></h2>
+    <form method="POST" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
+        <input type="hidden" name="MAX_FILE_SIZE" value="{{ max_file_size }}"/>
+        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+        <div class="btn_area">
+            <div class="up_file_btn">
+                {{ input(req, 'file[name]', 'text', {'id': 'sys-file-name'}) }}
+                {{ input(req, 'file[file]', 'file', {'style': 'opacity: 0; position: absolute; width: 120px;', 'onchange': "$('#sys-file-name').val($(this).val().split('\\\\').pop());"}) }}
+                <button type="button" class="lineform_btn touch" onclick="$(this).prev().click();" style="width: 120px;"/>
+                {{ _('File selection') }}</button>
+            </div>
+            {% if errors.file.ext %}
+                <p class="error">{{ errors.file.ext }}</p>
+            {% endif %}
+            {% if errors.file.file %}
+                <p class="error">{{ errors.file.file }}</p>
+            {% endif %}
+            {% if errors.file.name %}
+                <p class="error">{{ errors.file.name }}</p>
+            {% endif %}
+
+            <div class="btn">
+                <button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i>{{ _('Update') }}</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="btn_area">
+        <ul class="btn_area_inner">
+            <li><a class="btn_contents touch" href="{% if req.isArgs('back_url') %}{{ req.get('back_url') }}{% endif %}{% if not req.isArgs('back_url') %}{{ url(req, 'Files', 'upload') }}{% endif %}"><i class="return_icon btn_icon"></i>{{ _('I Back to List') }}</a></li>
+            <li><a class="btn_contents touch" href="{{ url(req, 'Files', 'delete', {id: file.id, back_url: req.get('back_url'), sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</a></li>
+        </ul>
+    </div>
+{% endblock %}
