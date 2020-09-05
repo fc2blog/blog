@@ -3,6 +3,7 @@
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
+use Fc2blog\Config;
 use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
