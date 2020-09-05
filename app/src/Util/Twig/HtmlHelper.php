@@ -56,6 +56,14 @@ class HtmlHelper extends AbstractExtension
         ['is_safe' => ['html']]
       ),
       new TwigFunction(
+        'userUrl',
+        function (Request $request, array $args = [], bool $reused = false, bool $abs = false) {
+          $opt = array_merge(['controller' => 'Entries', 'action' => 'preview'], $args);
+          return App::userURL($request, $opt, $reused , $abs);
+        },
+        ['is_safe' => ['html']]
+      ),
+      new TwigFunction(
         't',
         function (string $text, int $length = 10, string $etc = '...') {
           if (!$length) {
