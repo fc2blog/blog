@@ -1,3 +1,5 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
+
 <header><h2><?php echo __('File upload'); ?></h2></header>
 
 <form method="POST" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
