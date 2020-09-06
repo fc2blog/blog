@@ -74,38 +74,44 @@ class BlogsController extends AdminController
   /**
    * 編集
    * @param Request $request
+   * @return string
    */
-  public function edit(Request $request)
+  public function edit(Request $request): string
   {
-    /** @var BlogsModel $blogs_model */
-    $blogs_model = Model::load('Blogs');
+    $blogs_model = new BlogsModel();
 
     $blog_id = $this->getBlogId($request);
+    $this->set('open_status_list', BlogsModel::getOpenStatusList());
+    $this->set('time_zone_list', BlogsModel::getTimezoneList());
+    $this->set('ssl_enable_settings_list', BlogsModel::getSSLEnableSettingList());
+    $this->set('redirect_status_code_settings_list', BlogsModel::getRedirectStatusCodeSettingList());
 
     // 初期表示時に編集データの設定
-    if (!$request->get('blog') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
+    if (!$request->get('blog') || !$request->isValidSig()) {
+      $request->generateNewSig();
       if (!$blog = $blogs_model->findById($blog_id)) {
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, ['action' => 'index']);
       }
       $request->set('blog', $blog);
-      return;
+      return "admin/blogs/edit.twig";
     }
 
     // 更新処理
-    $white_list = array('name', 'introduction', 'nickname', 'timezone', 'blog_password', 'open_status', 'ssl_enable', 'redirect_status_code');
+    $white_list = ['name', 'introduction', 'nickname', 'timezone', 'blog_password', 'open_status', 'ssl_enable', 'redirect_status_code'];
     $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, $white_list);
     if (empty($errors['blog'])) {
       if ($blogs_model->updateById($blog_data, $blog_id)) {
-        $this->setBlog(array('id' => $blog_id, 'nickname' => $blog_data['nickname']));    // ニックネームの更新
+        $this->setBlog(['id' => $blog_id, 'nickname' => $blog_data['nickname']]); // ニックネームの更新
         $this->setInfoMessage(__('I updated a blog'));
-        $this->redirect($request, array('action' => 'edit'));
+        $this->redirect($request, ['action' => 'edit']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+
+    return "admin/blogs/edit.twig";
   }
 
   /**
