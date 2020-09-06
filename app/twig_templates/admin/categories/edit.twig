@@ -1,0 +1,45 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('I edit a category') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('I edit a category') }}</h2></header>
+
+    <form method="POST" class="admin-form">
+
+        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+
+        <table>
+            <tbody>
+            <tr>
+                <th>{{ _('Parent category') }}</th>
+                <td>
+                    {{ input(req, 'category[parent_id]', 'select', {'options': category_parents} ) }}
+                    {% if errors.parent_id %}<p class="error">{{ errors.parent_id }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Category name') }}</th>
+                <td>
+                    {{ input(req, 'category[name]', 'text') }}
+                    {% if errors.name %}<p class="error">{{ errors.name }}</p>{% endif %}
+
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Sort by category') }}</th>
+                <td>
+                    {{ input(req, 'category[category_order]', 'select', {'options': categories_model_order_list} ) }}
+                    {% if errors.category_order %}<p class="error">{{ errors.category_order }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="submit" value="{{ _('Update') }}"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </form>
+{% endblock %}

@@ -68,43 +68,45 @@ class CategoriesController extends AdminController
   /**
    * 編集
    * @param Request $request
+   * @return string
    */
-  public function edit(Request $request)
+  public function edit(Request $request): string
   {
-    /** @var CategoriesModel $categories_model */
-    $categories_model = Model::load('Categories');
+    $categories_model = new CategoriesModel();
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
 
     // 親カテゴリー一覧
     $options = $categories_model->getParentList($blog_id, $id);
-    $this->set('category_parents', array(0 => '') + $options);
+    $this->set('category_parents', [0 => ''] + $options);
+    $this->set('categories_model_order_list', $categories_model::getOrderList());
 
     // 初期表示時に編集データの取得&設定
     if (!$request->get('category') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
       if (!$category = $categories_model->findByIdAndBlogId($id, $blog_id)) {
-        $this->redirect($request, array('action' => 'create'));
+        $this->redirect($request, ['action' => 'create']);
       }
       $request->set('category', $category);
-      return;
+      return "admin/categories/edit.twig";
     }
 
     // 更新処理
     $category_request = $request->get('category');
     $category_request['id'] = $id;            // 入力チェック用
     $category_request['blog_id'] = $blog_id;  // 入力チェック用
-    $errors = $categories_model->validate($category_request, $data, array('parent_id', 'name', 'category_order'));
+    $errors = $categories_model->validate($category_request, $data, ['parent_id', 'name', 'category_order']);
     if (empty($errors)) {
-      if ($categories_model->updateNodeById($data, $id, 'blog_id=?', array($blog_id))) {
+      if ($categories_model->updateNodeById($data, $id, 'blog_id=?', [$blog_id])) {
         $this->setInfoMessage(__('I have updated the category'));
-        $this->redirect($request, array('action' => 'create'));
+        $this->redirect($request, ['action' => 'create']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return "admin/categories/edit.twig";
   }
 
   /**
