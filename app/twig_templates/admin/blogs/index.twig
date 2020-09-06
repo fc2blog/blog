@@ -1,0 +1,30 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('List of blogs') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('List of blogs') }}</h2></header>
+
+    <div class="right mb10"><a class="admin_common_btn create_btn" href="{{ url(req, 'Blogs', 'create') }}">{{ _('Create a new blog') }}</a></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>{{ _('Blog ID') }}</th>
+            <th>{{ _('I choose the blog') }}</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for blog in blogs %}
+            <tr>
+                <td>{{ blog.id }}</td>
+                <td><a href="{{ url(req, 'Blogs', 'choice', {blog_id: blog.id}) }}">{{ t(blog.name, 20) }}</a></td>
+                <td><a href="{{ blogUrl(req, blog.id) }}" target="_blank">{{ _('Checking the blog') }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include('admin/common/paging.twig') %}
+
+{% endblock %}

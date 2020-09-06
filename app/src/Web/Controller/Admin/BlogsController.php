@@ -15,29 +15,31 @@ class BlogsController extends AdminController
   /**
    * 一覧表示
    * @param Request $request
+   * @return string
    */
-  public function index(Request $request)
+  public function index(Request $request): string
   {
-    Session::set('sig', App::genRandomString());
+    $request->generateNewSig();
 
     // ブログの一覧取得
-    $options = array(
+    $options = [
       'where' => 'user_id=?',
-      'params' => array($this->getUserId()),
+      'params' => [$this->getUserId()],
       'limit' => Config::get('BLOG.DEFAULT_LIMIT', 10),
       'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => 'created_at DESC',
-    );
+    ];
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
       $options['page'] = 0;
     }
     $blogs_model = Model::load('Blogs');
     $blogs = $blogs_model->find('all', $options);
-    if ($blogs === false) $blogs = array();
+    if ($blogs === false) $blogs = [];
     $paging = $blogs_model->getPaging($options);
 
     $this->set('blogs', $blogs);
     $this->set('paging', $paging);
+    return 'admin/blogs/index.twig';
   }
 
   /**
