@@ -85,6 +85,7 @@ class BlogsController extends AdminController
     $this->set('time_zone_list', BlogsModel::getTimezoneList());
     $this->set('ssl_enable_settings_list', BlogsModel::getSSLEnableSettingList());
     $this->set('redirect_status_code_settings_list', BlogsModel::getRedirectStatusCodeSettingList());
+    $this->set('tab', 'blog_edit');
 
     // 初期表示時に編集データの設定
     if (!$request->get('blog') || !$request->isValidSig()) {
