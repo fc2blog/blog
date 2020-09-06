@@ -364,9 +364,6 @@ abstract class Controller
 
   public function get(string $key)
   {
-    if (!defined("THIS_IS_TEST")) {
-      throw new LogicException("the method is only for testing.");
-    }
     return $this->data[$key];
   }
 
