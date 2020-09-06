@@ -114,11 +114,22 @@ class BlogPluginsController extends AdminController
   /**
    * 新規作成
    * @param Request $request
+   * @return string
    */
-  public function create(Request $request)
+  public function create(Request $request): string
   {
     /** @var BlogPluginsModel $blog_plugins_model */
     $blog_plugins_model = Model::load('BlogPlugins');
+
+    $this->set('blog_plugin_attribute_align', BlogPluginsModel::getAttributeAlign());
+    $this->set('blog_plugin_attribute_color', BlogPluginsModel::getAttributeColor());
+    $this->set('device_key_list', Config::get('DEVICE_FC2_KEY'));
+    $this->set('device_type', $request->get('blog_plugin.device_type'));
+
+    // テンプレート置換用変数読み込み
+    Config::read('fc2_template.php');
+    $template_syntaxes = array_merge(array_keys(Config::get('fc2_template_foreach')), array_keys(Config::get('fc2_template_if')));
+    $this->set('template_syntaxes', $template_syntaxes);
 
     // 初期表示時
     if (!$request->get('blog_plugin') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
@@ -127,7 +138,7 @@ class BlogPluginsController extends AdminController
         'device_type' => $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES')),
         'category' => $request->get('category', 1),
       ));
-      return;
+      return "admin/blog_plugins/create.twig";
     }
 
     // 新規登録処理
@@ -145,6 +156,7 @@ class BlogPluginsController extends AdminController
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return "admin/blog_plugins/create.twig";
   }
 
   /**
