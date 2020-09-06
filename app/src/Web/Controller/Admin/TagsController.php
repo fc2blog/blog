@@ -2,7 +2,6 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\TagsModel;
@@ -15,24 +14,26 @@ class TagsController extends AdminController
   /**
    * 一覧表示
    * @param Request $request
+   * @return string
    */
-  public function index(Request $request)
+  public function index(Request $request): string
   {
-    $tags_model = Model::load('Tags');
-
+    $tags_model = new TagsModel();
     $blog_id = $this->getBlogId($request);
+    $request->generateNewSig();
 
-    Session::set('sig', App::genRandomString());
+    $this->set('tag_limit_list', Config::get('TAG.LIMIT_LIST'));
+    $this->set('tag_default_limit', Config::get('TAG.DEFAULT_LIMIT'));
 
     // 検索条件作成
     $where = 'blog_id=?';
-    $params = array($blog_id);
+    $params = [$blog_id];
 
     if ($name = $request->get('name')) {
       $name = Model::escape_wildcard($name);
       $name = "%{$name}%";
       $where .= ' AND name LIKE ?';
-      $params = array_merge($params, array($name));
+      $params = array_merge($params, [$name]);
     }
 
     // 並び順
@@ -51,13 +52,13 @@ class TagsController extends AdminController
         $order = 'name ASC, id ASC';
         break;
     }
-    $options = array(
+    $options = [
       'where' => $where,
       'params' => $params,
       'limit' => $request->get('limit', Config::get('TAG.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
       'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => $order,
-    );
+    ];
     if ($options['limit'] > max(array_keys(Config::get('TAG.LIMIT_LIST')))) {
       $options['limit'] = Config::get('TAG.DEFAULT_LIMIT');
     }
@@ -69,6 +70,9 @@ class TagsController extends AdminController
 
     $this->set('tags', $tags);
     $this->set('paging', $paging);
+    $this->set('page_list', Model::getPageList($paging));
+
+    return "admin/tags/index.twig";
   }
 
   /**
