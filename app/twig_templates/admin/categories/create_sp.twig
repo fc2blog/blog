@@ -1,0 +1,45 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Category management') }}{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="/css/sp/category_sp.css" type="text/css" media="all">
+
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('Category management') }}</span></h1></header>
+
+    <h2><span class="h2_inner">{{ _('Add category') }}</span></h2>
+    <form method="POST" class="admin-form">
+        <div class="form_area">
+            <div class="form_contents">
+                <h4>{{ _('Parent category') }}</h4>
+                {{ input(req, 'category[parent_id]', 'select', {'options' :category_parents}) }}
+                {% if errors.parent_id %}<p class="error">{{ errors.parent_id }}</p>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Category name') }}</h4>
+                <div class="common_input_text">{{ input(req, 'category[name]', 'text') }}</div>
+                {% if errors.name %}<p class="error">{{ errors.name }}</p>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Sort by category') }}</h4>
+                {{ input(req, 'category[category_order]', 'select', {'options': categories_model_order_list}) }}
+                {% if errors.parent_id %}<p class="error">{{ errors.parent_id }}</p>{% endif %}
+            </div>
+            <div class="form_contents">
+                <div class="btn">
+                    <button type="submit" class="btn_contents positive touch"><i class="positive_add_icon btn_icon"></i>{{ _('Add') }}</button>
+                </div>
+            </div>
+        </div>
+        {{ input(req, 'sig', 'hidden', {'value': sig}) }}
+    </form>
+
+    {% if not req.get('category') %}
+
+        <h2><span class="h2_inner">{{ _('Categories') }}</span></h2>
+        <div class="category_list">
+            <ul id="sys-category-list">
+                {{ renderCategoriesTree2(req, categories, true) }}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
