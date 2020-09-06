@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('I want to create a plugin'); ?></h2></header>
 <p class="header_btn">
   <a class="admin_common_btn create_btn" href="<?php echo \Fc2blog\Web\Html::url($request, array('controller'=>'blog_plugins', 'action'=>'index')); ?>"><?php echo __('Plugin management'); ?></a>
