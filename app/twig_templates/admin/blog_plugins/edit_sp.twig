@@ -1,0 +1,104 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('I want to edit the plugin') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('I want to edit the plugin') }}</span></h1></header>
+
+    <form method="POST" id="sys-blog-plugin-form" class="admin-form">
+
+        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        {{ input(req, 'blog_plugin[device_type]', 'hidden') }}
+        {{ input(req, 'blog_plugin[category]', 'hidden') }}
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+
+        {% if errors.blog_plugin.device_type %}<p class="error">{{ errors.blog_plugin.device_type }}</p>{% endif %}
+        {% if errors.blog_plugin.category %}<p class="error">{{ errors.blog_plugin.category }}</p>{% endif %}
+
+        <div class="form_area">
+            <h2><span class="h2_inner">{{ _('Plugin name') }}</span></h2>
+            <div class="form_contents">
+                <div class="common_input_text">{{ input(req, 'blog_plugin[title]', 'text') }}</div>
+                {% if errors.blog_plugin.title %}<p class="error">{{ errors.blog_plugin.title }}</p>{% endif %}
+            </div>
+        </div>
+        <div class="form_area">
+            <h2><span class="h2_inner">{{ _('Character color setting of title statement') }}</span></h2>
+            <div class="form_contents">
+                {{ input(req, 'blog_plugin[title_align]', 'select', {'options': blog_plugin_attribute_align}) }}
+                {% if errors.blog_plugin.title_align %}<p class="error">{{ errors.blog_plugin.title_align }}</p>{% endif %}
+                {{ input(req, 'blog_plugin[title_color]', 'radio', {'options': blog_plugin_attribute_color}) }}
+                {% if errors.blog_plugin.title_color %}<p class="error">{{ errors.blog_plugin.title_color }}</p>{% endif %}
+            </div>
+        </div>
+        <div class="form_area">
+            <h2><span class="h2_inner">{{ _('Character color setting of content statement') }}</span></h2>
+            <div class="form_contents">
+                {{ input(req, 'blog_plugin[contents_align]', 'select', {'options': blog_plugin_attribute_align}) }}
+                {% if errors.blog_plugin.contents_align %}<p class="error">{{ errors.blog_plugin.contents_align }}</p>{% endif %}
+                {{ input(req, 'blog_plugin[contents_color]', 'radio', {'options': blog_plugin_attribute_color}) }}
+                {% if errors.blog_plugin.contents_color %}<p class="error">{{ errors.blog_plugin.contents_color }}</p>{% endif %}
+            </div>
+        </div>
+        <div class="form_area">
+            <h2><span class="h2_inner">{{ _('Remodeling of the plug-in') }}</span></h2>
+            <div class="edit_area_box">
+                <div><a href="javascript:void(0);" onclick="$(this).parent().hide().next().show(); return false;">{{ _('I will do the editing of [HTML]. (For advanced users)') }}</a></div>
+                <div style="display: none;">
+                    {{ input(req, 'blog_plugin[contents]', 'textarea') }}
+                    {% if errors.blog_plugin.contents %}<p class="error">{{ errors.blog_plugin.contents }}</p>{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-button btn_area">
+            <ul class="btn_area_inner">
+                <li>
+                    <button type="submit" id="sys-blog-plugin-form-submit" class="btn_contents touch positive touch"><i class="save_icon btn_icon"></i>{{ _('Update') }}</button>
+                </li>
+                <li>
+                    <button type="button" id="sys-blog-plugin-form-preview" class="btn_contents touch"><i class="preview_icon btn_icon"></i>{{ _('Preview') }}</button>
+                </li>
+            </ul>
+            <ul class="btn_area_inner">
+                <li>
+                    <a class="btn_contents touch" href="{{ url(req, 'blog_plugins', 'index', {'device_type': device_type_sp}) }}"><i class="return_icon btn_icon"></i>{{ _('I Back to List') }}</a>
+                </li>
+            </ul>
+        </div>
+    </form>
+
+    <h2><span class="h2_inner">{{ _('Delete plugin') }}</span></h2>
+    <div class="btn_area">
+        <ul class="btn_area_inner">
+            <li>
+                <a href="{{ url(req, 'blog_plugins', 'delete', {id: req.get('id'), sig: sig}) }}" class="btn_contents touch"
+                   onclick="return confirm('{{ _('Are you sure you want to delete?') }}');"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        $(function () {
+            // form内でEnterしてもsubmitさせない
+            common.formEnterNonSubmit('sys-blog-plugin-form');
+
+            // プレビュー処理を行う
+            $('#sys-blog-plugin-form-preview').click(function () {
+                var action = '{{ userUrl(req, {blog_id: blog_id}, false, true) }}';
+                $('#sys-blog-plugin-form').prop('action', action);
+                $('#sys-blog-plugin-form').prop('target', '_preview');
+                $('#sys-blog-plugin-form').submit();
+            });
+
+            // submit処理を行う
+            $('#sys-blog-plugin-form-submit').click(function () {
+                var action = '{{ url(req, 'BlogPlugins', 'edit') }}';
+                $('#sys-blog-plugin-form').prop('action', action);
+                $('#sys-blog-plugin-form').prop('target', '_self');
+            });
+        });
+    </script>
+
+    {% include('admin/blog_templates/form_js.twig') %}
+
+{% endblock %}
