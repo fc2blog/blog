@@ -1,0 +1,30 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Other Settings') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Other Settings') }}</h2></header>
+
+    {% include('admin/blogs/tab.twig') %}
+
+    <form method="POST" id="sys-blog-template-form" class="admin-form">
+
+        <table>
+            <tbody>
+            <tr>
+                <th>{{ _('Initial display page') }}</th>
+                <td>
+                    {{ input(req, 'blog_setting[start_page]', 'select', {'options': blog_settings_start_page_list}) }}
+                    {% if errors.blog_setting.start_page %}<p class="error">{{ errors.blog_setting.start_page }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="submit" value="{{ _('Update') }}"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="sig" value="{{ sig }}">
+
+    </form>
+{% endblock %}

@@ -51,11 +51,15 @@ class BlogSettingsController extends AdminController
   /**
    * その他編集
    * @param Request $request
+   * @return string
    */
-  public function etc_edit(Request $request)
+  public function etc_edit(Request $request): string
   {
     $white_list = array('start_page');
-    $this->settingEdit($request, $white_list, 'etc_edit');
+    $this->set('template_path', 'admin/blog_settings/etc_edit.twig');
+    $this->set('blog_settings_start_page_list', BlogSettingsModel::getStartPageList());
+    $this->set('tab', 'etc_edit');
+    return $this->settingEdit($request, $white_list, 'etc_edit');
   }
 
   /**
