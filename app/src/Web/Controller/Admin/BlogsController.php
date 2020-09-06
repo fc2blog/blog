@@ -32,7 +32,7 @@ class BlogsController extends AdminController
     if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
       $options['page'] = 0;
     }
-    $blogs_model = Model::load('Blogs');
+    $blogs_model = new BlogsModel();
     $blogs = $blogs_model->find('all', $options);
     if ($blogs === false) $blogs = [];
     $paging = $blogs_model->getPaging($options);
