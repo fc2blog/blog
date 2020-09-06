@@ -53,7 +53,7 @@ class BlogPluginsController extends AdminController
    * @param Request $request
    * @return string
    */
-  public function official_search(Request $request)
+  public function official_search(Request $request): string
   {
     return $this->plugin_search($request, true);
   }
@@ -74,7 +74,7 @@ class BlogPluginsController extends AdminController
    * @param bool $is_official
    * @return string
    */
-  private function plugin_search(Request $request, $is_official = true)
+  private function plugin_search(Request $request, $is_official = true): string
   {
     $plugins_model = Model::load('Plugins');
 
@@ -107,8 +107,12 @@ class BlogPluginsController extends AdminController
 
     $this->set('plugins', $plugins);
     $this->set('paging', $paging);
+    $this->set('user_id', $this->getUserId());
+    $this->set('devices', Config::get('DEVICE_NAME'));
+    $this->set('req_device_name', Config::get('DEVICE_NAME')[$request->get('device_type')]);
+    $this->set('device_key', Config::get('DEVICE_FC2_KEY.' . $request->get('device_type')));
 
-    return 'BlogPlugins/plugin_search.php';
+    return 'admin/blog_plugins/plugin_search.twig';
   }
 
   /**
