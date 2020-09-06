@@ -130,7 +130,6 @@ class EntriesController extends AdminController
     $blog_id = $this->getBlogId($request);
 
     // data load
-    $request->generateNewSig();
     $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
     $this->set('open_status_list', EntriesModel::getOpenStatusList());
     $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
@@ -155,6 +154,7 @@ class EntriesController extends AdminController
 
     // 初期表示時
     if (!$request->get('entry') || !$request->isValidSig()) {
+      $request->generateNewSig();
       return "admin/entries/create.twig";
     }
 
