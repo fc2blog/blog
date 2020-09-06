@@ -134,29 +134,33 @@ class BlogsController extends AdminController
   /**
    * 削除
    * @param Request $request
+   * @return string
    */
-  public function delete(Request $request)
+  public function delete(Request $request): string
   {
+    $this->set('tab', 'blog_delete');
     // 退会チェック
-    if (!$request->get('blog.delete') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
-      return;
+    if (!$request->get('blog.delete') || !$request->isValidSig()) {
+      $request->generateNewSig();
+      return 'admin/blogs/delete.twig';
     }
 
     $blog_id = $this->getBlogId($request);
     $user_id = $this->getUserId();
 
-    // 削除データの取得
+    // 削除するブログが存在するか？
     $blogs_model = Model::load('Blogs');
     if (!$blog = $blogs_model->findByIdAndUserId($blog_id, $user_id)) {
-      $this->redirect($request, array('action' => 'index'));
+      $this->setErrorMessage(__('I failed to remove'));
+      $this->redirect($request, ['action' => 'index']);
     }
 
     // 削除処理
     $blogs_model->deleteByIdAndUserId($blog_id, $user_id);
-    $this->setBlog(null);   // ログイン中のブログを削除したのでブログの選択中状態を外す
+    $this->setBlog(null); // ログイン中のブログを削除したのでブログの選択中状態を外す
     $this->setInfoMessage(__('I removed the blog'));
-    $this->redirect($request, array('action' => 'index'));
+    $this->redirect($request, ['action' => 'index']);
+    return 'admin/blogs/delete.twig'; // 到達しないはずである
   }
 
 }
