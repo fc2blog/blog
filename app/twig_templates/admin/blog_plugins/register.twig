@@ -1,0 +1,37 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Registration of plug-in') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Registration of plug-in') }}</h2></header>
+    <p class="header_btn">
+        <a class="admin_common_btn create_btn" href="{{ url(req, 'blog_plugins', 'index') }}">{{ _('Plugin management') }}</a>
+    </p>
+
+    <form method="POST" id="sys-plugin-form" class="admin-form">
+
+        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+        <table>
+            <tbody>
+            <tr>
+                <th>{{ _('Plugin name') }}</th>
+                <td>
+                    {{ input(req, 'plugin[title]', 'text') }}
+                    {% if errors.plugin.title %}<p class="error">{{ errors.plugin.title }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Description') }}</th>
+                <td>
+                    {{ input(req, 'plugin[body]', 'textarea') }}
+                    {% if errors.plugin.body %}<p class="error">{{ errors.plugin.body }}</p>{% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <p class="form-button center">
+            <input type="submit" value="{% if blog_plugin.plugin_id %}{{ _('Update') }}{% endif %}{% if not blog_plugin.plugin_id %}{{ _('Register') }}{% endif %}"/>
+        </p>
+
+    </form>
+{% endblock %}

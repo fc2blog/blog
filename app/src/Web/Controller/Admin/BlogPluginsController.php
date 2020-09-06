@@ -231,23 +231,24 @@ class BlogPluginsController extends AdminController
   /**
    * 登録
    * @param Request $request
+   * @return string
    */
-  public function register(Request $request)
+  public function register(Request $request): string
   {
-    /** @var PluginsModel $plugins_model */
-    $plugins_model = Model::load('Plugins');
+    $plugins_model = new PluginsModel();
+    $blog_plugins_model = new BlogPluginsModel();
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
 
     // 登録データの取得
-    $blog_plugin = Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id);
+    $blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id);
     if (!$blog_plugin) {
-      $this->redirect($request, array('action' => 'index'));
+      $this->redirect($request, ['action' => 'index']);
     }
     $this->set('blog_plugin', $blog_plugin);
 
-    if (!$request->get('plugin') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('plugin') || !$request->isValidSig()) {
       // 初期値入力
       if ($blog_plugin['plugin_id']) {
         // 既に登録済み
@@ -258,27 +259,29 @@ class BlogPluginsController extends AdminController
         // 未登録
         $request->set('plugin.title', $blog_plugin['title']);
       }
-      Session::set('sig', App::genRandomString());
-      return;
+      $request->generateNewSig();
+      return 'admin/blog_plugins/register.twig';
     }
 
     // 新規登録処理
-    $errors = array();
-    $white_list = array('title', 'body');
+    $errors = [];
+    $white_list = ['title', 'body'];
     $errors['plugin'] = $plugins_model->validate($request->get('plugin'), $plugin_data, $white_list);
     if (empty($errors['plugin'])) {
       // 登録処理
-      if (Model::load('Plugins')->register($blog_plugin, $plugin_data, $this->getUserId())) {
+      if ($plugins_model->register($blog_plugin, $plugin_data, $this->getUserId())) {
         $this->setInfoMessage(__('I have registered the plug-in'));
       } else {
         $this->setErrorMessage(__('I failed to register the plug-in'));
       }
-      $this->redirect($request, array('action' => 'index'));
+      $this->redirect($request, ['action' => 'index']);
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+
+    return 'admin/blog_plugins/register.twig';
   }
 
   /**
