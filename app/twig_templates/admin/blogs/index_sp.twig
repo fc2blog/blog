@@ -1,0 +1,23 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('List of blogs') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="sh_heading_main_b">{{ _('List of blogs') }}</h1></header>
+
+    <div class="btn_area">
+        <div class="btn"><a class="btn_contents positive touch" href="{{ url(req, 'Blogs', 'create') }}">{{ _('Create a new blog') }}</a></div>
+    </div>
+
+    <h2><span class="h2_inner">{{ _('Blog ID') }}</span></h2>
+
+    <ul class="link_list">
+        {% for blog in blogs %}
+            <li class="link_list_item {% if blog_id == blog.id %}selected{% endif %}">
+                <a href="{{ url(req, 'Blogs', 'choice', {blog_id: blog.id}) }}" class="common_next_link next_bg">{{ blog.id }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% include('admin/common/paging_sp.twig') %}
+
+{% endblock %}
