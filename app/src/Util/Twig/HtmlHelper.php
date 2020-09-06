@@ -49,6 +49,17 @@ class HtmlHelper extends AbstractExtension
         ['is_safe' => ['html']]
       ),
       new TwigFunction(
+        'blogUrl',
+        function (Request $request, $blog_id, $is_sp = false) {
+          $opt = ['controller' => 'Entries', 'action' => 'index', 'blog_id' => $blog_id];
+          if ($is_sp) {
+            $opt['sp'] = "1";
+          }
+          return App::userURL($request, $opt, false, true);
+        },
+        ['is_safe' => ['html']]
+      ),
+      new TwigFunction(
         'userPreviewUrl',
         function (Request $request, $blog_id, $template_id, $device_key) {
           $opt = ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $blog_id, 'template_id' => $template_id, $device_key => 1];
