@@ -166,8 +166,9 @@ class BlogPluginsController extends AdminController
   /**
    * 編集
    * @param Request $request
+   * @return string
    */
-  public function edit(Request $request)
+  public function edit(Request $request): string
   {
     /** @var BlogPluginsModel $blog_plugins_model */
     $blog_plugins_model = Model::load('BlogPlugins');
@@ -175,16 +176,22 @@ class BlogPluginsController extends AdminController
     $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
 
+    $this->set('blog_plugin_attribute_align', BlogPluginsModel::getAttributeAlign());
+    $this->set('blog_plugin_attribute_color', BlogPluginsModel::getAttributeColor());
+    $this->set('device_key_list', Config::get('DEVICE_FC2_KEY'));
+    $this->set('device_type', $request->get('blog_plugin.device_type'));
+    $this->set('device_type_sp', Config::get('DEVICE_SP'));
+
     // 編集対象のデータ取得
     if (!$blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id)) {
       $this->redirect($request, array('action' => 'index'));
     }
 
     // 初期表示時に編集データの設定
-    if (!$request->get('blog_plugin') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('blog_plugin') || !$request->isValidSig()) {
       $request->set('blog_plugin', $blog_plugin);
-      Session::set('sig', App::genRandomString());
-      return;
+      $request->generateNewSig();
+      return "admin/blog_plugins/edit.twig";
     }
 
     // 更新処理
@@ -194,13 +201,15 @@ class BlogPluginsController extends AdminController
     if (empty($errors['blog_plugin'])) {
       if ($blog_plugins_model->updateByIdAndBlogId($blog_plugin_data, $id, $blog_id)) {
         $this->setInfoMessage(__('I have updated the plugin'));
-        $this->redirect($request, array('action' => 'index', 'device_type' => $blog_plugin['device_type']));
+        $this->redirect($request, ['action' => 'index', 'device_type' => $blog_plugin['device_type']]);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+
+    return "admin/blog_plugins/edit.twig";
   }
 
   /**
