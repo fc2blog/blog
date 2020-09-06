@@ -2,12 +2,10 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Session;
 
 class BlogsController extends AdminController
 {
@@ -45,32 +43,33 @@ class BlogsController extends AdminController
   /**
    * 新規作成
    * @param Request $request
+   * @return string
    */
-  public function create(Request $request)
+  public function create(Request $request): string
   {
     // 初期表示時
-    if (!$request->get('blog') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
-      return;
+    if (!$request->get('blog') || !$request->isValidSig()) {
+      $request->generateNewSig();
+      return 'admin/blogs/create.twig';
     }
 
-    /** @var BlogsModel $blogs_model */
-    $blogs_model = Model::load('Blogs');
+    $blogs_model = new BlogsModel();
 
     // 新規登録処理
-    $errors = array();
-    $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, array('id', 'name', 'nickname'));
+    $errors = [];
+    $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, ['id', 'name', 'nickname']);
     if (empty($errors['blog'])) {
       $blog_data['user_id'] = $this->getUserId();
       if ($id = $blogs_model->insert($blog_data)) {
         $this->setInfoMessage(__('I created a blog'));
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, ['action' => 'index']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return 'admin/blogs/create.twig';
   }
 
   /**

@@ -1,0 +1,43 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('New registration of the blog') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('New registration of the blog') }}</h2></header>
+
+    <form method="POST" class="admin-form">
+
+        <table>
+            <tbody>
+            <tr>
+                <th>{{ _('Blog ID') }}</th>
+                <td>
+                    {{ input(req, 'blog[id]', 'text', {'maxlength': 50}) }}
+                    {% if errors.blog.id %}<p class="error">{{ errors.blog.id }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Blog name') }}</th>
+                <td>
+                    {{ input(req, 'blog[name]', 'text', {'maxlength': 255}) }}
+                    {% if errors.blog.name %}<p class="error">{{ errors.blog.name }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Nickname') }}</th>
+                <td>
+                    {{ input(req, 'blog[nickname]', 'text', {'maxlength': 255}) }}
+                    {% if errors.blog.nickname %}<p class="error">{{ errors.blog.nickname }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="submit" value="{{ _('Register') }}"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <input type="hidden" name="sig" value="{{ sig }}">
+
+    </form>
+{% endblock %}
