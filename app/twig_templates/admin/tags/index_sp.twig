@@ -1,0 +1,37 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('List of tags') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('List of tags') }}</span><span class="accordion_btn"><i class="search_icon btn_icon"></i></span></h1></header>
+    <div id="entry_search" class="accordion_contents" style="display:none;">
+        <form method="GET" id="sys-search-form">
+            <input type="hidden" name="mode" value="Tags"/>
+            <input type="hidden" name="process" value="index"/>
+            {{ input(req, 'limit', 'hidden', {'default': tag_default_limit}) }}
+            {{ input(req, 'page', 'hidden', {'default': 0}) }}
+            {{ input(req, 'order', 'hidden', {'default': 'count_desc'}) }}
+            <dl class="input_search">
+                <dt class="lineform_text_wrap common_input_text">{{ input(req, 'name', 'text', {'placeholder': _('Tag name')}) }}</dt>
+                <dd class="lineform_btn_wrap">
+                    <button type="submit" class="lineform_btn touch">{{ _('Search') }}</button>
+                </dd>
+            </dl>
+        </form>
+    </div>
+
+    <ul class="link_list">
+        {% for tag in tags %}
+        <li class="link_list_item">
+            <a href="{{ url(req, 'Tags', 'edit', {id: tag.id}) }}" class="common_next_link next_bg">
+                <dl>
+                    <dt class="item_title">{{ tag.name }}</dt>
+                    <dd class="state"><i class="entry_state detail_icon"></i>{{ tag.count }}</dd>
+                </dl>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% include('admin/common/paging_sp.twig') %}
+
+{% endblock %}
