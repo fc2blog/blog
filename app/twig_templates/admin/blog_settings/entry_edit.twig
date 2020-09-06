@@ -1,0 +1,49 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Article setting') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Article setting') }}</h2></header>
+
+    {% include('admin/blogs/tab.twig') %}
+
+    <form method="POST" id="sys-blog-template-form" class="admin-form">
+
+        <table>
+            <tbody>
+            <tr>
+                <th>{{ _('Display the latest entries') }}</th>
+                <td>
+                    {{ input(req, 'blog_setting[entry_recent_display_count]', 'text', {'maxlength': 3}) }}
+                    {% if errors.blog_setting.entry_recent_display_count %}<p class="error">{{ errors.blog_setting.entry_recent_display_count }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Display the number of articles, display order') }}</th>
+                <td>
+                    {{ input(req, 'blog_setting[entry_display_count]', 'text', {'maxlength': 10}) }}
+                    {% if errors.blog_setting.entry_display_count %}<p class="error">{{ errors.blog_setting.entry_display_count }}</p>{% endif %}
+                    {{ input(req, 'blog_setting[entry_order]', 'select', {'options': blog_settings_entry_order_list}) }}
+                    {% if errors.blog_setting.entry_order %}<p class="error">{{ errors.blog_setting.entry_order }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ _('Password of the article view') }}<br/>
+                    ({{ _('It is adapted to the password is not set at the time of the article') }})
+                </th>
+                <td>
+                    {{ input(req, 'blog_setting[entry_password]', 'text') }}
+                    {% if errors.blog_setting.entry_password %}<p class="error">{{ errors.blog_setting.entry_password }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="submit" value="{{ _('Update') }}"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="sig" value="{{ sig }}">
+
+    </form>
+{% endblock %}
