@@ -15,19 +15,37 @@ class BlogPluginsController extends AdminController
 
   /**
    * 一覧表示
-   * @param $request
+   * @param Request $request
+   * @return string
    */
-  public function index($request)
+  public function index(Request $request): string
   {
-    Session::set('sig', App::genRandomString());
+    $request->generateNewSig();
 
     $blog_id = $this->getBlogId($request);
     $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
-    $request->set('device_type', $device_type);
+    $this->set('device_type', $device_type);
+    $this->set('devices', Config::get('DEVICE_NAME'));
 
     // デバイス毎に分けられたテンプレート一覧を取得
     $category_blog_plugins = Model::load('BlogPlugins')->getCategoryPlugins($blog_id, $device_type);
     $this->set('category_blog_plugins', $category_blog_plugins);
+    $this->set('app_display_show', Config::get('APP.DISPLAY.SHOW'));
+    $this->set('app_display_hide', Config::get('APP.DISPLAY.HIDE'));
+
+    $blog_plugin_json = [];
+    foreach ($category_blog_plugins as $category => $blog_plugins) {
+      foreach ($blog_plugins as $blog_plugin) {
+        $json[] = array(
+          'id' => $blog_plugin['id'],
+          'category' => $blog_plugin['category'],
+          'title' => $blog_plugin['title'],
+        );
+      }
+    }
+    $this->set('blog_plugin_json', $blog_plugin_json);
+
+    return "admin/blog_plugins/index.twig";
   }
 
   /**

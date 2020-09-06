@@ -1,0 +1,304 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Plugin management') }}{% endblock %}
+
+{% block content %}
+    <script type="text/javascript" src="/js/jquery/jquery-toggles/toggles.js"></script>
+
+    <header><h1 class="sh_heading_main_b">{{ _('Plugin management') }}</h1></header>
+
+    <div class="form_area">
+        <div class="form_contents">
+            <select onchange="location.href=$(this).val();">
+                {% for type, name in devices %}
+                    <option value="{{ url(req, 'BlogPlugins', 'index', {device_type: type}) }}" {% if device_type==type %}selected="selected"{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div id="sys-index" class="plugin_general">
+        <h2><span class="h2_inner">{{ _('Settings of the plug-in') }}</span></h2>
+        <div class="switch_area">
+            <div class="form_contents">
+                <ul class="common_radio">
+                    <li class="common_radio_item"><input name="plugin_radio" type="radio" value="detail" id="plugin_radio_detail" class="common_input_radio" checked="checked"><label for="plugin_radio_detail" class="common_radio_label touch">{{ _('Advanced setting') }}</label></li>
+                    <li class="common_radio_item"><input name="plugin_radio" type="radio" value="display" id="plugin_radio_display" class="common_input_radio"><label for="plugin_radio_display" class="common_radio_label touch">{{ _('Display Settings') }}</label></li>
+                    <li class="common_radio_item"><input name="plugin_radio" type="radio" value="sort" id="plugin_radio_sort" class="common_input_radio"><label for="plugin_radio_sort" class="common_radio_label touch">{{ _('Sorting') }}</label></li>
+                </ul>
+            </div>
+        </div>
+        {% for category, blog_plugins in category_blog_plugins %}
+            <h3><span class="h3_inner">{{ _('Category') }}{{ category }}</span></h3>
+            <ul class="link_list ui-sortable">
+                {% for blog_plugin in blog_plugins %}
+                    <li class="link_list_item">
+                        <a class="common_next_link next_bg" href="{{ url(req, 'BlogPlugins', 'edit', {id: blog_plugin.id}) }}">
+                            <span class="plugin_title">{{ t(blog_plugin.title, 20) }}</span>
+                            <span class="contents_status"><span class="check_icon_text">{% if blog_plugin.display == app_display_show %}<i class="green_check_icon btn_icon"></i>{{ _('Show') }}{% endif %}{% if blog_plugin.display != app_display_show %}{{ _('Hide') }}{% endif %}</span></span>
+                        </a>
+                        <div class="switch_checkbox" style="display: none;">
+                            <div class="toggle toggle-light" style="height: 22px; width: 78px;"></div>
+                            <input type="checkbox" value="{{ blog_plugin.id }}" class="toggle" {% if blog_plugin.display == app_display_show %}checked="checked"{% endif %}/>
+                        </div>
+                        <i class="sortable_icon btn_icon" style="display: none;"></i>
+                    </li>
+                {% endfor %}
+                <li class="link_list_item link_list_none"><a class="common_next_link">{{ _('Plug-in is not set') }}</a></li>
+            </ul>
+            <div class="btn_area plugin_detail_show">
+                <ul class="btn_area_inner">
+                    <li>
+                        <button class="btn_contents touch" onclick="location.href='{{ url(req, 'BlogPlugins', 'official_search', {device_type: device_type, category: category}) }}';"><i class="btn_icon"></i>{{ _('Official Plugin Search') }}</button>
+                    </li>
+                    <li>
+                        <button class="btn_contents touch" onclick="location.href='{{ url(req, 'BlogPlugins', 'share_search', {device_type: device_type, category: category}) }}';"><i class="btn_icon"></i>{{ _('Share Plugin Search') }}</button>
+                    </li>
+                </ul>
+            </div>
+        {% endfor %}
+
+        <div class="btn_area" id="btn_area_display" style="display: none;">
+            <ul class="btn_area_inner">
+                <li>
+                    <button class="btn_contents positive touch"><i class="btn_icon"></i>{{ _('Setting') }}</button>
+                </li>
+            </ul>
+        </div>
+        <div class="btn_area" id="btn_area_sort" style="display: none;">
+            <ul class="btn_area_inner">
+                <li>
+                    <button class="btn_contents positive touch"><i class="btn_icon"></i>{{ _('Setting') }}</button>
+                </li>
+            </ul>
+        </div>
+
+        <form action="{{ url(req, 'BlogPlugins', 'display_changes') }}" method="POST" id="sys-display">
+            <input type="hidden" name="device_type" value="{{ device_type }}"/>
+            <input type="hidden" name="sig" value="{{ sig }}"/>
+        </form>
+        <form action="{{ url(req, 'BlogPlugins', 'sort') }}" method="POST" id="sys-order">
+            <input type="hidden" name="device_type" value="{{ device_type }}"/>
+            <input type="hidden" name="sig" value="{{ sig }}"/>
+        </form>
+
+    </div>
+
+    <style>
+        /* プラグイン未設定表示用 */
+        li.link_list_none {
+            display: none;
+        }
+
+        ul.link_list > li:first-child:last-child {
+            display: block;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            // 初期データを取得
+            var blog_plugins = {};
+            var category_order = [];    // 並び替え戻し用
+            $('ul.link_list').each(function () {
+                var category = $('ul.link_list').index($(this)) + 1;
+                var index = 0;
+                category_order[category] = [];
+                $(this).find('input[type=checkbox]').each(function () {
+                    var id = $(this).val();
+                    blog_plugins[id] = {
+                        category: category,
+                        index: index++,
+                        checked: $(this).prop('checked')
+                    }
+                    category_order[category].push(id);
+                });
+            });
+
+            // 並び順のチェックと完了ボタンの表示可否
+            var isSortChange = function () {
+                var cond = false;
+                $('ul.link_list').each(function () {
+                    var category = $('ul.link_list').index($(this)) + 1;
+                    var index = 0;
+                    $(this).find('input[type=checkbox]').each(function () {
+                        var blog_plugin = blog_plugins[$(this).val()];
+                        if (blog_plugin['category'] != category || blog_plugin['index'] != index) {
+                            cond = true;
+                        }
+                        index++;
+                    });
+                });
+                return cond;
+            };
+            var sortButtonShow = function () {
+                if (isSortChange()) {
+                    $('#btn_area_sort').slideDown();
+                } else {
+                    $('#btn_area_sort').slideUp();
+                }
+            };
+            // 表示可否のチェックと完了ボタンの表示可否
+            var isDisplayChange = function () {
+                var cond = false;
+                $('ul.link_list input[type=checkbox]').each(function () {
+                    if (blog_plugins[$(this).val()]['checked'] != $(this).prop('checked')) {
+                        cond = true;
+                    }
+                });
+                return cond;
+            };
+            var displayButtonShow = function () {
+                if (isDisplayChange()) {
+                    $('#btn_area_display').slideDown();
+                } else {
+                    $('#btn_area_display').slideUp();
+                }
+            };
+            // 作業状態変更
+            var pluginState = 'detail';
+            var pluginSwitch = function (state) {
+                if (pluginState == 'display' && state != 'display' && isDisplayChange()) {
+                    if (!confirm('{{ _('Display settings you have changed will return to the original Are you sure?') }}')) {
+                        $('#plugin_radio_display').prop('checked', true);
+                        return;
+                    }
+                    // 変更した内容を戻す処理
+                    $('ul.link_list input[type=checkbox]').each(function () {
+                        if (blog_plugins[$(this).val()]['checked'] != $(this).prop('checked')) {
+                            $(this).prev().click();
+                        }
+                    });
+                } else if (pluginState == 'sort' && state != 'sort' && isSortChange()) {
+                    if (!confirm('{{ _('The sort order that you have changed will return to the original Are you sure?') }}')) {
+                        $('#plugin_radio_sort').prop('checked', true);
+                        return;
+                    }
+                    // 変更した内容を戻す処理
+                    $('ul.link_list').each(function () {
+                        var order = category_order[$('ul.link_list').index($(this)) + 1];
+                        for (var i = 0; i < order.length; i++) {
+                            $(this).append($('ul.link_list > li.link_list_item input[type=checkbox][value=' + (order[i]) + ']').closest('li'));
+                        }
+                    });
+                }
+                pluginState = state;
+
+                // 各初期化処理
+                $('.link_list_item > a').off('click').removeClass('next_bg'); // aタグのリンクアイコン非表示
+                $('.switch_checkbox').hide();                                 // 表示可否のスイッチを非表示
+                $('.plugin_detail_show').hide();                              // プラグイン検索リンクを非表示
+                $('.sortable_icon').hide();                                   // 並び替え用を非表示
+                $('.contents_status').hide();                                 // 表示・非表示を非表示
+                $('#btn_area_display').hide();                                // 表示可否設定の決定ボタン非表示
+                $('#btn_area_sort').hide();                                   // 並べ替え設定の完了ボタン非表示
+
+                switch (pluginState) {
+                    case 'detail':
+                        $('.link_list_item:not(.link_list_none) > a').addClass('next_bg');
+                        $('.plugin_detail_show').show();
+                        $('.contents_status').show();
+                        break;
+
+                    case 'display':
+                        $('.link_list_item > a').on('click', function () {
+                            $(this).next().children('.toggle').click();
+                            var checkbox = $(this).next().children('input:checkbox.toggle');
+                            checkbox.prop('checked', !checkbox.prop('checked'));
+                            return false;
+                        });
+                        $('.switch_checkbox').show();
+                        displayButtonShow();
+                        break;
+
+                    case 'sort':
+                        $('.link_list_item > a').on('click', function () {
+                            return false;
+                        });
+                        $('.sortable_icon').show();
+                        sortButtonShow();
+                        break;
+                }
+            };
+
+            $('#plugin_radio_detail').on('click', function () {
+                pluginSwitch('detail');
+            });
+            $('#plugin_radio_display').on('click', function () {
+                pluginSwitch('display');
+            });
+            $('#plugin_radio_sort').on('click', function () {
+                pluginSwitch('sort');
+            });
+
+            // 並べ替え設定
+            $('.link_list').sortable({
+                connectWith: '.link_list',
+                handle: 'i.sortable_icon',
+                axis: 'y',
+                update: function (event, ui) {
+                    sortButtonShow();
+                }
+            });
+
+            // チェックボックスをトグル化
+            $('input:checkbox.toggle').each(function () {
+                $(this).prev().toggles({
+                    text: {on: '{{ _('Show') }}', off: '{{ _('Hide') }}'},
+                    width: 78,
+                    height: 22,
+                    on: $(this).prop('checked')
+                });
+            });
+
+            // 変更をチェックボックスに反映
+            $('.toggle-light').on('toggle', function (e, active) {
+                $(e.currentTarget).next().prop('checked', active);
+                displayButtonShow();
+            });
+            // CSS微調整
+            $('.toggle-on').css({textIndent: -5});
+            $('.toggle-off').css({textIndent: 5});
+
+            // 並び替え完了処理
+            $('#btn_area_sort button').on('click', function () {
+                $(this).html('{{ _('Is communicating ...') }}');
+                var form = $('#sys-order');
+                $('ul.link_list').each(function () {
+                    var category = $('ul.link_list').index($(this)) + 1;
+                    var index = 0;
+                    $(this).find('input[type=checkbox]').each(function () {
+                        var id = $(this).val();
+                        form.append('<input type="hidden" name="blog_plugins[' + id + '][order]" value="' + index + '" />');
+                        form.append('<input type="hidden" name="blog_plugins[' + id + '][category]" value="' + category + '" />');
+                        index++;
+                    });
+                });
+                form.submit();
+            });
+
+            // 表示可否完了処理
+            $('#btn_area_display button').on('click', function () {
+                $(this).html('{{ _('Is communicating ...') }}');
+                var form = $('#sys-display');
+                $('ul.link_list input[type=checkbox]').each(function () {
+                    form.append('<input type="hidden" name="blog_plugins[' + $(this).val() + ']" value="'
+                        + ($(this).prop('checked') ? {{ app_display_show }} : {{ app_display_hide }}) + '" />');
+                });
+                form.submit();
+            });
+
+            // 初期表示
+            {% if req.get('state') == 'display' %}
+            $('#plugin_radio_display').prop('checked', true);
+            pluginSwitch('display');
+            {% endif %}
+            {% if req.get('state') == 'sort' %}
+            $('#plugin_radio_sort').prop('checked', true);
+            pluginSwitch('sort');
+            {% endif %}
+            {% if req.get('state') != 'display' and req.get('state') == 'sort' %}
+            pluginSwitch('detail');
+            {% endif %}
+        });
+    </script>
+{% endblock %}
