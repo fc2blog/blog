@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('Category management'); ?></h2></header>
 
 <?php if (!$is_limit_create_category) : ?>
