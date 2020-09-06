@@ -13,15 +13,25 @@ class BlogSettingsController extends AdminController
   /**
    * コメント編集
    * @param Request $request
+   * @return string
    */
-  public function comment_edit(Request $request)
+  public function comment_edit(Request $request): string
   {
     $white_list = array(
       'comment_confirm', 'comment_display_approval', 'comment_display_private',
       'comment_cookie_save', 'comment_captcha',
       'comment_order', 'comment_display_count', 'comment_quote'
     );
-    $this->settingEdit($request, $white_list, 'comment_edit');
+    $this->set('template_path', 'admin/blog_settings/comment_edit.twig');
+    $this->set('tab', 'comment_edit');
+    $this->set('blog_settings_comment_confirm_list', BlogSettingsModel::getCommentConfirmList());
+    $this->set('blog_settings_comment_display_approval_list', BlogSettingsModel::getCommentDisplayApprovalList());
+    $this->set('blog_settings_comment_display_private_list', BlogSettingsModel::getCommentDisplayPrivateList());
+    $this->set('blog_settings_comment_cookie_save_list', BlogSettingsModel::getCommentCookieSaveList());
+    $this->set('blog_settings_comment_captcha_list', BlogSettingsModel::getCommentCaptchaList());
+    $this->set('blog_settings_comment_order_list', BlogSettingsModel::getCommentOrderList());
+    $this->set('blog_settings_comment_quote_list', BlogSettingsModel::getCommentQuoteList());
+    return $this->settingEdit($request, $white_list, 'comment_edit');
   }
 
   /**
