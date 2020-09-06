@@ -7,6 +7,7 @@ namespace Fc2blog\Util\Twig;
 use Fc2blog\App;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -59,7 +60,7 @@ class HtmlHelper extends AbstractExtension
         'userUrl',
         function (Request $request, array $args = [], bool $reused = false, bool $abs = false) {
           $opt = array_merge(['controller' => 'Entries', 'action' => 'preview'], $args);
-          return App::userURL($request, $opt, $reused , $abs);
+          return App::userURL($request, $opt, $reused, $abs);
         },
         ['is_safe' => ['html']]
       ),
@@ -168,7 +169,7 @@ class HtmlHelper extends AbstractExtension
                 if ($is_sp) {
                   echo "</li></ul>";
                 } else {
-                  echo "</ul>";
+                  echo "</ul>"; // TODO 元ソースからのミスであり、上だけでよく、こちらは不要かもしれない
                 }
               }
             }
@@ -198,6 +199,51 @@ class HtmlHelper extends AbstractExtension
                              onclick="categoryChange(this);"
                       />
                       <label for="sys-entry-categories-id-<?php echo $category['id']; ?>"><?php echo h($category['name']); ?></label>
+                  </li>
+                <?php
+              }
+            }
+          }
+          // タグを全部閉じる
+          for (; $level > 1; $level--) {
+            echo "</li></ul>";
+          }
+        },
+      ),
+      new TwigFunction( // TODO refactoring. for /admin/categories/create
+        'renderCategoriesTree2',
+        function (Request $request, array $categories, bool $is_sp = false) {
+          $level = 1;
+          foreach ($categories as $category) {
+            if ($level < $category['level']) {
+              $level = $category['level'];
+              echo "<li><ul>";
+            }
+
+            if ($level > $category['level']) {
+              for (; $level > $category['level']; $level--) {
+                echo "</li></ul>";
+              }
+            }
+
+            if ($level == $category['level']) {
+              if ($is_sp) { ?>
+                  <li>
+                      <p>
+                          <a href="<?php echo Html::url($request, array('action' => 'edit', 'id' => $category['id'])); ?>"><?php echo h($category['name']); ?>
+                              (<?php echo $category['count']; ?>)</a>
+                      </p>
+                  </li>
+                <?php
+              } else {
+                ?>
+                  <li>
+                      <a href="<?php echo Html::url($request, array('action' => 'edit', 'id' => $category['id'])); ?>"><?php echo h($category['name']); ?>
+                          (<?php echo $category['count']; ?>)</a>
+                    <?php if ($category['id'] != 1) : ?>
+                        <a href="<?php echo Html::url($request, array('action' => 'delete', 'id' => $category['id'], 'sig' => Session::get('sig'))); ?>"
+                           onclick="return confirm('<?php echo __('If the child category exists\nRemove all along with the child category, but do you really want?'); ?>');"><?php echo __('Delete'); ?></a>
+                    <?php endif; ?>
                   </li>
                 <?php
               }
