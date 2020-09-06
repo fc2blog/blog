@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <?php \Fc2blog\Web\Html::addJS('/js/jquery/jquery-toggles/toggles.js'); ?>
 
 <header><h1 class="sh_heading_main_b"><?php echo __('Plugin management'); ?></h1></header>

@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('Plugin management'); ?></h2></header>
 
 <?php $device_type = $request->get('device_type'); ?>
