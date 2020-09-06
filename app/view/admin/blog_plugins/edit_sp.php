@@ -1,3 +1,5 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
+
 <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title"><?php echo __('I want to edit the plugin'); ?></span></h1></header>
 
 <form method="POST" id="sys-blog-plugin-form" class="admin-form">
