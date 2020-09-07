@@ -1,0 +1,44 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Withdrawal process') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Withdrawal process') }}</h2></header>
+
+    {% include('admin/users/tab.twig') %}
+
+    <form method="POST" id="sys-users-form" class="admin-form">
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+
+        <table>
+            <tbody>
+            <tr>
+                <th>{{ _('Unsubscribe confirmation') }}</th>
+                <td>
+                    <input type="checkbox" name="user[delete]" id="sys-user-delete"/>
+                    <label for="sys-user-delete">{{ _('Unsubscribe') }}</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="button" value="{{ _('Withdrawal') }}" id="sys-withdrawal"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </form>
+
+    <script>
+        $(function () {
+            $('#sys-withdrawal').on('click', function () {
+                if ($('input[name="user[delete]"]:checked').length != 1) {
+                    alert('{{ _('Please check the box "unsubscribe"') }}');
+                    return;
+                }
+                if (confirm('{{ _('Can not be undone if you unsubscribe. Are you sure you want to unsubscribe really?') }}')) {
+                    $('#sys-users-form').submit();
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -2,7 +2,7 @@
     <li class="tab_item {% if tab == 'edit' %}selected{% endif %}">
         <a href="{{ url(req, 'Users', 'edit') }}">{{ _('User setting') }}</a>
     </li>
-    <li class="tab_item {% if tab == 'withdrawal' %}withdrawal{% endif %}">
+    <li class="tab_item {% if tab == 'withdrawal' %}selected{% endif %}">
         <a href="{{ url(req, 'Users', 'withdrawal') }}">{{ _('Withdrawal process') }}</a>
     </li>
 </ul>

@@ -2,7 +2,6 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
@@ -124,19 +123,23 @@ class UsersController extends AdminController
   /**
    * 退会
    * @param Request $request
+   * @return string
    */
-  public function withdrawal(Request $request)
+  public function withdrawal(Request $request): string
   {
+    $this->set('tab', 'withdrawal');
+
     // 退会チェック
-    if (!$request->get('user.delete') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
-      return ;
+    if (!$request->get('user.delete') || !$request->isValidSig()) {
+      $request->generateNewSig();
+      return 'admin/users/withdrawal.twig';
     }
 
     // 削除処理
     Model::load('Users')->deleteById($this->getUserId());
     $this->setInfoMessage(__('Was completed withdrawal'));
     $this->logout($request);
+    return 'admin/users/withdrawal.twig';
   }
 
   /**
