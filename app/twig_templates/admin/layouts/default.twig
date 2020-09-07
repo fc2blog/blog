@@ -2,7 +2,7 @@
 <html lang="{{ lang }}">
 <head>
     <meta charset="utf-8">
-    <title>{{ block('title') }}</title>
+    <title>{{ block('title') }}{% if blog.id %} - {{ blog.id }}{% endif %}</title>
     <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
     <link rel="stylesheet" href="/css/normalize.css" type="text/css" media="all">
     <link rel="stylesheet" href="/css/admin-fc2.css" type="text/css" media="all">
