@@ -2,7 +2,7 @@
     <tbody>
     <tr>
         <th>{{ _('Article name') }}</th>
-        <td><a href="{{ entryUrl(req, comment.blog_id, comment.entry_id}) }}" target="_blank">{{ comment.entry_title }}</a></td>
+        <td><a href="{{ entryUrl(req, comment.blog_id, comment.entry_id) }}" target="_blank">{{ comment.entry_title }}</a></td>
     </tr>
     <tr>
         <th>{{ _('Contributor') }}</th>
@@ -14,7 +14,7 @@
     </tr>
     <tr>
         <th>{{ _('Body') }}</th>
-        <td>{{ comment|nl2br }}</td>
+        <td>{{ comment.body|nl2br }}</td>
     </tr>
     {% if comment.mail %}
         <tr>
@@ -58,7 +58,7 @@
 <form method="POST" id="sys-comment-form" class="admin-form">
 
     {% if comment.open_status != comment_open_status_private %}
-        {{ input(req, 'comment[reply_body]', 'textarea', {'style'=>'width: 95%; height: 200px;'}) }}
+        {{ input(req, 'comment[reply_body]', 'textarea', {'style': 'width: 95%; height: 200px;'}) }}
         <p class="error" style="display: none;" id="sys-reply-error"></p>
 
         <p class="mb20">
