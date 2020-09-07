@@ -255,10 +255,7 @@ class CommentsController extends AdminController
    */
   public function ajax_reply(Request $request)
   {
-    $this->layout = 'ajax.php';
-
-    /** @var CommentsModel $comments_model */
-    $comments_model = Model::load('Comments');
+    $comments_model = new CommentsModel();
 
     $comment_id = $request->get('id');
     $blog_id = $this->getBlogId($request);
@@ -277,7 +274,7 @@ class CommentsController extends AdminController
         $comment['reply_body'] = '> ' . str_replace("\n", "\n> ", $comment['body']) . "\n";
       }
       $request->set('comment', $comment);
-      return;
+      return "admin/comments/ajax_reply.twig";
     }
 
     // 下記の入力チェック処理以降はjsonで返却
@@ -288,11 +285,12 @@ class CommentsController extends AdminController
     if (empty($errors)) {
       if ($comments_model->updateReply($data, $comment)) {
         $this->set('json', array('success' => 1));
-        return;
+        return "admin/comments/ajax_reply.twig";
       }
     }
 
     $this->set('json', array('error' => $errors['reply_body']));
+    return "admin/comments/ajax_reply.twig";
   }
 
   /**
