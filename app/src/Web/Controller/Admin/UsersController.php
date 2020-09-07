@@ -84,37 +84,41 @@ class UsersController extends AdminController
   /**
    * ユーザー情報変更処理
    * @param Request $request
+   * @return string
    */
-  public function edit(Request $request)
+  public function edit(Request $request): string
   {
-    /** @var UsersModel $users_model */
-    $users_model = Model::load('Users');
-
+    $users_model = new UsersModel();
     $user_id = $this->getUserId();
+    $this->set('tab', 'edit');
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('user') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
+    if (!$request->get('user') || !$request->isValidSig()) {
+      $request->generateNewSig();
       $user = $users_model->findById($user_id);
       unset($user['password']);
       $request->set('user', $user);
-      return;
+      $blogs_model = new BlogsModel();
+      $this->set('blogs_list', $blogs_model->getListByUserId($user_id));
+      return 'admin/users/edit.twig';
     }
 
     // 更新処理
-    $errors = array();
-    $white_list = array('password', 'login_blog_id');
+    $errors = [];
+    $white_list = ['password', 'login_blog_id'];
     $errors['user'] = $users_model->updateValidate($request->get('user'), $data_user, $white_list);
     if (empty($errors['user'])) {
       if ($users_model->updateById($data_user, $user_id)) {
         $this->setInfoMessage(__('Update User Information'));
-        $this->redirect($request, array('action' => 'edit'));
+        $this->redirect($request, ['action' => 'edit']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+
+    return 'admin/users/edit.twig';
   }
 
   /**

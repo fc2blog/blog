@@ -1,0 +1,38 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('User setting') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('User setting') }}</h2></header>
+
+    {% include('admin/users/tab.twig') %}
+
+    <form method="POST" id="sys-users-form" class="admin-form">
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+
+        <table>
+            <tbody>
+            <tr>
+                <th>{{ _('Change Password') }}</th>
+                <td>
+                    {{ input(req, 'user[password]', 'password') }}
+                    {% if errors.user.password %}<p class="error">{{ errors.user.password }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Blog ID at login') }}</th>
+                <td>
+                    {{ input(req, 'user[login_blog_id]', 'select', {'options': blogs_list}) }}
+                    {% if errors.user.login_blog_id %}<p class="error">{{ errors.user.login_blog_id }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="submit" value="{{ _('Update') }}"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </form>
+
+{% endblock %}
