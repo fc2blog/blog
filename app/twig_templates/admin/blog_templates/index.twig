@@ -36,7 +36,7 @@
                         </td>
                     {% endif %}
                     <td class="center">
-                        <a href="{{ userPreviewUrl(req, blog_id, blog_template.id, blog_template.device_key) }}" target="_blank">{{ _('Preview') }}</a>
+                        <a href="{{ userPreviewUrl(req, blog.id, blog_template.id, blog_template.device_key) }}" target="_blank">{{ _('Preview') }}</a>
                     </td>
                     <td class="center">
                         {% if inArray(blog_template.id, template_ids) %}
