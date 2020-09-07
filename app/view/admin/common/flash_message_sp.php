@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <?php if (!empty($messages['error'])) :?>
   <!-- エラー -->
   <div class="flash-message flash-message-error" style="display: none;">

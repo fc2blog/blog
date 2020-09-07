@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('Environment Check'); ?></h2></header>
 <style>
 ul.check > li

@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('Installation complete'); ?></h2></header>
 
 <?php echo __('The installation was completed'); ?><br />

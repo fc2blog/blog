@@ -1,3 +1,4 @@
+<?php throw new LogicException("Already converted to twig. something wrong."); ?>
 <header><h2><?php echo __('Administrator registration'); ?></h2></header>
 
 <form method="POST" class="admin-form">
