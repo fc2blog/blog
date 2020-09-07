@@ -30,7 +30,7 @@
                     <a href="{{ url(req, 'blog_plugins', 'download', {id: plugin.id, category: req.get('category'), sig: sig}) }}">{{ _('Download') }}</a>
                 </td>
                 <td class="center">
-                    <a href="{{ url(req, 'Entries', 'preview', {blog_id: blog_id, plugin_id: plugin.id, category: req.get('category'), device_key: 1}, false, true) }}" target="_blank">{{ _('Preview') }}</a>
+                    <a href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, plugin_id: plugin.id, category: req.get('category'), device_key: 1}, false, true) }}" target="_blank">{{ _('Preview') }}</a>
                 </td>
                 <td class="center">
                     {% if user_id == plugin.user_id %}

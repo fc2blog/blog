@@ -183,7 +183,7 @@
         $('#sys-entry-form-preview').click(function () {
             source['body'] = $('#sys-entry-body').elrte('val');   // submit用に値が変わるので一旦保存
             source['extend'] = $('#sys-entry-extend').elrte('val');   // submit用に値が変わるので一旦保存
-            var action = '{{ url(req, 'Entries', 'preview', {'blog_id' : blog_id}, false ,true) }}';
+            var action = '{{ url(req, 'Entries', 'preview', {'blog_id' : blog.id}, false ,true) }}';
             $('#sys-entry-form').prop('action', action);
             $('#sys-entry-form').prop('target', '_preview');
             $('#sys-entry-form').submit();

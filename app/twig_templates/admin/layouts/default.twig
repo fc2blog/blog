@@ -45,7 +45,7 @@
                 {{ _('Blog name') }}：
                 <select id="sys-blog-change">
                     {% for key, blog in blog_list %}
-                        <option value="{{ key }}" {% if blog_id == key %}selected="selected"{% endif %}>{{ blog }}</option>
+                        <option value="{{ key }}" {% if blog.id == key %}selected="selected"{% endif %}>{{ blog }}</option>
                     {% endfor %}
                     <option disabled="disabled">--------------</option>
                     <option value="">{{ _('Create a new blog') }}</option>

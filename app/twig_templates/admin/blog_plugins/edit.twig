@@ -65,7 +65,7 @@
 
             // プレビュー処理を行う
             $('#sys-blog-plugin-form-preview').click(function () {
-                var action = '{{ userUrl(req, {blog_id: blog_id, device_key: 1}, false, true) }}';
+                var action = '{{ userUrl(req, {blog_id: blog.id, device_key: 1}, false, true) }}';
                 $('#sys-blog-plugin-form').prop('action', action);
                 $('#sys-blog-plugin-form').prop('target', '_preview');
                 $('#sys-blog-plugin-form').submit();

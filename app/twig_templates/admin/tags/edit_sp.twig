@@ -24,7 +24,7 @@
     <div class="btn_area">
         <ul class="btn_area_inner">
             <li><a class="btn_contents touch" href="{% if req.isArgs('back_url') %}{{ req.get('back_url') }}{% endif %}{% if not req.isArgs('back_url') %}{{ url(req, 'Tags', 'index') }}{% endif %}"><i class="return_icon btn_icon"></i>{{ _('I Back to List') }}</a></li>
-            <li><a class="btn_contents touch" href="{{ blogUrl(req, blog_id) }}?tag={{ tag.name }}" target="_blank"><i class="preview_icon btn_icon"></i>{{ _('Check the article') }}</a></li>
+            <li><a class="btn_contents touch" href="{{ blogUrl(req, blog.id) }}?tag={{ tag.name }}" target="_blank"><i class="preview_icon btn_icon"></i>{{ _('Check the article') }}</a></li>
         </ul>
     </div>
 

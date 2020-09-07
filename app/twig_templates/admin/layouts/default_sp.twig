@@ -81,7 +81,7 @@
             {% if isLogin %}
                 <div><span id="right_menu_btn"><i class="rightmenu"></i></span></div>
             {% endif %}
-            <h1>{{ blog_id }}</h1>
+            <h1>{{ blog.id }}</h1>
         </header>
 
         <div id="contents">
@@ -105,7 +105,7 @@
             <ul>
                 {% if is_selected_blog %}
                     <li {% if active_menu == 'common/notice' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Common', 'notice') }}"><span><i class="sidemenu_home"></i></span><span>{{ _('Notice') }}</span></a></li>
-                    <li><a class="touch" href="{{ url(req, 'Common', 'notice' , {'blog_id': blog_id, 'sp': '1'}) }}" target="_blank"><span><i class="sidemenu_myblog"></i></span><span>{{ _('Checking the blog') }}</span></a></li>
+                    <li><a class="touch" href="{{ url(req, 'Common', 'notice' , {'blog_id': blog.id, 'sp': '1'}) }}" target="_blank"><span><i class="sidemenu_myblog"></i></span><span>{{ _('Checking the blog') }}</span></a></li>
                     <li {% if active_menu == 'entries/create' or active_menu == 'entries/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Entries', 'create') }}"><span><i class="sidemenu_editor"></i></span><span>{{ _('New article') }}</span></a></li>
                     <li {% if active_menu == 'entries/index' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Entries', 'index') }}"><span><i class="sidemenu_entry"></i></span><span>{{ _('List of articles') }}</span></a></li>
                     <li {% if active_menu == 'comments/index' or active_menu == 'comments/reply' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Comments', 'index') }}"><span><i class="sidemenu_comment"></i></span><span>{{ _('List of comments') }}</span></a></li>

@@ -40,7 +40,7 @@
             {% for tag in tags %}
                 <tr>
                     <td class="center ss_cell"><input type="checkbox" name="id[]" value="{{ tag.id }}"/></td>
-                    <td><a href="{{ blogUrl(req, blog_id) }}/?tag={{ tag.name }}" target="_blank">{{ tag.name }}</a></td>
+                    <td><a href="{{ blogUrl(req, blog.id) }}/?tag={{ tag.name }}" target="_blank">{{ tag.name }}</a></td>
                     <td>{{ tag.count }}</td>
                     <td class="center s_cell"><a href="{{ url(req, 'Tags', 'edit', {id: tag.id}) }}">{{ _('Edit') }}</a></td>
                     <td class="center s_cell"><a href="{{ url(req, 'Tags', 'delete', {id: tag.id, sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a></td>

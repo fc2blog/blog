@@ -42,7 +42,7 @@
 
             // プレビュー処理を行う
             $('#sys-blog-template-form-preview').click(function () {
-                var action = '{{ userUrl(req, {blog_id: blog_id}, false, true) }}';
+                var action = '{{ userUrl(req, {blog_id: blog.id}, false, true) }}';
                 $('#sys-blog-template-form').prop('action', action);
                 $('#sys-blog-template-form').prop('target', '_preview');
                 $('#sys-blog-template-form').submit();
