@@ -1,0 +1,45 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Withdrawal process') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('Withdrawal process') }}</span></h1></header>
+
+    {% include('admin/users/tab_sp.twig') %}
+
+    <h2 id="blog_settings"><span class="h2_inner">{{ _('Unsubscribe confirmation') }}</span></h2>
+    <form method="POST" id="sys-users-form" class="admin-form">
+        <div class="form_area">
+            <div class="form_contents">{{ _('If you want to unsubscribe, please tap the "Withdrawal" button and check the "Unsubscribe confirmation".') }}</div>
+            <div class="form_contents">
+                <div class="checkbox_btn touch">
+                    <div class="checkbox_btn_inner">
+                        <input type="checkbox" name="user[delete]" id="sys-user-delete" class="checkbox_btn_input" value="1"/>
+                        <span class="checkbox_bg"></span>
+                    </div>
+                    <label for="sys-user-delete" class="checkbox_btn_label">{{ _('Unsubscribe confirmation') }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="form_area">
+            <div class="form_contents">
+                <div class="btn">
+                    <button type="button" class="btn_contents touch" id="sys-withdrawal">{{ _('Withdrawal') }}<i class="delete_icon btn_icon"></i></button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        $(function () {
+            $('#sys-withdrawal').on('click', function () {
+                if ($('input[name="user[delete]"]:checked').length != 1) {
+                    alert('{{ _('Please check the box "Unsubscribe confirmation"') }}');
+                    return;
+                }
+                if (confirm('{{ _('Can not be undone if you unsubscribe. Are you sure you want to unsubscribe really?') }}')) {
+                    $('#sys-users-form').submit();
+                }
+            });
+        });
+    </script>
+{% endblock %}
