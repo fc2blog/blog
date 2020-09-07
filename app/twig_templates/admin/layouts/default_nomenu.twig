@@ -41,12 +41,7 @@
 
   <article>
     <article id="main-contents" style="margin-left: auto; margin-right: auto; float: none;">
-      {% if device_type_str == "pc" %}
-        {% include '../flagments/flash_message.twig' %}
-      {% endif %}
-      {% if device_type_str == "sp" %}
-        {% include '../flagments/flash_message_sp.twig' %}
-      {% endif %}
+      {% include 'admin/flagments/flash_message.twig' %}
       {{ block('content') }}
     </article>
   </article>
