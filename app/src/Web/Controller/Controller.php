@@ -200,12 +200,11 @@ abstract class Controller
       'sig' => Session::get('sig'),
       'lang' => $request->lang,
       'debug' => Config::get('APP_DEBUG') != 0,
-      'preview_active_blog_url' => App::userURL($request,['controller'=>'entries', 'action'=>'index', 'blog_id'=>$this->getBlogId($request)]), // 代用できそう
+      'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)]), // 代用できそう
       'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
-      'active_menu'=> App::getActiveMenu($request),
+      'active_menu' => App::getActiveMenu($request),
       'isLogin' => $this->isLogin(), // TODO admin 以外ではどうするか
       'nick_name' => $this->getNickName(), // TODO admin 以外ではどうするか
-      'blog' => $this->getBlog($this->getBlogId($request)),  // TODO admin 以外ではどうするか
       'blog_list' => $blogs_model->getSelectList($this->getUserId()),  // TODO admin 以外ではどうするか
       'blog_id' => $this->getBlogId($request), // TODO admin以外ではどうするか // blog['id']で代用できそう
       'is_selected_blog' => $this->isSelectedBlog(), // TODO admin以外ではどうするか
@@ -217,14 +216,15 @@ abstract class Controller
         'deviceArgs' => App::getArgsDevice($request)
       ],
       'cookie_common' => [
-        'expire' => \Fc2blog\Config::get('COOKIE_EXPIRE'),
-        'domain' => \Fc2blog\Config::get('COOKIE_DEFAULT_DOMAIN')
+        'expire' => Config::get('COOKIE_EXPIRE'),
+        'domain' => Config::get('COOKIE_DEFAULT_DOMAIN')
       ]
     ];
     // ログインしていないと確定しない変数
-    if(is_string($this->getBlogId($request))){
+    if ($this->getBlog($this->getBlogId($request)) !== false && is_string($this->getBlogId($request))) {
       // TODO blogにいれられないものか？
-      $data['blog_url'] = $blogs_model::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) ."/" . $this->getBlogId($request) ."/";
+      $data['blog_url'] = $blogs_model::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) . "/" . $this->getBlogId($request) . "/";
+      $data['data'] = $this->getBlog($data['blog_url']);
     }
     $data = array_merge($data, $this->data);
 
