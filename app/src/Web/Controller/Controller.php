@@ -206,7 +206,6 @@ abstract class Controller
       'isLogin' => $this->isLogin(), // TODO admin 以外ではどうするか
       'nick_name' => $this->getNickName(), // TODO admin 以外ではどうするか
       'blog_list' => $blogs_model->getSelectList($this->getUserId()),  // TODO admin 以外ではどうするか
-      'blog_id' => $this->getBlogId($request), // TODO admin以外ではどうするか // blog['id']で代用できそう
       'is_selected_blog' => $this->isSelectedBlog(), // TODO admin以外ではどうするか
       'flash_messages' => $this->removeMessage(), // TODO admin 以外ではどうするか
       'js_common' => [
@@ -222,9 +221,8 @@ abstract class Controller
     ];
     // ログインしていないと確定しない変数
     if ($this->getBlog($this->getBlogId($request)) !== false && is_string($this->getBlogId($request))) {
-      // TODO blogにいれられないものか？
-      $data['blog_url'] = $blogs_model::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) . "/" . $this->getBlogId($request) . "/";
-      $data['data'] = $this->getBlog($data['blog_url']);
+      $data['blog'] = $this->getBlog($this->getBlogId($request));
+      $data['blog']['url'] = $blogs_model::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) . "/" . $this->getBlogId($request) . "/";
     }
     $data = array_merge($data, $this->data);
 
