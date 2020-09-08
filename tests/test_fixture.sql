@@ -149,7 +149,6 @@ UNLOCK TABLES;
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments`
     DISABLE KEYS */;
-INSERT INTO dev_fc2blog.comments (id, blog_id, entry_id, name, title, body, mail, url, password, open_status, reply_body, reply_status, reply_updated_at, created_at, updated_at) VALUES (1, 'testblog2', 3, 'テストユーザー', 'テストタイトル', 'これはテストコメントです。', 'example@example.jp', 'http://example.jp', '16aefed70e99f2756d44ccd11f3c42c6b381243b8b2dc662e1a07adb3c55e0a1', 0, null, 1, null, '2020-09-08 12:11:53', '2020-09-08 12:11:53');
 /*!40000 ALTER TABLE `comments`
     ENABLE KEYS */;
 UNLOCK TABLES;
