@@ -3,13 +3,17 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Fc2Template;
 
+use ErrorException;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\TagsModel;
+use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleComment;
 use Fc2blog\Web\Request;
+use ParseError;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 class Fc2TemplateTest extends TestCase
 {
@@ -22,7 +26,10 @@ class Fc2TemplateTest extends TestCase
   {
     Config::read('fc2_template.php');
     $printable_tags = Config::get('fc2_template_var_search');
-    $printable_tags = Config::get('fc2_template_var_search');
+
+    $generator = new GenerateSampleComment();
+    $generator->removeAllComments('testblog2', 1);
+    $generator->generateSampleComment('testblog2', 1, 2);
 
     $b = new BlogTemplatesModel();
 
@@ -105,11 +112,11 @@ class Fc2TemplateTest extends TestCase
             echo "[ok] {$printable_tag}: {$converted_php} ==> {$rtn}".PHP_EOL;
           }
         }
-      } catch (\ErrorException $e) {
+      } catch (ErrorException $e) {
         $this->fail("exec error `{$converted_php}` got {$e->getMessage()}");
-      } catch (\TypeError $e) {
+      } catch (TypeError $e) {
         $this->fail("type error `{$converted_php}` got {$e->getMessage()}");
-      } catch (\ParseError $e) {
+      } catch (ParseError $e) {
         $this->fail("parse error `{$converted_php}` got {$e->getMessage()}");
       }
     }
