@@ -20,7 +20,8 @@ class Fc2TemplateTest extends TestCase
 
   /**
    * テンプレートタグを実際にPHPとして評価してみる
-   * （ただし、それぞれのタグには大量の前提条件があり、実行時エラーを特定できるものではない、せいぜいLinter程度の効果）
+   * （ただし、それぞれのタグ表示には各種前提条件があり、実行時エラーを特定できるものではない。せいぜいLinter程度の効果）
+   * TODO blank rtnがなくなる程度にデータを拡充する
    */
   public function testAllPrintableTagEval():void
   {
@@ -33,11 +34,15 @@ class Fc2TemplateTest extends TestCase
 
     $b = new BlogTemplatesModel();
 
-    { // タグのEvalのために以下のダミーが必要
+    // TODO Paging
+    { // タグのEvalのために以下の疑似データが必要
       $blog_id = "testblog2";
-      $now_date = time();
-      $prev_month_date = strtotime('last month');
-      $next_month_date = strtotime('next month');
+      $url = '/testblog2/';
+      $now_date = date('Y-m-d') ;
+      $now_month_date = date('Y-m-1', strtotime($now_date));
+      $prev_month_date = date('Y-m-1', strtotime($now_month_date . ' -1 month'));
+      $next_month_date = date('Y-m-1', strtotime($now_month_date . ' +1 month'));
+
       $request = new Request(
         "GET",
         "/testblog2",
@@ -56,8 +61,33 @@ class Fc2TemplateTest extends TestCase
       );
       Config::set('ControllerName', 'Common'); // TODO 後続のテストを汚染してしまう可能性がある
 
+      // TODO エントリにカテゴリ
+      // TODO エントリにタグ？
       $entry_model = new EntriesModel();
       $entry = $entry_model->findByIdAndBlogId(1, 'testblog2');
+      { // FC2のテンプレート用にデータを置き換える borrow from layouts/fc2_template.php
+        // topentry系変数のデータ設定
+        $entry['title_w_img'] = $entry['title'];
+        $entry['title'] = strip_tags($entry['title']);
+        $entry['link'] = \Fc2blog\App::userURL($request,array('controller'=>'Entries', 'action'=>'view', 'blog_id'=>$entry['blog_id'], 'id'=>$entry['id']));
+        [
+          $entry['year'],
+          $entry['month'],
+          $entry['day'],
+          $entry['hour'],
+          $entry['minute'],
+          $entry['second'],
+          $entry['youbi'],
+          $entry['month_short']
+        ] = explode('/', date('Y/m/d/H/i/s/D/M', strtotime($entry['posted_at'])));
+        $entry['wayoubi'] = __($entry['youbi']);
+
+        // 自動改行処理
+        if ($entry['auto_linefeed']==\Fc2blog\Config::get('ENTRY.AUTO_LINEFEED.USE')) {
+          $entry['body'] = nl2br($entry['body']);
+          $entry['extend'] = nl2br($entry['extend']);
+        }
+      }
       echo "entry =>";
       var_export($entry);
       echo PHP_EOL;
@@ -70,6 +100,29 @@ class Fc2TemplateTest extends TestCase
       $comment_model = new CommentsModel();
       $comment = $comment_model->findByIdAndBlogId(1, 'testblog2');
 //      var_dump($comment);
+      {
+        $comment['edit_link'] = \Fc2blog\Web\Html::url($request, array('controller'=>'Entries', 'action'=>'comment_edit', 'blog_id'=>$comment['blog_id'], 'id'=>$comment['id']));
+
+        list($comment['year'], $comment['month'], $comment['day'],
+          $comment['hour'], $comment['minute'], $comment['second'], $comment['youbi']
+          ) = explode('/', date('Y/m/d/H/i/s/D', strtotime($comment['updated_at'])));
+        $comment['wayoubi'] = __($comment['youbi']);
+        $comment['body'] = $comment['body'];
+
+        if(isset($comment['reply_updated_at'])) {
+          [
+            $comment['reply_year'],
+            $comment['reply_month'],
+            $comment['reply_day'],
+            $comment['reply_hour'],
+            $comment['reply_minute'],
+            $comment['reply_second'],
+            $comment['reply_youbi']
+          ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($comment['reply_updated_at'])));
+        $comment['reply_wayoubi'] = __($comment['reply_youbi']);
+        $comment['reply_body'] = nl2br($comment['reply_body']);
+        }
+      }
 
       $comment_error = 'something what?';
 
@@ -109,7 +162,7 @@ class Fc2TemplateTest extends TestCase
           }elseif(strlen($rtn)===0){
             echo "[blank rtn] {$printable_tag}: {$converted_php} ==> {$rtn}".PHP_EOL;
           }else{
-            echo "[ok] {$printable_tag}: {$converted_php} ==> {$rtn}".PHP_EOL;
+            // echo "[ok] {$printable_tag}: {$converted_php} ==> {$rtn}".PHP_EOL;
           }
         }
       } catch (ErrorException $e) {
