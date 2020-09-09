@@ -63,4 +63,23 @@ class Log
   {
     static::getLogger()->error($message, $context);
   }
+
+  /**
+   * @param string $message
+   * @param array $context
+   */
+  public static function notice(string $message, array $context = []): void
+  {
+    static::getLogger()->notice($message, $context);
+  }
+
+  /**
+   * @param string $message
+   * @param array $context
+   */
+  public static function debug(string $message, array $context = []): void
+  {
+    static::getLogger()->debug($message, $context);
+  }
+
 }
