@@ -2,7 +2,7 @@
 
 namespace Fc2blog\Web\Controller\User;
 
-use Fc2blog\Model\Model;
+use Fc2blog\Model\BlogsModel;
 use Fc2blog\Web\Controller\AppController;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -54,7 +54,8 @@ abstract class UserController extends AppController
       return true;
     }
     // ログイン判定
-    return Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id);
+    $blogs_model = new BlogsModel();
+    return $blogs_model->isUserHaveBlogId($this->getAdminUserId(), $blog_id);
   }
 
   /**
