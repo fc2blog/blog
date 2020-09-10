@@ -18,84 +18,38 @@ use TypeError;
 
 class Fc2TemplateTest extends TestCase
 {
-  // TODO testとgeneratorの親子関係が逆であるべき
-
   public function setUp(): void
   {
     Config::read('fc2_template.php');
     parent::setUp();
   }
 
-  /**
-   * テンプレートタグを実際にPHPとして評価してみる
-   * （ただし、それぞれのタグ表示には各種前提条件があり、実行時エラーを特定できるものではない。せいぜいLinter程度の効果）
-   * TODO blank rtnがなくなる程度にデータを拡充する
-   */
-  public function testAllPrintableTagEval(): void
+  public $coverage_blank_php = [];
+  public $coverage_blank_return = [];
+  public $coverage_ok = [];
+
+  public function tearDown(): void
   {
-    $printable_tags = Config::get('fc2_template_var_search');
-
-    extract($this->generateBlogTopSampleData());
-
-    $b = new BlogTemplatesModel();
-    foreach ($printable_tags as $tag_str => $printable_tag) {
-      // タグの含まれたHTML
-      $input_html = "{$printable_tag}";
-      // 変換されたPHP
-      $converted_php = $b->convertFC2Template($input_html);
-      $this->fragmentRunner(compact(array_keys(get_defined_vars())), $tag_str, $converted_php);
-    }
+    // TODO 逆カバレッジのようなものを取得し、「どのケースでも」出力されていないタグを出力する。
+    // TODO 各テストでtearDownがあるので、全テスト終了後に集計するメソッドが必要では？
+    var_dump($this->coverage_blank_return);
   }
 
   /**
-   * fc2 templateのif系タグを実行テスト
-   * TODO blank rtnがなくなる程度にデータを拡充する
+   * ブログトップページ（EntriesController::index）にて全タグを擬似実行
+   * NOTE: compact(array_keys(get_defined_vars())) にて、スコープ内変数が（わかりづらく）外部にて利用されているので、削除時には注意すること
    */
-  public function testAllIfCondEval(): void
-  {
-    $fc2_template_if_list = Config::get('fc2_template_if');
-
-    extract($this->generateBlogTopSampleData());
-
-    $b = new BlogTemplatesModel();
-    foreach ($fc2_template_if_list as $tag_str => $php_code) {
-      $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
-      $converted_php = $b->convertFC2Template($input_html);
-      $this->fragmentRunner(compact(array_keys(get_defined_vars())), $tag_str, $converted_php);
-    }
-  }
-
-  /**
-   * fc2 templateのforeach系タグを実行テスト
-   * TODO blank rtnがなくなる程度にデータを拡充する
-   */
-  public function testAllForEachCondEval(): void
-  {
-    $fc2_template_if_list = Config::get('fc2_template_foreach');
-
-    extract($this->generateBlogTopSampleData());
-
-    $b = new BlogTemplatesModel();
-    foreach ($fc2_template_if_list as $tag_str => $php_code) {
-      $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
-      $converted_php = $b->convertFC2Template($input_html);
-      $this->fragmentRunner(compact(array_keys(get_defined_vars())), $tag_str, $converted_php);
-    }
-  }
-
-  /**
-   * ブログトップページ（EntriesController::index）の疑似データを生成
-   * @return array
-   */
-  public function generateBlogTopSampleData(): array
+  public function testTagsInEntriesIndex(): void
   {
     $blog_id = "testblog2";
 
-    // entryもここで生成すべき
+    ## テストデータ生成
+    // TODO: entryもここで生成すべき
     $generator = new GenerateSampleComment();
     $generator->removeAllComments($blog_id, 1);
     $generator->generateSampleComment($blog_id, 1, 2);
 
+    ## 「状態」生成
     // request 生成
     $request = new Request(
       "GET",
@@ -113,10 +67,9 @@ class Fc2TemplateTest extends TestCase
         // self_blog系のためにログイン情報？
       ]
     );
-
     Config::set('ControllerName', 'Entries'); // TODO 後続のテストを汚染してしまう可能性がある
 
-    // Top Page用条件生成
+    ## Top Page用条件生成
     $options = [
       'where' => 'blog_id=?',
       'params' => [$blog_id],
@@ -125,18 +78,73 @@ class Fc2TemplateTest extends TestCase
     $entries = EntriesController::getEntriesArray($blog_id, $options);
     $paging = EntriesController::getPaging($options);
     extract($this->setAreaData([]));
-
     extract($this->fc2templateLayoutEmulator(compact(array_keys(get_defined_vars()))));
 
-    return compact(array_keys(get_defined_vars()));
+    ## 疑似実行
+    $this->getAllPrintableTagEval(compact(array_keys(get_defined_vars())));
+    $this->getAllIfCondEval(compact(array_keys(get_defined_vars())));
+    $this->getAllForEachCondEval(compact(array_keys(get_defined_vars())));
   }
 
   /**
    * エントリページ（EntriesController::view）の疑似データを生成
-   * @return array
    */
-  public function generatePermanentEntryPageSampleData(): array
+  public function getTagsInEntriesView(): void
   {
+  }
+
+  /**
+   * テンプレートタグを実際にPHPとして評価してみる
+   * （ただし、それぞれのタグ表示には各種前提条件があり、実行時エラーを特定できるものではない。せいぜいLinter程度の効果）
+   * @param array $env
+   */
+  public function getAllPrintableTagEval(array $env): void
+  {
+    extract($env);
+
+    $printable_tags = Config::get('fc2_template_var_search');
+    $b = new BlogTemplatesModel();
+    foreach ($printable_tags as $tag_str => $printable_tag) {
+      // タグの含まれたHTML
+      $input_html = "{$printable_tag}";
+      // 変換されたPHP
+      $converted_php = $b->convertFC2Template($input_html);
+      $this->fragmentRunner(compact(array_keys(get_defined_vars())), $tag_str, $converted_php);
+    }
+  }
+
+  /**
+   * fc2 templateのif系タグを実行テスト
+   * @param array $env
+   */
+  public function getAllIfCondEval(array $env): void
+  {
+    extract($env);
+
+    $fc2_template_if_list = Config::get('fc2_template_if');
+    $b = new BlogTemplatesModel();
+    foreach ($fc2_template_if_list as $tag_str => $php_code) {
+      $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
+      $converted_php = $b->convertFC2Template($input_html);
+      $this->fragmentRunner(compact(array_keys(get_defined_vars())), $tag_str, $converted_php);
+    }
+  }
+
+  /**
+   * fc2 templateのforeach系タグを実行テスト
+   * @param array $env
+   */
+  public function getAllForEachCondEval(array $env): void
+  {
+    extract($env);
+
+    $fc2_template_if_list = Config::get('fc2_template_foreach');
+    $b = new BlogTemplatesModel();
+    foreach ($fc2_template_if_list as $tag_str => $php_code) {
+      $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
+      $converted_php = $b->convertFC2Template($input_html);
+      $this->fragmentRunner(compact(array_keys(get_defined_vars())), $tag_str, $converted_php);
+    }
   }
 
   /**
@@ -159,16 +167,18 @@ class Fc2TemplateTest extends TestCase
       ob_end_clean();
       // 文字列がとれれば、基本的に実行はできているはず
       $this->assertIsString($rtn);
-      if (true) {
-        if (strlen($converted_php) === 0) {
-          // echo "[blank php] {$tag_str}: {$converted_php} ==> {$rtn}" . PHP_EOL;
-        } elseif (strlen($rtn) === 0) {
-          echo "[blank rtn] {$tag_str}: {$converted_php} ==> {$rtn}" . PHP_EOL;
-        } else {
-          // echo "[ok] {$tag_str}: {$converted_php} ==> {$rtn}" . PHP_EOL;
-        }
+
+      // 一度でもOKを通過していればOKとする。
+      if (strlen($converted_php) === 0) {
+        if (!isset($this->coverage_ok[$tag_str])) $this->coverage_blank_php[$tag_str] = "";
+      } elseif (strlen($rtn) === 0) {
+        if (!isset($this->coverage_ok[$tag_str])) $this->coverage_blank_return[$tag_str] = $converted_php;
+      } else {
+        unset($this->coverage_blank_return[$tag_str]);
+        unset($this->coverage_blank_php[$tag_str]);
+        $this->coverage_ok[$tag_str] = "{$converted_php} ==> {$rtn}";
       }
-    } catch (ErrorException $e) {
+    } /** @noinspection PhpRedundantCatchClauseInspection eval時に発生する可能性がある */ catch (ErrorException $e) {
       $this->fail("exec error `{$converted_php}` got {$e->getMessage()}");
     } catch (TypeError $e) {
       $this->fail("type error `{$converted_php}` got {$e->getMessage()}");
