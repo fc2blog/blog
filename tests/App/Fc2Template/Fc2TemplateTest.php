@@ -28,10 +28,8 @@ class Fc2TemplateTest extends TestCase
   public $coverage_blank_return = [];
   public $coverage_ok = [];
 
-  public function tearDown(): void
-  {
+  public function __destruct() {
     // TODO 逆カバレッジのようなものを取得し、「どのケースでも」出力されていないタグを出力する。
-    // TODO 各テストでtearDownがあるので、全テスト終了後に集計するメソッドが必要では？
     var_dump($this->coverage_blank_return);
   }
 
