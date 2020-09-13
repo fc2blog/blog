@@ -519,81 +519,95 @@ class EntriesController extends UserController
     // 記事詳細取得
     $entries_model = new EntriesModel();
     $entry = $entries_model->getEntry($entry_id, $blog_id);
-    if (!$entry) {
-      return $this->error404();
-    }
+    if (!$entry) return $this->error404();
 
     $this->set('entry', $entry);
     $this->set('sub_title', $entry['title']); // HTMLのサブタイトル
 
-    $self_blog = $this->isLoginBlog($request);
+    // 表示エリア、データセット分岐処理
+    // （スマホはコメントと、コメント投稿画面が別々）
+    $sp_comment_view_mode = $request->get('m2'); // スマホ用、フォーム、返信画面判定パラメタ
+    $areas = [];
+    switch ($sp_comment_view_mode) {
+      case 'form': // コメント投稿表示(スマフォ)
+        $areas[] = 'form_area';
+        break;
 
+      case 'res': // コメント一覧表示(スマフォ)
+        $this->setCommentsData($request, $blog_id, $entry_id, $entry, true);
+        $areas[] = 'comment_area';
+        break;
+
+      default: // PCや上記以外
+        // PC場合、記事のコメント必要
+        if (App::isPC()) {
+          $is_comment_settled = $this->setCommentsData($request, $blog_id, $entry_id, $entry, false);
+          if ($is_comment_settled) {
+            $areas[] = 'comment_area';
+          }
+        }
+        $this->setNextPrevEntryData($blog_id, $entry);
+        $areas[] = 'permanent_area';
+        break;
+    }
+
+    $this->setAreaData($areas);
+
+    // FC2用のテンプレートで表示
+    return $this->fc2template($entry['blog_id']);
+  }
+
+  /**
+   * 記事の「次の記事」「前の記事」情報のセット
+   * @param string $blog_id
+   * @param array $entry
+   */
+  private function setNextPrevEntryData(string $blog_id, array $entry)
+  {
+    $entries_model = new EntriesModel();
     $blog_settings_model = new BlogSettingsModel();
-    $comments_model = new CommentsModel();
 
     // ブログの設定情報取得
     $blog_setting = $blog_settings_model->findByBlogId($blog_id);
-
-    // スマフォのコメント投稿、閲覧分岐処理
-    $sp_comment_view_mode = $request->get('m2'); // スマフォ用のコメント投稿＆閲覧判定
-    switch ($sp_comment_view_mode) {
-      // コメント一覧表示(スマフォ)
-      case 'res':
-
-        // 記事のコメント取得(パスワード制限時はコメントを取得しない)
-        if (
-          $this->isNeedAuthorizedEntry($entry) &&
-          $this->isUserAuthorizedToEntry($request, $entry)
-        ) {
-          // コメント一覧を取得(ページング用)
-          $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting);
-          $options['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
-
-          $comments = $comments_model->find('all', $options);
-          $this->set('comments', $comments_model->decorateByBlogSetting($request, $comments, $blog_setting, $self_blog));
-          $this->set('paging', $comments_model->getPaging($options));
-        }
-
-        // FC2用のテンプレートで表示
-        $this->setAreaData(['comment_area']);
-        return $this->fc2template($entry['blog_id']);
-        /** @noinspection PhpUnreachableStatementInspection */
-        break;
-
-      // コメント投稿表示(スマフォ)
-      case 'form':
-        // FC2用のテンプレートで表示
-        $this->setAreaData(['form_area']);
-        return $this->fc2template($entry['blog_id']);
-        /** @noinspection PhpUnreachableStatementInspection */
-        break;
-
-      // 上記以外は通常の詳細表示として扱う
-      default:
-        break;
-    }
-
-    // 表示画面判定
-    $areas = ['permanent_area'];
-
-    // PCの場合の記事のコメント取得(パスワード制限時はコメントを取得しない)
-    if (
-      App::isPC() &&
-      $this->isNeedAuthorizedEntry($entry) &&
-      $this->isUserAuthorizedToEntry($request, $entry)
-    ) {
-      $areas[] = 'comment_area';
-      $this->set('comments', $comments_model->getCommentListByBlogSetting($blog_id, $entry_id, $blog_setting, $self_blog));
-    }
 
     // 前後の記事取得
     $is_asc = $blog_setting['entry_order'] == Config::get('ENTRY.ORDER.ASC');
     $this->set('next_entry', $is_asc ? $entries_model->nextEntry($entry) : $entries_model->prevEntry($entry));
     $this->set('prev_entry', $is_asc ? $entries_model->prevEntry($entry) : $entries_model->nextEntry($entry));
+  }
 
-    // FC2用のテンプレートで表示
-    $this->setAreaData($areas);
-    return $this->fc2template($entry['blog_id']);
+  /**
+   * 記事のコメント情報のセット(パスワード制限時はセットしない)
+   * @param Request $request
+   * @param string $blog_id
+   * @param int $entry_id
+   * @param array $entry
+   * @param bool $is_need_paging
+   * @return bool セットしたか（パスワード制限でブロックされなかったか）
+   */
+  private function setCommentsData(Request $request, string $blog_id, int $entry_id, array $entry, bool $is_need_paging): bool
+  {
+    if ($this->isEntryNeedAuth($entry) && !$this->isUserAuthedToEntry($request, $entry)) {
+      return false;
+    }
+
+    $comments_model = new CommentsModel();
+    $blog_settings_model = new BlogSettingsModel();
+
+    // ブログの設定情報取得
+    $blog_setting = $blog_settings_model->findByBlogId($blog_id);
+
+    $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting);
+    if ($is_need_paging) {
+      // コメント一覧を取得(ページング用)
+      $options['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
+      $this->set('paging', $comments_model->getPaging($options));
+    }
+    $comments = $comments_model->find('all', $options);
+    $comments = $comments_model->decorateByBlogSetting($comments, $blog_setting, $this->isLoginBlog($request));
+    $this->set('comments', $comments);
+
+    return true;
   }
 
   /**
@@ -602,11 +616,11 @@ class EntriesController extends UserController
    * @param $entry
    * @return bool
    */
-  private function isUserAuthorizedToEntry($request, $entry) : bool
+  private function isUserAuthedToEntry($request, $entry): bool
   {
     return (
       $this->isLoginBlog($request) || // 管理者であるか
-      Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']), false) // パスワードOKとなっている
+      Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']), false) // パスワードアクセスで許可されているか
     );
   }
 
@@ -615,12 +629,12 @@ class EntriesController extends UserController
    * @param $entry
    * @return bool
    */
-  private function isNeedAuthorizedEntry($entry):bool
+  private function isEntryNeedAuth($entry): bool
   {
-    if(!isset($entry['open_status'])){
+    if (!isset($entry['open_status'])) {
       throw new InvalidArgumentException('missing open_status');
     }
-    return $entry['open_status'] != Config::get('ENTRY.OPEN_STATUS.PASSWORD');
+    return $entry['open_status'] == Config::get('ENTRY.OPEN_STATUS.PASSWORD');
   }
 
   /**
@@ -1095,23 +1109,23 @@ class EntriesController extends UserController
     $comment_error = <<<HTML
       <script>
       function insertCommentErrorMessage(name, message){
-        var html = document.createElement('p');
+        let html = document.createElement('p');
         html.style.cssText = "background-color: #fdd; color: #f00; border-radius: 3px; border: solid 2px #f44;padding: 3px; margin: 5px 3px;";
         html.innerHTML = message;
-        var target = document.getElementsByName(name)[0];
+        let target = document.getElementsByName(name)[0];
         if (!target) {
           return ;
         }
-        var parent = target.parentNode;
+        let parent = target.parentNode;
         parent.insertBefore(html, target.nextSibling);
       }
       function setCommentData(name, value){
-        var target = document.getElementsByName(name)[0];
+        let target = document.getElementsByName(name)[0];
         if (!target) {
           return ;
         }
-        if (target.type=='checkbox') {
-          if (value==$open_status_private) {
+        if (target.type==='checkbox') {
+          if (value===$open_status_private) {
             target.checked = 'checked';
           }
         } else {
@@ -1123,11 +1137,12 @@ class EntriesController extends UserController
       }
       if( window.addEventListener ){
           window.addEventListener( 'load', displayCommentErrorMessage, false );
-      }else if( window.attachEvent ){
+      }else { // noinspection JSUnresolvedVariable
+        if( window.attachEvent ){
           window.attachEvent( 'onload', displayCommentErrorMessage );
       }else{
           window.onload = displayCommentErrorMessage;
-      }
+      } }
       </script>
     HTML;
     $this->set('comment_error', $comment_error);

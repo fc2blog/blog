@@ -6,8 +6,11 @@ namespace Fc2blog\Tests\App\Fc2Template;
 use ErrorException;
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
+use Fc2blog\Model\CommentsModel;
+use Fc2blog\Model\EntriesModel;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleComment;
 use Fc2blog\Web\Controller\User\EntriesController;
 use Fc2blog\Web\Html;
@@ -28,7 +31,8 @@ class Fc2TemplateTest extends TestCase
   public $coverage_blank_return = [];
   public $coverage_ok = [];
 
-  public function __destruct() {
+  public function __destruct()
+  {
     // TODO 逆カバレッジのようなものを取得し、「どのケースでも」出力されていないタグを出力する。
     var_dump($this->coverage_blank_return);
   }
@@ -87,8 +91,108 @@ class Fc2TemplateTest extends TestCase
   /**
    * エントリページ（EntriesController::view）の疑似データを生成
    */
-  public function getTagsInEntriesView(): void
+  public function testTagsInEntriesView(): void
   {
+    $blog_id = "testblog2";
+
+    ## テストデータ生成
+    // TODO: entryもここで生成すべき
+    $generator = new GenerateSampleComment();
+    $generator->removeAllComments($blog_id, 1);
+    $generator->generateSampleComment($blog_id, 1, 2);
+
+    ## 「状態」生成
+    // request 生成
+    $request = new Request(
+      "GET",
+      "/{$blog_id}/no=1",
+      [],
+      [],
+      ['no' => 1],
+      [],
+      [],
+      [],
+      [
+        'comment_name' => 'comment name',
+        'comment_mail' => 'comment mail',
+        'comment_url' => 'comment_url',
+        // self_blog系のためにログイン情報？
+      ]
+    );
+    Config::set('ControllerName', 'Entries'); // TODO 後続のテストを汚染してしまう可能性がある
+    $request->methodName = 'view';
+    $request->set('id', $request->get('no'));
+
+    ## 以下Entries::Viewより
+
+    $entries_model = new EntriesModel();
+
+    $id = $request->get('id');
+    $comment_view = $request->get('m2');    // スマフォ用のコメント投稿＆閲覧判定
+
+    // 記事詳細取得
+    $entry = $entries_model->getEntry($id, $blog_id);
+    if (!$entry) {
+      $this->fail('404 notfound entry');
+    }
+
+    $sub_title = $entry['title'];
+    $self_blog = false; // loginしていないということで
+
+    $blog_settings_model = new BlogSettingsModel();
+    $comments_model = new CommentsModel();
+
+//    // スマフォのコメント投稿、閲覧分岐処理
+//    switch ($comment_view) {
+//      // コメント一覧表示(スマフォ)
+//      case 'res':
+//        // ブログの設定情報取得
+//        $blog_setting = $blog_settings_model->findByBlogId($blog_id);
+//
+//        // 記事のコメント取得(パスワード制限時はコメントを取得しない)
+//        if ($self_blog || $entry['open_status'] != Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
+//          // コメント一覧を取得(ページング用)
+//          $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $id, $blog_setting);
+//          $options['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
+//          $comments = $comments_model->find('all', $options);
+//          $paging= $comments_model->getPaging($options);
+//        }
+//
+//        // FC2用のテンプレートで表示
+//        $this->setAreaData(array('comment_area'));
+//        return $this->fc2template($entry['blog_id']);
+//        /** @noinspection PhpUnreachableStatementInspection */
+//        break;
+//
+//      // コメント投稿表示(スマフォ)
+//      case 'form':
+//        // FC2用のテンプレートで表示
+//        $this->setAreaData(array('form_area'));
+//        return $this->fc2template($entry['blog_id']);
+//        /** @noinspection PhpUnreachableStatementInspection */
+//        break;
+//
+//      // 上記以外は通常の詳細表示として扱う
+//      default:
+//        break;
+//    }
+
+
+    // ブログの設定情報取得
+    $blog_setting = $blog_settings_model->findByBlogId($blog_id);
+
+    // 前後の記事取得
+    $is_asc = $blog_setting['entry_order'] == Config::get('ENTRY.ORDER.ASC');
+    $next_entry = $is_asc ? $entries_model->nextEntry($entry) : $entries_model->prevEntry($entry);
+    $prev_entry = $is_asc ? $entries_model->prevEntry($entry) : $entries_model->nextEntry($entry);
+
+    extract($this->setAreaData(['permanent_area']));
+    extract($this->fc2templateLayoutEmulator(compact(array_keys(get_defined_vars()))));
+
+    ## 疑似実行
+    $this->getAllPrintableTagEval(compact(array_keys(get_defined_vars())));
+    $this->getAllIfCondEval(compact(array_keys(get_defined_vars())));
+    $this->getAllForEachCondEval(compact(array_keys(get_defined_vars())));
   }
 
   /**
