@@ -1,0 +1,220 @@
+{% block head_include_css %}
+    <link rel="stylesheet" href="/css/sp/category_sp.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/sp/entry_sp.css" type="text/css">
+{% endblock %}
+{% block head_include_js %}
+    <!-- timepicker-addon -->
+    <script type="text/javascript" src="/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js"></script>
+    {% if lang != 'en' %}
+        <script type="text/javascript" src="/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-{{ lang }}.js"></script>
+    {% endif %}
+    <!-- /timepicker-addon -->
+
+    <script type="text/javascript" src="/js/js.cookie.js"></script>
+    <script type="text/javascript" src="/js/admin/entry_editor.js"></script>
+{% endblock %}
+
+<script type="text/javascript" src="/js/jquery/jquery.fc2tab.js"></script>
+<script type="text/javascript">
+    $(function () {
+        // 記事 or 追記のタブ
+        $.fc2Tab({menu: '.list_switch_item', contents: '.content_wrap', classSelected: 'selected'});
+
+        // スマフォ版の日付入力処理
+        var dates = {{ entry_date_list|json_encode()|raw }};
+        $('#sys-posted_at-year').val(dates[0]);
+        $('#sys-posted_at-month').val(dates[1]);
+        $('#sys-posted_at-day').val(dates[2]);
+        $('#sys-posted_at-hour').val(dates[3]);
+        $('#sys-posted_at-minute').val(dates[4]);
+        $('#sys-posted_at-second').val(dates[5]);
+
+        // 入力変更があった場合 hiddenへ値を反映
+        $('#sys-posted_at-year, #sys-posted_at-month, #sys-posted_at-day, #sys-posted_at-hour, #sys-posted_at-minute, #sys-posted_at-second').on('change', function () {
+            posted_at_select_to_input();
+        });
+
+        // 公開設定にイベント追加
+        $('input[name="entry[open_status]"]').on('click', function () {
+            var open_status = $(this).val();
+            switch (open_status) {
+                case '{{ open_status_open }}':
+                case '{{ open_status_password }}':
+                case '{{ entry_open_status_draft }}':
+                    $('#sys-input-posted_at').hide();
+                    $('#sys-select-posted_at').show();
+                    $('input[name="posted_at_select"]:checked').click();
+                    break;
+
+                case '{{ entry_open_status_limit }}':
+                case '{{ entry_open_status_reservation }}':
+                    $('#sys-select-posted_at').hide();
+                    $('#sys-input-posted_at').show();
+                    break;
+            }
+        });
+
+        // 保存時の日時
+        $('#sys-radio-entry-posted_at-1').on('click', function () {
+            $('#sys-input-posted_at').hide();
+            $('input[name="entry[posted_at]"]').val('');
+        });
+        // 日時を指定
+        $('#sys-radio-entry-posted_at-2').on('click', function () {
+            $('#sys-input-posted_at').show();
+            posted_at_select_to_input();
+        });
+
+        // 初期表示用
+        $('input[name="posted_at_select"]:checked').click();
+    });
+
+    function posted_at_select_to_input() {
+        var posted_at = $('#sys-posted_at-year').val() + '-' + $('#sys-posted_at-month').val() + '-' + $('#sys-posted_at-day').val();
+        posted_at += ' ' + $('#sys-posted_at-hour').val() + ':' + $('#sys-posted_at-minute').val() + ':' + $('#sys-posted_at-second').val();
+        $('input[name="entry[posted_at]"]').val(posted_at);
+    }
+</script>
+
+<div class="form_area">
+    <div class="form_contents common_input_text">
+        <!--{{ _('Title') }}-->
+        {{ input(req, 'entry[title]', 'text', {'placeholder' : _('Article Title')}) }}
+        {% if error.entry.title %}<p class="error">{{ error.entry.title }}</p>{% endif %}
+    </div>
+</div>
+
+<ul class="list_switch">
+    <li class="list_switch_item selected">
+        <i class="article_icon btn_icon"></i>{{ _('Body') }}
+    </li>
+    <li class="list_switch_item">
+        <i class="more_icon btn_icon"></i>{{ _('Edit a postscript') }}
+    </li>
+</ul>
+<div class="content_wrap" style="display: block;">
+    <div class="edit_area_box">{{ input(req, 'entry[body]', 'textarea', {'id' : 'sys-entry-body','placeholder' : _('Body')}) }}</div>
+    {% if error.entry.body %}<p class="error">{{ error.entry.body }}</p>{% endif %}
+</div>
+
+<div class="content_wrap nondisplay" style="display: none; ">
+    <div class="edit_area_box">{{ input(req, 'entry[extend]', 'textarea', {'id' : 'sys-entry-extend','placeholder' : _('Edit a postscript')}) }}</div>
+    {% if error.entry.extend %}<p class="error">{{ error.entry.extend }}</p>{% endif %}
+</div>
+
+<section>
+    <h2 class="accordion_head"><i class="accordion_icon btn_icon"></i>{{ _('Entry settings') }}</h2>
+    <div class="accordion_inner" style="display: none;">
+        <div class="form_area">
+            <h3><span class="h3_inner">{{ _('Post type') }}</span></h3>
+            <div class="form_contents">
+                <div class="radio_vertical_box">
+                    {{ input(req, 'entry[open_status]', 'radio', {'options' : open_status_list, 'default' : open_status_open, 'class' : 'radio_vertical_input'}) }}
+                    {% if error.entry.open_status %}<p class="error">{{ error.entry.open_status }}</p>{% endif %}
+                </div>
+                <div class="sys-entry-password">
+                    <h4>{{ _('Set Password') }}</h4>
+                    <div class="common_input_text">{{ input(req, 'entry[password]', 'text') }}</div>
+                    <p>
+                        {{ _('They are authenticated with a password of the entire If empty') }}<br/>
+                        <a href="{{ url(req, 'BlogSettings', 'entry_edit') }}" target="_blank">{{ _('Passwords in the whole place') }}</a><br/>
+                    </p>
+                    {% if error.entry.password %}<p class="error">{{ error.entry.password }}</p>{% endif %}
+                </div>
+            </div><!--/form_contents-->
+        </div><!--/form_area-->
+        <div class="form_area">
+            <h3><span class="h3_inner">{{ _('Date and time') }}</span></h3>
+            <div class="form_contents">
+                <div class="radio_horizontal_box">
+                    <ul class="form-radio-list" id="sys-select-posted_at">
+                        <li>
+                            <input type="radio" name="posted_at_select" value="1" class="common_input_radio" id="sys-radio-entry-posted_at-1" {{ ifNotReqGet(req, 'entry.posted_a', 'checked="checked"') }} />
+                            <label for="sys-radio-entry-posted_at-1">{{ _('Date and time when saving') }}</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="posted_at_select" value="2" class="common_input_radio" id="sys-radio-entry-posted_at-2" {{ ifReqGet(req, 'entry.posted_a', 'checked="checked"') }} />
+                            <label for="sys-radio-entry-posted_at-2">{{ _('Specify the date and time') }}</label>
+                        </li>
+                    </ul>
+                </div>
+            </div><!--/form_contents-->
+            <div class="form_contents">
+                <div id="sys-input-posted_at">
+                    <table class="entry_time_set">
+                        <tbody>
+                        <tr>
+                            <td class="cell"><input type="text" id="sys-posted_at-year" class="common_input_text"/><span class="attr">{{ _('Year') }}</span></td>
+                            <td class="cell"><select id="sys-posted_at-month" class="common_input_select">{{ getNumRangeOptionTags(1,12) }}</select><span class="attr">{{ _('Month') }}</span></td>
+                            <td class="cell"><select id="sys-posted_at-day" class="common_input_select">{{ getNumRangeOptionTags(1,31) }}</select><span class="attr">{{ _('Day') }}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="cell"><select id="sys-posted_at-hour" class="common_input_select">{{ getNumRangeOptionTags(0,23) }}</select><span class="attr">{{ _('Hour') }}</span></td>
+                            <td class="cell"><select id="sys-posted_at-minute" class="common_input_select">{{ getNumRangeOptionTags(0,59) }}</select><span class="attr">{{ _('Minute') }}</span></td>
+                            <td class="cell"><select id="sys-posted_at-second" class="common_input_select">{{ getNumRangeOptionTags(0,59) }}</select><span class="attr">{{ _('Second') }}</span></td>
+                        </tr>
+                    </table>
+                </div>
+                {{ input(req, 'entry[posted_at]', 'hidden') }}
+                {% if error.entry.posted_at %}<p class="error">{{ error.entry.posted_at }}</p>{% endif %}
+            </div><!--/form_contents-->
+        </div><!--/form_area-->
+        <div class="form_area">
+            <h3><span class="h3_inner">{{ _('Accept comments') }}</span></h3>
+            <div class="form_contents">
+                <div class="radio_horizontal_box">
+                    {{ input(req, 'entry[comment_accepted]', 'radio', {'options': comment_accepted_list, 'default': comment_accepted_accepted, 'class' : 'common_input_radio'}) }}
+                </div>
+                {% if error.entry.comment_accepted %}<p class="error">{{ error.entry.comment_accepted }}</p>{% endif %}
+            </div><!--/form_contents-->
+        </div><!--/formarea-->
+        <div class="form_area">
+            <h3><span class="h3_inner">{{ _('New paragraph') }}</span></h3>
+            <div class="form_contents">
+                <div class="radio_horizontal_box">
+                    {{ input(req, 'entry[auto_linefeed]', 'radio', {'options' : auto_line_feed_list, 'default' : auto_line_feed_use}) }}
+                </div>
+                {% if error.entry.auto_linefeed %}<p class="error">{{ error.entry.auto_linefeed }}</p>{% endif %}
+            </div><!--/form_contents-->
+        </div><!--/formarea-->
+    </div><!--/accordion_inner-->
+    <h2 class="accordion_head"><i class="accordion_icon btn_icon"></i>{{ _('Category') }}</h2>
+    <div class="accordion_inner" style="display: none;">
+        <div class="form_area">
+            {{ include('admin/categories/ajax_add_sp.twig') }}
+        </div><!--/form_area-->
+    </div><!--/accordion_inner-->
+    <h2 class="accordion_head"><i class="accordion_icon btn_icon"></i>{{ _('User tags') }}</h2>
+    <div class="accordion_inner" style="display: none;">
+        <div class="form_area">
+            <div class="form_contents">
+                <div class="common_input_text"><input type="text" id="sys-add-tag-text"/></div>
+                <div class="btn">
+                    <button type="submit" id="sys-add-tag-button" class="btn_contents positive touch">
+                        <i class="positive_add_icon btn_icon"></i>{{ _('Add') }}
+                    </button>
+                </div>
+                <ul id="sys-add-tags"></ul>
+                <hr id="add-tag-line"/>
+                <ul id="sys-use-well-tags">
+                    {% for tag in tags %}
+                        <li>{{ tag }}</li>
+                    {% endfor %}
+                </ul>
+            </div><!--/form_contents-->
+        </div><!--/form_area-->
+    </div><!--/accordion_inner-->
+</section>
+
+<div class="form-button btn_area">
+    <ul class="btn_area_inner">
+        <li>
+            <button type="submit" id="sys-entry-form-submit" class="btn_contents touch positive touch"><i class="save_icon btn_icon"></i>{{ _('Save this entry') }}</button>
+        </li>
+        <li>
+            <button type="button" id="sys-entry-form-preview" class="btn_contents touch"><i class="preview_icon btn_icon"></i>{{ _('Preview') }}</button>
+        </li>
+    </ul>
+</div>
+
+{{ include('admin/entries/editor_js_sp.twig') }}

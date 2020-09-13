@@ -1,0 +1,35 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Login to Administration page') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Login') }}</h2></header>
+    <form method="POST" class="admin-form">
+        <table id="id_form">
+            <tbody>
+            <tr>
+                <th>{{ _('Login ID') }}</th>
+                <td>
+                    {{ input(req, 'user[login_id]', 'text')|raw }}
+                    {% if errors['login_id'] %}
+                        <span class="error">{{ errors['login_id'] }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Password') }}</th>
+                <td>
+                    {{ input(req, 'user[password]', 'password')|raw }}
+                    {% if errors['login_id'] %}
+                        <span class="error">{{ errors['password'] }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="submit" value="{{ _('Login') }}"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+{% endblock %}

@@ -6,7 +6,11 @@
 
 namespace Fc2blog\Web;
 
+use Fc2blog\App;
+use Fc2blog\Util\I18n;
+use Fc2blog\Util\Log;
 use Fc2blog\Web\Controller\Test\CommonController;
+use Fc2blog\Web\Router\Router;
 
 class Request
 {
@@ -31,7 +35,9 @@ class Request
 
   public $className = CommonController::class;
   public $methodName = "index";
+  public $shortControllerName = "Common";
   public $lang = "";
+  public $deviceType="";
 
   public function __construct(
     string $method = null,
@@ -47,6 +53,7 @@ class Request
   {
     $this->method = $method ?? $_SERVER['REQUEST_METHOD'] ?? "GET";
     $this->uri = $uri ?? $_SERVER["REQUEST_URI"] ?? "GET";
+    Session::start();
     if (isset($_SESSION)) {
       $this->session = $session ?? $_SESSION;
     }
@@ -67,6 +74,26 @@ class Request
       parse_str($urls['query'], $this->get);
     }
     $this->request = array_merge($this->get, $this->post);
+
+    // リクエストからの言語規定
+    $this->lang = I18n::setLanguage($this);
+    // リクエストからのデバイス種類規定
+    $this->deviceType = App::getDeviceType($this);
+
+    // ルートの解決
+    $router = new Router($this);
+    $resolve = $router->resolve();
+
+    $this->methodName = $resolve['methodName']; // ここまでRequestに持たせるのは少々責務範囲が広いか？
+    $this->className = $resolve['className']; // ここまでRequestに持たせるのは少々責務範囲が広いか？
+    { // Common など短いコントローラ名の生成
+      $classNamePathList = explode('\\', $this->className);
+      $className = $classNamePathList[count($classNamePathList) - 1];
+      $this->shortControllerName = explode('Controller', $className)[0];
+    }
+
+    // デバッグ用アクセス（リゾルブ結果）ログ
+    Log::debug_log(__FILE__ . ":" . __LINE__ . " Controller[{$this->className}] Method[{$this->methodName}] Device[{$this->deviceType}]");
   }
 
   /**
@@ -345,5 +372,41 @@ class Request
   public function getData(): array
   {
     return $this->request;
+  }
+
+  /**
+   * @param string $cookie_name
+   * @return mixed|null
+   */
+  public function getCookie(string $cookie_name)
+  {
+    return $this->cookie[$cookie_name] ?? null;
+  }
+
+  public function isValidSig():bool
+  {
+    if(
+      !isset($this->session['sig']) ||
+      strlen($this->session['sig'])===0
+    ) {
+      error_log("session did not have sig.");
+      return false;
+    }
+    if(
+      !is_string($this->get('sig', null)) ||
+      strlen($this->get('sig', "")===0)
+    ){
+      error_log("request did not have sig.");
+      return false;
+    }
+
+    return $this->session['sig'] === $this->get('sig');
+  }
+
+  public function generateNewSig():void
+  {
+    $sig = App::genRandomString();
+    $this->session['sig'] = $sig;
+    Session::set('sig', $sig);
   }
 }

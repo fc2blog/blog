@@ -1,0 +1,17 @@
+<script type="text/javascript" src="/js/admin/syntax_check.js"></script>
+
+<script>
+var template_syntaxes = {{ template_syntaxes|json_encode()|raw }};
+$(function(){
+  // タグ構文の簡易入力チェックを行う
+  $('textarea[name="blog_plugin[contents]"]').on('blur', function(){
+    syntax.check('textarea[name="blog_plugin[contents]"]');
+  });
+  // タグ構文の簡易入力チェックを行う
+  $('textarea[name="blog_plugin[list]"]').on('blur', function(){
+    syntax.check('textarea[name="blog_plugin[list]"]');
+  });
+  $('textarea[name="blog_plugin[list]"]').trigger('blur');
+  $('textarea[name="blog_plugin[contents]"]').trigger('blur');
+});
+</script>

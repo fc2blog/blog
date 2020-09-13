@@ -1,0 +1,32 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('User setting') }}{% endblock %}
+
+{% block content %}
+
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('User setting') }}</span></h1></header>
+
+    {% include('admin/users/tab_sp.twig') %}
+
+    <h2 id="blog_settings"><span class="h2_inner">{{ _('Setting') }}</span></h2>
+    <form method="POST" id="sys-users-form" class="admin-form">
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+        <div class="form_area">
+            <div class="form_contents">
+                <h4>{{ _('Change Password') }}</h4>
+                <div class="common_input_text">{{ input(req, 'user[password]', 'text') }}</div>
+                {% if errors.user.password %}<span class="error">{{ errors.user.password }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Blog ID at login') }}</h4>
+                {{ input(req, 'user[login_blog_id]', 'select', {'options': blogs_list}) }}
+                {% if errors.user.login_blog_id %}<span class="error">{{ errors.user.login_blog_id }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <div class="btn">
+                    <button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i>{{ _('Update') }}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+<ul class="tab">
+    <li class="tab_item {% if tab == 'blog_edit' %}selected{% endif %}">
+        <a href="{{ url(req, 'Blogs', 'edit') }}">{{ _('Blog setting') }}</a>
+    </li>
+    <li class="tab_item {% if tab == 'entry_edit' %}selected{% endif %}">
+        <a href="{{ url(req, 'BlogSettings', 'entry_edit') }}">{{ _('Article setting') }}</a>
+    </li>
+    <li class="tab_item {% if tab == 'comment_edit' %}selected{% endif %}">
+        <a href="{{ url(req, 'BlogSettings', 'comment_edit') }}">{{ _('Comments Settings') }}</a>
+    </li>
+    <li class="tab_item {% if tab == 'etc_edit' %}selected{% endif %}">
+        <a href="{{ url(req, 'BlogSettings', 'etc_edit') }}">{{ _('Other Settings') }}</a>
+    </li>
+    <li class="tab_item {% if tab == 'blog_delete' %}selected{% endif %}">
+        <a href="{{ url(req, 'Blogs', 'delete') }}">{{ _('Blog Delete') }}</a>
+    </li>
+</ul>

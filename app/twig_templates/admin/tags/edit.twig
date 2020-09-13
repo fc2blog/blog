@@ -1,0 +1,30 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('I want to edit tags') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('I want to edit tags') }}</h2></header>
+
+    <form method="POST" id="sys-tag-form" class="admin-form">
+
+        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+
+        <table>
+            <tbody>
+            <tr>
+                <th>{{ _('Tag name') }}</th>
+                <td>
+                    {{ input(req, 'tag[name]', 'text') }}
+                    {% if errors.tag.name %}<p class="error">{{ errors.tag.name }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="submit" value="{{ _('Update') }}"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </form>
+{% endblock %}

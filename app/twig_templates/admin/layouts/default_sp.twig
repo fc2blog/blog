@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta name="robots" content="noindex, nofollow, noarchive"/>
+    <title>{{ block('title') }}{% if blog.id %} - {{ blog.id }}{% endif %}</title>
+    <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
+    <link rel="stylesheet" href="/css/sp/blog_sp_admin.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/sp/side_menu.css" type="text/css" media="all">
+
+    {# <?php echo $this->includeCSS() }} 管理画面には不要？ #}
+
+    <script type="text/javascript" src="/js/jquery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/js/jquery/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="/js/jquery/jquery-ui/1.9.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/jquery/jquery.ui.touch-punch.min.js"></script>
+    <link rel="stylesheet" href="/css/jquery/jquery-ui/1.9.2/themes/ui-lightness/jquery-ui.css" type="text/css" media="screen">
+    <script type="text/javascript" src="/js/common_design.js"></script>
+
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script>
+        // フレームワーク用のjsの設定
+        common = Object.assign(common, {{ js_common|json_encode()|raw }});
+    </script>
+
+    <script type="text/javascript" src="/js/sp/jquery.slideMenu.js"></script>
+    <script type="text/javascript" src="/js/sp/jquery.accordion.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $.slideMenu();
+
+            $('#left_menu_btn,#right_menu_btn').click(function () {
+                $('#editor_btn_area').hide();
+            });
+
+            $('#overlay').click(function () {
+                $('#editor_btn_area').show();
+            });
+
+            // submenu
+            $('.accordion_head').fc2Accordion({
+                contents: '.accordion_inner',
+                classOpen: 'cursol_up'
+            });
+
+            // search form
+            $('.accordion_btn').fc2Accordion({
+                contents: '.accordion_contents',
+                classOpen: 'cursol_up'
+            });
+
+            // 保存完了、エラー等のメッセージ
+            $('.popup_btn').click(function () {
+                $('.popup_message').addClass('hidden');
+            });
+
+            // ボタンをタップしたときにクラスの追加
+            var touchNormalBtn = function (e) {
+                $('.btn_contents_touch').removeClass('btn_contents_touch');
+                if (e.type === 'touchstart') {
+                    $(this).addClass('btn_contents_touch');
+                }
+            };
+            $(document).on('touchstart.btnContents', '.touch', touchNormalBtn).on('touchmove.btnContents touchcancel.btnContents touchend.btnContents', touchNormalBtn);
+        });
+    </script>
+
+    {# <?php echo $this->includeJS() }}  管理画面には不要？ #}
+
+</head>
+<body>
+
+<div id="wrapper_all">
+    <div id="wrapper">
+
+        <header id="global_header">
+            <div><span id="left_menu_btn"><i class="leftmenu"></i></span></div>
+            {% if isLogin %}
+                <div><span id="right_menu_btn"><i class="rightmenu"></i></span></div>
+            {% endif %}
+            <h1>{{ blog.id }}</h1>
+        </header>
+
+        <div id="contents">
+            {% include 'admin/flagments/flash_message_sp.twig' %}
+            {{ block('content') }}
+        </div>
+
+        <footer id="site_footer">
+            <div id="switch_lang" class="sh_langselect">
+                <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
+                    <option value="ja" {% if lang == 'ja' %}selected="selected"{% endif %}>日本語</option>
+                    <option value="en" {% if lang == 'en' %}selected="selected"{% endif %}>English</option>
+                </select>
+            </div>
+        </footer>
+
+    </div><!--/wrapper-->
+
+    {% if isLogin %}
+        <div id="left_menu" class="sidemenu">
+            <ul>
+                {% if is_selected_blog %}
+                    <li {% if active_menu == 'common/notice' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Common', 'notice') }}"><span><i class="sidemenu_home"></i></span><span>{{ _('Notice') }}</span></a></li>
+                    <li><a class="touch" href="{{ url(req, 'Common', 'notice' , {'blog_id': blog.id, 'sp': '1'}) }}" target="_blank"><span><i class="sidemenu_myblog"></i></span><span>{{ _('Checking the blog') }}</span></a></li>
+                    <li {% if active_menu == 'entries/create' or active_menu == 'entries/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Entries', 'create') }}"><span><i class="sidemenu_editor"></i></span><span>{{ _('New article') }}</span></a></li>
+                    <li {% if active_menu == 'entries/index' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Entries', 'index') }}"><span><i class="sidemenu_entry"></i></span><span>{{ _('List of articles') }}</span></a></li>
+                    <li {% if active_menu == 'comments/index' or active_menu == 'comments/reply' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Comments', 'index') }}"><span><i class="sidemenu_comment"></i></span><span>{{ _('List of comments') }}</span></a></li>
+                    <li {% if active_menu == 'files/upload' or active_menu == 'files/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Files', 'upload') }}"><span><i class="sidemenu_file"></i></span><span>{{ _('Upload file') }}</span></a></li>
+                {% endif %}
+                {% if is_selected_blog %}
+                    <li class="list_titile">{{ _('Setting') }}</li>
+                    <li {% if active_menu == 'blog_templates/index' or active_menu == 'entries/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'BlogTemplates','index', {'device_type': 4}) }}"><span><i class="sidemenu_template"></i></span><span>{{ _('Template management') }}</span></a></li>
+                    <li {% if active_menu == 'blog_plugins/index' or active_menu == 'entries/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'blog_plugins','index', {'device_type': 4 }) }}"><span><i class="sidemenu_plugin"></i></span><span>{{ _('Plugin management') }}</span></a></li>
+                    <li {% if active_menu == 'categories/create' or active_menu == 'categories/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Categories', 'create') }}"><span><i class="sidemenu_category"></i></span><span>{{ _('Category management') }}</span></a></li>
+                    <li {% if active_menu == 'tags/index' or active_menu == 'tags/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Tags', 'index') }}"><span><i class="sidemenu_tag"></i></span><span>{{ _('List of tags') }}</span></a></li>
+                    <li {% if active_menu == 'blogs/edit' or active_menu == 'blog_settings/entry_edit' or active_menu == 'blog_settings/comment_edit' or active_menu == 'blog_settings/etc_edit' or active_menu =='blogs/delete' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Blogs', 'edit') }}"><span><i class="sidemenu_setting"></i></span><span>{{ _('Blog setting') }}</span></a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div id="right_menu" class="sidemenu">
+            <ul>
+                <li class="list_titile">{{ _('User Menu') }}</li>
+                <li {% if active_menu == 'blogs/index' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Blogs', 'index') }}"><span><i class="sidemenu_myblog"></i></span><span>{{ _('List of blogs') }}</span></a></li>
+                <li {% if active_menu == 'users/edit' or active_menu == 'users/withdrawal' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'edit') }}"><span><i class="sidemenu_setting"></i></span><span>{{ _('User setting') }}</span></a></li>
+                <li><a class="touch" href="{{ url(req, 'Users', 'logout') }}"><span><i class="sidemenu_logout"></i></span><span>{{ _('Logout') }}</span></a></li>
+                {% if debug %}
+                    <li class="list_titile">デバッグ用</li>
+                    <li><a class="touch" href="{{ url(req, 'Users', 'index') }}"><span><i class="sidemenu_history"></i></span><span>ユーザー一覧</span></a></li>
+                {% endif %}
+                <li class="list_titile">{{ _('Blog name') }}</li>
+                {% for key, blog in blog_list %}
+                    <li {% if blog_id == key %}class="selected"{% endif %}><a href="{{ url(req, 'Blogs', 'choice', {'blog_id': key }) }}"><span><i class="sidemenu_home"></i></span><span>{{ blog }}</span></a></li>
+                {% endfor %}
+                <li {% if active_menu == 'blogs/create' %}class="selected"{% endif %}><a href="{{ url(req, 'Blogs', 'create') }}"><span><i class="sidemenu_myblog"></i></span><span>{{ _('Create a new blog') }}</span></a></li>
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if not isLogin %}
+        <div id="left_menu" class="sidemenu">
+          <ul>
+              {% if is_register_able %}
+              <li {% if active_menu == 'users/register' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'register') }}"><span><i class="sidemenu_editor"></i></span><span>{{ _('User registration') }}</span></a></li>
+              {% endif %}
+            <li {% if active_menu == 'users/login' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'login') }}"><span></span><span>{{ _('Login') }}</span></a></li>
+          </ul>
+        </div>
+    {% endif %}
+
+</div><!--#wrapper_all-->
+
+<div id="main-overlay" style=""></div>
+</body>
+</html>

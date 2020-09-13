@@ -286,6 +286,9 @@ abstract class Model implements ModelInterface
     $pages['page'] = $page;
     $pages['is_next'] = $page < $pages['max_page'] - 1;
     $pages['is_prev'] = $page > 0;
+    $pager_range = !empty($pager_range) ? $pager_range : 3;
+    $pages['start'] = max($pages['page'] - $pager_range, 0);
+    $pages['end'] = min($pages['page'] + $pager_range + 1, $pages['max_page']);
     return $pages;
   }
 

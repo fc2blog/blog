@@ -9,12 +9,6 @@ use Fc2blog\Web\Session;
 
 abstract class AdminController extends AppController
 {
-
-  public function __construct(Request $request, $method)
-  {
-    parent::__construct($request, $method);
-  }
-
   protected function beforeFilter(Request $request)
   {
     // 親のフィルター呼び出し

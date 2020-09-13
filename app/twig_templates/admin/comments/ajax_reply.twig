@@ -1,0 +1,85 @@
+<table>
+    <tbody>
+    <tr>
+        <th>{{ _('Article name') }}</th>
+        <td><a href="{{ entryUrl(req, comment.blog_id, comment.entry_id) }}" target="_blank">{{ comment.entry_title }}</a></td>
+    </tr>
+    <tr>
+        <th>{{ _('Contributor') }}</th>
+        <td>{{ comment.name }}</td>
+    </tr>
+    <tr>
+        <th>{{ _('Title') }}</th>
+        <td>{{ comment.title }}</td>
+    </tr>
+    <tr>
+        <th>{{ _('Body') }}</th>
+        <td>{{ comment.body|nl2br }}</td>
+    </tr>
+    {% if comment.mail %}
+        <tr>
+            <th>{{ _('E-mail address') }}</th>
+            <td>{{ comment.mail }}</td>
+        </tr>
+    {% endif %}
+    {% if comment.url %}
+        <tr>
+            <th>URL</th>
+            <td><a href="{{ comment.url }}" target="_blank">{{ comment.url }}</a></td>
+        </tr>
+    {% endif %}
+    <tr>
+        <th>{{ _('Public state') }}</th>
+        <td id="sys-open-status">
+            {% if comment.open_status == comment_open_status_public %}
+                {{ _('Published') }}
+            {% endif %}
+            {% if comment.open_status == comment_open_status_pending %}
+                {{ _('Approval pending') }} &raquo; <a href="{{ url(req, 'comments', 'approval', {id: comment.id}) }}" onclick="reply.approval({{ comment.id }}); return false;" id="sys-comment-approval">{{ _('Approval') }}</a>
+            {% endif %}
+            {% if comment.open_status == comment_open_status_private %}
+                {{ _('Only exposed administrator') }}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>{{ _('Updated date') }}</th>
+        <td>{{ comment.updated_at|date('Y-m-d H:i:s') }}</td>
+    </tr>
+    {% if comment.reply_status == comment_reply_status_reply %}
+        <tr>
+            <th>{{ _('Response time') }}</th>
+            <td>{{ comment.reply_updated_at|date('Y-m-d H:i:s') }}</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+
+<form method="POST" id="sys-comment-form" class="admin-form">
+
+    {% if comment.open_status != comment_open_status_private %}
+        {{ input(req, 'comment[reply_body]', 'textarea', {'style': 'width: 95%; height: 200px;'}) }}
+        <p class="error" style="display: none;" id="sys-reply-error"></p>
+
+        <p class="mb20">
+            {% if comment.reply_status == comment_reply_status_reply %}
+                <input type="button" id="sys-reply-button" value="{{ _('Update') }}" onclick="reply.submit({{ comment.id }});"/>
+            {% endif %}
+            {% if comment.reply_status != comment_reply_status_reply %}
+                <input type="button" id="sys-reply-button" value="{{ _('Reply') }}" onclick="reply.submit({{ comment.id }});"/><br/>
+                {% if comment.open_status == comment_open_status_pending %}
+                    ※{{ _('When you press the reply button, the message will be approved') }}
+                {% endif %}
+            {% endif %}
+            <span id="sys-reply-message" style="display: none;">{{ _('Is communicating ...') }}</span>
+        </p>
+    {% endif %}
+
+    <h3>{{ _('Delete Comment') }}</h3>
+    <div id="comment_dell" class="mb20">
+        <p class="mb10">{{ _('You can delete a comment by pressing the button below.') }}</p>
+        <a class="admin_common_btn dell_btn" href="{{ url(req, 'comments', 'delete', {id: comment.id}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a>
+    </div>
+
+</form>
+

@@ -3,6 +3,7 @@
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
+use Fc2blog\Config;
 use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
@@ -14,13 +15,17 @@ class FilesController extends AdminController
   /**
    * 一覧表示
    * @param Request $request
+   * @return string
    */
-  public function ajax_index(Request $request)
+  public function ajax_index(Request $request): string
   {
-    $files_model = Model::load('Files');
+    $files_model = new FilesModel();
 
     $blog_id = $this->getBlogId($request);
 
+    $this->set('file_default_limit', Config::get('FILE.DEFAULT_LIMIT'));
+    $this->set('page_list_file', App::getPageList($request, 'FILE'));
+    $this->set('page_limit_file', App::getPageLimit($request, 'FILE'));
     // 検索条件
     $where = 'blog_id=?';
     $params = array($blog_id);
@@ -59,30 +64,35 @@ class FilesController extends AdminController
     $files = $files_model->find('all', $options);
     $paging = $files_model->getPaging($options);
 
+    foreach ($files as &$file) {
+      $file['path'] = App::getUserFilePath($file, false, true);
+    }
+
     $this->set('files', $files);
     $this->set('paging', $paging);
+    $this->set('page_list_paging', Model::getPageList($paging));
 
-    // ajax表示
-    $this->layout = 'ajax.php';
+    return 'admin/files/ajax_index.twig';
   }
 
   /**
    * 新規作成
    * @param Request $request
+   * @return string
    */
-  public function upload(Request $request)
+  public function upload(Request $request): string
   {
-    /** @var FilesModel $files_model */
-    $files_model = Model::load('Files');
-
+    $files_model = new FilesModel();
     $blog_id = $this->getBlogId($request);
+    $request->generateNewSig();
 
-    Session::set('sig', App::genRandomString());
+    $this->set('file_max_size', Config::get('FILE.MAX_SIZE'));
+    $this->set('page_limit_file', App::getPageLimit($request, 'FILE'));
 
-    // 初期表示時
+    // アップロード時処理
     if ($request->file('file')) {
       // 新規登録処理
-      $errors = array();
+      $errors = [];
       $errors['file'] = $files_model->insertValidate($request->file('file'), $request->get('file'), $data_file);
       if (empty($errors['file'])) {
         $data_file['blog_id'] = $blog_id;
@@ -93,27 +103,29 @@ class FilesController extends AdminController
           $data_file['id'] = $id;
           $move_file_path = App::getUserFilePath($data_file, true);
           App::mkdir($move_file_path);
-          if(defined("THIS_IS_TEST")){
+          if (defined("THIS_IS_TEST")) {
             rename($tmp_name, $move_file_path);
-          }else {
+          } else {
             move_uploaded_file($tmp_name, $move_file_path);
           }
 
           $this->setInfoMessage(__('I have completed the upload of files'));
-          $this->redirect($request, array('action' => 'upload'));
+          $this->redirect($request, array('action' => 'upload')); // アップロード成功
         }
       }
 
       // エラー情報の設定
       $this->setErrorMessage(__('Input error exists'));
       $this->set('errors', $errors);
-      return;
+      return 'admin/files/upload.twig';
     }
 
     // PCの場合はajaxでファイル情報を取得するので以下の処理は不要
-    if (App::isPC()) {
-      return;
+    if (App::isPC($request)) {
+      return 'admin/files/upload.twig';
     }
+
+    // 初期表示処理
 
     // 検索条件
     $where = 'blog_id=?';
@@ -153,26 +165,36 @@ class FilesController extends AdminController
     $files = $files_model->find('all', $options);
     $paging = $files_model->getPaging($options);
 
+    foreach ($files as &$file) {
+      $file['path'] = App::getUserFilePath($file, false, true);
+    }
+
     $this->set('files', $files);
     $this->set('paging', $paging);
+
+    return 'admin/files/upload.twig';
   }
 
   /**
-   * 編集
-   * @param Request $request
-   */
-  public function edit(Request $request)
+   *編集
+* @param Request $request
+* @return string
+*/
+  public function edit(Request $request): string
   {
-    /** @var FilesModel $files_model */
-    $files_model = Model::load('Files');
-
+    $files_model = new FilesModel();
     $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
 
+    $this->set('file_max_size', Config::get('FILE.MAX_SIZE'));
+
     // 詳細データの取得
     if (!$file = $files_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->redirect($request, array('action' => 'index'));
+      $this->redirect($request, ['action' => 'index']);
     }
+
+    $file['path'] = App::getUserFilePath($file, false, true);
+    $file['thumbnail_path'] = App::getThumbnailPath(App::getUserFilePath($file, false, true), 600, 'w');
     $this->set('file', $file);
 
     if (!$request->get('file')) {
@@ -181,17 +203,17 @@ class FilesController extends AdminController
       if (!empty($back_url)) {
         $request->set('back_url', $back_url);    // 戻る用のURL
       }
-      Session::set('sig', App::genRandomString());
-      return;
+      $request->generateNewSig();
+      return 'admin/files/edit.twig';
     }
 
-    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!$request->isValidSig()) {
       $request = new Request();
-      $this->redirect($request, array('action' => 'upload'));
+      $this->redirect($request, ['action' => 'upload']);
     }
 
     // 新規登録処理
-    $errors = array();
+    $errors = [];
     $errors['file'] = $files_model->updateValidate($request->file('file'), $request->get('file'), $file, $data_file);
     if (empty($errors['file'])) {
       $tmp_name = isset($data_file['tmp_name']) ? $data_file['tmp_name'] : null;
@@ -203,9 +225,9 @@ class FilesController extends AdminController
           $data_file['blog_id'] = $blog_id;
           $move_file_path = App::getUserFilePath($data_file, true);
           App::deleteFile($blog_id, $id);
-          if(defined("THIS_IS_TEST")){
+          if (defined("THIS_IS_TEST")) {
             rename($tmp_name, $move_file_path);
-          }else{
+          } else {
             move_uploaded_file($tmp_name, $move_file_path);
           }
         }
@@ -215,7 +237,7 @@ class FilesController extends AdminController
         if (!empty($back_url)) {
           $this->redirect($request, $back_url);
         }
-        $this->redirect($request, array('action' => 'upload'));
+        $this->redirect($request, ['action' => 'upload']);
       }
     }
 
@@ -227,6 +249,7 @@ class FilesController extends AdminController
     if (!empty($back_url)) {
       $request->set('back_url', $back_url);    // 戻る用のURL
     }
+    return 'admin/files/edit.twig';
   }
 
   /**

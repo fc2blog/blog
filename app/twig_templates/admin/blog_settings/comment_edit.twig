@@ -1,0 +1,80 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Comments Settings') }}{% endblock %}
+
+{% block content %}
+<header><h2>{{ _('Comments Settings') }}</h2></header>
+
+{% include('admin/blog_settings/tab.twig') %}
+
+<form method="POST" id="sys-blog-template-form" class="admin-form">
+
+<table>
+  <tbody>
+    <tr>
+      <th>{{ _('Approval settings') }}</th>
+      <td>
+        {{ input(req, 'blog_setting[comment_confirm]', 'select', {'options': blog_settings_comment_confirm_list}) }}
+        {% if errors.blog_setting.comment_confirm %}<p class="error">{{ errors.blog_setting.comment_confirm }}</p>{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>{{ _('Display awaiting message') }}</th>
+      <td>
+        {{ input(req, 'blog_setting[comment_display_approval]', 'select', {'options': blog_settings_comment_display_approval_list}) }}
+        {% if errors.blog_setting.comment_display_approval %}<p class="error">{{ errors.blog_setting.comment_display_approval }}</p>{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>{{ _('Display private comment') }}</th>
+      <td>
+        {{ input(req, 'blog_setting[comment_display_private]', 'select', {'options': blog_settings_comment_display_private_list}) }}
+        {% if errors.blog_setting.comment_display_private %}<p class="error">{{ errors.blog_setting.comment_display_private }}</p>{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>{{ _('Sender information') }}</th>
+      <td>
+        {{ _('Save sender\'s information into Cookie?') }}
+        {{ input(req, 'blog_setting[comment_cookie_save]', 'select', {'options': blog_settings_comment_cookie_save_list}) }}
+        {% if errors.blog_setting.comment_cookie_save %}<p class="error">{{ errors.blog_setting.comment_cookie_save }}</p>{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>{{ _('Comment confirmation setting') }}</th>
+      <td>
+        {{ input(req, 'blog_setting[comment_captcha]', 'select', {'options': blog_settings_comment_captcha_list}) }}
+        {% if errors.blog_setting.comment_captcha %}<p class="error">{{ errors.blog_setting.comment_captcha }}</p>{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>{{ _('Display the latest comments') }}</th>
+      <td>
+        {{ input(req, 'blog_setting[comment_display_count]', 'text', {'maxlength': 10}) }}
+        {% if errors.blog_setting.comment_display_count %}<p class="error">{{ errors.blog_setting.comment_display_count }}</p>{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>{{ _('Display order of comments') }}</th>
+      <td>
+        {{ input(req, 'blog_setting[comment_order]', 'select', {'options': blog_settings_comment_order_list}) }}
+        {% if errors.blog_setting.comment_order %}<p class="error">{{ errors.blog_setting.comment_order }}</p>{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th>{{ _('Quotes Comments') }}</th>
+      <td>
+        {{ input(req, 'blog_setting[comment_quote]', 'select', {'options': blog_settings_comment_quote_list}) }}
+        {% if errors.blog_setting.comment_quote %}<p class="error">{{ errors.blog_setting.comment_quote }}</p>{% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td class="form-button" colspan="2">
+        <input type="submit" value="{{ _('Update') }}" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+<input type="hidden" name="sig" value="{{ sig }}">
+
+</form>
+{% endblock %}

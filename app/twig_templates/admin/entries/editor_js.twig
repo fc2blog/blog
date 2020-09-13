@@ -1,0 +1,229 @@
+{% block head_include_css %}
+    <!-- elRTE -->
+    <link rel="stylesheet" href="/js/elrte/css/elrte.min.css" type="text/css" media="screen">
+    <!-- /elRTE -->
+{% endblock %}
+
+{% block head_include_js %}
+    <!-- elRTE -->
+    <script type="text/javascript" src="/js/elrte/js/elrte.full.js"></script>
+
+    <!-- elRTE translation messages -->
+    <script type="text/javascript" src="/js/elrte/js/elRTE.options.js"></script>
+    <script type="text/javascript" src="/js/elrte/js/i18n/elrte.{{ lang_elrte }}.js"></script>
+    <!-- /elRTE -->
+
+    <!-- timepicker-addon -->
+    <script type="text/javascript" src="/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js"></script>
+    {% if lang != 'en' %}
+        <script type="text/javascript" src="/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-{{ lang }}.js"></script>
+    {% endif %}
+    <!-- /timepicker-addon -->
+
+    <script type="text/javascript" src="/js/js.cookie.js"></script>
+    <script type="text/javascript" src="/js/admin/entry_editor.js"></script>
+{% endblock %}
+
+<!-- メディアを追加する -->
+<div id="sys-add-media-dialog" title="{{ _('Add Media') }}">
+    <!-- Search Area -->
+    <div id="sys-add-media-search">
+        <input type="text" id="sys-add-media-search-keyword"/>
+        <input type="button" value="{{ _('Search') }}" id="sys-add-media-search-button"/>
+    </div>
+    <hr/>
+
+    <!-- Media Area -->
+    <div id="sys-add-media-load"></div>
+</div>
+
+<script>
+    $(function () {
+        // form内でEnterしてもsubmitさせない
+        common.formEnterNonSubmit('sys-entry-form');
+
+        // 追記と記事の設定の開閉処理
+        var cookie_config = {
+            expires: {{ cookie_common.expire }},
+            domain: '{{ cookie_common.domain }}',
+            path: '/',
+            sameSite: 'Lax'
+        };
+        $('#sys-accordion-extend').on('click', function () {
+            var next = $(this).next();
+            if (next.is(':visible')) {
+                next.slideUp('fast');
+                Cookies.set('js_entry_hide_extend', true, cookie_config);
+            } else {
+                next.slideDown('fast');
+                Cookies.remove('js_entry_hide_extend', cookie_config);
+            }
+        });
+        $('#sys-accordion-setting').on('click', function () {
+            var next = $(this).next();
+            if (next.is(':visible')) {
+                next.slideUp('fast');
+                Cookies.set('js_entry_hide_setting', true, cookie_config);
+            } else {
+                next.slideDown('fast');
+                Cookies.remove('js_entry_hide_setting', cookie_config);
+            }
+        });
+
+        // 公開区分による表示処理変更
+        $('input[name="entry[open_status]"]').on('change', function () {
+            var open_status = $('input[name="entry[open_status]"]:checked').val();
+            if (open_status == '{{ open_status_password }}') {
+                $('.sys-entry-password').slideDown('fast');
+            } else {
+                $('.sys-entry-password').slideUp('fast');
+            }
+        });
+        $('input[name="entry[open_status]"]:checked').change();
+
+        // date time picker
+        $('.date-time-picker').datetimepicker({
+            dateFormat: 'yy-mm-dd',
+            timeFormat: 'HH:mm:ss'
+        });
+
+        // ユーザータグ
+        // タグ追加(登録済みは登録しない)
+        function addUserTag(tag) {
+            tag = jQuery.trim(tag);
+            if (tag == "") {
+                return;
+            }
+            var tags = getTags();
+            for (var i = 0; i < tags.length; i++) {
+                if (tags[i] == tag) {
+                    return;
+                }
+            }
+            tag = tag.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            var html = $('<li><span class="ui-icon ui-icon-circle-close"></span><input type="hidden" name="entry_tags[]" value="' + tag + '" />' + tag + '</li>');
+            html.find('span.ui-icon').on('click', function () {
+                $(this).closest('li').remove();
+            });
+            $('#sys-add-tags').append(html);
+        }
+
+        // タグ一覧をテキストの配列で取得
+        function getTags() {
+            var tags = [];
+            $('#sys-add-tags > li > input').each(function () {
+                tags.push($(this).val());
+            });
+            return tags;
+        }
+
+        // タグの追加イベント
+        $('#sys-add-tag-text').on('keypress', function (e) {
+            if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
+                $('#sys-add-tag-button').click();
+            }
+        });
+        $('#sys-add-tag-button').on('click', function () {
+            var tags = $('#sys-add-tag-text').val().split(',');
+            for (var i = 0; i < tags.length; i++) {
+                addUserTag(tags[i]);
+            }
+            $('#sys-add-tag-text').val('');
+        });
+        $('#sys-use-well-tags > li').on('click', function () {
+            addUserTag($(this).html());
+        });
+
+        // タグの初期設定(編集用)
+        let tags = {};
+        tags = {{ entry_tags|json_encode()|raw }};
+        for (let key in tags) {
+            addUserTag(tags[key]);
+        }
+
+        // elRTEエディター使用
+        var opts = {
+            cssClass: 'el-rte',
+            height: 450,
+            toolbar: 'custome',
+            lang: '{{ lang_elrte }}',
+            cssfiles: ['/js/elrte/css/elrte-inner.css']
+        }
+
+        var isSetupString = false;
+        var entryBody = $('#sys-entry-body').val();
+        var entryExtend = $('#sys-entry-extend').val();
+        if (jQuery.trim(entryBody) == '') {
+            entryBody = ' ';
+            $('#sys-entry-body').val('Editor Setup...')
+            isSetupString = true;
+        }
+        if (jQuery.trim(entryExtend) == '') {
+            entryExtend = ' ';
+            $('#sys-entry-extend').val('Editor Setup...')
+            isSetupString = true;
+        }
+        $('#sys-entry-body').elrte(opts);
+        $('#sys-entry-extend').elrte(opts);
+        if (isSetupString) {
+            $('#sys-entry-body').elrte('val', entryBody);
+            $('#sys-entry-extend').elrte('val', entryExtend);
+        }
+
+        if (Cookies.get("js_entry_hide_extend")) $('#sys-accordion-extend').next().css("visibility", "").hide();
+
+        // submit時に編集前の状態に戻す
+        var source = {};
+        $('#sys-entry-form').submit(function () {
+            $('#sys-entry-body').val(source['body']);
+            $('#sys-entry-extend').val(source['extend']);
+        });
+
+        // プレビュー処理を行う
+        $('#sys-entry-form-preview').click(function () {
+            source['body'] = $('#sys-entry-body').elrte('val');   // submit用に値が変わるので一旦保存
+            source['extend'] = $('#sys-entry-extend').elrte('val');   // submit用に値が変わるので一旦保存
+            var action = '{{ url(req, 'Entries', 'preview', {'blog_id' : blog.id}, false ,true) }}';
+            $('#sys-entry-form').prop('action', action);
+            $('#sys-entry-form').prop('target', '_preview');
+            $('#sys-entry-form').submit();
+            $('#sys-entry-body').elrte('val', source['body']);   // 編集中の状態に戻す
+            $('#sys-entry-extend').elrte('val', source['extend']);   // 編集中の状態に戻す
+        });
+
+        // submit処理を行う
+        $('#sys-entry-form-submit').click(function () {
+            source['body'] = $('#sys-entry-body').elrte('val');   // submit用に値が変わるので一旦保存(本来不要だがpreviewと合わせる為必要)
+            source['extend'] = $('#sys-entry-extend').elrte('val');   // submit用に値が変わるので一旦保存(本来不要だがpreviewと合わせる為必要)
+            var action = '';
+            if ($('#sys-entry-form').find('input[name=id]').val()) {
+                action = '{{ url(req, 'Entries', 'edit') }}';
+            } else {
+                action = '{{ url(req, 'Entries', 'create') }}';
+            }
+            $('#sys-entry-form').prop('action', action);
+            $('#sys-entry-form').prop('target', '_self');
+        });
+
+        // メディア追加ボタンを追加する
+        function addEditorMenu(key) {
+            // メニュー作成
+            var html = '';
+            html += '<ul class="add-editor-menu">';
+            html += '<li><input type="button" value="{{ _('Add Media') }}" id="sys-add-image-' + key + '" /></li>';
+            html += '</ul>';
+            $('#sys-entry-' + key).closest('.el-rte').before(html);
+
+            // 追加したメニューにイベント追加
+            $('#sys-add-image-' + key).click(function () {
+                addMedia.open(key, {
+                    Add: '{{ _('Add') }}',
+                    elrte: true
+                });
+            });
+        }
+
+        addEditorMenu('body');
+        addEditorMenu('extend');
+    });
+</script>

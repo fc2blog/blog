@@ -2,7 +2,6 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
@@ -84,95 +83,105 @@ class UsersController extends AdminController
   /**
    * ユーザー情報変更処理
    * @param Request $request
+   * @return string
    */
-  public function edit(Request $request)
+  public function edit(Request $request): string
   {
-    /** @var UsersModel $users_model */
-    $users_model = Model::load('Users');
-
+    $users_model = new UsersModel();
     $user_id = $this->getUserId();
+    $this->set('tab', 'edit');
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('user') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
+    if (!$request->get('user') || !$request->isValidSig()) {
+      $request->generateNewSig();
       $user = $users_model->findById($user_id);
       unset($user['password']);
       $request->set('user', $user);
-      return;
+      $blogs_model = new BlogsModel();
+      $this->set('blogs_list', $blogs_model->getListByUserId($user_id));
+      return 'admin/users/edit.twig';
     }
 
     // 更新処理
-    $errors = array();
-    $white_list = array('password', 'login_blog_id');
+    $errors = [];
+    $white_list = ['password', 'login_blog_id'];
     $errors['user'] = $users_model->updateValidate($request->get('user'), $data_user, $white_list);
     if (empty($errors['user'])) {
       if ($users_model->updateById($data_user, $user_id)) {
         $this->setInfoMessage(__('Update User Information'));
-        $this->redirect($request, array('action' => 'edit'));
+        $this->redirect($request, ['action' => 'edit']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+
+    return 'admin/users/edit.twig';
   }
 
   /**
    * 退会
    * @param Request $request
+   * @return string
    */
-  public function withdrawal(Request $request)
+  public function withdrawal(Request $request): string
   {
+    $this->set('tab', 'withdrawal');
+
     // 退会チェック
-    if (!$request->get('user.delete') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
-      return ;
+    if (!$request->get('user.delete') || !$request->isValidSig()) {
+      $request->generateNewSig();
+      return 'admin/users/withdrawal.twig';
     }
 
     // 削除処理
     Model::load('Users')->deleteById($this->getUserId());
     $this->setInfoMessage(__('Was completed withdrawal'));
     $this->logout($request);
+    return 'admin/users/withdrawal.twig';
   }
 
   /**
    * ログイン
    * @param Request $request
+   * @return string
    */
-  public function login(Request $request)
+  public function login(Request $request): string
   {
+    $template = 'admin/users/login.twig';
+
     if ($this->isLogin()) {
       $this->redirect($request, Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
     }
 
-    $this->set('html_title', __('Login to Administration page'));
-
     // 初期表示時
     if (!$request->get('user')) {
-      return;
+      return $template;
     }
 
-    /** @var UsersModel $users_model */
-    $users_model = Model::load('Users');
+    $users_model = new UsersModel();
 
     // ログインフォームのバリデート
-    $errors = $users_model->loginValidate($request->get('user'), $data, array('login_id', 'password'));
+    $errors = $users_model->loginValidate($request->get('user'), $data, ['login_id', 'password']);
     if (empty($errors)) {
       $user = $users_model->findByLoginIdAndPassword($data['login_id'], $data['password']);
       if ($user) {
         // ログイン処理
         $blog = Model::load('Blogs')->getLoginBlog($user);
         $this->loginProcess($user, $blog);
-        $users_model->updateById(array('logged_at' => date('Y-m-d H:i:s')), $user['id']);
+        $users_model->updateById(['logged_at' => date('Y-m-d H:i:s')], $user['id']);
         if (!$this->isSelectedBlog()) {
-          $this->redirect($request, array('controller' => 'Blogs', 'action' => 'create'));
+          $this->redirect($request, ['controller' => 'Blogs', 'action' => 'create']);
         }
         $this->redirect($request, Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
       }
-      $errors = array('login_id' => __('Login ID or password is incorrect'));
+      $errors = ['login_id' => __('Login ID or password is incorrect')];
     }
+
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return $template;
   }
 
   /**

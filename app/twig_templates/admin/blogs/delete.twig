@@ -1,0 +1,42 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Blog Delete') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Blog Delete') }}</h2></header>
+
+    {% include('admin/blog_settings/tab.twig') %}
+
+    <form method="POST" id="sys-blogs-form" class="admin-form">
+        <table>
+            <tbody>
+            <tr>
+                <th>{{ _('Delete confirmation') }}</th>
+                <td>
+                    <input type="checkbox" name="blog[delete]" id="sys-blog-delete" value="1"/>
+                    <label for="sys-blog-delete">{{ _('Remove') }}</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="button" value="{{ _('Delete') }}" id="sys-withdrawal"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="sig" value="{{ sig }}">
+    </form>
+
+    <script>
+        $(function () {
+            $('#sys-withdrawal').on('click', function () {
+                if ($('input[name="blog[delete]"]:checked').length != 1) {
+                    alert('{{ _('Please check the box "Remove"') }}');
+                    return;
+                }
+                if (confirm('{{ _('Can not be undone if you remove, but Are you sure you want to delete really?') }}')) {
+                    $('#sys-blogs-form').submit();
+                }
+            });
+        });
+    </script>
+{% endblock %}

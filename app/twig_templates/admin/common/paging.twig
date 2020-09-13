@@ -1,0 +1,44 @@
+{# @var req \Fc2blog\Web\Request #}
+
+<ul class="paging">
+    {% if paging.is_prev %}
+        <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':0}, true) }}">&lt;&lt;</a></li>
+    {% endif %}
+
+    {% if paging.is_prev %}
+        <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':paging.page-1}, true) }}">&lt;</a></li>
+    {% endif %}
+
+    {% if 0 < paging.start %}
+        <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':0}, true) }}">&lt;</a></li>
+    {% endif %}
+
+    {% if 1 < paging.start %}
+        <li>...</li>
+    {% endif %}
+
+    {% for i in range(paging.start, paging.end-1) %}
+        {% if paging.page == i %}
+            <li class="active">{{ i+1 }}</li>
+        {% endif %}
+        {% if paging.page != i %}
+            <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':i}, true) }}">{{ i+1 }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if paging.end < (paging.max_page-1) %}
+        <li>...</li>
+    {% endif %}
+
+    {% if paging.end < paging.max_page %}
+        <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':paging.max_page-1}, true) }}">{{ paging.max_page }}</a></li>
+    {% endif %}
+
+    {% if paging.is_next %}
+        <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':paging.page+1}, true) }}">&gt;</a></li>
+    {% endif %}
+
+    {% if paging.is_next %}
+        <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':paging.max_pate-1}, true) }}">&gt;&gt;</a></li>
+    {% endif %}
+</ul>

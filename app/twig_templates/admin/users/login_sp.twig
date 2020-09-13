@@ -1,0 +1,25 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Login to Administration page') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('Login') }}</span></h1></header>
+    <form method="POST" class="admin-form">
+        <div class="form_area">
+            <div class="form_contents">
+                <h4>{{ _('Login ID') }}</h4>
+                <div class="common_input_text">{{ input(req,  'user[login_id]', 'text') }}</div>
+                {% if errors[login_id] %}<span class="error">{{ errors['login_id'] }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Password') }}</h4>
+                <div class="common_input_text">{{ input(req,  'user[password]', 'password') }}</div>
+                {% if errors[password] %}<span class="error">{{ errors['password'] }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <div class="btn">
+                    <button type="submit" class="btn_contents positive touch"><i class="btn_icon"></i>{{ _('Login') }}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -16,13 +16,17 @@ class BlogTemplatesController extends AdminController
   /**
    * 一覧表示
    * @param Request $request
+   * @return string
    */
-  public function index(Request $request)
+  public function index(Request $request): string
   {
-    Session::set('sig', App::genRandomString());
-
+    $request->generateNewSig();
     $blog_id = $this->getBlogId($request);
-    $device_type = $request->get('device_type', 0);
+    if (App::isPC($request)) {
+      $device_type = $request->get('device_type', 0);
+    } else {
+      $device_type = $request->get('device_type', 1);
+    }
 
     $blog = $this->getBlog($blog_id);
     $blogs_model = new BlogsModel();
@@ -31,14 +35,23 @@ class BlogTemplatesController extends AdminController
     // デバイス毎に分けられたテンプレート一覧を取得
     $blog_template = new BlogTemplatesModel();
     $device_blog_templates = $blog_template->getTemplatesOfDevice($blog_id, $device_type);
+    foreach ($device_blog_templates as $_device_type => &$blog_templates) {
+      foreach ($blog_templates as &$blog_template) {
+        $blog_template['device_key'] = Config::get('DEVICE_FC2_KEY.' . $_device_type);
+      }
+    }
     $this->set('device_blog_templates', $device_blog_templates);
+    $this->set('devices', Config::get('DEVICE_NAME'));
+
+    return "admin/blog_templates/index.twig";
   }
 
   /**
    * FC2のテンプレート一覧
    * @param Request $request
+   * @return string
    */
-  public function fc2_index(Request $request)
+  public function fc2_index(Request $request): string
   {
     // デバイスタイプの設定
     $device_type = $request->get('device_type', Config::get('DEVICE_PC'));
@@ -56,14 +69,17 @@ class BlogTemplatesController extends AdminController
 
     $this->set('templates', $templates);
     $this->set('paging', $paging);
+    $this->set('devices', Config::get('DEVICE_NAME'));
+
+    return "admin/blog_templates/fc2_index.twig";
   }
 
   /**
-   * FC2のテンプレート一覧
+   * FC2のテンプレート詳細（スマホ用）
    * @param Request $request
    * @return string
    */
-  public function fc2_view(Request $request)
+  public function fc2_view(Request $request): string
   {
     // 戻る用URLの設定
     $back_url = $request->getReferer();
@@ -82,91 +98,98 @@ class BlogTemplatesController extends AdminController
       return $this->error404();
     }
     $this->set('template', $template);
-    return "";
+
+    return "admin/blog_templates/fc2_view.twig"; // これはSP版しかないページです
   }
 
   /**
    * 新規作成
    * @param Request $request
+   * @return string
    */
-  public function create(Request $request)
+  public function create(Request $request): string
   {
-    /** @var BlogTemplatesModel $blog_templates_model */
-    $blog_templates_model = Model::load('BlogTemplates');
+    $blog_templates_model = new BlogTemplatesModel();
+
+    // テンプレート置換用変数読み込み
+    Config::read('fc2_template.php');
+    $this->set('template_syntaxes', array_merge(array_keys(Config::get('fc2_template_foreach')), array_keys(Config::get('fc2_template_if'))));
 
     // 初期表示時
-    if (!$request->get('blog_template') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('blog_template') || !$request->isValidSig()) {
       // FC2テンプレートダウンロード
       if ($request->get('fc2_id')) {
         $device_type = $request->get('device_type');
         $device_key = Config::get('DEVICE_FC2_KEY.' . $device_type);
         $template = Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
-        $request->set('blog_template', array(
+        $request->set('blog_template', [
           'title' => $template['name'],
           'html' => $template['html'],
           'css' => $template['css'],
           'device_type' => $device_type,
-        ));
+        ]);
       } else {
         $request->set('blog_template.device_type', $request->get('device_type'));
       }
-      Session::set('sig', App::genRandomString());
-      return;
+      $request->generateNewSig();;
+      return "admin/blog_templates/create.twig";
     }
 
     // 新規登録処理
-    $errors = array();
-    $white_list = array('title', 'html', 'css', 'device_type');
+    $errors = [];
+    $white_list = ['title', 'html', 'css', 'device_type'];
     $errors['blog_template'] = $blog_templates_model->validate($request->get('blog_template'), $blog_template_data, $white_list);
     if (empty($errors['blog_template'])) {
       $blog_template_data['blog_id'] = $this->getBlogId($request);
       if ($id = $blog_templates_model->insert($blog_template_data)) {
         $this->setInfoMessage(__('I created a template'));
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, ['action' => 'index']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return "admin/blog_templates/create.twig";
   }
 
   /**
    * 編集
    * @param Request $request
+   * @return string
    */
-  public function edit(Request $request)
+  public function edit(Request $request): string
   {
-    /** @var BlogTemplatesModel $blog_templates_model */
-    $blog_templates_model = Model::load('BlogTemplates');
+    $blog_templates_model = new BlogTemplatesModel();
 
     $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
 
     // 初期表示時に編集データの取得&設定
-    if (!$request->get('blog_template') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+    if (!$request->get('blog_template') || !$request->isValidSig()) {
       if (!$blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, ['action' => 'index']);
       }
       $request->set('blog_template', $blog_template);
-      Session::set('sig', App::genRandomString());
-      return;
+      $request->generateNewSig();
+      return "admin/blog_templates/edit.twig";
     }
 
     // 更新処理
-    $errors = array();
-    $white_list = array('title', 'html', 'css');
+    $errors = [];
+    $white_list = ['title', 'html', 'css'];
     $errors['blog_template'] = $blog_templates_model->validate($request->get('blog_template'), $blog_template_data, $white_list);
     if (empty($errors['blog_template'])) {
       if ($blog_templates_model->updateByIdAndBlogId($blog_template_data, $id, $blog_id)) {
         $this->setInfoMessage(__('I have updated the template'));
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, ['action' => 'index']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return "admin/blog_templates/edit.twig";
   }
 
   /**

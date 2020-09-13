@@ -22,7 +22,7 @@ class ChoiceTest extends TestCase
 
     // Ja表記を確認
     $c = $this->reqGet("/admin/common/notice");
-    $this->assertStringContainsString("<title>testblog2</title>", $c->getOutput());
+    $this->assertStringContainsString("testblog2", $c->getOutput());
     $this->assertEquals("testblog2", $this->clientTraitSession['blog_id']);
   }
 
@@ -44,6 +44,5 @@ class ChoiceTest extends TestCase
     $c = $this->reqGet("/admin/blogs/create");
     $this->assertInstanceOf(BlogsController::class, $c);
     $this->assertEquals('create', $c->getResolvedMethod());
-    $this->assertEquals('admin/blogs/create.php', $c->getTemplateFilePath());
   }
 }

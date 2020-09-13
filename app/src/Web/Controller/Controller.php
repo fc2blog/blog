@@ -9,12 +9,21 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
-use Fc2blog\Util\I18n;
 use Fc2blog\Util\Log;
 use Fc2blog\Util\StringCaseConverter;
+use Fc2blog\Util\Twig\GetTextHelper;
+use Fc2blog\Util\Twig\HtmlHelper;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
+use InvalidArgumentException;
 use LogicException;
+use RuntimeException;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
@@ -24,63 +33,49 @@ abstract class Controller
   private $templateFilePath = "";
   private $layoutFilePath = "";
   private $resolvedMethod;
-  private $request;
+  protected $request;
 
-  public function __construct(Request $request, $method)
+  public function __construct(Request $request)
   {
     $this->request = $request;
+  }
 
-    $lang = I18n::setLanguage($request);
-    $request->lang = $lang;
+  public function execute($method)
+  {
+    $this->beforeFilter($this->request);
 
-    $className = get_class($this);
-
-    { // PSR-4 対応のためのTweak
-      // namespace付きクラス名から、クラス名へ
-      $classNamePathList = explode('\\', $className);
-      $className = $classNamePathList[count($classNamePathList) - 1];
-    }
-
-    // コントローラー名の設定（後でアクセス許可判定などに使われる
-    $controllerName = explode('Controller', $className);
-    Config::set('ControllerName', $controllerName[0]);
-
-    // メソッド名の設定（後でアクセス許可判定などに使われる
-    Config::set('ActionName', $method);
-
-    // デバイスタイプの設定（TODO ここでなくても良さそうだが
-    Config::set('DeviceType', App::getDeviceType($request));
-
-    // アプリプレフィックス、テンプレートファイル名決定に使われる
-    $prefix = Config::get('APP_PREFIX'); // TODO Request に持たせられそう
-
-    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Prefix[' . $prefix . '] Controller[' . $className . '] Method[' . $method . '] Device[' . Config::get('DeviceType') . ']');
-
-    $this->beforeFilter($request);
-
-    // アクションの実行(返り値はテンプレートファイル名)
+    // アクションの実行(返り値はテンプレートファイル名、レンダリング用データは$this->data)
     $this->resolvedMethod = $method;
-    $template = $this->$method($request);
+    $template = $this->$method($this->request);
 
     // 空の場合は、規約に則ってテンプレートファイルを決定する
     if (empty($template)) {
-      $template = substr($className, 0, strlen($className) - strlen('Controller')) . '/' . $method . '.php';
+      // TODO prefixもつけて、ここでフルパスにしたほうがよくないか？（後でPrefixをわざわざつけている）
+      $template = strtolower($this->request->shortControllerName) . '/' . $method . '.php';
     }
 
-    // 後での置換のため、出力を一時変数へ
-    ob_start();
-    $this->layout($request, $template);
-    $this->output = ob_get_clean();
+    // 出力を$this->outputで保持。後ほどemit()すること。
+    // TODO PHPテンプレートとTwigテンプレートの移行中なので、テンプレートファイル名で切り分ける
+    if (preg_match("/\.twig\z/u", $template)) {
+      $this->renderByTwig($this->request, $template);
+    } else {
+      ob_start();
+      $this->layout($this->request, $template);
+      $this->output = ob_get_clean();
+    }
 
-    // SSI的なインクルード処理など
+    // SSI的なインクルード処理など（現状活用されていない）
+    // TODO 必要になるまで削除して良いと思われる
     $this->beforeRender();
+  }
 
-    // 結果を出力
-    if (!defined("THIS_IS_TEST")) {
-      echo $this->output;
-    }
+  public function emit()
+  {
+    echo $this->output;
+  }
 
-    return $this;
+  public function getShortClassName()
+  {
   }
 
   protected function beforeFilter(Request $request)
@@ -122,13 +117,14 @@ abstract class Controller
     $url .= $hash;
 
     // デバッグ時にSessionにログを保存
-    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Redirect[' . $url . ']');
+    Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Redirect[' . $url . ']');
 
     if (!is_null($blog_id) && $full_url) {
       $status_code = BlogsModel::getRedirectStatusCodeByBlogId($blog_id);
     } else {
       $status_code = 302;
     }
+    // TODO Twig化が完了したら、Redirectをここで行わずに上位で行えるようにしたい（途中でのexitをなくしたい）
     if (!headers_sent()) {
       // full url指定時のリダイレクトは、Blogの設定がもつステータスコードを利用する
       header('Location: ' . $url, true, $status_code);
@@ -160,7 +156,93 @@ abstract class Controller
     $this->redirect($request, $url, $hash);
   }
 
-  private function layout(Request $request, $fw_template)
+  /**
+   * TwigテンプレートエンジンでHTMLをレンダリング
+   * 結果は $this->output に保管される
+   * 現状、Admin用画面のみでの利用を想定
+   * @param Request $request
+   * @param string $twig_template
+   */
+  private function renderByTwig(Request $request, string $twig_template): void
+  {
+    $base_path = realpath(__DIR__ . "/../../../twig_templates/") . "/";
+    $loader = new FilesystemLoader($base_path);
+    $twig = new Environment($loader);
+
+    foreach (
+      array_merge(
+        (new GetTextHelper())->getFunctions(),
+        (new HtmlHelper())->getFunctions(),
+      ) as $function) {
+      $twig->addFunction($function);
+    }
+
+    $twig_template_path = $twig_template;
+    $twig_template_device_path = preg_replace("/\.twig\z/u", '_' . App::getDeviceTypeStr($request) . '.twig', $twig_template_path);
+
+    if (is_file($base_path . $twig_template_device_path)) { // デバイス用ファイルがある
+      $twig_template_path = $twig_template_device_path;
+    }
+
+    if (!is_file($base_path . $twig_template_path)) {
+      throw new InvalidArgumentException("Twig error: missing template: {$base_path}{$twig_template_path}");
+    }
+
+    // TODO remove me. this is test.
+//    $this->setInfoMessage("test info");
+//    $this->setWarnMessage("test warn");
+//    $this->setErrorMessage("test error");
+
+    $this->data['request'] = $request; // TODO Adhocに追加しているので、どこか適切な場所に移動する
+    $blogs_model = new BlogsModel();
+    $data = [ // 各種ベースとなるデータ // TODO 整理共通化リファクタリング
+      'req' => $request,
+      'sig' => Session::get('sig'),
+      'lang' => $request->lang,
+      'debug' => Config::get('APP_DEBUG') != 0,
+      'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)]), // 代用できそう
+      'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
+      'active_menu' => App::getActiveMenu($request),
+      'isLogin' => $this->isLogin(), // TODO admin 以外ではどうするか
+      'nick_name' => $this->getNickName(), // TODO admin 以外ではどうするか
+      'blog_list' => $blogs_model->getSelectList($this->getUserId()),  // TODO admin 以外ではどうするか
+      'is_selected_blog' => $this->isSelectedBlog(), // TODO admin以外ではどうするか
+      'flash_messages' => $this->removeMessage(), // TODO admin 以外ではどうするか
+      'js_common' => [
+        'isURLRewrite' => Config::get('URL_REWRITE'),
+        'baseDirectory' => Config::get('BASE_DIRECTORY'),
+        'deviceType' => $request->deviceType,
+        'deviceArgs' => App::getArgsDevice($request)
+      ],
+      'cookie_common' => [
+        'expire' => Config::get('COOKIE_EXPIRE'),
+        'domain' => Config::get('COOKIE_DEFAULT_DOMAIN')
+      ]
+    ];
+    // ログインしていないと確定しない変数
+    if ($this->getBlog($this->getBlogId($request)) !== false && is_string($this->getBlogId($request))) {
+      $data['blog'] = $this->getBlog($this->getBlogId($request));
+      $data['blog']['url'] = $blogs_model::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) . "/" . $this->getBlogId($request) . "/";
+    }
+    $data = array_merge($data, $this->data);
+
+    try {
+      $this->output = $twig->render($twig_template_path, $data);
+    } catch (LoaderError $e) {
+      throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
+    } catch (RuntimeError $e) {
+      throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
+    } catch (SyntaxError $e) {
+      throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
+    }
+  }
+
+  /**
+   * PHPを用いたテンプレートエンジンでHTMLをレンダリング
+   * @param Request $request
+   * @param string|null $fw_template スコープ変数として、 include(〜)の中で利用されている
+   */
+  private function layout(Request $request, ?string $fw_template)
   {
     // 定義済み変数に関しては展開させない
     unset($this->data['fw_template']);
@@ -171,14 +253,14 @@ abstract class Controller
     // アプリプレフィックス
     $prefix = strtolower(Config::get('APP_PREFIX'));
 
-    Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Layout[' . $this->layout . ']');
+    Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Layout[' . $this->layout . ']');
     if ($this->layout == '') {
       // layoutが空の場合は表示処理を行わない
       return;
     }
 
     $fw_template_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
+    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       if (defined("THIS_IS_TEST")) {
         $this->layoutFilePath = $fw_template_path; // テスト用に退避
@@ -194,12 +276,12 @@ abstract class Controller
       include($fw_template_path);
     } else {
       $this->layoutFilePath = ""; // テスト用に退避
-      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Not Found Layout[' . $fw_template_path . ']');
+      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Not Found Layout[' . $fw_template_path . ']');
     }
   }
 
   /**
-   * 画面表示処理
+   * PHPを用いたテンプレートエンジンで本文部分の画面HTMLをレンダリング
    * @param Request $request
    * @param $fw_template
    * @param array $fw_data
@@ -229,7 +311,7 @@ abstract class Controller
 
     // Template表示
     $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? strtolower(Config::get('APP_PREFIX')) . '/' : '') . $fw_template;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . Config::get('DeviceType')) . '.$2', $fw_template_path);
+    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       if (defined("THIS_IS_TEST")) {
         $this->templateFilePath = $fw_template_device_path; // テスト用に退避
@@ -244,10 +326,10 @@ abstract class Controller
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
       /** @noinspection PhpIncludeInspection */
       include($fw_template_path);
-      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Template[' . $fw_template_path . ']');
+      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Template[' . $fw_template_path . ']');
     } else {
       $this->templateFilePath = "";
-      Log::debug_log(__FILE__ . ":" . __LINE__ ." ".'Not Found Template[' . $fw_template_path . ']');
+      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Not Found Template[' . $fw_template_path . ']');
     }
   }
 
@@ -280,9 +362,6 @@ abstract class Controller
 
   public function get(string $key)
   {
-    if (!defined("THIS_IS_TEST")) {
-      throw new LogicException("the method is only for testing.");
-    }
     return $this->data[$key];
   }
 

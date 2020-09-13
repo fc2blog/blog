@@ -1,0 +1,93 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('List of articles') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('List of articles') }}</h2></header>
+
+    <h3 id="entry_count">
+        {{ _('Entry search') }}[{{ _('Hits') }}&nbsp;{{ paging.count }}{{ _(' results') }}]
+        {{ input(req, 'limit', 'select', {'options':entry_limit_list, 'default': entry_default_limit}) }}
+        {{ input(req, 'page', 'select', {'options':page_list, 'default':'0'}) }}
+    </h3>
+    <p>{{ _('You can search in accordance with the conditions of past articles.') }}</p>
+    <div id="entry_search">
+        <form method="GET" id="sys-search-form">
+            <input type="hidden" name="mode" value="Entries"/>
+            <input type="hidden" name="process" value="index"/>
+            {{ input(req, 'category_id', 'select', {'options' : category_list_w}) }}
+            {{ input(req, 'tag_id', 'select', {'options': tag_list_w }) }}
+            {{ input(req, 'open_status', 'select', {'options': open_status_list_w }) }}
+            {{ input(req, 'limit', 'hidden', {'default' : entry_default_limit}) }}
+            {{ input(req, 'page', 'hidden', {'default' : '0'}) }}
+            {{ input(req, 'order', 'hidden', {'default' : 'posted_at_desc'}) }}
+            <br/>
+            {{ input(req, 'keyword', 'text', {'maxlength' : '100'}) }}
+            <input type="submit" value="{{ _('Search') }}"/>
+        </form>
+    </div>
+    <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
+
+    {% include('admin/common/paging.twig') %}
+
+    <form method="POST" id="sys-list-form">
+        <table>
+            <thead>
+            <tr>
+                <th><input type="checkbox" onclick="common.fullCheck(this);"/></th>
+                <th><a href="javascript:void(0);" onclick="orderChange('posted_at_desc'); return false;">{{ _('Date') }}</a></th>
+                <th><a href="javascript:void(0);" onclick="orderChange('title_asc'); return false;">{{ _('Title') }}</a></th>
+                <th><a href="javascript:void(0);" onclick="orderChange('body_asc'); return false;">{{ _('Body') }}</a></th>
+                <th>{{ _('Edit') }}</th>
+                <th>{{ _('State') }}</th>
+                <th><a href="javascript:void(0);" onclick="orderChange('comment_desc'); return false;">{{ _('Comment') }}</a></th>
+                <th>{{ _('Delete') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for entry in entries %}
+                <tr>
+                    <td class="center ss_cell"><input type="checkbox" name="id[]" value="{{ entry.id }}"/></td>
+                    <td>{{ entry.posted_at|date('Y-m-d') }}</td>
+                    <td class="m_cell">
+                        <a href="{{ entryUrl(req, entry.blog_id, entry.id) }}" target="_blank">
+                            {{ t(entry.title, 10) }}
+                        </a>
+                    </td>
+                    <td>{{ t(entry.body) }}</td>
+                    <td class="center s_cell"><a href="{{ url(req, 'entries', 'edit', {'id':entry.id}) }}">{{ _('Edit') }}</a></td>
+                    <td>{{ open_status_list[entry.open_status] }}</td>
+                    <td>
+                        {% if entry.comment_count>0 %}
+                            <a href="{{ url(req, 'Comments', 'index', {'entry_id': entry.id}) }}">{{ entry.comment_count }}</a>
+                        {% endif %}
+                        {% if entry.comment_count<=0 %}
+                            {{ entry.comment_count }}
+                        {% endif %}
+                    </td>
+                    <td class="center s_cell">
+                        <a href="{{ url(req, 'entries', 'delete', {'id':entry.id, 'sig':sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">
+                            {{ _('Delete') }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <input type="hidden" name="mode" value="entries"/>
+        <input type="hidden" name="process" value="delete"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+        <input type="button" id="sys-entries-delete-button" value="{{ _('Remove what you have selected') }}" onclick="if(confirm('{{ _('Are you sure you want to delete?') }}')) $('#sys-list-form').submit();" disabled="disabled"/>
+    </form>
+
+    {% include('admin/common/paging.twig') %}
+
+    <script>
+        $(function () {
+            // 記事削除用のチェックボックスがチェックされている時だけ削除ボタンを有効化する
+            $('input[type=checkbox][name="id[]"]').on('change', function () {
+                $('#sys-entries-delete-button').prop('disabled', !$('input[type=checkbox][name="id[]"]:checked').length);
+            });
+        });
+    </script>
+{% endblock %}

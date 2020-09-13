@@ -4,9 +4,13 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\CategoriesModel;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\EntryCategoriesModel;
+use Fc2blog\Model\EntryTagsModel;
+use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
+use Fc2blog\Model\TagsModel;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
@@ -16,23 +20,24 @@ class EntriesController extends AdminController
   /**
    * 一覧表示
    * @param Request $request
+   * @return string
    */
-  public function index(Request $request)
+  public function index(Request $request): string
   {
-    $entries_model = Model::load('Entries');
-
+    $entries_model = new EntriesModel();
     $blog_id = $this->getBlogId($request);
 
     // 検索条件
     $where = 'entries.blog_id=?';
-    $params = array($blog_id);
-    $from = array();
+    $params = [$blog_id];
+    $from = [];
 
+    // クエリの生成
     if ($keyword = $request->get('keyword')) {
       $keyword = Model::escape_wildcard($keyword);
       $keyword = "%{$keyword}%";
       $where .= ' AND (entries.title LIKE ? OR entries.body LIKE ? OR entries.extend LIKE ?)';
-      $params = array_merge($params, array($keyword, $keyword, $keyword));
+      $params = array_merge($params, [$keyword, $keyword, $keyword]);
     }
     if ($open_status = $request->get('open_status')) {
       $where .= ' AND entries.open_status=?';
@@ -40,12 +45,12 @@ class EntriesController extends AdminController
     }
     if ($category_id = $request->get('category_id')) {
       $where .= ' AND entry_categories.blog_id=? AND entry_categories.category_id=? AND entries.id=entry_categories.entry_id';
-      $params = array_merge($params, array($blog_id, $category_id));
+      $params = array_merge($params, [$blog_id, $category_id]);
       $from[] = 'entry_categories';
     }
     if ($tag_id = $request->get('tag_id')) {
       $where .= ' AND entry_tags.blog_id=? AND entry_tags.tag_id=? AND entries.id=entry_tags.entry_id';
-      $params = array_merge($params, array($blog_id, $tag_id));
+      $params = array_merge($params, [$blog_id, $tag_id]);
       $from[] = 'entry_tags';
     }
 
@@ -78,10 +83,10 @@ class EntriesController extends AdminController
         break;
     }
 
-    Session::set('sig', App::genRandomString());
+    $request->generateNewSig();
 
     // オプション設定
-    $options = array(
+    $options = [
       'fields' => 'entries.*',
       'where' => $where,
       'params' => $params,
@@ -89,31 +94,68 @@ class EntriesController extends AdminController
       'limit' => $request->get('limit', Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
       'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => $order,
-    );
+    ];
+
     $entries = $entries_model->find('all', $options);
     $paging = $entries_model->getPaging($options);
-
     $this->set('entries', $entries);
     $this->set('paging', $paging);
+
+    $this->set('entry_limit_list', Config::get('ENTRY.LIMIT_LIST'));
+    $this->set('entry_default_limit', Config::get('ENTRY.DEFAULT_LIMIT'));
+    $this->set('page_list', Model::getPageList($paging));
+
+    $categories_model = new CategoriesModel();
+    $tags_model = new TagsModel();
+    $entries_model = new EntriesModel();
+    $this->set('category_list_w', ['' => __('Category name')] + $categories_model->getSearchList($this->getBlogId($request)));
+    $this->set('tag_list_w', ['' => _('Tag name')] + $tags_model->getSearchList($this->getBlogId($request)));
+    $this->set('open_status_list_w', ['' => __('Public state')] + $entries_model::getOpenStatusList());
+    $this->set('open_status_list', $entries_model::getOpenStatusList());
+    return "admin/entries/index.twig";
   }
 
   /**
    * 新規作成
    * @param Request $request
+   * @return string
    */
-  public function create(Request $request)
+  public function create(Request $request): string
   {
-    /** @var EntriesModel $entries_model */
-    $entries_model = Model::load('Entries');
-    /** @var EntryCategoriesModel $entry_categories_model */
-    $entry_categories_model = Model::load('EntryCategories');
-
+    $entries_model = new EntriesModel();
+    $entry_categories_model = new EntryCategoriesModel();
+    $entry_tags_model = new EntryTagsModel();
+    $tags_model = new TagsModel();
+    $categories_model = new CategoriesModel();
     $blog_id = $this->getBlogId($request);
 
+    // data load
+    $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
+    $this->set('open_status_list', EntriesModel::getOpenStatusList());
+    $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
+    $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
+    $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
+    $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
+    $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
+    $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
+    $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+    $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
+    $this->set('categories', $categories_model->getList($blog_id));
+    // 以下はSPテンプレ用で追加
+    $now = strtotime($request->get('entry.posted_at'));
+    $now = $now === false ? time() : $now;
+    $date_list = explode('/', date('Y/m/d/H/i/s', $now));
+    $this->set('entry_date_list', $date_list);
+    $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
+    $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
+    $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
+    $this->set('domain_user', Config::get('DOMAIN_USER'));
+    $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogId($request)], false, true));
+
     // 初期表示時
-    if (!$request->get('entry') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      Session::set('sig', App::genRandomString());
-      return;
+    if (!$request->get('entry') || !$request->isValidSig()) {
+      $request->generateNewSig();
+      return "admin/entries/create.twig";
     }
 
     // 新規登録処理
@@ -127,67 +169,96 @@ class EntriesController extends AdminController
         // カテゴリと紐付
         $entry_categories_model->save($blog_id, $id, $entry_categories_data);
         // タグと紐付
-        Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
+        $entry_tags_model->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I created a entry'));
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, array('action' => 'index')); // 保存成功
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return "admin/entries/create.twig";
   }
 
   /**
    * 編集
    * @param Request $request
+   * @return string
    */
-  public function edit(Request $request)
+  public function edit(Request $request):string
   {
-    /** @var EntriesModel $entries_model */
-    $entries_model = Model::load('Entries');
-    /** @var EntryCategoriesModel $entry_categories_model */
-    $entry_categories_model = Model::load('EntryCategories');
+    $entries_model = new EntriesModel();
+    $entry_categories_model = new EntryCategoriesModel();
+    $entry_tags_model = new EntryTagsModel();
+    $tags_model = new TagsModel();
+    $categories_model = new CategoriesModel();
 
-    $id = $request->get('id');
     $blog_id = $this->getBlogId($request);
+    $id = $request->get('id');
 
-    // 初期表示時に編集データの取得&設定
-    if (!$request->get('entry')) {
-      if (!$entry = $entries_model->findByIdAndBlogId($id, $blog_id)) {
-        $this->redirect($request, array('action' => 'index'));
-      }
-      $request->set('entry', $entry);
-      $request->set('entry_categories', array('category_id' => $entry_categories_model->getCategoryIds($blog_id, $id)));
-      $request->set('entry_tags', Model::load('Tags')->getEntryTagNames($blog_id, $id));   // タグの文字列をテーブルから取得
-      return;
+    if (!$entry = $entries_model->findByIdAndBlogId($id, $blog_id)) {
+      $this->redirect($request, array('action' => 'index'));
     }
 
-    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      return;
+
+    // 編集画面の表示
+    if (!$request->get('entry') || !$request->isValidSig()) {
+      $request->generateNewSig();
+
+      // data load
+      $request->set('entry', $entry);
+      $request->set('entry_categories', array('category_id' => $entry_categories_model->getCategoryIds($blog_id, $id)));
+      $request->set('entry_tags',$tags_model->getEntryTagNames($blog_id, $id));   // タグの文字列をテーブルから取得
+
+      $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
+      $this->set('open_status_list', EntriesModel::getOpenStatusList());
+      $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
+      $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
+      $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
+      $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
+      $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
+      $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
+      $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+      $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
+      $this->set('categories', $categories_model->getList($blog_id));
+      // 以下はSPテンプレ用で追加
+      $this->set('entry', $entry);
+      $now = strtotime($request->get('entry.posted_at'));
+      $now = $now === false ? time() : $now;
+      $date_list = explode('/', date('Y/m/d/H/i/s', $now));
+      $this->set('entry_date_list', $date_list);
+      $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
+      $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
+      $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
+      $this->set('domain_user', Config::get('DOMAIN_USER'));
+      $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogId($request)], false, true));
+
+      return "admin/entries/edit.twig";
     }
 
     // 更新処理
-    $errors = array();
-    $whitelist_entry = array('title', 'body', 'extend', 'open_status', 'password', 'auto_linefeed', 'comment_accepted', 'posted_at');
+    $errors = [];
+    $whitelist_entry = ['title', 'body', 'extend', 'open_status', 'password', 'auto_linefeed', 'comment_accepted', 'posted_at'];
     $errors['entry'] = $entries_model->validate($request->get('entry'), $entry_data, $whitelist_entry);
-    $errors['entry_categories'] = $entry_categories_model->validate($request->get('entry_categories'), $entry_categories_data, array('category_id'));
+    $errors['entry_categories'] = $entry_categories_model->validate($request->get('entry_categories'), $entry_categories_data, ['category_id']);
     if (empty($errors['entry']) && empty($errors['entry_categories'])) {
       if ($entries_model->updateByIdAndBlogId($entry_data, $id, $blog_id)) {
         // カテゴリと紐付
         $entry_categories_model->save($blog_id, $id, $entry_categories_data);
         // タグと紐付
-        Model::load('EntryTags')->save($blog_id, $id, $request->get('entry_tags'));
+        $entry_tags_model->save($blog_id, $id, $request->get('entry_tags'));
         // 一覧ページへ遷移
         $this->setInfoMessage(__('I have updated the entry'));
-        $this->redirect($request, array('action' => 'index'));
+        $this->redirect($request, ['action' => 'index']);
       }
     }
 
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
+    return "admin/entries/exit.twig";
   }
 
   /**
@@ -207,35 +278,39 @@ class EntriesController extends AdminController
   /**
    * ajaxでメディアを表示する画面
    * @param Request $request
+   * @return string
    */
   public function ajax_media_load(Request $request)
   {
-    $files_model = Model::load('Files');
-
+    $files_model = new FilesModel();
     $blog_id = $this->getBlogId($request);
 
     // 検索条件
     $where = 'blog_id=?';
-    $params = array($blog_id);
+    $params = [$blog_id];
     if ($request->get('keyword')) {
       $where .= ' AND name like ?';
       $params[] = '%' . $request->get('keyword') . '%';
     }
 
-    $options = array(
+    $options = [
       'where' => $where,
       'params' => $params,
       'limit' => Config::get('PAGE.FILE.LIMIT', App::getPageLimit($request, 'FILE_AJAX')),
       'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
       'order' => 'id DESC',
-    );
+    ];
     $files = $files_model->find('all', $options);
     $paging = $files_model->getPaging($options);
+
+    foreach($files as &$file){
+      $file['path']  = App::getUserFilePath($file);
+    }
 
     $this->set('files', $files);
     $this->set('paging', $paging);
 
-    $this->layout = 'ajax.php';
+    return 'admin/entries/ajax_media_load.twig';
   }
 
 }

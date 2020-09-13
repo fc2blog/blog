@@ -214,6 +214,18 @@ class App
   }
 
   /**
+   * デバイスタイプを取得する
+   * @param Request $request
+   * @return string|null
+   */
+  public static function getDeviceTypeStr(Request $request): string
+  {
+    $device_id = static::getDeviceType($request);
+    $device_table = Config::get("DEVICE_FC2_KEY");
+    return $device_table[$device_id];
+  }
+
+  /**
    * 現在のデバイスタイプをPC,SPの形で取得する
    * @param Request $request
    * @return string
@@ -252,38 +264,42 @@ class App
 
   /**
    * IOSかどうかを判定
+   * @param Request $request
    * @return bool
    */
-  public static function isIOS(): bool
+  public static function isIOS(Request $request): bool
   {
-    return self::isSP() && strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false;
+    return self::isSP($request) && strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false;
   }
 
   /**
    * Androidかどうかを判定
+   * @param Request $request
    * @return bool
    */
-  public static function isAndroid(): bool
+  public static function isAndroid(Request $request): bool
   {
-    return self::isSP() && strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
+    return self::isSP($request) && strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
   }
 
   /**
    * PC環境下どうかを調べる
+   * @param Request $request
    * @return bool
    */
-  public static function isPC(): bool
+  public static function isPC(Request $request): bool
   {
-    return Config::get('DeviceType') == Config::get('DEVICE_PC');
+    return $request->deviceType == Config::get('DEVICE_PC');
   }
 
   /**
    * SP環境下どうかを調べる
+   * @param Request $request
    * @return bool
    */
-  public static function isSP(): bool
+  public static function isSP(Request $request): bool
   {
-    return Config::get('DeviceType') == Config::get('DEVICE_SP');
+    return $request->deviceType == Config::get('DEVICE_SP');
   }
 
   /**
@@ -304,13 +320,13 @@ class App
       $args = array_merge($gets, $args);
     }
 
-    $controller = Config::get('ControllerName');
+    $controller = $controller = $request->shortControllerName;
     if (isset($args['controller'])) {
       $controller = $args['controller'];
       unset($args['controller']);
     }
 
-    $action = Config::get('ActionName');
+    $action = $request->methodName;
     if (isset($args['action'])) {
       $action = $args['action'];
       unset($args['action']);
@@ -330,7 +346,7 @@ class App
     }
 
     // 絶対パスが必要な際に、フルのホスト名を取得する
-    $full_domain = ($abs) ? BlogsModel::getFullHostUrlByBlogId($blog_id) : "";
+    $full_domain = ($abs && !is_null($blog_id)) ? BlogsModel::getFullHostUrlByBlogId($blog_id) : "";
 
     // TOPページの場合
     if (strtolower($controller) == 'entries' && strtolower($action) == 'index' && !empty($blog_id)) {
@@ -421,18 +437,14 @@ class App
 
   /**
    * 現在選択中のメニューかどうかを返す
-   * @param array params = array('entries/create', 'entries/edit', ...),
+   * @param Request $request
+   * @param array|string params = array('entries/create', 'entries/edit', ...),
    * @return bool
+   * TODO Configの削減
    */
-  public static function isActiveMenu(array $params): bool
+  public static function isActiveMenu(Request $request, $params): bool
   {
-    // コントローラー名とメソッド名を取得
-    static $controller_name = null;
-    static $method_name = null;
-    if ($controller_name == null) {
-      $controller_name = StringCaseConverter::snakeCase(Config::get('ControllerName'));
-      $method_name = StringCaseConverter::snakeCase(Config::get('ActionName'));
-    }
+    [$controller_name, $method_name] = explode( '/', static::getActiveMenu($request));
 
     if (is_string($params)) {
       $params = array($params);
@@ -440,7 +452,7 @@ class App
 
     // コントローラー名とメソッド名を判定
     foreach ($params as $value) {
-      list($c_name, $m_name) = explode('/', $value);
+      [$c_name, $m_name] = explode('/', $value);
       if (lcfirst($c_name) != $controller_name) {
         continue;
       }
@@ -450,6 +462,19 @@ class App
       return true;
     }
     return false;
+  }
+
+  /**
+   * 現在選択中のメニューを返す
+   * @param Request $request
+   * @return string
+   */
+  public static function getActiveMenu(Request $request):string
+  {
+    $controller_name = StringCaseConverter::snakeCase($request->shortControllerName);
+    $method_name = StringCaseConverter::snakeCase($request->methodName);
+
+    return "{$controller_name}/{$method_name}";
   }
 
   /**

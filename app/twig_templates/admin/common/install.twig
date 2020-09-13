@@ -1,0 +1,197 @@
+{% extends 'admin/layouts/default_nomenu.twig' %}
+{% block title %}{{ _('Environment Check') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Environment Check') }}</h2></header>
+    <style>
+        ul.check > li {
+            border: 1px solid #999;
+            margin: 3px;
+            padding: 3px;
+        }
+
+        ul.check > li.ok {
+            border: 1px solid #090;
+            background-color: #cfc;
+        }
+
+        ul.check > li.ng {
+            border: 1px solid #f66;
+            background-color: #fcc;
+        }
+
+        ul.check > li.ng p.ng {
+            padding: 3px;
+        }
+
+        ul.check > li.warning {
+            border: 1px solid #666;
+            background-color: #ccc;
+        }
+
+        ul.check > li hr {
+            border: 1px solid #333;
+            border-bottom: 1px solid #aaa;
+            background-color: #333;
+            margin: 0;
+        }
+
+        table#db {
+            width: 400px;
+            margin: 5px auto;
+        }
+
+        #db th {
+            width: 150px;
+        }
+    </style>
+    <ul class="check">
+        <li class="{% if is_write_temp %}ok{% endif %}{% if not is_write_temp %}ng{% endif %}">
+            {{ _('Write access to the temporary directory') }} . . .
+            {% if is_write_temp %}
+                OK
+            {% endif %}
+            {% if not is_write_temp %}
+                <span style="color: red;">NG!</span>
+                <hr/>
+                <p class="ng">[{{ temp_dir }}]<br/>{{ _('Please perform a writable set for the above folder') }}</p>
+            {% endif %}
+        </li>
+
+        <li class="{% if is_write_upload %}ok{% endif %}{% if not is_write_upload %}ng{% endif %}">
+            {{ _('Write access to the upload directory') }} . . .
+            {% if is_write_upload %}
+                OK
+            {% endif %}
+            {% if not is_write_upload %}
+                <span style="color: red;">NG!</span>
+                <hr/>
+                <p class="ng">[{{ www_upload_dir }}]<br/>{{ _('Please perform a writable set for the above folder') }}</p>
+            {% endif %}
+        </li>
+
+        <li class="{% if is_db_connect_lib %}ok{% endif %}{% if not is_db_connect_lib %}ng{% endif %}">
+            {{ _('Check connection library with MySQL') }} . . .
+            {% if is_db_connect_lib %}
+                OK
+            {% endif %}
+            {% if not is_db_connect_lib %}
+                <span style="color: red;">NG!</span>
+                <hr/>
+                <p class="ng">{{ _('Please enable pdo or mysqli') }}</p>
+            {% endif %}
+        </li>
+
+        <li class="{% if is_connect %}ok{% endif %}{% if not is_connect %}ng{% endif %}">
+            {{ _('Check connection to the MySQL') }} . . .
+            {% if is_connect %}
+                OK
+            {% endif %}
+            {% if not is_connect %}
+                <span style="color: red;">NG!</span>
+                <hr/>
+                <p class="ng">
+                    {{ _('Can not connect to DB') }}<br/>
+                    {{ _('Please check and there is no problem in the following setting') }}<br/>
+                    {{ _('Please change each item of config.php If you are different') }}
+                <pre class="db">{{ connect_message }}</pre>
+                </p>
+            {% endif %}
+            <table id="db">
+                <tr>
+                    <th>{{ _('Host name') }}</th>
+                    <td>{{ DB_HOST }}</td>
+                </tr>
+                <tr>
+                    <th>{{ _('User name') }}</th>
+                    <td>{{ DB_USER }}</td>
+                </tr>
+                <tr>
+                    <th>{{ _('Password') }}</th>
+                    <td>{{ DB_PASSWORD }}</td>
+                </tr>
+                <tr>
+                    <th>{{ _('Database name') }}</th>
+                    <td>{{ DB_DATABASE }}</td>
+                </tr>
+            </table>
+        </li>
+
+        {% if is_connect %}
+            <li class="{% if is_character %}ok{% endif %}{% if not is_character %}ng{% endif %}">
+                {{ _('Character code check of MySQL') }} . . .
+                {% if is_character %}
+                    OK
+                {% endif %}
+                {% if not is_character %}
+                    <span style="color: red;">NG!</span>
+                    <hr/>
+                    <p class="ng">
+                        {{ _('You can not use the character code of UTF8MB4 because the version of MySQL is older') }}<br/>
+                        {{ _('Please change to UTF8 DB_CHARSET') }}<br/>
+                        {{ _('Example') }}) define('DB_CHARSET', 'UTF8');
+                    </p>
+                {% endif %}
+            </li>
+        {% endif %}
+
+        <li class="{% if is_domain %}ok{% endif %}{% if not is_domain %}ng{% endif %}">
+            {{ _('Check the configuration of the domain') }} . . .
+            {% if is_domain %}
+                OK
+            {% endif %}
+            {% if not is_domain %}
+                <span style="color: red;">NG!</span>
+                <hr/>
+                <p class="ng">
+                    {{ _('Domain is set to the current domain') }}<br/>
+                    {{ _('Please change to the appropriate domain') }}<br/>
+                    {{ _('Example') }}) <?php echo $_SERVER["SERVER_NAME"]; ?>
+                </p>
+            {% endif %}
+        </li>
+
+        <li class="{% if is_salt %}ok{% endif %}{% if not is_salt %}ng{% endif %}">
+            {{ _('Check the configuration of the salt value') }} . . .
+            {% if is_salt %}
+                OK
+            {% endif %}
+            {% if not is_salt %}
+                <span style="color: red;">NG!</span>
+                <hr/>
+                <p class="ng">
+                    {{ _('Salt value for password check (random character string) is still in the initial string') }}<br/>
+                    {{ _('Please change to a string of alphanumeric which is not easily predicted') }}<br/>
+                    {{ _('Example') }}) {{ random_string }}
+                </p>
+            {% endif %}
+        </li>
+
+        <li class="{% if is_gd %}ok{% endif %}{% if not is_gd %}ng{% endif %}">
+            {{ _('Check the configuration of the GD library') }} . . .
+            {% if is_gd %}
+                OK
+            {% endif %}
+            {% if not is_gd %}
+                <span style="color: red;">NG!</span>
+                <hr/>
+                <p class="ng">
+                    {{ _('GD library does not have installed') }}<br/>
+                    {{ _('Though it is possible to proceed with the installation of the blog') }}<br/>
+                    {{ _('Until you install the GD library') }}<br/>
+                    {{ _('You can not use the ability to create a thumbnail image') }}
+                </p>
+            {% endif %}
+        </li>
+    </ul>
+
+    {% if is_all_ok %}
+        <form>
+            <input type="hidden" name="state" value="1"/>
+            <p class="form-button">
+                <input type="submit" value="{{ _('Install') }}"/>
+            </p>
+        </form>
+    {% endif %}
+
+{% endblock %}

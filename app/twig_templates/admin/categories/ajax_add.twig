@@ -1,0 +1,160 @@
+<table>
+    <tbody>
+    <tr>
+        <th>{{ _('Categories') }}</th>
+        <td>
+            <ul id="sys-category-list">
+                {{ renderCategoriesTree(categories, entry_categories) }}
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>{{ _('Category add') }}</th>
+        <td>
+            <dl class="form_item">
+                <dt><label>{{ _('Parent category') }}</label></dt>
+                <dd>
+                    <select id="sys-category-add-parent">
+                        <option value="0">{{ _('Not selected') }}</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {% if category.id == 1 %}disabled="disabled"{% endif %}>{{ spaceIndent(category.level) }}{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </dd>
+                <dt><label>{{ _('Category name') }}</label></dt>
+                <dd>
+                    <input type="text" id="sys-category-add-name" placeholder="{{ _('Category name') }}"/>
+                    <input id="sys-category-add" type="button" value="{{ _('Add') }}"/>
+                </dd>
+            </dl>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    // カテゴリーのチェックボックスクリック時 強調表示と親階層のチェック処理
+    function categoryChange(target) {
+        var target = $(target);
+        target.prop('checked') ? target.parent().addClass('active') : target.parent().removeClass('active');
+
+        // 以下の処理は親階層のチェック処理を行う
+        var parent = target.parent('li');
+
+        // 親全てチェック
+        if (target.prop('checked')) {
+            while ((parent = parent.parent('ul').parent('li').prev('li')).length) {
+                parent.find('input[type=checkbox]').prop('checked', true).parent().addClass('active');
+            }
+            return;
+        }
+
+        // 同一階層にチェック済みがない場合 １つ上の親のチェックを外す
+        while (!parent.siblings().children('input[type=checkbox]:checked').length) {
+            parent = parent.parent('ul').parent('li').prev('li');
+            if (!parent.length) {
+                return;
+            }
+            parent.find('input[type=checkbox]').prop('checked', false).parent().removeClass('active');
+        }
+    }
+
+    $(function () {
+        // セレクトボックスにカテゴリを追加
+        var addSelect = function (category) {
+            if (category.parent_id == 0) {
+                // 末尾に追加
+                $('#sys-category-add-parent').append($('<option>').html(category.name).val(category.id));
+                return;
+            }
+            // 親の子供の末尾に追加(目印になるものが無いので空白の個数便りに探しだしている)
+            var option = $('#sys-category-add-parent > option[value=' + category.parent_id + ']');
+            var spaceCount = option.html().split('&nbsp;&nbsp;&nbsp;').length;
+            var space = '';
+            for (var i = 0; i < spaceCount; i++) {
+                space += '&nbsp;&nbsp;&nbsp;';
+            }
+            do {
+                if (option.next('option').length == 0) {
+                    $('#sys-category-add-parent').append($('<option>').html(space + category.name).val(category.id));
+                    break;
+                }
+                option = option.next('option');
+                if (option.html().split(space).length - 1 == 0) {
+                    option.prev().after($('<option>').html(space + category.name).val(category.id));
+                    break;
+                }
+            } while (option.length);
+        };
+
+        // カテゴリ一覧にカテゴリを追加
+        var addList = function (category) {
+            var html = '<li class="active">';
+            html += '  <input id="sys-entry-categories-id-' + category.id + '" type="checkbox" name="entry_categories[category_id][]" value="' + category.id + '" checked="checked" onclick="categoryChange(this);" />';
+            html += '  <label for="sys-entry-categories-id-' + category.id + '">' + category.name + '</label>';
+            html += '</li>';
+            if (category.parent_id == 0) {
+                $('#sys-category-list').append($(html).hide());
+                $('#sys-entry-categories-id-' + category.id).parent().slideDown('fast');
+            } else {
+                var li = $('#sys-entry-categories-id-' + category.parent_id).parent();
+                if (!li.next().children('ul').length) {
+                    // 子無しの場合は子を入れるulを追加する
+                    li.after('<li><ul></ul></li>');
+                }
+                // 末尾に追加する
+                li.next().children('ul').append($(html).hide());
+                $('#sys-entry-categories-id-' + category.id).parent().slideDown('fast');
+            }
+        };
+
+        // Enterキーでカテゴリ追加
+        $('#sys-category-add-name').keypress(function (e) {
+            if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
+                $('#sys-category-add').click();
+            }
+        });
+
+        // カテゴリ追加処理
+        $('#sys-category-add').click(function () {
+            var parent_id = $('#sys-category-add-parent').val();
+            var name = $('#sys-category-add-name').val();
+            if (name == '') {
+                alert('{{ _('Please enter the category name') }}');
+                return;
+            }
+            if ($('#sys-category-add').prop('disabled')) {
+                return;
+            }
+
+            $('#sys-category-add').attr('disabled', 'disabled');
+            $('#sys-category-add').val('通信中');
+
+            $.ajax({
+                url: '{{ url(req, 'Categories', 'ajax_add') }}',
+                type: 'POST',
+                data: {
+                    category: {
+                        parent_id: parent_id,
+                        name: name
+                    },
+                    sig: "{{ sig }}"
+                },
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status != 1) {
+                        alert(json.error.name);
+                    } else {
+                        addSelect(json.category);    // セレクトボックスにカテゴリを追加
+                        addList(json.category);      // 一覧にカテゴリを追加
+                    }
+
+                    $('#sys-category-add-name').val('');
+                    $('#sys-category-add').removeAttr('disabled');
+                    $('#sys-category-add').val('{{ _('Add') }}');
+                }
+            });
+            return false;
+        });
+    });
+</script>

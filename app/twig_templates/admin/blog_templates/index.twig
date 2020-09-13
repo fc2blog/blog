@@ -1,0 +1,55 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Template management') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Template management') }}</h2></header>
+
+    {% for device_type, blog_templates in device_blog_templates %}{# 機種毎のループ #}
+        <h3>{{ attribute(devices, device_type) }}</h3>
+        <p class="header_btn">
+            <a class="admin_common_btn create_btn" href="{{ url(req, 'BlogTemplates', 'fc2_index', { 'device_type': device_type}) }}">{{ _('Template Search') }}</a>
+            <a class="admin_common_btn create_btn" href="{{ url(req, 'BlogTemplates', 'create', { 'device_type': device_type}) }}">{{ _('Template Creation') }}</a>
+        </p>
+        <table>
+            <thead>
+            <tr>
+                <th>{{ _('Template name') }}</th>
+                <th>{{ _('Usage state') }}</th>
+                <th>{{ _('Preview') }}</th>
+                <th>{{ _('Delete') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for blog_template in blog_templates %}{# テンプレート毎のループ #}
+                <tr>
+                    <td>
+                        <a href="{{ url(req, 'BlogTemplates', 'edit', {'id': blog_template.id}) }}">{{ t(blog_template.title, 20) }}</a>
+                    </td>
+                    {% if inArray(blog_template.id, template_ids) %}
+                        <td class="center red">
+                            {{ _('Applying') }}
+                        </td>
+                    {% endif %}
+                    {% if not inArray(blog_template.id, template_ids) %}
+                        <td class="center">
+                            <a href="{{ url(req, 'BlogTemplates', 'apply', { 'id': blog_template.id, 'sig': sig}) }}" onclick="return confirm('{{ _('Are you sure you want to apply this template?') }}')">{{ _('Apply') }}</a>
+                        </td>
+                    {% endif %}
+                    <td class="center">
+                        <a href="{{ userPreviewUrl(req, blog.id, blog_template.id, blog_template.device_key) }}" target="_blank">{{ _('Preview') }}</a>
+                    </td>
+                    <td class="center">
+                        {% if inArray(blog_template.id, template_ids) %}
+                            &nbsp;
+                        {% endif %}
+                        {% if not inArray(blog_template.id, template_ids) %}
+                            <a href="{{ url(req, 'BlogTemplates', 'delete', { 'id': blog_template.id, 'sig': sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+
+{% endblock %}

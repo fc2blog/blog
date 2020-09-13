@@ -1,0 +1,131 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Plugin management') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Plugin management') }}</h2></header>
+
+    <div class="header_select">
+        <select onchange="location.href=$(this).val();">
+            {% for type, name in devices %}
+                <option value="{{ url(req, 'BlogPlugins', 'index', {device_type: type}) }}" {% if device_type==type %}selected="selected"{% endif %}>{{ name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="sys-index">
+        {% for category, blog_plugins in category_blog_plugins %}
+            <h3>{{ _('Category') }}{{ category }}</h3>
+            <p class="header_btn">
+                <a class="admin_common_btn create_btn" href="{{ url(req, 'BlogPlugins', 'official_search', {device_type:device_type, category: category}) }}">{{ _('Official Plugin Search') }}</a>
+                <a class="admin_common_btn create_btn" href="{{ url(req, 'BlogPlugins', 'share_search', {device_type:device_type, category: category}) }}">{{ _('Share Plugin Search') }}</a>
+                <a class="admin_common_btn create_btn" href="{{ url(req, 'BlogPlugins', 'create', {device_type:device_type, category: category}) }}">{{ _('Plugin Creation') }}</a>
+            </p>
+            <table>
+                <thead>
+                <tr>
+                    <th>{{ _('Plugin name') }}</th>
+                    <th class="m_cell">{{ _('Display') }}</th>
+                    <th>{{ _('Share plugin') }}</th>
+                    <th class="s_cell">{{ _('Delete') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for blog_plugin in blog_plugins %}
+                    <tr>
+                        <td>
+                            <a href="{{ url(req, 'BlogPlugins', 'edit', {id: blog_plugin.id}) }}">{{ t(blog_plugin.title, 20) }}</a>
+                        </td>
+                        <td class="center m_cell">
+                            <input type="checkbox" name="blog_plugin[display]" value="{{ blog_plugin.id }}" {% if blog_plugin.display == app_display_show %}checked="checked"{% endif %} />
+                        </td>
+                        <td class="center">
+                            <a href="{{ url(req, 'BlogPlugins', 'register', {id: blog_plugin.id}) }}">{% if blog_plugin.plugin_id %}{{ _('Update') }}{% endif %}{% if not blog_plugin.plugin_id %}{{ _('Register') }}{% endif %}</a>
+                        </td>
+                        <td class="center s_cell">
+                            <a href="{{ url(req, 'BlogPlugins', 'delete', {id: blog_plugin.id, sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}">{{ _('Delete') }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+        <div class="center">
+            <input type="button" id="sys-index-sort-button" value="{{ _('Sort') }}"/>
+        </div>
+    </div>
+
+    <form action="{{ url(req, 'BlogPlugins', 'sort') }}" method="POST" id="sys-order" style="display: none;">
+        {% for category, blog_plugins in category_blog_plugins %}
+            <h3>{{ _('Category') }}{{ category }}</h3>
+            <ul id="sys-category-{{ category }}" class="jquery-ui-sortable mb20"></ul>
+        {% endfor %}
+        <div class="center">
+            <input type="button" id="sys-order-cancel-button" value="{{ _('Cancel') }}"/>
+            <input type="button" id="sys-order-save-button" value="{{ _('Completion') }}"/>
+        </div>
+        <input type="hidden" name="device_type" value="{{ device_type }}"/>
+    </form>
+
+    <script>
+        var blog_plugins = {{ blog_plugin_json|json_encode()|raw }};
+        $(function () {
+            // 表示切り替え
+            $('input[type=checkbox][name="blog_plugin[display]"]').on('click', function () {
+                $.ajax({
+                    url: common.fwURL('blog_plugins', 'display_change', {
+                        id: $(this).val(),
+                        display: $(this).prop('checked') ? 1 : 0,
+                        sig: "{{ sig }}"
+                    }),
+                    cache: false
+                });
+            });
+
+            // 並び順変更
+            $('#sys-index-sort-button').on('click', function () {
+                $('#sys-index').hide();
+                $('#sys-order').show();
+                // ソート用のリスト作成
+                $('.jquery-ui-sortable').each(function () {
+                    $(this).append('<li class="ui-state-disabled">プラグイン名</li>');
+                });
+                for (var i = 0; i < blog_plugins.length; i++) {
+                    var blog_plugin = blog_plugins[i];
+                    var html = '<li>';
+                    html += '<input type="hidden" name="id" value="' + blog_plugin['id'] + '" />';
+                    html += blog_plugin['title'];
+                    html += '<a href="javascript:void(0);" onclick="$(this).parent().fadeOut(\'fast\', function(){$(this).remove();})">{{ _('Delete') }}</a>';
+                    html += '</li>';
+                    $('#sys-category-' + blog_plugin['category']).append(html);
+                }
+                $('.jquery-ui-sortable').sortable({
+                    connectWith: '.jquery-ui-sortable',
+                    items: 'li:not(.ui-state-disabled)'
+                });
+            });
+
+            // キャンセル
+            $('#sys-order-cancel-button').on('click', function () {
+                $('#sys-order').hide();
+                $('#sys-index').show();
+                // リストの中身を初期化
+                $('#sys-category-1, #sys-category-2, #sys-category-3').html('');
+            });
+
+            // 完了
+            $('#sys-order-save-button').on('click', function () {
+                $(this).parent().html('{{ _('Is communicating ...') }}');
+                $('.jquery-ui-sortable > li:not(.ui-state-disabled) > input[type=hidden]').each(function () {
+                    var id = $(this).val();
+                    var category = $(this).closest('ul.jquery-ui-sortable').attr('id').match(/sys-category-([123])/)[1];
+                    var order = $(this).closest('ul.jquery-ui-sortable').find('li:not(.ui-state-disabled)').index($(this).closest('li'));
+                    $('#sys-order').append('<input type="hidden" name="blog_plugins[' + id + '][order]" value="' + order + '" />');
+                    $('#sys-order').append('<input type="hidden" name="blog_plugins[' + id + '][category]" value="' + category + '" />');
+                });
+                $('#sys-order').submit();
+            });
+
+        });
+    </script>
+
+{% endblock %}

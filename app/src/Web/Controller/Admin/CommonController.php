@@ -6,6 +6,7 @@ use Exception;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\MSDB;
 use Fc2blog\Model\PluginsModel;
@@ -93,22 +94,26 @@ class CommonController extends AdminController
   /**
    * お知らせ一覧画面
    * @param Request $request
+   * @return string
    */
   public function notice(Request $request)
   {
     $blog_id = $this->getBlogId($request);
 
-    $comments_model = Model::load('Comments');
+    $comments_model = new CommentsModel();
     $this->set('unread_count', $comments_model->getUnreadCount($blog_id));
     $this->set('unapproved_count', $comments_model->getUnapprovedCount($blog_id));
+    $this->set('reply_status_unread', Config::get('COMMENT.REPLY_STATUS.UNREAD'));
+    $this->set('reply_status_pending', Config::get('COMMENT.OPEN_STATUS.PENDING'));
+    return "admin/common/notice.twig";
   }
 
   /**
    * インストール画面
    * @param Request $request
-   * @return string|void
+   * @return string
    */
-  public function install(Request $request)
+  public function install(Request $request): string
   {
     $this->layout = 'default_nomenu.php';
 
@@ -124,11 +129,20 @@ class CommonController extends AdminController
       default:
       case 0:
         // 環境チェック確認
+        $this->set('temp_dir', Config::get('TEMP_DIR'));
+        $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
+        $this->set('is_db_connect_lib', defined('DB_CONNECT_LIB'));
+        $this->set('random_string', App::genRandomStringAlphaNum(32));
+
+        $this->set('DB_HOST', DB_HOST);
+        $this->set('DB_USER', DB_USER);
+        $this->set('DB_PASSWORD', DB_PASSWORD);
+        $this->set('DB_DATABASE', DB_DATABASE);
 
         // ディレクトリ書き込みパーミッション確認
-        $is_write_temp = is_writable(\Fc2blog\Config::get('TEMP_DIR') . '.');
+        $is_write_temp = is_writable(Config::get('TEMP_DIR') . '.');
         $this->set('is_write_temp', $is_write_temp);
-        $is_write_upload = is_writable(\Fc2blog\Config::get('WWW_UPLOAD_DIR') . '.');
+        $is_write_upload = is_writable(Config::get('WWW_UPLOAD_DIR') . '.');
         $this->set('is_write_upload', $is_write_upload);
 
         // DBライブラリ確認
@@ -166,7 +180,7 @@ class CommonController extends AdminController
         $is_all_ok = $is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_character && $is_domain && $is_salt;
         $this->set('is_all_ok', $is_all_ok);
 
-        return;
+        return 'admin/common/install.twig';
 
       case 1:
         // 各種初期設定、DB テーブル作成、ディレクトリ作成
@@ -236,9 +250,11 @@ class CommonController extends AdminController
         $plugins_model->addInitialOfficialPlugin();
 
         $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=2');
-        return "";
+        return 'admin/common/install_user.twig';
 
       case 2:  // 管理者登録
+        // TODO いきなりstate=2を指定されたとき、state=1に戻す仕組みがない（とは言え無害？）
+
         $users = new UsersModel();
         if ($users->isExistAdmin()) {
           // 既に管理者ユーザー登録完了済み
@@ -247,7 +263,7 @@ class CommonController extends AdminController
 
         // ユーザー登録画面を表示
         if (!$request->get('user')) {
-          return 'common/install_user.php';
+          return 'admin/common/install_user.twig';
         }
 
         // 以下はユーザー登録実行
@@ -269,7 +285,7 @@ class CommonController extends AdminController
 
             // 成功したので完了画面へリダイレクト
             $this->setInfoMessage(__('User registration is completed'));
-            $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=3');
+            $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=3'); // 成功終了
 
           } else {
             // ブログ作成失敗時には登録したユーザーを削除（ロールバックの代用）
@@ -277,14 +293,14 @@ class CommonController extends AdminController
 
           }
           $this->setErrorMessage(__('I failed to register'));
-          return 'common/install_user.php';
+          return 'admin/common/install_user.twig';
         }
 
         // エラー情報の設定
         $this->setErrorMessage(__('Input error exists'));
         $this->set('errors', $errors);
 
-        return 'common/install_user.php';
+        return 'admin/common/install_user.twig'; // 失敗描画
 
       case 3:
         // 完了画面
@@ -292,7 +308,7 @@ class CommonController extends AdminController
         // 完了画面表示と同時に、インストール済みロックファイルの生成
         file_put_contents($installed_lock_file_path, "This is installed check lockfile.\nThe blog already installed. if you want re-enable installer, please delete this file.");
 
-        return 'common/installed.php';
+        return 'admin/common/installed.twig';
     }
   }
 }

@@ -6,7 +6,6 @@
 namespace Fc2blog\Web\Controller;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
@@ -64,7 +63,7 @@ abstract class AppController extends Controller
    */
   protected function getDeviceType()
   {
-    return Config::get('DeviceType');
+    return $this->request->deviceType;
   }
 
   /**

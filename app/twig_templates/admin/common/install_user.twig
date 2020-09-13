@@ -1,0 +1,56 @@
+{% extends 'admin/layouts/default_nomenu.twig' %}
+{% block title %}{{ _('Environment Check') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Administrator registration') }}</h2></header>
+
+    <form method="POST" class="admin-form">
+        <input type="hidden" name="state" value="2"/>
+
+        <table id="id_form">
+            <tbody>
+            <tr>
+                <th>{{ _('Login ID') }}</th>
+                <td>
+                    {{ input(req, 'user[login_id]', 'text') }}
+                    {% if errors.user.login_id %}<p class="error">{{ errors.user.login_id }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Password') }}</th>
+                <td>
+                    {{ input(req, 'user[password]', 'password') }}
+                    {% if errors.user.password %}<p class="error">{{ errors.user.password }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Blog ID') }}</th>
+                <td>
+                    {{ input(req, 'blog[id]', 'text') }}
+                    {% if errors.blog.id %}<p class="error">{{ errors.blog.id }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Blog name') }}</th>
+                <td>
+                    {{ input(req, 'blog[name]', 'text') }}
+                    {% if errors.blog.name %}<p class="error">{{ errors.blog.name }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{{ _('Nickname') }}</th>
+                <td>
+                    {{ input(req, 'blog[nickname]', 'text') }}
+                    {% if errors.blog.nickname %}<p class="error">{{ errors.blog.nickname }}</p>{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <input type="submit" value="{{ _('Register') }}"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </form>
+{% endblock %}

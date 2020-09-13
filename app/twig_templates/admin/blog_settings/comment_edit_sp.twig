@@ -1,0 +1,62 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Comments Settings') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('Comments Settings') }}</span></h1></header>
+
+    {% include('admin/blog_settings/tab_sp.twig') %}
+
+    <h2 id="blog_settings"><span class="h2_inner">{{ _('Setting') }}</span></h2>
+    <form method="POST" id="sys-blog-template-form" class="admin-form">
+        <div class="form_area">
+            <div class="form_contents">
+                <h4>{{ _('Approval settings') }}</h4>
+                {{ input(req, 'blog_setting[comment_confirm]', 'select', {'options': blog_settings_comment_confirm_list}) }}
+                {% if errors.blog_setting.comment_confirm %}<span class="error">{{ errors.blog_setting.comment_confirm }}</span>{% endif %}
+                <?php if (isset($errors['blog_setting']['comment_confirm'])): ?><span class="error"><?php echo $errors['blog_setting']['comment_confirm']; ?></span><?php endif; ?>
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Display awaiting message') }}</h4>
+                {{ input(req, 'blog_setting[comment_display_approval]', 'select', {'options': blog_settings_comment_display_approval_list}) }}
+                {% if errors.blog_setting.comment_display_approval %}<span class="error">{{ errors.blog_setting.comment_display_approval }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Display private comment') }}</h4>
+                {{ input(req, 'blog_setting[comment_display_private]', 'select', {'options': blog_settings_comment_display_private_list}) }}
+                {% if errors.blog_setting.comment_display_private %}<span class="error">{{ errors.blog_setting.comment_display_private }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Sender information') }}</h4>
+                {{ input(req, 'blog_setting[comment_cookie_save]', 'select', {'options': blog_settings_comment_cookie_save_list}) }}
+                {% if errors.blog_setting.comment_cookie_save %}<span class="error">{{ errors.blog_setting.comment_cookie_save }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Comment confirmation setting') }}</h4>
+                {{ input(req, 'blog_setting[comment_captcha]', 'select', {'options': blog_settings_comment_captcha_list}) }}
+                {% if errors.blog_setting.comment_captcha %}<span class="error">{{ errors.blog_setting.comment_captcha }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Display the latest comments') }}</h4>
+                <div class="common_input_text">{{ input(req, 'blog_setting[comment_display_count]', 'text', {'maxlength': 10}) }}</div>
+                {% if errors.blog_setting.comment_display_count %}<span class="error">{{ errors.blog_setting.comment_display_count }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Display order of comments') }}</h4>
+                {{ input(req, 'blog_setting[comment_order]', 'select', {'options': blog_settings_comment_order_list}) }}
+                {% if errors.blog_setting.comment_order %}<span class="error">{{ errors.blog_setting.comment_order }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Quotes Comments') }}</h4>
+                {{ input(req, 'blog_setting[comment_quote]', 'select', {'options': blog_settings_comment_quote_list}) }}
+                {% if errors.blog_setting.comment_quote %}<span class="error">{{ errors.blog_setting.comment_quote }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <div class="btn">
+                    <button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i>{{ _('Update') }}</button>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="sig" value="{{ sig }}">
+    </form>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('I want to edit tags') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('I want to edit tags') }}</span></h1></header>
+
+    <h2><span class="h2_inner">{{ _('Edit tag') }}</span></h2>
+    <form method="POST" id="sys-tag-form" class="admin-form">
+        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+        {{ input(req, 'back_url', 'hidden', {'default': req.get('back_url')}) }}
+        <div class="form_area">
+            <div class="form_contents">
+                <h4>{{ _('Tag name') }}</h4>
+                <div class="common_input_text">{{ input(req, 'tag[name]', 'text') }}</div>
+                {% if errors.tag.name %}<span class="error">{{ errors.tag.name }}</span>{% endif %}
+                <div class="btn">
+                    <button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i>{{ _('Update') }}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="btn_area">
+        <ul class="btn_area_inner">
+            <li><a class="btn_contents touch" href="{% if req.isArgs('back_url') %}{{ req.get('back_url') }}{% endif %}{% if not req.isArgs('back_url') %}{{ url(req, 'Tags', 'index') }}{% endif %}"><i class="return_icon btn_icon"></i>{{ _('I Back to List') }}</a></li>
+            <li><a class="btn_contents touch" href="{{ blogUrl(req, blog.id) }}?tag={{ tag.name }}" target="_blank"><i class="preview_icon btn_icon"></i>{{ _('Check the article') }}</a></li>
+        </ul>
+    </div>
+
+    <h2><span class="h2_inner">{{ _('Delete tag') }}</span></h2>
+    <div class="btn_area">
+        <ul class="btn_area_inner">
+            <li>
+                <a href="{{ url(req, 'Tags', 'delete', {id: req.get('id'), back_url: req.get('back_url'), sig: sig }) }}" class="btn_contents touch" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Blog setting') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('Blog setting') }}</span></h1></header>
+
+    {% include('admin/blog_settings/tab_sp.twig') %}
+
+    <h2 id="blog_settings"><span class="h2_inner">{{ _('Setting') }}</span></h2>
+    <form method="POST" class="admin-form">
+        <div class="form_area">
+            <div class="form_contents">
+                <h4>{{ _('Blog name') }}</h4>
+                <div class="common_input_text">{{ input(req, 'blog[name]', 'text') }}</div>
+                {% if errors.blog.name %}<span class="error">{{ errors.blog.name }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Blog Description') }}</h4>
+                <div class="common_input_text">{{ input(req, 'blog[introduction]', 'text') }}</div>
+                {% if errors.blog.introduction %}<span class="error">{{ errors.blog.introduction }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Nickname') }}</h4>
+                <div class="common_input_text">{{ input(req, 'blog[nickname]', 'text') }}</div>
+                {% if errors.blog.nickname %}<span class="error">{{ errors.blog.nickname }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Visibility Blog') }}</h4>
+                {{ input(req, 'blog[open_status]', 'select', {'options': open_status_list}) }}
+                {% if errors.blog.open_status %}<span class="error">{{ errors.blog.open_status }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('View password blog') }}</h4>
+                <div class="common_input_text">{{ input(req, 'blog[blog_password]', 'text') }}</div>
+                {% if errors.blog.blog_password %}<span class="error">{{ errors.blog.blog_password }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Time zone') }}</h4>
+                {{ input(req, 'blog[timezone]', 'select', {'options': time_zone_list}) }}
+                {% if errors.blog.timezone %}<span class="error">{{ errors.blog.timezone }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('SSL Enable Mode') }}</h4>
+                {{ input(req, 'blog[ssl_enable]', 'select', {'options': ssl_enable_settings_list}) }}
+                {% if errors.blog.ssl_enable %}<span class="error">{{ errors.blog.ssl_enable }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Redirect status code') }}</h4>
+                {{ input(req, 'blog[redirect_status_code]', 'select', {'options': redirect_status_code_settings_list}) }}
+                {% if errors.blog.redirect_status_code %}<span class="error">{{ errors.blog.redirect_status_code }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <div class="btn">
+                    <button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i>{{ _('Update') }}</button>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="sig" value="{{ sig }}">
+    </form>
+{% endblock %}

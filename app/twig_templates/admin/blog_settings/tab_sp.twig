@@ -1,0 +1,17 @@
+<ul class="link_list">
+    <li class="link_list_item {% if tab == 'blog_edit' %}selected{% endif %}">
+        <a class="common_next_link next_bg" href="{{ url(req, 'Blogs', 'edit') }}{% if tab == blog_edit %}#blog_settings{% endif %}">{{ _('Blog setting') }}</a>
+    </li>
+    <li class="link_list_item {% if tab == 'entry_edit' %}selected{% endif %}">
+        <a class="common_next_link next_bg" href="{{ url(req, 'BlogSettings', 'entry_edit') }}{% if tab == blog_edit %}#blog_settings{% endif %}">{{ _('Article setting') }}</a>
+    </li>
+    <li class="link_list_item {% if tab == 'comment_edit' %}selected{% endif %}">
+        <a class="common_next_link next_bg" href="{{ url(req, 'BlogSettings', 'comment_edit') }}{% if tab == blog_edit %}#blog_settings{% endif %}">{{ _('Comments Settings') }}</a>
+    </li>
+    <li class="link_list_item {% if tab == 'etc_edit' %}selected{% endif %}">
+        <a class="common_next_link next_bg" href="{{ url(req, 'BlogSettings', 'etc_edit') }}{% if tab == blog_edit %}#blog_settings{% endif %}">{{ _('Other Settings') }}</a>
+    </li>
+    <li class="link_list_item {% if tab == 'blog_delete' %}selected{% endif %}">
+        <a class="common_next_link next_bg" href="{{ url(req, 'Blogs', 'delete') }}{% if tab == blog_edit %}#blog_settings{% endif %}">{{ _('Blog Delete') }}</a>
+    </li>
+</ul>

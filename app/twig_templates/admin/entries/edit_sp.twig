@@ -1,0 +1,24 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Edit this entry.') }}{% endblock %}
+{# @var req \Fc2blog\Web\Request #}
+
+{% block content %}
+    <header><h1 class="sh_heading_main_b editor_title">{{ _('Edit this entry.') }}</h1></header>
+    <form method="POST" id="sys-entry-form" class="admin-form">
+        <input type="hidden" name="id" value="{{ entry.id }}"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+        {% include('admin/entries/form_sp.twig') %}
+    </form>
+
+    <h2><span class="h2_inner">{{ _('Delete entry') }}</span></h2>
+    <div class="btn_area">
+        <ul class="btn_area_inner">
+            <li>
+                <a href="{{ url(req, req.shortControllerName, 'delete', {'id': entry.id, 'sig': sig}) }}" class="btn_contents touch"
+                   onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">
+                    <i class="delete_icon btn_icon"></i>{{ _('Delete') }}
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

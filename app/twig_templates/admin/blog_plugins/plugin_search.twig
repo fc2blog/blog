@@ -1,0 +1,46 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Plugin search') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Plugin search') }}</h2></header>
+
+    <h3>{{ req_device_name }}</h3>
+    <p class="header_btn">
+        <a class="admin_common_btn create_btn" href="{{ url(req, 'blog_plugins', 'index') }}">{{ _('Plugin management') }}</a>
+    </p>
+
+    {% include('admin/common/paging.twig') %}
+
+    <table>
+        <thead>
+        <tr>
+            <th>{{ _('Plugin name') }}</th>
+            <th>{{ _('Description') }}</th>
+            <th>{{ _('Download') }}</th>
+            <th>{{ _('Preview') }}</th>
+            <th>{{ _('Delete') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for plugin in plugins %}
+            <tr>
+                <td>{{ t(plugin.title, 20) }}</td>
+                <td>{{ plugin.body|nl2br }}</td>
+                <td class="center">
+                    <a href="{{ url(req, 'blog_plugins', 'download', {id: plugin.id, category: req.get('category'), sig: sig}) }}">{{ _('Download') }}</a>
+                </td>
+                <td class="center">
+                    <a href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, plugin_id: plugin.id, category: req.get('category'), device_key: 1}, false, true) }}" target="_blank">{{ _('Preview') }}</a>
+                </td>
+                <td class="center">
+                    {% if user_id == plugin.user_id %}
+                        <a href="{{ url(req, 'blog_plugins', 'plugin_delete', {id: plugin.id, sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include('admin/common/paging.twig') %}
+{% endblock %}

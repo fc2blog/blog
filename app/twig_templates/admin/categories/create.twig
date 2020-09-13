@@ -1,0 +1,52 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Category management') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Category management') }}</h2></header>
+
+    {% if not is_limit_create_category %}
+        <h3>{{ _('Add category') }}</h3>
+        <form method="POST" class="admin-form">
+
+            <table>
+                <tbody>
+                <tr>
+                    <th>{{ _('Parent category') }}</th>
+                    <td>
+                        {{ input(req, 'category[parent_id]', 'select', {'options': category_parents}) }}
+                        {% if errors.parent_id %}<p class="error">{{ errors.parent_id }}</p>{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ _('Category name') }}</th>
+                    <td>
+                        {{ input(req, 'category[name]', 'text') }}
+                        {% if errors.name %}<p class="error">{{ errors.name }}</p>{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ _('Sort by category') }}</th>
+                    <td>
+                        {{ input(req, 'category[category_order]', 'select', {'options': categories_model_order_list}) }}
+                        {% if errors.category_order %}<p class="error">{{ errors.category_order }}</p>{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="form-button" colspan="2">
+                        <input type="submit" value="{{ _('Add') }}"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <input type="hidden" name="sig" value="{{ sig }}"/>
+
+        </form>
+    {% endif %}
+
+    {% if not req.get('category') %}
+        <h3>{{ _('Categories') }}</h3>
+        <ul id="sys-category-list">
+            {{ renderCategoriesTree2(req, categories) }}
+        </ul>
+    {% endif %}
+{% endblock %}

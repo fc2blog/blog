@@ -1,0 +1,40 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Article setting') }}{% endblock %}
+
+{% block content %}
+    <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('Article setting') }}</span></h1></header>
+
+    {% include('admin/blog_settings/tab_sp.twig') %}
+
+    <h2 id="blog_settings"><span class="h2_inner">{{ _('Setting') }}</span></h2>
+    <form method="POST" id="sys-blog-template-form" class="admin-form">
+        <div class="form_area">
+            <div class="form_contents">
+                <h4>{{ _('Display the latest entries') }}</h4>
+                <div class="common_input_text">{{ input(req, 'blog_setting[entry_recent_display_count]', 'text') }}</div>
+                {% if errors.blog_setting.entry_recent_display_count %}<span class="error">{{ errors.blog_setting.entry_recent_display_count }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>{{ _('Display the number of articles, display order') }}</h4>
+                <div class="common_input_text">{{ input(req, 'blog_setting[entry_display_count]', 'text') }}</div>
+                {% if errors.blog_setting.entry_display_count %}<span class="error">{{ errors.blog_setting.entry_display_count }}</span>{% endif %}
+                {{ input(req, 'blog_setting[entry_order]', 'select', {'options': blog_settings_entry_order_list}) }}
+                {% if errors.blog_setting.entry_order %}<span class="error">{{ errors.blog_setting.entry_order }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <h4>
+                    {{ _('Password of the article view') }}<br/>
+                    ({{ _('It is adapted to the password is not set at the time of the article') }})
+                </h4>
+                <div class="common_input_text">{{ input(req, 'blog_setting[entry_password]', 'text') }}</div>
+                {% if errors.blog_setting.entry_password %}<span class="error">{{ errors.blog_setting.entry_password }}</span>{% endif %}
+            </div>
+            <div class="form_contents">
+                <div class="btn">
+                    <button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i>{{ _('Update') }}</button>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="sig" value="{{ sig }}">
+    </form>
+{% endblock %}

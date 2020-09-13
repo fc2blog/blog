@@ -1,0 +1,60 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('I want to edit the template') }}{% endblock %}
+
+{% block content %}
+
+    <header><h2>{{ _('I want to edit the template') }}</h2></header>
+
+    <form method="POST" id="sys-blog-template-form" class="admin-form">
+
+        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+
+        <h3>{{ _('Template name') }}</h3>
+        <div>
+            {{ input(req, 'blog_template[title]', 'text') }}
+            {% if errors.blog_template.title %}<p class="error">{{ errors.blog_template.title }}</p>{% endif %}
+        </div>
+        <h3>HTML</h3>
+        <div>
+            {{ input(req, 'blog_template[html]', 'textarea') }}
+            {% if errors.blog_template.html %}<p class="error">{{ errors.blog_template.html }}</p>{% endif %}
+        </div>
+        <h3>CSS</h3>
+        <div>
+            {{ input(req, 'blog_template[css]', 'textarea') }}
+            {% if errors.blog_template.css %}<p class="error">{{ errors.blog_template.css }}</p>{% endif %}
+        </div>
+
+        <p class="form-button">
+            <input type="submit" value="{{ _('Update') }}" id="sys-blog-template-form-submit"/>
+            <input type="button" value="{{ _('Preview') }}" id="sys-blog-template-form-preview"/>
+        </p>
+
+    </form>
+
+    <script>
+        $(function () {
+            // form内でEnterしてもsubmitさせない
+            common.formEnterNonSubmit('sys-blog-template-form');
+
+            // プレビュー処理を行う
+            $('#sys-blog-template-form-preview').click(function () {
+                var action = '{{ userUrl(req, {blog_id: blog.id}, false, true) }}';
+                $('#sys-blog-template-form').prop('action', action);
+                $('#sys-blog-template-form').prop('target', '_preview');
+                $('#sys-blog-template-form').submit();
+            });
+
+            // submit処理を行う
+            $('#sys-blog-template-form-submit').click(function () {
+                var action = '{{ url(req, 'BlogTemplates', 'create') }}';
+                $('#sys-blog-template-form').prop('action', action);
+                $('#sys-blog-template-form').prop('target', '_self');
+            });
+        });
+    </script>
+
+    {% include('admin/blog_templates/form_js.twig') %}
+
+{% endblock %}

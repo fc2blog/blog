@@ -18,7 +18,7 @@ class Html
 
   /**
    * URLを作成する
-   * TODO:ユーザー側のURL生成時はApp:userURLを使用に置き換え最終的にblog_idの部分を削る
+   * TODO: ユーザー側のURL生成時はApp:userURLを使用に置き換え最終的にblog_idの部分を削る
    * @param Request $request
    * @param array $args
    * @param bool $reused
@@ -35,14 +35,14 @@ class Html
       $args = array_merge($gets, $args);
     }
 
-    $controller = Config::get('ControllerName');
+    $controller = $request->shortControllerName;
     if (isset($args['controller'])) {
       $controller = $args['controller'];
       unset($args['controller']);
     }
     $controller = StringCaseConverter::snakeCase($controller);
 
-    $action = Config::get('ActionName');
+    $action = $request->methodName;
     if (isset($args['action'])) {
       $action = $args['action'];
       unset($args['action']);
@@ -82,7 +82,7 @@ class Html
     $params[] = Config::get('ARGS_CONTROLLER') . '=' . $controller;
     $params[] = Config::get('ARGS_ACTION') . '=' . $action;
     foreach ($args as $key => $value) {
-      $params[] = $key . '=' . $value;
+      $params[] = $key . '=' . rawurlencode($value);
     }
     if (!empty($device_name)) {
       $params[] = $device_name;

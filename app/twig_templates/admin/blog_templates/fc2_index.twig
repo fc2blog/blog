@@ -1,0 +1,36 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('FC2 Template list') }}{% endblock %}
+
+{% block content %}
+
+    <header><h2>{{ _('FC2 Template list') }}[{{ attribute(devices, req.get('device_type')) }}]</h2></header>
+
+    {% if templates %}
+        {% for template in templates %}
+            <table class="templates">
+                <tbody>
+                <tr>
+                    <td rowspan="3" class="thumb"><img alt="template image" src="{{ template.image }}"/></td>
+                    <td>{{ _('Name') }} : {{ template.name }}</td>
+                </tr>
+                <tr>
+                    <td>{{ _('Summary') }} : {{ template.discription|raw }}{# TODO TYPO #}</td>
+                </tr>
+                <tr>
+                    <td class="btn">
+                        <a class="admin_common_btn create_btn" href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, fc2_id:template.id, device_type: req.get('device_type')}, false, true) }}" target="_blank">{{ _('Preview') }}</a>
+                        <a class="admin_common_btn create_btn" href="{{ url(req, 'blog_templates', 'create', {fc2_id: template.id, device_type:req.get('device_type'), sig: sig}) }}">{{ _('Download') }}</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endif %}
+
+    {% if not templates %}
+        <p>{{ _('FC2 template can not be found') }}</p>
+    {% endif %}
+
+    {% include('admin/common/paging.twig') %}
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'admin/layouts/default_sp.twig' %}
+{% block title %}{{ _('Reply') }}{% endblock %}
+
+{% block content %}
+
+    <header><h1 class="detail sh_heading_main_b">{{ _('Comment') }}<a href="#jamp1" class="btn_contents page_scroll touch">{{ _('Reply') }}</a></h1></header>
+
+    <h2><span class="h2_inner">{{ _('Details of comment') }}</span></h2>
+    <p class="output_contents">
+        <span class="comment_title">{{ comment.title }}</span>
+        <span class="comment_text">{{ comment.body|nl2br }}</span>
+    </p>
+    <h3><span class="h3_inner">{{ _('Summary') }}</span></h3>
+    <dl class="output_contents comment_about">
+        <dt class="about_title">{{ _('Public state') }}</dt>
+        <dd class="about_content">
+            {% if comment.open_status == comment_open_status_public %}
+                <span class="published">{{ _('Published') }}</span>
+            {% endif %}
+            {% if comment.open_status == comment_open_status_pending %}
+                <span class="approval">{{ _('Approval pending') }}</span>
+            {% endif %}
+            {% if comment.open_status == comment_open_status_private %}
+                <span class="private">{{ _('Only exposed administrator') }}</span>
+            {% endif %}
+        </dd>
+        {% if comment.reply_status == comment_reply_status_reply %}
+            <dt class="about_title">{{ _('Response time') }}</dt>
+            <dd class="about_content">{{ comment.reply_updated_at|date('Y-m-d H:i:s') }}</dd>
+        {% endif %}
+        <dt class="about_title">{{ _('Contributor') }}</dt>
+        <dd class="about_content">{{ comment.name }}</dd>
+        {% if comment.mail %}
+            <dt class="about_title">{{ _('E-mail address') }}</dt>
+            <dd class="about_content">{{ comment.mail }}</dd>
+        {% endif %}
+        {% if comment.url %}
+            <dt class="about_title">URL</dt>
+            <dd class="about_content"><a href="{{ comment.url }}" target="_blank">{{ comment.url }}</a></dd>
+        {% endif %}
+        <dt class="about_title">{{ _('Article name') }}</dt>
+        <dd class="about_content"><a href="{{ entryUrl(req, comment.blog_id, comment.id, true) }}" target="_blank">{{ comment.entry_title }}</a></dd>
+    </dl>
+
+    <div class="btn_area">
+        {% if comment.open_status == comment_open_status_pending %}
+            <div class="btn">
+                <a href="{{ url(req, 'comments', 'approval', {id: comment.id, back_url: request.get('back_url')}) }}"
+                   onclick="return confirm('{{ _('Are you sure you want to be approved?') }}');" class="btn_contents positive touch"><i class="check_icon btn_icon"></i>{{ _('I moderate comments') }}</a>
+            </div>
+        {% endif %}
+        <ul class="btn_area_inner">
+            <li><a class="btn_contents touch" href="{% if req.isArgs('back_url') %}{{ req.get('back_url') }}{% endif %}{% if not req.isArgs('back_url') %}{{ url(req, 'comments', 'index') }}{% endif %}"><i class="return_icon btn_icon"></i>{{ _('I Back to List') }}</a></li>
+            <li><a class="btn_contents touch" href="{{ url(req, 'comments', 'delete', {id: comment.id, back_url: request.get('back_url')}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</a></li>
+        </ul>
+    </div>
+
+    {% if comment.open_status != comment_open_status_private %}
+        <form method="POST" id="sys-comment-form" class="admin-form">
+            <h2 id="jamp1"><span class="h2_inner">{{ _('I will reply to comments') }}</span></h2>
+            <div class="form_area">
+                {{ input(req, 'back_url', 'hidden', {'default': req.get('back_url')}) }}
+                <p class="form_contents">{{ input(req, 'comment[reply_body]', 'textarea', {'class': 'common_textarea'}) }}</p>
+                {% if errors.comment.reply_body %}<p class="error">{{ errors.comment.reply_body }}</p>{% endif %}
+            </div>
+            <div class="btn_area">
+                {% if comment.reply_status == comment_reply_status_reply %}
+                    <div class="btn">
+                        <button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i>{{ _('Update') }}</button>
+                    </div>
+                {% endif %}
+                {% if comment.reply_status != comment_reply_status_reply %}
+                    <div class="btn">
+                        <button type="submit" class="btn_contents positive touch"><i class="save_icon btn_icon"></i>{{ _('Reply') }}</button>
+                    </div>
+                    {% if comment.open_status == comment_open_status_pending %}
+                        ※{{ _('When you press the reply button, the message will be approved') }}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </form>
+    {% endif %}
+
+{% endblock %}

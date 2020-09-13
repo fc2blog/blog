@@ -1,0 +1,8 @@
+<ul class="link_list">
+  <li class="link_list_item {% if tab == 'edit' %}selected{% endif %}">
+    <a class="common_next_link next_bg"  href="{{ url(req, 'Users', 'edit') }}">{{ _('User setting') }}</a>
+  </li>
+  <li class="link_list_item {% if tab == 'withdrawal' %}selected{% endif %}">
+    <a class="common_next_link next_bg"  href="{{ url(req, 'Users', 'withdrawal') }}">{{ _('Withdrawal process') }}</a>
+  </li>
+</ul>

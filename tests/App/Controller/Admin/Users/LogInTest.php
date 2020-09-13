@@ -29,9 +29,7 @@ class LogInTest extends TestCase
     $c = $this->reqGet("/admin/users/login");
 
     $this->assertInstanceOf(UsersController::class, $c);
-    $this->assertEquals("管理画面へログイン", $c->get('html_title'));
-    $this->assertEquals("admin/layouts/default.php", $c->getLayoutFilePath());
-    $this->assertEquals("admin/users/login.php", $c->getTemplateFilePath());
+    $this->assertStringContainsString("管理画面へログイン", $c->getOutput());
   }
 
   public function testLogin(): void
@@ -65,8 +63,6 @@ class LogInTest extends TestCase
 
     $this->assertInstanceOf(CommonController::class, $c);
     $this->assertEquals("notice", $c->getResolvedMethod());
-    $this->assertEquals("admin/layouts/default.php", $c->getLayoutFilePath());
-    $this->assertEquals("admin/common/notice.php", $c->getTemplateFilePath());
   }
 
   public function testLogout(): void

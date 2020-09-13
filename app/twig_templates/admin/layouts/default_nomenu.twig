@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ block('title') }}</title>
+  <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
+  <link rel="stylesheet" href="/css/normalize.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/admin-fc2.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/admin-form.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/common.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/main.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/admin_style.css" type="text/css" media="all">
+
+  {# $this->includeCSS(); 管理画面には不要？ #}
+
+  <script type="text/javascript" src="/js/jquery/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="/js/jquery/jquery-migrate-1.2.1.min.js"></script>
+  <script type="text/javascript" src="/js/jquery/jquery-ui/1.9.2/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="/css/jquery/jquery-ui/1.9.2/themes/ui-lightness/jquery-ui.css" type="text/css" media="screen">
+  <script type="text/javascript" src="/js/common_design.js"></script>
+  <script type="text/javascript" src="/js/common.js"></script>
+  <script>
+    // フレームワーク用のjsの設定
+    let common = {{ js_common|json_encode() }};
+  </script>
+
+  {# $this->includeJS(); 管理画面には不要？ #}
+</head>
+<body>
+
+  <header class="clear">
+    <div>
+      <div id="switch_lang">
+        <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
+          <option value="ja" {% if lang == 'ja' %}selected="selected"{% endif %}>日本語</option>
+          <option value="en" {% if lang == 'en' %}selected="selected"{% endif %}>English</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <article>
+    <article id="main-contents" style="margin-left: auto; margin-right: auto; float: none;">
+      {% include 'admin/flagments/flash_message.twig' %}
+      {{ block('content') }}
+    </article>
+  </article>
+
+</body>
+</html>
+

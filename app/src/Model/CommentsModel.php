@@ -393,12 +393,13 @@ class CommentsModel extends Model
 
   /**
    * コメント一覧の情報にブログの設定情報で装飾する
+   * @param Request $request
    * @param $tmp_comments
    * @param $blog_setting
    * @param bool $self_blog
    * @return array
    */
-  public function decorateByBlogSetting($tmp_comments, $blog_setting, $self_blog = false)
+  public function decorateByBlogSetting(Request $request, $tmp_comments, $blog_setting, $self_blog = false)
   {
     $flag_pending = Config::get('COMMENT.OPEN_STATUS.PENDING');
     $flag_private = Config::get('COMMENT.OPEN_STATUS.PRIVATE');
@@ -406,7 +407,7 @@ class CommentsModel extends Model
     $blog = Model::load('Blogs')->findById($blog_setting['blog_id']);
 
     // コメントを追加で表示するかどうか
-    $is_add_comment = $blog_setting[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . Config::get('DeviceType'))] == Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+    $is_add_comment = $blog_setting[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $request->deviceType)] == Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
 
     $comments = array();
     foreach ($tmp_comments as $key => $comment) {
@@ -445,17 +446,18 @@ class CommentsModel extends Model
 
   /**
    * ブログの設定情報からコメント一覧取得
+   * @param Request $request
    * @param $blog_id
    * @param $entry_id
    * @param $blog_setting
    * @param bool $self_blog
    * @return array
    */
-  public function getCommentListByBlogSetting($blog_id, $entry_id, $blog_setting, $self_blog = false)
+  public function getCommentListByBlogSetting(Request $request, $blog_id, $entry_id, $blog_setting, $self_blog = false)
   {
     $options = $this->getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting);
     $comments = $this->find('all', $options);
-    return $this->decorateByBlogSetting($comments, $blog_setting, $self_blog);
+    return $this->decorateByBlogSetting($request, $comments, $blog_setting, $self_blog);
   }
 
   /**
