@@ -77,7 +77,7 @@ class EntriesController extends UserController
   }
 
   /**
-   * 一覧表示
+   * 一覧表示 アクション
    * @param Request $request
    * @return string
    */
@@ -507,50 +507,55 @@ class EntriesController extends UserController
   }
 
   /**
-   * 詳細表示
+   * 詳細（１エントリ）表示 アクション
    * @param Request $request
    * @return string
    */
-  public function view(Request $request)
+  public function view(Request $request): string
   {
-    $entries_model = new EntriesModel();
-
     $blog_id = $this->getBlogId($request);
-    $id = $request->get('id');
-    $comment_view = $request->get('m2');    // スマフォ用のコメント投稿＆閲覧判定
+    $entry_id = $request->get('id');
 
     // 記事詳細取得
-    $entry = $entries_model->getEntry($id, $blog_id);
+    $entries_model = new EntriesModel();
+    $entry = $entries_model->getEntry($entry_id, $blog_id);
     if (!$entry) {
       return $this->error404();
     }
+
     $this->set('entry', $entry);
-    $this->set('sub_title', $entry['title']);
+    $this->set('sub_title', $entry['title']); // HTMLのサブタイトル
 
     $self_blog = $this->isLoginBlog($request);
 
     $blog_settings_model = new BlogSettingsModel();
     $comments_model = new CommentsModel();
 
+    // ブログの設定情報取得
+    $blog_setting = $blog_settings_model->findByBlogId($blog_id);
+
     // スマフォのコメント投稿、閲覧分岐処理
-    switch ($comment_view) {
+    $sp_comment_view_mode = $request->get('m2'); // スマフォ用のコメント投稿＆閲覧判定
+    switch ($sp_comment_view_mode) {
       // コメント一覧表示(スマフォ)
       case 'res':
-        // ブログの設定情報取得
-        $blog_setting = $blog_settings_model->findByBlogId($blog_id);
 
         // 記事のコメント取得(パスワード制限時はコメントを取得しない)
-        if ($self_blog || $entry['open_status'] != Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
+        if (
+          $this->isNeedAuthorizedEntry($entry) &&
+          $this->isUserAuthorizedToEntry($request, $entry)
+        ) {
           // コメント一覧を取得(ページング用)
-          $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $id, $blog_setting);
+          $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting);
           $options['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
+
           $comments = $comments_model->find('all', $options);
           $this->set('comments', $comments_model->decorateByBlogSetting($request, $comments, $blog_setting, $self_blog));
           $this->set('paging', $comments_model->getPaging($options));
         }
 
         // FC2用のテンプレートで表示
-        $this->setAreaData(array('comment_area'));
+        $this->setAreaData(['comment_area']);
         return $this->fc2template($entry['blog_id']);
         /** @noinspection PhpUnreachableStatementInspection */
         break;
@@ -558,7 +563,7 @@ class EntriesController extends UserController
       // コメント投稿表示(スマフォ)
       case 'form':
         // FC2用のテンプレートで表示
-        $this->setAreaData(array('form_area'));
+        $this->setAreaData(['form_area']);
         return $this->fc2template($entry['blog_id']);
         /** @noinspection PhpUnreachableStatementInspection */
         break;
@@ -569,17 +574,16 @@ class EntriesController extends UserController
     }
 
     // 表示画面判定
-    $areas = array('permanent_area');
+    $areas = ['permanent_area'];
 
-    // ブログの設定情報取得
-    $blog_setting = $blog_settings_model->findByBlogId($blog_id);
-
-    // 記事のコメント取得(パスワード制限時はコメントを取得しない)
-    if ($self_blog || $entry['open_status'] != Config::get('ENTRY.OPEN_STATUS.PASSWORD') || Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']))) {
-      if (App::isPC($request)) {
-        $areas[] = 'comment_area';
-        $this->set('comments', $comments_model->getCommentListByBlogSetting($request, $blog_id, $id, $blog_setting, $self_blog));
-      }
+    // PCの場合の記事のコメント取得(パスワード制限時はコメントを取得しない)
+    if (
+      App::isPC() &&
+      $this->isNeedAuthorizedEntry($entry) &&
+      $this->isUserAuthorizedToEntry($request, $entry)
+    ) {
+      $areas[] = 'comment_area';
+      $this->set('comments', $comments_model->getCommentListByBlogSetting($blog_id, $entry_id, $blog_setting, $self_blog));
     }
 
     // 前後の記事取得
@@ -589,8 +593,34 @@ class EntriesController extends UserController
 
     // FC2用のテンプレートで表示
     $this->setAreaData($areas);
-
     return $this->fc2template($entry['blog_id']);
+  }
+
+  /**
+   * アクセスユーザーが該当エントリのアクセス権があるか？
+   * @param $request
+   * @param $entry
+   * @return bool
+   */
+  private function isUserAuthorizedToEntry($request, $entry) : bool
+  {
+    return (
+      $this->isLoginBlog($request) || // 管理者であるか
+      Session::get($this->getEntryPasswordKey($entry['blog_id'], $entry['id']), false) // パスワードOKとなっている
+    );
+  }
+
+  /**
+   * 指定のエントリはアクセス権が必要か？
+   * @param $entry
+   * @return bool
+   */
+  private function isNeedAuthorizedEntry($entry):bool
+  {
+    if(!isset($entry['open_status'])){
+      throw new InvalidArgumentException('missing open_status');
+    }
+    return $entry['open_status'] != Config::get('ENTRY.OPEN_STATUS.PASSWORD');
   }
 
   /**
@@ -919,7 +949,7 @@ class EntriesController extends UserController
   {
     $blog_settings_model = new BlogSettingsModel();
     $blog_setting = $blog_settings_model->findByBlogId($blog_id);
-    if($blog_setting==false){
+    if ($blog_setting == false) {
       Log::error("couldn't get a blog settings. blog_id: {$blog_id}");
       throw new InvalidArgumentException("couldn't get a blog settings. blog_id: {$blog_id}");
     }
