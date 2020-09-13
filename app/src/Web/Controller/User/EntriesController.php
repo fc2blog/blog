@@ -540,7 +540,7 @@ class EntriesController extends UserController
 
       default: // PCや上記以外
         // PC場合、記事のコメント必要
-        if (App::isPC()) {
+        if (App::isPC($request)) {
           $is_comment_settled = $this->setCommentsData($request, $blog_id, $entry_id, $entry, false);
           if ($is_comment_settled) {
             $areas[] = 'comment_area';
@@ -604,7 +604,7 @@ class EntriesController extends UserController
       $this->set('paging', $comments_model->getPaging($options));
     }
     $comments = $comments_model->find('all', $options);
-    $comments = $comments_model->decorateByBlogSetting($comments, $blog_setting, $this->isLoginBlog($request));
+    $comments = $comments_model->decorateByBlogSetting($request, $comments, $blog_setting, $this->isLoginBlog($request));
     $this->set('comments', $comments);
 
     return true;
@@ -777,7 +777,7 @@ class EntriesController extends UserController
     $this->fc2CommentError('comment', $errors['comment'], $data);
 
     // FC2用のテンプレートで表示
-    $this->setPageData(array(App::isPC($request) ? 'comment_area' : 'form_area'));
+    $this->setAreaData(array(App::isPC($request) ? 'comment_area' : 'form_area'));
     return $this->fc2template($entry['blog_id']);
   }
 
