@@ -1,9 +1,9 @@
 <?php
 
-$config = array();
+$config = [];
 
 // ループ文の置き換え用
-$config['fc2_template_foreach'] = array(
+$config['fc2_template_foreach'] = [
   'topentry'      => '<?php if(!empty($entries) && empty($titlelist_area)) foreach($entries as $entry) { ?>',
   'titlelist'     => '<?php if(!empty($entries) && !empty($titlelist_area)) foreach($entries as $entry) { ?>',
   'comment'       => '<?php if(!empty($comments)) foreach($comments as $comment) { ?>',
@@ -30,10 +30,10 @@ $config['fc2_template_foreach'] = array(
   'plugin_second'  => '<?php if(!isset($t_plugins_2)) $t_plugins_2=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.SECOND\'), $blog_id); ?><?php if (!empty($t_plugins_2)) foreach($t_plugins_2 as $t_plugin) { ?>',
   'plugin_third'   => '<?php if(!isset($t_plugins_3)) $t_plugins_3=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.THIRD\'), $blog_id); ?><?php if (!empty($t_plugins_3)) foreach($t_plugins_3 as $t_plugin) { ?>',
   'spplugin_first' => '<?php if(!isset($t_plugins_1)) $t_plugins_1=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory($this->getDeviceType(), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
-);
+];
 
 // if文の置き換え用
-$config['fc2_template_if'] = array(
+$config['fc2_template_if'] = [
   // 各エリア判定用
   'index_area'         => '<?php if(!empty($index_area)) { ?>',
   'not_index_area'     => '<?php if(empty($index_area)) { ?>',
@@ -105,9 +105,9 @@ $config['fc2_template_if'] = array(
   // デバイスタイプ
   'ios'     => '<?php if(\Fc2blog\App::isIOS($request)) { ?>',
   'android' => '<?php if(\Fc2blog\App::isAndroid($request)) { ?>',
-);
+];
 
-$template_vars = array(
+$template_vars = [
   '<%server_url>' => '<?php echo \Fc2blog\Web\Html::getServerUrl() . \'/\'; ?>',
   '<%blog_id>'    => '<?php echo $blog_id; ?>',
   // タイトルリスト一覧
@@ -197,8 +197,8 @@ PHP
   // 記事のタグ系
   '<%topentry_tag_list_name>'      => '<?php if(isset($tag[\'name\'])) echo h($tag[\'name\']); ?>',
   '<%topentry_tag_list_parsename>' => '<?php if(isset($tag[\'name\'])) echo ue($tag[\'name\']); ?>',
-  '<%ctag_name>'                   => '<?php if(isset($t_tag[\'name\'])) echo h($t_tag[\'name\']); ?>',
-  '<%ctag_url>'                    => '<?php if(isset($t_tag[\'name\'])) echo $url . \'?tag=\' . ue($t_tag[\'name\']); ?>',
+  '<%ctag_name>'                   => '<?php if(isset($t_tag[\'name\'])) echo h($t_tag[\'name\']); ?>', // TODO $t_tag がコード中にみつからない
+  '<%ctag_url>'                    => '<?php if(isset($t_tag[\'name\'])) echo $url . \'?tag=\' . ue($t_tag[\'name\']); ?>', // TODO $t_tag がコード中にみつからない
   // 記事一覧のコメント表示
   '<%topentry_comment_list_name>'   => '<?php if(isset($comment[\'name\'])) echo h($comment[\'name\']); ?>',
   '<%topentry_comment_list_title>'  => '<?php if(isset($comment[\'title\'])) echo h($comment[\'title\']); ?>',
@@ -488,53 +488,60 @@ PHP
   // HTML変換
   'name="mode" value="regist"' => 'name="process" value="comment_regist"',
   'name="mode" value="edit"'   => 'name="process" value="comment_edit"',
-);
+];
 
-$config['fc2_template_var_search'] = $config['fc2_template_var_replace'] = array();
+$config['fc2_template_var_search'] = $config['fc2_template_var_replace'] = [];
 foreach ($template_vars as $key => $value) {
   $config['fc2_template_var_search'][] = $key;
-  $config['fc2_template_var_replace'][] = $value;;
+  $config['fc2_template_var_replace'][] = $value;
 }
 
 /**
-* ページング用のPHPコードを取得する
-*/
-function getFc2PagingPHP($page_num){
-  global $blog_id;
-  $html  = '<?php if(!empty($paging)): ?>';
-  $html .= '<?php for ($i=max(0, $paging[\'page\']-' . $page_num . ');$i<$paging[\'page\'];$i++) ';
-  $html .= 'echo \'<a href="\' . \Fc2blog\Web\Html::url($request, array(\'page\'=>$i, \'blog_id\'=>$blog_id), true) . \'">\' . ($i+1) . \'</a>\'; ?>';
-  $html .= '<strong><?php echo $paging[\'page\']+1; ?></strong>';
-  $html .= '<?php for ($i=$paging[\'page\']+1;$i<$paging[\'max_page\'] && $i<$paging[\'page\']+1+' . $page_num . ';$i++) ';
-  $html .= 'echo \'<a href="\' . \Fc2blog\Web\Html::url($request, array(\'page\'=>$i, \'blog_id\'=>$blog_id), true) . \'">\' . ($i+1) . \'</a>\'; ?>';
-  $html .= '<?php endif; ?>';
+ * ページング用のPHPコードを取得する
+ * @param int $page_num
+ * @return string
+ */
+function getFc2PagingPHP(int $page_num):string
+{
+  $html =
+    '<?php ' . PHP_EOL .
+    'if(!empty($paging)){' . PHP_EOL .
+    '  for ($i=max(0, $paging[\'page\']-' . $page_num . ');$i<$paging[\'page\'];$i++){ ' . PHP_EOL .
+    '    echo \'<a href="\' . \Fc2blog\Web\Html::url($request, array(\'page\'=>$i, \'blog_id\'=>$blog_id), true) . \'">\' . ($i+1) . \'</a>\'; ' . PHP_EOL .
+    '  }' . PHP_EOL .
+    '  ?><strong><?php echo $paging[\'page\']+1; ?></strong><?php' . PHP_EOL .
+    '  for ($i=$paging[\'page\']+1;$i<$paging[\'max_page\'] && $i<$paging[\'page\']+1+' . $page_num . ';$i++) {' . PHP_EOL .
+    '    echo \'<a href="\' . \Fc2blog\Web\Html::url($request, array(\'page\'=>$i, \'blog_id\'=>$blog_id), true) . \'">\' . ($i+1) . \'</a>\'; ' . PHP_EOL .
+    '  }' . PHP_EOL .
+    '}' . PHP_EOL .
+    '?>' . PHP_EOL;
   return $html;
 }
 
 function getTopentryDiscription(): string
 {
   return <<<PHP
-<?php
-  if (isset(\$entry['body'])) {
-    if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
-      echo <<<HTML
-<form method="POST">
-  <input type="hidden" name="mode" value="Entries" />
-  <input type="hidden" name="process" value="password" />
-  <input type="hidden" name="id" value="{\$entry['id']}" />
-  <p>
-    このコンテンツはパスワードで保護されています。<br />
-    閲覧するには以下にパスワードを入力してください。
-  </p>
-  <p>パスワード <input type="password" name="password" /><input type="submit" value="送信" /></p>
-</form>
-HTML;
-    } else {
-      echo th(strip_tags(\$entry['body']), 200);
+  <?php
+    if (isset(\$entry['body'])) {
+      if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+        echo <<<HTML
+        <form method="POST">
+          <input type="hidden" name="mode" value="Entries" />
+          <input type="hidden" name="process" value="password" />
+          <input type="hidden" name="id" value="{\$entry['id']}" />
+          <p>
+            このコンテンツはパスワードで保護されています。<br />
+            閲覧するには以下にパスワードを入力してください。
+          </p>
+          <p>パスワード <input type="password" name="password" /><input type="submit" value="送信" /></p>
+        </form>
+        HTML;
+      } else {
+        echo th(strip_tags(\$entry['body']), 200);
+      }
     }
-  }
-?>
-PHP;
+  ?>
+  PHP;
 }
 
 return $config;
