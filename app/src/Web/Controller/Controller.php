@@ -42,12 +42,32 @@ abstract class Controller
 
   public function execute($method)
   {
+    $template = $this->prepare($method);
+    $this->render($template, $method);
+  }
+
+  /**
+   * render前のアクション実行処理群
+   * @param string $method
+   * @return string template file path
+   */
+  public function prepare(string $method): string
+  {
     $this->beforeFilter($this->request);
 
     // アクションの実行(返り値はテンプレートファイル名、レンダリング用データは$this->data)
     $this->resolvedMethod = $method;
-    $template = $this->$method($this->request);
+    return $this->$method($this->request);
+  }
 
+  /**
+   * HTML(等)レンダリング
+   * @param string|null $template
+   * @param string $method
+   * @return void
+   */
+  public function render(?string $template, string $method) :void
+  {
     // 空の場合は、規約に則ってテンプレートファイルを決定する
     if (empty($template)) {
       // TODO prefixもつけて、ここでフルパスにしたほうがよくないか？（後でPrefixをわざわざつけている）
@@ -62,11 +82,9 @@ abstract class Controller
       ob_start();
       $this->layout($this->request, $template);
       $this->output = ob_get_clean();
+      // SSI的なインクルード処理など
+      $this->beforeRender();
     }
-
-    // SSI的なインクルード処理など（現状活用されていない）
-    // TODO 必要になるまで削除して良いと思われる
-    $this->beforeRender();
   }
 
   public function emit()

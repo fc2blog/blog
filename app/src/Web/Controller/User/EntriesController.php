@@ -35,6 +35,7 @@ class EntriesController extends UserController
       Log::notice("missing blog_id parameter. redirect to top.");
       $this->redirect($request, ['controller' => 'Blogs', 'action' => 'index']);
     }
+    $this->set('blog_id', $blog_id);
 
     // 指定のブログが実在するかチェック
     if (!($blog = $this->getBlog($blog_id)) || !is_array($blog)) {
