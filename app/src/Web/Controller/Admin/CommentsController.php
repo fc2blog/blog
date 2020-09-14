@@ -164,11 +164,10 @@ class CommentsController extends AdminController
   /**
    * コメントの承認(ajax版)
    * @param Request $request
+   * @return string
    */
-  public function ajax_approval(Request $request)
+  public function ajax_approval(Request $request):string
   {
-    $this->layout = 'json.php';
-
     $comments_model = Model::load('Comments');
 
     $id = $request->get('id');
@@ -176,18 +175,24 @@ class CommentsController extends AdminController
 
     // 承認データの取得
     if (!$comment = $comments_model->findByIdAndBlogId($id, $blog_id)) {
-      $this->set('json', array('error' => __('Comments subject to approval does not exist')));
-      return;
+      $this->set('json', ['error' => __('Comments subject to approval does not exist')]);
+      // error だが、JS側でsuccessプロパティ存在をみて判定しているので、 status codeは200を返す
+      $this->set('http_content_type', "application/json; charset=utf-8");
+      return "admin/common/json.twig";
     }
 
+    // すでに許可済み
     if ($comment['open_status'] != Config::get('COMMENT.OPEN_STATUS.PENDING')) {
-      $this->set('json', array('success' => 1));
-      return;
+      $this->set('json', ['success' => 1]);
+      $this->set('http_content_type', "application/json; charset=utf-8");
+      return "admin/common/json.twig";
     }
 
     // 承認処理
     $comments_model->updateApproval($blog_id, $id);
-    $this->set('json', array('success' => 1));
+    $this->set('json', ['success' => 1]);
+    $this->set('http_content_type', "application/json; charset=utf-8");
+    return "admin/common/json.twig";
   }
 
   /**
@@ -260,6 +265,8 @@ class CommentsController extends AdminController
     $comment_id = $request->get('id');
     $blog_id = $this->getBlogId($request);
 
+    $this->setStatusDataList();
+
     // 返信用のコメント取得
     $comment = $comments_model->getReplyComment($blog_id, $comment_id);
     if (!$comment) {
@@ -277,20 +284,21 @@ class CommentsController extends AdminController
       return "admin/comments/ajax_reply.twig";
     }
 
-    // 下記の入力チェック処理以降はjsonで返却
-    $this->layout = 'json.php';
+    $this->set('http_content_type', "application/json; charset=utf-8");
 
     // コメント投稿処理
-    $errors = $comments_model->replyValidate($request->get('comment'), $data, array('reply_body'));
+    $errors = $comments_model->replyValidate($request->get('comment'), $data, ['reply_body']);
+
     if (empty($errors)) {
       if ($comments_model->updateReply($data, $comment)) {
-        $this->set('json', array('success' => 1));
-        return "admin/comments/ajax_reply.twig";
+        $this->set('json', ['success' => 1]);
+        return "admin/common/json.twig";
       }
     }
 
-    $this->set('json', array('error' => $errors['reply_body']));
-    return "admin/comments/ajax_reply.twig";
+    // error だが、JS側でsuccessプロパティ存在をみて判定しているので、 status codeは200を返す
+    $this->set('json', ['error' => $errors['reply_body']]);
+    return "admin/common/json.twig";
   }
 
   /**
