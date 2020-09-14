@@ -131,7 +131,7 @@ class BlogTemplatesController extends AdminController
       } else {
         $request->set('blog_template.device_type', $request->get('device_type'));
       }
-      $request->generateNewSig();;
+      $request->generateNewSig();
       return "admin/blog_templates/create.twig";
     }
 
