@@ -177,9 +177,9 @@ class FilesController extends AdminController
 
   /**
    *編集
-* @param Request $request
-* @return string
-*/
+   * @param Request $request
+   * @return string
+   */
   public function edit(Request $request): string
   {
     $files_model = new FilesModel();
@@ -278,8 +278,9 @@ class FilesController extends AdminController
   /**
    * 削除
    * @param Request $request
+   * @return string
    */
-  public function ajax_delete(Request $request)
+  public function ajax_delete(Request $request): string
   {
     // 削除処理
     $json = array('status' => 0);
@@ -287,8 +288,9 @@ class FilesController extends AdminController
       $json = array('status' => 1);
     }
 
-    $this->layout = 'json.php';
+    $this->set('http_content_type', "application/json; charset=utf-8");
     $this->set('json', $json);
+    return "admin/common/json.twig";
   }
 
 }
