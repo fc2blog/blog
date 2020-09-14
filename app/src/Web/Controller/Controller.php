@@ -89,6 +89,16 @@ abstract class Controller
 
   public function emit()
   {
+    $status_code = isset($this->data['http_status_code']) ? $this->data['http_status_code'] : 200;
+    if($status_code !== 200){
+      http_response_code($status_code);
+    }
+
+    $content_type = isset($this->data['http_content_type']) ? $this->data['http_content_type'] : "";
+    if(strlen($content_type)>0){
+      header("Content-Type: {$content_type}");
+    }
+
     echo $this->output;
   }
 
