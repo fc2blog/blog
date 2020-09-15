@@ -5,6 +5,8 @@ namespace Fc2blog\Tests\Helper\SampleDataGenerator;
 
 use Exception;
 use Fc2blog\Model\CategoriesModel;
+use Fc2blog\Model\EntryCategoriesModel;
+use Fc2blog\Util\Log;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -90,6 +92,23 @@ class GenerateSampleCategory
       if (1 !== $categories_model->deleteByIdAndBlogId($row['id'], $row['blog_id'])) {
         throw new RuntimeException("delete failed, " . print_r($row, true));
       }
+    }
+  }
+
+  /**
+   * @param string $blog_id
+   * @param int $entry_id
+   * @param int[] $category_id_list
+   */
+  public function updateEntryCategories(string $blog_id, int $entry_id, array $category_id_list): void
+  {
+    $entry_categories_model = new EntryCategoriesModel();
+    $data = ['category_id' => $category_id_list];
+    // カテゴリと紐付
+    $result = $entry_categories_model->save($blog_id, $entry_id, $data);
+    if ($result === false) {
+      Log::error(__FILE__ . ":" . __LINE__ . " updateEntryCategories failed.", ['blog_id' => $blog_id, 'entry_id' => $entry_id, 'data' => $data]);
+      throw new RuntimeException(__FILE__ . ":" . __LINE__ . " updateEntryCategories failed.");
     }
   }
 }
