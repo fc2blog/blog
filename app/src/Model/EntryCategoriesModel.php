@@ -2,6 +2,8 @@
 
 namespace Fc2blog\Model;
 
+use LogicException;
+
 class EntryCategoriesModel extends Model
 {
 
@@ -131,5 +133,45 @@ class EntryCategoriesModel extends Model
       Model::load('Categories')->decreaseCount($blog_id, $category_ids);
     }
     return $this->delete('blog_id=? AND entry_id=?', array($blog_id, $entry_id));
+  }
+
+  public function findByIdAndBlogId($id, ?string $blog_id, $options = [])
+  {
+    // entry_categories table does not have id column.
+    throw new LogicException("this method not works in EntryCategoriesModel");
+  }
+
+  public function findsByEntryIdAndBlogId($entry_id, ?string $blog_id, $options = [])
+  {
+    if (empty($entry_id) || empty($blog_id)) {
+      return [];
+    }
+    $options['where'] = isset($options['where']) ? 'blog_id=? AND entry_id=? AND ' . $options['where'] : 'blog_id=? AND entry_id=?';
+    $options['params'] = isset($options['params']) ? array_merge([$blog_id, $entry_id], $options['params']) : [$blog_id, $entry_id];
+    $entry_category_list = $this->find('all', $options);
+
+    $category_list = [];
+    $category_model = new CategoriesModel();
+    foreach($entry_category_list as $entry_category){
+      $category_list[] = $category_model->findByIdAndBlogId($entry_category['category_id'], $blog_id);
+    }
+    return $category_list;
+  }
+
+  public function findByCategoryIdAndBlogId($category_id, ?string $blog_id, $options = [])
+  {
+    if (empty($category_id) || empty($blog_id)) {
+      return [];
+    }
+    $options['where'] = isset($options['where']) ? 'blog_id=? AND category_id=? AND ' . $options['where'] : 'blog_id=? AND category_id=?';
+    $options['params'] = isset($options['params']) ? array_merge([$blog_id, $category_id], $options['params']) : [$blog_id, $category_id];
+    $entry_category_row = $this->find('row', $options);
+
+    if($entry_category_row===false){
+      return false;
+    }
+
+    $category_model = new CategoriesModel();
+    return $category_model->findByIdAndBlogId($entry_category_row['category_id'], $blog_id);
   }
 }
