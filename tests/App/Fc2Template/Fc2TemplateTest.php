@@ -8,6 +8,8 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
+use Fc2blog\Model\EntryCategoriesModel;
+use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleCategory;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleComment;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleEntry;
 use Fc2blog\Web\Controller\User\EntriesController;
@@ -41,10 +43,17 @@ class Fc2TemplateTest extends TestCase
   {
     ## テストデータ生成
 
+    # category生成
+    $category_generator = new GenerateSampleCategory();
+    $categories = $category_generator->generateSampleCategories($blog_id, 0, 1);
+    $category = $categories[0];
+
     # entry生成
     $entry_generator = new GenerateSampleEntry();
     $entries = $entry_generator->generateSampleEntry($blog_id, 1);
     $entry = $entries[0];
+    // カテゴリを追加する
+    $category_generator->updateEntryCategories($blog_id, $entry['id'], [$category['id']]);
 
     # comment生成
     $comment_generator = new GenerateSampleComment();
@@ -117,6 +126,37 @@ class Fc2TemplateTest extends TestCase
     $this->evalAll($request, $entry_controller->getData());
   }
 
+  /**
+   * カテゴリページ（EntriesController::category）の疑似データを生成
+   */
+  public function testTagsInEntriesCategory(): void
+  {
+    $blog_id = "testblog2";
+    $entry = $this->generateTestData($blog_id);
+    $entry_category_model = new EntryCategoriesModel();
+    $entry_categories = $entry_category_model->getCategoryIds($blog_id, $entry['id']);
+    $entry_category = $entry_category_model->findByCategoryIdAndBlogId($entry_categories[0], $blog_id);
+
+    ## 「状態」生成
+    // request 生成
+    $request = new Request(
+      "GET",
+      "/{$blog_id}/cat={$entry_category['id']}",
+      [],
+      [],
+      ['cat' => $entry_category['id']],
+      [],
+      [],
+      [],
+      []
+    );
+    $entry_controller = new EntriesController($request);
+    $entry_controller->prepare('category');
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+  }
+
 
   // == support
 
@@ -125,7 +165,7 @@ class Fc2TemplateTest extends TestCase
    * @param Request $request
    * @param array $data
    */
-  public function evalAll(Request $request, array $data) :void
+  public function evalAll(Request $request, array $data): void
   {
     $this->getAllPrintableTagEval($request, $data);
     $this->getAllIfCondEval($request, $data);
