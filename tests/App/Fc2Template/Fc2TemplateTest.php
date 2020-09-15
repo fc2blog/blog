@@ -9,9 +9,11 @@ use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\EntryCategoriesModel;
+use Fc2blog\Model\TagsModel;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleCategory;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleComment;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleEntry;
+use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleTag;
 use Fc2blog\Web\Controller\User\EntriesController;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
@@ -54,6 +56,10 @@ class Fc2TemplateTest extends TestCase
     $entry = $entries[0];
     // カテゴリを追加する
     $category_generator->updateEntryCategories($blog_id, $entry['id'], [$category['id']]);
+
+    # tag生成
+    $tag_generator = new GenerateSampleTag();
+    $tag_generator->generateSampleTagsToSpecifyEntry($blog_id, $entry['id'], 1);
 
     # comment生成
     $comment_generator = new GenerateSampleComment();
@@ -152,6 +158,40 @@ class Fc2TemplateTest extends TestCase
     );
     $entry_controller = new EntriesController($request);
     $entry_controller->prepare('category');
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+  }
+
+  /**
+   * タグ検索ページ（EntriesController::tag）の疑似データを生成
+   */
+  public function testTagsInEntriesTag(): void
+  {
+    $blog_id = "testblog2";
+    $entry = $this->generateTestData($blog_id);
+
+    $tag_model = new TagsModel();
+    $tags = $tag_model->getEntryTags($blog_id, $entry['id']);
+//    var_dump($tags);
+    $tag_str = $tags[0]['name'];
+
+
+    ## 「状態」生成
+    // request 生成
+    $request = new Request(
+      "GET",
+      "/{$blog_id}/tag={$tag_str}",
+      [],
+      [],
+      ['tag' => $tag_str],
+      [],
+      [],
+      [],
+      []
+    );
+    $entry_controller = new EntriesController($request);
+    $entry_controller->prepare('tag');
 
     ## 疑似実行
     $this->evalAll($request, $entry_controller->getData());
