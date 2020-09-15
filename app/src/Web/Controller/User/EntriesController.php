@@ -689,25 +689,30 @@ class EntriesController extends UserController
   /**
    * ブログのパスワード認証
    * @param Request $request
+   * @return string
    */
-  public function blog_password(Request $request)
+  public function blog_password(Request $request): string
   {
     $blog_id = $this->getBlogId($request);
     $blog = $this->getBlog($blog_id);
 
+    // プライベートブログではない、あるいは認証済み、ログイン済みならリダイレクト
     if ($blog['open_status'] != Config::get('BLOG.OPEN_STATUS.PRIVATE') || Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog($request)) {
       $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
     }
 
+    // 認証処理
     if ($request->get('blog')) {
       if ($request->get('blog.password') == $blog['blog_password']) {
         Session::set($this->getBlogPasswordKey($blog['id']), true);
+        $this->set('auth_success', true); // for testing.
         $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
       }
       $this->set('errors', array('password' => __('The password is incorrect!')));
     }
 
     $this->set('blog', $blog);
+    return "";
   }
 
   /**
