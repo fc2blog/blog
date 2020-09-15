@@ -197,6 +197,33 @@ class Fc2TemplateTest extends TestCase
     $this->evalAll($request, $entry_controller->getData());
   }
 
+  /**
+   * アーカイブページ（EntriesController::archive）の疑似データを生成
+   */
+  public function testTagsInEntriesArchive(): void
+  {
+    $blog_id = "testblog2";
+    $this->generateTestData($blog_id);
+
+    ## 「状態」生成
+    // request 生成
+    $request = new Request(
+      "GET",
+      "/{$blog_id}/archives.html",
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    );
+    $entry_controller = new EntriesController($request);
+    $entry_controller->prepare('archives');
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+  }
 
   // == support
 
