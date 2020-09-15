@@ -117,6 +117,14 @@ class Fc2TemplateTest extends TestCase
     $this->evalAll($request, $entry_controller->getData());
   }
 
+
+  // == support
+
+  /**
+   * 各タグのテストを実施
+   * @param Request $request
+   * @param array $data
+   */
   public function evalAll(Request $request, array $data) :void
   {
     $this->getAllPrintableTagEval($request, $data);
@@ -125,7 +133,7 @@ class Fc2TemplateTest extends TestCase
   }
 
   /**
-   * テンプレートタグを実際にPHPとして評価してみる
+   * テンプレートタグを変換し、実行テスト
    * （ただし、それぞれのタグ表示には各種前提条件があり、実行時エラーを特定できるものではない。せいぜいLinter程度の効果）
    * @param Request $request
    * @param array $env
@@ -147,7 +155,7 @@ class Fc2TemplateTest extends TestCase
   }
 
   /**
-   * fc2 templateのif系タグを実行テスト
+   * fc2 templateのif系タグを変換し、実行テスト
    * @param Request $request
    * @param array $env
    */
@@ -165,7 +173,7 @@ class Fc2TemplateTest extends TestCase
   }
 
   /**
-   * fc2 templateのforeach系タグを実行テスト
+   * fc2 templateのforeach系タグを変換し、実行テスト
    * @param Request $request
    * @param array $env
    */
@@ -184,7 +192,7 @@ class Fc2TemplateTest extends TestCase
   }
 
   /**
-   * PHPのフラグメントを評価
+   * PHPのフラグメントをPHPとして評価してみる
    * @param array $env
    * @param $tag_str
    * @param string $converted_php
