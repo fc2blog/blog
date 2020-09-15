@@ -6,6 +6,7 @@ namespace Fc2blog\Tests\App\Fc2Template;
 use ErrorException;
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\EntryCategoriesModel;
@@ -220,6 +221,107 @@ class Fc2TemplateTest extends TestCase
     );
     $entry_controller = new EntriesController($request);
     $entry_controller->prepare('archives');
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+  }
+
+  /**
+   * ブログパスワードページ（EntriesController::blog_password）の疑似データを生成
+   */
+  public function testTagsInEntriesBlogPassword(): void
+  {
+    $blog_id = "testblog2";
+    $this->generateTestData($blog_id);
+
+    // TODO 一時的にBlogをパスワード付きに
+    $blogs_model = new BlogsModel();
+    $blog = $blogs_model->findById($blog_id);
+//    var_dump($blog);
+    $blog['open_status'] = Config::get('BLOG.OPEN_STATUS.PRIVATE');
+    $blog['blog_password'] = "password";
+    $blogs_model->updateById($blog, $blog['id']);
+
+    ## 「状態」生成
+    // request 生成
+    // 認証前
+    try {
+      $request = new Request(
+        "GET",
+        "/{$blog_id}/",
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      );
+      $entry_controller = new EntriesController($request);
+      $entry_controller->prepare('blog_password');
+      $this->fail('password protect not worked');
+    } catch (RedirectExit $e) {
+      $this->assertEquals("/testblog2/index.php?mode=entries&process=blog_password", $e->redirectUrl);
+    }
+
+    // 認証のトライ
+    $request = new Request(
+      "GET",
+      "/{$blog_id}/index.php?mode=entries&process=blog_password",
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    );
+    $entry_controller = new EntriesController($request);
+    $entry_controller->prepare('blog_password');
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+
+    // 認証のトライ
+    try {
+      $request = new Request(
+        "POST",
+        "/{$blog_id}/index.php?mode=entries&process=blog_password",
+        [],
+        [
+          'blog' => [
+            'password' => 'password'
+          ]
+        ],
+        [],
+        [],
+        [],
+        [],
+        []
+      );
+      $entry_controller = new EntriesController($request);
+      $entry_controller->prepare('blog_password');
+      $this->fail('password auth not worked');
+    } catch (RedirectExit $e) {
+      $this->assertEquals("/testblog2/index.php?mode=entries&process=index", $e->redirectUrl);
+      $this->assertTrue($entry_controller->get('auth_success'));
+    }
+
+    // 認証OK
+    $request = new Request(
+      "POST",
+      "/{$blog_id}/",
+      [
+        "blog_password.{$blog_id}" => true
+      ],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    );
+    $entry_controller = new EntriesController($request);
+    $entry_controller->prepare('index');
 
     ## 疑似実行
     $this->evalAll($request, $entry_controller->getData());
