@@ -126,15 +126,15 @@ class EntriesModel extends Model
     $add_where = ' AND open_status IN (' . implode(',', $open_status_list) . ')';
 
     $sql = <<<SQL
-SELECT
-  DATE_FORMAT(posted_at, '%Y') as year,
-  DATE_FORMAT(posted_at, '%m') as month,
-  COUNT(*) as count
-FROM entries
-WHERE blog_id=? {$add_where}
-GROUP BY DATE_FORMAT(posted_at, '%Y-%m')
-ORDER BY posted_at DESC
-SQL;
+      SELECT
+        DATE_FORMAT(posted_at, '%Y') as year,
+        DATE_FORMAT(posted_at, '%m') as month,
+        COUNT(*) as count
+      FROM entries
+      WHERE blog_id=? {$add_where}
+      GROUP BY year, month
+      ORDER BY concat(year, month) DESC;
+    SQL;
     $params = array($blog_id);
     $options = array('result' => DBInterface::RESULT_ALL);
     return $this->findSql($sql, $params, $options);
