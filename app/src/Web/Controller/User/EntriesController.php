@@ -596,6 +596,7 @@ class EntriesController extends UserController
     $blog_settings_model = new BlogSettingsModel();
 
     // ブログの設定情報取得
+    // TODO あるエントリのcommentsを取得するこれらはモデルに移動したほうがよいのではないか？
     $blog_setting = $blog_settings_model->findByBlogId($blog_id);
 
     $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting);
@@ -718,9 +719,9 @@ class EntriesController extends UserController
   /**
    * コメント投稿
    * @param Request $request
-   * @return string|void
+   * @return string
    */
-  public function comment_regist(Request $request)
+  public function comment_regist(Request $request): string
   {
     $blog_id = $this->getBlogId($request);
 
@@ -744,14 +745,15 @@ class EntriesController extends UserController
     $entry_id = $request->get('comment.entry_id');
 
     // 記事詳細取得
-    $entry = Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id);
+    $entries_model = new EntriesModel();
+    $entry = $entries_model->getCommentAcceptedEntry($entry_id, $blog_id);
     if (!$entry) {
-      $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id));
+      $this->redirect($request, ['action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id]);
     }
 
     // CAPTCHA用に確認画面を挟む
     if ($is_captcha && !$request->isArgs('token')) {
-      return;
+      return "";
     }
 
     // 記事のカテゴリ一覧を取得 TODO:後でcacheを使用する形に
@@ -776,7 +778,7 @@ class EntriesController extends UserController
     // Captcha使用時のエラー画面
     if ($is_captcha) {
       $this->set('errors', $errors);
-      return;
+      return "";
     }
 
     // コメント投稿エラー
@@ -845,7 +847,7 @@ class EntriesController extends UserController
       return $this->fc2template($blog_id);
     }
 
-    // 削除ボタンを押された場合の処理
+    // 削除ボタンを押された場合の処理(comment_deleteに処理を移譲)
     if ($request->get('comment.delete')) {
       return $this->comment_delete($request);
     }
@@ -892,29 +894,28 @@ class EntriesController extends UserController
    */
   public function comment_delete(Request $request)
   {
-    /** @var CommentsModel $comments_model */
-    $comments_model = Model::load('Comments');
+    $comments_model = new CommentsModel();
 
     $blog_id = $this->getBlogId($request);
     $comment_id = $request->get('comment.id');
     $comment = "";
     if (!$comment_id || !($comment = $comments_model->findByIdAndBlogId($comment_id, $blog_id)) || empty($comment['password'])) {
-      $this->redirect($request, array('controller' => 'Entries', 'action' => 'index', 'blog_id' => $blog_id));
+      $this->redirect($request, ['controller' => 'Entries', 'action' => 'index', 'blog_id' => $blog_id]);
     }
 
     // コメント削除処理
-    $errors = array();
+    $errors = [];
     $errors['comment'] = $comments_model->editValidate($request->get('comment'), $data, array('password'), $comment);
     if (empty($errors['comment'])) {
       $comments_model->deleteByIdAndBlogId($comment['id'], $comment['blog_id']);
-      $this->redirect($request, array('action' => 'view', 'blog_id' => $comment['blog_id'], 'id' => $comment['entry_id']));
+      $this->redirect($request, ['action' => 'view', 'blog_id' => $comment['blog_id'], 'id' => $comment['entry_id']]);
     }
 
     // コメント投稿エラー
-    $this->fc2CommentError('edit', $errors['comment'], array('open_status' => $comment['open_status']));
+    $this->fc2CommentError('edit', $errors['comment'], ['open_status' => $comment['open_status']]);
 
     // FC2用のテンプレートで表示
-    $this->setAreaData(array('edit_area'));
+    $this->setAreaData(['edit_area']);
     return $this->fc2template($blog_id);
   }
 
