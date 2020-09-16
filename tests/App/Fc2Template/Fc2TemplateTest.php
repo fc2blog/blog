@@ -7,8 +7,11 @@ use ErrorException;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
+use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
+use Fc2blog\Model\CommentsModel;
+use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\EntryCategoriesModel;
 use Fc2blog\Model\TagsModel;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleCategory;
@@ -55,6 +58,12 @@ class Fc2TemplateTest extends TestCase
     $entry_generator = new GenerateSampleEntry();
     $entries = $entry_generator->generateSampleEntry($blog_id, 1);
     $entry = $entries[0];
+    // テストの都合上コメント許可エントリに固定する
+    $entry['comment_accepted'] = Config::get("COMMENT_ACCEPTED.ENTRY.ACCEPTED");
+    $entries_model = new EntriesModel();
+    $entries_model->updateByIdAndBlogId($entry, $entry['id'], $blog_id);
+//    var_dump($entry);
+
     // カテゴリを追加する
     $category_generator->updateEntryCategories($blog_id, $entry['id'], [$category['id']]);
 
@@ -332,6 +341,87 @@ class Fc2TemplateTest extends TestCase
     ## 疑似実行
     $this->evalAll($request, $entry_controller->getData());
   }
+
+  /**
+   * コメント編集ページ（EntriesController::comment_edit）の疑似データを生成
+   */
+  public function testTagsInEntriesCommentEdit(): void
+  {
+    $blog_id = "testblog2";
+    $entry = $this->generateTestData($blog_id);
+
+    ## 「状態」生成
+    // request 生成
+    $request = new Request(
+      "POST",
+      "/{$blog_id}/",
+      [],
+      [],
+      [
+        'token' => "1234",
+        'process' => 'comment_regist',
+        'comment' => [
+          'no' => (string)$entry['id'],
+          'name' => "noname",
+          'title' => "No title",
+          'mail' => "",
+          'url' => "",
+          'body' => "test",
+        ]
+      ],
+      [],
+      [],
+      [],
+      []
+    );
+    try {
+      $entry_controller = new EntriesController($request);
+      $entry_controller->prepare('comment_regist');
+      $this->fail('should be need captcha');
+    } catch (RedirectExit $e) {
+//      var_dump($e->redirectUrl);
+    }
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+
+    ## 「状態」生成
+    // request 生成
+    $request = new Request(
+      "POST",
+      "/{$blog_id}/",
+      [],
+      [],
+      [
+        'token' => "1234",
+        'process' => 'comment_regist',
+        'comment' => [
+          'no' => (string)$entry['id'],
+          'name' => "noname",
+          'title' => "No title",
+          'mail' => "",
+          'url' => "",
+          'body' => "test",
+        ]
+      ],
+      [],
+      [],
+      [],
+      []
+    );
+    try {
+      $entry_controller = new EntriesController($request);
+      $entry_controller->prepare('comment_regist');
+      $this->fail('should be need captcha');
+    } catch (RedirectExit $e) {
+      var_dump($e->redirectUrl);
+    }
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+  }
+
+
 
   // == support
 
