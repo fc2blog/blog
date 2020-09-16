@@ -4,6 +4,7 @@ namespace Fc2blog\Model;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Web\Controller\Admin\BlogTemplatesController;
 use Fc2blog\Web\Session;
 
 class BlogTemplatesModel extends Model
@@ -168,6 +169,9 @@ class BlogTemplatesModel extends Model
     $html = self::convertFC2Template($html);
     file_put_contents($templatePath, $html);
     chmod($templatePath, 0777);
+
+    // pluginのPHPを再生成（すでにファイルがあれば不要な処理だが、このタイミングよりよい再生成タイミングがない）
+    BlogsModel::regeneratePluginPhpByBlogId($blog_id);
 
     // フォルダが存在しない場合作成
     $cssPath = self::getCssFilePath($blog_id, $device_type, $isPreview);
