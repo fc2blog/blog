@@ -421,6 +421,66 @@ class Fc2TemplateTest extends TestCase
     $this->evalAll($request, $entry_controller->getData());
   }
 
+  /**
+   * コメント（削除）ページ（EntriesController::comment_delete）の疑似データを生成
+   */
+  public function testTagsInEntriesCommentDelete(): void
+  {
+    $blog_id = "testblog2";
+    $entry = $this->generateTestData($blog_id);
+
+    // 削除するコメントは、パスワード付きの必要がある
+    $blog_settings_model = new BlogSettingsModel();
+    $comments_model = new CommentsModel();
+    # comment生成
+    $comment_generator = new GenerateSampleComment();
+    $comment_generator->removeAllComments($blog_id, $entry['id']);
+    $some_comments = $comment_generator->generateSampleComment($blog_id, $entry['id'], 1);
+    $some_comment = $some_comments[0];
+    $some_comment['open_status'] = Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+    $comments_model->updateByIdAndBlogId($some_comment, $some_comment['id'], $blog_id);
+//    var_dump($some_comment);
+
+    $blog_setting = $blog_settings_model->findByBlogId($blog_id);
+    $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $entry['id'], $blog_setting);
+    $comments = $comments_model->find('all', $options);
+    $comments = $comments_model->decorateByBlogSetting(new Request(), $comments, $blog_setting, false);
+//    var_dump($comments);
+
+    ## 「状態」生成
+    // request 生成
+    $request = new Request(
+      "GET",
+      "/{$blog_id}/no={$entry['id']}",
+      [],
+      [
+        'process' => 'comment_edit', // 内部的にcomment_deleteに移譲される
+        'mode2' => 'edited',
+        'edit' => [ // FC2テンプレートの引数を受け側で合わせる（変換がEntries::comment_editでおこなわれている
+          'rno' => $some_comment['id'], // → 'comment.id'
+          'name' => '',
+          'title' => '',
+          'mail' => '',
+          'url' => '',
+          'body' => '',
+          'pass' => 'wrong password', // → 'comment.password' まちがったパスワードでないと、リダイレクトして終了するので
+          'delete' => '削除',
+        ],
+      ],
+      [],
+      [],
+      [],
+      [],
+      []
+    );
+
+    $entry_controller = new EntriesController($request);
+    $entry_controller->set('comments', $comments);
+    $entry_controller->prepare('comment_edit');  // 内部的にcomment_deleteに移譲される
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+  }
 
 
   // == support
@@ -595,11 +655,11 @@ class Fc2TemplateTest extends TestCase
 
         list($entries[$key]['year'], $entries[$key]['month'], $entries[$key]['day'],
           $entries[$key]['hour'], $entries[$key]['minute'], $entries[$key]['second'], $entries[$key]['youbi'], $entries[$key]['month_short']
-          ) = explode('/', date('Y/m/d/H/i/s/D/M', strtotime($value['posted_at'])));
+          ) = explode(' / ', date('Y / m / d / H / i / s / D / M', strtotime($value['posted_at'])));
         $entries[$key]['wayoubi'] = __($entries[$key]['youbi']);
 
         // 自動改行処理
-        if ($value['auto_linefeed'] == Config::get('ENTRY.AUTO_LINEFEED.USE')) {
+        if ($value['auto_linefeed'] == Config::get('ENTRY . AUTO_LINEFEED .use')) {
           $entries[$key]['body'] = nl2br($value['body']);
           $entries[$key]['extend'] = nl2br($value['extend']);
         }
@@ -609,33 +669,45 @@ class Fc2TemplateTest extends TestCase
 // コメント一覧の情報
     if (!empty($comments)) {
       foreach ($comments as $key => $value) {
-        $comments[$key]['edit_link'] = Html::url($request, array('controller' => 'Entries', 'action' => 'comment_edit', 'blog_id' => $value['blog_id'], 'id' => $value['id']));
+        $comments[$key]['edit_link'] = Html::url($request, ['controller' => 'Entries', 'action' => 'comment_edit', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
 
-        list($comments[$key]['year'], $comments[$key]['month'], $comments[$key]['day'],
-          $comments[$key]['hour'], $comments[$key]['minute'], $comments[$key]['second'], $comments[$key]['youbi']
-          ) = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['updated_at'])));
+        [
+          $comments[$key]['year'],
+          $comments[$key]['month'],
+          $comments[$key]['day'],
+          $comments[$key]['hour'],
+          $comments[$key]['minute'],
+          $comments[$key]['second'],
+          $comments[$key]['youbi']
+        ] = explode(' / ', date('Y / m / d / H / i / s / D', strtotime($value['updated_at'])));
         $comments[$key]['wayoubi'] = __($comments[$key]['youbi']);
         $comments[$key]['body'] = $value['body'];
 
-        list($comments[$key]['reply_year'], $comments[$key]['reply_month'], $comments[$key]['reply_day'],
-          $comments[$key]['reply_hour'], $comments[$key]['reply_minute'], $comments[$key]['reply_second'], $comments[$key]['reply_youbi']
-          ) = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['reply_updated_at'])));
+        [
+          $comments[$key]['reply_year'],
+          $comments[$key]['reply_month'],
+          $comments[$key]['reply_day'],
+          $comments[$key]['reply_hour'],
+          $comments[$key]['reply_minute'],
+          $comments[$key]['reply_second'],
+          $comments[$key]['reply_youbi']
+        ] = explode(' / ', date('Y / m / d / H / i / s / D', strtotime($value['reply_updated_at'] ?? "now"))); // NOTE TODO nullのことがあり、TypeErrorがThrowされることがある
         $comments[$key]['reply_wayoubi'] = __($comments[$key]['reply_youbi']);
-        $comments[$key]['reply_body'] = nl2br($value['reply_body']);
+        $comments[$key]['reply_body'] = nl2br($value['reply_body'] ?? ""); // NOTE TODO NULLのことがあり、TypeErrorがThrowされることがある
       }
     }
 
 // FC2用のどこでも有効な単変数
-    $url = '/' . $blog['id'] . '/';
+    $url = ' / ' . $blog['id'] . ' / ';
 //    $blog_id = $this->getBlogId($request); // 外部で定義しているので、不要
 
 // 年月日系
     // get from app/src/Web/Controller/User/EntriesController.php::date() 経由だと定義される
     /** @noinspection PhpUndefinedVariableInspection */
-    $now_date = isset($date_area) && $date_area ? $now_date : date('Y-m-d');
-    $now_month_date = date('Y-m-1', strtotime($now_date));
-    $prev_month_date = date('Y-m-1', strtotime($now_month_date . ' -1 month'));
-    $next_month_date = date('Y-m-1', strtotime($now_month_date . ' +1 month'));
+    $now_date = (isset($now_date) && isset($date_area) && $date_area) ? $now_date : date('Y-m-d'); // TODO パースに失敗するので変更した（元も壊れているのでは？
+    $now_month_date = date('Y-m-1', strtotime($now_date)); // ここでパースに失敗する
+    $prev_month_date = date('Y-m-1', strtotime($now_month_date . ' - 1 month'));
+    $next_month_date = date('Y-m-1', strtotime($now_month_date . ' + 1 month'));
 
     return compact(array_keys(get_defined_vars()));
   }
