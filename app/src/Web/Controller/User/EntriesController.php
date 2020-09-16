@@ -792,9 +792,9 @@ class EntriesController extends UserController
   /**
    * コメント編集画面
    * @param Request $request
-   * @return string|void
+   * @return string
    */
-  public function comment_edit(Request $request)
+  public function comment_edit(Request $request) :string
   {
     $blog_id = $this->getBlogId($request);
 
@@ -854,7 +854,7 @@ class EntriesController extends UserController
 
     // Captcha画面の初期表示処理
     if ($is_captcha && !$request->isArgs('token')) {
-      return;
+      return "";
     }
 
     // FC2テンプレート編集時
@@ -876,7 +876,7 @@ class EntriesController extends UserController
     // Captcha使用時のエラー画面
     if ($is_captcha) {
       $this->set('errors', $errors);
-      return;
+      return "";
     }
 
     // コメント投稿エラー
