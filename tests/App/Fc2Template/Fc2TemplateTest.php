@@ -264,6 +264,9 @@ class Fc2TemplateTest extends TestCase
       $this->assertEquals("/testblog2/index.php?mode=entries&process=blog_password", $e->redirectUrl);
     }
 
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+
     // 認証のトライ
     $request = new Request(
       "GET",
@@ -305,6 +308,9 @@ class Fc2TemplateTest extends TestCase
       $this->assertEquals("/testblog2/index.php?mode=entries&process=index", $e->redirectUrl);
       $this->assertTrue($entry_controller->get('auth_success'));
     }
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
 
     // 認証OK
     $request = new Request(
