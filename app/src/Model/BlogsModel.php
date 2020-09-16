@@ -429,6 +429,19 @@ class BlogsModel extends Model
         }
       }
     }
+
+    // pluginのPHPコードを再生成する(PC)
+    $blog_plugins_model = new BlogPluginsModel();
+    $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_PC"));
+    // var_dump($category_blog_plugins);
+
+    foreach($category_blog_plugins as $plugins){ // カテゴリ毎
+      foreach($plugins as $plugin){ // プラグイン毎
+        $blog_plugins_model::createPlugin($plugin['contents'], $blog_id, $plugin['id']);
+      }
+    }
+
+    // TODO スマホも生成する
   }
 
   /**
