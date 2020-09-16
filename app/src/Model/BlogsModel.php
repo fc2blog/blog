@@ -430,18 +430,33 @@ class BlogsModel extends Model
       }
     }
 
+    static::regeneratePluginPhpByBlogId($blog_id);
+  }
+
+  /**
+   * PluginのPHPコードをDBから再生成する
+   * @param string $blog_id
+   */
+  public static function regeneratePluginPhpByBlogId(string $blog_id): void
+  {
     // pluginのPHPコードを再生成する(PC)
     $blog_plugins_model = new BlogPluginsModel();
     $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_PC"));
-    // var_dump($category_blog_plugins);
 
-    foreach($category_blog_plugins as $plugins){ // カテゴリ毎
-      foreach($plugins as $plugin){ // プラグイン毎
+    foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
+      foreach ($plugins as $plugin) { // プラグイン毎
         $blog_plugins_model::createPlugin($plugin['contents'], $blog_id, $plugin['id']);
       }
     }
 
-    // TODO スマホも生成する
+    // pluginのPHPコードを再生成する(SP)
+    $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_SP"));
+
+    foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
+      foreach ($plugins as $plugin) { // プラグイン毎
+        $blog_plugins_model::createPlugin($plugin['contents'], $blog_id, $plugin['id']);
+      }
+    }
   }
 
   /**
