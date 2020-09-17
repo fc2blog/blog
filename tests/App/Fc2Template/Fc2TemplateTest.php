@@ -500,7 +500,7 @@ class Fc2TemplateTest extends TestCase
       [],
       [
         'process' => 'date',
-        'date'=>$date_ymd,
+        'date' => $date_ymd,
       ],
       [],
       [],
