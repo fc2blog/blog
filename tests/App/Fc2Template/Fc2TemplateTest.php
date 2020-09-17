@@ -482,6 +482,38 @@ class Fc2TemplateTest extends TestCase
     $this->evalAll($request, $entry_controller->getData());
   }
 
+  /**
+   * 日付ページ（EntriesController::date）の疑似データを生成
+   */
+  public function testTagsInEntriesDate(): void
+  {
+    $blog_id = "testblog2";
+    $this->generateTestData($blog_id);
+    $date_ymd = date("Ymd");
+
+    ## 「状態」生成
+    // request 生成
+    $request = new Request(
+      "GET",
+      "/{$blog_id}/?process=date&date={$date_ymd}",
+      [],
+      [],
+      [
+        'process' => 'date',
+        'date'=>$date_ymd,
+      ],
+      [],
+      [],
+      [],
+      []
+    );
+    $entry_controller = new EntriesController($request);
+    $entry_controller->prepare('date');
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+  }
+
 
   // == support
 
