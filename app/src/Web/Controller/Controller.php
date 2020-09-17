@@ -159,7 +159,7 @@ abstract class Controller
     }
     $escaped_url = h($url);
     if (defined("THIS_IS_TEST")) {
-      $e = new RedirectExit(__FILE__ . ":" . __LINE__ . " redirect to {$escaped_url} status code:{$status_code} stack trace:".print_r(debug_backtrace(),true));
+      $e = new RedirectExit(__FILE__ . ":" . __LINE__ . " redirect to {$escaped_url} status code:{$status_code} stack trace:".print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),true));
       $e->redirectUrl = $url;
       $e->statusCode = $status_code;
       throw $e;
