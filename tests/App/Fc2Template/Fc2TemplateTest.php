@@ -27,6 +27,7 @@ use TypeError;
 
 class Fc2TemplateTest extends TestCase
 {
+
   public function setUp(): void
   {
     Config::read('fc2_template.php');
@@ -430,7 +431,6 @@ class Fc2TemplateTest extends TestCase
     $entry = $this->generateTestData($blog_id);
 
     // 削除するコメントは、パスワード付きの必要がある
-    $blog_settings_model = new BlogSettingsModel();
     $comments_model = new CommentsModel();
     # comment生成
     $comment_generator = new GenerateSampleComment();
@@ -441,6 +441,7 @@ class Fc2TemplateTest extends TestCase
     $comments_model->updateByIdAndBlogId($some_comment, $some_comment['id'], $blog_id);
 //    var_dump($some_comment);
 
+    $blog_settings_model = new BlogSettingsModel();
     $blog_setting = $blog_settings_model->findByBlogId($blog_id);
     $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $entry['id'], $blog_setting);
     $comments = $comments_model->find('all', $options);
