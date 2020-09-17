@@ -414,7 +414,7 @@ class Fc2TemplateTest extends TestCase
       $entry_controller->prepare('comment_regist');
       $this->fail('should be need captcha');
     } catch (RedirectExit $e) {
-      var_dump($e->redirectUrl);
+//      var_dump($e->redirectUrl);
     }
 
     ## 疑似実行
