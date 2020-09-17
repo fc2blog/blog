@@ -514,6 +514,9 @@ class Fc2TemplateTest extends TestCase
     $this->evalAll($request, $entry_controller->getData());
   }
 
+  /**
+   * キーワード検索結果ページ（EntriesController::search）の疑似データを生成
+   */
   public function testTagsInEntriesSearch(): void
   {
     $blog_id = "testblog2";
