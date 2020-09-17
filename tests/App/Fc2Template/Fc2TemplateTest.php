@@ -52,7 +52,7 @@ class Fc2TemplateTest extends TestCase
 
     # category生成
     $category_generator = new GenerateSampleCategory();
-    $categories = $category_generator->generateSampleCategories($blog_id, 0, 1);
+    $categories = $category_generator->generateSampleCategories($blog_id, 0, 3);
     $category = $categories[0];
 
     # entry生成
@@ -756,6 +756,9 @@ class Fc2TemplateTest extends TestCase
           $entries[$key]['extend'] = nl2br($value['extend']);
         }
       }
+      if (!empty($entry)) { // テスト用、entryの中身もデコレートする
+        $entry = $entries[0];
+      }
     }
 
 // コメント一覧の情報
@@ -787,7 +790,12 @@ class Fc2TemplateTest extends TestCase
         $comments[$key]['reply_wayoubi'] = __($comments[$key]['reply_youbi']);
         $comments[$key]['reply_body'] = nl2br($value['reply_body'] ?? ""); // NOTE TODO NULLのことがあり、TypeErrorがThrowされることがある
       }
+      // テスト用
+      if (!isset($comment)) {
+        $comment = $comments[0];
+      }
     }
+
 
 // FC2用のどこでも有効な単変数
     $url = ' / ' . $blog['id'] . ' / ';
