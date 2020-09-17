@@ -38,12 +38,35 @@ class Fc2TemplateTest extends TestCase
   public $coverage_blank_return = [];
   public $coverage_ok = [];
 
-  public function __destruct()
+  public function testCoverage()
   {
     // TODO 逆カバレッジのようなものを取得し、「どのケースでも」出力されていないタグを出力する。
-    var_dump($this->coverage_blank_return);
-//    var_dump($this->coverage_blank_php);
-//    var_dump($this->coverage_ok);
+    echo ".";
+    $this->testTagsInEntriesIndex();
+    echo ".";
+    $this->testTagsInEntriesView();
+    echo ".";
+    $this->testTagsInEntriesCategory();
+    echo ".";
+    $this->testTagsInEntriesTag();
+    echo ".";
+    $this->testTagsInEntriesArchive();
+    echo ".";
+    $this->testTagsInEntriesBlogPassword();
+    echo ".";
+    $this->testTagsInEntriesCommentEdit();
+    echo ".";
+    $this->testTagsInEntriesCommentDelete();
+    echo ".";
+    $this->testTagsInEntriesDate();
+    echo ".";
+    $this->testTagsInEntriesSearch();
+    echo ".";
+    $this->testTagsInEntriesPlugin();
+    echo PHP_EOL . "=== coverage_blank_return" . PHP_EOL;
+    var_export($this->coverage_blank_return);
+    echo PHP_EOL . "=== coverage_ok" . PHP_EOL;
+    var_export($this->coverage_ok);
   }
 
   public function generateTestData($blog_id): array
