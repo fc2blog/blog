@@ -544,7 +544,35 @@ class Fc2TemplateTest extends TestCase
     $this->evalAll($request, $entry_controller->getData());
   }
 
-  //plugin?
+  /**
+   * キーワード検索結果ページ（EntriesController::search）(スマホ)の疑似データを生成
+   */
+  public function testTagsInEntriesPlugin(): void
+  {
+    $blog_id = "testblog2";
+    $this->generateTestData($blog_id);
+
+    ## 「状態」生成
+    // request 生成
+    $request = new Request(
+      "GET",
+      "/{$blog_id}/?mp=8", // blog_plugins id
+      [],
+      [],
+      [
+        'mp' => '8',
+      ],
+      [],
+      [],
+      [],
+      []
+    );
+    $entry_controller = new EntriesController($request);
+    $entry_controller->prepare('plugin');
+
+    ## 疑似実行
+    $this->evalAll($request, $entry_controller->getData());
+  }
 
   // == support
 
