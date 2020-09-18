@@ -26,7 +26,7 @@ class GenerateSampleTag
 
     $input_tags = [];
     while ($num-- > 0) {
-      $input_tags[] = $faker->word();
+      $input_tags[] = $faker->word().rand(0,10);
     }
 
     # validate、空文字の拒否

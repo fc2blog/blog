@@ -32,7 +32,7 @@ class GenerateSampleCategory
       $insert_data = [
         'blog_id' => $blog_id,
         'parent_id' => (string)$parent_id,
-        'name' => $faker->word(),
+        'name' => $faker->word().(string)random_int(1,100),
         'category_order' => static::getRandomKey($categories_model->getOrderList()),
       ];
 
