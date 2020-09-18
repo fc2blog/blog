@@ -142,6 +142,16 @@ UNLOCK TABLES;
 
 LOCK TABLES `files` WRITE;
 /*!40000 ALTER TABLE `files` DISABLE KEYS */;
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (1,'testblog2','0.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (2,'testblog2','1.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (3,'testblog2','2.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (4,'testblog2','3.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (5,'testblog2','4.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (6,'testblog2','5.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (7,'testblog2','6.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (8,'testblog2','7.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (9,'testblog2','8.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
+INSERT INTO `files` (`id`, `blog_id`, `name`, `ext`, `created_at`, `updated_at`) VALUES (10,'testblog2','9.png','png','2020-09-18 09:54:45','2020-09-18 09:54:45');
 /*!40000 ALTER TABLE `files` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,4 +205,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-17 13:58:05
+-- Dump completed on 2020-09-18  9:57:27

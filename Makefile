@@ -10,3 +10,7 @@ db-dump-all:
 .PHONY: db-dump-data-only
 db-dump-data-only:
 	mysqldump -u docker -pdocker -h 127.0.0.1 -P 3306 --complete-insert --skip-extended-insert --column-statistics=0 --skip-triggers --no-create-db --no-create-info "dev_fc2blog" | sed "s/ AUTO_INCREMENT=[0-9]*//" > dump_data.sql
+
+.PHONY: test-download-images
+test-download-images:
+	cd tests/test_images && ./download_samples.sh
