@@ -36,7 +36,7 @@ class GenerateSampleEntry
 
       $entry = [
         'title' => $faker->sentence(3),
-        'body' => $faker->sentence(20),
+        'body' => $faker->sentence(20) . '<img src="/uploads/t/e/s/testblog2/file/0.png">',
         'extend' => $faker->sentence(20),
         'tag' => $tags,
         'open_status' => static::getRandomKey(EntriesModel::getOpenStatusList()),
