@@ -14,6 +14,7 @@ use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\EntryCategoriesModel;
 use Fc2blog\Model\TagsModel;
+use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleCategory;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleComment;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleEntry;
@@ -31,6 +32,8 @@ class Fc2TemplateTest extends TestCase
   public function setUp(): void
   {
     Config::read('fc2_template.php');
+    $_SESSION = []; // reset session.
+    DBHelper::clearDbAndInsertFixture();
     parent::setUp();
   }
 
@@ -264,10 +267,13 @@ class Fc2TemplateTest extends TestCase
    */
   public function testTagsInEntriesBlogPassword(): void
   {
+    $_SESSION = []; // clear
+    DBHelper::clearDbAndInsertFixture();
+
     $blog_id = "testblog2";
     $this->generateTestData($blog_id);
 
-    // TODO 一時的にBlogをパスワード付きに
+    // 一時的にBlogをパスワード付きに
     $blogs_model = new BlogsModel();
     $blog = $blogs_model->findById($blog_id);
 //    var_dump($blog);
@@ -450,6 +456,9 @@ class Fc2TemplateTest extends TestCase
    */
   public function testTagsInEntriesCommentDelete(): void
   {
+    $_SESSION = []; // reset session.
+    DBHelper::clearDbAndInsertFixture();
+
     $blog_id = "testblog2";
     $entry = $this->generateTestData($blog_id);
 
