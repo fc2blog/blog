@@ -263,7 +263,8 @@ class App
   }
 
   /**
-   * IOSかどうかを判定
+   * iPhone,iPodかどうかを判定
+   * (isIOSだが、過去iOSを搭載されていたiPadは含まれない)
    * @param Request $request
    * @return bool
    */
