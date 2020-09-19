@@ -1051,7 +1051,7 @@ class EntriesController extends UserController
   }
 
   /**
-   * fc2タグ処理変換済みテンプレートのファイルパスを返す、なければ生成する
+   * fc2タグ処理変換済みテンプレートPHPのファイルパスを返す、なければ生成する
    * @param $blog_id
    * @param null $html
    * @param null $css
@@ -1065,14 +1065,14 @@ class EntriesController extends UserController
     Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Blog Template[' . $templateFilePath . ']');
 
     if (!is_file($templateFilePath)) {
-      // テンプレートファイルが生成されていなければ作成(CSSも同時に)
-      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Template does not exist! Create');
+      // テンプレートファイルが生成されていなければ作成、CSSも同時に生成する（CSSのみの更新はない）
+      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Template does not exist, generate now.');
 
       $blog = $this->getBlog($blog_id);
       $templateId = $blog[Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)];
-      BlogTemplatesModel::createTemplate($templateId, $blog_id, $device_type, $html, $css);
 
-      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Template generation completion');
+      // HTMLとCSSの実行PHPを生成
+      BlogTemplatesModel::createTemplate($templateId, $blog_id, $device_type, $html, $css);
     }
 
     // CSSのURL
