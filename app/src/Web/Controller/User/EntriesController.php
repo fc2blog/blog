@@ -17,6 +17,7 @@ use Fc2blog\Util\Log;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 use InvalidArgumentException;
+use LogicException;
 
 class EntriesController extends UserController
 {
@@ -323,6 +324,45 @@ class EntriesController extends UserController
     // FC2用のテンプレートで表示
     $preview_path = BlogTemplatesModel::getTemplateFilePath($blog_id, $request->get('device_type'), $html);
     is_file($preview_path) && unlink($preview_path);
+    return $this->fc2template($blog_id, $html, $css);
+  }
+
+  /**
+   * 一時的なテンプレートファイルの生成と実行（テスト用
+   * @param Request $request
+   * @param string $html テンプレートのString
+   * @param string $css テンプレートのCSS
+   * @return string temporary compiled template file path
+   */
+  public function test_template(Request $request, string $html, string $css)
+  {
+    if (!defined("THIS_IS_TEST")) { // テスト以外ではブロックする
+      throw new LogicException("the method is allowed only in testing.");
+    }
+
+    $blog_id = $this->getBlogId($request);
+
+    // 記事一覧データ設定
+    $options = [
+      'where' => 'blog_id=?',
+      'params' => [$blog_id],
+    ];
+    $pages = $request->get('page') ? [] : ['index_area'];
+    $this->setEntriesData($request, $options, $pages);
+
+    // テンプレートのシンタックスチェック
+    $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
+    if ($syntax !== true) {
+      throw new InvalidArgumentException("Syntax error in the generated template.");
+    }
+
+    // プレビュー用（テンポラリ用）のファイルパスを取得
+    $preview_path = BlogTemplatesModel::getTemplateFilePath($blog_id, $request->get('device_type'), true);
+    // プレビュー用ファイルパスにすでにファイルがあれば、削除しておく
+    if(file_exists($preview_path)){
+      unlink($preview_path);
+    }
+
     return $this->fc2template($blog_id, $html, $css);
   }
 
