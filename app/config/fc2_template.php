@@ -35,53 +35,53 @@ $config['fc2_template_foreach'] = [
 // if文の置き換え用
 $config['fc2_template_if'] = [
   // 各エリア判定用
-  'index_area'         => '<?php if(!empty($index_area)) { ?>',
+  'index_area'         => '<?php if(!empty($index_area)) { ?>', // index アクション
   'not_index_area'     => '<?php if(empty($index_area)) { ?>',
-  'titlelist_area'     => '<?php if(!empty($titlelist_area)) { ?>',
+  'titlelist_area'     => '<?php if(!empty($titlelist_area)) { ?>', // archive アクション
   'not_titlelist_area' => '<?php if(empty($titlelist_area)) { ?>',
-  'date_area'          => '<?php if(!empty($date_area)) { ?>',
+  'date_area'          => '<?php if(!empty($date_area)) { ?>', // date アクション
   'not_date_area'      => '<?php if(empty($date_area)) { ?>',
-  'category_area'      => '<?php if(!empty($category_area)) { ?>',
+  'category_area'      => '<?php if(!empty($category_area)) { ?>', // category アクション
   'not_category_area'  => '<?php if(empty($category_area)) { ?>',
-  'tag_area'           => '<?php if(!empty($tag_area)) { ?>',
+  'tag_area'           => '<?php if(!empty($tag_area)) { ?>',  // tag_area アクション (存在しない？
   'not_tag_area'       => '<?php if(empty($tag_area)) { ?>',
-  'ctag_exists'        => '<?php if(!isset($t_tags)) $t_tags = \Fc2blog\Model\Model::load(\'Tags\')->getTemplateTags($blog_id); ?><?php if(!empty($t_tags)) { ?>',
-  'search_area'        => '<?php if(!empty($search_area)) { ?>',
+  'ctag_exists'        => '<?php if(!isset($t_tags)) $t_tags = \Fc2blog\Model\Model::load(\'Tags\')->getTemplateTags($blog_id); ?><?php if(!empty($t_tags)) { ?>', // タグ一覧が空でないか
+  'search_area'        => '<?php if(!empty($search_area)) { ?>', // search アクション
   'not_search_area'    => '<?php if(empty($search_area)) { ?>',
-  'comment_area'       => '<?php if(!empty($comment_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',
+  'comment_area'       => '<?php if(!empty($comment_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // preview_entry, pc view, sp view/?m2=res, pc comment_regist
   'not_comment_area'   => '<?php if(empty($comment_area)) { ?>',
-  'form_area'          => '<?php if(!empty($form_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',
+  'form_area'          => '<?php if(!empty($form_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // view?m2=form, sp comment_regist,
   'not_form_area'      => '<?php if(empty($form_area)) { ?>',
-  'edit_area'          => '<?php if(!empty($edit_area)) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>',
+  'edit_area'          => '<?php if(!empty($edit_area)) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // comment_edit, comment_delete アクション
   'not_edit_area'      => '<?php if(empty($edit_area)) { ?>',
-  'comment_edit'       => '<?php if(!empty($comment[\'password\'])) { ?>',
-  'trackback_area'     => '<?php if(false) { ?>',
+  'comment_edit'       => '<?php if(!empty($comment[\'password\'])) { ?>', // commentインスタンスにパスワードが設定されている
+  'trackback_area'     => '<?php if(false) { ?>', // trackback は無効化と思われる
   'not_trackback_area' => '<?php if(true) { ?>',
-  'permanent_area'     => '<?php if(!empty($permanent_area)) { ?>',
+  'permanent_area'     => '<?php if(!empty($permanent_area)) { ?>', // preview_entry, view
   'not_permanent_area' => '<?php if(empty($permanent_area)) { ?>',
-  'spplugin_area'      => '<?php if(!empty($spplugin_area)) { ?><?php if(!empty($s_plugin)) $t_plugin=$s_plugin; ?>',
+  'spplugin_area'      => '<?php if(!empty($spplugin_area)) { ?><?php if(!empty($s_plugin)) $t_plugin=$s_plugin; ?>', // plugin, sp preview_plugin
   'not_spplugin_area'  => '<?php if(empty($spplugin_area)) { ?>',
   // 関連する記事
-  'relate_list_area'     => '<?php if(false) { ?>',
-  'not_relate_list_area' => '<?php if(true) { ?>',
+  'relate_list_area'     => '<?php if(false) { ?>', // 関連する記事は無効化されていると思われる
+  'not_relate_list_area' => '<?php if(true) { ?>', // 関連する記事は無効化されていると思われる
   // 続きの表示
-  'more_link'          => '<?php if(empty($comment_area) && !empty($entry[\'extend\'])) { ?>',
+  'more_link'          => '<?php if(empty($comment_area) && !empty($entry[\'extend\'])) { ?>', // view, sp view?m2=res, pc comment_regist
   'more'               => '<?php if(!empty($comment_area) && !empty($entry[\'extend\'])) { ?>',
   // コメントの受付可否
   'allow_comment'      => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?>',
   'deny_comment'       => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.REJECT\')) { ?>',
   // 記事のスレッドテーマも無し判定
-  'community'          => '<?php if(false) { ?>',
+  'community'          => '<?php if(false) { ?>', // community？は無効化されていると思われる
   // トラックバックは無し判定
-  'allow_tb'           => '<?php if(false) { ?>',
+  'allow_tb'           => '<?php if(false) { ?>', // 無効化されていると思われる
   'deny_tb'            => '<?php if(true) { ?>',
   // コメントの返信の有無判定
   'comment_reply'      => '<?php if(!empty($comment[\'reply_body\'])) { ?>',
   // タグが存在するかどうか
-  'topentry_tag'       => '<?php if(!empty($entry[\'tags\'])) { ?>',
+  'topentry_tag'       => '<?php if(!empty($entry[\'tags\'])) { ?>', // entry(loop内)でtagsがあるか
   'not_topentry_tag'   => '<?php if(empty($entry[\'tags\'])) { ?>',
   // 本文に画像が存在するかどうか
-  'body_img'           => '<?php if(!empty($entry[\'first_image\'])) { ?>',
+  'body_img'           => '<?php if(!empty($entry[\'first_image\'])) { ?>', // entry(loop内)でfirst imgが設定されているか（投稿時、更新時にエントリ内にimgタグがあったか
   'body_img_none'      => '<?php if(empty($entry[\'first_image\'])) { ?>',
   // カテゴリーの各条件
   'category_parent'      => '<?php if(!empty($t_category) && $t_category[\'is_parent\']) { ?>',
@@ -90,20 +90,20 @@ $config['fc2_template_if'] = [
   'category_sub_hasnext' => '<?php if(!empty($t_category) && $t_category[\'is_sub_hasnext\']) { ?>',
   'category_sub_end'     => '<?php if(!empty($t_category) && $t_category[\'is_sub_end\']) { ?>',
   // プラグイン系
-  'plugin'             => '<?php if(true) { ?>',
-  'spplugin'           => '<?php if(true) { ?>',
+  'plugin'             => '<?php if(true) { ?>', // 意味無しタグ プラグインは必ず有効なので、
+  'spplugin'           => '<?php if(true) { ?>', // 意味無しタグ プラグインは必ず有効なので、
   // ページング系
-  'page_area'          => '<?php if(!empty($paging)) { ?>',
+  'page_area'          => '<?php if(!empty($paging)) { ?>', // paging が設定されているか
   'nextpage'           => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>',
   'prevpage'           => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>',
-  'nextentry'          => '<?php if(!empty($next_entry)) { ?>',
-  'preventry'          => '<?php if(!empty($prev_entry)) { ?>',
+  'nextentry'          => '<?php if(!empty($next_entry)) { ?>', // 次のエントリが設定されているか
+  'preventry'          => '<?php if(!empty($prev_entry)) { ?>', // 次のエントリが設定されているか
   'firstpage_disp'     => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>',
   'lastpage_disp'      => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>',
   'res_nextpage_area'  => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>',
   'res_prevpage_area'  => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>',
   // デバイスタイプ
-  'ios'     => '<?php if(\Fc2blog\App::isIOS($request)) { ?>',
+  'ios'     => '<?php if(\Fc2blog\App::isIOS($request)) { ?>', // iOSとあるが、iPhone,iPodであるかの判定
   'android' => '<?php if(\Fc2blog\App::isAndroid($request)) { ?>',
 ];
 
@@ -140,28 +140,28 @@ $template_vars = [
   '<%topentry_enc_title>'          => '<?php if(isset($entry[\'enc_title\'])) echo $entry[\'enc_title\']; ?>',
   '<%topentry_enc_utftitle>'       => '<?php if(isset($entry[\'enc_utftitle\'])) echo $entry[\'enc_utftitle\']; ?>',
   '<%topentry_body>'               => <<<PHP
-<?php
-  if (isset(\$entry['body'])) {
-    if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
-      echo <<<HTML
-<form method="POST">
-  <input type="hidden" name="mode" value="Entries" />
-  <input type="hidden" name="process" value="password" />
-  <input type="hidden" name="id" value="{\$entry['id']}" />
-  <p>
-    このコンテンツはパスワードで保護されています。<br />
-    閲覧するには以下にパスワードを入力してください。
-  </p>
-  <p>パスワード <input type="password" name="password" /><input type="submit" value="送信" /></p>
-</form>
-HTML;
-    } else {
-      echo \$entry['body'];
-    }
-  }
-?>
-PHP
-,
+                                      <?php
+                                        if (isset(\$entry['body'])) {
+                                          if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+                                            echo <<<HTML
+                                            <form method="POST">
+                                              <input type="hidden" name="mode" value="Entries" />
+                                              <input type="hidden" name="process" value="password" />
+                                              <input type="hidden" name="id" value="{\$entry['id']}" />
+                                              <p>
+                                                このコンテンツはパスワードで保護されています。<br />
+                                                閲覧するには以下にパスワードを入力してください。
+                                              </p>
+                                              <p>パスワード <input type="password" name="password" /><input type="submit" value="送信" /></p>
+                                            </form>
+                                            HTML;
+                                          } else {
+                                            echo \$entry['body'];
+                                          }
+                                        }
+                                      ?>
+                                      PHP
+                                      ,
   '<%topentry_discription>'        => getTopentryDiscription(),
   '<%topentry_description>'        => getTopentryDiscription(),
   '<%topentry_desc>'               => '',
