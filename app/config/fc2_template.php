@@ -7,7 +7,7 @@ $config['fc2_template_foreach'] = [
   'topentry'      => '<?php if(!empty($entries) && empty($titlelist_area)) foreach($entries as $entry) { ?>',
   'titlelist'     => '<?php if(!empty($entries) && !empty($titlelist_area)) foreach($entries as $entry) { ?>',
   'comment'       => '<?php if(!empty($comments)) foreach($comments as $comment) { ?>',
-  'comment_list'  => '<?php if(!empty($comments)) foreach($comments as $comment) { ?>',
+  'comment_list'  => '<?php if(!empty($comments)) foreach($comments as $comment) { ?>', // comment のalias
   'category_list' => '<?php if(!empty($entry[\'categories\'])) foreach($entry[\'categories\'] as $category) { ?>',
   'tag_list'      => '<?php if(!empty($entry[\'tags\'])) foreach($entry[\'tags\'] as $tag) { ?>',
   // 最新記事一覧(プラグイン表示用)
@@ -22,8 +22,9 @@ $config['fc2_template_foreach'] = [
   'category_multi_sub_end' => '<?php if(!empty($t_category) && isset($t_category[\'climb_hierarchy\'])) for($category_index=0;$category_index<$t_category[\'climb_hierarchy\'];$category_index++) { ?>',
   // カレンダー
   'calendar'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($request, $blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
+  // calend"e"r, calendar のエイリアス
   'calender'      => '<?php if(!isset($t_calendars)) $t_calendars = \Fc2blog\Model\Model::load(\'Entries\')->getTemplateCalendar($request, $blog_id, date(\'Y\', strtotime($now_date)), date(\'m\', strtotime($now_date))); ?><?php if (!empty($t_calendars)) foreach($t_calendars as $t_calendar) { ?>',
-  // タグ
+  // タグループ(ctag_existsと組み合わせると指定ブログの全タグ)
   'ctag'          => '<?php if (!empty($t_tags)) foreach($t_tags as $t_tag) { ?>',
   // プラグイン系
   'plugin_first'   => '<?php if(!isset($t_plugins_1)) $t_plugins_1=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory(\Fc2blog\App::getDeviceType($request), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
@@ -45,7 +46,7 @@ $config['fc2_template_if'] = [
   'not_category_area'  => '<?php if(empty($category_area)) { ?>',
   'tag_area'           => '<?php if(!empty($tag_area)) { ?>',  // tag_area アクション (存在しない？
   'not_tag_area'       => '<?php if(empty($tag_area)) { ?>',
-  'ctag_exists'        => '<?php if(!isset($t_tags)) $t_tags = \Fc2blog\Model\Model::load(\'Tags\')->getTemplateTags($blog_id); ?><?php if(!empty($t_tags)) { ?>', // タグ一覧が空でないか
+  'ctag_exists'        => '<?php if(!isset($t_tags)) $t_tags = \Fc2blog\Model\Model::load(\'Tags\')->getTemplateTags($blog_id); ?><?php if(!empty($t_tags)) { ?>', // タグ一覧が空でな
   'search_area'        => '<?php if(!empty($search_area)) { ?>', // search アクション
   'not_search_area'    => '<?php if(empty($search_area)) { ?>',
   'comment_area'       => '<?php if(!empty($comment_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // preview_entry, pc view, sp view/?m2=res, pc comment_regist
