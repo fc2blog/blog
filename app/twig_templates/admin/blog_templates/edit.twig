@@ -48,7 +48,7 @@
 
             // submit処理を行う
             $('#sys-blog-template-form-submit').click(function () {
-                var action = '{{ url(req, 'BlogTemplates', 'create') }}';
+                var action = '{{ url(req, 'BlogTemplates', 'edit') }}';
                 $('#sys-blog-template-form').prop('action', action);
                 $('#sys-blog-template-form').prop('target', '_self');
             });
