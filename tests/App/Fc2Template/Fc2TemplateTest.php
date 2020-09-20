@@ -99,7 +99,7 @@ class Fc2TemplateTest extends TestCase
     $entries = $entry_generator->generateSampleEntry($blog_id, 1);
     $entry = $entries[0];
     // テストの都合上コメント許可エントリに固定する
-    $entry['comment_accepted'] = Config::get("COMMENT_ACCEPTED.ENTRY.ACCEPTED");
+    $entry['comment_accepted'] = Config::get("ENTRY.COMMENT_ACCEPTED.ACCEPTED");
     $entries_model = new EntriesModel();
     $entries_model->updateByIdAndBlogId($entry, $entry['id'], $blog_id);
 //    var_dump($entry);
