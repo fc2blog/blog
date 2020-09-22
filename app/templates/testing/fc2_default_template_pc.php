@@ -39,126 +39,11 @@
     <p class="archives"><a href="<%url>archives.html">記事一覧</a></p>
 </div>
 
-<div>
-    <h3>最新記事</h3>
-    <ul>
-        <!--recent-->
-        <li>
-            <a href="<%recent_link>" title="<%recent_title>"><%recent_title> (<%recent_month>/<%recent_day>)</a>
-        </li>
-        <!--/recent-->
-    </ul>
-</div>
-
-<div>
-    <h3>最新コメント</h3>
-    <ul>
-        <!--rcomment-->
-        <li>
-            <a href="<%rcomment_link>#comment<%rcomment_no>" title="<%rcomment_title>"><%rcomment_name>:<%rcomment_etitle> (<%rcomment_month>/<%rcomment_day>)</a>
-        </li>
-        <!--/rcomment-->
-    </ul>
-</div>
-
-<div>
-    <h3>月別アーカイブ</h3>
-    <ul>
-        <!--archive-->
-        <li>
-            <a href="<%archive_link>" title="<%archive_year>年<%archive_month>月"><%archive_year>年<%archive_month>月 (<%archive_count>)</a>
-        </li>
-        <!--/archive-->
-    </ul>
-</div>
-
-<div>
-    <h3>カテゴリ一覧</h3>
-    <div>
-        <!--category-->
-        <div>
-            <!--category_sub_hasnext-->┣<!--/category_sub_hasnext-->
-            <!--category_sub_end-->┗<!--/category_sub_end-->
-            <a href="<%category_link>" title="<%category_name>"><%category_name> (<%category_count>)</a>
-        </div>
-        <!--/category-->
-    </div>
-</div>
-
-<div>
-    <h3>カテゴリ一覧階層付き</h3>
-    <ul class="plugin-multi-tree">
-        <!--category-->
-        <li><a href="<%category_link>" title="<%category_name>"><%category_name>(<%category_count>)</a></li>
-        <!--category_parent-->
-        <li><ul>
-                <!--/category_parent-->
-                <!--category_nosub--><!--category_multi_sub_end-->
-            </ul></li>
-        <!--/category_multi_sub_end--><!--/category_nosub-->
-        <!--/category-->
-    </ul>
-
-    <style>
-        ul.plugin-multi-tree li{
-            list-style: none;
-        }
-        ul.plugin-multi-tree li a:before{
-            content: '・';
-        }
-    </style>
-</div>
-
-
-<div>
-    <h3>カレンダー</h3>
-    <div class="plugin-calender">
-        <table summary="カレンダー" class="calender">
-            <caption>
-                <a href="<%prev_month_link>"><%prev_month></a>
-                | <%now_year>/<%now_month> |
-                <a href="<%next_month_link>"><%next_month></a>
-            </caption>
-            <tr>
-                <th abbr="日曜日" scope="col" id="sun">日</th>
-                <th abbr="月曜日" scope="col">月</th>
-                <th abbr="火曜日" scope="col">火</th>
-                <th abbr="水曜日" scope="col">水</th>
-                <th abbr="木曜日" scope="col">木</th>
-                <th abbr="金曜日" scope="col">金</th>
-                <th abbr="土曜日" scope="col" id="sat">土</th>
-            </tr>
-            <!--calender-->
-            <tr>
-                <td><%calender_sun></td>
-                <td><%calender_mon></td>
-                <td><%calender_tue></td>
-                <td><%calender_wed></td>
-                <td><%calender_thu></td>
-                <td><%calender_fri></td>
-                <td><%calender_sat></td>
-            </tr>
-            <!--/calender-->
-        </table>
-    </div>
-</div>
-
-<div>
-    <h3>検索フォーム</h3>
-    <form action="./" method="get">
-        <p class="plugin-search">
-            <input type="text" size="20" name="q" value="" maxlength="200" /><br />
-            <input type="submit" value=" 検索 " />
-        </p>
-    </form>
-</div>
-
 <div id="main_contents">
     <!--not_titlelist_area-->
     <!--not_search_area-->
     <!--topentry-->
     <div>
-        <p>eno: <%topentry_no></p>
         <h2>
             <!--not_permanent_area-->
             <a href="<%topentry_link>" title="<%template_abs_link>">
@@ -169,6 +54,7 @@
             <!--/not_permanent_area-->
         </h2>
         <ul>
+            <li>entry_id: <%topentry_no></li>
             <li><%topentry_year>/<%topentry_month>/<%topentry_day></li>
             <li><%topentry_hour>:<%topentry_minute></li>
         </ul>
@@ -179,6 +65,7 @@
             <li><a href="<%topentry_link>#cm"><%template_post_comment> | comment count:<%topentry_comment_num></a></li>
             <!--/allow_comment-->
             <!--deny_comment-->
+            <li>(comment not allowed)</li>
             <!--/deny_comment-->
         </ul>
         <div>
@@ -377,17 +264,133 @@
             <!--plugin_third-->
             <div>
                 <h3><%plugin_third_title></h3>
-                <!--plugin_third_description-->
-                <div><%plugin_third_description></div><!--/plugin_third_description-->
+                <div><%plugin_third_description></div>
                 <div><%plugin_third_content></div>
-                <!--plugin_third_description2-->
-                <div><%plugin_third_description2></div><!--/plugin_third_description2-->
+                <div><%plugin_third_description2></div>
             </div>
             <!--/plugin_third-->
         </div>
         <!--/plugin-->
     </div>
 
+</div>
+
+<div>
+    <h3>最新記事</h3>
+    <ul>
+        <!--recent-->
+        <li>
+            <a href="<%recent_link>" title="<%recent_title>"><%recent_title> (<%recent_month>/<%recent_day>)</a>
+        </li>
+        <!--/recent-->
+    </ul>
+</div>
+
+<div>
+    <h3>最新コメント</h3>
+    <ul>
+        <!--rcomment-->
+        <li>
+            <a href="<%rcomment_link>#comment<%rcomment_no>" title="<%rcomment_title>"><%rcomment_name>:<%rcomment_etitle>
+                (<%rcomment_month>/<%rcomment_day>)</a>
+        </li>
+        <!--/rcomment-->
+    </ul>
+</div>
+
+<div>
+    <h3>月別アーカイブ</h3>
+    <ul>
+        <!--archive-->
+        <li>
+            <a href="<%archive_link>" title="<%archive_year>年<%archive_month>月"><%archive_year>年<%archive_month>月
+                (<%archive_count>)</a>
+        </li>
+        <!--/archive-->
+    </ul>
+</div>
+
+<div>
+    <h3>カテゴリ一覧</h3>
+    <div>
+        <!--category-->
+        <div>
+            <!--category_sub_hasnext-->┣<!--/category_sub_hasnext-->
+            <!--category_sub_end-->┗<!--/category_sub_end-->
+            <a href="<%category_link>" title="<%category_name>"><%category_name> (<%category_count>)</a>
+        </div>
+        <!--/category-->
+    </div>
+</div>
+
+<div>
+    <h3>カテゴリ一覧階層付き</h3>
+    <ul class="plugin-multi-tree">
+        <!--category-->
+        <li><a href="<%category_link>" title="<%category_name>"><%category_name>(<%category_count>)</a></li>
+        <!--category_parent-->
+        <li>
+            <ul>
+                <!--/category_parent-->
+                <!--category_nosub--><!--category_multi_sub_end-->
+            </ul>
+        </li>
+        <!--/category_multi_sub_end--><!--/category_nosub-->
+        <!--/category-->
+    </ul>
+
+    <style>
+        ul.plugin-multi-tree li {
+            list-style: none;
+        }
+
+        ul.plugin-multi-tree li a:before {
+            content: '・';
+        }
+    </style>
+</div>
+
+<div>
+    <h3>カレンダー</h3>
+    <div class="plugin-calender">
+        <table summary="カレンダー" class="calender">
+            <caption>
+                <a href="<%prev_month_link>"><%prev_month></a>
+                | <%now_year>/<%now_month> |
+                <a href="<%next_month_link>"><%next_month></a>
+            </caption>
+            <tr>
+                <th abbr="日曜日" scope="col" id="sun">日</th>
+                <th abbr="月曜日" scope="col">月</th>
+                <th abbr="火曜日" scope="col">火</th>
+                <th abbr="水曜日" scope="col">水</th>
+                <th abbr="木曜日" scope="col">木</th>
+                <th abbr="金曜日" scope="col">金</th>
+                <th abbr="土曜日" scope="col" id="sat">土</th>
+            </tr>
+            <!--calender-->
+            <tr>
+                <td><%calender_sun></td>
+                <td><%calender_mon></td>
+                <td><%calender_tue></td>
+                <td><%calender_wed></td>
+                <td><%calender_thu></td>
+                <td><%calender_fri></td>
+                <td><%calender_sat></td>
+            </tr>
+            <!--/calender-->
+        </table>
+    </div>
+</div>
+
+<div>
+    <h3>検索フォーム</h3>
+    <form action="./" method="get">
+        <p class="plugin-search">
+            <input type="text" size="20" name="q" value="" maxlength="200"/><br/>
+            <input type="submit" value=" 検索 "/>
+        </p>
+    </form>
 </div>
 
 <div>
@@ -409,24 +412,6 @@
     <!--/ctag-->
     <!--/ctag_exists-->
 </div>
-<div>
-    <h3>spplugin_first</h3>
-    <!--spplugin_first-->
-    <div>
-        <h3><%plugin_first_title></h3>
-
-        <!--plugin_first_description-->
-        <div><%plugin_first_description></div>
-        <!--/plugin_first_description-->
-
-        <div><%plugin_first_content></div>
-
-        <!--plugin_first_description2-->
-        <div><%plugin_first_description2></div>
-        <!--/plugin_first_description2-->
-    </div>
-    <!--/spplugin_first-->
-</div>
 
 <div>
     <h2>plugin_first - side menu</h2>
@@ -435,16 +420,9 @@
         <!--plugin_first-->
         <div>
             <h3><%plugin_first_title></h3>
-
-            <!--plugin_first_description-->
             <div><%plugin_first_description></div>
-            <!--/plugin_first_description-->
-
             <div><%plugin_first_content></div>
-
-            <!--plugin_first_description2-->
             <div><%plugin_first_description2></div>
-            <!--/plugin_first_description2-->
         </div>
         <!--/plugin_first-->
     </div>
@@ -458,16 +436,9 @@
         <!--plugin_second-->
         <div>
             <h3><%plugin_second_title></h3>
-
-            <!--plugin_second_description-->
             <div><%plugin_second_description></div>
-            <!--/plugin_second_description-->
-
             <div><%plugin_second_content></div>
-
-            <!--plugin_second_description2-->
             <div><%plugin_second_description2></div>
-            <!--/plugin_second_description2-->
         </div>
         <!--/plugin_second-->
     </div>
