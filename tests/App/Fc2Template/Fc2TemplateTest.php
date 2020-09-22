@@ -41,19 +41,6 @@ class Fc2TemplateTest extends TestCase
   public $coverage_blank_return = [];
   public $coverage_ok = [];
 
-  public function testPreview()
-  {
-    $req = new Request(
-      'GET',
-      '/testblog2/?device_type=1',
-    );
-    $controller = new EntriesController($req);
-    $file_path = $controller->test_template($req, "html<%blog_name>html", "css");
-
-    echo file_get_contents($file_path);
-  }
-
-
   public function testCoverage()
   {
     // TODO 逆カバレッジのようなものを取得し、「どのケースでも」出力されていないタグを出力する。
