@@ -4,7 +4,7 @@
 {% block content %}
     <header><h2 class="editor_title">{{ _('Edit this entry.') }}</h2></header>
     <form method="POST" id="sys-entry-form" class="admin-form">
-        <input type="hidden" name="id" value="{{ id }}"/>
+        <input type="hidden" name="id" value="{{ entry.id }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>
         {% include('admin/entries/form.twig') %}
     </form>
