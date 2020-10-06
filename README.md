@@ -40,3 +40,37 @@ $app_dir_path = "/path/to/your/www/app";
 2. open `http://localhost:8080/admin/common/install`
 
 * If you want to test https. open `https://localhost:8480/admin/common/install` .
+
+
+#### unit test.
+
+##### prepare
+
+1. `$ composer install`
+2. `$ cd tests/test_images`
+3. `$ ./download_samples.sh`
+
+> download sample photos.
+
+##### fix permission (optional) 
+
+If you run on different UID between install( `/admin/common/install` ) and unit testing, (ex: Install on Apache and Run phpunit with CLI)
+
+You should be run `sudo chmod -R 777 app/temp` for fix permissions.
+
+##### run PHPUnit
+
+1. `$ composer run test`
+
+#### e2e test (headless browser test)
+
+##### prepare
+
+1. install node.js
+2. `$ cd e2e_test`
+3. `$ npm ci`
+
+##### run jest
+
+1. startup fc2blog.
+2. `$ npm run test`
