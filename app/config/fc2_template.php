@@ -397,7 +397,7 @@ PHP
   '<%introduction>'            => '<?php if(isset($blog[\'introduction\'])) echo h($blog[\'introduction\']); ?>',
   '<%pno>'                     => '<?php if(isset($entry[\'id\'])) echo $entry[\'id\']; ?>',
   '<%sub_title>'               => '<?php if(isset($sub_title)) echo h($sub_title); ?>',
-  '<%template_comment_js>'     => '<?php echo \'/js/template_comment.js\' ?>',
+  '<%template_comment_js>'     => ''/* OSS版では未実装となります ref: https://github.com/fc2blog/blog/issues/92 */,
   '<%template_copyright_date>' => date('Y'),
   '<%ad>'                      => '',
   '<%ad2>'                     => '',
