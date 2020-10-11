@@ -75,7 +75,17 @@ class CommonController extends UserController
       }
     }
     $this->setToken($key);    // トークン設定
-    $isJa = Config::get('LANG') == 'ja'; // 日本語以外は数字のみを表示
+    // captchaの日本語モード判定
+    // Cookieでlangがja以外は英語モード
+    // Cookieに指定がなければ、Accept Languageヘッダーを参照し、一番がjaでなければ英語モード
+    // どちらにもかからなければ、Config設定を優先する
+    if(isset($request->cookie['lang']) && $request->cookie['lang'] !== 'ja'){
+      $isJa = false;
+    }elseif(isset($request->server['HTTP_ACCEPT_LANGUAGE']) && preg_match('/\Aja/ui', $request->server['HTTP_ACCEPT_LANGUAGE'])){
+      $isJa = false;
+    }else{
+      $isJa = Config::get('LANG') == 'ja'; // 日本語以外は数字のみを表示
+    }
     $captcha = new CaptchaImage($size_x, $size_y, Config::get('PASSWORD_SALT'), $isJa);
     try {
       $captcha->drawNumber($key, true);
