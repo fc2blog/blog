@@ -50,11 +50,12 @@ class CreateTest extends TestCase
     $this->mergeAdminSession();
     $sig = $this->getSig();
 
+    $test_category_name = "test_".microtime(true);
     $request_data = [
       'sig' => $sig,
       'category' => [
         'parent_id' => "0",
-        'name' => "test",
+        'name' => "$test_category_name",
         'category_order' => "0"
       ]
     ];
@@ -65,10 +66,22 @@ class CreateTest extends TestCase
     $c = $this->reqGet("/admin/categories/create");
     $data = $c->getData();
 //    var_export($data);
+//    var_export($data['category_parents']);
 
-    $this->assertEquals("test", $data['category_parents'][2]['value']);
-    $this->assertEquals(1, $data['category_parents'][2]['level']);
-    $this->assertArrayNotHasKey('disabled', $data['category_parents'][2]);
+    $is_found = false;
+    $found_index = false;
+    foreach($data['category_parents'] as $idx => $row){
+      if(!is_array($row)) continue;
+      if($row['value']===$test_category_name){
+        $is_found=true;
+        $found_index=$idx;
+//        var_export($row);
+      }
+    }
+
+    $this->assertTrue($is_found);
+    $this->assertEquals(1, $data['category_parents'][$found_index]['level']);
+    $this->assertArrayNotHasKey('disabled', $data['category_parents'][$found_index]);
   }
 
   public function testDelete(): void
