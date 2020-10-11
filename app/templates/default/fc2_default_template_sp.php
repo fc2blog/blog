@@ -34,7 +34,7 @@
 
   <div id="header">
     <h1><a href="<%url>"><%blog_name></a></h1>
-    <p class="browser_change"><a href="<%url>?pc" title="PCページを表示">PC</a></p>
+    <p class="browser_change"><a href="<%url>?pc" title="<%template_show_pc>">PC</a></p>
     <div id="header_menu"><span></span></div>
   </div>
   <div id="ad_header" class="ad_header"><%ad></div>
@@ -73,7 +73,7 @@
                 <%topentry_year>/<%topentry_month>/<%topentry_day> <%topentry_hour>:<%topentry_minute>
               </span>
               <span class="res">
-                <!--allow_comment-->コメント(<%topentry_comment_num>)<!--/allow_comment-->
+                <!--allow_comment--><%template_comment>(<%topentry_comment_num>)<!--/allow_comment-->
               </span>
             </a>
           </li>
@@ -120,7 +120,7 @@
             <%topentry_year>年<%topentry_month>月<%topentry_day>日<%topentry_hour>:<%topentry_minute>&nbsp;
             <a href="<%topentry_category_link>"><%topentry_category></a>
             <!--body_img-->
-            <a href="<%topentry_link>&photo=true<%tail_url>"><img src="https://templates.blog.fc2.com/template/sphone/basic_black/img.gif" alt="写真あり" width="18" height="14" /></a>
+            <a href="<%topentry_link>&photo=true<%tail_url>"><img src="https://templates.blog.fc2.com/template/sphone/basic_black/img.gif" alt="<%template_show_pic>" width="18" height="14" /></a>
             <!--/body_img-->
           </p>
         </div>
@@ -135,22 +135,22 @@
         <ul class="contents_footer">
         <!--allow_comment-->
           <li>
-            <a href="<%topentry_link>&m2=form<%tail_url>">コメントを書く</a>
+            <a href="<%topentry_link>&m2=form<%tail_url>"><%template_write_cm></a>
           </li>
           <li>
-            <a href="<%topentry_link>&m2=res<%tail_url>">コメント(<%topentry_comment_num>)</a>
+            <a href="<%topentry_link>&m2=res<%tail_url>"><%template_comment>(<%topentry_comment_num>)</a>
           </li>
         <!--/allow_comment-->
         <!--deny_comment-->
           <li>
-            <span>コメントクローズ中</span>
+            <span><%template_cm_close></span>
           </li>
         <!--/deny_comment-->
         </ul>
       </div>
       <div class="pager">
-        <!--preventry--><a href="<%preventry_url><%tail_url>" class="prevpage">前の記事</a><!--/preventry-->
-        <!--nextentry--><a href="<%nextentry_url><%tail_url>" class="nextpage">次の記事</a><!--/nextentry-->
+        <!--preventry--><a href="<%preventry_url><%tail_url>" class="prevpage"><%template_goto_preventry></a><!--/preventry-->
+        <!--nextentry--><a href="<%nextentry_url><%tail_url>" class="nextpage"><%template_goto_nextentry></a><!--/nextentry-->
       </div>
       <!--/topentry-->
     <!--/permanent_area-->
@@ -159,27 +159,27 @@
     <!--コメント投稿ページ-->
       <div id="comment_post" class="section">
         <div class="page_title">
-          <h2>コメントを書く</h2>
+          <h2><%template_post_comment></h2>
         </div>
         <form method="post" name="form1" action="./">
           <dl class="form">
-            <dt>名前</dt>
+            <dt><%template_name></dt>
             <dd><input type="text" name="comment[name]" /></dd>
-            <dt>タイトル</dt>
+            <dt><%template_title></dt>
             <dd><input type="text" name="comment[title]" /></dd>
-            <dt>メールアドレス</dt>
+            <dt><%template_address></dt>
             <dd><input type="email" name="comment[mail]" /></dd>
             <dt>URL</dt>
             <dd><input type="url" name="comment[url]" /></dd>
-            <dt>コメント本文(必須)</dt>
+            <dt><%template_body></dt>
             <dd><textarea name="comment[body]"></textarea></dd>
-            <dt>パスワード</dt>
+            <dt><%template_password></dt>
             <dd><input type="password" name="comment[pass]" /></dd>
-            <dt>公開設定</dt>
+            <dt><%template_privacy_set></dt>
             <dd>
               <select name="comment[himitu]">
-                <option value ="0">公開コメント</option>
-                <option value ="1">管理人への秘密コメント</option>
+                <option value ="0"><%template_privacy_public></option>
+                <option value ="1"><%template_privacy_secret></option>
               </select>
             </dd>
           </dl>
@@ -188,11 +188,11 @@
           <input type="hidden" name="mobile" value="1" />
           <!--private_area--><input type="hidden" name="spass" value="<%spass>" /><!--/private_area-->
           <div class="submit_btn">
-            <a href="#" onclick="submit()">投稿する</a>
+            <a href="#" onclick="submit()"><%template_send></a>
           </div>
         </form>
         <ul class="contents_footer">
-          <li><a href="<%url>?no=<%pno><%tail_url>">記事本文へもどる</a></li>
+          <li><a href="<%url>?no=<%pno><%tail_url>"><%template_return_post></a></li>
         </ul>
       </div>
     <!--/form_area-->
@@ -201,33 +201,33 @@
     <!--ｺﾒﾝﾄｴﾃﾞｨｯﾄｴﾘｱ開始-->
              <div id="comment_post" class="section">
                  <div class="page_title">
-                     <h2>コメントを編集する</h2>
+                     <h2><%template_edit_comment></h2>
                  </div>
-                <form method="post" name="form1" action="../../config">
+                <form method="post" name="form1" action="./">
                      <dl class="form">
-                        <dt>名前</dt>
+                        <dt><%template_name></dt>
                          <dd><input type="text" name="edit[name]" value="<%edit_name>" /></dd>
-                         <dt>タイトル</dt>
+                         <dt><%template_title></dt>
                          <dd><input type="text" name="edit[title]" value="<%edit_title>" /></dd>
-                         <dt>メールアドレス</dt>
+                         <dt><%template_address></dt>
                          <dd><input type="email" name="edit[mail]" value="<%edit_mail>" ></dd>
                          <dt>URL</dt>
                          <dd><input type="url" name="edit[url]" value="<%edit_url>" /></dd>
-                         <dt>コメント本文(必須)</dt>
+                         <dt><%template_body></dt>
                          <dd><textarea name="edit[body]"><%edit_body></textarea></dd>
-                         <dt>パスワード</dt>
+                         <dt><%template_password></dt>
                          <dd><input type="password" name="edit[pass]" /></dd>
-                         <dt>公開設定</dt>
+                         <dt><%template_privacy_set></dt>
                          <dd>
                              <select name="edit[himitu]">
-                                 <option value ="0">公開コメント</option>
-                                 <option value ="1">管理人への秘密コメント</option>
+                                 <option value ="0"><%template_privacy_public></option>
+                                 <option value ="1"><%template_privacy_secret></option>
                              </select>
                          </dd>
                      </dl>
                      <div class="submit_btn">
-                         <input type="submit" value="更新する">
-                         <input type="submit" name="edit[delete]" value="削除する">
+                         <input type="submit" value="<%template_update>">
+                         <input type="submit" name="edit[delete]" value="<%template_sp_delete>">
                      </div>
                      <input type="hidden" name="mode" value="edit">
                      <input type="hidden" name="mode2" value="edited" />
@@ -236,7 +236,7 @@
                      <!--private_area--><input type="hidden" name="spass" value="<%spass>" /><!--/private_area-->
                  </form>
                  <ul class="contents_footer">
-                     <li><a href="<%url>?no=<%edit_entry_no><%tail_url>">記事本文へもどる</a></li>
+                     <li><a href="<%url>?no=<%edit_entry_no><%tail_url>"><%template_return_post></a></li>
                  </ul>
              </div>
     <!--ｺﾒﾝﾄｴﾃﾞｨｯﾄｴﾘｱ終了-->
@@ -246,7 +246,7 @@
     <!--コメント一覧ページ-->
       <div id="comment" class="section">
         <div class="page_title">
-          <h2>コメント一覧</h2>
+          <h2><%template_comment></h2>
         </div>
         <dl class="list">
           <!--comment-->
@@ -256,13 +256,13 @@
             <p class="posted">
               <%comment_mail+name>
               <%comment_url+str><br />
-              <%comment_year>年<%comment_month>月<%comment_day>日 <%comment_hour>:<%comment_minute><a href="<%comment_edit_link>" title="<%template_edit_comment>">&nbsp;<%template_edit></a>
+              <%comment_year>/<%comment_month>/<%comment_day>(<%comment_hour>:<%comment_minute>)<a href="<%comment_edit_link>" title="<%template_edit_comment>">&nbsp;<%template_edit></a>
             </p>
             <!--comment_reply-->
               <div style="background-color: #ffffdd; border: 1px solid #d7d7d7; padding: 5px; margin: 5px 0 0 5px;">
                 <%comment_reply_body>
                 <p class="posted">
-                  <%comment_reply_year>年<%comment_reply_month>月<%comment_reply_day>日 <%comment_reply_hour>:<%comment_reply_minute>
+                  <%comment_reply_year>/<%comment_reply_month>/<%comment_reply_day>(<%comment_reply_hour>:<%comment_reply_minute>)
                 </p>
               </div>
             <!--/comment_reply-->
@@ -270,16 +270,16 @@
           <!--/comment-->
         </dl>
         <ul class="contents_footer">
-          <li><a href="<%url>?no=<%pno><%tail_url>">記事本文へもどる</a></li>
-          <li><a href="<%url>?m2=form&no=<%pno><%tail_url>">コメントを書く</a></li>
+          <li><a href="<%url>?no=<%pno><%tail_url>"><%template_return_post></a></li>
+          <li><a href="<%url>?m2=form&no=<%pno><%tail_url>"><%template_cm_post></a></li>
         </ul>
       </div>
       <!--respage_area-->
       <div class="pager">
         <div class="pager_box">
-          <!--res_prevpage_area--><a href="<%res_prevpage_url><%tail_url>" class="prevpage">前へ</a><!--/res_prevpage_area-->
+          <!--res_prevpage_area--><a href="<%res_prevpage_url><%tail_url>" class="prevpage"><%template_prev></a><!--/res_prevpage_area-->
           <%res_template_pager1>
-          <!--res_nextpage_area--><a href="<%res_nextpage_url><%tail_url>" class="nextpage">次へ</a><!--/res_nextpage_area-->
+          <!--res_nextpage_area--><a href="<%res_nextpage_url><%tail_url>" class="nextpage"><%template_next></a><!--/res_nextpage_area-->
         </div>
       </div>
       <!--/respage_area-->
@@ -288,16 +288,16 @@
   </div><!--/main_contents-->
 
   <ul id="page_navi">
-    <li class="goto_home"><a href="<%url>">ホーム</a></li>
-    <li class="page_top"><a href="#header">ページトップ</a></li>
+    <li class="goto_home"><a href="<%url>"><%template_home></a></li>
+    <li class="page_top"><a href="#header"><%template_page_top></a></li>
   </ul>
 
   <div class="ad_footer"><%ad2></div>
 
   <div id="footer">
     <div class="footer_menu">
-      <a href="<%server_url><%blog_id>/admin.php">ログイン</a>
-      <a href="mailto:@?subject=FC2%E3%83%96%E3%83%AD%E3%82%B0&body=<%url>">友達に教える</a>
+      <a href="<%server_url><%blog_id>/admin.php"><%template_login></a>
+      <a href="mailto:@?subject=FC2%E3%83%96%E3%83%AD%E3%82%B0&body=<%url>"><%template_tell_friend></a>
     </div>
     <p class="copyright">Copyright (c) <%blog_name></p>
     <div class="powered">

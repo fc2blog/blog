@@ -2512,3 +2512,13 @@ msgstr "管理画面へログイン"
 
 msgid "If you want to re-enable this installer, please delete `installed.lock` file in temp dir."
 msgstr "再度インストーラーにアクセスしたい場合は、tempディレクトリ内の`installed.lock`ファイルを削除してください。"
+
+msgid "Return to entry"
+msgstr "エントリーに戻る"
+
+msgid "List view"
+msgstr "リスト表示"
+
+msgid "Grid view"
+msgstr "グリッド表示"
+
