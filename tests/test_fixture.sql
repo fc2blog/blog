@@ -82,7 +82,8 @@ UNLOCK TABLES;
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
 INSERT INTO `categories` (`id`, `blog_id`, `parent_id`, `lft`, `rgt`, `name`, `category_order`, `count`) VALUES (1,'testblog1',0,1,2,'未分類',0,3);
-INSERT INTO `categories` (`id`, `blog_id`, `parent_id`, `lft`, `rgt`, `name`, `category_order`, `count`) VALUES (1,'testblog2',0,1,2,'未分類',0,3);
+INSERT INTO `categories` (`id`, `blog_id`, `parent_id`, `lft`, `rgt`, `name`, `category_order`, `count`) VALUES (1,'testblog2',0,1,2,'未分類',0,2);
+INSERT INTO `categories` (`id`, `blog_id`, `parent_id`, `lft`, `rgt`, `name`, `category_order`, `count`) VALUES (2,'testblog2',0,3,4,'テストカテゴリ',0,1);
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,7 +103,7 @@ UNLOCK TABLES;
 LOCK TABLES `entries` WRITE;
 /*!40000 ALTER TABLE `entries` DISABLE KEYS */;
 INSERT INTO `entries` (`id`, `blog_id`, `title`, `body`, `extend`, `first_image`, `open_status`, `password`, `auto_linefeed`, `comment_accepted`, `comment_count`, `posted_at`, `created_at`, `updated_at`) VALUES (1,'testblog1','最初のテスト記事','最初のテスト記事','','',1,'',1,1,0,'2020-07-24 12:06:32','2020-07-24 12:06:32','2020-07-24 12:06:32');
-INSERT INTO `entries` (`id`, `blog_id`, `title`, `body`, `extend`, `first_image`, `open_status`, `password`, `auto_linefeed`, `comment_accepted`, `comment_count`, `posted_at`, `created_at`, `updated_at`) VALUES (1,'testblog2','1st','1st','','',1,'',1,1,0,'2020-07-24 12:10:15','2020-07-24 12:10:15','2020-07-24 12:11:17');
+INSERT INTO `entries` (`id`, `blog_id`, `title`, `body`, `extend`, `first_image`, `open_status`, `password`, `auto_linefeed`, `comment_accepted`, `comment_count`, `posted_at`, `created_at`, `updated_at`) VALUES (1,'testblog2','テスト記事１','<img src=\"/uploads/t/e/s/testblog2/file/2.png\"><div>テスト記事１の本文です</div>','テスト記事１の追記です。<div><img src=\"/uploads/t/e/s/testblog2/file/1.png\"></div>','/uploads/t/e/s/testblog2/file/2.png',1,'',1,1,0,'2020-07-24 12:10:15','2020-07-24 12:10:15','2020-10-12 05:11:03');
 INSERT INTO `entries` (`id`, `blog_id`, `title`, `body`, `extend`, `first_image`, `open_status`, `password`, `auto_linefeed`, `comment_accepted`, `comment_count`, `posted_at`, `created_at`, `updated_at`) VALUES (2,'testblog1','記事二本目','記事二本目','','',1,'',1,1,0,'2020-07-24 12:07:07','2020-07-24 12:07:07','2020-07-24 12:07:07');
 INSERT INTO `entries` (`id`, `blog_id`, `title`, `body`, `extend`, `first_image`, `open_status`, `password`, `auto_linefeed`, `comment_accepted`, `comment_count`, `posted_at`, `created_at`, `updated_at`) VALUES (2,'testblog2','2nd','2nd','','',1,'',1,1,0,'2020-07-24 12:10:32','2020-07-24 12:10:32','2020-07-24 12:11:28');
 INSERT INTO `entries` (`id`, `blog_id`, `title`, `body`, `extend`, `first_image`, `open_status`, `password`, `auto_linefeed`, `comment_accepted`, `comment_count`, `posted_at`, `created_at`, `updated_at`) VALUES (3,'testblog1','記事三本目','記事三本目','記事三本目','',1,'',1,1,0,'2020-07-24 12:07:30','2020-07-24 12:07:30','2020-07-24 12:07:30');
@@ -119,9 +120,9 @@ LOCK TABLES `entry_categories` WRITE;
 INSERT INTO `entry_categories` (`blog_id`, `entry_id`, `category_id`) VALUES ('testblog1',1,1);
 INSERT INTO `entry_categories` (`blog_id`, `entry_id`, `category_id`) VALUES ('testblog1',2,1);
 INSERT INTO `entry_categories` (`blog_id`, `entry_id`, `category_id`) VALUES ('testblog1',3,1);
-INSERT INTO `entry_categories` (`blog_id`, `entry_id`, `category_id`) VALUES ('testblog2',1,1);
 INSERT INTO `entry_categories` (`blog_id`, `entry_id`, `category_id`) VALUES ('testblog2',2,1);
 INSERT INTO `entry_categories` (`blog_id`, `entry_id`, `category_id`) VALUES ('testblog2',3,1);
+INSERT INTO `entry_categories` (`blog_id`, `entry_id`, `category_id`) VALUES ('testblog2',1,2);
 /*!40000 ALTER TABLE `entry_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +132,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `entry_tags` WRITE;
 /*!40000 ALTER TABLE `entry_tags` DISABLE KEYS */;
-INSERT INTO `entry_tags` (`blog_id`, `entry_id`, `tag_id`) VALUES ('testblog2',1,1);
 INSERT INTO `entry_tags` (`blog_id`, `entry_id`, `tag_id`) VALUES ('testblog2',2,1);
 /*!40000 ALTER TABLE `entry_tags` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -174,7 +174,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
-INSERT INTO `tags` (`id`, `blog_id`, `name`, `count`) VALUES (1,'testblog2','alphnum',2);
+INSERT INTO `tags` (`id`, `blog_id`, `name`, `count`) VALUES (1,'testblog2','alphnum',1);
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-18 10:51:10
+-- Dump completed on 2020-10-12  5:11:47

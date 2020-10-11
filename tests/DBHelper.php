@@ -29,7 +29,7 @@ class DBHelper extends TestCase
     $pdo->query($sql);
 
     // copy test files
-    static::copyTestImages();
+//    static::copyTestImages();
   }
 
   public static function clearDb()
