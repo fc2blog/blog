@@ -104,12 +104,12 @@ class BlogTemplatesModel extends Model
 
   /**
    * テンプレートのパスを返却
-   * @param $blog_id
+   * @param string $blog_id
    * @param int $device_type
    * @param bool $isPreview
    * @return string
    */
-  public static function getTemplateFilePath($blog_id, $device_type = 0, $isPreview = false)
+  public static function getTemplateFilePath(string $blog_id, int $device_type = 0, bool $isPreview = false)
   {
     return Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
   }
