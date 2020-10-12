@@ -27,6 +27,28 @@ describe("crawl password required blog", () => {
     expect(body_text.match(/パスワード認証/));
   });
 
+  it("access with wrong password", async () => {
+    await c.page.type(
+        "input[name='blog[password]']",
+        "wrongpass"
+    );
+
+    await c.getSS("wrong_password_typed");
+
+    // 保存する
+    const [response] = await Promise.all([
+      c.waitLoad(),
+      await c.page.click("input[type=submit]"),
+    ]);
+
+    expect(response.status()).toEqual(200);
+    expect(response.url()).toEqual("http://localhost:8080/testblog3/index.php?mode=entries&process=blog_password");
+    expect(await c.page.title()).toEqual("testblog3");
+
+    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    expect(body_text.match(/パスワードが違います/));
+  });
+
   it("access with password", async () => {
     await c.page.type(
         "input[name='blog[password]']",
