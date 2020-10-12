@@ -15,26 +15,39 @@ db-dump-data-only:
 test-download-images:
 	cd tests/test_images && ./download_samples.sh
 
+.PHONY: test
+test:
+	php composer.phar run test
+	cd e2e_test && npm run test
+
 .PHONY: clean
 clean:
 	-rm -r app/temp/installed.lock
 	-rm -r app/temp/blog_template/*
 	-rm -r public/uploads/*
 	-rm -r tests/test_images/*.png
-	-rm -r public/uploads/*
 	-rm -r e2e_test/node_modules/
+	-rm -r e2e_test/ss/*
 	-tests/cli_drop_all_table.php
 	-rm -r app/vendor/
+	-rm -r node_modules/
 	-rm composer.phar
+	-rm tests/App/Lib/CaptchaImage/test_output.gif
 
 composer.phar:
 	curl -sSfL -o composer-setup.php https://getcomposer.org/installer
 	php composer-setup.php --filename=composer.phar
 	rm composer-setup.php
 
-.PHONY: dev-setup
-dev-setup: composer.phar
+.PHONY: setup-unit-test
+setup-unit-test:
+	make setup-dev
+	make setup-test-data
+
+.PHONY: setup-dev
+setup-dev: composer.phar
 	php composer.phar install
+	npm ci
 	cd e2e_test && npm ci
 	cd tests/test_images && ./download_samples.sh
 

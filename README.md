@@ -40,3 +40,14 @@ $app_dir_path = "/path/to/your/www/app";
 2. open `http://localhost:8080/admin/common/install`
 
 * If you want to test https. open `https://localhost:8480/admin/common/install` .
+
+
+#### unit test
+
+1. `$ make setup-unit-test`
+2. `$ docker-compose start`
+3. `$ make test`
+
+* If you want to know "what's going on?", Please see the `Makefile`.  
+* Require Docker&docker-compose, PHP, node.js runtimes.
+ 
