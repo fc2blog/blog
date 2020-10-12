@@ -99,7 +99,7 @@ class EntriesController extends UserController
     $areas = $request->get('page') ? [] : ['index_area'];
     $this->setEntriesData($request, $options, $areas);
 
-    return $this->setupFc2Template($this->getBlogId($request));
+    return $this->getFc2TemplatePath($this->getBlogId($request));
   }
 
   /**
@@ -126,7 +126,7 @@ class EntriesController extends UserController
       'params' => $params,
     );
     $this->setEntriesData($request, $options, array('search_area'));
-    return $this->setupFc2Template($this->getBlogId($request));
+    return $this->getFc2TemplatePath($this->getBlogId($request));
   }
 
   /**
@@ -160,7 +160,7 @@ class EntriesController extends UserController
       'order' => 'entries.posted_at ' . $order . ', entries.id ' . $order,
     );
     $this->setEntriesData($request, $options, array('category_area'));
-    return $this->setupFc2Template($this->getBlogId($request));
+    return $this->getFc2TemplatePath($this->getBlogId($request));
   }
 
   /**
@@ -193,7 +193,7 @@ class EntriesController extends UserController
       'params' => $params,
     );
     $this->setEntriesData($request, $options, array('tag_area'));
-    return $this->setupFc2Template($this->getBlogId($request));
+    return $this->getFc2TemplatePath($this->getBlogId($request));
   }
 
   /**
@@ -218,7 +218,7 @@ class EntriesController extends UserController
     );
     $this->setEntriesData($request, $options, array('date_area'));
     $this->set('now_date', date('Y-m-d', strtotime($start)));
-    return $this->setupFc2Template($this->getBlogId($request));
+    return $this->getFc2TemplatePath($this->getBlogId($request));
   }
 
   /**
@@ -240,7 +240,7 @@ class EntriesController extends UserController
     );
     $this->setEntriesData($request, $options, array('titlelist_area'));
     $this->set('sub_title', __("List of articles"));
-    return $this->setupFc2Template($this->getBlogId($request));
+    return $this->getFc2TemplatePath($this->getBlogId($request));
   }
 
   /**
@@ -322,7 +322,7 @@ class EntriesController extends UserController
     }
 
     // FC2用のテンプレートで表示
-    return $this->setupFc2Template($blog_id, $html, $css, true);
+    return $this->getFc2TemplatePath($blog_id, $html, $css, true);
   }
 
   /**
@@ -354,7 +354,7 @@ class EntriesController extends UserController
       throw new InvalidArgumentException("Syntax error in the generated template.");
     }
 
-    return $this->setupFc2Template($blog_id, $html, $css, true);
+    return $this->getFc2TemplatePath($blog_id, $html, $css, true);
   }
 
   /**
@@ -392,7 +392,7 @@ class EntriesController extends UserController
     }
 
     // FC2用のテンプレートで表示
-    return $this->setupFc2Template($blog_id, $html, $css, true);
+    return $this->getFc2TemplatePath($blog_id, $html, $css, true);
   }
 
   /**
@@ -452,7 +452,7 @@ class EntriesController extends UserController
     if ($device_type == Config::get('DEVICE_SP')) {
       $this->set('s_plugin', $plugin);
       $this->setAreaData(array('spplugin_area'));
-      return $this->setupFc2Template($blog_id);
+      return $this->getFc2TemplatePath($blog_id);
     }
 
     // 記事一覧データ設定(スマフォ版以外のプレビュー表示)
@@ -480,7 +480,7 @@ class EntriesController extends UserController
     $this->set('t_plugins_' . $category, $plugins);
 
     // FC2用のテンプレートで表示
-    return $this->setupFc2Template($blog_id);
+    return $this->getFc2TemplatePath($blog_id);
   }
 
   /**
@@ -532,7 +532,7 @@ class EntriesController extends UserController
       $areas[] = 'comment_area';
     }
     $this->setAreaData($areas);
-    return $this->setupFc2Template($entry['blog_id']);
+    return $this->getFc2TemplatePath($entry['blog_id']);
   }
 
   /**
@@ -583,7 +583,7 @@ class EntriesController extends UserController
     $this->setAreaData($areas);
 
     // FC2用のテンプレートで表示
-    return $this->setupFc2Template($entry['blog_id']);
+    return $this->getFc2TemplatePath($entry['blog_id']);
   }
 
   /**
@@ -683,7 +683,7 @@ class EntriesController extends UserController
 
     // FC2用のテンプレートで表示
     $this->setAreaData(array('spplugin_area'));
-    return $this->setupFc2Template($blog_id);
+    return $this->getFc2TemplatePath($blog_id);
   }
 
   /**
@@ -814,7 +814,7 @@ class EntriesController extends UserController
 
     // FC2用のテンプレートで表示
     $this->setAreaData(array(App::isPC($request) ? 'comment_area' : 'form_area'));
-    return $this->setupFc2Template($entry['blog_id']);
+    return $this->getFc2TemplatePath($entry['blog_id']);
   }
 
   /**
@@ -872,7 +872,7 @@ class EntriesController extends UserController
 
       // FC2用のテンプレートで表示
       $this->setAreaData(array('edit_area'));
-      return $this->setupFc2Template($blog_id);
+      return $this->getFc2TemplatePath($blog_id);
     }
 
     // 削除ボタンを押された場合の処理(comment_deleteに処理を移譲)
@@ -912,7 +912,7 @@ class EntriesController extends UserController
 
     // FC2用のテンプレートで表示
     $this->setAreaData(array('edit_area'));
-    return $this->setupFc2Template($blog_id);
+    return $this->getFc2TemplatePath($blog_id);
   }
 
   /**
@@ -944,7 +944,7 @@ class EntriesController extends UserController
 
     // FC2用のテンプレートで表示
     $this->setAreaData(['edit_area']);
-    return $this->setupFc2Template($blog_id);
+    return $this->getFc2TemplatePath($blog_id);
   }
 
   /**
@@ -1086,7 +1086,7 @@ class EntriesController extends UserController
    * @param bool $is_preview
    * @return string
    */
-  private function setupFc2Template($blog_id, string $html = null, string $css = null, bool $is_preview = false)
+  private function getFc2TemplatePath($blog_id, string $html = null, string $css = null, bool $is_preview = false)
   {
     $device_type = $this->getDeviceType();
 

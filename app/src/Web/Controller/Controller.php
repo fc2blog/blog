@@ -27,7 +27,7 @@ use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
-  private $data = array();            // テンプレートへ渡す変数の保存領域
+  protected $data = [];            // テンプレートへ渡す変数の保存領域
   protected $layout = 'default.php';  // 表示ページのレイアウトテンプレート
   protected $output = '';             // 出力タグ
   private $templateFilePath = "";
@@ -43,7 +43,7 @@ abstract class Controller
   public function execute($method)
   {
     $template = $this->prepare($method);
-    $this->render($template, $method);
+    $this->render($template);
   }
 
   /**
@@ -55,48 +55,52 @@ abstract class Controller
   {
     $this->beforeFilter($this->request);
 
-    // アクションの実行(返り値はテンプレートファイル名、レンダリング用データは$this->data)
+    // アクションの実行(返り値はテンプレートファイルパスまたは空文字、レンダリング用データは$this->data)
     $this->resolvedMethod = $method;
-    return $this->$method($this->request);
+    $template_path = $this->$method($this->request);
+
+    // 空の場合は、規約に則ってテンプレートファイルを決定する
+    if (empty($template_path)) {
+      $template_path = strtolower($this->request->shortControllerName) . '/' . $method . '.php';
+    }
+
+    return $template_path;
   }
 
   /**
-   * HTML(等)レンダリング
-   * @param string|null $template
-   * @param string $method
+   * HTML(等)をレンダリングし、$this->outputに保存
+   * @param string $template_path
    * @return void
    */
-  public function render(?string $template, string $method) :void
+  public function render(string $template_path): void
   {
-    // 空の場合は、規約に則ってテンプレートファイルを決定する
-    if (empty($template)) {
-      // TODO prefixもつけて、ここでフルパスにしたほうがよくないか？（後でPrefixをわざわざつけている）
-      $template = strtolower($this->request->shortControllerName) . '/' . $method . '.php';
-    }
-
     // 出力を$this->outputで保持。後ほどemit()すること。
-    // TODO PHPテンプレートとTwigテンプレートの移行中なので、テンプレートファイル名で切り分ける
-    if (preg_match("/\.twig\z/u", $template)) {
-      $this->renderByTwig($this->request, $template);
+    // テンプレートファイル拡張子で、PHPテンプレートとTwigテンプレートを切り分ける
+    if (preg_match("/\.twig\z/u", $template_path)) {
+      $this->output = $this->renderByTwig($this->request, $template_path);
     } else {
-      ob_start();
-      $this->layout($this->request, $template);
-      $this->output = ob_get_clean();
-      // SSI的なインクルード処理など
-      $this->beforeRender();
+      $this->output = $this->renderByPhpTemplate($this->request, $template_path);
+      $this->output = $this->afterFilter($this->output);
     }
   }
 
-  public function emit()
+  /**
+   * ヘッダーおよび$this->outputの送信
+   * TODO Output Bufferによりエラー表示を隠蔽する
+   */
+  public function emit(): void
   {
-    $status_code = isset($this->data['http_status_code']) ? $this->data['http_status_code'] : 200;
-    if($status_code !== 200){
-      http_response_code($status_code);
+    if (isset($this->data['http_status_code']) && is_int(isset($this->data['http_status_code']))) {
+      http_response_code($this->data['http_status_code']);
     }
 
-    $content_type = isset($this->data['http_content_type']) ? $this->data['http_content_type'] : "";
-    if(strlen($content_type)>0){
-      header("Content-Type: {$content_type}");
+    if (!headers_sent()) {
+      // Content typeの送信
+      if (isset($this->data['http_content_type']) && strlen(isset($this->data['http_content_type'])) > 0) {
+        header("Content-Type: {$this->data['http_content_type']}");
+      } else {
+        header("Content-Type: text/html; charset=UTF-8");
+      }
     }
 
     echo $this->output;
@@ -110,8 +114,9 @@ abstract class Controller
   {
   }
 
-  protected function beforeRender()
+  protected function afterFilter(string $str): string
   {
+    return $str;
   }
 
   public function set(string $key, $value)
@@ -159,7 +164,7 @@ abstract class Controller
     }
     $escaped_url = h($url);
     if (defined("THIS_IS_TEST")) {
-      $e = new RedirectExit(__FILE__ . ":" . __LINE__ . " redirect to {$escaped_url} status code:{$status_code} stack trace:".print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),true));
+      $e = new RedirectExit(__FILE__ . ":" . __LINE__ . " redirect to {$escaped_url} status code:{$status_code} stack trace:" . print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), true));
       $e->redirectUrl = $url;
       $e->statusCode = $status_code;
       throw $e;
@@ -190,8 +195,9 @@ abstract class Controller
    * 現状、Admin用画面のみでの利用を想定
    * @param Request $request
    * @param string $twig_template
+   * @return string
    */
-  private function renderByTwig(Request $request, string $twig_template): void
+  private function renderByTwig(Request $request, string $twig_template): string
   {
     $base_path = realpath(__DIR__ . "/../../../twig_templates/") . "/";
     $loader = new FilesystemLoader($base_path);
@@ -223,7 +229,7 @@ abstract class Controller
 
     $this->data['request'] = $request; // TODO Adhocに追加しているので、どこか適切な場所に移動する
     $blogs_model = new BlogsModel();
-    $data = [ // 各種ベースとなるデータ // TODO 整理共通化リファクタリング
+    $data = [ // 各種ベースとなるデータ // TODO 整理共通化リファクタリング, $thisが一意でないので、User系のTwig化時に整理が必要
       'req' => $request,
       'sig' => Session::get('sig'),
       'lang' => $request->lang,
@@ -255,7 +261,7 @@ abstract class Controller
     $data = array_merge($data, $this->data);
 
     try {
-      $this->output = $twig->render($twig_template_path, $data);
+      return $twig->render($twig_template_path, $data);
     } catch (LoaderError $e) {
       throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
     } catch (RuntimeError $e) {
@@ -268,43 +274,145 @@ abstract class Controller
   /**
    * PHPを用いたテンプレートエンジンでHTMLをレンダリング
    * @param Request $request
-   * @param string|null $fw_template スコープ変数として、 include(〜)の中で利用されている
+   * @param string $template_file_path
+   * @return string
    */
-  private function layout(Request $request, ?string $fw_template)
+  private function renderByPhpTemplate(Request $request, string $template_file_path)
   {
-    // 定義済み変数に関しては展開させない
-    unset($this->data['fw_template']);
-
-    // 設定されているdataを展開
-    extract($this->data);
-
     // アプリプレフィックス
     $prefix = strtolower(Config::get('APP_PREFIX'));
 
     Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Layout[' . $this->layout . ']');
     if ($this->layout == '') {
       // layoutが空の場合は表示処理を行わない
-      return;
+      return "";
     }
 
-    $fw_template_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $fw_template_path);
-    if (is_file($fw_template_device_path)) {
+    $layout_file_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
+    $device_layout_path = preg_replace('/^(.*?)\.([^\/.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $layout_file_path);
+
+    // 各種テンプレート種類によって分岐
+    if (is_file($device_layout_path)) {
+      // view/user系 デバイス毎に対応があるテンプレート（現状SPのみ）
+
       if (defined("THIS_IS_TEST")) {
-        $this->layoutFilePath = $fw_template_path; // テスト用に退避
+        $this->layoutFilePath = $layout_file_path; // テスト用に退避
       }
+
+      extract($this->data);
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
+      ob_start();
       /** @noinspection PhpIncludeInspection */
-      include($fw_template_device_path);
-    } elseif (is_file($fw_template_path)) {
+      include($device_layout_path);
+      return ob_get_clean();
+
+    } elseif (is_file($layout_file_path) && $this->layout !== "fc2_template.php") {
+      // view/user系 PCテンプレート
+
       if (defined("THIS_IS_TEST")) {
-        $this->layoutFilePath = $fw_template_path; // テスト用に退避
+        $this->layoutFilePath = $layout_file_path; // テスト用に退避
       }
+
+      extract($this->data);
+      ob_start();
       /** @noinspection PhpIncludeInspection */
-      include($fw_template_path);
+      include($layout_file_path);
+      return ob_get_clean();
+
+    } elseif ($this->layout === "fc2_template.php") {
+      // FC2タグを用いたユーザーテンプレート
+
+      if (is_null($template_file_path)) {
+        throw new InvalidArgumentException("undefined template");
+      }
+      if (!is_file($template_file_path)) {
+        throw new InvalidArgumentException("missing template");
+      }
+
+      // FC2のテンプレート用にデータを置き換える
+      if (!empty($this->data['entry'])) {
+        $this->data['entries'] = [$this->data['entry']];
+      }
+      if (!empty($this->data['entries'])) {
+        foreach ($this->data['entries'] as $key => $value) {
+          // topentry系変数のデータ設定
+          $this->data['entries'][$key]['title_w_img'] = $value['title'];
+          $this->data['entries'][$key]['title'] = strip_tags($value['title']);
+          $this->data['entries'][$key]['link'] = App::userURL($request, ['controller' => 'Entries', 'action' => 'view', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
+
+          [
+            $this->data['entries'][$key]['year'],
+            $this->data['entries'][$key]['month'],
+            $this->data['entries'][$key]['day'],
+            $this->data['entries'][$key]['hour'],
+            $this->data['entries'][$key]['minute'],
+            $this->data['entries'][$key]['second'],
+            $this->data['entries'][$key]['youbi'],
+            $this->data['entries'][$key]['month_short']
+          ] = explode('/', date('Y/m/d/H/i/s/D/M', strtotime($value['posted_at'])));
+          $this->data['entries'][$key]['wayoubi'] = __($this->data['entries'][$key]['youbi']);
+
+          // 自動改行処理
+          if ($value['auto_linefeed'] == Config::get('ENTRY.AUTO_LINEFEED.USE')) {
+            $this->data['entries'][$key]['body'] = nl2br($value['body']);
+            $this->data['entries'][$key]['extend'] = nl2br($value['extend']);
+          }
+        }
+      }
+
+      // コメント一覧の情報
+      if (!empty($this->data['comments'])) {
+        foreach ($this->data['comments'] as $key => $value) {
+          $this->data['comments'][$key]['edit_link'] = Html::url($request, ['controller' => 'Entries', 'action' => 'comment_edit', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
+
+          [
+            $this->data['comments'][$key]['year'],
+            $this->data['comments'][$key]['month'],
+            $this->data['comments'][$key]['day'],
+            $this->data['comments'][$key]['hour'],
+            $this->data['comments'][$key]['minute'],
+            $this->data['comments'][$key]['second'],
+            $this->data['comments'][$key]['youbi']
+          ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['updated_at'])));
+          $this->data['comments'][$key]['wayoubi'] = __($this->data['comments'][$key]['youbi']);
+          $this->data['comments'][$key]['body'] = $value['body']; // TODO nl2brされていないのは正しいのか？
+
+          [
+            $this->data['comments'][$key]['reply_year'],
+            $this->data['comments'][$key]['reply_month'],
+            $this->data['comments'][$key]['reply_day'],
+            $this->data['comments'][$key]['reply_hour'],
+            $this->data['comments'][$key]['reply_minute'],
+            $this->data['comments'][$key]['reply_second'],
+            $this->data['comments'][$key]['reply_youbi']
+          ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['reply_updated_at'])));
+          $this->data['comments'][$key]['reply_wayoubi'] = __($this->data['comments'][$key]['reply_youbi']);
+          $this->data['comments'][$key]['reply_body'] = nl2br($value['reply_body']);
+        }
+      }
+
+      // FC2用のどこでも有効な単変数
+      $this->data['url'] = '/' . $this->data['blog']['id'] . '/';
+      $this->data['blog_id'] = $this->getBlogId($request);
+
+      // 年月日系
+      $this->data['now_date'] = $this->data['date_area'] ? $this->data['now_date'] : date('Y-m-d');
+      $this->data['now_month_date'] = date('Y-m-1', strtotime($this->data['now_date']));
+      $this->data['prev_month_date'] = date('Y-m-1', strtotime($this->data['now_month_date'] . ' -1 month'));
+      $this->data['next_month_date'] = date('Y-m-1', strtotime($this->data['now_month_date'] . ' +1 month'));
+
+      // 設定されているdataを展開
+      extract($this->data);
+
+      // テンプレート表示
+      ob_start();
+      /** @noinspection PhpIncludeInspection */
+      include($template_file_path);
+      return ob_get_clean();
     } else {
       $this->layoutFilePath = ""; // テスト用に退避
-      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Not Found Layout[' . $fw_template_path . ']');
+      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Not Found Layout[' . $layout_file_path . ']');
+      return "";
     }
   }
 
@@ -313,33 +421,26 @@ abstract class Controller
    * @param Request $request
    * @param $fw_template
    * @param array $fw_data
-   * @param bool $fw_is_prefix
+   * @param bool $fw_is_prefix // TODO 削除できる想定
    */
-  public function display(Request $request, $fw_template, $fw_data = array(), $fw_is_prefix = true)
+  public function display(Request $request, $fw_template, $fw_data = [], $fw_is_prefix = true)
   {
     $fw_template = StringCaseConverter::snakeCase($fw_template);
-    // データの設定
-    if (count($fw_data)) {
-      // 定義済み変数に関しては展開させない
-      unset($fw_data['fw_template']);
-      unset($fw_data['fw_is_prefix']);
 
-      // fw_dataがある場合は渡された値のみ展開
+    // データの設定
+    if (count($fw_data)>0) {
+      // fw_dataの指定がある場合はそちらを利用
       extract($fw_data);
     } else {
-      // 定義済み変数に関しては展開させない
-      unset($this->data['fw_template']);
-      unset($this->data['fw_is_prefix']);
-
-      // displayDataが無い場合はControllerのdataを展開
+      // fw_dataが無い場合はControllerのdataを展開
       extract($this->data);
     }
-    // 展開完了後fw_dataは解除
+    // 展開完了後fw_dataはunset
     unset($fw_data);
 
     // Template表示
     $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? strtolower(Config::get('APP_PREFIX')) . '/' : '') . $fw_template;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/\.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $fw_template_path);
+    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       if (defined("THIS_IS_TEST")) {
         $this->templateFilePath = $fw_template_device_path; // テスト用に退避
@@ -363,13 +464,14 @@ abstract class Controller
 
   /**
    * 表示処理データを取得
+   * TODO DELME 利用されている箇所が無い？
    * @param Request $request
    * @param $template
    * @param array $data
    * @param bool $isPrefix
    * @return false|string
    */
-  public function fetch(Request $request, $template, $data = array(), $isPrefix = true)
+  public function fetch(Request $request, $template, $data = [], $isPrefix = true)
   {
     ob_start();
     $this->display($request, $template, $data, $isPrefix);
@@ -385,6 +487,7 @@ abstract class Controller
   // 404 NotFound Action
   public function error404()
   {
+    // TODO ステータスコードを付与
     return 'Common/error404.php';
   }
 
@@ -441,4 +544,3 @@ abstract class Controller
     return $this->data;
   }
 }
-
