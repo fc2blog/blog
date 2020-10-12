@@ -4,7 +4,6 @@ namespace Fc2blog\Model;
 
 use Fc2blog\App;
 use Fc2blog\Config;
-use Fc2blog\Web\Controller\Admin\BlogTemplatesController;
 use Fc2blog\Web\Session;
 
 class BlogTemplatesModel extends Model
