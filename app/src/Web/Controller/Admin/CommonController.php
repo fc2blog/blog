@@ -233,6 +233,7 @@ class CommonController extends AdminController
         }
         $res = MSDB::getInstance()->multiExecute($sql);
         if ($res === false) {
+          /** @noinspection SyntaxError */
           $this->setErrorMessage(__('Create table failed.'));
           $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=1&error=table_insert');
         }
@@ -241,6 +242,7 @@ class CommonController extends AdminController
         $sql = "SHOW TABLES LIKE 'users'";
         $table = MSDB::getInstance()->find($sql);
         if (!is_countable($table)) {
+          /** @noinspection SyntaxError */
           $this->setErrorMessage(__('Create table failed.'));
           $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=1&error=table_insert');
         }
