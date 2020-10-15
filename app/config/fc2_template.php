@@ -99,12 +99,12 @@ $config['fc2_template_if'] = [
   'prevpage'           => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>',
   'nextentry'          => '<?php if(!empty($next_entry)) { ?>', // 次のエントリが設定されているか
   'preventry'          => '<?php if(!empty($prev_entry)) { ?>', // 次のエントリが設定されているか
-  'firstpage_disp'     => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>',
-  'lastpage_disp'      => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>',
-  'res_nextpage_area'  => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>',
-  'res_prevpage_area'  => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>',
+  'firstpage_disp'     => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>', // prevpageのエイリアス
+  'lastpage_disp'      => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>', // nextpageのエイリアス
+  'res_nextpage_area'  => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>', // nextpageのエイリアス
+  'res_prevpage_area'  => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>', // prevpageのエイリアス
   // デバイスタイプ
-  'ios'     => '<?php if(\Fc2blog\App::isIOS($request)) { ?>', // iOSとあるが、iPhone,iPodであるかの判定
+  'ios'     => '<?php if(\Fc2blog\App::isIOS($request)) { ?>', // iOSとあるが、iPhone,iPodであるかの判定、iPadはPC扱い
   'android' => '<?php if(\Fc2blog\App::isAndroid($request)) { ?>',
 ];
 
@@ -282,7 +282,7 @@ $template_vars = [
 // プラグイン(スマフォ用)
   '<%spplugin_first_no>'     => '<?php if(isset($t_plugin[\'id\'])) echo $t_plugin[\'id\']; ?>',
   '<%spplugin_first_title>'  => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>',
-  '<%spplugin_title>'        => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>',
+  '<%spplugin_title>'        => '<?php if(isset($t_plugin[\'title\'])) echo $t_plugin[\'title\']; ?>', // spplugin_first_titleのエイリアス
   '<%spplugin_content>'      => '<?php if(isset($t_plugin[\'id\'])) include(\Fc2blog\App::getPluginFilePath($blog_id, $t_plugin[\'id\'])); ?>',
   '<%spplugin_talign>'       => '<?php if(isset($t_plugin[\'title_align\'])) echo $t_plugin[\'title_align\']; ?>',
   '<%spplugin_tcolor>'       => '<?php if(isset($t_plugin[\'title_color\'])) echo $t_plugin[\'title_color\']; ?>',
@@ -486,7 +486,7 @@ $template_vars = [
   "<%template_secret>"          => '<?php echo __(\'Private comment\'); ?>',
   "<%template_css_text>"        => '<?php if(isset($css_link)) echo file_get_contents(\Fc2blog\Config::get(\'WWW_DIR\') . substr($css_link, 1)); ?>',
 
-  // HTML変換
+  // HTML変換 （テンプレートファイル互換性のため、ゆらぎ対応は無し）
   'name="mode" value="regist"' => 'name="process" value="comment_regist"',
   'name="mode" value="edit"'   => 'name="process" value="comment_edit"',
 ];
