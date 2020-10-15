@@ -39,6 +39,48 @@
     <p class="archives"><a href="<%url>archives.html">記事一覧</a></p>
 </div>
 
+<div>
+    <h2>現在のarea</h2>
+    <ul>
+        <!--index_area--> <li>index_area</li> <!--/index_area-->
+        <!--not_index_area--> <li>not_index_area</li> <!--/not_index_area-->
+        <!--titlelist_area--> <li>titlelist_area</li> <!--/titlelist_area-->
+        <!--not_titlelist_area--> <li>not_titlelist_area</li> <!--/not_titlelist_area-->
+        <!--date_area--> <li>date_area</li> <!--/date_area-->
+        <!--not_date_area--> <li>not_date_area</li> <!--/not_date_area-->
+        <!--category_area--> <li>category_area</li> <!--/category_area-->
+        <!--not_category_area--> <li>not_category_area</li> <!--/not_category_area-->
+        <!--tag_area--> <li>tag_area</li> <!--/tag_area-->
+        <!--not_tag_area--> <li>not_tag_area</li> <!--/not_tag_area-->
+        <!--ctag_exists--> <li>ctag_exists</li> <!--/ctag_exists-->
+        <!--search_area--> <li>search_area</li> <!--/search_area-->
+        <!--not_search_area--> <li>not_search_area</li> <!--/not_search_area-->
+        <!--comment_area--> <li>comment_area</li> <!--/comment_area-->
+        <!--not_comment_area--> <li>not_comment_area</li> <!--/not_comment_area-->
+        <!--form_area--> <li>form_area</li> <!--/form_area-->
+        <!--not_form_area--> <li>not_form_area</li> <!--/not_form_area-->
+        <!--edit_area--> <li>edit_area</li> <!--/edit_area-->
+        <!--not_edit_area--> <li>not_edit_area</li> <!--/not_edit_area-->
+        <!--comment_edit--> <li>comment_edit</li> <!--/comment_edit-->
+        <!--trackback_area--> <li>trackback_area(false固定)</li> <!--/trackback_area-->
+        <!--not_trackback_area--> <li>not_trackback_area(true固定)</li> <!--/not_trackback_area-->
+        <!--permanent_area--> <li>permanent_area</li> <!--/permanent_area-->
+        <!--not_permanent_area--> <li>not_permanent_area</li> <!--/not_permanent_area-->
+        <!--spplugin_area--> <li>spplugin_area</li> <!--/spplugin_area-->
+        <!--not_spplugin_area--> <li>not_spplugin_area</li> <!--/not_spplugin_area-->
+        <!--relate_list_area--> <li>relate_list_area(false固定)</li> <!--/relate_list_area-->
+        <!--not_relate_list_area--> <li>not_spplugin_area(true固定)</li> <!--/not_relate_list_area-->
+    </ul>
+    <h2>特殊エリア</h2>
+    <ul>
+        <!--more_link--> <li>more_link</li><!--/more_link-->
+        <!--more--> <li>more</li><!--/more-->
+        <!--community--> <li>community(false固定)</li><!--/community-->
+        <!--allow_tb--> <li>allow_tb(false固定)</li><!--/allow_tb-->
+        <!--deny_tb--> <li>deny_tb(true固定)</li><!--/deny_tb-->
+    </ul>
+</div>
+
 <div id="main_contents">
     <!--not_titlelist_area-->
     <!--not_search_area-->
@@ -47,9 +89,9 @@
         <h2>
             <!--not_permanent_area-->
             <a href="<%topentry_link>" title="<%template_abs_link>">
-                <!--/not_permanent_area-->
+            <!--/not_permanent_area-->
                 <%topentry_title>
-                <!--not_permanent_area-->
+            <!--not_permanent_area-->
             </a>
             <!--/not_permanent_area-->
         </h2>
@@ -101,6 +143,17 @@
             </ul>
         </div>
         <!--/permanent_area-->
+
+        <!--topentry_tag-->
+        <div>
+            entry(loop内)でtagsが有
+        </div>
+        <!--/topentry_tag-->
+        <!--not_topentry_tag-->
+        <div>
+            entry(loop内)でtagsが空
+        </div>
+        <!--/not_topentry_tag-->
 
     </div>
     <!--/topentry-->
@@ -244,6 +297,7 @@
     <!--/edit_area-->
 
     <!--not_permanent_area-->
+    <!--page_area-->
     <div class="page_navi">
         <!--prevpage-->
         <a href="<%prevpage_url>" title="<%template_prevpage>"><%template_prevpage></a>
@@ -255,11 +309,11 @@
         <a href="<%nextpage_url>" title="<%template_nextpage>"><%template_nextpage></a>
         <!--/nextpage-->
     </div>
+    <!--/page_area-->
     <!--/not_permanent_area-->
 
     <div>
         <h2>plugin_third</h2>
-        <!--plugin-->
         <div>
             <!--plugin_third-->
             <div>
@@ -270,7 +324,6 @@
             </div>
             <!--/plugin_third-->
         </div>
-        <!--/plugin-->
     </div>
 
 </div>
@@ -351,9 +404,21 @@
 </div>
 
 <div>
+    <h3>カテゴリ一覧階無し</h3>
+    <!--category-->
+    <div>
+        <!--category_sub_begin-->・<!--/category_sub_begin-->
+        <!--category_sub_hasnext-->┣<!--/category_sub_hasnext-->
+        <!--category_sub_end-->┗<!--/category_sub_end-->
+        <a href="<%category_link>" title="<%category_name>"><%category_name> (<%category_count>)</a>
+    </div>
+    <!--/category-->
+</div>
+
+<div>
     <h3>カレンダー</h3>
-    <div class="plugin-calender">
-        <table summary="カレンダー" class="calender">
+    <div>
+        <table>
             <caption>
                 <a href="<%prev_month_link>"><%prev_month></a>
                 | <%now_year>/<%now_month> |
@@ -368,17 +433,17 @@
                 <th abbr="金曜日" scope="col">金</th>
                 <th abbr="土曜日" scope="col" id="sat">土</th>
             </tr>
-            <!--calender-->
+            <!--calendar-->
             <tr>
-                <td><%calender_sun></td>
-                <td><%calender_mon></td>
-                <td><%calender_tue></td>
-                <td><%calender_wed></td>
-                <td><%calender_thu></td>
-                <td><%calender_fri></td>
-                <td><%calender_sat></td>
+                <td><%calendar_sun></td>
+                <td><%calendar_mon></td>
+                <td><%calendar_tue></td>
+                <td><%calendar_wed></td>
+                <td><%calendar_thu></td>
+                <td><%calendar_fri></td>
+                <td><%calendar_sat></td>
             </tr>
-            <!--/calender-->
+            <!--/calendar-->
         </table>
     </div>
 </div>
@@ -415,7 +480,7 @@
 
 <div>
     <h2>plugin_first - side menu</h2>
-    <!--plugin-->
+    <!--plugin--><!-- pluginは必ずtrue -->
     <div>
         <!--plugin_first-->
         <div>
@@ -431,18 +496,37 @@
 
 <div>
     <h2>plugin_second - footer menu</h2>
-    <!--plugin-->
     <div>
         <!--plugin_second-->
+        <div>
+            <h3><%spplugin_first_title> (<%spplugin_first_no>)</h3>
+            <div><%plugin_second_description></div>
+            <div><%spplugin_content></div>
+            <div><%spplugin_talign></div>
+            <div><%spplugin_tcolor></div>
+            <div><%spplugin_first_talign></div>
+            <div><%spplugin_first_tcolor></div>
+            <div><%spplugin_align></div>
+            <div><%spplugin_color></div>
+        </div>
+        <!--/plugin_second-->
+    </div>
+</div>
+
+<div>
+    <h2>spplugin_first</h2>
+    <!--spplugin--> <!-- sppluginは必ずTrue -->
+    <div>
+        <!--spplugin_first-->
         <div>
             <h3><%plugin_second_title></h3>
             <div><%plugin_second_description></div>
             <div><%plugin_second_content></div>
             <div><%plugin_second_description2></div>
         </div>
-        <!--/plugin_second-->
+        <!--/spplugin_first-->
     </div>
-    <!--/plugin-->
+    <!--/spplugin-->
 </div>
 
 <div>
