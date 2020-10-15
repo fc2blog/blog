@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\Fc2Template;
 
 use ErrorException;
-use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogSettingsModel;
@@ -19,8 +18,8 @@ use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleCategory;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleComment;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleEntry;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleTag;
+use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Controller\User\EntriesController;
-use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use ParseError;
 use PHPUnit\Framework\TestCase;
@@ -66,10 +65,10 @@ class Fc2TemplateTest extends TestCase
     $this->testTagsInEntriesSearch();
     echo ".";
     $this->testTagsInEntriesPlugin();
-    echo PHP_EOL . "=== coverage_blank_return" . PHP_EOL;
-    var_export($this->coverage_blank_return);
-    echo PHP_EOL . "=== coverage_ok" . PHP_EOL;
-    var_export($this->coverage_ok);
+//    echo PHP_EOL . "=== coverage_blank_return" . PHP_EOL;
+//    var_export($this->coverage_blank_return);
+//    echo PHP_EOL . "=== coverage_ok" . PHP_EOL;
+//    var_export($this->coverage_ok);
   }
 
   public function generateTestData($blog_id): array
@@ -612,7 +611,7 @@ class Fc2TemplateTest extends TestCase
   /**
    * 各タグのテストを実施
    * @param Request $request
-   * @param array $data
+   * @param array $data controller->data と同等
    */
   public function evalAll(Request $request, array $data): void
   {
@@ -625,12 +624,11 @@ class Fc2TemplateTest extends TestCase
    * テンプレートタグを変換し、実行テスト
    * （ただし、それぞれのタグ表示には各種前提条件があり、実行時エラーを特定できるものではない。せいぜいLinter程度の効果）
    * @param Request $request
-   * @param array $env
+   * @param array $data controller->data と同等
    */
-  public function getAllPrintableTagEval(Request $request, array $env): void
+  public function getAllPrintableTagEval(Request $request, array $data): void
   {
-    extract($env);
-    extract($this->fc2templateLayoutEmulator($request, $env));
+    extract(Controller::preprocessingDataForFc2Template($request, $data));
 
     $printable_tags = Config::get('fc2_template_var_search');
     $b = new BlogTemplatesModel();
@@ -664,12 +662,11 @@ class Fc2TemplateTest extends TestCase
   /**
    * fc2 templateのforeach系タグを変換し、実行テスト
    * @param Request $request
-   * @param array $env
+   * @param array $data controller->data と同等
    */
-  public function getAllForEachCondEval(Request $request, array $env): void
+  public function getAllForEachCondEval(Request $request, array $data): void
   {
-    extract($env);
-    extract($this->fc2templateLayoutEmulator($request, $env));
+    extract(Controller::preprocessingDataForFc2Template($request, $data));
 
     $fc2_template_if_list = Config::get('fc2_template_foreach');
     $b = new BlogTemplatesModel();
@@ -749,99 +746,4 @@ class Fc2TemplateTest extends TestCase
     }
     return $return_array;
   }
-
-  /**
-   * fc2_template.php のlayoutにて各種の変換ロジックが入っており、それを再現するもの
-   * @param Request $request
-   * @param $array
-   * @return array
-   */
-  public function fc2templateLayoutEmulator(Request $request, $array): array
-  {
-    extract($array);
-
-    $blogs_model = new BlogsModel();
-    /** @noinspection PhpUndefinedVariableInspection */
-    $blog = $blogs_model->findById($blog_id);
-
-// FC2のテンプレート用にデータを置き換える
-
-    if (!empty($entry)) {
-      $entries = array($entry);
-    }
-    if (!empty($entries)) {
-      foreach ($entries as $key => $value) {
-        // topentry系変数のデータ設定
-        $entries[$key]['title_w_img'] = $value['title'];
-        $entries[$key]['title'] = strip_tags($value['title']);
-        /** @noinspection PhpUndefinedVariableInspection */
-        $entries[$key]['link'] = App::userURL($request, array('controller' => 'Entries', 'action' => 'view', 'blog_id' => $value['blog_id'], 'id' => $value['id']));
-
-        list($entries[$key]['year'], $entries[$key]['month'], $entries[$key]['day'],
-          $entries[$key]['hour'], $entries[$key]['minute'], $entries[$key]['second'], $entries[$key]['youbi'], $entries[$key]['month_short']
-          ) = explode(' / ', date('Y / m / d / H / i / s / D / M', strtotime($value['posted_at'])));
-        $entries[$key]['wayoubi'] = __($entries[$key]['youbi']);
-
-        // 自動改行処理
-        if ($value['auto_linefeed'] == Config::get('ENTRY . AUTO_LINEFEED .use')) {
-          $entries[$key]['body'] = nl2br($value['body']);
-          $entries[$key]['extend'] = nl2br($value['extend']);
-        }
-      }
-      if (!empty($entry)) { // テスト用、entryの中身もデコレートする
-        $entry = $entries[0];
-      }
-    }
-
-// コメント一覧の情報
-    if (!empty($comments)) {
-      foreach ($comments as $key => $value) {
-        $comments[$key]['edit_link'] = Html::url($request, ['controller' => 'Entries', 'action' => 'comment_edit', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
-
-        [
-          $comments[$key]['year'],
-          $comments[$key]['month'],
-          $comments[$key]['day'],
-          $comments[$key]['hour'],
-          $comments[$key]['minute'],
-          $comments[$key]['second'],
-          $comments[$key]['youbi']
-        ] = explode(' / ', date('Y / m / d / H / i / s / D', strtotime($value['updated_at'])));
-        $comments[$key]['wayoubi'] = __($comments[$key]['youbi']);
-        $comments[$key]['body'] = $value['body'];
-
-        [
-          $comments[$key]['reply_year'],
-          $comments[$key]['reply_month'],
-          $comments[$key]['reply_day'],
-          $comments[$key]['reply_hour'],
-          $comments[$key]['reply_minute'],
-          $comments[$key]['reply_second'],
-          $comments[$key]['reply_youbi']
-        ] = explode(' / ', date('Y / m / d / H / i / s / D', strtotime($value['reply_updated_at'] ?? "now"))); // NOTE TODO nullのことがあり、TypeErrorがThrowされることがある
-        $comments[$key]['reply_wayoubi'] = __($comments[$key]['reply_youbi']);
-        $comments[$key]['reply_body'] = nl2br($value['reply_body'] ?? ""); // NOTE TODO NULLのことがあり、TypeErrorがThrowされることがある
-      }
-      // テスト用
-      if (!isset($comment)) {
-        $comment = $comments[0];
-      }
-    }
-
-
-// FC2用のどこでも有効な単変数
-    $url = ' / ' . $blog['id'] . ' / ';
-//    $blog_id = $this->getBlogId($request); // 外部で定義しているので、不要
-
-// 年月日系
-    // get from app/src/Web/Controller/User/EntriesController.php::date() 経由だと定義される
-    /** @noinspection PhpUndefinedVariableInspection */
-    $now_date = (isset($now_date) && isset($date_area) && $date_area) ? $now_date : date('Y-m-d'); // TODO パースに失敗するので変更した（元も壊れているのでは？
-    $now_month_date = date('Y-m-1', strtotime($now_date)); // ここでパースに失敗する
-    $prev_month_date = date('Y-m-1', strtotime($now_month_date . ' - 1 month'));
-    $next_month_date = date('Y-m-1', strtotime($now_month_date . ' + 1 month'));
-
-    return compact(array_keys(get_defined_vars()));
-  }
-
 }

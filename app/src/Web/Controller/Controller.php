@@ -13,6 +13,7 @@ use Fc2blog\Util\Log;
 use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Util\Twig\GetTextHelper;
 use Fc2blog\Util\Twig\HtmlHelper;
+use Fc2blog\Web\Controller\User\UserController;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -127,6 +128,7 @@ abstract class Controller
   /**
    * リダイレクト
    * MEMO: Blog idが特定できないときの強制的なSchemaがさだまらない
+   * TODO: この時点でリダイレクトせず、emit時にヘッダー送信する形にリファクタリングすべき
    * @param Request $request
    * @param $url
    * @param string $hash
@@ -272,10 +274,95 @@ abstract class Controller
   }
 
   /**
+   * fc2blog形式のPHP Viewテンプレート内で利用する各種データを生成・変換
+   * @param Request $request
+   * @param array $data
+   * @return array
+   * TODO User系のみで使われるので、後日UserControllerへ移動
+   */
+  static public function preprocessingDataForFc2Template(Request $request, array $data):array
+  {
+    // FC2のテンプレート用にデータを置き換える
+    if (!empty($data['entry'])) {
+      $data['entries'] = [$data['entry']];
+    }
+    if (!empty($data['entries'])) {
+      foreach ($data['entries'] as $key => $value) {
+        // topentry系変数のデータ設定
+        $data['entries'][$key]['title_w_img'] = $value['title'];
+        $data['entries'][$key]['title'] = strip_tags($value['title']);
+        $data['entries'][$key]['link'] = App::userURL($request, ['controller' => 'Entries', 'action' => 'view', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
+
+        [
+          $data['entries'][$key]['year'],
+          $data['entries'][$key]['month'],
+          $data['entries'][$key]['day'],
+          $data['entries'][$key]['hour'],
+          $data['entries'][$key]['minute'],
+          $data['entries'][$key]['second'],
+          $data['entries'][$key]['youbi'],
+          $data['entries'][$key]['month_short']
+        ] = explode('/', date('Y/m/d/H/i/s/D/M', strtotime($value['posted_at'])));
+        $data['entries'][$key]['wayoubi'] = __($data['entries'][$key]['youbi']);
+
+        // 自動改行処理
+        if ($value['auto_linefeed'] == Config::get('ENTRY.AUTO_LINEFEED.USE')) {
+          $data['entries'][$key]['body'] = nl2br($value['body']);
+          $data['entries'][$key]['extend'] = nl2br($value['extend']);
+        }
+      }
+    }
+
+    // コメント一覧の情報
+    if (!empty($data['comments'])) {
+      foreach ($data['comments'] as $key => $value) {
+        $data['comments'][$key]['edit_link'] = Html::url($request, ['controller' => 'Entries', 'action' => 'comment_edit', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
+
+        [
+          $data['comments'][$key]['year'],
+          $data['comments'][$key]['month'],
+          $data['comments'][$key]['day'],
+          $data['comments'][$key]['hour'],
+          $data['comments'][$key]['minute'],
+          $data['comments'][$key]['second'],
+          $data['comments'][$key]['youbi']
+        ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['updated_at'])));
+        $data['comments'][$key]['wayoubi'] = __($data['comments'][$key]['youbi']);
+        $data['comments'][$key]['body'] = $value['body']; // TODO nl2brされていないのは正しいのか？
+
+        [
+          $data['comments'][$key]['reply_year'],
+          $data['comments'][$key]['reply_month'],
+          $data['comments'][$key]['reply_day'],
+          $data['comments'][$key]['reply_hour'],
+          $data['comments'][$key]['reply_minute'],
+          $data['comments'][$key]['reply_second'],
+          $data['comments'][$key]['reply_youbi']
+        ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['reply_updated_at'])));
+        $data['comments'][$key]['reply_wayoubi'] = __($data['comments'][$key]['reply_youbi']);
+        $data['comments'][$key]['reply_body'] = nl2br($value['reply_body']);
+      }
+    }
+
+    // FC2用のどこでも有効な単変数
+    $data['url'] = '/' . $data['blog']['id'] . '/';
+    $data['blog_id'] = UserController::getBlogId($request); // TODO User系でしかこのメソッドは呼ばれないはずなので
+
+    // 年月日系
+    $data['now_date'] = (isset($data['date_area']) && $data['date_area']) ? $data['now_date'] : date('Y-m-d');
+    $data['now_month_date'] = date('Y-m-1', strtotime($data['now_date']));
+    $data['prev_month_date'] = date('Y-m-1', strtotime($data['now_month_date'] . ' -1 month'));
+    $data['next_month_date'] = date('Y-m-1', strtotime($data['now_month_date'] . ' +1 month'));
+
+    return $data;
+  }
+
+  /**
    * PHPを用いたテンプレートエンジンでHTMLをレンダリング
    * @param Request $request
    * @param string $template_file_path
    * @return string
+   * TODO User系のみで用いられるので、後日UserControllerへ移動
    */
   private function renderByPhpTemplate(Request $request, string $template_file_path)
   {
@@ -291,13 +378,13 @@ abstract class Controller
     $layout_file_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
     $device_layout_path = preg_replace('/^(.*?)\.([^\/.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $layout_file_path);
 
+    if (defined("THIS_IS_TEST")) {
+      $this->layoutFilePath = $layout_file_path; // テスト用に退避
+    }
+
     // 各種テンプレート種類によって分岐
     if (is_file($device_layout_path)) {
       // view/user系 デバイス毎に対応があるテンプレート（現状SPのみ）
-
-      if (defined("THIS_IS_TEST")) {
-        $this->layoutFilePath = $layout_file_path; // テスト用に退避
-      }
 
       extract($this->data);
       // デバイス毎のファイルがあればデバイス毎のファイルを優先する
@@ -308,10 +395,6 @@ abstract class Controller
 
     } elseif (is_file($layout_file_path) && $this->layout !== "fc2_template.php") {
       // view/user系 PCテンプレート
-
-      if (defined("THIS_IS_TEST")) {
-        $this->layoutFilePath = $layout_file_path; // テスト用に退避
-      }
 
       extract($this->data);
       ob_start();
@@ -329,77 +412,7 @@ abstract class Controller
         throw new InvalidArgumentException("missing template");
       }
 
-      // FC2のテンプレート用にデータを置き換える
-      if (!empty($this->data['entry'])) {
-        $this->data['entries'] = [$this->data['entry']];
-      }
-      if (!empty($this->data['entries'])) {
-        foreach ($this->data['entries'] as $key => $value) {
-          // topentry系変数のデータ設定
-          $this->data['entries'][$key]['title_w_img'] = $value['title'];
-          $this->data['entries'][$key]['title'] = strip_tags($value['title']);
-          $this->data['entries'][$key]['link'] = App::userURL($request, ['controller' => 'Entries', 'action' => 'view', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
-
-          [
-            $this->data['entries'][$key]['year'],
-            $this->data['entries'][$key]['month'],
-            $this->data['entries'][$key]['day'],
-            $this->data['entries'][$key]['hour'],
-            $this->data['entries'][$key]['minute'],
-            $this->data['entries'][$key]['second'],
-            $this->data['entries'][$key]['youbi'],
-            $this->data['entries'][$key]['month_short']
-          ] = explode('/', date('Y/m/d/H/i/s/D/M', strtotime($value['posted_at'])));
-          $this->data['entries'][$key]['wayoubi'] = __($this->data['entries'][$key]['youbi']);
-
-          // 自動改行処理
-          if ($value['auto_linefeed'] == Config::get('ENTRY.AUTO_LINEFEED.USE')) {
-            $this->data['entries'][$key]['body'] = nl2br($value['body']);
-            $this->data['entries'][$key]['extend'] = nl2br($value['extend']);
-          }
-        }
-      }
-
-      // コメント一覧の情報
-      if (!empty($this->data['comments'])) {
-        foreach ($this->data['comments'] as $key => $value) {
-          $this->data['comments'][$key]['edit_link'] = Html::url($request, ['controller' => 'Entries', 'action' => 'comment_edit', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
-
-          [
-            $this->data['comments'][$key]['year'],
-            $this->data['comments'][$key]['month'],
-            $this->data['comments'][$key]['day'],
-            $this->data['comments'][$key]['hour'],
-            $this->data['comments'][$key]['minute'],
-            $this->data['comments'][$key]['second'],
-            $this->data['comments'][$key]['youbi']
-          ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['updated_at'])));
-          $this->data['comments'][$key]['wayoubi'] = __($this->data['comments'][$key]['youbi']);
-          $this->data['comments'][$key]['body'] = $value['body']; // TODO nl2brされていないのは正しいのか？
-
-          [
-            $this->data['comments'][$key]['reply_year'],
-            $this->data['comments'][$key]['reply_month'],
-            $this->data['comments'][$key]['reply_day'],
-            $this->data['comments'][$key]['reply_hour'],
-            $this->data['comments'][$key]['reply_minute'],
-            $this->data['comments'][$key]['reply_second'],
-            $this->data['comments'][$key]['reply_youbi']
-          ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['reply_updated_at'])));
-          $this->data['comments'][$key]['reply_wayoubi'] = __($this->data['comments'][$key]['reply_youbi']);
-          $this->data['comments'][$key]['reply_body'] = nl2br($value['reply_body']);
-        }
-      }
-
-      // FC2用のどこでも有効な単変数
-      $this->data['url'] = '/' . $this->data['blog']['id'] . '/';
-      $this->data['blog_id'] = $this->getBlogId($request);
-
-      // 年月日系
-      $this->data['now_date'] = $this->data['date_area'] ? $this->data['now_date'] : date('Y-m-d');
-      $this->data['now_month_date'] = date('Y-m-1', strtotime($this->data['now_date']));
-      $this->data['prev_month_date'] = date('Y-m-1', strtotime($this->data['now_month_date'] . ' -1 month'));
-      $this->data['next_month_date'] = date('Y-m-1', strtotime($this->data['now_month_date'] . ' +1 month'));
+      $this->data = static::preprocessingDataForFc2Template($request, $this->data);
 
       // 設定されているdataを展開
       extract($this->data);
