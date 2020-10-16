@@ -14,6 +14,7 @@ class LoaderHelper extends TestCase
     # 細かなエラーを見逃さないために、Noticeを含むすべてのエラーをキャッチしてErrorExceptionに変換する
     # TODO もっとふさわしい場所に移動
     set_error_handler(function (int $severity, string $message, string $file, int $line) {
+      error_log("Error on {$file}:{$line} {$message}");
       /** @noinspection PhpUnhandledExceptionInspection */
       throw new ErrorException($message, 0, $severity, $file, $line);
     });
