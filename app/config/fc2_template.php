@@ -56,15 +56,15 @@ $config['fc2_template_if'] = [
   'edit_area'          => '<?php if(!empty($edit_area)) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // comment_edit, comment_delete アクション
   'not_edit_area'      => '<?php if(empty($edit_area)) { ?>',
   'comment_edit'       => '<?php if(!empty($comment[\'password\'])) { ?>', // commentインスタンスにパスワードが設定されている
-  'trackback_area'     => '<?php if(false) { ?>', // trackback は無効化と思われる
-  'not_trackback_area' => '<?php if(true) { ?>',
+  'trackback_area'     => '<?php if(false) { ?>', // 互換性用タグ、trackback は無効化されている
+  'not_trackback_area' => '<?php if(true) { ?>', // 互換性用タグ、trackback は無効化されている
   'permanent_area'     => '<?php if(!empty($permanent_area)) { ?>', // preview_entry, view
   'not_permanent_area' => '<?php if(empty($permanent_area)) { ?>',
   'spplugin_area'      => '<?php if(!empty($spplugin_area)) { ?><?php if(!empty($s_plugin)) $t_plugin=$s_plugin; ?>', // plugin, sp preview_plugin
   'not_spplugin_area'  => '<?php if(empty($spplugin_area)) { ?>',
   // 関連する記事
-  'relate_list_area'     => '<?php if(false) { ?>', // 関連する記事は無効化されていると思われる
-  'not_relate_list_area' => '<?php if(true) { ?>', // 関連する記事は無効化されていると思われる
+  'relate_list_area'     => '<?php if(false) { ?>', // 互換性用タグ、関連する記事は無効化されている
+  'not_relate_list_area' => '<?php if(true) { ?>', // 互換性用タグ、関連する記事は無効化されている
   // 続きの表示
   'more_link'          => '<?php if(empty($comment_area) && !empty($entry[\'extend\'])) { ?>', // view, sp view?m2=res, pc comment_regist
   'more'               => '<?php if(!empty($comment_area) && !empty($entry[\'extend\'])) { ?>',
@@ -72,10 +72,10 @@ $config['fc2_template_if'] = [
   'allow_comment'      => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?>',
   'deny_comment'       => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.REJECT\')) { ?>',
   // 記事のスレッドテーマも無し判定
-  'community'          => '<?php if(false) { ?>', // community？は無効化されていると思われる
+  'community'          => '<?php if(false) { ?>', // 互換性用タグ、communityは無効化されている
   // トラックバックは無し判定
-  'allow_tb'           => '<?php if(false) { ?>', // 無効化されていると思われる
-  'deny_tb'            => '<?php if(true) { ?>',
+  'allow_tb'           => '<?php if(false) { ?>', // 互換性用タグ、trackback は無効化と思われる
+  'deny_tb'            => '<?php if(true) { ?>', // 互換性用タグ、trackback は無効化と思われる
   // コメントの返信の有無判定
   'comment_reply'      => '<?php if(!empty($comment[\'reply_body\'])) { ?>',
   // タグが存在するかどうか
@@ -91,10 +91,10 @@ $config['fc2_template_if'] = [
   'category_sub_hasnext' => '<?php if(!empty($t_category) && $t_category[\'is_sub_hasnext\']) { ?>',
   'category_sub_end'     => '<?php if(!empty($t_category) && $t_category[\'is_sub_end\']) { ?>',
   // プラグイン系
-  'plugin'             => '<?php if(true) { ?>', // 意味無しタグ プラグインは必ず有効なので、
-  'spplugin'           => '<?php if(true) { ?>', // 意味無しタグ プラグインは必ず有効なので、
+  'plugin'             => '<?php if(true) { ?>', // 互換性用タグ、プラグインは必ず有効
+  'spplugin'           => '<?php if(true) { ?>', // 互換性用タグ、プラグインは必ず有効
   // ページング系
-  'page_area'          => '<?php if(!empty($paging)) { ?>', // paging が設定されているか
+  'page_area'          => '<?php if(!empty($paging)) { ?>', // paging が利用可能か
   'nextpage'           => '<?php if(!empty($paging) && $paging[\'is_next\']) { ?>',
   'prevpage'           => '<?php if(!empty($paging) && $paging[\'is_prev\']) { ?>',
   'nextentry'          => '<?php if(!empty($next_entry)) { ?>', // 次のエントリが設定されているか
