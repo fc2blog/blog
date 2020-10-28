@@ -28,7 +28,8 @@ class BlogPluginsController extends AdminController
     $this->set('devices', Config::get('DEVICE_NAME'));
 
     // デバイス毎に分けられたテンプレート一覧を取得
-    $category_blog_plugins = Model::load('BlogPlugins')->getCategoryPlugins($blog_id, $device_type);
+    $blog_plugins_model = new BlogPluginsModel();
+    $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, $device_type);
     $this->set('category_blog_plugins', $category_blog_plugins);
     $this->set('app_display_show', Config::get('APP.DISPLAY.SHOW'));
     $this->set('app_display_hide', Config::get('APP.DISPLAY.HIDE'));

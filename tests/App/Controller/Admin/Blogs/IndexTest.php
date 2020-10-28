@@ -65,11 +65,13 @@ class IndexTest extends TestCase
     $this->mergeAdminSession();
     $sig = $this->getSig();
 
+    $title = "testblog".time();
+
     $request_params = [
       'blog' => [
-        'id' => 'testblog3',
-        'name' => 'testblog3name',
-        'nickname' => 'testblog3nick',
+        'id' => $title,
+        'name' => $title.'_name',
+        'nickname' => $title.'_nick',
       ],
       'sig' => $sig
     ];
@@ -78,12 +80,12 @@ class IndexTest extends TestCase
     $this->assertEquals('/admin/blogs/index', $r->redirectUrl);
 
     $c = $this->reqGet('/admin/blogs/index');
-    $this->assertStringContainsString('testblog3name', $c->getOutput());
+    $this->assertStringContainsString($title.'_name', $c->getOutput());
 //    var_export($c->getData());
     $blogs = $c->getData()['blogs'];
     $is_found = false;
     foreach ($blogs as $blog) {
-      if ($blog['id'] === 'testblog3') {
+      if ($blog['id'] === $title) {
         $is_found = true;
         break;
       }

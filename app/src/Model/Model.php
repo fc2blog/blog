@@ -218,12 +218,12 @@ abstract class Model implements ModelInterface
 
   /**
    * idとblog_idの複合キーからデータを取得
-   * @param $id
-   * @param $blog_id
-   * @param array $options
+   * @param int|string|null $id
+   * @param string|null $blog_id
+   * @param array|null $options
    * @return array|false
    */
-  public function findByIdAndBlogId($id, $blog_id, $options = [])
+  public function findByIdAndBlogId($id, ?string $blog_id, $options = [])
   {
     if (empty($id) || empty($blog_id)) {
       return [];

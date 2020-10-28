@@ -204,11 +204,11 @@ class BlogPluginsModel extends Model
    * idとblog_idの複合キーからデータを取得
    * attributeデータを振り分け
    * @param $id
-   * @param $blog_id
+   * @param string|null $blog_id
    * @param array $options
    * @return array|mixed
    */
-  public function findByIdAndBlogId($id, $blog_id, $options = []): array
+  public function findByIdAndBlogId($id, ?string $blog_id, $options = []): array
   {
     $data = parent::findByIdAndBlogId($id, $blog_id, $options);
     if (empty($data)) {

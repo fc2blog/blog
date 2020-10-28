@@ -1,7 +1,5 @@
 <?php
-if(!headers_sent()){
-  header("Content-Type: text/html; charset=UTF-8");
-}
+// \Fc2blog\Web\Controller\Controller::renderByPhpTemplate からincludeされる、変数スコープはそちらを参照
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $request->lang; ?>">
@@ -48,7 +46,7 @@ if(!headers_sent()){
 
   <article>
     <article id="main-contents">
-      <?php $this->display($request, $fw_template); ?>
+      <?php $this->display($request, $template_file_path); ?>
     </article>
   </article>
 

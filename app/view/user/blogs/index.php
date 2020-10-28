@@ -1,3 +1,4 @@
+<?php /* TODO 本テンプレートへの到達経路が不明 */?>
 <header><h2><?php echo __('List of blogs'); ?></h2></header>
 
 <ul class="blog_list">

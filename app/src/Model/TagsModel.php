@@ -307,7 +307,7 @@ SQL;
   }
 
   /**
-   * 最近の記事一覧を取得
+   * 全タグを取得
    * FC2テンプレートでの表示用
    * @param $blog_id
    * @return array

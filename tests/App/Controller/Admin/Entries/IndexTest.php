@@ -188,6 +188,7 @@ class IndexTest extends TestCase
     $first_comment_body = $c->get('entries')[0]['body'];
 
     $c = $this->reqGet("/admin/entries/index", ['keyword' => mb_substr($first_comment_body, 10, 10)]);
+    // TODO 低確率でFailする
     $this->assertEquals(1, $c->get('paging')['count']);
   }
 

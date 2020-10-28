@@ -249,7 +249,7 @@ class EntriesModel extends Model
     return $flag;
   }
 
-  public function updateByIdAndBlogId($data, $comment_id, $blog_id, $options = array())
+  public function updateByIdAndBlogId($data, $id, $blog_id, $options = array())
   {
     // 最初に登場する画像を設定
     $data['first_image'] = $this->getFirstImage($data);
@@ -257,7 +257,7 @@ class EntriesModel extends Model
     // 更新日時を設定
     $data['updated_at'] = date('Y-m-d H:i:s');
 
-    return parent::updateByIdAndBlogId($data, $comment_id, $blog_id, $options);
+    return parent::updateByIdAndBlogId($data, $id, $blog_id, $options);
   }
 
   /**

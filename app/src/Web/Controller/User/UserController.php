@@ -2,7 +2,7 @@
 
 namespace Fc2blog\Web\Controller\User;
 
-use Fc2blog\Model\Model;
+use Fc2blog\Model\BlogsModel;
 use Fc2blog\Web\Controller\AppController;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -13,9 +13,9 @@ abstract class UserController extends AppController
   /**
    * ブログID取得
    * @param Request $request
-   * @return array|int|mixed|null
+   * @return string|null
    */
-  public function getBlogId(Request $request)
+  public static function getBlogId(Request $request): ?string
   {
     return $request->get('blog_id');
   }
@@ -23,7 +23,7 @@ abstract class UserController extends AppController
   /**
    * 管理画面ログイン中のブログIDを取得する
    */
-  protected function getAdminBlogId()
+  protected static function getAdminBlogId(): ?string
   {
     return Session::get('blog_id');
   }
@@ -31,7 +31,7 @@ abstract class UserController extends AppController
   /**
    * 管理画面ログイン中のUserIDを取得する
    */
-  protected function getAdminUserId()
+  protected static function getAdminUserId()
   {
     return Session::get('user_id');
   }
@@ -41,40 +41,41 @@ abstract class UserController extends AppController
    * @param Request $request
    * @return bool
    */
-  protected function isLoginBlog(Request $request)
+  protected function isLoginBlog(Request $request) :bool
   {
-    // ログイン中判定
+    // ログイン中か
     $admin_blog_id = $this->getAdminBlogId();
     if (empty($admin_blog_id)) {
       return false;
     }
-    // ログイン中のブログIDと判定
+    // セッションに持っているログイン中のブログIDを取得
     $blog_id = $this->getBlogId($request);
     if ($admin_blog_id == $blog_id) {
       return true;
     }
-    // ログイン判定
-    return Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id);
+    // あるいはログイン中のアカウントがブログ所有者か判定
+    $blogs_model = new BlogsModel();
+    return $blogs_model->isUserHaveBlogId($admin_blog_id, $blog_id);
   }
 
   /**
    * ブログのパスワードキー
-   * @param $blog_id
+   * @param string $blog_id
    * @return string
    */
-  protected function getBlogPasswordKey($blog_id)
+  protected static function getBlogPasswordKey(string $blog_id): string
   {
     return 'blog_password.' . $blog_id;
   }
 
   /**
    * 記事のパスワードキー
-   * @param $blog_id
-   * @param $entry_id
+   * @param string $blog_id
+   * @param int $entry_id
    * @return string
    */
-  protected function getEntryPasswordKey($blog_id, $entry_id)
+  protected static function getEntryPasswordKey(string $blog_id, int $entry_id): string
   {
-    return 'entry_password.' . $blog_id . '.' . $entry_id;
+    return 'entry_password.' . $blog_id . '.' . (string)$entry_id;
   }
 }
