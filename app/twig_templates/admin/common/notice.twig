@@ -13,7 +13,7 @@
 
     {% if unapproved_count %}
         <p>
-            <a href="{{ url(req, 'Comments', 'index', {'reply_status': reply_status_pending }) }}">
+            <a href="{{ url(req, 'Comments', 'index', {'open_status': open_status_pending }) }}">
                 {{ _s('There %d reviews unapproved comment', unapproved_count) }}
             </a>
         </p>
