@@ -2,7 +2,6 @@
 
 namespace Fc2blog\Web\Controller\User;
 
-use Fc2blog\Config;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 
