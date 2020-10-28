@@ -309,6 +309,11 @@ abstract class Controller
           $data['entries'][$key]['body'] = nl2br($value['body']);
           $data['entries'][$key]['extend'] = nl2br($value['extend']);
         }
+
+        // topentry_enc_* 系タグの生成
+        $data['entries'][$key]['enc_title'] = urlencode($data['entries'][$key]['title']);
+        $data['entries'][$key]['enc_utftitle'] = urlencode($data['entries'][$key]['title']);
+        $data['entries'][$key]['enc_link'] = urlencode($data['entries'][$key]['link']);
       }
     }
 
