@@ -14,11 +14,28 @@
     <div class="btn_area">
         <ul class="btn_area_inner">
             <li>
-                <a href="{{ url(req, req.shortControllerName, 'delete', {'id': entry.id, 'sig': sig}) }}" class="btn_contents touch"
-                   onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">
+                <a href="#" onclick="delete_single_entry({{ entry.id }}); return false;" class="btn_contents touch">
                     <i class="delete_icon btn_icon"></i>{{ _('Delete') }}
                 </a>
             </li>
         </ul>
     </div>
+
+    <form method="POST" id="entry-delete-form">
+        <input type="hidden" name="mode" value="entries"/>
+        <input type="hidden" name="process" value="delete"/>
+        <input type="hidden" name="id" value=""/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+    </form>
+    <script>
+        function delete_single_entry(entry_id) {
+            if (!confirm('{{ _('Are you sure you want to delete?') }}')) {
+                return;
+            }
+            $('#entry-delete-form input[name="id"]').val(entry_id);
+            $('#entry-delete-form').submit();
+            $('#entry-delete-form input[name="id"]').val("");
+        }
+    </script>
+
 {% endblock %}
