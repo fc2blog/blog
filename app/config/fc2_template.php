@@ -484,6 +484,9 @@ PHP
   "<%template_goto_nextentry>"  => '<?php echo __(\'Next Entry\'); ?>',
   "<%template_secret>"          => '<?php echo __(\'Private comment\'); ?>',
   "<%template_css_text>"        => '<?php if(isset($css_link)) echo file_get_contents(\Fc2blog\Config::get(\'WWW_DIR\') . substr($css_link, 1)); ?>',
+  "<%template_list_of_articles>"=> '<?php echo __(\'List of articles\'); ?>',
+  "<%template_list_view>"       => '<?php echo __(\'List view\'); ?>',
+  "<%template_grid_view>"       => '<?php echo __(\'Grid view\'); ?>',
 
   // HTML変換
   'name="mode" value="regist"' => 'name="process" value="comment_regist"',

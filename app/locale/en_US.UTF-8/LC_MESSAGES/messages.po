@@ -2465,3 +2465,13 @@ msgstr ""
 
 msgid "If you want to re-enable this installer, please delete `installed.lock` file in temp dir."
 msgstr ""
+
+msgid "Return to entry"
+msgstr ""
+
+msgid "List view"
+msgstr ""
+
+msgid "Grid view"
+msgstr ""
+
