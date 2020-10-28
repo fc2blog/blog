@@ -40,35 +40,19 @@ class Fc2TemplateTest extends TestCase
   public $coverage_blank_return = [];
   public $coverage_ok = [];
 
-  public function testCoverage()
+  public function testAllAreaType()
   {
-    // TODO 逆カバレッジのようなものを取得し、「どのケースでも」出力されていないタグを出力する。
-    echo ".";
     $this->testTagsInEntriesIndex();
-    echo ".";
     $this->testTagsInEntriesView();
-    echo ".";
     $this->testTagsInEntriesCategory();
-    echo ".";
     $this->testTagsInEntriesTag();
-    echo ".";
     $this->testTagsInEntriesArchive();
-    echo ".";
     $this->testTagsInEntriesBlogPassword();
-    echo ".";
     $this->testTagsInEntriesCommentEdit();
-    echo ".";
     $this->testTagsInEntriesCommentDelete();
-    echo ".";
     $this->testTagsInEntriesDate();
-    echo ".";
     $this->testTagsInEntriesSearch();
-    echo ".";
     $this->testTagsInEntriesPlugin();
-//    echo PHP_EOL . "=== coverage_blank_return" . PHP_EOL;
-//    var_export($this->coverage_blank_return);
-//    echo PHP_EOL . "=== coverage_ok" . PHP_EOL;
-//    var_export($this->coverage_ok);
   }
 
   public function generateTestData($blog_id): array
@@ -88,7 +72,6 @@ class Fc2TemplateTest extends TestCase
     $entry['comment_accepted'] = Config::get("ENTRY.COMMENT_ACCEPTED.ACCEPTED");
     $entries_model = new EntriesModel();
     $entries_model->updateByIdAndBlogId($entry, $entry['id'], $blog_id);
-//    var_dump($entry);
 
     // カテゴリを追加する
     $category_generator->updateEntryCategories($blog_id, $entry['id'], [$category['id']]);
@@ -609,7 +592,7 @@ class Fc2TemplateTest extends TestCase
   // == support
 
   /**
-   * 各タグのテストを実施
+   * 各種タグのテストを実施
    * @param Request $request
    * @param array $data controller->data と同等
    */
@@ -628,8 +611,6 @@ class Fc2TemplateTest extends TestCase
    */
   public function getAllPrintableTagEval(Request $request, array $data): void
   {
-    extract(Controller::preprocessingDataForFc2Template($request, $data));
-
     $printable_tags = Config::get('fc2_template_var_search');
     $b = new BlogTemplatesModel();
     foreach ($printable_tags as $tag_str => $printable_tag) {
@@ -637,25 +618,23 @@ class Fc2TemplateTest extends TestCase
       $input_html = "{$printable_tag}";
       // 変換されたPHP
       $converted_php = $b->convertFC2Template($input_html);
-      $this->fragmentRunner(compact(array_keys(get_defined_vars())), $tag_str, $converted_php);
+      $this->fragmentRunner(Controller::preprocessingDataForFc2Template($request, $data), $tag_str, $converted_php);
     }
   }
 
   /**
    * fc2 templateのif系タグを変換し、実行テスト
    * @param Request $request
-   * @param array $env
+   * @param array $data
    */
-  public function getAllIfCondEval(Request $request, array $env): void
+  public function getAllIfCondEval(Request $request, array $data): void
   {
-    extract($env);
-
     $fc2_template_if_list = Config::get('fc2_template_if');
     $b = new BlogTemplatesModel();
     foreach ($fc2_template_if_list as $tag_str => $php_code) {
       $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
       $converted_php = $b->convertFC2Template($input_html);
-      $this->fragmentRunner(compact(array_keys(get_defined_vars())), $tag_str, $converted_php);
+      $this->fragmentRunner(Controller::preprocessingDataForFc2Template($request, $data), $tag_str, $converted_php);
     }
   }
 
@@ -666,14 +645,12 @@ class Fc2TemplateTest extends TestCase
    */
   public function getAllForEachCondEval(Request $request, array $data): void
   {
-    extract(Controller::preprocessingDataForFc2Template($request, $data));
-
     $fc2_template_if_list = Config::get('fc2_template_foreach');
     $b = new BlogTemplatesModel();
     foreach ($fc2_template_if_list as $tag_str => $php_code) {
       $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
       $converted_php = $b->convertFC2Template($input_html);
-      $this->fragmentRunner(compact(array_keys(get_defined_vars())), $tag_str, $converted_php);
+      $this->fragmentRunner(Controller::preprocessingDataForFc2Template($request, $data), $tag_str, $converted_php);
     }
   }
 
@@ -697,6 +674,7 @@ class Fc2TemplateTest extends TestCase
       ob_end_clean();
       // 文字列がとれれば、基本的に実行はできているはず
       $this->assertIsString($rtn);
+//      var_dump($rtn);
 
       // 一度でもOKを通過していればOKとする。
       if (strlen($converted_php) === 0) {

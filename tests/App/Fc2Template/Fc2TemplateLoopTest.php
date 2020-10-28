@@ -12,7 +12,7 @@ use TypeError;
 
 class Fc2TemplateLoopTest extends TestCase
 {
-  // TODO 全 fc2_template_ifをチェックできているか担保する仕組み
+  // TODO 全 fc2_template_foreachをチェックできているか担保する仕組み
 
   public function setUp(): void
   {
@@ -88,5 +88,4 @@ class Fc2TemplateLoopTest extends TestCase
 
     return $rtn;
   }
-
 }

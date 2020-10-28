@@ -224,14 +224,11 @@ abstract class Controller
       throw new InvalidArgumentException("Twig error: missing template: {$base_path}{$twig_template_path}");
     }
 
-    // TODO remove me. this is test.
-//    $this->setInfoMessage("test info");
-//    $this->setWarnMessage("test warn");
-//    $this->setErrorMessage("test error");
-
     $this->data['request'] = $request; // TODO Adhocに追加しているので、どこか適切な場所に移動する
     $blogs_model = new BlogsModel();
-    $data = [ // 各種ベースとなるデータ // TODO 整理共通化リファクタリング, $thisが一意でないので、User系のTwig化時に整理が必要
+
+    // TODO 整理共通化リファクタリング, $thisが一意でない（管理画面用にデータを構築している）ので、User系のTwig化時に整理が必要
+    $data = [ // 各種ベースとなるデータ
       'req' => $request,
       'sig' => Session::get('sig'),
       'lang' => $request->lang,
@@ -282,6 +279,8 @@ abstract class Controller
    */
   static public function preprocessingDataForFc2Template(Request $request, array $data):array
   {
+    $data['request'] = $request;
+
     // FC2のテンプレート用にデータを置き換える
     if (!empty($data['entry'])) {
       $data['entries'] = [$data['entry']];

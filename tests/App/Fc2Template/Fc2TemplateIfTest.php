@@ -352,9 +352,7 @@ class Fc2TemplateIfTest extends TestCase
     $android_ua = 'Mozilla/5.0 (Linux; Android 4.0.3; SC-02C Build/IML74K) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.58 Mobile Safari/537.31';
     $req = new Request('GET', '/', [], [], [], [], ['HTTP_USER_AGENT' => $android_ua]);
     $this->ifStateTester('android', 'ok', ['request' => $req]);
-
   }
-
 
   public function ifStateTester($tag, $expected, $env)
   {
@@ -397,5 +395,4 @@ class Fc2TemplateIfTest extends TestCase
 
     return $rtn;
   }
-
 }
