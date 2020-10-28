@@ -97,12 +97,6 @@ $config['SESSION_NAME'] = 'dojima';
 $config['COOKIE_DEFAULT_DOMAIN'] = ""; // JS用Cookie名 省略時、アクセスドメインとなります
 $config['COOKIE_EXPIRE'] = 180; // 有効期限 180日
 
-// URLの形式を書き換えるフラグ
-$config['URL_REWRITE'] = false;
-
-// ベースディレクトリ
-$config['BASE_DIRECTORY'] = '/';
-
 // directory indexファイル名
 $config['DIRECTORY_INDEX'] = 'index.php';
 
@@ -111,9 +105,6 @@ $config['ARGS_CONTROLLER'] = 'mode'; // TODO mode以外の状態が存在しな�
 
 // Action引数
 $config['ARGS_ACTION'] = 'process'; // TODO process以外の状態が存在しない
-
-// アプリプレフィックス(Controller,Viewのプレフィックス)
-$config['APP_PREFIX'] = null;
 
 // -------------------- アプリの定数系設定ファイル --------------------//
 

@@ -94,6 +94,7 @@ class InstallTest extends TestCase
       $this->assertFalse($d['is_all_ok']);
 
     } finally {
+      // 復元している
       Config::set('TEMP_DIR', $old_temp_dir);
       Config::set('WWW_UPLOAD_DIR', $old_www_upload_dir);
     }

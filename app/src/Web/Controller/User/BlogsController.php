@@ -20,7 +20,7 @@ class BlogsController extends UserController
     if (empty($blog)) {
       return $this->error404();
     }
-    $this->redirect($request, Config::get('BASE_DIRECTORY') . $blog['id'] . '/');
+    $this->redirect($request, $request->baseDirectory . $blog['id'] . '/');
     return "";
   }
 }

@@ -38,6 +38,8 @@ class Request
   public $shortControllerName = "Common";
   public $lang = "";
   public $deviceType="";
+  public $urlRewrite = true;
+  public $baseDirectory = "/";
 
   public function __construct(
     string $method = null,

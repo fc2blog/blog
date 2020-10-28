@@ -5,6 +5,8 @@
 
 namespace Fc2blog;
 
+use LogicException;
+
 class Config
 {
   private static $config = [];
@@ -39,9 +41,14 @@ class Config
   /**
    * @param string $key
    * @param $value
+   * @deprecated the method only use for testing.
+   * TODO 一部テストでつかわれているが、将来的に削除する
    */
   public static function set(string $key, $value)
   {
+    if(!defined("THIS_IS_TEST")){
+      throw new LogicException("Config::set is deprecated");
+    }
     self::_set($key, $value, self::$config);
   }
 

@@ -35,9 +35,8 @@ class Router
     }
 
     if (preg_match('|\A/admin/|u', $request->uri)) { // Admin routing
-      Config::set('URL_REWRITE', true);
-      Config::set('BASE_DIRECTORY', '/admin/');
-      Config::set('APP_PREFIX', 'Admin');
+      $request->urlRewrite = true;
+      $request->baseDirectory = '/admin/';
       $this->className = \Fc2blog\Web\Controller\Admin\CommonController::class; // default controller.
       $this->methodName = 'index'; // default method.
 
@@ -59,9 +58,8 @@ class Router
       }
 
     } elseif (preg_match('|\A/_for_unit_test_/|u', $request->uri)) { // Test routing
-      Config::set('URL_REWRITE', true);
-      Config::set('BASE_DIRECTORY', '/_for_unit_test_/');
-      Config::set('APP_PREFIX', 'Test');
+      $request->urlRewrite = true;
+      $request->baseDirectory = '/_for_unit_test_/';
       $this->className = \Fc2blog\Web\Controller\Test\CommonController::class; // default controller.
 
       // 管理用のパラメータを設定する
@@ -82,10 +80,8 @@ class Router
       }
 
     } else { // User Routing
-
-      Config::set('URL_REWRITE', false);
-      Config::set('BASE_DIRECTORY', '/');
-      Config::set('APP_PREFIX', 'User');
+      $request->urlRewrite = false;
+      $request->baseDirectory = '/';
       $this->className = BlogsController::class; // default controller.
 
       // ユーザー用のパラメータを設定する
