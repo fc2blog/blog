@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <header><h1 class="detail sh_heading_main_b">{{ _('Comment') }}<a href="#jamp1" class="btn_contents page_scroll touch">{{ _('Reply') }}</a></h1></header>
+    <header><h1 class="detail sh_heading_main_b">{{ _('Comment') }}<a href="#jump1" class="btn_contents page_scroll touch">{{ _('Reply') }}</a></h1></header>
 
     <h2><span class="h2_inner">{{ _('Details of comment') }}</span></h2>
     <p class="output_contents">
@@ -57,7 +57,7 @@
 
     {% if comment.open_status != comment_open_status_private %}
         <form method="POST" id="sys-comment-form" class="admin-form">
-            <h2 id="jamp1"><span class="h2_inner">{{ _('I will reply to comments') }}</span></h2>
+            <h2 id="jump1"><span class="h2_inner">{{ _('I will reply to comments') }}</span></h2>
             <div class="form_area">
                 {{ input(req, 'back_url', 'hidden', {'default': req.get('back_url')}) }}
                 <p class="form_contents">{{ input(req, 'comment[reply_body]', 'textarea', {'class': 'common_textarea'}) }}</p>
