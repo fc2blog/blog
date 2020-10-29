@@ -91,7 +91,7 @@ abstract class Controller
    */
   public function emit(): void
   {
-    if (isset($this->data['http_status_code']) && is_int(isset($this->data['http_status_code']))) {
+    if (isset($this->data['http_status_code']) && is_int($this->data['http_status_code'])) {
       http_response_code($this->data['http_status_code']);
     }
 
