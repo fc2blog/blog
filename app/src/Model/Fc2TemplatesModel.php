@@ -54,6 +54,9 @@ class Fc2TemplatesModel extends Model
     $pages['page'] = $page;
     $pages['is_next'] = $page < $pages['max_page'] - 1;
     $pages['is_prev'] = $page > 0;
+    $pager_range = 3;
+    $pages['start'] = max($pages['page'] - $pager_range, 0);
+    $pages['end'] = min($pages['page'] + $pager_range + 1, $pages['max_page']);
 
     $json['pages'] = $pages;
 
