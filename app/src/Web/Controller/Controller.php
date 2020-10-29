@@ -499,7 +499,7 @@ abstract class Controller
   // 404 NotFound Action
   public function error404()
   {
-    // TODO ステータスコードを付与
+    $this->data['http_status_code'] = 404;
     return 'Common/error404.php';
   }
 
