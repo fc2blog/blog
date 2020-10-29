@@ -39,6 +39,6 @@
     {% endif %}
 
     {% if paging.is_next %}
-        <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':paging.max_pate-1}, true) }}">&gt;&gt;</a></li>
+        <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':paging.max_page-1}, true) }}">&gt;&gt;</a></li>
     {% endif %}
 </ul>
