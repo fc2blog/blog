@@ -41,13 +41,12 @@ class Config
   /**
    * @param string $key
    * @param $value
-   * @deprecated the method only use for testing.
-   * TODO 一部テストでつかわれているが、将来的に削除する
+   * @deprecated can only be used for testing purposes
    */
   public static function set(string $key, $value)
   {
     if(!defined("THIS_IS_TEST")){
-      throw new LogicException("Config::set is deprecated");
+      throw new LogicException("Config::set can only be used for testing purposes");
     }
     self::_set($key, $value, self::$config);
   }
