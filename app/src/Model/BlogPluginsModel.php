@@ -40,7 +40,7 @@ class BlogPluginsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list = []): array
+  public function validate(array $data, ?array &$valid_data = [], array $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
@@ -103,7 +103,7 @@ class BlogPluginsModel extends Model
   /**
    * 文字方向の設定
    */
-  public static function getAttributeAlign()
+  public static function getAttributeAlign(): array
   {
     return array(
       'left' => __('Flush left'),
@@ -117,7 +117,7 @@ class BlogPluginsModel extends Model
    * @param bool $text
    * @return array
    */
-  public static function getAttributeColor($text = false)
+  public static function getAttributeColor($text = false): array
   {
     if ($text) {
       return array(
@@ -148,9 +148,9 @@ class BlogPluginsModel extends Model
   /**
    * FC2テンプレートの構文チェック
    * @param $value
-   * @return bool|string
+   * @return string
    */
-  public static function fc2PluginSyntax($value)
+  public static function fc2PluginSyntax($value): string
   {
     // フォルダが存在しない場合作成
     $plugin_path = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer(Session::get('blog_id')) . '/plugins/syntax.php';
@@ -180,7 +180,7 @@ class BlogPluginsModel extends Model
    * @param $device_type
    * @return array[]
    */
-  public function getCategoryPlugins($blog_id, $device_type)
+  public function getCategoryPlugins($blog_id, $device_type): array
   {
     $options = array(
       'where' => 'blog_id=? AND device_type=?',
@@ -263,9 +263,9 @@ class BlogPluginsModel extends Model
    * @param $blog_id
    * @param $device_type
    * @param $category
-   * @return int|mixed
+   * @return int
    */
-  public function getNextPluginOrder($blog_id, $device_type, $category)
+  public function getNextPluginOrder($blog_id, $device_type, $category): int
   {
     $plugin_order = $this->find('one', array(
       'fields' => 'plugin_order',
@@ -306,13 +306,13 @@ class BlogPluginsModel extends Model
 
   /**
    * テンプレートの更新
-   * @param $values
+   * @param array $values
    * @param $id
-   * @param $blog_id
+   * @param string $blog_id
    * @param array $options
    * @return bool
    */
-  public function updateByIdAndBlogId($values, $id, $blog_id, $options = array())
+  public function updateByIdAndBlogId(array $values, $id, string $blog_id, array $options = array()): bool
   {
     $values['updated_at'] = date('Y-m-d H:i:s');
     if (!parent::updateByIdAndBlogId($values, $id, $blog_id, $options)) {
@@ -327,12 +327,12 @@ class BlogPluginsModel extends Model
 
   /**
    * 表示方法の変更を行う
-   *  params => array([id=>display],...)の形式
-   * @param $params
-   * @param $blog_id
+   *  params => array([id=>display], ...)の形式
+   * @param array $params
+   * @param string $blog_id
    * @return bool
    */
-  public function updateDisplay($params, $blog_id)
+  public function updateDisplay(array $params, string $blog_id)
   {
     if (!count($params)) {
       return false;
@@ -363,11 +363,11 @@ class BlogPluginsModel extends Model
   /**
    * idとblog_idをキーとした削除 + ファイル削除も行う
    * @param $id
-   * @param $blog_id
+   * @param string $blog_id
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function deleteByIdAndBlogId($id, $blog_id, $options = array())
+  public function deleteByIdAndBlogId($id, string $blog_id, array $options = array())
   {
     // プラグインファイルの削除
     $plugin_file = App::getPluginFilePath($blog_id, $id);
@@ -378,13 +378,13 @@ class BlogPluginsModel extends Model
   }
 
   /**
-   * 並べ替え
+   * 並べ替えて更新
    *  [id] => array(order=>x, category=>x)の形
-   * @param $sort_values
-   * @param $device_type
-   * @param $blog_id
+   * @param array $sort_values
+   * @param string $device_type
+   * @param string $blog_id
    */
-  public function sort($sort_values, $device_type, $blog_id)
+  public function sort(array $sort_values, string $device_type, string $blog_id)
   {
     $blog_plugins = $this->find('all', array(
       'fields' => array('id, plugin_order, category'),
@@ -413,11 +413,11 @@ class BlogPluginsModel extends Model
 
   /**
    * テンプレートを作成
-   * @param $html
-   * @param $blog_id
+   * @param string $html
+   * @param string $blog_id
    * @param string $id
    */
-  public static function createPlugin($html, $blog_id, $id = 'preview')
+  public static function createPlugin(string $html, string $blog_id, string $id = 'preview'): void
   {
     // フォルダが存在しない場合作成
     $plugin_path = App::getPluginFilePath($blog_id, $id);

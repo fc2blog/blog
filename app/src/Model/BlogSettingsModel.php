@@ -87,7 +87,7 @@ class BlogSettingsModel extends Model
     );
   }
 
-  public static function getInstance()
+  public static function getInstance() :self
   {
     if (!self::$instance) {
       self::$instance = new BlogSettingsModel();
@@ -100,7 +100,7 @@ class BlogSettingsModel extends Model
     return 'blog_settings';
   }
 
-  public static function getCommentConfirmList()
+  public static function getCommentConfirmList() :array
   {
     return array(
       Config::get('COMMENT.COMMENT_CONFIRM.THROUGH') => __('Displayed as it is'),
@@ -108,7 +108,7 @@ class BlogSettingsModel extends Model
     );
   }
 
-  public static function getCommentDisplayApprovalList()
+  public static function getCommentDisplayApprovalList() :array
   {
     return array(
       Config::get('COMMENT.COMMENT_DISPLAY.SHOW') => __('View "This comment is awaiting moderation" and'),
@@ -116,7 +116,7 @@ class BlogSettingsModel extends Model
     );
   }
 
-  public static function getCommentDisplayPrivateList()
+  public static function getCommentDisplayPrivateList() :array
   {
     return array(
       Config::get('COMMENT.COMMENT_DISPLAY.SHOW') => __('Display'),
@@ -124,7 +124,7 @@ class BlogSettingsModel extends Model
     );
   }
 
-  public static function getCommentCookieSaveList()
+  public static function getCommentCookieSaveList() :array
   {
     return array(
       Config::get('COMMENT.COMMENT_COOKIE_SAVE.NOT_SAVE') => __('Not save'),
@@ -132,7 +132,7 @@ class BlogSettingsModel extends Model
     );
   }
 
-  public static function getCommentCaptchaList()
+  public static function getCommentCaptchaList() :array
   {
     return array(
       Config::get('COMMENT.COMMENT_CAPTCHA.NOT_USE') => __('Do not use'),
@@ -140,7 +140,7 @@ class BlogSettingsModel extends Model
     );
   }
 
-  public static function getCommentOrderList()
+  public static function getCommentOrderList() :array
   {
     return array(
       Config::get('COMMENT.ORDER.ASC') => __('Oldest First'),
@@ -148,7 +148,7 @@ class BlogSettingsModel extends Model
     );
   }
 
-  public static function getCommentQuoteList()
+  public static function getCommentQuoteList() :array
   {
     return array(
       Config::get('COMMENT.QUOTE.USE') => __('Quote'),
@@ -156,7 +156,7 @@ class BlogSettingsModel extends Model
     );
   }
 
-  public static function getEntryOrderList()
+  public static function getEntryOrderList() :array
   {
     return array(
       Config::get('ENTRY.ORDER.DESC') => __('Latest order'),
@@ -164,7 +164,7 @@ class BlogSettingsModel extends Model
     );
   }
 
-  public static function getStartPageList()
+  public static function getStartPageList() :array
   {
     return array(
       Config::get('BLOG.START_PAGE.NOTICE') => __('Notice'),
@@ -174,11 +174,11 @@ class BlogSettingsModel extends Model
 
   /**
    * 主キーをキーにしてデータを取得
-   * @param $blog_id
+   * @param string $blog_id
    * @param array $options
    * @return mixed
    */
-  public function findByBlogId($blog_id, $options = array())
+  public function findByBlogId(string $blog_id, $options = array())
   {
     $options['where'] = isset($options['where']) ? 'blog_id=? AND ' . $options['where'] : 'blog_id=?';
     $options['params'] = isset($options['params']) ? array_merge(array($blog_id), $options['params']) : array($blog_id);
@@ -188,26 +188,26 @@ class BlogSettingsModel extends Model
 
   /**
    * idをキーとした更新
-   * @param $values
-   * @param $blog_id
+   * @param array $values
+   * @param string $blog_id
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function updateByBlogId($values, $blog_id, $options = array())
+  public function updateByBlogId(array $values, string $blog_id, array $options = [])
   {
     return $this->update($values, 'blog_id=?', array($blog_id), $options);
   }
 
   /**
    * コメント返信の表示タイプ更新
-   * @param $device_type
-   * @param $reply_type
-   * @param $blog_id
+   * @param string $device_type
+   * @param string $reply_type
+   * @param string $blog_id
    * @return array|false|int|mixed
    */
-  public function updateReplyType($device_type, $reply_type, $blog_id)
+  public function updateReplyType(string $device_type, string $reply_type, string $blog_id)
   {
-    $values = array();
+    $values = [];
     $values[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $device_type)] = $reply_type;
     return $this->updateByBlogId($values, $blog_id);
   }

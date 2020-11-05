@@ -114,7 +114,7 @@ class CommentsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function registerValidate($data, &$valid_data, $white_list = array())
+  public function registerValidate($data, &$valid_data=[], $white_list = array())
   {
     // Validateの設定
     $this->setValidate();
@@ -129,7 +129,7 @@ class CommentsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function replyValidate($data, &$valid_data, $white_list = array())
+  public function replyValidate($data, &$valid_data=[], $white_list = array())
   {
     // Validateの設定
     $this->setValidate();
@@ -145,7 +145,7 @@ class CommentsModel extends Model
    * @param $comment
    * @return array
    */
-  public function editValidate($data, &$valid_data, $white_list, $comment)
+  public function editValidate($data, &$valid_data=[], $white_list, $comment)
   {
     // Validateの設定
     $this->setValidate();

@@ -58,7 +58,7 @@ class UsersModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function registerValidate($data, &$valid_data, $white_list=array())
+  public function registerValidate(array $data, ?array &$valid_data=[], $white_list=[])
   {
     // Validateの設定
     $this->setValidate($white_list);
@@ -83,7 +83,7 @@ class UsersModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function updateValidate($data, &$valid_data, $white_list=array())
+  public function updateValidate(array $data, ?array &$valid_data=[], $white_list=[])
   {
     // Validateの設定
     $this->setValidate($white_list);
@@ -116,7 +116,7 @@ class UsersModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function loginValidate($data, &$valid_data, $white_list=array())
+  public function loginValidate(array $data, ?array &$valid_data=[], $white_list=[])
   {
     // Validateの設定
     $this->setValidate($white_list);

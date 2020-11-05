@@ -11,7 +11,7 @@ class Fc2TemplatesModel extends Model
 
   public static $instance = null;
 
-  public static function getInstance()
+  public static function getInstance(): self
   {
     if (!self::$instance) {
       self::$instance = new Fc2TemplatesModel();
@@ -27,10 +27,10 @@ class Fc2TemplatesModel extends Model
   /**
    * テンプレートを検索する
    * TODO:後で取得できなかった場合などの例外処理を入れる
-   * @param $condition
+   * @param array $condition
    * @return mixed
    */
-  public function getListAndPaging($condition)
+  public function getListAndPaging(array $condition)
   {
     $url = 'https://admin.blog.fc2.com/oss_api.php?action=template_search';
     $url .= '&page=' . $condition['page'];
@@ -63,11 +63,11 @@ class Fc2TemplatesModel extends Model
   /**
    * 単一テンプレートを取得する
    * TODO:後で取得できなかった場合などの例外処理を入れる
-   * @param $id
-   * @param $device
+   * @param string $id
+   * @param string $device
    * @return mixed
    */
-  public function findByIdAndDevice($id, $device)
+  public function findByIdAndDevice(string $id, string $device)
   {
     $url = 'https://admin.blog.fc2.com/oss_api.php?action=template_view&id=' . $id . '&device=' . $device;
 

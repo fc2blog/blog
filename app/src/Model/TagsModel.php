@@ -36,7 +36,7 @@ class TagsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list = []): array
+  public function validate(array $data, ?array &$valid_data=[], array $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(

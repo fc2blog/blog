@@ -13,7 +13,7 @@ class CategoriesModel extends Model
   {
   }
 
-  public static function getInstance()
+  public static function getInstance(): self
   {
     if (!self::$instance) {
       self::$instance = new CategoriesModel();
@@ -33,12 +33,12 @@ class CategoriesModel extends Model
 
   /**
    * バリデート処理
-   * @param $data
-   * @param $valid_data
+   * @param array $data
+   * @param ?array $valid_data
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list = []): array
+  public function validate(array $data, ?array &$valid_data = [], array $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(

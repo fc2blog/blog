@@ -12,7 +12,7 @@ interface DBInterface
   const RESULT_ROW = 'row';                // １行のみ取得
   const RESULT_LIST = 'list';              // リスト形式で取得
   const RESULT_ALL = 'all';                // 全て取得
-  const RESULT_STAT = 'statment';          // 結果ステートメントを返却する
+  const RESULT_STAT = 'statement';          // 結果ステートメントを返却する
   const RESULT_INSERT_ID = 'insert_id';    // AUTO_INCREMENTの値を返却
   const RESULT_AFFECTED = 'affected';      // 変更のあった行数を返却
   const RESULT_SUCCESS = 'success';        // SQLの実行結果が成功かどうかを返却

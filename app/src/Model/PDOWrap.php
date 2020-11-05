@@ -42,7 +42,7 @@ class PDOWrap implements DBInterface
   {
     $_options = array(
       'types' => '',                  // paramsの型設定(sdi)
-      'result' => \Fc2blog\Model\DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statment...
+      'result' => \Fc2blog\Model\DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statement...
     );
     $options = array_merge($_options, $options);
     try {
@@ -68,7 +68,7 @@ class PDOWrap implements DBInterface
   {
     $_options = array(
       'types' => '',                      // paramsの型設定(sdi)
-      'result' => \Fc2blog\Model\DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statment...
+      'result' => \Fc2blog\Model\DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statement...
     );
     $options = array_merge($_options, $options);
     try {
