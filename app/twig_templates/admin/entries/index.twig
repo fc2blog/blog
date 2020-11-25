@@ -65,7 +65,7 @@
                         {% endif %}
                     </td>
                     <td class="center s_cell">
-                        <a href="{{ url(req, 'entries', 'delete', {'id':entry.id, 'sig':sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">
+                        <a href="#" onclick="delete_single_entry({{ entry.id }}); return false;">
                             {{ _('Delete') }}
                         </a>
                     </td>
@@ -79,6 +79,23 @@
         <input type="hidden" name="sig" value="{{ sig }}"/>
         <input type="button" id="sys-entries-delete-button" value="{{ _('Remove what you have selected') }}" onclick="if(confirm('{{ _('Are you sure you want to delete?') }}')) $('#sys-list-form').submit();" disabled="disabled"/>
     </form>
+
+    <form method="POST" id="entry-delete-form">
+        <input type="hidden" name="mode" value="entries"/>
+        <input type="hidden" name="process" value="delete"/>
+        <input type="hidden" name="id" value=""/>
+        <input type="hidden" name="sig" value="{{ sig }}"/>
+    </form>
+    <script>
+        function delete_single_entry(entry_id) {
+            if (!confirm('{{ _('Are you sure you want to delete?') }}')) {
+                return;
+            }
+            $('#entry-delete-form input[name="id"]').val(entry_id);
+            $('#entry-delete-form').submit();
+            $('#entry-delete-form input[name="id"]').val("");
+        }
+    </script>
 
     {% include('admin/common/paging.twig') %}
 
