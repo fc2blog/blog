@@ -40,7 +40,7 @@ class BlogTemplatesModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list = []): array
+  public function validate(array $data, ?array &$valid_data=[], array $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
@@ -75,7 +75,7 @@ class BlogTemplatesModel extends Model
   {
     if (defined("THIS_IS_TEST")) {
       // テンプレート検証用にテンポラリディレクトリが必要だが、テストやCLIでSessionを汚染したくないので
-      $blog_id = "unittestorcliexecute";
+      $blog_id = "unitTestOrCliExecute";
     } else {
       $blog_id = Session::get('blog_id');
     }

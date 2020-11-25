@@ -33,18 +33,17 @@ abstract class Model implements ModelInterface
 
   public function close(): void
   {
-    $db = $this->getDB();
-    $db->close();
+    $this->getDB()->close();
   }
 
   /**
    * 入力チェック処理
    * @param array $data 入力データ
-   * @param array &$valid_data 入力チェック後の返却データ
+   * @param ?array &$valid_data 入力チェック後の返却データ
    * @param array $white_list 入力のチェック許可リスト
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list = []): array
+  public function validate(array $data, ?array &$valid_data=[], array $white_list = []): array
   {
     $errors = [];
     $valid_data = [];
@@ -81,6 +80,7 @@ abstract class Model implements ModelInterface
    * Modelをロードする(getInstance)
    * @param string $model
    * @return mixed
+   * @deprecated
    */
   public static function load(string $model)
   {
@@ -97,7 +97,7 @@ abstract class Model implements ModelInterface
    * @param $str
    * @return string
    */
-  public static function escape_wildcard($str): string
+  public static function escape_wildcard(string $str): string
   {
     return addcslashes($str, self::LIKE_WILDCARD);
   }
@@ -105,10 +105,10 @@ abstract class Model implements ModelInterface
 
   /**
    * 配列内が全て数値型かチェック
-   * @param $array
+   * @param array $array
    * @return bool
    */
-  public function is_numeric_array($array): bool
+  public function is_numeric_array(array $array): bool
   {
     // 配列チェック
     if (!is_array($array)) {
@@ -128,11 +128,11 @@ abstract class Model implements ModelInterface
   }
 
   /**
-   * @param $type
+   * @param string $type
    * @param array $options
    * @return array|false
    */
-  public function find($type, $options = [])
+  public function find(string $type, array $options = [])
   {
     if (!isset($options['options'])) {
       $options['options'] = [];
@@ -160,7 +160,7 @@ abstract class Model implements ModelInterface
       case 'all':
         $options['options']['result'] = DBInterface::RESULT_ALL;
         break;
-      case 'statment':
+      case 'statement':
       default:
         $options['options']['result'] = DBInterface::RESULT_STAT;
         break;
@@ -202,11 +202,11 @@ abstract class Model implements ModelInterface
 
   /**
    * 主キーをキーにしてデータを取得
-   * @param $id
+   * @param int|string|null $id
    * @param array $options
    * @return array|false
    */
-  public function findById($id, $options = [])
+  public function findById($id, array $options = [])
   {
     if (empty($id)) {
       return [];
@@ -220,10 +220,10 @@ abstract class Model implements ModelInterface
    * idとblog_idの複合キーからデータを取得
    * @param int|string|null $id
    * @param string|null $blog_id
-   * @param array|null $options
+   * @param array $options
    * @return array|false
    */
-  public function findByIdAndBlogId($id, ?string $blog_id, $options = [])
+  public function findByIdAndBlogId($id, ?string $blog_id, array $options = [])
   {
     if (empty($id) || empty($blog_id)) {
       return [];
@@ -236,11 +236,11 @@ abstract class Model implements ModelInterface
   /**
    * idとuser_idのキーからデータを取得
    * @param $id
-   * @param $user_id
+   * @param int $user_id
    * @param array $options
    * @return array|false
    */
-  public function findByIdAndUserId($id, $user_id, $options = [])
+  public function findByIdAndUserId($id, int $user_id, array $options = [])
   {
     if (empty($id) || empty($user_id)) {
       return [];
@@ -255,7 +255,7 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return bool
    */
-  public function isExist($options = []): bool
+  public function isExist(array $options = []): bool
   {
     return !!$this->find('row', $options);
   }
@@ -265,7 +265,7 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return array
    */
-  public function getPaging($options = []): array
+  public function getPaging(array $options = []): array
   {
     if (!isset($options['page']) || !isset($options['limit'])) {
       Log::error('getPaging options["page"] or options["limit"]が設定されておりません');
@@ -275,9 +275,6 @@ abstract class Model implements ModelInterface
     $page = $options['page'];
     $limit = $options['limit'];
 
-//    $options['fields'] = 'COUNT(*)';
-//    unset($options['page'], $options['offset'], $options['order']);    // countにpage,offset,orderは必要ないのでunset
-//    $count = $this->find('one', $options);
     $count = $this->getFoundRows();
 
     $pages = [];
@@ -323,7 +320,7 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return array|false
    */
-  public function findSql(string $sql, $params = [], $options = [])
+  public function findSql(string $sql, array $params = [], array $options = [])
   {
     return $this->getDB()->find($sql, $params, $options);
   }
@@ -342,6 +339,8 @@ abstract class Model implements ModelInterface
     $compositeKey = $this->getAutoIncrementCompositeKey();
     if ($compositeKey && empty($values['id']) && !empty($values[$compositeKey])) {
       // 複合キーのauto_increment対応
+      /** @noinspection SqlResolve */
+      /** @noinspection SqlInsertValues */
       $sql = 'INSERT INTO ' . $tableName . ' (id, ' . implode(',', array_keys($values)) . ') '
         . 'VALUES ((SELECT LAST_INSERT_ID(COALESCE(MAX(id), 0)+1) FROM ' . $tableName . ' as auto_increment_temp '
         . 'WHERE ' . $compositeKey . '=?), ' . implode(',', array_fill(0, count($values), '?')) . ')';
@@ -360,15 +359,15 @@ abstract class Model implements ModelInterface
   }
 
   /**
-   * @param $values
-   * @param $where
+   * @param array $values
+   * @param string $where
    * @param array $params
    * @param array $options
    * @return false|int 失敗時:false, 成功時:1
    */
-  public function update($values, $where, $params = [], $options = [])
+  public function update(array $values, string $where, array $params = [], array $options = [])
   {
-    if (!count($values)) {
+    if (count($values)===0) {
       return 0;
     }
     $sets = [];
@@ -384,28 +383,28 @@ abstract class Model implements ModelInterface
 
   /**
    * idをキーとした更新
-   * @param $values
+   * @param array $values
    * @param $id
    * @param array $options
    * @return false|int 失敗時:false, 成功時:1
    */
-  public function updateById($values, $id, $options = [])
+  public function updateById(array $values, $id, array $options = [])
   {
-    return $this->update($values, 'id=?', array($id), $options);
+    return $this->update($values, 'id=?', [$id], $options);
   }
 
 
   /**
    * idとblog_idをキーとした更新
-   * @param $values
+   * @param array $values
    * @param $id
-   * @param $blog_id
+   * @param string $blog_id
    * @param array $options
-   * @return false|int 失敗時False、成功時1
+   * @return false|int 失敗時 False 、成功時1
    */
-  public function updateByIdAndBlogId($values, $id, $blog_id, $options = [])
+  public function updateByIdAndBlogId(array $values, $id, string $blog_id, array $options = [])
   {
-    return $this->update($values, 'id=? AND blog_id=?', array($id, $blog_id), $options);
+    return $this->update($values, 'id=? AND blog_id=?', [$id, $blog_id], $options);
   }
 
 
@@ -428,33 +427,33 @@ abstract class Model implements ModelInterface
    * @param array $options
    * @return false|int 失敗時:false, 成功時:1
    */
-  public function deleteById($id, $options = [])
+  public function deleteById($id, array $options = [])
   {
-    return $this->delete('id=?', array($id), $options);
+    return $this->delete('id=?', [$id], $options);
   }
 
   /**
    * idとblog_idをキーとした削除
    * @param $id
-   * @param $blog_id
+   * @param string $blog_id
    * @param array $options
    * @return false|int 失敗時:false, 成功時:1
    */
-  public function deleteByIdAndBlogId($id, $blog_id, array $options = [])
+  public function deleteByIdAndBlogId($id, string $blog_id, array $options = [])
   {
-    return $this->delete('blog_id=? AND id=?', array($blog_id, $id), $options);
+    return $this->delete('blog_id=? AND id=?', [$blog_id, $id], $options);
   }
 
   /**
    * idとuser_idをキーとした削除
    * @param $id
-   * @param $user_id
+   * @param int $user_id
    * @param array $options
    * @return false|int 失敗時:false, 成功時:1
    */
-  public function deleteByIdAndUserId($id, $user_id, array $options = [])
+  public function deleteByIdAndUserId($id, int $user_id, array $options = [])
   {
-    return $this->delete('id=? AND user_id=?', array($id, $user_id), $options);
+    return $this->delete('id=? AND user_id=?', [$id, $user_id], $options);
   }
 
   /**
@@ -468,11 +467,11 @@ abstract class Model implements ModelInterface
   {
     $sql = 'INSERT INTO ' . $this->getTableName() . ' (' . implode(',', $columns) . ') VALUES ';
     $len = count($params) / count($columns);
-    $sqls = [];
+    $sql_array = [];
     for ($i = 0; $i < $len; $i++) {
-      $sqls[] = '(' . implode(',', array_fill(0, count($columns), '?')) . ')';
+      $sql_array[] = '(' . implode(',', array_fill(0, count($columns), '?')) . ')';
     }
-    $sql .= implode(',', $sqls);
+    $sql .= implode(',', $sql_array);
     $options['result'] = DBInterface::RESULT_INSERT_ID;
     return $this->executeSql($sql, $params, $options);
   }
@@ -576,12 +575,14 @@ abstract class Model implements ModelInterface
     if ($where != "") {
       $where .= ' AND ';
     }
+    /** @noinspection SqlResolve */
+    /** @noinspection SqlCaseVsIf */
     $updateSql = <<<SQL
-UPDATE {$table} SET
- lft = CASE WHEN lft > {$right} THEN lft + 2 ELSE lft END,
- rgt = CASE WHEN rgt >= {$right} THEN rgt + 2 ELSE rgt END
- WHERE $where rgt >= {$right}
-SQL;
+      UPDATE {$table} SET
+       lft = CASE WHEN lft > {$right} THEN lft + 2 ELSE lft END,
+       rgt = CASE WHEN rgt >= {$right} THEN rgt + 2 ELSE rgt END
+      WHERE $where rgt >= {$right}
+    SQL;
     if (!$this->executeSql($updateSql, $params)) {
       return false;
     }
@@ -601,7 +602,7 @@ SQL;
    * @param array $options
    * @return false|int
    */
-  public function updateNodeById(array $data, string $id, string $where = '', array $params = [], $options = [])
+  public function updateNodeById(array $data, string $id, string $where = '', array $params = [], array $options = [])
   {
     $idWhere = $where ? 'id=? AND ' . $where : 'id=?';
 
@@ -647,39 +648,41 @@ SQL;
     if ($self_rgt > $parent_rgt) {
       // 自身を左へ移動
       $move = $parent_rgt - $self_lft;
+      /** @noinspection SqlResolve */
       $sql = <<<SQL
-UPDATE $table SET
-lft = CASE WHEN lft > $parent_rgt AND lft < $self_lft
-          THEN lft + $space
-         WHEN lft >= $self_lft AND lft < $self_rgt
-           THEN lft + $move
-         ELSE lft END,
-rgt = CASE WHEN rgt >= $parent_rgt AND rgt < $self_lft
-          THEN rgt + $space
-         WHEN rgt > $self_lft AND rgt <= $self_rgt
-           THEN rgt + $move
-         ELSE rgt END
-WHERE $where
-  rgt >= $parent_rgt AND lft < $self_rgt
-SQL;
+      UPDATE $table SET
+      lft = CASE WHEN lft > $parent_rgt AND lft < $self_lft
+                   THEN lft + $space
+                 WHEN lft >= $self_lft AND lft < $self_rgt
+                   THEN lft + $move
+                 ELSE lft END,
+      rgt = CASE WHEN rgt >= $parent_rgt AND rgt < $self_lft
+                   THEN rgt + $space
+                 WHEN rgt > $self_lft AND rgt <= $self_rgt
+                   THEN rgt + $move
+                 ELSE rgt END
+      WHERE $where
+        rgt >= $parent_rgt AND lft < $self_rgt
+      SQL;
     } else {
       // 自身を右へ移動
       $move = $parent_rgt - $self_rgt - 1;
+      /** @noinspection SqlResolve */
       $sql = <<<SQL
-UPDATE $table SET
-lft = CASE WHEN lft > $self_rgt AND lft < $parent_rgt
-          THEN lft - $space
-         WHEN lft >= $self_lft AND lft < $self_rgt
-           THEN lft + $move
-         ELSE lft END,
-rgt = CASE WHEN rgt > $self_rgt AND rgt < $parent_rgt
-          THEN rgt - $space
-         WHEN rgt > $self_lft AND rgt <= $self_rgt
-           THEN rgt + $move
-         ELSE rgt END
-WHERE $where
-  rgt > $self_lft AND lft < $parent_rgt
-SQL;
+      UPDATE $table SET
+      lft = CASE WHEN lft > $self_rgt AND lft < $parent_rgt
+                   THEN lft - $space
+                 WHEN lft >= $self_lft AND lft < $self_rgt
+                   THEN lft + $move
+                 ELSE lft END,
+      rgt = CASE WHEN rgt > $self_rgt AND rgt < $parent_rgt
+                   THEN rgt - $space
+                 WHEN rgt > $self_lft AND rgt <= $self_rgt
+                   THEN rgt + $move
+                 ELSE rgt END
+      WHERE $where
+        rgt > $self_lft AND lft < $parent_rgt
+      SQL;
     }
 
     // 親の位置変更処理
@@ -724,17 +727,19 @@ SQL;
     }
 
     // 詰める処理
+    /** @noinspection SqlResolve */
+    /** @noinspection SqlCaseVsIf */
     $sql = <<<SQL
-UPDATE $table SET
-lft = CASE WHEN lft > $self_rgt
-          THEN lft - $space
-         ELSE lft END,
-rgt = CASE WHEN rgt > $self_rgt
-          THEN rgt - $space
-         ELSE rgt END
-WHERE $where
-  rgt > $self_rgt
-SQL;
+    UPDATE $table SET
+    lft = CASE WHEN lft > $self_rgt
+                THEN lft - $space
+               ELSE lft END,
+    rgt = CASE WHEN rgt > $self_rgt
+                THEN rgt - $space
+               ELSE rgt END
+    WHERE $where
+      rgt > $self_rgt
+    SQL;
     return $this->executeSql($sql, $params, $options);
   }
 }

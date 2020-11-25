@@ -51,10 +51,10 @@ class BlogsModel extends Model
 
   /**
    * ディレクトリとして使用済みかどうか
-   * @param $value
+   * @param string $value
    * @return bool|string
    */
-  public static function useDirectory($value)
+  public static function useDirectory(string $value)
   {
     if (is_dir(Config::get('WWW_DIR') . $value)) {
       return __('Is already in use');
@@ -69,7 +69,7 @@ class BlogsModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate($data, &$valid_data, $white_list = []): array
+  public function validate(array $data, ?array &$valid_data = [], array $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
@@ -134,8 +134,9 @@ class BlogsModel extends Model
 
   /**
    * ブログの公開状態のリストを取得
+   * @return array
    */
-  public static function getOpenStatusList()
+  public static function getOpenStatusList(): array
   {
     return array(
       Config::get('BLOG.OPEN_STATUS.PUBLIC') => __('Public'),
@@ -145,8 +146,9 @@ class BlogsModel extends Model
 
   /**
    * タイムゾーン一覧
+   * @return array
    */
-  public static function getTimezoneList()
+  public static function getTimezoneList(): array
   {
     $timezone_identifiers = DateTimeZone::listIdentifiers();
     $timezone = array();
@@ -168,6 +170,7 @@ class BlogsModel extends Model
 
   /**
    * ブログのSSL 有効、無効
+   * @return array
    */
   public static function getSSLEnableSettingList(): array
   {
@@ -179,6 +182,7 @@ class BlogsModel extends Model
 
   /**
    * フルURLでリダイレクト時のステータスコード
+   * @return array
    */
   public static function getRedirectStatusCodeSettingList(): array
   {
@@ -193,7 +197,7 @@ class BlogsModel extends Model
    * @param $blog
    * @return array
    */
-  public static function getTemplateIds($blog)
+  public static function getTemplateIds($blog): array
   {
     $columns = Config::get('BLOG_TEMPLATE_COLUMN');
     return [
@@ -224,7 +228,7 @@ class BlogsModel extends Model
    * @param array $options
    * @return mixed
    */
-  public function findByIdAndUserId($blog_id, $user_id, $options = []): array
+  public function findByIdAndUserId($blog_id, $user_id, array $options = []): array
   {
     $options['where'] = isset($options['where']) ? 'id=? AND user_id=? AND ' . $options['where'] : 'id=? AND user_id=?';
     $options['params'] = isset($options['params']) ? array_merge(array($blog_id, $user_id), $options['params']) : array($blog_id, $user_id);
@@ -282,10 +286,10 @@ class BlogsModel extends Model
 
   /**
    * ユーザーIDをキーにブログのリストを取得
-   * @param $user_id
+   * @param string $user_id
    * @return mixed
    */
-  public function getListByUserId($user_id)
+  public function getListByUserId(string $user_id)
   {
     return $this->find('list', array(
       'fields' => array('id', 'name'),
@@ -296,11 +300,11 @@ class BlogsModel extends Model
 
   /**
    * ユーザーが対象のブログIDを所持しているかチェック
-   * @param $user_id
-   * @param $blog_id
+   * @param string $user_id
+   * @param string $blog_id
    * @return bool
    */
-  public function isUserHaveBlogId($user_id, $blog_id): bool
+  public function isUserHaveBlogId(string $user_id, string $blog_id): bool
   {
     return $this->isExist([
       'fields' => 'id',
@@ -317,7 +321,7 @@ class BlogsModel extends Model
    * @param array $options
    * @return false|string falseは登録失敗
    */
-  public function insert($data, $options = [])
+  public function insert(array $data, array $options = [])
   {
     // 主キーがauto_incrementじゃないのでreturn値の受け取り方を変更
     $data['created_at'] = $data['updated_at'] = date('Y-m-d H:i:s');
@@ -374,7 +378,11 @@ class BlogsModel extends Model
     return $id;
   }
 
-  public function resetToDefaultTemplateByBlogId(string $blog_id)
+  /**
+   * 指定のblogを初期テンプレートにリセット
+   * @param string $blog_id
+   */
+  public function resetToDefaultTemplateByBlogId(string $blog_id): void
   {
     $blogs_model = new BlogsModel();
     $blog = $blogs_model->findById($blog_id);
@@ -461,12 +469,12 @@ class BlogsModel extends Model
 
   /**
    * idをキーとした更新
-   * @param $values
+   * @param array $values
    * @param $id
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function updateById($values, $id, $options = array())
+  public function updateById(array $values, $id, array $options = array())
   {
     $values['updated_at'] = date('Y-m-d H:i:s');
     return parent::updateById($values, $id, $options);
@@ -485,11 +493,11 @@ class BlogsModel extends Model
 
   /**
    * テンプレートの切り替え
-   * @param $blog_template
-   * @param $blog_id
+   * @param array $blog_template
+   * @param string $blog_id
    * @return array|false|int|mixed
    */
-  public function switchTemplate($blog_template, $blog_id)
+  public function switchTemplate(array $blog_template, string $blog_id)
   {
     $device_type = $blog_template['device_type'];
 
@@ -519,23 +527,31 @@ class BlogsModel extends Model
 
   /**
    * ブログの削除処理
-   * @param $blog_id
-   * @param $user_id
+   * @param string $blog_id
+   * @param int $user_id
    * @param array $options
    * @return bool|int
    */
-  public function deleteByIdAndUserId($blog_id, $user_id, $options = array())
+  public function deleteByIdAndUserId($blog_id, int $user_id, $options = array())
   {
     if (!parent::deleteById($blog_id, array('where' => 'user_id=?', 'params' => array($user_id)))) {
       return 0;
     }
 
     // ブログに関連するレコード全て削除
-    $tables = array(
-      'entries', 'entry_tags', 'tags', 'entry_categories', 'categories', 'comments',
-      'files', 'blog_settings', 'blog_templates'
-    );
+    $tables = [
+      'entries',
+      'entry_tags',
+      'tags',
+      'entry_categories',
+      'categories',
+      'comments',
+      'files',
+      'blog_settings',
+      'blog_templates'
+    ];
     foreach ($tables as $table) {
+      /** @noinspection SqlResolve */
       $sql = 'DELETE FROM ' . $table . ' WHERE blog_id=?';
       $this->executeSql($sql, array($blog_id));
     }
@@ -606,10 +622,10 @@ class BlogsModel extends Model
   /**
    * Blog Idをキーとして、そのブログの`http(s)://FQDN(:port)`を生成する
    * @param string $blog_id
-   * @param null $domain 省略時、\Fc2blog\Config::get("DOMAIN")
+   * @param ?string $domain 省略時、\Fc2blog\Config::get("DOMAIN")
    * @return string
    */
-  static public function getFullHostUrlByBlogId(string $blog_id, $domain = null)
+  static public function getFullHostUrlByBlogId(string $blog_id, ?string $domain = null): string
   {
     $schema = static::getSchemaByBlogId($blog_id);
     if (is_null($domain)) {
@@ -624,7 +640,7 @@ class BlogsModel extends Model
    * @param string $blog_id
    * @return string
    */
-  static public function getSchemaByBlogId(string $blog_id)
+  static public function getSchemaByBlogId(string $blog_id): string
   {
     if (!static::isValidBlogId($blog_id)) throw new InvalidArgumentException("invalid blog id :{$blog_id}");
     $blogs_model = static::getInstance();
@@ -642,7 +658,7 @@ class BlogsModel extends Model
    * @param int $value
    * @return string
    */
-  static public function getSchemaBySslEnableValue(int $value)
+  static public function getSchemaBySslEnableValue(int $value): string
   {
     return ($value === Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http:' : 'https:';
   }

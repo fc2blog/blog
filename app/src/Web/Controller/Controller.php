@@ -128,11 +128,11 @@ abstract class Controller
   /**
    * リダイレクト
    * MEMO: Blog idが特定できないときの強制的なSchemaがさだまらない
-   * TODO: この時点でリダイレクトせず、emit時にヘッダー送信する形にリファクタリングすべき
+   * TODO: この時点でリダイレクトせず、 emit時にヘッダー送信する形にリファクタリングすべき
    * @param Request $request
    * @param $url
    * @param string $hash
-   * @param bool $full_url BlogIdが特定できるとき、http(s)://〜からのフルURLを出力する、HTTP<>HTTPS強制リダイレクト時に必要
+   * @param bool $full_url BlogIdが特定できるとき、http(s)://〜からのフルURLを出力する、 HTTP<>HTTPS強制リダイレクト時に必要
    * @param string|null $blog_id
    * @throws RedirectExit
    */

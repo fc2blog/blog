@@ -118,8 +118,8 @@ class Html
     }
 
     // Requestから取得する用のname
-    $rname = str_replace(array('[', ']'), array('.', ''), $name);
-    $rvalue = $request->get($rname, $default);
+    $r_name = str_replace(array('[', ']'), array('.', ''), $name);
+    $rvalue = $request->get($r_name, $default);
 
     // 属性作成
     $attrs['name'] = ($type == 'checkbox' && count($options)) ? $name . '[]' : $name;
@@ -206,8 +206,8 @@ class Html
         $label_attr = isset($option_attrs['label']) ? ' ' . $option_attrs['label'] : '';
         foreach ($options as $key => $option) {
           $html .= '<li' . $li_attr . '>';
-          $html .= '<input type="radio" value="' . $key . '" ' . ($key == $rvalue ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
-          $html .= ' <label for="' . $labelKey . $key . '"' . $label_attr . '>' . $option . '</label>';
+          $html .= '  <input type="radio" value="' . $key . '" ' . ($key == $rvalue ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
+          $html .= '  <label for="' . $labelKey . $key . '"' . $label_attr . '>' . $option . '</label>';
           $html .= '</li>';
         }
         $html .= '</ul>';

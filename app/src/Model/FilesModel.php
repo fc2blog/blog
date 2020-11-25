@@ -158,7 +158,7 @@ class FilesModel extends Model
   }
 
   /**
-   * blogidと複数IDをキーとした削除
+   * blog_idと複数IDをキーとした削除
    * @param array $ids
    * @param $blog_id
    * @return bool

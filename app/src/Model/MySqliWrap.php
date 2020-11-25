@@ -36,7 +36,7 @@ class MySqliWrap implements DBInterface{
   public function find(string $sql, array $params=[], array $options=[]){
     $_options = array(
       'types'  => '',                  // paramsの型設定(sdi)
-      'result' => \Fc2blog\Model\DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statment...
+      'result' => \Fc2blog\Model\DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statement...
     );
     $options = array_merge($_options, $options);
     try{
@@ -60,7 +60,7 @@ class MySqliWrap implements DBInterface{
   public function execute(string $sql, array $params=[], array $options=[]){
     $_options = array(
       'types' => '',                      // paramsの型設定(sdi)
-      'result' => \Fc2blog\Model\DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statment...
+      'result' => \Fc2blog\Model\DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statement...
     );
     $options = array_merge($_options, $options);
     try{
@@ -198,7 +198,7 @@ class MySqliWrap implements DBInterface{
         $one = null;
         switch (get_class($stmt)) {
           case 'mysqli_stmt':
-            $one = $this->fetchStatment($stmt, 'one');
+            $one = $this->fetchstatement($stmt, 'one');
             $stmt->close();
             break;
 
@@ -216,7 +216,7 @@ class MySqliWrap implements DBInterface{
         $row = array();
         switch (get_class($stmt)) {
           case 'mysqli_stmt':
-            $row = $this->fetchStatment($stmt, 'row');
+            $row = $this->fetchstatement($stmt, 'row');
             $stmt->close();
             break;
 
@@ -232,7 +232,7 @@ class MySqliWrap implements DBInterface{
         $rows = array();
         switch (get_class($stmt)) {
           case 'mysqli_stmt':
-            $rows = $this->fetchStatment($stmt, 'list');
+            $rows = $this->fetchstatement($stmt, 'list');
             $stmt->close();
             break;
 
@@ -251,7 +251,7 @@ class MySqliWrap implements DBInterface{
         $rows = array();
         switch (get_class($stmt)) {
           case 'mysqli_stmt':
-            $rows = $this->fetchStatment($stmt);
+            $rows = $this->fetchstatement($stmt);
             $stmt->close();
             break;
 
@@ -290,9 +290,9 @@ class MySqliWrap implements DBInterface{
   }
 
   /**
-   * mysqli_statment用のfetch
+   * mysqli_statement用のfetch
    */
-  private function fetchStatment(&$stmt, $type='all'){
+  private function fetchstatement(&$stmt, $type='all'){
     $hits = array();
     $params = array();
 
