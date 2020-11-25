@@ -220,7 +220,6 @@ div.flash-message > p { padding: 10px; }
 div.flash-message-info {
 	background-color: #C3E4FD;
 	border-color: #688FDC;
-	margin: 0 0 15px;
 }
 div.flash-message-warn {
 	border-color: #cc9;

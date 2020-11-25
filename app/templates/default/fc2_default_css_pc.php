@@ -240,13 +240,13 @@ body { color: #444444; }
 
 #headermenu .archives {
   float: left;
-  width: 105px;
+  width: 135px;
   background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/headermenu.png) no-repeat 103px 0;
 }
 
 #headermenu .archives a {
   display: block;
-  width: 105px;
+  width: 135px;
   height: 39px;
   line-height: 39px;
 }

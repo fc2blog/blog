@@ -140,8 +140,9 @@ class CategoriesController extends AdminController
   /**
    * ajax用のカテゴリ追加
    * @param Request $request
+   * @return string
    */
-  public function ajax_add(Request $request)
+  public function ajax_add(Request $request): string
   {
     /** @var CategoriesModel $categories_model */
     $categories_model = Model::load('Categories');
@@ -150,8 +151,11 @@ class CategoriesController extends AdminController
 
     $json = array('status' => 0);
 
-    if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-      return;
+    if (!$request->isValidSig()) {
+      $this->set('http_content_type', "application/json; charset=utf-8");
+      $this->set('http_status_code', 400);
+      $this->set('json', ['error' => 'invalid sig']);
+      return "admin/common/json.twig";
     }
 
     $category_request = $request->get('category');
@@ -171,8 +175,9 @@ class CategoriesController extends AdminController
 
     $json['error'] = $errors;
 
-    $this->layout = 'json.php';
+    $this->set('http_content_type', "application/json; charset=utf-8");
     $this->set('json', $json);
+    return "admin/common/json.twig";
   }
 
 }

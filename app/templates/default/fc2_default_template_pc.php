@@ -172,13 +172,13 @@
     <p><%introduction></p>
   </div><!-- /header -->
   <div id="headermenu">
-    <p class="archives"><a href="<%url>archives.html">記事一覧</a></p>
+    <p class="archives"><a href="<%url>archives.html"><%template_list_of_articles></a></p>
     <!--not_titlelist_area-->
     <!--not_search_area-->
     <!--not_permanent_area-->
     <ul class="switch">
-      <li class="list"><a href="#" title="リスト表示">リスト表示</a></li>
-      <li class="grid"><a href="#" title="グリッド表示">グリッド表示</a></li>
+      <li class="list"><a href="#" title="<%template_list_view>"><%template_list_view></a></li>
+      <li class="grid"><a href="#" title="<%template_grid_view>"><%template_grid_view></a></li>
     </ul>
     <!--/not_permanent_area-->
     <!--/not_titlelist_area-->
@@ -223,7 +223,7 @@
               <li><%template_theme>:<a href="<%topentry_thread_link>" title="<%topentry_thread_title>"><%topentry_thread_title></a></li>
               <li><%template_genre>:<a href="<%topentry_community_janrelink>" title="<%topentry_community_janrename>"><%topentry_community_janrename></a></li>
               <!--/community-->
-              <li><a href="<%topentry_category_link>" title="<%template_view_category>">カテゴリ:<%topentry_category></a></li>
+              <li><a href="<%topentry_category_link>" title="<%template_view_category>"><%template_category>:<%topentry_category></a></li>
               <!--allow_comment-->
               <li><a href="<%topentry_link>#cm" title="<%template_post_comment>">CM:<%topentry_comment_num></a></li>
               <!--/allow_comment-->
@@ -307,7 +307,7 @@
                 <dd><textarea id="comment" cols="50" rows="5" name="comment[body]"></textarea></dd>
                 <dt><label for="pass"><%template_password></label></dt>
                 <dd><input id="pass" type="password" name="comment[pass]" size="20" /></dd>
-                <dt><%template_private></dt>
+                <dt><%template_privacy_set></dt>
                 <dd><input id="himitu" type="checkbox" name="comment[himitu]" /><label for="himitu"><%template_private_check></label></dd>
               </dl>
               <p class="form_btn"><input type="submit" value="<%template_send>" /></p>
@@ -320,7 +320,7 @@
         <div class="content" id="edit">
           <h3 class="sub_header"><%template_edit_comment></h3>
           <div class="form">
-            <form action="../../config" method="post" name="comment_form" id="comment_form">
+            <form action="./" method="post" name="comment_form" id="comment_form">
               <dl>
                 <dt>
                   <input type="hidden" name="mode" value="edit" />
@@ -340,7 +340,7 @@
                 <dd><textarea id="comment" cols="50" rows="5" name="edit[body]"><%edit_body></textarea></dd>
                 <dt><label for="pass"><%template_password></label></dt>
                 <dd><input id="pass" type="password" name="edit[pass]" size="20" /></dd>
-                <dt><%template_private></dt>
+                <dt><%template_privacy_set></dt>
                 <dd><input id="himitu" type="checkbox" name="edit[himitu]" /><label for="himitu"><%template_private_check></label></dd>
               </dl>
               <p class="form_btn"><input type="submit" value="<%template_send>" /><input type="submit" name="edit[delete]" value="<%template_delete>" /></p>

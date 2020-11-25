@@ -65,7 +65,7 @@ class UploadTest extends TestCase
       "keyword" => "",
     ]);
     $this->assertInstanceOf(FilesController::class, $c);
-    $this->assertCount(3, $c->get('files'));
+    $this->assertCount(2/*初期登録が2コあるので*/+3, $c->get('files'));
 
     ## search test.
     $c = $this->reqGet("/admin/files/ajax_index", [
@@ -135,8 +135,6 @@ class UploadTest extends TestCase
 
     $this->uploadFile();
     $this->uploadFile();
-    $this->uploadFile();
-    $this->uploadFile();
 
     $c = $this->reqGet("/admin/files/ajax_index", [
       "limit" => "5",
@@ -145,7 +143,7 @@ class UploadTest extends TestCase
       "keyword" => "",
     ]);
     $this->assertInstanceOf(FilesController::class, $c);
-    $this->assertCount(4, $c->get('files'));
+    $this->assertCount(2/*初期登録が2個あるので*/+2, $c->get('files'));
 
     $files = $c->getData()['files'];
 //    var_dump($files);

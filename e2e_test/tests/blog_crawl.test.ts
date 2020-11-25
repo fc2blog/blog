@@ -93,7 +93,7 @@ describe("crawl some blog", () => {
 
     expect(entry_bodies[0].match(/3rd/)).toBeTruthy();
     expect(entry_bodies[1].match(/2nd/)).toBeTruthy();
-    expect(entry_bodies[2].match(/1st/)).toBeTruthy();
+    expect(entry_bodies[2].match(/テスト記事１/)).toBeTruthy();
   });
 
   it("click  first entry's 「続きを読む」", async () => {
@@ -347,7 +347,7 @@ describe("crawl some blog", () => {
   });
 
   it("comment delete fail by wrong password", async () => {
-    const comment1 = await c.page.$("#comment1");
+    await c.page.$("#comment1");
     await c.getSS("comment_delete_fail_before");
     const edit_a = await c.page.$("#cm ul > li:nth-child(3) > a");
 

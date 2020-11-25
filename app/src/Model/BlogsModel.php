@@ -224,7 +224,7 @@ class BlogsModel extends Model
    * @param array $options
    * @return mixed
    */
-  public function findByIdAndUserId($blog_id, $user_id, $options = []):array
+  public function findByIdAndUserId($blog_id, $user_id, $options = []): array
   {
     $options['where'] = isset($options['where']) ? 'id=? AND user_id=? AND ' . $options['where'] : 'id=? AND user_id=?';
     $options['params'] = isset($options['params']) ? array_merge(array($blog_id, $user_id), $options['params']) : array($blog_id, $user_id);
@@ -298,21 +298,15 @@ class BlogsModel extends Model
    * ユーザーが対象のブログIDを所持しているかチェック
    * @param $user_id
    * @param $blog_id
-   * @return bool|mixed
+   * @return bool
    */
-  public function isUserHaveBlogId($user_id, $blog_id)
+  public function isUserHaveBlogId($user_id, $blog_id): bool
   {
-    static $is_list = array();    // キャッシュ用
-
-    $key = $user_id . '_' . $blog_id;
-    if (isset($is_list[$key])) {
-      return $is_list[$key];
-    }
-    return $is_list[$key] = $this->isExist(array(
+    return $this->isExist([
       'fields' => 'id',
       'where' => 'id=? AND user_id=?',
-      'params' => array($blog_id, $user_id),
-    ));
+      'params' => [$blog_id, $user_id],
+    ]);
   }
 
   /**
@@ -433,6 +427,34 @@ class BlogsModel extends Model
             $blog_id
           );
         }
+      }
+    }
+
+    static::regeneratePluginPhpByBlogId($blog_id);
+  }
+
+  /**
+   * PluginのPHPコードをDBから再生成する
+   * @param string $blog_id
+   */
+  public static function regeneratePluginPhpByBlogId(string $blog_id): void
+  {
+    // pluginのPHPコードを再生成する(PC)
+    $blog_plugins_model = new BlogPluginsModel();
+    $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_PC"));
+
+    foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
+      foreach ($plugins as $plugin) { // プラグイン毎
+        $blog_plugins_model::createPlugin($plugin['contents'], $blog_id, $plugin['id']);
+      }
+    }
+
+    // pluginのPHPコードを再生成する(SP)
+    $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_SP"));
+
+    foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
+      foreach ($plugins as $plugin) { // プラグイン毎
+        $blog_plugins_model::createPlugin($plugin['contents'], $blog_id, $plugin['id']);
       }
     }
   }

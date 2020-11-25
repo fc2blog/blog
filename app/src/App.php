@@ -263,13 +263,14 @@ class App
   }
 
   /**
-   * IOSかどうかを判定
+   * iPhone,iPodかどうかを判定
+   * (isIOSだが、過去iOSを搭載されていたiPadは含まれない)
    * @param Request $request
    * @return bool
    */
   public static function isIOS(Request $request): bool
   {
-    return self::isSP($request) && strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== false;
+    return self::isSP($request) && strpos($request->server['HTTP_USER_AGENT'], 'iPhone') !== false;
   }
 
   /**
@@ -279,7 +280,7 @@ class App
    */
   public static function isAndroid(Request $request): bool
   {
-    return self::isSP($request) && strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false;
+    return self::isSP($request) && strpos($request->server['HTTP_USER_AGENT'], 'Android') !== false;
   }
 
   /**

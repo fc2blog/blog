@@ -15,35 +15,36 @@ abstract class AppController extends Controller
 {
 
   /**
-   * 出力結果を装飾
+   * 出力結果を後処理置換
+   * @param string $html
+   * @return string
    */
-  protected function beforeRender()
+  protected function afterFilter(string $html): string
   {
-    $html = $this->output;
-
     // cssとjsを置き換える
     $css_html = Html::getCSSHtml();
     $js_html = Html::getJSHtml();
 
     // cssとjsを置き換え
-    $html = str_replace(array($this->includeCSS(), $this->includeJS()), array($css_html, $js_html), $html);
+    $html = str_replace([$this->includeCSS(), $this->includeJS()], [$css_html, $js_html], $html);
 
-    // 編集後のHTMLを出力結果に代入
-    $this->output = $html;
+    return $html;
   }
 
   /**
    * CSSの置き換え引数
+   * @return string
    */
-  public function includeCSS()
+  public function includeCSS(): string
   {
     return '<!-- ' . "\xFF" . 'CSS_INCLUDE -->';
   }
 
   /**
    * Javascriptの置き換え引数
+   * @return string
    */
-  public function includeJS()
+  public function includeJS(): string
   {
     return '<!-- ' . "\xFF" . 'JS_INCLUDE -->';
   }
@@ -60,8 +61,9 @@ abstract class AppController extends Controller
 
   /**
    * デバイスタイプを取得する
+   * @return string
    */
-  protected function getDeviceType()
+  protected function getDeviceType(): string
   {
     return $this->request->deviceType;
   }
@@ -71,7 +73,7 @@ abstract class AppController extends Controller
    * @param null $key
    * @param string $name
    */
-  protected function setToken($key = null, $name = 'token')
+  protected function setToken($key = null, $name = 'token'): void
   {
     if ($key === null) {
       // 適当な値をトークンに設定

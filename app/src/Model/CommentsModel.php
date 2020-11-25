@@ -166,8 +166,10 @@ class CommentsModel extends Model
   {
     $comment = $this->findByIdAndBlogId($comment_id, $blog_id);
     // パスワード未設定、管理人のみは編集できない
-    if (empty($comment) || empty($comment['password'])
-      || $comment['open_status'] == Config::get('COMMENT.OPEN_STATUS.PRIVATE')
+    if (
+      empty($comment) ||
+      empty($comment['password']) ||
+      $comment['open_status'] == Config::get('COMMENT.OPEN_STATUS.PRIVATE')
     ) {
       return array();
     }
