@@ -43,13 +43,13 @@
             // submenu
             $('.accordion_head').fc2Accordion({
                 contents: '.accordion_inner',
-                classOpen: 'cursol_up'
+                classOpen: 'cursor_up'
             });
 
             // search form
             $('.accordion_btn').fc2Accordion({
                 contents: '.accordion_contents',
-                classOpen: 'cursol_up'
+                classOpen: 'cursor_up'
             });
 
             // 保存完了、エラー等のメッセージ
@@ -112,7 +112,7 @@
                     <li {% if active_menu == 'files/upload' or active_menu == 'files/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Files', 'upload') }}"><span><i class="sidemenu_file"></i></span><span>{{ _('Upload file') }}</span></a></li>
                 {% endif %}
                 {% if is_selected_blog %}
-                    <li class="list_titile">{{ _('Setting') }}</li>
+                    <li class="list_titie">{{ _('Setting') }}</li>
                     <li {% if active_menu == 'blog_templates/index' or active_menu == 'entries/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'BlogTemplates','index', {'device_type': 4}) }}"><span><i class="sidemenu_template"></i></span><span>{{ _('Template management') }}</span></a></li>
                     <li {% if active_menu == 'blog_plugins/index' or active_menu == 'entries/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'blog_plugins','index', {'device_type': 4 }) }}"><span><i class="sidemenu_plugin"></i></span><span>{{ _('Plugin management') }}</span></a></li>
                     <li {% if active_menu == 'categories/create' or active_menu == 'categories/edit' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Categories', 'create') }}"><span><i class="sidemenu_category"></i></span><span>{{ _('Category management') }}</span></a></li>
@@ -124,15 +124,15 @@
 
         <div id="right_menu" class="sidemenu">
             <ul>
-                <li class="list_titile">{{ _('User Menu') }}</li>
+                <li class="list_titie">{{ _('User Menu') }}</li>
                 <li {% if active_menu == 'blogs/index' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Blogs', 'index') }}"><span><i class="sidemenu_myblog"></i></span><span>{{ _('List of blogs') }}</span></a></li>
                 <li {% if active_menu == 'users/edit' or active_menu == 'users/withdrawal' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'edit') }}"><span><i class="sidemenu_setting"></i></span><span>{{ _('User setting') }}</span></a></li>
                 <li><a class="touch" href="{{ url(req, 'Users', 'logout') }}"><span><i class="sidemenu_logout"></i></span><span>{{ _('Logout') }}</span></a></li>
                 {% if debug %}
-                    <li class="list_titile">デバッグ用</li>
+                    <li class="list_titie">デバッグ用</li>
                     <li><a class="touch" href="{{ url(req, 'Users', 'index') }}"><span><i class="sidemenu_history"></i></span><span>ユーザー一覧</span></a></li>
                 {% endif %}
-                <li class="list_titile">{{ _('Blog name') }}</li>
+                <li class="list_titie">{{ _('Blog name') }}</li>
                 {% for key, blog in blog_list %}
                     <li {% if blog_id == key %}class="selected"{% endif %}><a href="{{ url(req, 'Blogs', 'choice', {'blog_id': key }) }}"><span><i class="sidemenu_home"></i></span><span>{{ blog }}</span></a></li>
                 {% endfor %}

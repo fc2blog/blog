@@ -187,7 +187,7 @@ h1 .accordion_btn:before {
 	top: 3px;
 }
 
-h1 .cursol_up {
+h1 .cursor_up {
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dedede), color-stop(100%,#fff));
 	background-image: -webkit-linear-gradient(top, #dedede, #fff);
 	background-image: -moz-linear-gradient(top, #dedede, #fff);
@@ -337,7 +337,7 @@ h3 {
 	border-radius: 5px 5px;
 }
 
-.sab_accordion h4.cursol_up {
+.sab_accordion h4.cursor_up {
 	-webkit-border-radius: 5px 5px 0 0;
 	border-radius: 5px 5px 0 0;
 	border-bottom: 1px solid #C8C8C8;
@@ -550,7 +550,7 @@ i.sab_accordion_icon {
 	vertical-align: bottom;
 }
 
-.cursol_up>i.sab_accordion_icon { background-position: center -460px; }
+.cursor_up>i.sab_accordion_icon { background-position: center -460px; }
 
 i.photo_icon {
 	width: 35px;
@@ -740,7 +740,7 @@ i.accordion_icon {
 	vertical-align: middle;
 }
 
-h2.cursol_up i.accordion_icon { background-position: center -116px; }
+h2.cursor_up i.accordion_icon { background-position: center -116px; }
 
 i.delete_btn {
 	background-position: center -445px;
@@ -4295,7 +4295,7 @@ h3.dialog_box_title { box-shadow: none; }
 
 .text_item_inner { border-bottom: 1px solid #dadada; }
 
-.text_item .cursol_up i.accordion_icon {
+.text_item .cursor_up i.accordion_icon {
 	background-position: center -116px;
 }
 
