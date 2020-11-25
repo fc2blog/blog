@@ -91,7 +91,7 @@ abstract class Controller
    */
   public function emit(): void
   {
-    if (isset($this->data['http_status_code']) && is_int(isset($this->data['http_status_code']))) {
+    if (isset($this->data['http_status_code']) && is_int($this->data['http_status_code'])) {
       http_response_code($this->data['http_status_code']);
     }
 
@@ -501,7 +501,7 @@ abstract class Controller
   // 404 NotFound Action
   public function error404()
   {
-    // TODO ステータスコードを付与
+    $this->data['http_status_code'] = 404;
     return 'Common/error404.php';
   }
 

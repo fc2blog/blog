@@ -186,5 +186,17 @@ abstract class AdminController extends AppController
     return $messages;
   }
 
+  // 存在しないアクションは404へ
+  public function __call($name, $arguments)
+  {
+    return $this->error404();
+  }
+
+  // 404 NotFound Action
+  public function error404()
+  {
+    $this->data['http_status_code'] = 404;
+    return 'admin/common/error404.twig';
+  }
 }
 
