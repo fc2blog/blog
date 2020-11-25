@@ -77,7 +77,7 @@ class BlogPluginsController extends AdminController
    */
   private function plugin_search(Request $request, $is_official = true): string
   {
-    $plugins_model = Model::load('Plugins');
+    $plugins_model = new PluginsModel();
 
     // デバイスタイプの取得
     $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));

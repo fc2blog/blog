@@ -6,6 +6,7 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
+use Fc2blog\Model\Fc2TemplatesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -63,7 +64,8 @@ class BlogTemplatesController extends AdminController
     $condition['device'] = Config::get('DEVICE_FC2_KEY.' . $device_type);
 
     // テンプレート一覧取得
-    $fc2_templates = Model::load('Fc2Templates')->getListAndPaging($condition);
+    $fc2_templates_model = new Fc2TemplatesModel();
+    $fc2_templates = $fc2_templates_model->getListAndPaging($condition);
     $templates = $fc2_templates['templates'];
     $paging = $fc2_templates['pages'];
 
