@@ -30,7 +30,7 @@ class CommonController extends AdminController
     }
 
     // TOPへ戻す
-    $url = Config::get('BASE_DIRECTORY');
+    $url = $request->baseDirectory;
     $device_name = App::getArgsDevice($request);
     if (!empty($device_name)) {
       $url .= '?' . $device_name;
@@ -192,7 +192,7 @@ class CommonController extends AdminController
         // ディレクトリ製作成功チェック
         if (!file_exists(Config::get('TEMP_DIR') . 'log') || !file_exists(Config::get('TEMP_DIR') . 'blog_template')) {
           $this->setErrorMessage(__('Create /app/temp/blog_template and log directory failed.'));
-          $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=1&error=mkdir');
+          $this->redirect($request, $request->baseDirectory . 'common/install?state=1&error=mkdir');
         }
 
         // DB接続確認
@@ -212,7 +212,7 @@ class CommonController extends AdminController
             $msdb->connect();
           } catch (Exception $e) {
             $this->setErrorMessage(__('Create database failed.'));
-            $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=1&error=db_create');
+            $this->redirect($request, $request->baseDirectory . 'common/install?state=1&error=db_create');
           }
         }
 
@@ -222,7 +222,7 @@ class CommonController extends AdminController
 
         if (is_countable($table) && count($table)) {
           // 既にDB登録完了
-          $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=2');
+          $this->redirect($request, $request->baseDirectory . 'common/install?state=2');
         }
 
         // DBセットアップ
@@ -235,7 +235,7 @@ class CommonController extends AdminController
         if ($res === false) {
           /** @noinspection SyntaxError */
           $this->setErrorMessage(__('Create table failed.'));
-          $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=1&error=table_insert');
+          $this->redirect($request, $request->baseDirectory . 'common/install?state=1&error=table_insert');
         }
 
         // DBセットアップ成功チェック
@@ -244,14 +244,14 @@ class CommonController extends AdminController
         if (!is_countable($table)) {
           /** @noinspection SyntaxError */
           $this->setErrorMessage(__('Create table failed.'));
-          $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=1&error=table_insert');
+          $this->redirect($request, $request->baseDirectory . 'common/install?state=1&error=table_insert');
         }
 
         // 初期公式プラグインを追加
         $plugins_model = new PluginsModel();
         $plugins_model->addInitialOfficialPlugin();
 
-        $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=2');
+        $this->redirect($request, $request->baseDirectory . 'common/install?state=2');
         return 'admin/common/install_user.twig';
 
       case 2:  // 管理者登録
@@ -260,7 +260,7 @@ class CommonController extends AdminController
         $users = new UsersModel();
         if ($users->isExistAdmin()) {
           // 既に管理者ユーザー登録完了済み
-          $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=3');
+          $this->redirect($request, $request->baseDirectory . 'common/install?state=3');
         }
 
         // ユーザー登録画面を表示
@@ -287,7 +287,7 @@ class CommonController extends AdminController
 
             // 成功したので完了画面へリダイレクト
             $this->setInfoMessage(__('User registration is completed'));
-            $this->redirect($request, Config::get('BASE_DIRECTORY') . 'common/install?state=3'); // 成功終了
+            $this->redirect($request, $request->baseDirectory . 'common/install?state=3'); // 成功終了
 
           } else {
             // ブログ作成失敗時には登録したユーザーを削除（ロールバックの代用）

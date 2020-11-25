@@ -55,7 +55,7 @@ class Html
     }
 
     // URL/Controller/Methodの形で返却
-    if (Config::get('URL_REWRITE') && !$full_url) {
+    if ($request->urlRewrite && !$full_url) {
       $params = array();
       foreach ($args as $key => $value) {
         $params[] = $key . '=' . $value;
@@ -64,7 +64,7 @@ class Html
         $params[] = $device_name;
       }
 
-      $url = Config::get('BASE_DIRECTORY') . $controller . '/' . $action;
+      $url = $request->baseDirectory . $controller . '/' . $action;
       if (count($params)) {
         $url .= '?' . implode('&', $params);
       }
@@ -88,7 +88,7 @@ class Html
       $params[] = $device_name;
     }
 
-    $url = Config::get('BASE_DIRECTORY') . Config::get('DIRECTORY_INDEX');
+    $url = $request->baseDirectory . Config::get('DIRECTORY_INDEX');
     if (count($params)) {
       $url .= '?' . implode('&', $params);
     }

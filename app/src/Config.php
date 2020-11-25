@@ -5,6 +5,8 @@
 
 namespace Fc2blog;
 
+use LogicException;
+
 class Config
 {
   private static $config = [];
@@ -39,9 +41,13 @@ class Config
   /**
    * @param string $key
    * @param $value
+   * @deprecated can only be used for testing purposes
    */
   public static function set(string $key, $value)
   {
+    if(!defined("THIS_IS_TEST")){
+      throw new LogicException("Config::set can only be used for testing purposes");
+    }
     self::_set($key, $value, self::$config);
   }
 

@@ -242,8 +242,8 @@ abstract class Controller
       'is_selected_blog' => $this->isSelectedBlog(), // TODO admin以外ではどうするか
       'flash_messages' => $this->removeMessage(), // TODO admin 以外ではどうするか
       'js_common' => [
-        'isURLRewrite' => Config::get('URL_REWRITE'),
-        'baseDirectory' => Config::get('BASE_DIRECTORY'),
+        'isURLRewrite' => $request->urlRewrite,
+        'baseDirectory' => $request->baseDirectory,
         'deviceType' => $request->deviceType,
         'deviceArgs' => App::getArgsDevice($request)
       ],
@@ -370,16 +370,13 @@ abstract class Controller
    */
   private function renderByPhpTemplate(Request $request, string $template_file_path)
   {
-    // アプリプレフィックス
-    $prefix = strtolower(Config::get('APP_PREFIX'));
-
     Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Layout[' . $this->layout . ']');
     if ($this->layout == '') {
       // layoutが空の場合は表示処理を行わない
       return "";
     }
 
-    $layout_file_path = Config::get('VIEW_DIR') . ($prefix ? $prefix . '/' : '') . 'layouts/' . $this->layout;
+    $layout_file_path = Config::get('VIEW_DIR') . 'user/layouts/' . $this->layout;
     $device_layout_path = preg_replace('/^(.*?)\.([^\/.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $layout_file_path);
 
     if (defined("THIS_IS_TEST")) {
@@ -456,7 +453,7 @@ abstract class Controller
     unset($fw_data);
 
     // Template表示
-    $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? strtolower(Config::get('APP_PREFIX')) . '/' : '') . $fw_template;
+    $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? 'user/' : '') . $fw_template;
     $fw_template_device_path = preg_replace('/^(.*?)\.([^\/.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $fw_template_path);
     if (is_file($fw_template_device_path)) {
       if (defined("THIS_IS_TEST")) {

@@ -129,7 +129,7 @@ class BlogsController extends AdminController
     if (!empty($blog)) {
       $this->setBlog($blog);
     }
-    $this->redirect($request, Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
+    $this->redirect($request, $request->baseDirectory);   // トップページへリダイレクト
   }
 
   /**

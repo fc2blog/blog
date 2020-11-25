@@ -152,7 +152,7 @@ class UsersController extends AdminController
     $template = 'admin/users/login.twig';
 
     if ($this->isLogin()) {
-      $this->redirect($request, Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
+      $this->redirect($request, $request->baseDirectory);   // トップページへリダイレクト
     }
 
     // 初期表示時
@@ -174,7 +174,7 @@ class UsersController extends AdminController
         if (!$this->isSelectedBlog()) {
           $this->redirect($request, ['controller' => 'Blogs', 'action' => 'create']);
         }
-        $this->redirect($request, Config::get('BASE_DIRECTORY'));   // トップページへリダイレクト
+        $this->redirect($request, $request->baseDirectory);   // トップページへリダイレクト
       }
       $errors = ['login_id' => __('Login ID or password is incorrect')];
     }
