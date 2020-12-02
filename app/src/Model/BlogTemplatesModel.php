@@ -4,6 +4,7 @@ namespace Fc2blog\Model;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Util\PhpCodeLinter;
 use Fc2blog\Web\Session;
 
 class BlogTemplatesModel extends Model
@@ -40,7 +41,7 @@ class BlogTemplatesModel extends Model
    * @param array $white_list
    * @return array
    */
-  public function validate(array $data, ?array &$valid_data=[], array $white_list = []): array
+  public function validate(array $data, ?array &$valid_data = [], array $white_list = []): array
   {
     // バリデートを定義
     $this->validates = array(
@@ -68,10 +69,10 @@ class BlogTemplatesModel extends Model
 
   /**
    * FC2テンプレートの構文チェック
-   * @param $value
+   * @param $php_code
    * @return bool|string
    */
-  public static function fc2TemplateSyntax($value)
+  public static function fc2TemplateSyntax(string $php_code)
   {
     if (defined("THIS_IS_TEST")) {
       // テンプレート検証用にテンポラリディレクトリが必要だが、テストやCLIでSessionを汚染したくないので
@@ -88,17 +89,16 @@ class BlogTemplatesModel extends Model
     }
 
     // HTMLをPHPテンプレートに変換してテンプレートファイルの作成
-    $html = self::convertFC2Template($value);
+    $html = self::convertFC2Template($php_code);
     file_put_contents($templatePath, $html);
-    chmod($templatePath, 0777);
 
+    chmod($templatePath, 0777);
     // PHPのシンタックスチェック
-    $cmd = 'php -l ' . $templatePath;
-    $ret = shell_exec($cmd);
-    if (strpos($ret, 'No syntax errors detected') !== false) {
+    if (PhpCodeLinter::isParsablePhpCode($html)) {
       return true;
+    } else {
+      return __('There may be a problem with the template or plug-in, installed in the blog.');
     }
-    return __('There may be a problem with the template or plug-in, installed in the blog.');
   }
 
   /**

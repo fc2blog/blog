@@ -4,6 +4,7 @@ namespace Fc2blog\Model;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Util\PhpCodeLinter;
 use Fc2blog\Web\Session;
 
 class BlogPluginsModel extends Model
@@ -147,10 +148,10 @@ class BlogPluginsModel extends Model
 
   /**
    * FC2テンプレートの構文チェック
-   * @param $value
-   * @return string
+   * @param string $php_code
+   * @return string|true
    */
-  public static function fc2PluginSyntax($value): string
+  public static function fc2PluginSyntax(string $php_code)
   {
     // フォルダが存在しない場合作成
     $plugin_path = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer(Session::get('blog_id')) . '/plugins/syntax.php';
@@ -160,18 +161,16 @@ class BlogPluginsModel extends Model
     }
 
     // HTMLをPHPテンプレートに変換してテンプレートファイルの作成
-    Model::load('BlogTemplates');
-    $html = BlogTemplatesModel::convertFC2Template($value);
+    $html = BlogTemplatesModel::convertFC2Template($php_code);
     file_put_contents($plugin_path, $html);
     chmod($plugin_path, 0777);
 
     // PHPのシンタックスチェック
-    $cmd = 'php -l ' . $plugin_path;
-    $ret = shell_exec($cmd);
-    if (strpos($ret, 'No syntax errors detected') !== false) {
+    if (PhpCodeLinter::isParsablePhpCode($html)) {
       return true;
+    } else {
+      return __('There may be a problem with the template or plug-in, installed in the blog.');
     }
-    return __('There may be a problem with the template or plug-in, installed in the blog.');
   }
 
   /**
@@ -427,7 +426,6 @@ class BlogPluginsModel extends Model
     }
 
     // HTMLをPHPテンプレートに変換してテンプレートファイルの作成
-    Model::load('BlogTemplates');
     $html = BlogTemplatesModel::convertFC2Template($html);
     file_put_contents($plugin_path, $html);
     chmod($plugin_path, 0777);
