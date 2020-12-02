@@ -25,6 +25,12 @@ use ParseError;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
+/**
+ * Class Fc2TemplateTest
+ * FC2テンプレートの各種タグ実行テスト
+ * TODO 他のテストと実質的に内容が重複している
+ * @package Fc2blog\Tests\App\Fc2Template
+ */
 class Fc2TemplateTest extends TestCase
 {
 
@@ -91,7 +97,6 @@ class Fc2TemplateTest extends TestCase
 
   /**
    * ブログトップページ（EntriesController::index）にて全タグを擬似実行
-   * NOTE: compact(array_keys(get_defined_vars())) にて、スコープ内変数が（わかりづらく）外部にて利用されているので、削除時には注意すること
    */
   public function testTagsInEntriesIndex(): void
   {

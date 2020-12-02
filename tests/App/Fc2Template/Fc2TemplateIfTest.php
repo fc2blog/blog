@@ -11,6 +11,11 @@ use ParseError;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
+/**
+ * Class Fc2TemplateIfTest
+ * FC2TemplateにおいてiF系のタグのレンダリングテスト
+ * @package Fc2blog\Tests\App\Fc2Template
+ */
 class Fc2TemplateIfTest extends TestCase
 {
   // TODO 全 fc2_template_ifをチェックできているか担保する仕組み
