@@ -14,7 +14,7 @@ describe("crawl admin pages", () => {
   const nick_name = "nickname";
 
   beforeAll(async () => {
-    execSync(__dirname + "/../../tests/cli_drop_all_table.php");
+    execSync("make -C " + __dirname + "/../../ db-drop-all-table");
     if (fs.existsSync(__dirname + "/../../app/temp/installed.lock")) {
       fs.unlinkSync(__dirname + "/../../app/temp/installed.lock");
     }

@@ -40,14 +40,13 @@ services:
       FC2_HTTP_PORT: "8080"
       FC2_HTTPS_PORT: "8480"
       FC2_PASSWORD_SALT: "7efe3a5b4d111b9e2148e24993c1cfdb"
-      FC2_DOCUMENT_ROOT_PATH: "/var/www/html/"
+      FC2_DOCUMENT_ROOT_PATH: "/fc2blog/public/"
       DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
     depends_on:
       - db
-    working_dir: "/var/www/html"
+    working_dir: "/fc2blog"
     volumes:
-      - ./public:/var/www/html
-      - ./app:/var/www/app
+      - .:/fc2blog
     ports:
       - 8080:80
       - 8480:443

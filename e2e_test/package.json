@@ -7,8 +7,9 @@
   "license": "MIT",
   "scripts": {
     "test": "npm run serial-test && npm run parallel-test",
-    "parallel-test": "../tests/cli_load_fixture.php && npm run clear-cache && npx jest tests/*",
-    "serial-test": "../tests/cli_drop_all_table.php && npm run clear-cache && npx jest -i 1 serial_execute_tests/*",
+    "php-prepare": "docker-compose exec --user www-data php bash -c \"php tests/cli_load_fixture.php\"",
+    "parallel-test": "npm run php-prepare && npm run clear-cache && npx jest tests/*",
+    "serial-test": "npm run php-prepare && npm run clear-cache && npx jest -i 1 serial_execute_tests/*",
     "fmt": "npx prettier --check --write \"./tests/*.ts\"",
     "clear-cache": "npx jest --clearCache",
     "test-enable-head": "NO_HEAD_LESS=1 npx jest",
