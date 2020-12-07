@@ -253,7 +253,7 @@
           <ul class="list_body">
             <!--topentry--><li><%topentry_year>/<%topentry_month>/<%topentry_day>(<%topentry_hour>:<%topentry_minute>) ： <a href="<%topentry_category_link>" title="<%template_view_category>"><%topentry_category></a> ： <a href="<%topentry_link>" title="<%topentry_discription>"><%topentry_title></a></li><!--/topentry-->
           </ul>
-        </div><!--/search-->
+        </div>
         <!--/search_area-->
 
         <!--permanent_area-->
