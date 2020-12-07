@@ -244,7 +244,7 @@
             <li><%titlelist_year>/<%titlelist_month>/<%titlelist_day>：<a href="<%titlelist_url>" title="<%titlelist_body>"><%titlelist_title></a>：<a href="<%titlelist_category_url>" title="<%template_view_category>"><%titlelist_category></a></li>
             <!--/titlelist-->
           </ul>
-        </div><!--/titlelist-->
+        </div>
         <!--/titlelist_area-->
 
         <!--search_area-->
