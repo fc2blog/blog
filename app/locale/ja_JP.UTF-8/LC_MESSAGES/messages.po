@@ -2522,3 +2522,9 @@ msgstr "リスト表示"
 msgid "Grid view"
 msgstr "グリッド表示"
 
+msgid "This contents is password protected.<br>You need a input password to view this."
+msgstr "このコンテンツはパスワードで保護されています。<br />閲覧するには以下にパスワードを入力してください。"
+
+msgid "Submit"
+msgstr "送信"
+

@@ -144,18 +144,21 @@ $template_vars = [
                                       <?php
                                         if (isset(\$entry['body'])) {
                                           if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+                                            \$__str__1 = __("This contents is password protected.<br>You need a input password to view this.");
+                                            \$__str__2 = __("Password");
+                                            \$__str__3 = __("Submit");
                                             echo <<<HTML
                                             <form method="POST">
                                               <input type="hidden" name="mode" value="Entries" />
                                               <input type="hidden" name="process" value="password" />
                                               <input type="hidden" name="id" value="{\$entry['id']}" />
                                               <p>
-                                                このコンテンツはパスワードで保護されています。<br />
-                                                閲覧するには以下にパスワードを入力してください。
+                                              {\$__str__1}
                                               </p>
-                                              <p>パスワード <input type="password" name="password" /><input type="submit" value="送信" /></p>
+                                              <p>{\$__str__2} <input type="password" name="password" /><input type="submit" value="{\$__str__3}" /></p>
                                             </form>
                                             HTML;
+                                            unset(\$__str__1,\$__str__2,\$__str__3);
                                           } else {
                                             echo \$entry['body'];
                                           }
@@ -528,18 +531,21 @@ function getTopentryDiscription(): string
   <?php
     if (isset(\$entry['body'])) {
       if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+        \$__str__1 = __("This contents is password protected.<br>You need a input password to view this.");
+        \$__str__2 = __("Password");
+        \$__str__3 = __("Submit");
         echo <<<HTML
         <form method="POST">
           <input type="hidden" name="mode" value="Entries" />
           <input type="hidden" name="process" value="password" />
           <input type="hidden" name="id" value="{\$entry['id']}" />
           <p>
-            このコンテンツはパスワードで保護されています。<br />
-            閲覧するには以下にパスワードを入力してください。
+          {\$__str__1}
           </p>
-          <p>パスワード <input type="password" name="password" /><input type="submit" value="送信" /></p>
+          <p>{\$__str__2} <input type="password" name="password" /><input type="submit" value="{\$__str__3}" /></p>
         </form>
         HTML;
+        unset(\$__str__1,\$__str__2,\$__str__3);
       } else {
         echo th(strip_tags(\$entry['body']), 200);
       }
