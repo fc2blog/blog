@@ -18,7 +18,7 @@
         {% if unread_count %}
             <?php $is_notice = true; ?>
             <li class="link_list_item">
-                <a href="{{ url(req, 'Entries', 'index', {'reply_status': reply_status_unread}) }}" class="common_next_link next_bg">
+                <a href="{{ url(req, 'Comments', 'index', {'reply_status': reply_status_unread}) }}" class="common_next_link next_bg">
                     {{ _s('There %d reviews unread comments', unread_count) }}
                 </a>
             </li>
@@ -26,7 +26,7 @@
 
         {% if unapproved_count %}
             <li class="link_list_item">
-                <a href="{{ url(req, 'Entries', 'index', {'open_status': open_status_pending}) }}" class="common_next_link next_bg">
+                <a href="{{ url(req, 'Comments', 'index', {'open_status': open_status_pending}) }}" class="common_next_link next_bg">
                     {{ _s('There %d reviews unapproved comment', unapproved_count) }}
                 </a>
             </li>
