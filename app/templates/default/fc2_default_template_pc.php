@@ -181,8 +181,8 @@
       <li class="grid"><a href="#" title="<%template_grid_view>"><%template_grid_view></a></li>
     </ul>
     <!--/not_permanent_area-->
-    <!--/not_titlelist_area-->
     <!--/not_search_area-->
+    <!--/not_titlelist_area-->
   </div>
   <div id="wrap">
     <div id="main">
