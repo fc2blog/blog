@@ -181,8 +181,8 @@
       <li class="grid"><a href="#" title="<%template_grid_view>"><%template_grid_view></a></li>
     </ul>
     <!--/not_permanent_area-->
-    <!--/not_titlelist_area-->
     <!--/not_search_area-->
+    <!--/not_titlelist_area-->
   </div>
   <div id="wrap">
     <div id="main">
@@ -244,7 +244,7 @@
             <li><%titlelist_year>/<%titlelist_month>/<%titlelist_day>：<a href="<%titlelist_url>" title="<%titlelist_body>"><%titlelist_title></a>：<a href="<%titlelist_category_url>" title="<%template_view_category>"><%titlelist_category></a></li>
             <!--/titlelist-->
           </ul>
-        </div><!--/titlelist-->
+        </div>
         <!--/titlelist_area-->
 
         <!--search_area-->
@@ -253,7 +253,7 @@
           <ul class="list_body">
             <!--topentry--><li><%topentry_year>/<%topentry_month>/<%topentry_day>(<%topentry_hour>:<%topentry_minute>) ： <a href="<%topentry_category_link>" title="<%template_view_category>"><%topentry_category></a> ： <a href="<%topentry_link>" title="<%topentry_discription>"><%topentry_title></a></li><!--/topentry-->
           </ul>
-        </div><!--/search-->
+        </div>
         <!--/search_area-->
 
         <!--permanent_area-->
