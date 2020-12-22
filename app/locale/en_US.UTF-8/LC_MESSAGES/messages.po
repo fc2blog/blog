@@ -2475,3 +2475,8 @@ msgstr ""
 msgid "Grid view"
 msgstr ""
 
+msgid "This contents is password protected.<br>You need a input password to view this."
+msgstr ""
+
+msgid "Submit"
+msgstr ""
