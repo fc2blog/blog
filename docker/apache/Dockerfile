@@ -13,6 +13,25 @@ RUN set -eux \
  && docker-php-ext-enable xdebug \
  && rm -rf /tmp/*
 
+ARG PUID=1000
+ARG PGID=1000
+
+RUN echo "-> $PUID"
+RUN echo "-> $PGID"
+
+RUN groupmod -o -g $PGID www-data && \
+    usermod -o -u $PUID -g www-data www-data && \
+    usermod --shell /bin/bash www-data
+
+COPY ./etc/apache2/sites-available/001-blog.conf /etc/apache2/sites-available/
+COPY ./usr/local/etc/php/conf.d/docker-php-ext-xdebug-debug-enable.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug-debug-enable.ini
+COPY ./usr/local/etc/php/conf.d/php-error-settings.ini /usr/local/etc/php/conf.d/php-error-settings.ini
+
+RUN make-ssl-cert generate-default-snakeoil --force-overwrite
+
 RUN a2enmod rewrite \
  && a2enmod ssl \
- && a2ensite default-ssl
+ && a2dissite default-ssl \
+ && a2dissite 000-default \
+ && a2ensite 001-blog.conf
+

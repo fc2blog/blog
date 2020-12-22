@@ -29,7 +29,7 @@ class LoaderHelper extends TestCase
     putenv('FC2_SQL_DEBUG=php://stderr');
     putenv('FC2_APP_DEBUG=php://stderr');
     putenv('FC2_ERROR_ON_DISPLAY=0');
-    putenv('FC2_DB_HOST=127.0.0.1');
+    putenv('FC2_DB_HOST=db');
     putenv('FC2_DB_USER=docker');
     putenv('FC2_DB_PASSWORD=docker');
     putenv('FC2_DB_DATABASE=dev_fc2blog');

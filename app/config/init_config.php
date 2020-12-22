@@ -4,7 +4,7 @@ $config = [];
 
 // -------------------- ディレクトリ構造関連 --------------------//
 
-$config['ROOT_DIR'] = realpath(dirname(__FILE__) . '/../../') . '/';
+$config['ROOT_DIR'] = realpath(__DIR__ . '/../../') . '/';
 
 $config['UPLOAD_DIR_NAME'] = 'uploads';
 
