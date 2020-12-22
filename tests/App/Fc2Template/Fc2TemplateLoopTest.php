@@ -10,6 +10,11 @@ use ParseError;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
+/**
+ * Class Fc2TemplateLoopTest
+ * FC2Templateにおいてループ系のタグのレンダリングをテスト
+ * @package Fc2blog\Tests\App\Fc2Template
+ */
 class Fc2TemplateLoopTest extends TestCase
 {
   // TODO 全 fc2_template_foreachをチェックできているか担保する仕組み
