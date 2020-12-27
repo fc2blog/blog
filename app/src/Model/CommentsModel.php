@@ -145,7 +145,7 @@ class CommentsModel extends Model
    * @param $comment
    * @return array
    */
-  public function editValidate($data, &$valid_data=[], $white_list, $comment)
+  public function editValidate($data, &$valid_data, $white_list, $comment)
   {
     // Validateの設定
     $this->setValidate();
