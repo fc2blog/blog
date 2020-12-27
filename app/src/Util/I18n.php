@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fc2blog\Util;
 
 use Fc2blog\Config;
+use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
 
 class I18n
@@ -22,6 +23,9 @@ class I18n
     if (!is_null($request->get('lang')) && strlen($request->get('lang')) > 0) {
       // Requestにある場合、最優先する
       $request_lang = $request->get('lang'); // <== ex: ja
+      // Cookieに書き込みする
+      // https://github.com/fc2blog/blog/issues/162#issuecomment-733474145
+      Cookie::set($request, 'lang', $request_lang);
     } elseif (!is_null($request->getCookie('lang'))) {
       // Requestにない場合、Cookieを確認する
       $request_lang = $request->getCookie('lang'); // <== ex: ja
@@ -40,6 +44,11 @@ class I18n
     if (!is_null($request_lang) && !is_null($request_language)) {
       $lang = $request_lang;
       $language = $request_language;
+    } else if( !is_null(Config::get('LANGUAGES.en'))){
+      // languageが確定できないとき、enを優先する
+      // https://github.com/fc2blog/blog/issues/162#issuecomment-733474145
+      $lang = "en";
+      $language = Config::get('LANGUAGES.'.$lang);
     } else {
       // fallback to default language.
       $lang = Config::get('LANG');
