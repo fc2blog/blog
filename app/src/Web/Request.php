@@ -378,11 +378,12 @@ class Request
 
   /**
    * @param string $cookie_name
+   * @param string|null $default
    * @return mixed|null
    */
-  public function getCookie(string $cookie_name)
+  public function getCookie(string $cookie_name, string $default = null)
   {
-    return $this->cookie[$cookie_name] ?? null;
+    return $this->cookie[$cookie_name] ?? $default;
   }
 
   public function isValidSig():bool
