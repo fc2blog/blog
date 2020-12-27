@@ -83,4 +83,25 @@ describe("crawl notfound page", () => {
   afterAll(async () => {
     await c.browser.close();
   });
+
+  it("open not exists class in admin context, must be found page", async () => {
+    const url = 'http://localhost:8080/admin/missing_class/invalid_method';
+    const [response] = await Promise.all([
+      c.waitLoad(),
+      c.page.goto(url),
+    ]);
+
+    await c.getSS("notfound_admin_page");
+
+    expect(response.url()).toEqual(url);
+    expect(response.status()).toEqual(404);
+    // expect(await c.page.title()).toEqual("404 Not Found."); // TODO: ユーザースペースのテンプレートのTwig化
+
+    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    expect(body_text.match(/404 Not Found お探しのページは存在しません/));
+  });
+
+  afterAll(async () => {
+    await c.browser.close();
+  });
 });
