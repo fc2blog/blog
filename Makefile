@@ -88,11 +88,10 @@ setup-dev: app/vendor tests/test_images/0.png
 .PHONY: reload-test-data
 reload-test-data:
 	docker-compose up -d
-	cp -a tests/test_data/app/temp/blog_template/t app/temp/blog_template
-	cp -a tests/test_data/public/uploads/t app/temp/blog_template
 	-mkdir -p public/uploads/t/e/s/testblog2/file/
 	cp -a tests/test_images/1.png public/uploads/t/e/s/testblog2/file/1.png
 	cp -a tests/test_images/2.png public/uploads/t/e/s/testblog2/file/2.png
 	touch app/temp/installed.lock
 	docker-compose run --rm --user www-data php bash -c "tests/cli_load_fixture.php"
 	docker-compose run --rm --user www-data php bash -c "tests/cli_update_template.php testblog2"
+
