@@ -50,17 +50,17 @@ test: app/vendor e2e_test/node_modules tests/test_images/0.png
 .PHONY: clean
 clean:
 	docker-compose up -d
-	-rm -r app/temp/installed.lock
-	-rm -r app/temp/blog_template/*
-	-rm -r public/uploads/*
+	-docker-compose exec --user root php bash -c "rm -r app/temp/installed.lock"
+	-docker-compose exec --user root php bash -c "rm -r app/temp/blog_template/*"
+	-docker-compose exec --user root php bash -c "rm -r public/uploads/*"
 	-rm -r tests/test_images/*.png
 	-rm -r e2e_test/node_modules/
 	-rm -r e2e_test/ss/*
 	-docker-compose exec --user www-data php bash -c "tests/cli_drop_all_table.php"
-	-rm -r app/vendor/
+	-docker-compose exec --user root php bash -c "rm -r app/vendor/"
 	-rm -r node_modules/
 	-rm composer.phar
-	-rm tests/App/Lib/CaptchaImage/test_output.gif
+	-docker-compose exec --user root php bash -c "rm tests/App/Lib/CaptchaImage/test_output.gif"
 
 composer.phar:
 	curl -sSfL -o composer-setup.php https://getcomposer.org/installer
