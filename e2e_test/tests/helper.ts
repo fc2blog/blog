@@ -52,7 +52,7 @@ export class Helper {
     return await this.page.click(selector);
   }
 
-  async clickAndWaitResponse(selector): Promise<Response> {
+  async clickAndWaitResponse(selector): Promise<Response|void> {
     let some = await Promise.all([this.waitLoad(), this.page.click(selector)]);
 
     return some[0];

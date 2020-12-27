@@ -31,7 +31,7 @@ describe("crawl notfound page", () => {
 
   it("login admin page", async () => {
     const start_url = "http://localhost:8080/admin/";
-    let [response] = await Promise.all([
+    const [response] = await Promise.all([
       c.waitLoad(),
       c.page.goto(start_url),
     ]);
@@ -52,14 +52,14 @@ describe("crawl notfound page", () => {
     );
     await c.page.type("#id_form input[name='user[password]']", admin_pass);
 
-    [response] = await Promise.all([
+    const [response2] = await Promise.all([
       c.waitLoad(),
       await c.page.click("#id_form input[type=submit]"),
     ]);
 
-    expect(response.status()).toEqual(200);
+    expect(response2.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/common/notice");
+    expect(response2.url()).toEqual("http://localhost:8080/admin/common/notice");
 
   });
 
