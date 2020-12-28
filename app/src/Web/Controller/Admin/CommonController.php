@@ -75,8 +75,12 @@ class CommonController extends AdminController
     }
 
     // 設定読み込みをしてリダイレクト
-    $blog_settings = new BlogSettingsModel();
-    $setting = $blog_settings->findByBlogId($this->getBlogId($request));
+    if(is_string($blog_id = $this->getBlogId($request))) {
+      $blog_settings = new BlogSettingsModel();
+      $setting = $blog_settings->findByBlogId($blog_id);
+    }else{
+      $setting = null;
+    }
     if (is_array($setting) && isset($setting['start_page'])) { // 設定あり
       switch ($setting['start_page']) {
         case Config::get('BLOG.START_PAGE.ENTRY'):
