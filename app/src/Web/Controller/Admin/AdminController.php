@@ -15,10 +15,10 @@ abstract class AdminController extends AppController
     parent::beforeFilter($request);
 
     // install.lockファイルがなければインストーラーへ
-    if(!$this->isInstalled() && (
-      $request->className !== CommonController::class ||
-      $request->methodName !== 'install'
-      )){
+    if (!$this->isInstalled() && (
+        $request->className !== CommonController::class ||
+        $request->methodName !== 'install'
+      )) {
       $this->redirect($request, ['controller' => 'Common', 'action' => 'install']);
     }
 
