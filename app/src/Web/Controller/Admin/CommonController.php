@@ -69,11 +69,6 @@ class CommonController extends AdminController
    */
   public function index(Request $request)
   {
-    // install.lockファイルがなければインストーラーへ
-    if(!$this->isInstalled()){
-      $this->redirect($request, ['controller' => 'Common', 'action' => 'install']);
-    }
-
     // 設定読み込みをしてリダイレクト
     if(is_string($blog_id = $this->getBlogId($request))) {
       $blog_settings = new BlogSettingsModel();
@@ -112,16 +107,6 @@ class CommonController extends AdminController
     $this->set('reply_status_unread', Config::get('COMMENT.REPLY_STATUS.UNREAD'));
     $this->set('open_status_pending', Config::get('COMMENT.OPEN_STATUS.PENDING'));
     return "admin/common/notice.twig";
-  }
-  
-  private function getInstalledLockFilePath():string
-  {
-    return Config::get('TEMP_DIR') . "installed.lock";
-  }
-  
-  private function isInstalled(): bool{
-    $installed_lock_file_path = $this->getInstalledLockFilePath();
-    return file_exists($installed_lock_file_path);
   }
 
   /**
