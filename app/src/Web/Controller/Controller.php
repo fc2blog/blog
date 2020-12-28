@@ -502,7 +502,7 @@ abstract class Controller
   public function error404()
   {
     $this->data['http_status_code'] = 404;
-    return 'Common/error404.php';
+    return 'user/common/error404.twig';
   }
 
   public function get(string $key)

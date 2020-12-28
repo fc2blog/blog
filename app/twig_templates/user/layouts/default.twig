@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="utf-8">
+    <title>{{ block('title') }}{% if blog.id %} - {{ blog.id }}{% endif %}</title>
+    <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
+    <link rel="stylesheet" href="/css/normalize.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/user-fc2.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/user-form.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/common.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/main.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/blog_style.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/secret.css" type="text/css" media="all">
+
+    <script type="text/javascript" src="/js/jquery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/common_design.js"></script>
+</head>
+<body>
+
+<header class="clear">
+    <div>
+        {% if id %}
+            <span>{{ nickname }}</span>
+        {% endif %}
+
+        <div id="switch_lang">
+            <select id="sys-language-setting">
+                <option value="ja" {% if lang=="ja" %}selected="selected"{% endif %}>日本語</option>
+                <option value="en" {% if lang=="ja" %}selected="selected"{% endif %}>>English</option>
+            </select>
+            <script>
+                $(function(){
+                    $('#sys-language-setting').on('change', function(){
+                        location.href="{{ url(req, 'Common', 'lang' ) }}&lang=" + $('#sys-language-setting').val();
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</header>
+
+<article>
+    <article id="main-contents">
+        {{ block('content') }}
+    </article>
+</article>
+
+</body>
+</html>
