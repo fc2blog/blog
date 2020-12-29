@@ -29,7 +29,7 @@ use Twig\Loader\FilesystemLoader;
 abstract class Controller
 {
   protected $data = [];            // テンプレートへ渡す変数の保存領域
-  protected $layout = 'default.php';  // 表示ページのレイアウトテンプレート
+  protected $layout = '';  // 表示ページのレイアウトテンプレート
   protected $output = '';             // 出力タグ
   private $templateFilePath = "";
   private $layoutFilePath = "";
@@ -79,9 +79,11 @@ abstract class Controller
     // テンプレートファイル拡張子で、PHPテンプレートとTwigテンプレートを切り分ける
     if (preg_match("/\.twig\z/u", $template_path)) {
       $this->output = $this->renderByTwig($this->request, $template_path);
-    } else {
-      $this->output = $this->renderByPhpTemplate($this->request, $template_path);
+    } elseif ($this->layout === 'fc2_template.php') {
+      $this->output = $this->renderByFc2Template($this->request, $template_path);
       $this->output = $this->afterFilter($this->output);
+    } else { // $this->layout === '' を含む
+      $this->output = "";
     }
   }
 
@@ -362,72 +364,31 @@ abstract class Controller
   }
 
   /**
-   * PHPを用いたテンプレートエンジンでHTMLをレンダリング
+   * FC2タグを用いたユーザーテンプレート（PHP）でHTMLをレンダリング
    * @param Request $request
    * @param string $template_file_path
    * @return string
    * TODO User系のみで用いられるので、後日UserControllerへ移動
    */
-  private function renderByPhpTemplate(Request $request, string $template_file_path)
+  private function renderByFc2Template(Request $request, string $template_file_path)
   {
-    Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Layout[' . $this->layout . ']');
-    if ($this->layout == '') {
-      // layoutが空の場合は表示処理を行わない
-      return "";
+    if (is_null($template_file_path)) {
+      throw new InvalidArgumentException("undefined template");
+    }
+    if (!is_file($template_file_path)) {
+      throw new InvalidArgumentException("missing template");
     }
 
-    $layout_file_path = Config::get('VIEW_DIR') . 'user/layouts/' . $this->layout;
-    $device_layout_path = preg_replace('/^(.*?)\.([^\/.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $layout_file_path);
+    $this->data = static::preprocessingDataForFc2Template($request, $this->data);
 
-    if (defined("THIS_IS_TEST")) {
-      $this->layoutFilePath = $layout_file_path; // テスト用に退避
-    }
+    // 設定されているdataを展開
+    extract($this->data);
 
-    // 各種テンプレート種類によって分岐
-    if (is_file($device_layout_path)) {
-      // view/user系 デバイス毎に対応があるテンプレート（現状SPのみ）
-
-      extract($this->data);
-      // デバイス毎のファイルがあればデバイス毎のファイルを優先する
-      ob_start();
-      /** @noinspection PhpIncludeInspection */
-      include($device_layout_path);
-      return ob_get_clean();
-
-    } elseif (is_file($layout_file_path) && $this->layout !== "fc2_template.php") {
-      // view/user系 PCテンプレート
-
-      extract($this->data);
-      ob_start();
-      /** @noinspection PhpIncludeInspection */
-      include($layout_file_path);
-      return ob_get_clean();
-
-    } elseif ($this->layout === "fc2_template.php") {
-      // FC2タグを用いたユーザーテンプレート
-
-      if (is_null($template_file_path)) {
-        throw new InvalidArgumentException("undefined template");
-      }
-      if (!is_file($template_file_path)) {
-        throw new InvalidArgumentException("missing template");
-      }
-
-      $this->data = static::preprocessingDataForFc2Template($request, $this->data);
-
-      // 設定されているdataを展開
-      extract($this->data);
-
-      // テンプレート表示
-      ob_start();
-      /** @noinspection PhpIncludeInspection */
-      include($template_file_path);
-      return ob_get_clean();
-    } else {
-      $this->layoutFilePath = ""; // テスト用に退避
-      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Not Found Layout[' . $layout_file_path . ']');
-      return "";
-    }
+    // テンプレートをレンダリングして返す
+    ob_start();
+    /** @noinspection PhpIncludeInspection */
+    include($template_file_path);
+    return ob_get_clean();
   }
 
   /**
