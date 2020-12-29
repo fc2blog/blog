@@ -215,7 +215,7 @@ abstract class Controller
 
     $twig_template_path = $twig_template;
     $twig_template_device_path = preg_replace("/\.twig\z/u", '_' . App::getDeviceTypeStr($request) . '.twig', $twig_template_path);
-
+    // TODO ファイル名のみか検証
     if (is_file($base_path . $twig_template_device_path)) { // デバイス用ファイルがある
       $twig_template_path = $twig_template_device_path;
     }
