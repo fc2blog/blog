@@ -88,12 +88,12 @@ class CommonController extends UserController
     }
     $captcha = new CaptchaImage($size_x, $size_y, Config::get('PASSWORD_SALT'), $isJa);
     try {
-      $captcha->drawNumber($key, true);
+      $captcha->drawNumber($key, true); // ここでデータ送信済み
     } catch (Exception $e) {
       throw new RuntimeException("drawNumber failed. {$e->getMessage()} {$e->getFile()}:{$e->getLine()}");
     }
 
-    $this->layout = 'none.php';
+    $this->layout = ""; // この後、レンダリングさせない
   }
 
   /**
