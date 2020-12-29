@@ -827,7 +827,7 @@ class EntriesController extends UserController
     $blog_id = $this->getBlogId($request);
 
     // ブログの設定情報を取得
-    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+    $blog_setting = (new BlogSettingsModel())->findByBlogId($blog_id);
     $is_captcha = $blog_setting['comment_captcha'] == Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートの引数を受け側で合わせる
@@ -852,8 +852,7 @@ class EntriesController extends UserController
     $comment_id = $request->get('id', $request->get('comment.id'));
 
     // 編集対象のコメント取得
-    /** @var CommentsModel $comments_model */
-    $comments_model = Model::load('Comments');
+    $comments_model = new CommentsModel();
     $comment = $comments_model->getEditableComment($comment_id, $blog_id);
     if (empty($comment)) {
       $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
@@ -861,8 +860,8 @@ class EntriesController extends UserController
 
     // 編集対象の親記事
     $entry_id = $comment['entry_id'];
-    if (!($entry = Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id))) {
-      $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id));
+    if (!($entry = (new EntriesModel())->getCommentAcceptedEntry($entry_id, $blog_id))) {
+      $this->redirect($request, ['action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id]);
     }
     $this->set('edit_entry', $entry);
 
@@ -871,7 +870,7 @@ class EntriesController extends UserController
       $this->set('edit_comment', $comment);
 
       // FC2用のテンプレートで表示
-      $this->setAreaData(array('edit_area'));
+      $this->setAreaData(['edit_area']);
       return $this->getFc2TemplatePath($blog_id);
     }
 
@@ -880,9 +879,12 @@ class EntriesController extends UserController
       return $this->comment_delete($request);
     }
 
+    // 公開非公開のプルダウン用バリエーション（固定）
+    $this->set('open_status_user_list', CommentsModel::getOpenStatusUserList());
+
     // Captcha画面の初期表示処理
     if ($is_captcha && !$request->isArgs('token')) {
-      return "";
+      return "user/entries/edit_comment_form.twig";
     }
 
     // FC2テンプレート編集時
@@ -891,27 +893,27 @@ class EntriesController extends UserController
     }
 
     // コメント投稿処理
-    $errors = array();
-    $white_list = array('name', 'title', 'mail', 'url', 'body', 'password', 'open_status');
+    $errors = [];
+    $white_list = ['name', 'title', 'mail', 'url', 'body', 'password', 'open_status'];
     $errors['comment'] = $comments_model->editValidate($request->get('comment'), $data, $white_list, $comment);
-    $errors['token'] = $is_captcha ? $this->tokenValidate($request) : array();   // Token用のバリデート
+    $errors['token'] = $is_captcha ? $this->tokenValidate($request) : [];   // Token用のバリデート
     if (empty($errors['comment']) && empty($errors['token'])) {
       if ($comments_model->updateByIdAndBlogIdAndBlogSetting($request, $data, $comment_id, $blog_id, $blog_setting)) {
-        $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id), '#comment' . $comment_id);
+        $this->redirect($request, ['action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id], '#comment' . $comment_id);
       }
     }
 
     // Captcha使用時のエラー画面
     if ($is_captcha) {
       $this->set('errors', $errors);
-      return "";
+      return "user/entries/edit_comment_form.twig";
     }
 
     // コメント投稿エラー
-    $this->fc2CommentError('edit', $errors['comment'], array('open_status' => $data['open_status']));
+    $this->fc2CommentError('edit', $errors['comment'], ['open_status' => $data['open_status']]);
 
     // FC2用のテンプレートで表示
-    $this->setAreaData(array('edit_area'));
+    $this->setAreaData(['edit_area']);
     return $this->getFc2TemplatePath($blog_id);
   }
 
