@@ -751,7 +751,7 @@ class EntriesController extends UserController
     $blog_id = $this->getBlogId($request);
 
     // ブログの設定情報取得(captchaの使用可否で画面切り替え)
-    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+    $blog_setting = (new BlogSettingsModel())->findByBlogId($blog_id);
     $is_captcha = $blog_setting['comment_captcha'] == Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートにリクエスト情報を合わせる
@@ -776,19 +776,22 @@ class EntriesController extends UserController
       $this->redirect($request, ['action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id]);
     }
 
+    // 公開非公開のプルダウン用バリエーション（固定）
+    $this->set('open_status_user_list', CommentsModel::getOpenStatusUserList());
+
     // CAPTCHA用に確認画面を挟む
     if ($is_captcha && !$request->isArgs('token')) {
-      return "";
+      return "user/entries/register_comment_form.twig";
     }
 
     // 記事のカテゴリ一覧を取得 TODO:後でcacheを使用する形に
-    $entry['categories'] = Model::load('Categories')->getEntryCategories($blog_id, $entry_id);
-    $entry['tags'] = Model::load('Tags')->getEntryTags($blog_id, $entry_id);
+    $entry['categories'] = (new CategoriesModel)->getEntryCategories($blog_id, $entry_id);
+    $entry['tags'] = (new TagsModel())->getEntryTags($blog_id, $entry_id);
     $this->set('entry', $entry);
 
+
     // 入力チェック処理
-    /** @var CommentsModel $comments_model */
-    $comments_model = Model::load('Comments');
+    $comments_model = new CommentsModel();
     $errors = array();
     $white_list = array('entry_id', 'name', 'title', 'mail', 'url', 'body', 'password', 'open_status');
     $errors['comment'] = $comments_model->registerValidate($request->get('comment'), $data, $white_list);
@@ -803,7 +806,7 @@ class EntriesController extends UserController
     // Captcha使用時のエラー画面
     if ($is_captcha) {
       $this->set('errors', $errors);
-      return "";
+      return "user/entries/register_comment_form.twig";
     }
 
     // コメント投稿エラー
