@@ -315,10 +315,9 @@ class EntriesController extends UserController
     $css = $template['css'];
 
     // テンプレートのシンタックスチェック
-    Model::load('BlogTemplates');
     $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
-      return 'Entries/syntax.php';
+      return 'user/entries/syntax_error.twig';
     }
 
     // FC2用のテンプレートで表示
@@ -385,10 +384,9 @@ class EntriesController extends UserController
     }
 
     // テンプレートのシンタックスチェック
-    Model::load('BlogTemplates');
     $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
-      return 'Entries/syntax.php';
+      return 'user/entries/syntax_error.twig';
     }
 
     // FC2用のテンプレートで表示
@@ -419,10 +417,9 @@ class EntriesController extends UserController
     $contents = $preview_plugin['contents'];
 
     // テンプレートのシンタックスチェック
-    Model::load('BlogPlugins');
     $syntax = BlogPluginsModel::fc2PluginSyntax($contents);
     if ($syntax !== true) {
-      return 'Entries/syntax.php';
+      return 'user/entries/syntax_error.twig';
     }
 
     // プラグインのPHPファイル作成
