@@ -13,7 +13,7 @@ RUN set -eux \
 RUN add-apt-repository -y ppa:ondrej/php \
  && add-apt-repository -y ppa:ondrej/apache2 \
  && apt-get update \
- && apt-get install -y apache2 mysql-server php8.0 libapache2-mod-php8.0 php-mysql php8.0-intl php8.0-mbstring php8.0-gd php8.0-mysql
+ && apt-get install -y apache2 mysql-server php8.0 libapache2-mod-php8.0 php8.0-intl php8.0-mbstring php8.0-gd php8.0-mysql
 
 ARG PUID=1000
 ARG PGID=1000
@@ -36,7 +36,7 @@ RUN mkdir /var/run/mysqld \
 
 # XXX
 RUN sh -c "/usr/bin/mysqld_safe --user=mysql &" \
- && sleep 5 \
+ && sleep 3 \
  && mysql_secure_installation -ppass -D \
  && echo "CREATE DATABASE fc2" | mysql \
  && echo "CREATE USER 'dbuser'@'127.0.0.1' IDENTIFIED BY 'd1B2p3a#s!s';" | mysql \
