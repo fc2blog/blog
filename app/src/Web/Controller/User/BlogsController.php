@@ -20,5 +20,6 @@ class BlogsController extends UserController
       return $this->error404();
     }
     $this->redirect($request, $request->baseDirectory . $blog['id'] . '/');
+    return "";
   }
 }

@@ -12,7 +12,6 @@ use Fc2blog\Web\Session;
 
 class BlogPluginsController extends AdminController
 {
-
   /**
    * 一覧表示
    * @param Request $request
@@ -416,8 +415,6 @@ class BlogPluginsController extends AdminController
     // 表示・非表示設定
     $blog_plugins_model->updateByIdAndBlogId(array('display' => $display), $id, $blog_id);
 //    $blog_plugins_model->updateDisplay(array($id=>$request->get('display')), $blog_id);   // TODO:後でこちらに置き換え
-
-    $this->layout = 'ajax.php';
   }
 
   /**

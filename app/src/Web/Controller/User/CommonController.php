@@ -92,8 +92,6 @@ class CommonController extends UserController
     } catch (Exception $e) {
       throw new RuntimeException("drawNumber failed. {$e->getMessage()} {$e->getFile()}:{$e->getLine()}");
     }
-
-    $this->layout = ""; // この後、レンダリングさせない
   }
 
   /**

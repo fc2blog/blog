@@ -28,9 +28,9 @@ use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
-  protected $data = [];            // テンプレートへ渡す変数の保存領域
+  protected $data = [];    // テンプレートへ渡す変数の保存領域
   protected $layout = '';  // 表示ページのレイアウトテンプレート
-  protected $output = '';             // 出力タグ
+  protected $output = '';  // 送信するデータ、HTML等
   private $resolvedMethod;
   protected $request;
 
@@ -79,7 +79,6 @@ abstract class Controller
       $this->output = $this->renderByTwig($this->request, $template_path);
     } elseif ($this->layout === 'fc2_template.php') {
       $this->output = $this->renderByFc2Template($this->request, $template_path);
-      $this->output = $this->afterFilter($this->output);
     } else { // $this->layout === '' を含む
       $this->output = "";
     }
@@ -109,11 +108,6 @@ abstract class Controller
 
   protected function beforeFilter(Request $request)
   {
-  }
-
-  protected function afterFilter(string $str): string
-  {
-    return $str;
   }
 
   public function set(string $key, $value)
@@ -278,7 +272,7 @@ abstract class Controller
    * @param Request $request
    * @param array $data
    * @return array
-   * TODO User系のみで使われるので、後日UserControllerへ移動
+   * TODO アクションではないので、なんらか別クラスへ切り出すべき
    */
   static public function preprocessingDataForFc2Template(Request $request, array $data):array
   {
@@ -393,6 +387,7 @@ abstract class Controller
   }
 
   // 存在しないアクションは404へ
+  // TODO 存在しないメソッドコールはエラーにしたほうがわかりやすい
   public function __call($name, $arguments)
   {
     return $this->error404();

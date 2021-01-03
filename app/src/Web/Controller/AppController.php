@@ -7,52 +7,16 @@ namespace Fc2blog\Web\Controller;
 
 use Fc2blog\App;
 use Fc2blog\Model\BlogsModel;
-use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
 abstract class AppController extends Controller
 {
-
-  /**
-   * 出力結果を後処理置換
-   * @param string $html
-   * @return string
-   */
-  protected function afterFilter(string $html): string
-  {
-    // cssとjsを置き換える
-    $css_html = Html::getCSSHtml();
-    $js_html = Html::getJSHtml();
-
-    // cssとjsを置き換え
-    $html = str_replace([$this->includeCSS(), $this->includeJS()], [$css_html, $js_html], $html);
-
-    return $html;
-  }
-
-  /**
-   * CSSの置き換え引数
-   * @return string
-   */
-  public function includeCSS(): string
-  {
-    return '<!-- ' . "\xFF" . 'CSS_INCLUDE -->';
-  }
-
-  /**
-   * Javascriptの置き換え引数
-   * @return string
-   */
-  public function includeJS(): string
-  {
-    return '<!-- ' . "\xFF" . 'JS_INCLUDE -->';
-  }
-
   /**
    * blog_idからブログ情報を取得
    * @param $blog_id
    * @return array|false|mixed
+   * @deprecated TODO Modelに移動するべき
    */
   public function getBlog($blog_id)
   {
@@ -62,6 +26,7 @@ abstract class AppController extends Controller
   /**
    * デバイスタイプを取得する
    * @return string
+   * @deprecated TODO requestに置換できる
    */
   protected function getDeviceType(): string
   {
@@ -72,6 +37,7 @@ abstract class AppController extends Controller
    * token発行
    * @param null $key
    * @param string $name
+   * TODO captchaでしかつかっていないので、名前をかえるべき
    */
   protected function setToken($key = null, $name = 'token'): void
   {
@@ -87,6 +53,7 @@ abstract class AppController extends Controller
    * @param Request $request
    * @param string $name
    * @return string|null
+   * TODO captchaでしかつかっていないので、名前をかえるべき
    */
   protected function tokenValidate(Request $request, $name = 'token')
   {
