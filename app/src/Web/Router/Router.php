@@ -194,6 +194,13 @@ class Router
       $this->methodName = 'error404';
     }
 
+    // 存在しないClassやMethodならFallbackさせる
+    if(!class_exists($this->className) || !method_exists($this->className, $this->methodName)){
+      // 404に固定
+      $this->className = CommonController::class; // default controller.
+      $this->methodName = 'error404';
+    }
+
     $request->className = $this->className;
     $request->methodName = $this->methodName;
   }
