@@ -6,6 +6,7 @@ namespace Fc2blog\Tests\App\Lib\CaptchaImage;
 
 use Exception;
 use Fc2blog\Lib\CaptchaImage;
+use GdImage;
 use PHPUnit\Framework\TestCase;
 
 class DrawNumberTest extends TestCase
@@ -74,7 +75,7 @@ class DrawNumberTest extends TestCase
   {
     $params = $this->getDefaultParams();
     $gif_resource = $this->generateGifImage($params);
-    $this->assertIsResource($gif_resource);
+    $this->assertInstanceOf(GdImage::class, $gif_resource);
   }
 
   public function testDrawEnNumber(): void
@@ -82,7 +83,7 @@ class DrawNumberTest extends TestCase
     $params = $this->getDefaultParams();
     $params['isJa'] = false;
     $gif_resource = $this->generateGifImage($params);
-    $this->assertIsResource($gif_resource);
+    $this->assertInstanceOf(GdImage::class, $gif_resource);
   }
 
   public function testDrawOddSize(): void
@@ -91,7 +92,7 @@ class DrawNumberTest extends TestCase
     $params['size_x'] = 199;
     $params['size_y'] = 39;
     $gif_resource = $this->generateGifImage($params);
-    $this->assertIsResource($gif_resource);
+    $this->assertInstanceOf(GdImage::class, $gif_resource);
   }
 
   public function testDrawToSmall(): void
@@ -101,18 +102,18 @@ class DrawNumberTest extends TestCase
     $params['size_x'] = 8;
     $params['size_y'] = 1;
     $gif_resource = $this->generateGifImage($params);
-    $this->assertIsResource($gif_resource);
+    $this->assertInstanceOf(GdImage::class, $gif_resource);
     $gif_resource = $this->generateGifImage($params, false);
-    $this->assertIsResource($gif_resource);
+    $this->assertInstanceOf(GdImage::class, $gif_resource);
   }
 
   public function testMiniOrNotMiniMode(): void
   {
     $params = $this->getDefaultParams();
     $gif_resource = $this->generateGifImage($params, true);
-    $this->assertIsResource($gif_resource);
+    $this->assertInstanceOf(GdImage::class, $gif_resource);
     $gif_resource = $this->generateGifImage($params, false);
-    $this->assertIsResource($gif_resource);
+    $this->assertInstanceOf(GdImage::class, $gif_resource);
   }
 
 }
