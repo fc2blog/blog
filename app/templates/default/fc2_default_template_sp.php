@@ -256,7 +256,10 @@
             <p class="posted">
               <%comment_mail+name>
               <%comment_url+str><br />
-              <%comment_year>/<%comment_month>/<%comment_day>(<%comment_hour>:<%comment_minute>)<a href="<%comment_edit_link>" title="<%template_edit_comment>">&nbsp;<%template_edit></a>
+              <%comment_year>/<%comment_month>/<%comment_day>(<%comment_hour>:<%comment_minute>)
+              <!--comment_edit-->
+                <a href="<%comment_edit_link>" title="<%template_edit_comment>">&nbsp;<%template_edit></a>
+              <!--/comment_edit-->
             </p>
             <!--comment_reply-->
               <div style="background-color: #ffffdd; border: 1px solid #d7d7d7; padding: 5px; margin: 5px 0 0 5px;">

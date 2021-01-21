@@ -274,7 +274,9 @@
             <ul class="sub_footer">
               <li><%comment_year>/<%comment_month>/<%comment_day>(<%comment_hour>:<%comment_minute>)</li>
               <li><%comment_mail+name> <%comment_url+str></li>
-              <li><a href="<%comment_edit_link>" title="<%template_edit_comment>"><%template_edit></a></li>
+              <!--comment_edit-->
+                <li><a href="<%comment_edit_link>" title="<%template_edit_comment>"><%template_edit></a></li>
+              <!--/comment_edit-->
             </ul>
             <!--comment_reply-->
               <div style="background-color: #ffffdd; border: 1px solid #d7d7d7; padding: 5px; margin: 5px 0 0 5px;">
