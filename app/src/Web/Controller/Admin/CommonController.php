@@ -5,9 +5,9 @@ namespace Fc2blog\Web\Controller\Admin;
 use Exception;
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\CommentsModel;
-use Fc2blog\Model\Model;
 use Fc2blog\Model\MSDB;
 use Fc2blog\Model\PluginsModel;
 use Fc2blog\Model\UsersModel;
@@ -64,31 +64,32 @@ class CommonController extends AdminController
   }
 
   /**
-   * 初期表示ページ(ブログの設定よりリダイレクト)
+   * /admin/ ブログの設定より初期表示ページを決定し、リダイレクト
    * @param Request $request
    */
-  public function initial(Request $request)
-  {
-    $setting = Model::load('BlogSettings')->findByBlogId($this->getBlogId($request));
-    if (is_array($setting)) {
-      switch ($setting['start_page']) {
-        default:
-        case Config::get('BLOG.START_PAGE.NOTICE'):
-          $this->redirect($request, array('controller' => 'Common', 'action' => 'notice'));
-          break;
-
-        case Config::get('BLOG.START_PAGE.ENTRY'):
-          $this->redirect($request, array('controller' => 'Entries', 'action' => 'create'));
-          break;
-      }
-    } else {
-      $this->redirect($request, array('controller' => 'Common', 'action' => 'notice'));
-    }
-  }
-
   public function index(Request $request)
   {
-    return $this->initial($request);
+    // 設定読み込みをしてリダイレクト
+    if(is_string($blog_id = $this->getBlogId($request))) {
+      $blog_settings = new BlogSettingsModel();
+      $setting = $blog_settings->findByBlogId($blog_id);
+    }else{
+      $setting = null;
+    }
+    if (is_array($setting) && isset($setting['start_page'])) { // 設定あり
+      switch ($setting['start_page']) {
+        case Config::get('BLOG.START_PAGE.ENTRY'):
+          $this->redirect($request, ['controller' => 'Entries', 'action' => 'create']);
+          break;
+
+        case Config::get('BLOG.START_PAGE.NOTICE'):
+        default:
+          $this->redirect($request, ['controller' => 'Common', 'action' => 'notice']);
+          break;
+      }
+    } else { // 設定なし
+      $this->redirect($request, ['controller' => 'Common', 'action' => 'notice']);
+    }
   }
 
   /**
@@ -120,8 +121,7 @@ class CommonController extends AdminController
     $state = $request->get('state', 0);
 
     // インストール済みロックファイルをチェックする。ロックファイルがあればインストール済みと判定し、完了画面へ
-    $installed_lock_file_path = Config::get('TEMP_DIR') . "installed.lock";
-    if (file_exists($installed_lock_file_path)) {
+    if ($this->isInstalled()) {
       $state = 3;
     }
 
@@ -308,7 +308,7 @@ class CommonController extends AdminController
         // 完了画面
 
         // 完了画面表示と同時に、インストール済みロックファイルの生成
-        file_put_contents($installed_lock_file_path, "This is installed check lockfile.\nThe blog already installed. if you want re-enable installer, please delete this file.");
+        file_put_contents($this->getInstalledLockFilePath(), "This is installed check lockfile.\nThe blog already installed. if you want re-enable installer, please delete this file.");
 
         return 'admin/common/installed.twig';
     }

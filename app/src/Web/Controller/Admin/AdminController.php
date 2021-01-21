@@ -14,6 +14,14 @@ abstract class AdminController extends AppController
     // 親のフィルター呼び出し
     parent::beforeFilter($request);
 
+    // install.lockファイルがなければインストーラーへ
+    if (!$this->isInstalled() && (
+        $request->className !== CommonController::class ||
+        $request->methodName !== 'install'
+      )) {
+      $this->redirect($request, ['controller' => 'Common', 'action' => 'install']);
+    }
+
     if (!$this->isLogin()) {
       // 未ログイン時は新規登録とログイン以外させない
       $allows = array(
@@ -76,6 +84,16 @@ abstract class AdminController extends AppController
   protected function isLogin()
   {
     return !!Session::get('user_id');
+  }
+
+  protected function getInstalledLockFilePath():string
+  {
+    return Config::get('TEMP_DIR') . "installed.lock";
+  }
+
+  protected function isInstalled(): bool{
+    $installed_lock_file_path = $this->getInstalledLockFilePath();
+    return file_exists($installed_lock_file_path);
   }
 
   /**

@@ -23,9 +23,10 @@ describe("crawl admin pages", () => {
     await c.init();
   });
 
-  const start_url = "http://localhost:8080/admin/common/install";
+  const start_url = "http://localhost:8080/admin";
+  const installer_url = "http://localhost:8080/admin/common/install";
 
-  it("open installer page", async () => {
+  it("redirect to installer page", async () => {
     const [response] = await Promise.all([
       c.waitLoad(),
       c.page.goto(start_url),
@@ -35,7 +36,11 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
+    expect(response.url()).toEqual("http://localhost:8080/admin/common/install");
+  });
 
+
+  it("open installer page", async () => {
     const title_text = await c.page.$eval("h2", elm=>elm.textContent);
     expect(/環境チェック/.exec(title_text)).toBeTruthy();
   });
@@ -99,7 +104,7 @@ describe("crawl admin pages", () => {
   it("re-open install page. show installed", async () => {
     const [response] = await Promise.all([
       c.waitLoad(),
-      c.page.goto(start_url),
+      c.page.goto(installer_url),
     ]);
 
     await c.getSS("installer_installed");
