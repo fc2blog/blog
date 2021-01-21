@@ -17,10 +17,14 @@ export class Helper {
 
   async init(): Promise<void> {
     this.browser = await puppeteer.launch({
+      args: ['--lang=ja'],
       ignoreHTTPSErrors: true,
-      headless: !(process.env.NO_HEAD_LESS === "1"), // 動作を確認するなら NO_HEAD_LESS=1 npm run test
+      headless: !(process.env.NO_HEAD_LESS === "1") // 動作を確認するなら NO_HEAD_LESS=1 npm run test
     });
     this.page = await this.browser.newPage();
+    await this.page.setExtraHTTPHeaders({
+      'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8'
+    });
     await this.page.authenticate({
       username: process.env.BASIC_ID || "",
       password: process.env.BASIC_PASS || "",
