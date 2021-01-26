@@ -74,7 +74,7 @@ describe("crawl notfound page", () => {
 
     expect(response.url()).toEqual(url);
     expect(response.status()).toEqual(404);
-    expect(await c.page.title()).toEqual("404 Not Found. - testblog2");
+    expect(await c.page.title()).toEqual("404 Not Found.");
 
     const body_text = await c.page.$eval("body", elm=>elm.textContent);
     expect(body_text.match(/404 Not Found お探しのページは存在しません/));
