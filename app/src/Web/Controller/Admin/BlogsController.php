@@ -2,10 +2,12 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Exception;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
+use Tuupola\Base62Proxy;
 
 class BlogsController extends AdminController
 {
@@ -44,6 +46,7 @@ class BlogsController extends AdminController
    * 新規作成
    * @param Request $request
    * @return string
+   * @throws Exception
    */
   public function create(Request $request): string
   {
@@ -60,6 +63,7 @@ class BlogsController extends AdminController
     $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, ['id', 'name', 'nickname']);
     if (empty($errors['blog'])) {
       $blog_data['user_id'] = $this->getUserId();
+      $blog_data['trip_salt'] = Base62Proxy::encode(random_bytes(128));
       if ($id = $blogs_model->insert($blog_data)) {
         $this->setInfoMessage(__('I created a blog'));
         $this->redirect($request, ['action' => 'index']);
