@@ -800,7 +800,7 @@ class EntriesController extends UserController
     if (empty($errors['comment']) && empty($errors['token'])) {
       $data['blog_id'] = $blog_id;  // ブログIDの設定
       // trip_hashの生成
-      if (isset($data['password']) && strlen(isset($data['password']) > 0)) {
+      if (isset($data['password']) && strlen($data['password'] > 0)) {
         $stretch_num = strlen($data['password']) % 10 + 1;
         $trip_salt = $blog['trip_salt'];
         $trip_hash = $trip_salt . $data['password'];
