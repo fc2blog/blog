@@ -78,6 +78,7 @@ $config['fc2_template_if'] = [
   'deny_tb'            => '<?php if(true) { ?>', // 互換性用タグ、trackback は無効化と思われる
   // コメントの返信の有無判定
   'comment_reply'      => '<?php if(!empty($comment[\'reply_body\'])) { ?>',
+  'comment_has_trip'   =>  '<?php if(isset($comment) && isset($comment[\'trip_hash\']) && strlen($comment[\'trip_hash\'])>0) { ?>',
   // タグが存在するかどうか
   'topentry_tag'       => '<?php if(!empty($entry[\'tags\'])) { ?>', // entry(loop内)でtagsがあるか
   'not_topentry_tag'   => '<?php if(empty($entry[\'tags\'])) { ?>',
@@ -106,6 +107,7 @@ $config['fc2_template_if'] = [
   // デバイスタイプ
   'ios'     => '<?php if(\Fc2blog\App::isIOS($request)) { ?>', // iOSとあるが、iPhone,iPodであるかの判定、iPadはPC扱い
   'android' => '<?php if(\Fc2blog\App::isAndroid($request)) { ?>',
+
 ];
 
 $template_vars = [
@@ -228,7 +230,7 @@ $template_vars = [
   '<%comment_url+str>'   => '<?php if(isset($comment[\'url\'])) echo \'<a href="\' . $comment[\'url\'] . \'">\' . $comment[\'url\'] . \'</a>\'; ?>',
   '<%comment_mail+name>' => '<?php if(!isset($comment[\'name\'])){}else if(!empty($comment[\'mail\'])){ echo \'<a href="mailto:\' . $comment[\'mail\'] . \'">\' . h($comment[\'name\']) . \'</a>\'; }else{ echo h($comment[\'name\']); } ?>',
   '<%comment_url+name>'  => '<?php if(!isset($comment[\'name\'])){}else if(!empty($comment[\'url\'])){ echo \'<a href="\' . $comment[\'url\'] . \'">\' . h($comment[\'name\']) . \'</a>\'; }else{ echo h($comment[\'name\']); } ?>',
-  '<%comment_trip>'      => '<?php if(isset($comment[\'trip\'])) echo $comment[\'trip\']; ?>',
+  '<%comment_trip>'      => '<?php if(isset($comment[\'trip_hash\'])) echo $comment[\'trip_hash\']; ?>',
   // コメント一覧の返信分
   '<%comment_reply_body>'    => '<?php if(isset($comment[\'reply_body\'])) echo $comment[\'reply_body\']; ?>',
   '<%comment_reply_year>'    => '<?php if(isset($comment[\'reply_year\'])) echo $comment[\'reply_year\']; ?>',
