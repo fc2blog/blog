@@ -86,7 +86,7 @@ class CommonController extends UserController
     }else{
       $isJa = Config::get('LANG') == 'ja'; // 日本語以外は数字のみを表示
     }
-    $captcha = new CaptchaImage($size_x, $size_y, Config::get('PASSWORD_SALT'), $isJa);
+    $captcha = new CaptchaImage($size_x, $size_y, $isJa);
     try {
       $captcha->drawNumber($key, true); // ここでデータ送信済み
     } catch (Exception $e) {

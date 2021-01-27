@@ -12,23 +12,19 @@ class CaptchaImage
 {
   var $img_size_x;
   var $img_size_y;
-  var $passwd;
   var $hirakana_mode;
 
   /**
    * CaptchaImage constructor.
    * @param $src_img_size_x 8 以上が必要
    * @param $src_img_size_y 1 以上が必要
-   * @param $src_passwd
    * @param bool $hirakana_mode
    */
-  public function __construct($src_img_size_x, $src_img_size_y, $src_passwd, $hirakana_mode = true)
+  public function __construct($src_img_size_x, $src_img_size_y, $hirakana_mode = true)
   {
     $this->img_size_x = $src_img_size_x;
     $this->img_size_y = $src_img_size_y;
     $this->hirakana_mode = $hirakana_mode;
-
-    $this->passwd = $src_passwd;
   }
 
   /**
