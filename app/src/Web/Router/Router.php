@@ -9,7 +9,6 @@ namespace Fc2blog\Web\Router;
 use Fc2blog\Config;
 use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Controller\Admin\AdminController;
-use Fc2blog\Web\Controller\Test\TestController;
 use Fc2blog\Web\Controller\User\BlogsController;
 use Fc2blog\Web\Controller\User\CommonController;
 use Fc2blog\Web\Controller\User\EntriesController;
@@ -55,28 +54,6 @@ class Router
         $this->methodName = $request->get($args_action);
       } elseif (isset($paths[2])) {
         $this->methodName = $paths[2];
-      }
-
-    } elseif (preg_match('|\A/_for_unit_test_/|u', $request->uri)) { // Test routing
-      $request->urlRewrite = true;
-      $request->baseDirectory = '/_for_unit_test_/';
-      $this->className = \Fc2blog\Web\Controller\Test\CommonController::class; // default controller.
-
-      // 管理用のパラメータを設定する
-      $paths = $request->getPaths(); // explode with `/`
-      $args_controller = Config::get('ARGS_CONTROLLER');
-
-      // アクションのクラスは当座固定
-      $request->set($args_controller, "common");
-
-      // → /_for_unit_test_/phpinfo
-      //     ^- path[0]      ^- path[1]
-      if ($paths[1] === "redirect_test_no_full_url") {
-        $this->methodName = "redirect_test_no_full_url";
-
-      } else if ($paths[1] === "redirect_test_full_url") {
-        $this->methodName = "redirect_test_full_url";
-
       }
 
     } else { // User Routing
@@ -179,8 +156,7 @@ class Router
     if (
       (
         $this->className === UserController::class ||
-        $this->className === AdminController::class ||
-        $this->className === TestController::class
+        $this->className === AdminController::class
       ) ||
       (
         $this->methodName === 'process' ||
