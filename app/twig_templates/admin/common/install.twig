@@ -151,22 +151,6 @@
             {% endif %}
         </li>
 
-        <li class="{% if is_salt %}ok{% endif %}{% if not is_salt %}ng{% endif %}">
-            {{ _('Check the configuration of the salt value') }} . . .
-            {% if is_salt %}
-                OK
-            {% endif %}
-            {% if not is_salt %}
-                <span style="color: red;">NG!</span>
-                <hr/>
-                <p class="ng">
-                    {{ _('Salt value for password check (random character string) is still in the initial string') }}<br/>
-                    {{ _('Please change to a string of alphanumeric which is not easily predicted') }}<br/>
-                    {{ _('Example') }}) {{ random_string }}
-                </p>
-            {% endif %}
-        </li>
-
         <li class="{% if is_gd %}ok{% endif %}{% if not is_gd %}ng{% endif %}">
             {{ _('Check the configuration of the GD library') }} . . .
             {% if is_gd %}

@@ -170,11 +170,7 @@ class CommonController extends AdminController
         $is_gd = function_exists('gd_info');
         $this->set('is_gd', $is_gd);
 
-        // salt変更済み確認
-        $is_salt = PASSWORD_SALT != '0123456789abcdef';
-        $this->set('is_salt', $is_salt);
-
-        $is_all_ok = $is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_character && $is_domain && $is_salt;
+        $is_all_ok = $is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_character && $is_domain;
         $this->set('is_all_ok', $is_all_ok);
 
         return 'admin/common/install.twig';

@@ -36,11 +36,6 @@ define('DOMAIN', (string)getenv("FC2_DOMAIN")); // ex: localhost, local.test or 
 define('HTTP_PORT', (string)getenv("FC2_HTTP_PORT")); // ex: 80, 8080
 define('HTTPS_PORT', (string)getenv("FC2_HTTPS_PORT")); // ex: 443, 8480
 
-// PASSWORD_SALTは必ず十分にランダムなテキストへ変更してください。
-// PASSWORD_SALT should be unique and random string.
-// ex: $ php -r 'echo hash("sha256", random_bytes(1024));'
-define('PASSWORD_SALT', (string)getenv("FC2_PASSWORD_SALT"));
-
 // publicとappの位置関係を修正した場合には変更してください
 // Please edit the path when change `app` and `public` relative path condition.
 define('WWW_DIR', (string)getenv("FC2_DOCUMENT_ROOT_PATH"));
