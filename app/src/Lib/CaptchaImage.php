@@ -86,7 +86,7 @@ class CaptchaImage
     //フォント種類
     $fid = random_int(0, count($arr_fonts) - 1);
 
-    $cur_x = random_int(0, 6);
+    $cur_x = random_int(10, 60); // 描画する文字の左開始位置
     $length = strlen($tmp_str);
     for ($i = 0; $i < $length; $i++) {
       if ($this->hirakana_mode) {
