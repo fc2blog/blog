@@ -254,7 +254,7 @@
           <dd>
             <%comment_body>
             <p class="posted">
-              <%comment_mail+name>
+              <%comment_mail+name><!--comment_has_trip-->#<%comment_trip><!--/comment_has_trip-->
               <%comment_url+str><br />
               <%comment_year>/<%comment_month>/<%comment_day>(<%comment_hour>:<%comment_minute>)
               <!--comment_edit-->

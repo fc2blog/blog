@@ -273,7 +273,7 @@
             <div class="sub_body"><%comment_body></div>
             <ul class="sub_footer">
               <li><%comment_year>/<%comment_month>/<%comment_day>(<%comment_hour>:<%comment_minute>)</li>
-              <li><%comment_mail+name> <%comment_url+str></li>
+              <li><%comment_mail+name><!--comment_has_trip-->#<%comment_trip><!--/comment_has_trip--> <%comment_url+str></li>
               <!--comment_edit-->
                 <li><a href="<%comment_edit_link>" title="<%template_edit_comment>"><%template_edit></a></li>
               <!--/comment_edit-->
