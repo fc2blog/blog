@@ -89,8 +89,7 @@ setup-dev: app/vendor tests/test_images/0.png
 .PHONY: reload-test-data
 reload-test-data:
 	docker-compose up -d
-	-docker-compose run --rm php bash -c "chown -R www-data:www-data app/temp"
-	-docker-compose run --rm php bash -c "chown -R www-data:www-data public/uploads"
+	make fix-permission
 	-mkdir -p public/uploads/t/e/s/testblog2/file/
 	cp -a tests/test_images/1.png public/uploads/t/e/s/testblog2/file/1.png
 	cp -a tests/test_images/2.png public/uploads/t/e/s/testblog2/file/2.png
@@ -98,3 +97,7 @@ reload-test-data:
 	docker-compose run --rm --user www-data php bash -c "tests/cli_load_fixture.php"
 	docker-compose run --rm --user www-data php bash -c "tests/cli_update_template.php testblog2"
 
+.PHONY: fix-permission
+fix-permission:
+	-docker-compose run --rm php bash -c "chown -R www-data:www-data app/temp"
+	-docker-compose run --rm php bash -c "chown -R www-data:www-data public/uploads"
