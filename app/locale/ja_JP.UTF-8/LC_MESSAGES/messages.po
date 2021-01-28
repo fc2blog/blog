@@ -2526,3 +2526,9 @@ msgstr "ブログに設置されたプラグイン、またはテンプレート
 
 msgid "The page you are looking for does not exist."
 msgstr "お探しのページは存在しません"
+
+msgid "Execute `Create database` failed. Please `Create database` your self."
+msgstr "`CREATE DATABASE`のsql実行に失敗しました、事前に`CREATE DATABASE`を実行してください。"
+
+msgid "(If not exists, will be try create)"
+msgstr "(未作成の場合、作成を試行します)"
