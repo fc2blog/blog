@@ -79,8 +79,8 @@ abstract class Controller
       $this->output = $this->renderByTwig($this->request, $template_path);
     } elseif ($this->layout === 'fc2_template.php') {
       $this->output = $this->renderByFc2Template($this->request, $template_path);
-    } else { // $this->layout === '' を含む
-      $this->output = "";
+    } else {
+      // $this->layout === '' の場合は、空ボディか、$this->outputにすでになにか入れられているという想定
     }
   }
 
@@ -91,13 +91,13 @@ abstract class Controller
   public function emit(): void
   {
     if (isset($this->data['http_status_code']) && is_int($this->data['http_status_code'])) {
-      http_response_code($this->data['http_status_code']);
+      http_response_code($this->getStatusCode());
     }
 
     if (!headers_sent()) {
       // Content typeの送信
-      if (isset($this->data['http_content_type']) && strlen(isset($this->data['http_content_type'])) > 0) {
-        header("Content-Type: {$this->data['http_content_type']}");
+      if (isset($this->data['http_content_type']) && strlen($this->data['http_content_type']) > 0) {
+        header("Content-Type: {$this->getContentType()}");
       } else {
         header("Content-Type: text/html; charset=UTF-8");
       }
@@ -396,8 +396,15 @@ abstract class Controller
   // 404 NotFound Action
   public function error404()
   {
-    $this->data['http_status_code'] = 404;
+    $this->setStatusCode(404);
     return 'user/common/error404.twig';
+  }
+
+  // 403 Forbidden
+  public function error403()
+  {
+    $this->setStatusCode(403);
+    return 'user/common/error403.twig';
   }
 
   public function get(string $key)
@@ -411,6 +418,26 @@ abstract class Controller
       throw new LogicException("the method is only for testing.");
     }
     return $this->output;
+  }
+
+  public function getStatusCode(): int
+  {
+    return (int)$this->data['http_status_code'];
+  }
+
+  public function setStatusCode(int $code = 200): void
+  {
+    $this->data['http_status_code'] = $code;
+  }
+
+  public function getContentType(): string
+  {
+    return $this->data['http_content_type'];
+  }
+
+  public function setContentType(string $mime_type = 'text/html; charset=UTF-8'): void
+  {
+    $this->data['http_content_type'] = $mime_type;
   }
 
   public function getResolvedMethod(): string

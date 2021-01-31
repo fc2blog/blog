@@ -388,6 +388,9 @@ msgstr "件"
 msgid "404 Not Found."
 msgstr "404 Not Found."
 
+msgid "403 Forbidden."
+msgstr "403 Forbidden."
+
 #: shell/../view/user/entries/comment_edit_sp.html:2
 #: shell/../view/user/entries/comment_edit.html:1
 msgid "I edit a comment"

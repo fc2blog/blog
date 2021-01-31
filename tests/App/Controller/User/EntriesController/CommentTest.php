@@ -73,12 +73,12 @@ class CommentTest extends TestCase
     $blog_setting = $blog_settings_model->findByBlogId($blog_id);
     $options = $comments_model->getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting);
     $comments = $comments_model->find('all', $options);
-//    var_dump($comments);
+    // var_dump($comments);
     // ※ この箇所はかなり壊れやすい
-    $this->assertEquals("jasvQm6D", $comments[0]['trip_hash']);
+    $this->assertEquals("s0jeH8Lw", $comments[0]['trip_hash']);
 
     // Tripがテンプレートにまで表示されているかチェック
     $c = $this->reqGet("/testblog2/index.php?mode=entries&process=view&id=1");
-    $this->assertStringContainsString("jasvQm6D", $c->getOutput());
+    $this->assertStringContainsString("s0jeH8Lw", $c->getOutput());
   }
 }

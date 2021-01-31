@@ -620,6 +620,36 @@ class BlogsModel extends Model
   }
 
   /**
+   * エントリのパーマリンク
+   * @param string $blog_id
+   * @param string $entry_id
+   * @return string
+   */
+  static public function getEntryFullUrlByBlogIdAndEntryId(string $blog_id, string $entry_id): string
+  {
+    $schema = static::getSchemaByBlogId($blog_id);
+    $domain = Config::get("DOMAIN");
+    $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+    return $schema . "//" . $domain . $port . "/" . $blog_id . "/blog-entry-" . (int)$entry_id . ".html";
+  }
+
+  /**
+   * Blog Idをキーとして、そのブログの`http(s)://FQDN(:port)/(blog_id)/`を生成する
+   * @param string $blog_id
+   * @param ?string $domain 省略時、\Fc2blog\Config::get("DOMAIN")
+   * @return string
+   */
+  static public function getFullUrlByBlogId(string $blog_id, ?string $domain = null): string
+  {
+    $schema = static::getSchemaByBlogId($blog_id);
+    if (is_null($domain)) {
+      $domain = Config::get("DOMAIN");
+    }
+    $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+    return $schema . "//" . $domain . $port . "/" . $blog_id . "/";
+  }
+
+  /**
    * Blog Idをキーとして、そのブログの`http(s)://FQDN(:port)`を生成する
    * @param string $blog_id
    * @param ?string $domain 省略時、\Fc2blog\Config::get("DOMAIN")

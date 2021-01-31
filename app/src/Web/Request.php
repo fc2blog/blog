@@ -412,4 +412,20 @@ class Request
     $this->session['sig'] = $sig;
     Session::set('sig', $sig);
   }
+
+  /**
+   * BlogID「かもしれない」ものを取得する
+   * @return string|null
+   */
+  public function getBlogId(): ?string
+  {
+    $paths = $this->getPaths();
+
+    // blog_id「かもしれないもの」を取得する
+    if (isset($paths[0]) && preg_match('|\A[0-9a-zA-Z]+\z|u', $paths[0])) {
+      return $paths[0];
+    } else {
+      return null;
+    }
+  }
 }
