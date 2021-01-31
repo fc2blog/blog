@@ -1154,16 +1154,6 @@ msgstr "現在ドメインにdomainが設定されています"
 msgid "Please change to the appropriate domain"
 msgstr "適切なドメインに変更してください"
 
-#: shell/../view/admin/common/install.html:163
-msgid "Check the configuration of the salt value"
-msgstr "salt値の設定をチェック"
-
-#: shell/../view/admin/common/install.html:170
-msgid ""
-"Salt value for password check (random character string) is still in the "
-"initial string"
-msgstr "パスワードチェック用のsalt値(ランダム文字列)が初期文字列のままです"
-
 #: shell/../view/admin/common/install.html:171
 msgid "Please change to a string of alphanumeric which is not easily predicted"
 msgstr "予測されにくい英数の文字列に変更してください"

@@ -21,7 +21,7 @@ class DrawNumberTest extends TestCase
    */
   private function generateGifImage(array $params, bool $mini_mode = true)
   {
-    $captcha = new CaptchaImage($params['size_x'], $params['size_y'], $params['salt'], false);
+    $captcha = new CaptchaImage($params['size_x'], $params['size_y'], false);
 
     $is_in_ob = ob_get_level() > 0;
     $before_ob = "";
@@ -67,7 +67,6 @@ class DrawNumberTest extends TestCase
       "size_x" => 200,
       "size_y" => 40,
       "isJa" => true, // or false
-      "salt" => "this_is_test_salt",
     ];
   }
 

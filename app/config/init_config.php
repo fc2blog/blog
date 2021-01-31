@@ -70,9 +70,6 @@ $config['INTERNAL_ENCODING'] = 'UTF-8';
 // cron実行
 $config['CRON'] = false;
 
-// パスワード用のsalt
-$config['PASSWORD_SALT'] = PASSWORD_SALT;
-
 // ドメイン
 $config['DOMAIN'] = DOMAIN;
 $config['DOMAIN_USER'] = $config['DOMAIN'];

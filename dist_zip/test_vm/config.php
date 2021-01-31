@@ -13,8 +13,6 @@ define('DOMAIN', 'example.test'); // ドメイン名
 define('HTTP_PORT', '80'); // HTTP時ポート
 define('HTTPS_PORT', '443'); // HTTPS時ポート
 
-define('PASSWORD_SALT', 'BgbXeZJQy9ijBNThVZ0zU6wbiXmerjpJ');
-
 define('WWW_DIR', __DIR__ . '/../html/');
 
 require(__DIR__ . '/core/bootstrap.php');

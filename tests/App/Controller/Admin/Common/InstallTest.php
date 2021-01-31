@@ -48,7 +48,6 @@ class InstallTest extends TestCase
     $this->assertTrue($d['is_character']);
     $this->assertTrue($d['is_domain']);
     $this->assertTrue($d['is_gd']);
-    $this->assertTrue($d['is_salt']);
     $this->assertTrue($d['is_all_ok']);
   }
 
@@ -88,8 +87,6 @@ class InstallTest extends TestCase
       $this->assertTrue($d['is_domain']);
       // 確認がむずかしい
       $this->assertTrue($d['is_gd']);
-      // 確認がむずかしい
-      $this->assertTrue($d['is_salt']);
 
       $this->assertFalse($d['is_all_ok']);
 

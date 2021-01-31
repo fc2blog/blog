@@ -152,7 +152,7 @@ class CommentsModel extends Model
 
     // Validateの追加設定
     $this->validates['password']['required'] = true;
-    $this->validates['password']['own'] = array('method' => 'password_check', 'password' => $comment['password']);   // パスワードチェック
+    $this->validates['password']['own'] = ['method' => 'password_check', 'password' => $comment['password']];   // パスワードチェック
     return $this->validate($data, $valid_data, $white_list);
   }
 
@@ -187,7 +187,7 @@ class CommentsModel extends Model
     if (empty($option['password'])) {
       return __('No password is registered');   // パスワード未登録
     }
-    if (hash_equals(self::passwordHash($value), $option['password'])) {
+    if (password_verify($value, $option['password'])) {
       return true;
     }
     return __('The password is incorrect!');
@@ -200,7 +200,7 @@ class CommentsModel extends Model
    */
   public static function passwordHash(string $password): string
   {
-    return hash('sha256', $password . Config::get('PASSWORD_SALT'));
+    return password_hash($password, PASSWORD_DEFAULT);
   }
 
   /**

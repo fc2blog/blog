@@ -191,7 +191,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `login_id`, `password`, `login_blog_id`, `type`, `created_at`, `logged_at`) VALUES (1,'testadmin','0e7af7a36a0aa40460828e8160589c024c08b97425526984d455b6e40190d93d','testblog2',1,'2020-07-24 11:48:03','2020-10-12 21:15:09');
+INSERT INTO `users` (`id`, `login_id`, `password`, `login_blog_id`, `type`, `created_at`, `logged_at`) VALUES (1,'testadmin','$2y$10$51G30OwrNVa.AFhW0dTUiuR8UE8u1/lFHMv7D3bZ/LhOyN6u4wDmi','testblog2',1,'2020-07-24 11:48:03','2020-10-12 21:15:09');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

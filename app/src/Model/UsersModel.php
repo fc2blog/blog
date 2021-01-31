@@ -127,12 +127,12 @@ class UsersModel extends Model
 
   /**
    * ユーザーパスワード用のハッシュを作成
-   * @param $password
+   * @param string $password
    * @return string
    */
-  public static function passwordHash($password)
+  public static function passwordHash(string $password): string
   {
-    return hash('sha256', $password . Config::get('PASSWORD_SALT'));
+    return password_hash($password, PASSWORD_DEFAULT);
   }
 
   /**
@@ -143,11 +143,17 @@ class UsersModel extends Model
    */
   public function findByLoginIdAndPassword($id, $password)
   {
-    $options = array(
-      'where'   => 'login_id=? AND password=?',
-      'params'  => array($id, $this->passwordHash($password)),
-    );
-    return $this->find('row', $options);
+    $options = [
+      'where' => 'login_id=?',
+      'params' => [$id],
+    ];
+    $user = $this->find('row', $options);
+
+    if (is_array($user) && password_verify($password, $user['password'])) {
+      return $user;
+    } else {
+      return false;
+    }
   }
 
   /**
