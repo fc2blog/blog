@@ -37,12 +37,12 @@
         }
 
         table#db {
-            width: 400px;
+            width: 600px;
             margin: 5px auto;
         }
 
         #db th {
-            width: 150px;
+            width: 250px;
         }
     </style>
     <ul class="check">
@@ -111,7 +111,7 @@
                     <td>{{ DB_PASSWORD }}</td>
                 </tr>
                 <tr>
-                    <th>{{ _('Database name') }}</th>
+                    <th>{{ _('Database name') }}<br>{{ _('(If not exists, will be try create)') }}</th>
                     <td>{{ DB_DATABASE }}</td>
                 </tr>
             </table>

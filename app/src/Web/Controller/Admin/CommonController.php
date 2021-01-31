@@ -185,7 +185,7 @@ class CommonController extends AdminController
         // ディレクトリ製作成功チェック
         if (!file_exists(Config::get('TEMP_DIR') . 'log') || !file_exists(Config::get('TEMP_DIR') . 'blog_template')) {
           $this->setErrorMessage(__('Create /app/temp/blog_template and log directory failed.'));
-          $this->redirect($request, $request->baseDirectory . 'common/install?state=1&error=mkdir');
+          $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=mkdir');
         }
 
         // DB接続確認
@@ -204,8 +204,8 @@ class CommonController extends AdminController
             // 作成できたか確認
             $msdb->connect();
           } catch (Exception $e) {
-            $this->setErrorMessage(__('Create database failed.'));
-            $this->redirect($request, $request->baseDirectory . 'common/install?state=1&error=db_create');
+            $this->setErrorMessage(__('Execute `Create database` failed. Please `Create database` your self.'));
+            $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=db_create');
           }
         }
 
@@ -228,7 +228,7 @@ class CommonController extends AdminController
         if ($res === false) {
           /** @noinspection SyntaxError */
           $this->setErrorMessage(__('Create table failed.'));
-          $this->redirect($request, $request->baseDirectory . 'common/install?state=1&error=table_insert');
+          $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');
         }
 
         // DBセットアップ成功チェック
@@ -237,7 +237,7 @@ class CommonController extends AdminController
         if (!is_countable($table)) {
           /** @noinspection SyntaxError */
           $this->setErrorMessage(__('Create table failed.'));
-          $this->redirect($request, $request->baseDirectory . 'common/install?state=1&error=table_insert');
+          $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');
         }
 
         // 初期公式プラグインを追加

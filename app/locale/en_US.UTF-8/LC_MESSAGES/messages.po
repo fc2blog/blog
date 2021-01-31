@@ -2479,3 +2479,9 @@ msgstr ""
 
 msgid "The page you are looking for does not exist."
 msgstr ""
+
+msgid "Execute `Create database` failed. Please `Create database` your self."
+msgstr ""
+
+msgid "(If not exists, will be try create)"
+msgstr ""
