@@ -104,7 +104,7 @@ class SetTest extends TestCase
   public function testSamesiteNoneAndNotSecure(): void
   {
     try {
-      $request = new Request();
+      $request = new Request('GET', '/', null, null, null, null, ['HTTPS' => ""]);
       @Cookie::set($request, "k", "v", time(), "", "", true, false, "None");
       $this->fail();
     } catch (InvalidArgumentException $e) {

@@ -9,7 +9,7 @@ namespace Fc2blog\Web;
 use Fc2blog\App;
 use Fc2blog\Util\I18n;
 use Fc2blog\Util\Log;
-use Fc2blog\Web\Controller\Test\CommonController;
+use Fc2blog\Web\Controller\User\CommonController;
 use Fc2blog\Web\Router\Router;
 
 class Request
