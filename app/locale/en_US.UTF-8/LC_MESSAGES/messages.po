@@ -2480,3 +2480,12 @@ msgstr ""
 
 msgid "Submit"
 msgstr ""
+
+msgid "Syntax Error"
+msgstr ""
+
+msgid "There may be a problem with a installed plugin or template."
+msgstr ""
+
+msgid "The page you are looking for does not exist."
+msgstr ""
