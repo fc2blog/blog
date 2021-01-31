@@ -18,6 +18,7 @@ use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 use InvalidArgumentException;
 use LogicException;
+use Tuupola\Base62Proxy;
 
 class EntriesController extends UserController
 {
@@ -752,6 +753,7 @@ class EntriesController extends UserController
 
     // ブログの設定情報取得(captchaの使用可否で画面切り替え)
     $blog_setting = (new BlogSettingsModel())->findByBlogId($blog_id);
+    $blog = (new BlogsModel())->findById($blog_id);
     $is_captcha = $blog_setting['comment_captcha'] == Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートにリクエスト情報を合わせる
@@ -789,7 +791,6 @@ class EntriesController extends UserController
     $entry['tags'] = (new TagsModel())->getEntryTags($blog_id, $entry_id);
     $this->set('entry', $entry);
 
-
     // 入力チェック処理
     $comments_model = new CommentsModel();
     $errors = array();
@@ -798,6 +799,19 @@ class EntriesController extends UserController
     $errors['token'] = $is_captcha ? $this->tokenValidate($request) : array();   // Token用のバリデート
     if (empty($errors['comment']) && empty($errors['token'])) {
       $data['blog_id'] = $blog_id;  // ブログIDの設定
+      // trip_hashの生成
+      if (isset($data['password']) && strlen($data['password'] > 0)) {
+        $stretch_num = strlen($data['password']) % 10 + 1;
+        $trip_salt = $blog['trip_salt'];
+        $trip_hash = $trip_salt . $data['password'];
+        for ($i = 0; $i < $stretch_num; $i++) {
+          $trip_hash = Base62Proxy::encode(hash('sha256', $trip_hash, true));
+        }
+        $trip_hash_length = 8;
+        $data['trip_hash'] = substr($trip_hash, 0, $trip_hash_length);
+      } else {
+        $data['trip_hash'] = '';
+      }
       if ($id = $comments_model->insertByBlogSetting($request, $data, $blog_setting)) {
         $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id), '#comment' . $id);
       }
