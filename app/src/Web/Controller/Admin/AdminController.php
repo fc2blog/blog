@@ -213,7 +213,7 @@ abstract class AdminController extends AppController
   // 404 NotFound Action
   public function error404()
   {
-    $this->data['http_status_code'] = 404;
+    $this->setStatusCode(404);
     return 'admin/common/error404.twig';
   }
 }

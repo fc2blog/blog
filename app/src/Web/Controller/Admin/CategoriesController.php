@@ -153,7 +153,7 @@ class CategoriesController extends AdminController
 
     if (!$request->isValidSig()) {
       $this->set('http_content_type', "application/json; charset=utf-8");
-      $this->set('http_status_code', 400);
+      $this->setStatusCode(404);
       $this->set('json', ['error' => 'invalid sig']);
       return "admin/common/json.twig";
     }
