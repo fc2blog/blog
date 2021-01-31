@@ -11,7 +11,7 @@
                 <td>
                     {{ input(req, 'user[login_id]', 'text')|raw }}
                     {% if errors['login_id'] %}
-                        <span class="error">{{ errors['login_id'] }}</span>
+                        <p class="error">{{ errors['login_id'] }}</p>
                     {% endif %}
                 </td>
             </tr>
@@ -19,8 +19,8 @@
                 <th>{{ _('Password') }}</th>
                 <td>
                     {{ input(req, 'user[password]', 'password')|raw }}
-                    {% if errors['login_id'] %}
-                        <span class="error">{{ errors['password'] }}</span>
+                    {% if errors['password'] %}
+                        <p class="error">{{ errors['password'] }}</p>
                     {% endif %}
                 </td>
             </tr>
