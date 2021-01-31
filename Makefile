@@ -49,6 +49,7 @@ test: app/vendor e2e_test/node_modules tests/test_images/0.png
 
 .PHONY: clean
 clean:
+	cd dist && make clean
 	docker-compose up -d
 	-docker-compose exec --user root php bash -c "rm -r app/temp/installed.lock"
 	-docker-compose exec --user root php bash -c "rm -r app/temp/blog_template/*"
