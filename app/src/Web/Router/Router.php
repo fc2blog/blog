@@ -77,55 +77,53 @@ class Router
         $request->set('blog_id', $paths[0]);
       }
 
-      // トップページ
-      if (isset($paths[0]) && !$request->isArgs($args_action)) {
+      if ($request->isArgs('xml')) { // `/?xml`
+        // RSS feed
+        $this->className = BlogsController::class;
+        $this->methodName = 'feed';
+
+      } else if (isset($paths[0]) && !$request->isArgs($args_action)) {
+        // トップページ
         $this->methodName = 'index';
-      }
 
-      // 記事詳細
-      if ($request->rawHasGet('no') && $request->isGet()) {
-        $this->methodName = 'view';
-        $request->set('id', $request->get('no'));
-      }
-      if ($request->isArgs('no') && $request->isArgs('m2')) {
-        $this->methodName = 'view';
-        $request->set('id', $request->get('no'));
-      }
+        if ($request->rawHasGet('no') && $request->isGet()) {
+          // 記事詳細
+          $this->methodName = 'view';
+          $request->set('id', $request->get('no'));
 
-      // プラグイン単体
-      if ($request->rawHasGet('mp')) {
-        $this->methodName = 'plugin';
-        $request->set('id', $request->get('mp'));
-      }
+        } else if ($request->isArgs('no') && $request->isArgs('m2')) {
+          $this->methodName = 'view';
+          $request->set('id', $request->get('no'));
 
-      // タグ
-      if ($request->rawHasGet('tag')) {
-        $this->methodName = 'tag';
-      }
+        } else if (isset($paths[1]) && strpos($paths[1], 'archives.html') === 0) {
+          // アーカイブ
+          $this->methodName = 'archive';
 
-      // カテゴリー
-      if ($request->rawHasGet('cat')) {
-        $this->methodName = 'category';
-      }
+        } else if (isset($paths[1]) && preg_match('/^blog-entry-([0-9]+)\.html$/u', $paths[1], $matches)) {
+          // 記事詳細
+          $this->methodName = 'view';
+          $request->set('id', $matches[1]);
 
-      // 検索
-      if ($request->rawHasGet('q')) {
-        $this->methodName = 'search';
-      }
+        } else if ($request->rawHasGet('mp')) {
+          // プラグイン単体
+          $this->methodName = 'plugin';
+          $request->set('id', $request->get('mp'));
 
-      // アーカイブ
-      if (isset($paths[1]) && strpos($paths[1], 'archives.html') === 0) {
-        $this->methodName = 'archive';
-      }
+        } else if ($request->rawHasGet('tag')) {
+          // タグ
+          $this->methodName = 'tag';
 
-      // 記事詳細
-      if (isset($paths[1]) && preg_match('/^blog-entry-([0-9]+)\.html$/u', $paths[1], $matches)) {
-        $this->methodName = 'view';
-        $request->set('id', $matches[1]);
-      }
+        } else if ($request->rawHasGet('cat')) {
+          // カテゴリー
+          $this->methodName = 'category';
 
-      // サムネイル画像
-      if (preg_match('{/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/file/([0-9]+)_([wh]?)([0-9]+)\.(png|gif|jpe?g)$}', $path, $matches)) {
+        } else if ($request->rawHasGet('q')) {
+          // 検索
+          $this->methodName = 'search';
+        }
+
+      } else if (preg_match('{/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/file/([0-9]+)_([wh]?)([0-9]+)\.(png|gif|jpe?g)$}', $path, $matches)) {
+        // サムネイル画像
         $this->className = CommonController::class;
         $this->methodName = 'thumbnail';
         $request->set('blog_id', $matches[1]);
@@ -133,8 +131,9 @@ class Router
         $request->set('whs', $matches[3]);
         $request->set('size', $matches[4]);
         $request->set('ext', $matches[5]);
-      }
-      if (preg_match('{/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/file/([0-9]+)_(wh)([0-9]+)_([0-9]+)\.(png|gif|jpe?g)$}', $path, $matches)) {
+
+      } else if (preg_match('{/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/file/([0-9]+)_(wh)([0-9]+)_([0-9]+)\.(png|gif|jpe?g)$}', $path, $matches)) {
+        // サムネイル画像
         $this->className = CommonController::class;
         $this->methodName = 'thumbnail';
         $request->set('blog_id', $matches[1]);
@@ -143,10 +142,9 @@ class Router
         $request->set('width', $matches[4]);
         $request->set('height', $matches[5]);
         $request->set('ext', $matches[6]);
-      }
 
-      if ($this->methodName === "") {
-        // 一つもかからなかったので
+      }else if ($this->methodName === "") {
+        // 一つもかからなかった
         $this->methodName = $request->get($args_action);
       }
     }
@@ -171,7 +169,7 @@ class Router
     }
 
     // 存在しないClassやMethodならFallbackさせる
-    if(!class_exists($this->className) || !method_exists($this->className, $this->methodName)){
+    if (!class_exists($this->className) || !method_exists($this->className, $this->methodName)) {
       // 404に固定
       $this->className = CommonController::class; // default controller.
       $this->methodName = 'error404';
