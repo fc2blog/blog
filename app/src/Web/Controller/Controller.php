@@ -10,9 +10,9 @@ use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\Log;
-use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Util\Twig\GetTextHelper;
 use Fc2blog\Util\Twig\HtmlHelper;
+use Fc2blog\Web\Controller\Admin\AdminController;
 use Fc2blog\Web\Controller\User\UserController;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
@@ -28,11 +28,9 @@ use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
-  protected $data = [];            // テンプレートへ渡す変数の保存領域
-  protected $layout = 'default.php';  // 表示ページのレイアウトテンプレート
-  protected $output = '';             // 出力タグ
-  private $templateFilePath = "";
-  private $layoutFilePath = "";
+  protected $data = [];    // テンプレートへ渡す変数の保存領域
+  protected $layout = '';  // 表示ページのレイアウトテンプレート
+  protected $output = '';  // 送信するデータ、HTML等
   private $resolvedMethod;
   protected $request;
 
@@ -79,9 +77,10 @@ abstract class Controller
     // テンプレートファイル拡張子で、PHPテンプレートとTwigテンプレートを切り分ける
     if (preg_match("/\.twig\z/u", $template_path)) {
       $this->output = $this->renderByTwig($this->request, $template_path);
-    } else {
-      $this->output = $this->renderByPhpTemplate($this->request, $template_path);
-      $this->output = $this->afterFilter($this->output);
+    } elseif ($this->layout === 'fc2_template.php') {
+      $this->output = $this->renderByFc2Template($this->request, $template_path);
+    } else { // $this->layout === '' を含む
+      $this->output = "";
     }
   }
 
@@ -107,17 +106,8 @@ abstract class Controller
     echo $this->output;
   }
 
-  public function getShortClassName()
-  {
-  }
-
   protected function beforeFilter(Request $request)
   {
-  }
-
-  protected function afterFilter(string $str): string
-  {
-    return $str;
   }
 
   public function set(string $key, $value)
@@ -194,7 +184,6 @@ abstract class Controller
   /**
    * TwigテンプレートエンジンでHTMLをレンダリング
    * 結果は $this->output に保管される
-   * 現状、Admin用画面のみでの利用を想定
    * @param Request $request
    * @param string $twig_template
    * @return string
@@ -215,7 +204,6 @@ abstract class Controller
 
     $twig_template_path = $twig_template;
     $twig_template_device_path = preg_replace("/\.twig\z/u", '_' . App::getDeviceTypeStr($request) . '.twig', $twig_template_path);
-
     if (is_file($base_path . $twig_template_device_path)) { // デバイス用ファイルがある
       $twig_template_path = $twig_template_device_path;
     }
@@ -224,39 +212,48 @@ abstract class Controller
       throw new InvalidArgumentException("Twig error: missing template: {$base_path}{$twig_template_path}");
     }
 
-    $this->data['request'] = $request; // TODO Adhocに追加しているので、どこか適切な場所に移動する
-    $blogs_model = new BlogsModel();
-
-    // TODO 整理共通化リファクタリング, $thisが一意でない（管理画面用にデータを構築している）ので、User系のTwig化時に整理が必要
-    $data = [ // 各種ベースとなるデータ
-      'req' => $request,
-      'sig' => Session::get('sig'),
-      'lang' => $request->lang,
-      'debug' => Config::get('APP_DEBUG') != 0,
-      'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)]), // 代用できそう
-      'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
-      'active_menu' => App::getActiveMenu($request),
-      'isLogin' => $this->isLogin(), // TODO admin 以外ではどうするか
-      'nick_name' => $this->getNickName(), // TODO admin 以外ではどうするか
-      'blog_list' => $blogs_model->getSelectList($this->getUserId()),  // TODO admin 以外ではどうするか
-      'is_selected_blog' => $this->isSelectedBlog(), // TODO admin以外ではどうするか
-      'flash_messages' => $this->removeMessage(), // TODO admin 以外ではどうするか
-      'js_common' => [
-        'isURLRewrite' => $request->urlRewrite,
-        'baseDirectory' => $request->baseDirectory,
-        'deviceType' => $request->deviceType,
-        'deviceArgs' => App::getArgsDevice($request)
-      ],
-      'cookie_common' => [
-        'expire' => Config::get('COOKIE_EXPIRE'),
-        'domain' => Config::get('COOKIE_DEFAULT_DOMAIN')
-      ]
-    ];
-    // ログインしていないと確定しない変数
-    if ($this->getBlog($this->getBlogId($request)) !== false && is_string($this->getBlogId($request))) {
-      $data['blog'] = $this->getBlog($this->getBlogId($request));
-      $data['blog']['url'] = $blogs_model::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) . "/" . $this->getBlogId($request) . "/";
+    // テンプレートエンジンに引き渡すデータを生成
+    $this->data['request'] = $request;
+    if($this instanceof AdminController) {
+      // Admin系データの生成
+      $blogs_model = new BlogsModel();
+      $data = [
+        'req' => $request,
+        'sig' => Session::get('sig'),
+        'lang' => $request->lang,
+        'debug' => Config::get('APP_DEBUG') != 0,
+        'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)]), // 代用できそう
+        'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
+        'active_menu' => App::getActiveMenu($request),
+        'isLogin' => $this->isLogin(),
+        'nick_name' => $this->getNickName(),
+        'blog_list' => $blogs_model->getSelectList($this->getUserId()),
+        'is_selected_blog' => $this->isSelectedBlog(),
+        'flash_messages' => $this->removeMessage(),
+        'js_common' => [
+          'isURLRewrite' => $request->urlRewrite,
+          'baseDirectory' => $request->baseDirectory,
+          'deviceType' => $request->deviceType,
+          'deviceArgs' => App::getArgsDevice($request)
+        ],
+        'cookie_common' => [
+          'expire' => Config::get('COOKIE_EXPIRE'),
+          'domain' => Config::get('COOKIE_DEFAULT_DOMAIN')
+        ]
+      ];
+      // リクエストからログインblogを特定し、保存
+      if ($this->getBlog($this->getBlogId($request)) !== false && is_string($this->getBlogId($request))) {
+        $data['blog'] = $this->getBlog($this->getBlogId($request));
+        $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) . "/" . $this->getBlogId($request) . "/";
+      }
+    }else{
+      // User系画面のデータ生成
+      $data = [
+        'req' => $request,
+        'lang' => $request->lang,
+      ];
     }
+
     $data = array_merge($data, $this->data);
 
     try {
@@ -275,7 +272,7 @@ abstract class Controller
    * @param Request $request
    * @param array $data
    * @return array
-   * TODO User系のみで使われるので、後日UserControllerへ移動
+   * TODO アクションではないので、なんらか別クラスへ切り出すべき
    */
   static public function preprocessingDataForFc2Template(Request $request, array $data):array
   {
@@ -362,137 +359,35 @@ abstract class Controller
   }
 
   /**
-   * PHPを用いたテンプレートエンジンでHTMLをレンダリング
+   * FC2タグを用いたユーザーテンプレート（PHP）でHTMLをレンダリング
    * @param Request $request
    * @param string $template_file_path
    * @return string
    * TODO User系のみで用いられるので、後日UserControllerへ移動
    */
-  private function renderByPhpTemplate(Request $request, string $template_file_path)
+  private function renderByFc2Template(Request $request, string $template_file_path)
   {
-    Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Layout[' . $this->layout . ']');
-    if ($this->layout == '') {
-      // layoutが空の場合は表示処理を行わない
-      return "";
+    if (is_null($template_file_path)) {
+      throw new InvalidArgumentException("undefined template");
+    }
+    if (!is_file($template_file_path)) {
+      throw new InvalidArgumentException("missing template");
     }
 
-    $layout_file_path = Config::get('VIEW_DIR') . 'user/layouts/' . $this->layout;
-    $device_layout_path = preg_replace('/^(.*?)\.([^\/.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $layout_file_path);
+    $this->data = static::preprocessingDataForFc2Template($request, $this->data);
 
-    if (defined("THIS_IS_TEST")) {
-      $this->layoutFilePath = $layout_file_path; // テスト用に退避
-    }
+    // 設定されているdataを展開
+    extract($this->data);
 
-    // 各種テンプレート種類によって分岐
-    if (is_file($device_layout_path)) {
-      // view/user系 デバイス毎に対応があるテンプレート（現状SPのみ）
-
-      extract($this->data);
-      // デバイス毎のファイルがあればデバイス毎のファイルを優先する
-      ob_start();
-      /** @noinspection PhpIncludeInspection */
-      include($device_layout_path);
-      return ob_get_clean();
-
-    } elseif (is_file($layout_file_path) && $this->layout !== "fc2_template.php") {
-      // view/user系 PCテンプレート
-
-      extract($this->data);
-      ob_start();
-      /** @noinspection PhpIncludeInspection */
-      include($layout_file_path);
-      return ob_get_clean();
-
-    } elseif ($this->layout === "fc2_template.php") {
-      // FC2タグを用いたユーザーテンプレート
-
-      if (is_null($template_file_path)) {
-        throw new InvalidArgumentException("undefined template");
-      }
-      if (!is_file($template_file_path)) {
-        throw new InvalidArgumentException("missing template");
-      }
-
-      $this->data = static::preprocessingDataForFc2Template($request, $this->data);
-
-      // 設定されているdataを展開
-      extract($this->data);
-
-      // テンプレート表示
-      ob_start();
-      /** @noinspection PhpIncludeInspection */
-      include($template_file_path);
-      return ob_get_clean();
-    } else {
-      $this->layoutFilePath = ""; // テスト用に退避
-      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Not Found Layout[' . $layout_file_path . ']');
-      return "";
-    }
-  }
-
-  /**
-   * PHPを用いたテンプレートエンジンで本文部分の画面HTMLをレンダリング
-   * @param Request $request
-   * @param $fw_template
-   * @param array $fw_data
-   * @param bool $fw_is_prefix // TODO 削除できる想定
-   */
-  public function display(Request $request, $fw_template, $fw_data = [], $fw_is_prefix = true)
-  {
-    $fw_template = StringCaseConverter::snakeCase($fw_template);
-
-    // データの設定
-    if (count($fw_data)>0) {
-      // fw_dataの指定がある場合はそちらを利用
-      extract($fw_data);
-    } else {
-      // fw_dataが無い場合はControllerのdataを展開
-      extract($this->data);
-    }
-    // 展開完了後fw_dataはunset
-    unset($fw_data);
-
-    // Template表示
-    $fw_template_path = Config::get('VIEW_DIR') . ($fw_is_prefix ? 'user/' : '') . $fw_template;
-    $fw_template_device_path = preg_replace('/^(.*?)\.([^\/.]*?)$/', '$1' . Config::get('DEVICE_PREFIX.' . $request->deviceType) . '.$2', $fw_template_path);
-    if (is_file($fw_template_device_path)) {
-      if (defined("THIS_IS_TEST")) {
-        $this->templateFilePath = $fw_template_device_path; // テスト用に退避
-      }
-      // デバイス毎のファイルがあればデバイス毎のファイルを優先する
-      /** @noinspection PhpIncludeInspection */
-      include($fw_template_device_path);
-    } elseif (is_file($fw_template_path)) {
-      if (defined("THIS_IS_TEST")) {
-        $this->templateFilePath = $fw_template_path; // テスト用に退避
-      }
-      // デバイス毎のファイルがあればデバイス毎のファイルを優先する
-      /** @noinspection PhpIncludeInspection */
-      include($fw_template_path);
-      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Template[' . $fw_template_path . ']');
-    } else {
-      $this->templateFilePath = "";
-      Log::debug_log(__FILE__ . ":" . __LINE__ . " " . 'Not Found Template[' . $fw_template_path . ']');
-    }
-  }
-
-  /**
-   * 表示処理データを取得
-   * TODO DELME 利用されている箇所が無い？
-   * @param Request $request
-   * @param $template
-   * @param array $data
-   * @param bool $isPrefix
-   * @return false|string
-   */
-  public function fetch(Request $request, $template, $data = [], $isPrefix = true)
-  {
+    // テンプレートをレンダリングして返す
     ob_start();
-    $this->display($request, $template, $data, $isPrefix);
+    /** @noinspection PhpIncludeInspection */
+    include($template_file_path);
     return ob_get_clean();
   }
 
   // 存在しないアクションは404へ
+  // TODO 存在しないメソッドコールはエラーにしたほうがわかりやすい
   public function __call($name, $arguments)
   {
     return $this->error404();
@@ -502,7 +397,7 @@ abstract class Controller
   public function error404()
   {
     $this->data['http_status_code'] = 404;
-    return 'Common/error404.php';
+    return 'user/common/error404.twig';
   }
 
   public function get(string $key)
@@ -516,22 +411,6 @@ abstract class Controller
       throw new LogicException("the method is only for testing.");
     }
     return $this->output;
-  }
-
-  public function getLayoutFilePath(): string
-  {
-    if (!defined("THIS_IS_TEST")) {
-      throw new LogicException("the method is only for testing.");
-    }
-    return substr($this->layoutFilePath, strlen(Config::get('VIEW_DIR')));
-  }
-
-  public function getTemplateFilePath(): string
-  {
-    if (!defined("THIS_IS_TEST")) {
-      throw new LogicException("the method is only for testing.");
-    }
-    return substr($this->templateFilePath, strlen(Config::get('VIEW_DIR')));
   }
 
   public function getResolvedMethod(): string

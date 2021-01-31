@@ -12,10 +12,6 @@ use Fc2blog\Util\StringCaseConverter;
 
 class Html
 {
-
-  private static $include_css = array();
-  private static $include_js = array();
-
   /**
    * URLを作成する
    * TODO: ユーザー側のURL生成時はApp:userURLを使用に置き換え最終的にblog_idの部分を削る
@@ -233,68 +229,6 @@ class Html
     }
 
     return $html;
-  }
-
-  /**
-   * CSSを追加する
-   * @param $css
-   * @param array $options
-   */
-  public static function addCSS($css, $options = array())
-  {
-    self::$include_css[] = array($css, $options);
-  }
-
-  /**
-   * 追加されたCSSのHTMLを取得
-   */
-  public static function getCSSHtml()
-  {
-    $css_html = '';
-    foreach (self::$include_css as $css) {
-      $attrs = array(
-          'rel' => 'stylesheet',
-          'type' => 'text/css',
-          'charset' => 'utf-8',
-          'media' => 'all',
-        ) + $css[1];
-      $css_html .= '<link href="' . $css[0] . '"';
-      foreach ($attrs as $key => $value) {
-        $css_html .= ' ' . $key . '="' . $value . '"';
-      }
-      $css_html .= ' />' . "\n";
-    }
-    return $css_html;
-  }
-
-  /**
-   * JSを追加する
-   * @param $js
-   * @param array $options
-   */
-  public static function addJS($js, $options = array())
-  {
-    self::$include_js[] = array($js, $options);
-  }
-
-  /**
-   * 追加されたJSのHTMLを取得
-   */
-  public static function getJSHtml()
-  {
-    $js_html = '';
-    foreach (self::$include_js as $js) {
-      $attrs = array(
-          'type' => 'text/javascript',
-          'charset' => 'utf-8',
-        ) + $js[1];
-      $js_html .= '<script src="' . $js[0] . '"';
-      foreach ($attrs as $key => $value) {
-        $js_html .= ' ' . $key . '="' . $value . '"';
-      }
-      $js_html .= '></script>' . "\n";
-    }
-    return $js_html;
   }
 
   public static function getServerUrl()

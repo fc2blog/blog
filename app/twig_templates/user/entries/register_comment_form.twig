@@ -1,0 +1,66 @@
+{% extends 'user/layouts/default.twig' %}
+{% block title %}{{ _('I will post a comment') }}{% endblock %}
+
+{% block content %}
+    <header class="comment-form">{{ _("I will post a comment") }}</header>
+
+    <form method="POST" id="sys-comment-form" class="user-form">
+
+        <input type="hidden" name="mode" value="Entries"/>
+        <input type="hidden" name="process" value="comment_regist"/>
+
+        {{ input(req, 'comment[entry_id]', 'hidden') }}
+
+        <dl class="vertical-form">
+            <dt>{{ _("Name") }}</dt>
+            <dd>
+                {{ input(req, 'comment[name]', 'text') }}
+                {% if errors.comment.name %}<p class="error">{{ errors.comment.name }}</p>{% endif %}
+            </dd>
+            <dt>{{ _("Title") }}</dt>
+            <dd>
+                {{ input(req, 'comment[title]', 'text') }}
+                {% if errors.comment.title %}<p class="error">{{ errors.comment.title }}</p>{% endif %}
+            </dd>
+            <dt>{{ _("E-mail") }}</dt>
+            <dd>
+                {{ input(req, 'comment[mail]', 'text') }}
+                {% if errors.comment.mail %}<p class="error">{{ errors.comment.mail }}</p>{% endif %}
+            </dd>
+            <dt>URL</dt>
+            <dd>
+                {{ input(req, 'comment[url]', 'text') }}
+                {% if errors.comment.url %}<p class="error">{{ errors.comment.url }}</p>{% endif %}
+            </dd>
+            <dt>{{ _("Comment") }}</dt>
+            <dd>
+                {{ input(req, 'comment[body]', 'textarea') }}
+                {% if errors.comment.body %}<p class="error">{{ errors.comment.body }}</p>{% endif %}
+            </dd>
+            <dt>{{ _("Password") }}</dt>
+            <dd>
+                {{ input(req, 'comment[password]', 'password') }}
+                {% if errors.comment.password %}<p class="error">{{ errors.comment.password }}</p>{% endif %}
+            </dd>
+            <dt>{{ _("Secret") }}</dt>
+            <dd>
+                {{ input(req, 'comment[open_status]', 'select', {'options': open_status_user_list}) }}
+                {% if errors.comment.open_status %}<p class="error">{{ errors.comment.open_status }}</p>{% endif %}
+            </dd>
+            <dt>{{ _("Authentication keyword") }}</dt>
+            <dd>
+                <img src="{{ url(req, 'common', 'captcha') }}"/>
+                <input type="button" class="captcha_reload" value="{{ _("Update authentication image") }}"
+                       onclick="$(this).prev().attr('src', common.fwURL('common', 'captcha', {t : new Date().getTime()}));"/><br/>
+                {{ input(req, 'token', 'captcha') }}
+                <p>{{ _("Please enter the numbers written on the image") }}</p>
+                {% if errors.token %}<p class="error">{{ errors.token }}</p>{% endif %}
+            </dd>
+        </dl>
+
+        <p class="form-button">
+            <input type="submit" value="{{ _("Post") }}"/>
+        </p>
+
+    </form>
+{% endblock %}

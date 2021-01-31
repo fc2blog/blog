@@ -16,7 +16,6 @@ use Fc2blog\Web\Request;
 
 class CommonController extends AdminController
 {
-
   /**
    * 言語設定変更
    * @param Request $request
@@ -116,8 +115,6 @@ class CommonController extends AdminController
    */
   public function install(Request $request): string
   {
-    $this->layout = 'default_nomenu.php';
-
     $state = $request->get('state', 0);
 
     // インストール済みロックファイルをチェックする。ロックファイルがあればインストール済みと判定し、完了画面へ

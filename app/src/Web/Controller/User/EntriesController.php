@@ -315,10 +315,9 @@ class EntriesController extends UserController
     $css = $template['css'];
 
     // テンプレートのシンタックスチェック
-    Model::load('BlogTemplates');
     $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
-      return 'Entries/syntax.php';
+      return 'user/entries/syntax_error.twig';
     }
 
     // FC2用のテンプレートで表示
@@ -385,10 +384,9 @@ class EntriesController extends UserController
     }
 
     // テンプレートのシンタックスチェック
-    Model::load('BlogTemplates');
     $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
     if ($syntax !== true) {
-      return 'Entries/syntax.php';
+      return 'user/entries/syntax_error.twig';
     }
 
     // FC2用のテンプレートで表示
@@ -419,10 +417,9 @@ class EntriesController extends UserController
     $contents = $preview_plugin['contents'];
 
     // テンプレートのシンタックスチェック
-    Model::load('BlogPlugins');
     $syntax = BlogPluginsModel::fc2PluginSyntax($contents);
     if ($syntax !== true) {
-      return 'Entries/syntax.php';
+      return 'user/entries/syntax_error.twig';
     }
 
     // プラグインのPHPファイル作成
@@ -727,7 +724,7 @@ class EntriesController extends UserController
 
     // プライベートブログではない、あるいは認証済み、ログイン済みならリダイレクト
     if ($blog['open_status'] != Config::get('BLOG.OPEN_STATUS.PRIVATE') || Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog($request)) {
-      $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
+      $this->redirect($request, ['action' => 'index', 'blog_id' => $blog_id]);
     }
 
     // 認証処理
@@ -735,13 +732,13 @@ class EntriesController extends UserController
       if ($request->get('blog.password') == $blog['blog_password']) {
         Session::set($this->getBlogPasswordKey($blog['id']), true);
         $this->set('auth_success', true); // for testing.
-        $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
+        $this->redirect($request, ['action' => 'index', 'blog_id' => $blog_id]);
       }
-      $this->set('errors', array('password' => __('The password is incorrect!')));
+      $this->set('errors', ['password' => __('The password is incorrect!')]);
     }
 
     $this->set('blog', $blog);
-    return "";
+    return "user/entries/blog_password.twig";
   }
 
   /**
@@ -754,7 +751,7 @@ class EntriesController extends UserController
     $blog_id = $this->getBlogId($request);
 
     // ブログの設定情報取得(captchaの使用可否で画面切り替え)
-    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+    $blog_setting = (new BlogSettingsModel())->findByBlogId($blog_id);
     $is_captcha = $blog_setting['comment_captcha'] == Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートにリクエスト情報を合わせる
@@ -779,19 +776,22 @@ class EntriesController extends UserController
       $this->redirect($request, ['action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id]);
     }
 
+    // 公開非公開のプルダウン用バリエーション（固定）
+    $this->set('open_status_user_list', CommentsModel::getOpenStatusUserList());
+
     // CAPTCHA用に確認画面を挟む
     if ($is_captcha && !$request->isArgs('token')) {
-      return "";
+      return "user/entries/register_comment_form.twig";
     }
 
     // 記事のカテゴリ一覧を取得 TODO:後でcacheを使用する形に
-    $entry['categories'] = Model::load('Categories')->getEntryCategories($blog_id, $entry_id);
-    $entry['tags'] = Model::load('Tags')->getEntryTags($blog_id, $entry_id);
+    $entry['categories'] = (new CategoriesModel)->getEntryCategories($blog_id, $entry_id);
+    $entry['tags'] = (new TagsModel())->getEntryTags($blog_id, $entry_id);
     $this->set('entry', $entry);
 
+
     // 入力チェック処理
-    /** @var CommentsModel $comments_model */
-    $comments_model = Model::load('Comments');
+    $comments_model = new CommentsModel();
     $errors = array();
     $white_list = array('entry_id', 'name', 'title', 'mail', 'url', 'body', 'password', 'open_status');
     $errors['comment'] = $comments_model->registerValidate($request->get('comment'), $data, $white_list);
@@ -806,7 +806,7 @@ class EntriesController extends UserController
     // Captcha使用時のエラー画面
     if ($is_captcha) {
       $this->set('errors', $errors);
-      return "";
+      return "user/entries/register_comment_form.twig";
     }
 
     // コメント投稿エラー
@@ -827,7 +827,7 @@ class EntriesController extends UserController
     $blog_id = $this->getBlogId($request);
 
     // ブログの設定情報を取得
-    $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
+    $blog_setting = (new BlogSettingsModel())->findByBlogId($blog_id);
     $is_captcha = $blog_setting['comment_captcha'] == Config::get('COMMENT.COMMENT_CAPTCHA.USE');
 
     // FC2テンプレートの引数を受け側で合わせる
@@ -852,8 +852,7 @@ class EntriesController extends UserController
     $comment_id = $request->get('id', $request->get('comment.id'));
 
     // 編集対象のコメント取得
-    /** @var CommentsModel $comments_model */
-    $comments_model = Model::load('Comments');
+    $comments_model = new CommentsModel();
     $comment = $comments_model->getEditableComment($comment_id, $blog_id);
     if (empty($comment)) {
       $this->redirect($request, array('action' => 'index', 'blog_id' => $blog_id));
@@ -861,8 +860,8 @@ class EntriesController extends UserController
 
     // 編集対象の親記事
     $entry_id = $comment['entry_id'];
-    if (!($entry = Model::load('Entries')->getCommentAcceptedEntry($entry_id, $blog_id))) {
-      $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id));
+    if (!($entry = (new EntriesModel())->getCommentAcceptedEntry($entry_id, $blog_id))) {
+      $this->redirect($request, ['action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id]);
     }
     $this->set('edit_entry', $entry);
 
@@ -871,7 +870,7 @@ class EntriesController extends UserController
       $this->set('edit_comment', $comment);
 
       // FC2用のテンプレートで表示
-      $this->setAreaData(array('edit_area'));
+      $this->setAreaData(['edit_area']);
       return $this->getFc2TemplatePath($blog_id);
     }
 
@@ -880,9 +879,12 @@ class EntriesController extends UserController
       return $this->comment_delete($request);
     }
 
+    // 公開非公開のプルダウン用バリエーション（固定）
+    $this->set('open_status_user_list', CommentsModel::getOpenStatusUserList());
+
     // Captcha画面の初期表示処理
     if ($is_captcha && !$request->isArgs('token')) {
-      return "";
+      return "user/entries/edit_comment_form.twig";
     }
 
     // FC2テンプレート編集時
@@ -891,27 +893,27 @@ class EntriesController extends UserController
     }
 
     // コメント投稿処理
-    $errors = array();
-    $white_list = array('name', 'title', 'mail', 'url', 'body', 'password', 'open_status');
+    $errors = [];
+    $white_list = ['name', 'title', 'mail', 'url', 'body', 'password', 'open_status'];
     $errors['comment'] = $comments_model->editValidate($request->get('comment'), $data, $white_list, $comment);
-    $errors['token'] = $is_captcha ? $this->tokenValidate($request) : array();   // Token用のバリデート
+    $errors['token'] = $is_captcha ? $this->tokenValidate($request) : [];   // Token用のバリデート
     if (empty($errors['comment']) && empty($errors['token'])) {
       if ($comments_model->updateByIdAndBlogIdAndBlogSetting($request, $data, $comment_id, $blog_id, $blog_setting)) {
-        $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id), '#comment' . $comment_id);
+        $this->redirect($request, ['action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id], '#comment' . $comment_id);
       }
     }
 
     // Captcha使用時のエラー画面
     if ($is_captcha) {
       $this->set('errors', $errors);
-      return "";
+      return "user/entries/edit_comment_form.twig";
     }
 
     // コメント投稿エラー
-    $this->fc2CommentError('edit', $errors['comment'], array('open_status' => $data['open_status']));
+    $this->fc2CommentError('edit', $errors['comment'], ['open_status' => $data['open_status']]);
 
     // FC2用のテンプレートで表示
-    $this->setAreaData(array('edit_area'));
+    $this->setAreaData(['edit_area']);
     return $this->getFc2TemplatePath($blog_id);
   }
 

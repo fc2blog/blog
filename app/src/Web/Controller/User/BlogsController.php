@@ -2,7 +2,7 @@
 
 namespace Fc2blog\Web\Controller\User;
 
-use Fc2blog\Model\Model;
+use Fc2blog\Model\BlogsModel;
 use Fc2blog\Web\Request;
 
 class BlogsController extends UserController
@@ -15,7 +15,7 @@ class BlogsController extends UserController
    */
   public function index(Request $request)
   {
-    $blog = Model::load('Blogs')->findByRandom();
+    $blog = (new BlogsModel())->findByRandom();
     if (empty($blog)) {
       return $this->error404();
     }

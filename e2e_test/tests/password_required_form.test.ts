@@ -21,7 +21,7 @@ describe("crawl password required blog", () => {
 
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual("http://localhost:8080/testblog3/index.php?mode=entries&process=blog_password");
-    expect(await c.page.title()).toEqual("testblog3");
+    expect(await c.page.title()).toEqual("パスワード認証 - testblog3");
 
     const body_text = await c.page.$eval("body", elm=>elm.textContent);
     expect(body_text.match(/パスワード認証/));
@@ -43,7 +43,7 @@ describe("crawl password required blog", () => {
 
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual("http://localhost:8080/testblog3/index.php?mode=entries&process=blog_password");
-    expect(await c.page.title()).toEqual("testblog3");
+    expect(await c.page.title()).toEqual("パスワード認証 - testblog3");
 
     const body_text = await c.page.$eval("body", elm=>elm.textContent);
     expect(body_text.match(/パスワードが違います/));

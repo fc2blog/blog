@@ -6,7 +6,6 @@ namespace Fc2blog\Tests\Helper;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Web\Controller\AppController;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Router\Router;
 use Fc2blog\Web\Session;
 use RuntimeException;
 
@@ -73,6 +72,7 @@ trait ClientTrait
       unset($_SERVER['HTTPS']);
     }
     $_SERVER['HTTP_USER_AGENT'] = "phpunit";
+    $_SERVER['HTTP_ACCEPT_LANGUAGE'] = "ja,en-US;q=0.9,en;q=0.8";
 
     $request = new Request(
       $method,
@@ -88,7 +88,7 @@ trait ClientTrait
 
     $c = new $request->className($request);
     $c->execute($request->methodName);
-    
+
     if (empty($_SESSION)) {
       //おそらく、セッション全破棄がおこなわれたので、初期化
       $this->clientTraitSession = [];
