@@ -41,7 +41,14 @@
             <tr>
                 <th>{{ _('View password blog') }}</th>
                 <td>
-                    {{ input(req, 'blog[blog_password]', 'text') }}
+                    {{ input(req, 'blog[blog_password]', 'blank_password') }}<br>
+                    {% if blog.blog_password %}
+                        {{ _('Password already registered.') }}
+                    {% else %}
+                        {{ _('Password not registered.') }}
+                    {% endif %}
+                    <br>
+                    {{ _('(Leave blank if you do not wish to change.)') }}
                     {% if errors.blog.blog_password %}<p class="error">{{ errors.blog.blog_password }}</p>{% endif %}
                 </td>
             </tr>
