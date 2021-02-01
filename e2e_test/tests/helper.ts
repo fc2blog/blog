@@ -8,6 +8,7 @@ dotenv.config();
 export class Helper {
   page: Page;
   browser: Browser;
+  requestHttpHeaders: Record<string, string>;
 
   constructor() {}
 
@@ -16,15 +17,17 @@ export class Helper {
   }
 
   async init(): Promise<void> {
+    this.requestHttpHeaders = {
+      'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
+      'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36'
+    };
     this.browser = await puppeteer.launch({
       args: ['--lang=ja'],
       ignoreHTTPSErrors: true,
       headless: !(process.env.NO_HEAD_LESS === "1") // 動作を確認するなら NO_HEAD_LESS=1 npm run test
     });
     this.page = await this.browser.newPage();
-    await this.page.setExtraHTTPHeaders({
-      'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8'
-    });
+    await this.page.setExtraHTTPHeaders(this.requestHttpHeaders);
     await this.page.authenticate({
       username: process.env.BASIC_ID || "",
       password: process.env.BASIC_PASS || "",
@@ -33,6 +36,16 @@ export class Helper {
     await this.page.setViewport({
       width: 1000,
       height: parseInt(process.env.VIEW_PORT_HEIGHT) || 1000,
+    });
+  }
+
+  async setSpUserAgent(): Promise<void>{
+    let spRequestHttpHeaders = this.requestHttpHeaders;
+    spRequestHttpHeaders['User-Agent'] = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Mobile Safari/537.36';
+    await this.page.setExtraHTTPHeaders(spRequestHttpHeaders);
+    await this.page.setViewport({
+      width: 400,
+      height: parseInt(process.env.VIEW_PORT_HEIGHT) || 811,
     });
   }
 
