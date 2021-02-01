@@ -188,7 +188,7 @@
           <input type="hidden" name="mobile" value="1" />
           <!--private_area--><input type="hidden" name="spass" value="<%spass>" /><!--/private_area-->
           <div class="submit_btn">
-            <a href="#" onclick="submit()"><%template_send></a>
+            <a href="#" onclick="submit();return false;"><%template_send></a>
           </div>
         </form>
         <ul class="contents_footer">
