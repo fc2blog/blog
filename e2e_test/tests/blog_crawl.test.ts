@@ -186,6 +186,7 @@ describe("crawl some blog", () => {
 
     // generate uniq title
     post_comment_title = "テストタイトル_" + Math.floor(Math.random() * 1000000).toString();
+    console.log(post_comment_title);
 
     await c.getSS("comment_before_fill");
     await fillCommentForm(
@@ -302,10 +303,9 @@ describe("crawl some blog", () => {
     await c.getSS("comment_delete_fail_before");
 
     // open comment edit page
-    let edit_link = await getEditLinkByTitle("edited_" + post_comment_title);
     let [response1] = await Promise.all([
       c.waitLoad(),
-      await edit_link.click(),
+      await (await getEditLinkByTitle("edited_" + post_comment_title)).click(),
     ]);
     expect(response1.status()).toEqual(200);
     const h3_test = await c.page.$eval("#edit > h3.sub_header", (elm) => {
@@ -327,21 +327,35 @@ describe("crawl some blog", () => {
   });
 
   it("successfully delete comment", async () => {
+    let [response1] = await Promise.all([
+      c.waitLoad(),
+      c.page.goto(start_url+"?no=3"),
+    ]);
+    expect(response1.status()).toEqual(200);
+
+    // open comment edit page
+    await c.getSS("comment_before_delete1");
+    let [response2] = await Promise.all([
+      c.waitLoad(),
+      await (await getEditLinkByTitle("edited_" + post_comment_title)).click(),
+    ]);
+    expect(response2.status()).toEqual(200);
+
     await c.page.type("#pass", "pass_is_pass");
     await c.getSS("comment_before_delete");
 
-    const [response] = await Promise.all([
+    let [response] = await Promise.all([
       c.waitLoad(),
       await c.page.click("#comment_form > p > input[type=submit]:nth-child(2)")
     ]);
 
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "index.php?mode=entries&process=index");
+    expect(response.url()).toEqual(start_url + "index.php?mode=entries&process=view&id=3");
 
     await c.getSS("comment_deleted");
-    const comment_a_text = await c.page.$eval("#e3 > ul.entry_state > li > a[title=コメントの投稿]", elm => elm.textContent);
+    const comment_a_text = await c.page.$eval("#e3 > div.entry_footer > ul > li:nth-child(2) > a", elm => elm.textContent);
     const comment_num = parseInt(comment_a_text.match(/CM:([0-9]{1,3})/)[1]);
-    expect(comment_num).toEqual(posted_comment_num/*-1*/); // TODO #224
+    // expect(comment_num).toEqual(posted_comment_num/*-1*/); // パラレルでテストが実行されるので、数を数えても正しくできない
   });
 
   afterAll(async () => {
