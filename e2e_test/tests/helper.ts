@@ -70,7 +70,7 @@ export class Helper {
     return await this.page.click(selector);
   }
 
-  async openUrl(url:string): Promise<Response> {
+  async openUrl(url: string): Promise<Response> {
     const [response] = await Promise.all([
       this.waitLoad(),
       this.page.goto(url),
@@ -91,46 +91,46 @@ export class Helper {
     return response;
   }
 
-  async clickBySelector(selector:string): Promise<Response>{
+  async clickBySelector(selector: string): Promise<Response> {
     const [response] = await Promise.all([
       this.waitLoad(),
       this.page.click(selector),
     ]);
 
-    if(!response){
+    if (!response) {
       throw new Error(`click selector failed, url:${this.page.url()} selector:${selector}`);
     }
 
-    if(response.status()!==200){
+    if (response.status() !== 200) {
       throw new Error(`click selector failed, url:${this.page.url()} response:${response.status()}`);
     }
 
     return response;
   }
 
-  async clickElement(elm: ElementHandle): Promise<Response>{
+  async clickElement(elm: ElementHandle): Promise<Response> {
     const [response] = await Promise.all([
       this.waitLoad(),
       elm.click(),
     ]);
 
-    if(!response){
+    if (!response) {
       throw new Error(`click failed, url:${this.page.url()} elmTag:${elm.getProperty("innerHTML")}`);
     }
 
-    if(response.status()!==200){
+    if (response.status() !== 200) {
       throw new Error(`click failed, url:${this.page.url()} response:${response.status()}`);
     }
 
     return response;
   }
 
-  async getTextBySelector(selector:string): Promise<string>{
+  async getTextBySelector(selector: string): Promise<string> {
     const text = await this.page.$eval(
       selector,
       (elm) => elm.textContent
     );
-    if(!text){
+    if (!text) {
       throw new Error(`get text failed, url:${this.page.url()} selector:${selector}`);
     }
     return text;

@@ -262,7 +262,7 @@ describe("crawl some blog", () => {
   });
 
   it("entry page - successfully delete comment", async () => {
-    await c.openUrl(start_url+"?no=3");
+    await c.openUrl(start_url + "?no=3");
 
     // open comment edit page
     await c.getSS("comment_before_delete1");
@@ -305,7 +305,7 @@ describe("crawl some blog", () => {
         edit_link = row.editLink;
       }
     });
-    if(!edit_link){
+    if (!edit_link) {
       throw new Error("link(a[title='コメントの編集']) not found");
     }
 

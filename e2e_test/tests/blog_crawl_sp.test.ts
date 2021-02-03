@@ -4,7 +4,7 @@ import {ElementHandle} from "puppeteer";
 
 describe("crawl some blog with smartphone", () => {
   let c: Helper;
-  let captcha_key: string= "1234";
+  let captcha_key: string = "1234";
   const start_url = "http://localhost:8080/testblog2/";
 
   beforeAll(async () => {
@@ -235,7 +235,7 @@ describe("crawl some blog with smartphone", () => {
   });
 
   it("entry page - open comment list to delete", async () => {
-    await c.openUrl(start_url+"?no=3");
+    await c.openUrl(start_url + "?no=3");
 
     const response = await c.clickElement(await c.page.$("#entry > ul > li:nth-child(2) > a"));
     expect(response.status()).toEqual(200);
