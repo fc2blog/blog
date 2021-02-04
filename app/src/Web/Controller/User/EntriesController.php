@@ -955,6 +955,8 @@ class EntriesController extends UserController
       $this->redirect($request, ['action' => 'view', 'blog_id' => $comment['blog_id'], 'id' => $comment['entry_id']]);
     }
 
+    $this->set('edit_comment', $request->get('comment'));
+
     // コメント投稿エラー
     $this->fc2CommentError('edit', $errors['comment'], ['open_status' => $comment['open_status']]);
 
