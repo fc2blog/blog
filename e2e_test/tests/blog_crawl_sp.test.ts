@@ -56,7 +56,7 @@ describe("crawl some blog with smartphone", () => {
   it("blog top - click first entry", async () => {
     const response = await c.clickBySelector("ul#entry_list a");
     await c.getSS("entry_sp.png");
-    expect(response.url()).toEqual(start_url + "?no=3");
+    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
     expect(await c.page.title()).toEqual("3rd - testblog2");
 
     const entry_h2_title = await c.getTextBySelector("div.entry_title h2");
@@ -68,7 +68,7 @@ describe("crawl some blog with smartphone", () => {
 
   it("entry page - click next page", async () => {
     const response = await c.clickBySelector("a.nextpage");
-    expect(response.url()).toEqual(start_url + "?no=2");
+    expect(response.url()).toEqual(start_url + "blog-entry-2.html");
     expect(await c.page.title()).toEqual("2nd - testblog2");
 
     const entry_h2_title = await c.getTextBySelector("div.entry_title h2");
@@ -81,7 +81,7 @@ describe("crawl some blog with smartphone", () => {
   it("entry page - click prev page", async () => {
     const response = await c.clickBySelector("a.prevpage");
 
-    expect(response.url()).toEqual(start_url + "?no=3");
+    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
     expect(await c.page.title()).toEqual("3rd - testblog2");
 
     const entry_h2_title = await c.getTextBySelector("div.entry_title h2");
@@ -96,7 +96,7 @@ describe("crawl some blog with smartphone", () => {
   it("entry page - open comment form", async () => {
     const response = await c.clickBySelector("#entry > ul > li:nth-child(1) > a");
 
-    expect(response.url()).toEqual(start_url + "?no=3&m2=form");
+    expect(response.url()).toEqual(start_url + "blog-entry-3.html?m2=form");
     expect(await c.page.title()).toEqual("3rd - testblog2");
   });
 
@@ -165,7 +165,7 @@ describe("crawl some blog with smartphone", () => {
 
   it("entry page - open comment list", async () => {
     const response = await c.clickBySelector("#entry > ul > li:nth-child(2) > a");
-    expect(response.url()).toEqual(start_url + "?no=3&m2=res");
+    expect(response.url()).toEqual(start_url + "blog-entry-3.html?m2=res");
     expect(await c.page.title()).toEqual("3rd - testblog2");
   });
 
@@ -203,7 +203,7 @@ describe("crawl some blog with smartphone", () => {
 
   it("comment list - test to fail delete", async () => {
     const response = await c.clickElement(await c.page.$("#entry > ul > li:nth-child(2) > a"));
-    expect(response.url()).toEqual(start_url + "?no=3&m2=res");
+    expect(response.url()).toEqual(start_url + "blog-entry-3.html?m2=res");
     expect(await c.page.title()).toEqual("3rd - testblog2");
     await c.getSS("comment_list_delete_before_sp");
   });
@@ -235,11 +235,11 @@ describe("crawl some blog with smartphone", () => {
   });
 
   it("entry page - open comment list to delete", async () => {
-    await c.openUrl(start_url + "?no=3");
+    await c.openUrl(start_url + "blog-entry-3.html");
 
     const response = await c.clickElement(await c.page.$("#entry > ul > li:nth-child(2) > a"));
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "?no=3&m2=res");
+    expect(response.url()).toEqual(start_url + "blog-entry-3.html?m2=res");
     expect(await c.page.title()).toEqual("3rd - testblog2");
     await c.getSS("comment_list_delete_before_sp");
   });
@@ -267,7 +267,7 @@ describe("crawl some blog with smartphone", () => {
     const response = await c.clickElement(await c.page.$("#entry_list > li:nth-child(1) > a"));
 
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "?no=3");
+    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
     expect(await c.page.title()).toEqual("3rd - testblog2");
   });
 

@@ -62,7 +62,7 @@ describe("crawl some blog", () => {
 
     await c.getSS("blog_archive.png");
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "?no=3");
+    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
 
     expect(await c.page.title()).toEqual("3rd - testblog2");
   });

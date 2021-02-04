@@ -353,7 +353,7 @@ class App
     if (strtolower($controller) == 'entries' && strtolower($action) == 'index' && !empty($blog_id)) {
       $url = '/';
 
-      $params = array();
+      $params = [];
       foreach ($args as $key => $value) {
         $params[] = $key . '=' . $value;
       }
@@ -370,21 +370,20 @@ class App
       return $url;
     }
 
-    // 固定記事の場合
+    // 記事の場合
     if (strtolower($controller) == 'entries' && strtolower($action) == 'view' && !empty($args['id'])) {
-//      $url = '/blog-entry-' . $args['id'] . '.html';
-      $url = '/?no=' . $args['id'];
+      $url = '/blog-entry-' . $args['id'] . '.html';
       unset($args['id']);
 
-      $params = array();
+      $params = [];
       foreach ($args as $key => $value) {
         $params[] = $key . '=' . $value;
       }
       if (!empty($device_name)) {
         $params[] = $device_name;
       }
-      if (count($params)) {
-        $url .= '&' . implode('&', $params);
+      if (count($params) > 0) {
+        $url .= '?' . implode('&', $params);
       }
       if ($blog_id) {
         $url = '/' . $blog_id . $url;
@@ -393,7 +392,7 @@ class App
       return $url;
     }
 
-    $params = array();
+    $params = [];
     $params[] = Config::get('ARGS_CONTROLLER') . '=' . lcfirst($controller);
     $params[] = Config::get('ARGS_ACTION') . '=' . $action;
     foreach ($args as $key => $value) {
