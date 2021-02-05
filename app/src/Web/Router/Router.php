@@ -69,22 +69,29 @@ class Router
       $args_controller = "mode";
       $args_action = "process";
 
-      if ($request->get($args_controller) == "common") {
+      if ($request->get($args_controller) === "common") {
         $this->className = CommonController::class;
       }
 
       // blog_idの設定
       if (isset($paths[0]) && preg_match('|\A[0-9a-zA-Z]+\z|u', $paths[0])) {
-        $this->className = EntriesController::class;
+        $this->className = EntriesController::class; // TODO delete
         $request->set('blog_id', $paths[0]);
+        $blog_id = $paths[0];
       }
 
-      if ($request->isArgs('xml')) { // `/?xml`
+      // `/`の場合
+      if($path === "/"){
+        $this->className = BlogsController::class;
+        $this->methodName = 'index';
+      }
+
+      if (isset($blog_id) && $request->isArgs('xml')) { // `/?xml`
         // RSS feed
         $this->className = BlogsController::class;
         $this->methodName = 'feed';
 
-      } else if (isset($paths[0]) && !$request->isArgs($args_action)) {
+      } else if (isset($blog_id) && !$request->isArgs($args_action)) {
         // トップページ
         $this->methodName = 'index';
 
