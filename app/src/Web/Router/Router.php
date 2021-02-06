@@ -1,9 +1,4 @@
 <?php
-/**
- * リクエストクラス
- * POST,GETへのアクセスを便利にするクラス
- */
-
 namespace Fc2blog\Web\Router;
 
 use Fc2blog\Util\StringCaseConverter;
