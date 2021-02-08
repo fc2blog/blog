@@ -135,10 +135,10 @@
         <ul class="contents_footer">
         <!--allow_comment-->
           <li>
-            <a href="<%topentry_link>&m2=form<%tail_url>"><%template_write_cm></a>
+            <a href="<%topentry_link>?m2=form<%tail_url>"><%template_write_cm></a>
           </li>
           <li>
-            <a href="<%topentry_link>&m2=res<%tail_url>"><%template_comment>(<%topentry_comment_num>)</a>
+            <a href="<%topentry_link>?m2=res<%tail_url>"><%template_comment>(<%topentry_comment_num>)</a>
           </li>
         <!--/allow_comment-->
         <!--deny_comment-->

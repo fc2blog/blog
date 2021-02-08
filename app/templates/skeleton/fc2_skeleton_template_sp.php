@@ -152,10 +152,10 @@
         <ul class="contents_footer">
             <!--allow_comment-->
             <li>
-                <a href="<%topentry_link>&m2=form<%tail_url>">コメントを書く</a>
+                <a href="<%topentry_link>?m2=form<%tail_url>">コメントを書く</a>
             </li>
             <li>
-                <a href="<%topentry_link>&m2=res<%tail_url>">コメント(<%topentry_comment_num>)</a>
+                <a href="<%topentry_link>?m2=res<%tail_url>">コメント(<%topentry_comment_num>)</a>
             </li>
             <!--/allow_comment-->
             <!--deny_comment-->
