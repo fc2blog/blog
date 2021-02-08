@@ -730,7 +730,7 @@ class EntriesController extends UserController
 
     // 認証処理
     if ($request->get('blog')) {
-      if ($request->get('blog.password') == $blog['blog_password']) {
+      if (password_verify($request->get('blog.password'), $blog['blog_password'])) {
         Session::set($this->getBlogPasswordKey($blog['id']), true);
         $this->set('auth_success', true); // for testing.
         $this->redirect($request, ['action' => 'index', 'blog_id' => $blog_id]);

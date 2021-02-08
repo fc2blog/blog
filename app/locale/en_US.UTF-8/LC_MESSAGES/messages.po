@@ -2488,3 +2488,12 @@ msgstr ""
 
 msgid "(If not exists, will be try create)"
 msgstr ""
+
+msgid "Password already registered."
+msgstr ""
+
+msgid "Password not registered."
+msgstr ""
+
+msgid "(Leave blank if you do not wish to change.)"
+msgstr ""

@@ -34,19 +34,36 @@ class BlogsModel extends Model
   /**
    * プライベートモード時のパスワード必須チェック
    * @param $value
-   * @param $valid
-   * @param $k
-   * @param $d
+   * @param $option
+   * @param $key
+   * @param $data
    * @return bool|string
    */
-  public static function privateCheck($value, $valid, $k, $d)
+  public static function privateCheck($value, $option, $key, $data)
   {
-    if ($value == null || $value === '') {
-      if ($d['open_status'] == Config::get('BLOG.OPEN_STATUS.PRIVATE')) {
-        return __('Please Be sure to set the password if you want to private');
-      }
+    if (
+      $data['open_status'] == Config::get('BLOG.OPEN_STATUS.PRIVATE') &&
+      (
+        // パスワードを入力したか、あるいはすでにパスワード設定済みか
+        strlen((string)$value) === 0 &&
+        !static::isPasswordRegistered($data['_blog_id'])
+      )
+    ) {
+      return __('Please Be sure to set the password if you want to private');
+    }else{
+      return true;
     }
-    return true;
+  }
+
+  /**
+   * 指定blog idのブログのパスワードが設定済みか？
+   * @param $blog_id
+   * @return bool
+   */
+  public static function isPasswordRegistered($blog_id)
+  {
+    $blog = (new BlogsModel)->findById($blog_id);
+    return (!empty($blog) && strlen($blog['blog_password']) > 0);
   }
 
   /**
@@ -474,7 +491,7 @@ class BlogsModel extends Model
    * @param array $options
    * @return array|false|int|mixed
    */
-  public function updateById(array $values, $id, array $options = array())
+  public function updateById(array $values, $id, array $options = [])
   {
     $values['updated_at'] = date('Y-m-d H:i:s');
     return parent::updateById($values, $id, $options);

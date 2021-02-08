@@ -148,6 +148,11 @@ class Html
         $html = '<input type="password" ' . $attr . ' value="' . h($rvalue) . '" />';
         break;
 
+      case 'blank_password':
+        // 一方向に設定するので、表示しない
+        $html = '<input type="password" ' . $attr . ' />';
+        break;
+
       case 'file':
         $html = '<input type="file" ' . $attr . ' />';
         break;

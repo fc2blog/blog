@@ -2535,3 +2535,12 @@ msgstr "`CREATE DATABASE`のsql実行に失敗しました、事前に`CREATE DA
 
 msgid "(If not exists, will be try create)"
 msgstr "(未作成の場合、作成を試行します)"
+
+msgid "Password already registered."
+msgstr "パスワード設定済み"
+
+msgid "Password not registered."
+msgstr "パスワード未設定"
+
+msgid "(Leave blank if you do not wish to change.)"
+msgstr "(パスワードを変更しない場合、空欄のままとしてください)"

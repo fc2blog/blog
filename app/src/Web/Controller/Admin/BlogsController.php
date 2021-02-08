@@ -104,8 +104,19 @@ class BlogsController extends AdminController
 
     // 更新処理
     $white_list = ['name', 'introduction', 'nickname', 'timezone', 'blog_password', 'open_status', 'ssl_enable', 'redirect_status_code'];
-    $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, $white_list);
+    $errors['blog'] = $blogs_model->validate(
+      // バリデーションのために、blog_idを引き回している。バリデーションを作り変えたい
+      array_merge($request->get('blog'), ["_blog_id"=>$blog_id]),
+      $blog_data,
+      $white_list
+    );
     if (empty($errors['blog'])) {
+      // パスワード空欄なら、パスワードを更新しない
+      if (strlen($blog_data['blog_password']) > 0) {
+        $blog_data['blog_password'] = password_hash($blog_data['blog_password'], PASSWORD_DEFAULT);
+      }else{
+        $blog_data['blog_password'] = ($blogs_model->findById($blog_id))['blog_password'];
+      }
       if ($blogs_model->updateById($blog_data, $blog_id)) {
         $this->setBlog(['id' => $blog_id, 'nickname' => $blog_data['nickname']]); // ニックネームの更新
         $this->setInfoMessage(__('I updated a blog'));
