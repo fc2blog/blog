@@ -7,7 +7,7 @@
   <meta name="format-detection" content="telephone=no" />
   <!--/ios-->
   <meta name="description" content="<%introduction>" />
-  <title><%sub_title> - <%blog_name></title>
+  <title><!--not_index_area--><%sub_title> - <!--/not_index_area--><%blog_name></title>
   <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
   <link rel="stylesheet" href="<%css_link>" />
   <link rel="apple-touch-icon" href="https://static.fc2.com/image/iphone/apple-touch-icon.png" />
@@ -188,7 +188,7 @@
           <input type="hidden" name="mobile" value="1" />
           <!--private_area--><input type="hidden" name="spass" value="<%spass>" /><!--/private_area-->
           <div class="submit_btn">
-            <a href="#" onclick="submit()"><%template_send></a>
+            <a href="#" onclick="submit();return false;"><%template_send></a>
           </div>
         </form>
         <ul class="contents_footer">

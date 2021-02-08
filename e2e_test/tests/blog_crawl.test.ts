@@ -1,5 +1,6 @@
-import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
-import { Helper } from "./helper";
+import {afterAll, beforeAll, describe, expect, it} from "@jest/globals";
+import {Helper} from "./helper";
+import {ElementHandle} from "puppeteer";
 
 // captcha を完全に動的にするには、ページ内から読み込まれる画像リクエストのヘッダーをいじらないといけないので一旦保留
 // import {sprintf} from 'sprintf-js';
@@ -20,30 +21,21 @@ import { Helper } from "./helper";
 
 describe("crawl some blog", () => {
   let c: Helper;
-  let captcha_key: string;
+  let captcha_key: string = "1234";
+  const start_url = "http://localhost:8080/testblog2/";
 
   beforeAll(async () => {
     c = new Helper();
     await c.init();
-    captcha_key = "1234";
   });
 
-  const start_url = "http://localhost:8080/testblog2/";
-
   it("open blog top", async () => {
-    const [response] = await Promise.all([
-      c.waitLoad(),
-      c.page.goto(start_url),
-    ]);
-
-    await c.getSS("blog_top.png");
-
-    expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url);
+    await c.openUrl(start_url);
+    await c.getSS("blog_top");
     expect(await c.page.title()).toEqual("testblog2");
   });
 
-  it("check cookie", async () => {
+  it("blog top - check cookie", async () => {
     const cookies = await c.page.cookies();
 
     // ここがコケるということは、テスト無しにクッキーが追加されているかも
@@ -80,8 +72,8 @@ describe("crawl some blog", () => {
     expect(template_cookie.sameSite).toEqual("Lax");
   });
 
-  it("check fuzzy display contents", async () => {
-    const title_text = await c.page.$eval("h1 a", (elm) => elm.innerHTML);
+  it("blog top - check fuzzy display contents", async () => {
+    const title_text = await c.getTextBySelector("h1 a");
     expect(title_text).toEqual("testblog2");
 
     const entry_bodies = await c.page.$$eval("div.entry_body", (elm_list) => {
@@ -89,86 +81,61 @@ describe("crawl some blog", () => {
       elm_list.forEach((elm) => bodies.push(elm.textContent));
       return bodies;
     });
-    // console.log(entry_bodies);
 
     expect(entry_bodies[0].match(/3rd/)).toBeTruthy();
     expect(entry_bodies[1].match(/2nd/)).toBeTruthy();
     expect(entry_bodies[2].match(/テスト記事１/)).toBeTruthy();
   });
 
-  it("click  first entry's 「続きを読む」", async () => {
-    const link = await c.page.$("div.entry_body a");
+  it("blog top - click first entry's 「続きを読む」", async () => {
+    const response = await c.clickBySelector("div.entry_body a");
 
-    const [response] = await Promise.all([c.waitLoad(), link.click()]);
-
-    await c.getSS("entry.png");
-
-    expect(response.status()).toEqual(200);
+    await c.getSS("entry");
     expect(response.url()).toEqual(start_url + "?no=3");
     expect(await c.page.title()).toEqual("3rd - testblog2");
 
-    const entry_h2_title = await c.page.$eval(
-      "h2.entry_header",
-      (elm) => elm.textContent
-    );
-    const entry_body = await c.page.$eval(
-      "div.entry_body",
-      (elm) => elm.textContent
-    );
-
-    expect(entry_body.match(/3rd/)).toBeTruthy();
+    const entry_h2_title = await c.getTextBySelector("h2.entry_header");
     expect(entry_h2_title.match(/3rd/)).toBeTruthy();
+
+    const entry_body = await c.getTextBySelector("div.entry_body");
+    expect(entry_body.match(/3rd/)).toBeTruthy();
   });
 
-  it("next page", async () => {
-    const [response] = await Promise.all([
-      c.waitLoad(),
-      c.page.click("a.nextentry"),
-    ]);
+  it("entry page - click next page", async () => {
+    const response = await c.clickBySelector("a.nextentry");
 
+    await c.getSS("entry_next_page");
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual(start_url + "?no=2");
     expect(await c.page.title()).toEqual("2nd - testblog2");
 
-    const entry_h2_title = await c.page.$eval(
-      "h2.entry_header",
-      (elm) => elm.textContent
-    );
-    const entry_body = await c.page.$eval(
-      "div.entry_body",
-      (elm) => elm.textContent
-    );
-
-    expect(entry_body.match(/2nd/)).toBeTruthy();
+    const entry_h2_title = await c.getTextBySelector("h2.entry_header");
     expect(entry_h2_title.match(/2nd/)).toBeTruthy();
+
+    const entry_body = await c.getTextBySelector("div.entry_body");
+    expect(entry_body.match(/2nd/)).toBeTruthy();
   });
 
-  it("prev page", async () => {
-    const [response] = await Promise.all([
-      c.waitLoad(),
-      c.page.click("a.preventry"),
-    ]);
+  it("entry page - click prev page", async () => {
+    const response = await c.clickBySelector("a.preventry");
 
+    await c.getSS("entry_prev_page");
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual(start_url + "?no=3");
     expect(await c.page.title()).toEqual("3rd - testblog2");
 
-    const entry_h2_title = await c.page.$eval(
-      "h2.entry_header",
-      (elm) => elm.textContent
-    );
-    const entry_body = await c.page.$eval(
-      "div.entry_body",
-      (elm) => elm.textContent
-    );
-
-    expect(entry_body.match(/3rd/)).toBeTruthy();
+    const entry_h2_title = await c.getTextBySelector("h2.entry_header");
     expect(entry_h2_title.match(/3rd/)).toBeTruthy();
+
+    const entry_body = await c.getTextBySelector("div.entry_body");
+    expect(entry_body.match(/3rd/)).toBeTruthy();
   });
 
   let posted_comment_num;
+  let post_comment_title;
 
-  it("comment", async () => {
+  it("entry page - fill comment form", async () => {
+    // check comment form is shown
     expect(
       (await c.page.$eval("#cm h3.sub_header", (elm) => elm.textContent)).match(
         /コメント/
@@ -183,59 +150,38 @@ describe("crawl some blog", () => {
       ).match(/コメントの投稿/)
     ).toBeTruthy();
 
-    await c.page.type(
-      "#comment_form input[name='comment[name]']",
-      "テスト太郎"
-    );
-    await c.page.type(
-      "#comment_form input[name='comment[title]']",
-      "テストタイトル"
-    );
-    await c.page.type(
-      "#comment_form input[name='comment[mail]']",
-      "test@example.jp"
-    );
-    await c.page.type(
-      "#comment_form input[name='comment[url]']",
-      "http://example.jp"
-    );
-    await c.page.type(
-      "#comment_form textarea[name='comment[body]']",
-      "これはテスト投稿です\nこれはテスト投稿です！"
-    );
-    await c.page.type(
-      "#comment_form input[name='comment[pass]']",
+    // generate uniq title
+    post_comment_title = "テストタイトル_" + Math.floor(Math.random() * 1000000).toString();
+    console.log(post_comment_title);
+
+    await c.getSS("comment_before_fill");
+    await fillCommentForm(
+      c.page,
+      "テスト太郎",
+      post_comment_title,
+      "test@example.jp",
+      "http://example.jp",
+      "これはテスト投稿です\nこれはテスト投稿です！",
       "pass_is_pass"
-    );
+    )
+    await c.getSS("comment_after_fill");
 
-    await c.getSS("comment_filled.png");
+    const response = await c.clickBySelector("#comment_form input[type=submit]");
+    await c.getSS("comment_confirm");
 
-    const [response] = await Promise.all([
-      c.waitLoad(),
-      await c.page.click("#comment_form input[type=submit]"),
-    ]);
-
-    expect(response.status()).toEqual(200);
     expect(response.url()).toEqual(start_url);
-
-    await c.getSS("comment_confirm.png");
   });
 
-  it("failed with wrong captcha", async () => {
+  it("comment form - fail with wrong captcha", async () => {
     // input wrong captcha
-    await c.page.type("input[name=token]", "0000"); // wrong key
+    await c.page.type("input[name=token]", "0000"/*wrong key*/);
 
-    const [response] = await Promise.all([
-      c.waitLoad(),
-      await c.page.click("#sys-comment-form input[type=submit]"),
-    ]);
-
+    const response = await c.clickBySelector("#sys-comment-form input[type=submit]");
+    await c.getSS("comment_wrong_captcha");
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual(start_url);
 
-    await c.getSS("comment_wrong_captcha.png");
-
-    // 特定しやすいセレクタがない
+    // 特定しやすいセレクタがないので、回してチェックする
     const is_captcha_failed = await c.page.$$eval("p", (elms) => {
       let isOk = false;
       elms.forEach((elm) => {
@@ -245,19 +191,14 @@ describe("crawl some blog", () => {
       });
       return isOk;
     });
-
     expect(is_captcha_failed).toBeTruthy();
   });
 
-
-  it("comment success", async () => {
+  it("comment form - successful comment posting", async () => {
     await c.page.type("input[name=token]", captcha_key);
-    await c.getSS("comment_success.png");
+    await c.getSS("before_comment_success");
 
-    const [response] = await Promise.all([
-      c.waitLoad(),
-      await c.page.click("#sys-comment-form input[type=submit]"),
-    ]);
+    const response = await c.clickBySelector("#sys-comment-form input[type=submit]");
 
     expect(response.status()).toEqual(200);
     const exp = new RegExp(
@@ -265,136 +206,227 @@ describe("crawl some blog", () => {
     );
     expect(response.url().match(exp)).not.toBeNull();
 
-    const comment_a_text = await c.page.$eval("#e3 > div.entry_footer > ul > li:nth-child(2) > a[title=コメントの投稿]", elm=>elm.textContent);
+    await c.getSS("comment_success");
 
-    await c.getSS("comment_success.png");
-    posted_comment_num = parseInt(comment_a_text.replace(/^CM:/,''));
+    const comment_a_text = await c.page.$eval("#e3 > div.entry_footer > ul > li:nth-child(2) > a[title=コメントの投稿]", elm => elm.textContent);
+    posted_comment_num = parseInt(comment_a_text.match(/CM:([0-9]{1,3})/)[1]);
   });
 
-  it("comment edit", async () => {
-    // NOTE: html構造的に、「編集」リンクが探しづらい
+  it("entry page - edit exists comment", async () => {
     await c.getSS("comment_edit_before");
-    let [response] = await Promise.all([
-      c.waitLoad(),
-      await c.page.click("#cm ul > li:nth-child(3) > a"),
-    ]);
 
+    await c.clickElement(await getEditLinkByTitle(post_comment_title));
+
+    await fillEditForm(
+      c.page,
+      "テスト太郎2",
+      "edited_" + post_comment_title,
+      "test2@example.jp",
+      "http://example.jp/2",
+      "これは編集済み",
+      "pass_is_pass"
+    )
+
+    await c.getSS("comment_edit_page");
+
+    // 確認フォームへ
+    let response = await c.clickBySelector("#comment_form > p > input[type=submit]:nth-child(1)");
+    await c.getSS("comment_edit_confirm");
     expect(response.status()).toEqual(200);
 
-    await c.page.$eval(
-      "#comment_form input[name='edit[name]']",
-      (elm: HTMLInputElement) => (elm.value = "")
-    );
-    await c.page.type("#comment_form input[name='edit[name]']", "テスト太郎2");
-    await c.page.$eval(
-      "#comment_form input[name='edit[title]']",
-      (elm: HTMLInputElement) => (elm.value = "")
-    );
-    await c.page.type(
-      "#comment_form input[name='edit[title]']",
-      "テストタイトル2"
-    );
-    await c.page.$eval(
-      "#comment_form input[name='edit[mail]']",
-      (elm: HTMLInputElement) => (elm.value = "")
-    );
-    await c.page.type(
-      "#comment_form input[name='edit[mail]']",
-      "test@example.jp2"
-    );
-    await c.page.$eval(
-      "#comment_form input[name='edit[url]']",
-      (elm: HTMLInputElement) => (elm.value = "")
-    );
-    await c.page.type(
-      "#comment_form input[name='edit[url]']",
-      "http://example.jp/2"
-    );
-    await c.page.$eval(
-      "#comment_form textarea[name='edit[body]']",
-      (elm: HTMLInputElement) => (elm.value = "")
-    );
-    await c.page.type(
-      "#comment_form textarea[name='edit[body]']",
-      "これは編集済み"
-    );
-    await c.page.$eval(
-      "#comment_form input[name='edit[pass]']",
-      (elm: HTMLInputElement) => (elm.value = "")
-    );
-    await c.page.type("#comment_form input[name='edit[pass]']", "pass_is_pass");
-
-    await c.getSS("comment_edit_page.png");
-
-    // 保存する
-    [response] = await Promise.all([
-      c.waitLoad(),
-      await c.page.click("#comment_form > p > input[type=submit]:nth-child(1)"),
-    ]);
-
-    await c.getSS("comment_edit_confirm.png");
-    expect(response.status()).toEqual(200);
-
+    // 保存実行
     await c.page.type("input[name=token]", captcha_key);
-
-    [response] = await Promise.all([
-      c.waitLoad(),
-      await c.page.click("#sys-comment-form input[type=submit]"),
-    ]);
-
-    await c.getSS("comment_edit_success.png");
+    response = await c.clickBySelector("#sys-comment-form input[type=submit]");
+    await c.getSS("comment_edit_success");
     expect(response.status()).toEqual(200);
   });
 
-  it("comment delete fail by wrong password", async () => {
-    await c.page.$("#comment1");
+  it("entry page - fail comment delete by wrong password", async () => {
     await c.getSS("comment_delete_fail_before");
-    const edit_a = await c.page.$("#cm ul > li:nth-child(3) > a");
 
-    // NOTE: html構造的に、「編集」リンクが探しづらい
-    let [response] = await Promise.all([c.waitLoad(), await edit_a.click()]);
-
-    expect(response.status()).toEqual(200);
-
+    // open comment edit page
+    await c.clickElement(await getEditLinkByTitle("edited_" + post_comment_title));
     const h3_test = await c.page.$eval("#edit > h3.sub_header", (elm) => {
       return elm.textContent;
     });
     expect(h3_test.match(/コメントの編集/)).toBeTruthy();
 
-    const delete_button = await c.page.$(
-        "#comment_form > p > input[type=submit]:nth-child(2)"
-    );
-
-    [response] = await Promise.all([c.waitLoad(), await delete_button.click()]);
-
+    // click delete button
+    let response = await c.clickBySelector("#comment_form > p > input[type=submit]:nth-child(2)");
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual(start_url);
 
+    // check shown error text
     const wrong_password_error_text = await c.page.$eval("#comment_form > dl > dd:nth-child(13) > p", elm => elm.textContent);
     expect(/必ず入力してください/.exec(wrong_password_error_text)).toBeTruthy();
-
   });
 
-  it("comment delete success", async () => {
+  it("entry page - successfully delete comment", async () => {
+    await c.openUrl(start_url + "?no=3");
+
+    // open comment edit page
+    await c.getSS("comment_before_delete1");
+    await c.clickElement(await getEditLinkByTitle("edited_" + post_comment_title));
 
     await c.page.type("#pass", "pass_is_pass");
+    await c.getSS("comment_before_delete");
 
-    const [response] = await Promise.all([
-      c.waitLoad(),
-      await c.page.click("#comment_form > p > input[type=submit]:nth-child(2)")
-    ]);
-
-    expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url+"index.php?mode=entries&process=index");
+    let response = await c.clickBySelector("#comment_form > p > input[type=submit]:nth-child(2)");
+    expect(response.url()).toEqual(start_url + "index.php?mode=entries&process=view&id=3");
 
     await c.getSS("comment_deleted");
-    const comment_a_text = await c.page.$eval("#e3 > ul.entry_state > li > a[title=コメントの投稿]", elm=>elm.textContent);
-    const comment_num = parseInt(comment_a_text.replace(/^CM:/,''));
-    expect(comment_num).toEqual(posted_comment_num);
-
+    const comment_a_text = await c.page.$eval("#e3 > div.entry_footer > ul > li:nth-child(2) > a", elm => elm.textContent);
+    const comment_num = parseInt(comment_a_text.match(/CM:([0-9]{1,3})/)[1]);
+    // expect(comment_num).toEqual(posted_comment_num/*-1*/); // パラレルでテストが実行されるので、数を数えても正しくできない
   });
 
   afterAll(async () => {
     await c.browser.close();
   });
+
+  // ========================
+
+  async function getEditLinkByTitle(title): Promise<ElementHandle> {
+    // 該当するタイトルの編集リンクを探す
+    const elm_list = await c.page.$$("#cm div.sub_content");
+    const data_list = [];
+    for (let i = 0; i < elm_list.length; i++) {
+      const item = {
+        title: await (await elm_list[i].$eval("h4", elm => elm.textContent)),
+        editLink: await (await elm_list[i].$("a[title='コメントの編集']")),
+        debugHtml: await (await elm_list[i].getProperty('innerHTML')).jsonValue()
+      };
+      data_list.push(item);
+    }
+
+    let edit_link: ElementHandle;
+    data_list.forEach((row) => {
+      if (row.title === title) {
+        edit_link = row.editLink;
+      }
+    });
+    if (!edit_link) {
+      throw new Error("link(a[title='コメントの編集']) not found");
+    }
+
+    return edit_link;
+  }
+
+  async function fillCommentForm(
+    page,
+    name,
+    title,
+    email,
+    url,
+    body,
+    pass = "",
+  ) {
+    await page.$eval(
+      "#comment_form input[name='comment[name]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='comment[name]']",
+      name
+    );
+    await page.$eval(
+      "#comment_form input[name='comment[title]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='comment[title]']",
+      title
+    );
+    await page.$eval(
+      "#comment_form input[name='comment[mail]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='comment[mail]']",
+      email
+    );
+    await page.$eval(
+      "#comment_form input[name='comment[url]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='comment[url]']",
+      url
+    );
+    await page.$eval(
+      "#comment_form textarea[name='comment[body]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form textarea[name='comment[body]']",
+      body
+    );
+    await page.$eval(
+      "#comment_form input[name='comment[pass]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='comment[pass]']",
+      pass
+    );
+  }
+
+  async function fillEditForm(
+    page,
+    name,
+    title,
+    email,
+    url,
+    body,
+    pass = "",
+  ) {
+    await page.$eval(
+      "#comment_form input[name='edit[name]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='edit[name]']",
+      name
+    );
+    await page.$eval(
+      "#comment_form input[name='edit[title]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='edit[title]']",
+      title
+    );
+    await page.$eval(
+      "#comment_form input[name='edit[mail]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='edit[mail]']",
+      email
+    );
+    await page.$eval(
+      "#comment_form input[name='edit[url]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='edit[url]']",
+      url
+    );
+    await page.$eval(
+      "#comment_form textarea[name='edit[body]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form textarea[name='edit[body]']",
+      body
+    );
+    await page.$eval(
+      "#comment_form input[name='edit[pass]']",
+      (elm: HTMLInputElement) => (elm.value = "")
+    );
+    await page.type(
+      "#comment_form input[name='edit[pass]']",
+      pass
+    );
+  }
 });
