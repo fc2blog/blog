@@ -29,8 +29,10 @@ class Router
     // favicon.ico アクセス時に404をレスポンスし、ブラウザにリトライさせない。
     // しない場合、404扱いからのブログページへリダイレクトが発生し、無駄な資源を消費する。
     // 可能なら、httpd側でハンドルしたほうが良いのだが、可搬性のため。
-    if (preg_match('/\Afavicon\.ico/u', $request->uri)) {
-      return null;
+    if (preg_match('/\A\/favicon\.ico\z/u', $request->uri)) {
+      $this->className = CommonController::class; // default controller.
+      $this->methodName = 'error404';
+      return;
     }
 
     if (preg_match('|\A/admin/|u', $request->uri)) { // Admin routing
