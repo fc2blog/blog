@@ -17,7 +17,7 @@ abstract class UserController extends AppController
    */
   public static function getBlogId(Request $request): ?string
   {
-    return $request->get('blog_id');
+    return $request->getBlogId();
   }
 
   /**

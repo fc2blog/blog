@@ -40,5 +40,8 @@ define('HTTPS_PORT', (string)getenv("FC2_HTTPS_PORT")); // ex: 443, 8480
 // Please edit the path when change `app` and `public` relative path condition.
 define('WWW_DIR', (string)getenv("FC2_DOCUMENT_ROOT_PATH"));
 
+//define('DEFAULT_BLOG_ID', (string)getenv("DEFAULT_BLOG_ID"));
+define("DEFAULT_BLOG_ID", (string)getenv("FC2_DEFAULT_BLOG_ID"));
+
 // 設定クラス読み込み
 require(__DIR__ . '/core/bootstrap.php');

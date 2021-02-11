@@ -727,4 +727,33 @@ class BlogsModel extends Model
 
     return $blog_array['redirect_status_code'];
   }
+
+  /**
+   * @return string|null
+   */
+  static public function getDefaultBlogId(): ?string
+  {
+    if (strlen(Config::get("DEFAULT_BLOG_ID", ""))>0) {
+      return Config::get("DEFAULT_BLOG_ID");
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * @param Request $request
+   * @return string|null
+   */
+  static public function getBlogIdByRequestOrDefault(Request $request): ?string
+  {
+    if($request->getBlogId()){
+      return $request->getBlogId();
+
+    } else if (Config::get("DEFAULT_BLOG_ID", "") && !is_null(BlogsModel::getDefaultBlogId())) {
+      return BlogsModel::getDefaultBlogId();
+
+    } else {
+      return null;
+    }
+  }
 }

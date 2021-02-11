@@ -41,6 +41,7 @@ services:
       FC2_HTTPS_PORT: "8480"
       FC2_DOCUMENT_ROOT_PATH: "/fc2blog/public/"
       DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
+      # FC2_DEFAULT_BLOG_ID: "testblog2" # experimental single tenant mode.
     depends_on:
       - db
     working_dir: "/fc2blog"

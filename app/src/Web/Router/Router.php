@@ -1,6 +1,8 @@
 <?php
+
 namespace Fc2blog\Web\Router;
 
+use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Controller\Admin\AdminController;
 use Fc2blog\Web\Controller\User\BlogsController;
@@ -57,36 +59,60 @@ class Router
       $request->urlRewrite = false;
       $request->baseDirectory = '/';
 
-      $default_blog_id = "testblog2";// TODO なんらか設定から引くように
-      $default_blog_id = null;
-
       // 対象となるblogを決定する
-      if ($path === "/" && !is_null($default_blog_id)) {
-        // `/`であり(blog_idがURLに無く)、デフォルトblog_idが存在する場合、デフォルトblog_idのトップを表示する
-        $blog_id = $default_blog_id;
+      if (!is_null($request->getBlogId())) {
+        // URLからDefault Blog IDが取得できる場合
+        $blog_id = $request->getBlogId();
+        $request->set('blog_id', $blog_id);
+        if (isset($paths[1])) {
+          $sub_path = $paths[1];
+        }
+      } else if (!is_null($request->get('blog_id'))) {
+        // パラメタからBlog idが取得できる場合
+        $blog_id = $request->get('blog_id');
         $request->set('blog_id', $blog_id);
         if (isset($paths[0])) {
           $sub_path = $paths[0];
         }
-
-      } else if ($path === "/" && is_null($default_blog_id)) {
-        // `/`であり(blog_idがURLに無く)、デフォルトblog_idが存在しない場合
-        $this->className = BlogsController::class;
-        $this->methodName = 'index';
-
-      } else if (!is_null($request->getBlogId())) {
-        // blog_idがURLから特定できる場合
-        $blog_id = $request->getBlogId();
-        if (isset($paths[1])) {
-          $sub_path = $paths[1];
+      } else {
+        // blog_idがリクエストから特定できない場合、デフォルトblog_idを利用する
+        $blog_id = BlogsModel::getDefaultBlogId();
+        $request->set('blog_id', $blog_id);
+        if (isset($paths[0])) {
+          $sub_path = $paths[0];
         }
       }
-      // TODO: blog_idがURLから特定できない場合でsub_pathを規定しないといけない？
 
       if (isset($blog_id) && $request->isArgs('xml')) { // `/?xml`
         // RSS feed
         $this->className = BlogsController::class;
         $this->methodName = 'feed';
+
+      } else if (preg_match('!\A/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/file/([0-9]+)_([wh]?)([0-9]{1,4})\.(png|gif|jpeg|jpg)\z!u', $path, $matches)) {
+        // サムネイル画像 (入力値制限あり
+        // http://localhost:8080/uploads/t/e/s/testblog2/file/2_72.png?
+        // http://localhost:8080/uploads/t/e/s/testblog2/file/2_w300.png?
+        // http://localhost:8080/uploads/t/e/s/testblog2/file/2_w400.png?
+        // http://localhost:8080/uploads/t/e/s/testblog2/file/2_w600.png?
+        $this->className = CommonController::class;
+        $this->methodName = 'thumbnail';
+        $request->set('blog_id', $matches[1]);
+        $request->set('id', $matches[2]);
+        $request->set('whs', $matches[3]);
+        $request->set('size', $matches[4]);
+        $request->set('ext', $matches[5]);
+
+      } else if (preg_match('!\A/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/file/([0-9]+)_(wh)([0-9]+)_([0-9]+)\.(png|gif|jpe?g)\z!u', $path, $matches)) {
+        // サムネイル画像 (入力値制限あり
+        // http://localhost:8080/uploads/t/e/s/testblog2/file/2_wh760_420.png
+        $this->className = CommonController::class;
+        $this->methodName = 'thumbnail';
+        $request->set('blog_id', $matches[1]);
+        $request->set('id', $matches[2]);
+        $request->set('whs', $matches[3]);
+        $request->set('width', $matches[4]);
+        $request->set('height', $matches[5]);
+        $request->set('ext', $matches[6]);
 
       } else if (isset($blog_id) && !$request->isArgs($args_action)) {
         $this->className = EntriesController::class;
@@ -130,28 +156,8 @@ class Router
         } else {
           // トップページ
           $this->methodName = 'index';
+
         }
-
-      } else if (preg_match('{/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/file/([0-9]+)_([wh]?)([0-9]+)\.(png|gif|jpe?g)$}', $path, $matches)) {
-        // サムネイル画像
-        $this->className = CommonController::class;
-        $this->methodName = 'thumbnail';
-        $request->set('blog_id', $matches[1]);
-        $request->set('id', $matches[2]);
-        $request->set('whs', $matches[3]);
-        $request->set('size', $matches[4]);
-        $request->set('ext', $matches[5]);
-
-      } else if (preg_match('{/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/([0-9a-zA-Z]+)/file/([0-9]+)_(wh)([0-9]+)_([0-9]+)\.(png|gif|jpe?g)$}', $path, $matches)) {
-        // サムネイル画像
-        $this->className = CommonController::class;
-        $this->methodName = 'thumbnail';
-        $request->set('blog_id', $matches[1]);
-        $request->set('id', $matches[2]);
-        $request->set('whs', $matches[3]);
-        $request->set('width', $matches[4]);
-        $request->set('height', $matches[5]);
-        $request->set('ext', $matches[6]);
 
       } else if ($request->get($args_controller) === "common" && $request->get($args_action) === "captcha") {
         // captcha画像生成
@@ -169,7 +175,11 @@ class Router
         $this->methodName = 'lang';
 
       } else if ($request->get($args_controller) === "blogs" && $request->get($args_action) === "index") {
-        // 言語切り替え
+        $this->className = BlogsController::class;
+        $this->methodName = 'index';
+
+      } else if (!isset($blog_id)) {
+        // blog_idが存在しない場合
         $this->className = BlogsController::class;
         $this->methodName = 'index';
 

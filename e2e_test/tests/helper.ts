@@ -20,7 +20,7 @@ export class Helper {
   async init(): Promise<void> {
     this.requestHttpHeaders = {
       'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
-      'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36'
+      'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 THIS_IS_TEST'
     };
     this.browser = await puppeteer.launch({
       args: ['--lang=ja'],
@@ -42,7 +42,7 @@ export class Helper {
 
   async setSpUserAgent(): Promise<void> {
     let spRequestHttpHeaders = this.requestHttpHeaders;
-    spRequestHttpHeaders['User-Agent'] = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Mobile Safari/537.36';
+    spRequestHttpHeaders['User-Agent'] = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Mobile Safari/537.36 THIS_IS_TEST';
     await this.page.setExtraHTTPHeaders(spRequestHttpHeaders);
     await this.page.setViewport({
       width: 400,
