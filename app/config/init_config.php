@@ -359,10 +359,9 @@ $config['PAGE'] = array(
 );
 
 $config['DEFAULT_BLOG_ID'] = defined("DEFAULT_BLOG_ID") ? DEFAULT_BLOG_ID : null;
-if (
-  defined("THIS_IS_TEST") ||
-  preg_match("/THIS_IS_TEST/u", $_SERVER['HTTP_USER_AGENT'])
-) {// TODO シングルテナントモードのテスト系が出来てからはずす
+// TODO E2E testでシングルテナントモード対応ができたら外す
+// UserAgentでDefault Blog Id設定を強制オフにする
+if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/THIS_IS_TEST/u", $_SERVER['HTTP_USER_AGENT'])) {
   $config['DEFAULT_BLOG_ID'] = null;
 }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Tests;
 
 use ErrorException;
+use Fc2blog\Config;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
@@ -45,5 +46,8 @@ class LoaderHelper extends TestCase
       /** @noinspection PhpIncludeInspection このファイルはないことがあるので */
       require(TEST_APP_DIR . '/config.php');
     }
+
+    // テストではシングルテナントモードは初期オフにする、必要なテストで都度Onにする
+    Config::set('DEFAULT_BLOG_ID', null);
   }
 }
