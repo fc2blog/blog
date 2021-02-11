@@ -26,8 +26,26 @@ class UrlTest extends TestCase
     // set default blog to "testblog2"
     Config::set('DEFAULT_BLOG_ID', 'testblog2');
     $c = $this->reqGet('/testblog2/');
-    $this->assertStringNotContainsString('<h1><a href="/testblog2/', $c->getOutput());
+    $this->assertStringNotContainsString('<h1><a href="/testblog2/"', $c->getOutput());
     $this->assertStringContainsString('<h1><a href="/"', $c->getOutput());
+    Config::set('DEFAULT_BLOG_ID', null);
+  }
+
+  public function testHeaderLinkUrlNotDefaultBlogWithDefaultBlogId(): void
+  {
+    // set default blog to "testblog2"
+    Config::set('DEFAULT_BLOG_ID', 'testblog2');
+    $c = $this->reqHttpsGet('/testblog1/');
+    $this->assertStringContainsString('<h1><a href="/testblog1/"', $c->getOutput());
+    Config::set('DEFAULT_BLOG_ID', null);
+  }
+
+  public function testHeaderLinkUrlNotDefaultBlogWithOutDefaultBlogId(): void
+  {
+    // set default blog to "testblog2"
+    Config::set('DEFAULT_BLOG_ID', null);
+    $c = $this->reqHttpsGet('/testblog1/');
+    $this->assertStringContainsString('<h1><a href="/testblog1/"', $c->getOutput());
     Config::set('DEFAULT_BLOG_ID', null);
   }
 }
