@@ -346,8 +346,13 @@ abstract class Controller
     }
 
     // FC2用のどこでも有効な単変数
-    $data['url'] = '/' . $data['blog']['id'] . '/';
     $data['blog_id'] = UserController::getBlogId($request); // TODO User系でしかこのメソッドは呼ばれないはずなので
+    if ($data['blog_id'] !== Config::get('DEFAULT_BLOG_ID')) {
+      $data['url'] = '/' . $data['blog']['id'] . '/';
+    } else {
+      // シングルテナントモード、DEFAULT_BLOG_IDとBlogIdが一致するなら、Pathを省略する
+      $data['url'] = '/';
+    }
 
     // 年月日系
     $data['now_date'] = (isset($data['date_area']) && $data['date_area']) ? $data['now_date'] : date('Y-m-d');
