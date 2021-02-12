@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\Helper;
 
 use Fc2blog\Exception\RedirectExit;
+use Fc2blog\Model\EntriesModel;
 use Fc2blog\Web\Controller\AppController;
+use Fc2blog\Web\Controller\Controller;
+use Fc2blog\Web\Controller\User\UserController;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 use RuntimeException;
@@ -220,5 +223,28 @@ trait ClientTrait
     $rtn['is_warn'] = strlen($rtn['warn']) > 0;
     $rtn['is_error'] = strlen($rtn['error']) > 0;
     return $rtn;
+  }
+
+  /**
+   * あるリクエストからFC2テンプレートレンダリング直前のデータを生成し、取得する
+   * @param $method
+   * @param $url
+   * @return array
+   */
+  private function getFc2PreprocessedData($method, $url): array
+  {
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") {
+      $_SERVER['HTTPS'] = null;
+    }
+    $request = new Request($method, $url, [/*clear session*/]);
+    /** @var UserController $c */
+    $c = new $request->className($request);
+    $c->prepare($request->methodName);
+    $d = Controller::preprocessingDataForFc2Template($request, $c->getData());
+    // App::userURLのテストのため
+    $em = new EntriesModel();
+    $d['_calender_data'] = $em->getTemplateCalendar($request, $c->get('blog_id'), 2020, 7); // テストデータに依存しているので、壊れやすい
+
+    return $d;
   }
 }
