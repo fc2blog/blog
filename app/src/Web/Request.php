@@ -100,12 +100,12 @@ class Request
 
   /**
    * リファラーを返却 存在しない場合は空文字を返却
+   * @return string
    */
-  public static function getReferer()
+  public function getReferer(): string
   {
-    // TODO
-    if (!empty($_SERVER['HTTP_REFERER'])) {
-      return $_SERVER['HTTP_REFERER'];
+    if (isset($this->server['HTTP_REFERER'])) {
+      return $this->server['HTTP_REFERER'];
     }
     return '';
   }

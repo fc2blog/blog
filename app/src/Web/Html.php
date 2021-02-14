@@ -244,9 +244,9 @@ class Html
     return $html;
   }
 
-  public static function getServerUrl()
+  public static function getServerUrl(Request $request): string
   {
-    $url = (empty($_SERVER["HTTPS"])) ? 'http://' : 'https://';
+    $url = (isset($request->server["HTTPS"]) && $request->server["HTTPS"] === "on") ? 'http://' : 'https://';
     $url .= Config::get('DOMAIN');
     return $url;
   }

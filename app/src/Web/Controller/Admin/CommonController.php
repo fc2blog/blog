@@ -165,6 +165,7 @@ class CommonController extends AdminController
         // ドメイン確認
         $is_domain = DOMAIN != 'domain';
         $this->set('is_domain', $is_domain);
+        $this->set('example_server_name', $request->server['SERVER_NAME'] ?? 'example.jp');
 
         // GDインストール済み確認
         $is_gd = function_exists('gd_info');
