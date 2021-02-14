@@ -13,14 +13,15 @@ class Cookie
 
   /**
    * クッキーから情報を取得する
-   * @param $key
-   * @param null $default
-   * @return mixed|null
+   * @param Request $request
+   * @param string $key
+   * @param ?string $default
+   * @return mixed
    */
-  public static function get($key, $default = null)
+  public static function get(Request $request, string $key, $default = null)
   {
-    if (isset($_COOKIE[$key])) {
-      return $_COOKIE[$key];
+    if (isset($request->cookie[$key])) {
+      return $request->cookie[$key];
     }
     return $default;
   }
@@ -106,6 +107,7 @@ class Cookie
     if(defined("THIS_IS_TEST")){
       $request->cookie[$key] = $value;
     }else{
+      $request->cookie[$key] = $value;
       setcookie(
         $key,
         $value,

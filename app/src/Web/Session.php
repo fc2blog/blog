@@ -104,7 +104,7 @@ class Session
   {
     $_SESSION = [];
     $request->session = [];
-    if (isset($_COOKIE[Config::get('SESSION_NAME')])) {
+    if (isset($request->cookie[Config::get('SESSION_NAME')])) {
       Cookie::remove($request, Config::get('SESSION_NAME'));
     }
     if (session_status() === PHP_SESSION_ACTIVE) {
