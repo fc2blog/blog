@@ -421,9 +421,15 @@ class Request
   {
     $paths = $this->getPaths();
 
-    // blog_id「かもしれないもの」を取得する
+    if(isset($this->request['blog_id'])){
+      // すでに解決されているので再利用
+      return $this->request['blog_id'];
+    }
+
+    // URLのblog_id「かもしれないもの」を取得し、保存する
     if (isset($paths[0]) && preg_match('|\A[0-9a-zA-Z]+\z|u', $paths[0])) {
-      return $paths[0];
+      $this->set('blog_id', $paths[0]);
+      return $this->request['blog_id'];
     } else {
       return null;
     }

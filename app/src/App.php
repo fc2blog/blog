@@ -363,7 +363,7 @@ class App
       if (count($params)) {
         $url .= '?' . implode('&', $params);
       }
-      if ($blog_id) {
+      if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
         $url = '/' . $blog_id . $url;
       }
       $url = ($abs ? $full_domain : '') . $url;
@@ -385,7 +385,7 @@ class App
       if (count($params) > 0) {
         $url .= '?' . implode('&', $params);
       }
-      if ($blog_id) {
+      if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
         $url = '/' . $blog_id . $url;
       }
       $url = ($abs ? $full_domain : '') . $url;
@@ -406,7 +406,7 @@ class App
     if (count($params)) {
       $url .= '?' . implode('&', $params);
     }
-    if ($blog_id) {
+    if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
       $url = '/' . $blog_id . $url;
     }
     $url = ($abs ? $full_domain : '') . $url;

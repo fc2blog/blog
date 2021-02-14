@@ -88,7 +88,15 @@ class Html
     if (count($params)) {
       $url .= '?' . implode('&', $params);
     }
-    if ($blog_id) {
+    // シングルテナントモードのために、/testblog2/〜〜 のブログ指定部分を省略するか？を決定
+    if (
+      $blog_id && (
+        // Default Blog IDが未指定か
+        strlen(Config::get('DEFAULT_BLOG_ID'))===0 ||
+        // 指定されたblog_idがDefault blog idと異なる場合
+        $blog_id !== Config::get('DEFAULT_BLOG_ID')
+      )
+    ) {
       $url = '/' . $blog_id . $url;
     }
 
