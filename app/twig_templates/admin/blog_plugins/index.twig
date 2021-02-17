@@ -77,7 +77,11 @@
                         display: $(this).prop('checked') ? 1 : 0,
                         sig: "{{ sig }}"
                     }),
-                    cache: false
+                    cache: false,
+                    error: function (data, status, xhr){
+                        alert("エラーが発生しました、ページをリロードしてやり直してください。\n" +
+                          "An error occurred, please reload page and try again.");
+                    }
                 });
             });
 
