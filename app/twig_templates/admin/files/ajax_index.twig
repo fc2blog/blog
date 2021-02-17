@@ -80,7 +80,7 @@
             return false;
         });
 
-        // ファイル削除ボタン
+        // 複数ファイル削除ボタン
         $('#sys-delete-button').click(function () {
             if (!confirm('{{ _('Are you sure you want to delete?') }}')) {
                 return;
@@ -108,6 +108,14 @@
                     // 削除完了後検索処理を実行
                     isAjaxSubmit = isPageChange = true;
                     ajaxSubmit();
+                },
+                error: function( response, status, xhr ) {
+                  if (status === "error") {
+                    alert("エラーが発生しました、ページをリロードしてください。\n" +
+                      "Request failed. Please reload page and retry.");
+                    isAjaxSubmit = isPageChange = true;
+                    ajaxSubmit();
+                  }
                 }
             });
             return false;
