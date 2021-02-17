@@ -138,7 +138,7 @@ class CategoriesController extends AdminController
   }
 
   /**
-   * ajax用のカテゴリ追加
+   * ajax用のカテゴリ追加 admin/entries/create からインクルード
    * @param Request $request
    * @return string
    */
