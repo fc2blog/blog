@@ -113,6 +113,7 @@
                   if (status === "error") {
                     alert("エラーが発生しました、ページをリロードしてください。\n" +
                       "Request failed. Please reload page and retry.");
+                    // 失敗しているが、画面を復帰させるために検索処理を実行
                     isAjaxSubmit = isPageChange = true;
                     ajaxSubmit();
                   }
