@@ -1,7 +1,7 @@
 // メディア追加関数
 var addMedia = {
   target_id: null,
-  elrte: true,    // elRTEの使用,不使用
+  elrte: true, // elRTEの使用,不使用
   init: function(){
     if (this.target_id!=null) {
       return ;
@@ -9,7 +9,7 @@ var addMedia = {
     // 検索ボタン
     $('#sys-add-media-search-button').on('click', function(){
       var keyword = $('#sys-add-media-search-keyword').val();
-      $('#sys-add-media-load').load(addMedia.load({keyword: keyword}));
+      addMedia.load({keyword: keyword});
     });
     // Enterキーで検索
     $('#sys-add-media-search-keyword').keypress(function(e){
@@ -71,7 +71,7 @@ var addMedia = {
     }
     $('#sys-add-media-dialog').dialog(option);
     $('#sys-add-media-load').html('<p>Now loading...</p>');
-    $('#sys-add-media-load').load(addMedia.load({}));
+    addMedia.load({});
   },
   add: function(){
     var textarea_id = addMedia.target_id;
@@ -100,7 +100,7 @@ var addMedia = {
   // 位置情報取得
   getSelection: function(dom) {
     var pos = {};
-    if (/*@cc_on!@*/false) {
+    if (/*@cc_on!@*/false) { // TODO remove, It's hack for IE<=10 #235
       dom.focus();
       var range = document.selection.createRange();
       var clone = range.duplicate();
