@@ -22,18 +22,27 @@ var addMedia = {
       $('#sys-add-media-dialog').dialog('option', {width: $(window).width() - 100});
     });
   },
-  load: function(params){
-    $('#sys-add-media-load').fadeOut('fast', function(){
-      $('#sys-add-media-load').load(common.fwURL('Entries', 'ajax_media_load', params), function(){
-        $('#sys-add-media-load').fadeIn('fast');
-        $('#sys-add-media-load').find('input[type=checkbox]').on('click', function(){
-          if ($(this).prop('checked')) {
-            $(this).closest('li').addClass('selected');
+  load: function (params) {
+    $('#sys-add-media-load').fadeOut('fast', function () {
+      $('#sys-add-media-load').load(
+        common.fwURL('Entries', 'ajax_media_load', params),
+        function (response, status, xhr) {
+          if (status === "error") {
+            alert("エラーが発生しました、ページをリロードしてください。\n" +
+              "Loading error. Please reload page.");
+
           } else {
-            $(this).closest('li').removeClass('selected');
+            $('#sys-add-media-load').fadeIn('fast');
+            $('#sys-add-media-load').find('input[type=checkbox]').on('click', function () {
+              if ($(this).prop('checked')) {
+                $(this).closest('li').addClass('selected');
+              } else {
+                $(this).closest('li').removeClass('selected');
+              }
+            });
           }
-        })
-      });
+        }
+      );
     });
   },
   open: function(key, config){
