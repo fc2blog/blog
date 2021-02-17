@@ -170,6 +170,10 @@
                     $('#sys-reply-message').hide();
                     $('#sys-reply-error').html(json.error);
                     $('#sys-reply-error').show();
+                },
+                error: function (data, status, xhr){
+                    alert("エラーが発生しました、ページをリロードしてください。\n" +
+                    "An error occurred, please reload page and try again.");
                 }
             });
         };
@@ -193,6 +197,10 @@
                         $('#sys-open-status-' + id + ' > *').show();
                         $('#sys-comment-approval').show();
                         alert(json.error);
+                    },
+                    error: function (data, status, xhr){
+                        alert("エラーが発生しました、ページをリロードしてやり直してください。\n" +
+                          "An error occurred, please reload page and try again.");
                     }
                 });
             });
