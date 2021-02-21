@@ -25,7 +25,6 @@ services:
       FC2_APP_DEBUG: 1
       FC2_SQL_DEBUG: 1
       FC2_CONFIG_FROM_ENV: 1
-      FC2_ENABLE_UNIT_TEST_ENDPOINT: 1
       FC2_STRICT_ERROR_REPORT: 1
       FC2_ERROR_LOG_PATH: "php://stderr"
       FC2_APP_LOG_PATH: "php://stderr"
