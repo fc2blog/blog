@@ -20,6 +20,10 @@ jobs:
           MYSQL_USER: docker
           MYSQL_PASSWORD: docker
     steps:
+      - name: Setup PHP 7.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
       - uses: actions/checkout@v2
 #      - name: Setup Database
 #        run: |
