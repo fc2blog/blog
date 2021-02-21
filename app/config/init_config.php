@@ -26,6 +26,7 @@ $config['DB_CHARSET'] = DB_CHARSET;
 // DBの接続情報
 $config['MASTER_DB'] = array(
   'HOST' => DB_HOST,
+  'PORT' => DB_PORT,
   'USER' => DB_USER,
   'PASSWORD' => DB_PASSWORD,
   'DATABASE' => DB_DATABASE,

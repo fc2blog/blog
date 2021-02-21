@@ -31,6 +31,7 @@ services:
       FC2_LOG_LEVEL: 100
       FC2_ERROR_ON_DISPLAY: 1
       FC2_DB_HOST: "db"
+      FC2_DB_PORT: "3306"
       FC2_DB_USER: "docker"
       FC2_DB_PASSWORD: "docker"
       FC2_DB_DATABASE: "dev_fc2blog"

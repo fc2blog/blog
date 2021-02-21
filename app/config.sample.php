@@ -7,6 +7,7 @@ error_reporting(0);
 
 // DBの接続情報
 define('DB_HOST', 'localhost'); // dbのホスト名
+define('DB_PORT', '3306'); // dbのホスト名
 define('DB_USER', 'your user name'); // dbのユーザー名
 define('DB_PASSWORD', 'your password'); // dbのパスワード
 define('DB_DATABASE', 'your database name'); // dbのデータベース名

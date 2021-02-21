@@ -132,6 +132,7 @@ class CommonController extends AdminController
         $this->set('random_string', App::genRandomStringAlphaNum(32));
 
         $this->set('DB_HOST', DB_HOST);
+        $this->set('DB_PORT', DB_PORT);
         $this->set('DB_USER', DB_USER);
         $this->set('DB_PASSWORD', DB_PASSWORD);
         $this->set('DB_DATABASE', DB_DATABASE);

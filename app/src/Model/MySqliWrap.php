@@ -10,6 +10,7 @@ class MySqliWrap implements DBInterface{
 
   // DB情報
   private $host = null;
+  private $port = port;
   private $user = null;
   private $password = null;
   private $database = null;
@@ -18,8 +19,9 @@ class MySqliWrap implements DBInterface{
   // DBオブジェクト
   private $db = null;
 
-  function __construct($host, $user, $password, $database, $charset){
+  function __construct($host, $port, $user, $password, $database, $charset){
     $this->host = $host;
+    $this->port = $port;
     $this->user = $user;
     $this->password = $password;
     $this->database = $database;
@@ -147,9 +149,9 @@ class MySqliWrap implements DBInterface{
     // TODO Show Warning message on connect failed. but mysqli throw error, not exception...
     if ($this->db == null) {
       if ($is_database) {
-        $this->db = new \mysqli($this->host, $this->user, $this->password, $this->database);
+        $this->db = new \mysqli($this->host, $this->user, $this->password, $this->database, (int)$this->port);
       } else {
-        $this->db = new \mysqli($this->host, $this->user, $this->password);
+        $this->db = new \mysqli($this->host, $this->user, $this->password, null, (int)$this->port);
       }
       $this->errorCheck('Connect Error');
       if ($is_charset) {

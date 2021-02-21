@@ -39,6 +39,7 @@ class MSDB implements DBInterface
       if (DB_CONNECT_LIB === 'PDO') {
         $this->master = new PDOWrap(
           Config::get('MASTER_DB.HOST'),
+          Config::get('MASTER_DB.PORT'),
           Config::get('MASTER_DB.USER'),
           Config::get('MASTER_DB.PASSWORD'),
           Config::get('MASTER_DB.DATABASE'),
@@ -48,6 +49,7 @@ class MSDB implements DBInterface
       if (DB_CONNECT_LIB === 'mysqli') {
         $this->master = new MySqliWrap(
           Config::get('MASTER_DB.HOST'),
+          Config::get('MASTER_DB.PORT'),
           Config::get('MASTER_DB.USER'),
           Config::get('MASTER_DB.PASSWORD'),
           Config::get('MASTER_DB.DATABASE'),

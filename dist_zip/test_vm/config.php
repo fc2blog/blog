@@ -3,6 +3,7 @@ error_reporting(-1);
 
 // DBの接続情報
 define('DB_HOST', '127.0.0.1'); // dbのホスト名
+define('DB_PORT', '3306'); // dbのホスト名
 define('DB_USER', 'dbuser'); // dbのユーザー名
 define('DB_PASSWORD', 'd1B2p3a#s!s'); // dbのパスワード
 define('DB_DATABASE', 'fc2'); // dbのデータベース名

@@ -2544,3 +2544,6 @@ msgstr "パスワード未設定"
 
 msgid "(Leave blank if you do not wish to change.)"
 msgstr "(パスワードを変更しない場合、空欄のままとしてください)"
+
+msgid "Host port"
+msgstr "ホスト ポート番号"
