@@ -10,7 +10,7 @@ class MySqliWrap implements DBInterface{
 
   // DB情報
   private $host = null;
-  private $port = port;
+  private $port = null;
   private $user = null;
   private $password = null;
   private $database = null;
