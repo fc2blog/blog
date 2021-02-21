@@ -45,6 +45,7 @@ jobs:
           FC2_LOG_LEVEL: 100
           FC2_ERROR_ON_DISPLAY: 1
           FC2_DB_HOST: 127.0.0.1
+          FC2_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           FC2_DB_USER: docker
           FC2_DB_PASSWORD: docker
           FC2_DB_DATABASE: fc2dev
