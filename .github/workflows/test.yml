@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
         ports:
           - 3306
@@ -44,7 +44,7 @@ jobs:
           FC2_APP_LOG_PATH: "php://stderr"
           FC2_LOG_LEVEL: 100
           FC2_ERROR_ON_DISPLAY: 1
-          FC2_DB_HOST: 127.0.0.1
+          FC2_DB_HOST: mysql
           FC2_DB_USER: docker
           FC2_DB_PASSWORD: docker
           FC2_DB_DATABASE: fc2dev
