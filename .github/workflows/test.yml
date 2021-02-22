@@ -66,4 +66,4 @@ jobs:
           touch app/temp/installed.lock
           tests/cli_load_fixture.php
           tests/cli_update_template.php testblog2
-          php composer.phar run test
+          php app/vendor/bin/phpunit --stop-on-failure

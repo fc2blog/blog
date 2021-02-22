@@ -164,6 +164,7 @@ class UsersController extends AdminController
 
     // ログインフォームのバリデート
     $errors = $users_model->loginValidate($request->get('user'), $data, ['login_id', 'password']);
+    var_dump($data);
     if (empty($errors)) {
       $user = $users_model->findByLoginIdAndPassword($data['login_id'], $data['password']);
       if ($user) {
