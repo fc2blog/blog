@@ -148,6 +148,8 @@ class UsersModel extends Model
       'params' => [$id],
     ];
     $user = $this->find('row', $options);
+    var_dump(__FILE__.":".__LINE__);
+    var_dump($user);
 
     if (is_array($user) && password_verify($password, $user['password'])) {
       return $user;
