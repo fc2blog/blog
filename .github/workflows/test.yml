@@ -132,14 +132,14 @@ jobs:
       - name: run e2e test
         working-directory: ./e2e_test
         run: |
-          docker exec --user root -it fc2blog-apache-test bash -c "chown -R www-data:www-data app/temp"
-          docker exec --user root -it fc2blog-apache-test bash -c "chown -R www-data:www-data public/uploads"
-          docker exec --user www-data -it fc2blog-apache-test bash -c "php tests/cli_load_fixture.php"
+          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data app/temp"
+          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data public/uploads"
+          docker exec --user www-data fc2blog-apache-test bash -c "php tests/cli_load_fixture.php"
           npx jest --clearCache
           npx jest -i 1 serial_execute_tests/*
-          docker exec --user root -it fc2blog-apache-test bash -c "chown -R www-data:www-data app/temp"
-          docker exec --user root -it fc2blog-apache-test bash -c "chown -R www-data:www-data public/uploads"
-          docker exec --user www-data -it fc2blog-apache-test bash -c "php tests/cli_load_fixture.php"
+          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data app/temp"
+          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data public/uploads"
+          docker exec --user www-data fc2blog-apache-test bash -c "php tests/cli_load_fixture.php"
           npx jest --clearCache
           npx jest tests/*
 
