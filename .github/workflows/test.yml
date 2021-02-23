@@ -129,16 +129,27 @@ jobs:
         run: |
           npm ci
 
-      - name: run e2e test
+      - name: run e2e test before
         run: |
-          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data app/temp"
-          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data public/uploads"
-          docker exec --user www-data fc2blog-apache-test bash -c "php tests/cli_load_fixture.php"
+          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/app/temp"
+          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/public/uploads"
+          docker exec --user www-data fc2blog-apache-test bash -c "php /fc2blog/tests/cli_load_fixture.php"
+
+      - name: run e2e test serial
+        working-directory: ./e2e_test
+        run: |
           npx jest --clearCache
           npx jest -i 1 serial_execute_tests/*
-          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data app/temp"
-          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data public/uploads"
-          docker exec --user www-data fc2blog-apache-test bash -c "php tests/cli_load_fixture.php"
+
+      - name: run e2e test before
+        run: |
+          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/app/temp"
+          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/public/uploads"
+          docker exec --user www-data fc2blog-apache-test bash -c "php /fc2blog/tests/cli_load_fixture.php"
+
+      - name: run e2e test parallel
+        working-directory: ./e2e_test
+        run: |
           npx jest --clearCache
           npx jest tests/*
 
