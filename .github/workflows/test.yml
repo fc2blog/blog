@@ -96,11 +96,12 @@ jobs:
         timeout-minutes: 1
         with:
           resource: http://127.0.0.1:8080
-          debug: 1
+          debug: true
 
       - name: prepare e2e test
+        working-directory: ./e2e_test
         run: |
-          cd e2e_test/ && npm ci
+          npm ci
 
       - name: run e2e test
         working-directory: ./e2e_test
