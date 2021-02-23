@@ -68,6 +68,29 @@ jobs:
         run: |
           docker build --build-arg PUID=$(id -u) --build-arg PGID=$(id -g) -t fc2blog-apache:tmp ./docker/apache/
 
+      - name: run web server in docker check env
+        env:
+          FC2_CONFIG_FROM_ENV: 1
+          FC2_APP_DEBUG: 1
+          FC2_SQL_DEBUG: 0
+          FC2_STRICT_ERROR_REPORT: 1
+          FC2_ERROR_LOG_PATH: "php://stderr"
+          FC2_APP_LOG_PATH: "php://stderr"
+          FC2_LOG_LEVEL: 100
+          FC2_ERROR_ON_DISPLAY: 1
+          FC2_DB_HOST: 127.0.0.1
+          FC2_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          FC2_DB_USER: docker
+          FC2_DB_PASSWORD: docker
+          FC2_DB_DATABASE: fc2dev
+          FC2_DB_CHARSET: "UTF8MB4"
+          FC2_DOMAIN: "localhost"
+          FC2_HTTP_PORT: "8080"
+          FC2_HTTPS_PORT: "8480"
+          DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
+        run: | # check env
+          docker run --rm -p 8080:80  -p 8480:443 --name fc2blog-apache-test --volume=`pwd`:/fc2blog -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY fc2blog-apache:tmp bash -c "export"
+
       - name: run web server in docker
         env:
           FC2_CONFIG_FROM_ENV: 1
@@ -89,7 +112,7 @@ jobs:
           FC2_HTTPS_PORT: "8480"
           DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
         run: | # TODO need more envs.
-          docker run -d -p 8080:80  -p 8480:443 --name fc2blog-apache-test --volume=`pwd`:/fc2blog -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY fc2blog-apache:tmp
+          docker run -d -p 8080:80  -p 8480:443 --name fc2blog-apache-test --volume=`pwd`:/fc2blog -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY fc2blog-apache:tmp export
 
       - name: Wait on
         uses: iFaxity/wait-on-action@v1
