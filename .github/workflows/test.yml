@@ -152,7 +152,7 @@ jobs:
         run: |
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/app/temp"
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/public/uploads"
-          docker exec --user www-data fc2blog-apache-test -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY  bash -c "php /fc2blog/tests/cli_load_fixture.php"
+          docker exec -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY --user www-data fc2blog-apache-test bash -c "php /fc2blog/tests/cli_load_fixture.php"
 
       - name: run e2e test serial
         working-directory: ./e2e_test
@@ -183,7 +183,7 @@ jobs:
         run: |
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/app/temp"
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/public/uploads"
-          docker exec --user www-data -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY fc2blog-apache-test bash -c "php /fc2blog/tests/cli_load_fixture.php"
+          docker exec  -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY --user www-data fc2blog-apache-test bash -c "php /fc2blog/tests/cli_load_fixture.php"
 
       - name: run e2e test parallel
         working-directory: ./e2e_test
