@@ -70,12 +70,14 @@ jobs:
 
       - name: run web server in docker
         run: | # TODO need more envs.
-          docker run -d -p 8080:80  -p 8480:443 --name fc2blog-apache-test fc2blog-apache:tmp
+          docker run -d -p 8080:80  -p 8480:443 --name fc2blog-apache-test --volume=`pwd`:/fc2blog fc2blog-apache:tmp
 
       - name: Wait on
         uses: iFaxity/wait-on-action@v1
+        timeout-minutes: 1
         with:
           resource: http://127.0.0.1:8080
+          debug: 1
 
       - name: prepare e2e test
         run: |
