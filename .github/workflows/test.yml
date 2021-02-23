@@ -152,7 +152,7 @@ jobs:
         run: |
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/app/temp"
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/public/uploads"
-          php /fc2blog/tests/cli_load_fixture.php
+          php tests/cli_load_fixture.php
 
       - name: run e2e test serial
         working-directory: ./e2e_test
@@ -183,7 +183,7 @@ jobs:
         run: |
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/app/temp"
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/public/uploads"
-          php /fc2blog/tests/cli_load_fixture.php
+          php tests/cli_load_fixture.php
 
       - name: run e2e test parallel
         working-directory: ./e2e_test
