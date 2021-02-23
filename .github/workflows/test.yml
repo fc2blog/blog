@@ -130,7 +130,6 @@ jobs:
           npm ci
 
       - name: run e2e test
-        working-directory: ./e2e_test
         run: |
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data app/temp"
           docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data public/uploads"
