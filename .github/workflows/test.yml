@@ -3,10 +3,7 @@ name: PhpUnit Test
 on:
   push:
     branches:
-      - master
-  pull_request:
-    branches:
-      - master
+      - issue103/gh-action-e2e
 
 jobs:
   test:
@@ -58,7 +55,7 @@ jobs:
           FC2_HTTP_PORT: "8080"
           FC2_HTTPS_PORT: "8480"
           DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
-        run: |
+        run: | # TODO remove stop-on-failure option.
           mkdir -p public/uploads/t/e/s/testblog2/file/
           cp -a tests/test_images/1.png public/uploads/t/e/s/testblog2/file/1.png
           cp -a tests/test_images/2.png public/uploads/t/e/s/testblog2/file/2.png
@@ -66,3 +63,25 @@ jobs:
           tests/cli_load_fixture.php
           tests/cli_update_template.php testblog2
           php app/vendor/bin/phpunit --stop-on-failure
+
+      - name: build web server image
+        run: |
+          docker build -t fc2blog-apache:tmp ./docker/apache/
+
+      - name: run web server in docker
+        run: | # TODO need more envs.
+          docker run -d -p 8080:80  -p 8480:443 --name fc2blog-apache-test fc2blog-apache:tmp
+
+      - name: wait startup web server
+        uses: ifaxity/wait-on-action
+        with:
+          resource: http://127.0.0.1:8080
+
+      - name: prepare e2e test
+        run: |
+          cd e2e_test/ && npm ci
+
+      - name: run e2e test
+        run: |
+          cd e2e_test/ && npm run test
+
