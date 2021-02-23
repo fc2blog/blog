@@ -113,6 +113,8 @@ jobs:
           DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
         run: | # TODO need more envs.
           docker run -d -p 8080:80  -p 8480:443 --name fc2blog-apache-test --volume=`pwd`:/fc2blog -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY fc2blog-apache:tmp export
+          sleep 10
+          curl -v http://127.0.0.1:8080
 
       - name: Wait on
         uses: iFaxity/wait-on-action@v1
