@@ -1,4 +1,4 @@
-name: PhpUnit Test
+name: Test All
 
 on:
   push:
@@ -8,186 +8,21 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:5.7
-        options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: fc2dev
-          MYSQL_USER: docker
-          MYSQL_PASSWORD: docker
     steps:
-      - name: Setup PHP 8.0
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.0'
-          extensions: mbstring, gd, gettext, fileinfo, pdo, pdo_mysql, mysqli
       - uses: actions/checkout@v2
-      - name: download sample image
-        run: cd tests/test_images && ./download_samples.sh
-      - name: get composer
+
+      - name: build docker image
+        run: make docker-compose-build
+
+      - name: build docker image and up
+        run: docker-compose up -d
+
+      - name: build docker image and up
         run: |
-          curl -sSfL -o composer-setup.php https://getcomposer.org/installer
-          php composer-setup.php --filename=composer.phar
-          rm composer-setup.php
-      - name: composer install
-        run: php composer.phar install --no-ansi --no-interaction --no-scripts --no-progress
-      - name: Execute tests (Unit and Feature tests) via PHPUnit
-        env:
-          FC2_CONFIG_FROM_ENV: 1
-          FC2_APP_DEBUG: 1
-          FC2_SQL_DEBUG: 0
-          FC2_STRICT_ERROR_REPORT: 1
-          FC2_ERROR_LOG_PATH: "php://stderr"
-          FC2_APP_LOG_PATH: "php://stderr"
-          FC2_LOG_LEVEL: 100
-          FC2_ERROR_ON_DISPLAY: 1
-          FC2_DB_HOST: 127.0.0.1
-          FC2_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          FC2_DB_USER: docker
-          FC2_DB_PASSWORD: docker
-          FC2_DB_DATABASE: fc2dev
-          FC2_DB_CHARSET: "UTF8MB4"
-          FC2_DOMAIN: "localhost"
-          FC2_HTTP_PORT: "8080"
-          FC2_HTTPS_PORT: "8480"
-          DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
-        run: | # TODO remove stop-on-failure option.
-          mkdir -p public/uploads/t/e/s/testblog2/file/
-          cp -a tests/test_images/1.png public/uploads/t/e/s/testblog2/file/1.png
-          cp -a tests/test_images/2.png public/uploads/t/e/s/testblog2/file/2.png
-          touch app/temp/installed.lock
-          tests/cli_load_fixture.php
-          tests/cli_update_template.php testblog2
-          php app/vendor/bin/phpunit --stop-on-failure
-
-      - name: build web server image
-        run: |
-          docker build --build-arg PUID=$(id -u) --build-arg PGID=$(id -g) -t fc2blog-apache:tmp ./docker/apache/
-
-      - name: run web server in docker check env
-        env:
-          FC2_CONFIG_FROM_ENV: 1
-          FC2_APP_DEBUG: 1
-          FC2_SQL_DEBUG: 0
-          FC2_STRICT_ERROR_REPORT: 1
-          FC2_ERROR_LOG_PATH: "php://stderr"
-          FC2_APP_LOG_PATH: "php://stderr"
-          FC2_LOG_LEVEL: 100
-          FC2_ERROR_ON_DISPLAY: 1
-          FC2_DB_HOST: 127.0.0.1
-          FC2_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          FC2_DB_USER: docker
-          FC2_DB_PASSWORD: docker
-          FC2_DB_DATABASE: fc2dev
-          FC2_DB_CHARSET: "UTF8MB4"
-          FC2_DOMAIN: "localhost"
-          FC2_HTTP_PORT: "8080"
-          FC2_HTTPS_PORT: "8480"
-          DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
-        run: | # check env
-          docker run --rm -p 8080:80  -p 8480:443 --name fc2blog-apache-test --volume=`pwd`:/fc2blog -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY fc2blog-apache:tmp bash -c "export"
-
-      - name: run web server in docker
-        env:
-          FC2_CONFIG_FROM_ENV: 1
-          FC2_APP_DEBUG: 1
-          FC2_SQL_DEBUG: 0
-          FC2_STRICT_ERROR_REPORT: 1
-          FC2_ERROR_LOG_PATH: "php://stderr"
-          FC2_APP_LOG_PATH: "php://stderr"
-          FC2_LOG_LEVEL: 100
-          FC2_ERROR_ON_DISPLAY: 1
-          FC2_DB_HOST: 127.0.0.1
-          FC2_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          FC2_DB_USER: docker
-          FC2_DB_PASSWORD: docker
-          FC2_DB_DATABASE: fc2dev
-          FC2_DB_CHARSET: "UTF8MB4"
-          FC2_DOMAIN: "localhost"
-          FC2_HTTP_PORT: "8080"
-          FC2_HTTPS_PORT: "8480"
-          DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
-        run: | # TODO need more envs.
-          docker run -d -p 8080:80 -p 8480:443 --name fc2blog-apache-test --volume=`pwd`:/fc2blog -e FC2_CONFIG_FROM_ENV -e FC2_APP_DEBUG -e FC2_SQL_DEBUG -e FC2_STRICT_ERROR_REPORT -e FC2_ERROR_LOG_PATH -e FC2_APP_LOG_PATH -e FC2_LOG_LEVEL -e FC2_ERROR_ON_DISPLAY -e FC2_DB_HOST -e FC2_DB_PORT -e FC2_DB_USER -e FC2_DB_PASSWORD -e FC2_DB_DATABASE -e FC2_DB_CHARSET -e FC2_DOMAIN -e FC2_HTTP_PORT -e FC2_HTTPS_PORT -e DEBUG_FORCE_CAPTCHA_KEY fc2blog-apache:tmp
           sleep 10
           docker ps -a
           curl -v http://127.0.0.1:8080
 
-#      - name: Wait on
-#        uses: iFaxity/wait-on-action@v1
-#        timeout-minutes: 1
-#        with:
-#          resource: http://127.0.0.1:8080
-#          verbose: true
-
-      - name: prepare e2e test
-        working-directory: ./e2e_test
-        run: |
-          npm ci
-
-      - name: run e2e test before
-        env:
-          FC2_CONFIG_FROM_ENV: 1
-          FC2_APP_DEBUG: 1
-          FC2_SQL_DEBUG: 0
-          FC2_STRICT_ERROR_REPORT: 1
-          FC2_ERROR_LOG_PATH: "php://stderr"
-          FC2_APP_LOG_PATH: "php://stderr"
-          FC2_LOG_LEVEL: 100
-          FC2_ERROR_ON_DISPLAY: 1
-          FC2_DB_HOST: 127.0.0.1
-          FC2_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          FC2_DB_USER: docker
-          FC2_DB_PASSWORD: docker
-          FC2_DB_DATABASE: fc2dev
-          FC2_DB_CHARSET: "UTF8MB4"
-          FC2_DOMAIN: "localhost"
-          FC2_HTTP_PORT: "8080"
-          FC2_HTTPS_PORT: "8480"
-          DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
-        run: |
-          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/app/temp"
-          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/public/uploads"
-          php tests/cli_load_fixture.php
-
-      - name: run e2e test serial
-        working-directory: ./e2e_test
-        run: |
-          npx jest --clearCache
-          npx jest -i 1 serial_execute_tests/*
-
-      - name: run e2e test before
-        env:
-          FC2_CONFIG_FROM_ENV: 1
-          FC2_APP_DEBUG: 1
-          FC2_SQL_DEBUG: 0
-          FC2_STRICT_ERROR_REPORT: 1
-          FC2_ERROR_LOG_PATH: "php://stderr"
-          FC2_APP_LOG_PATH: "php://stderr"
-          FC2_LOG_LEVEL: 100
-          FC2_ERROR_ON_DISPLAY: 1
-          FC2_DB_HOST: 127.0.0.1
-          FC2_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          FC2_DB_USER: docker
-          FC2_DB_PASSWORD: docker
-          FC2_DB_DATABASE: fc2dev
-          FC2_DB_CHARSET: "UTF8MB4"
-          FC2_DOMAIN: "localhost"
-          FC2_HTTP_PORT: "8080"
-          FC2_HTTPS_PORT: "8480"
-          DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
-        run: |
-          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/app/temp"
-          docker exec --user root fc2blog-apache-test bash -c "chown -R www-data:www-data /fc2blog/public/uploads"
-          php tests/cli_load_fixture.php
-
-      - name: run e2e test parallel
-        working-directory: ./e2e_test
-        run: |
-          npx jest --clearCache
-          npx jest tests/*
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: make test
 
