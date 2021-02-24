@@ -12,12 +12,12 @@ describe("crawl admin pages", () => {
     await c.init();
   });
 
-  const start_url = "http://localhost:8080/admin/";
+  const start_url = "/admin/";
 
   it("open login page", async () => {
     const [response] = await Promise.all([
       c.waitLoad(),
-      c.page.goto(start_url),
+      c.page.goto(c.getBaseUrl() + start_url),
     ]);
 
     await c.getSS("admin_login.png");
@@ -37,7 +37,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     // ログインページにリダイレクトされる
-    expect(response.url()).toEqual("http://localhost:8080/admin/users/login");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/login");
   });
 
   it("login failed", async () => {
@@ -59,7 +59,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/users/login");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/login");
 
     const flash_message = await c.page.$eval(
       "#main-contents > div.flash-message-error > p",
@@ -97,7 +97,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/common/notice");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/common/notice");
   });
 
   it("open お知らせ", async () => {
@@ -110,7 +110,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/common/notice");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/common/notice");
   });
 
   it("open 新しく記事を書く", async () => {
@@ -124,7 +124,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     expect(response.url()).toEqual(
-      "http://localhost:8080/admin/entries/create"
+      c.getBaseUrl() + "/admin/entries/create"
     );
   });
 
@@ -138,7 +138,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/entries/index");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/entries/index");
   });
 
   it("open コメント一覧", async () => {
@@ -152,7 +152,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     expect(response.url()).toEqual(
-      "http://localhost:8080/admin/comments/index"
+      c.getBaseUrl() + "/admin/comments/index"
     );
   });
 
@@ -166,7 +166,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/files/upload");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/files/upload");
   });
 
   it("open テンプレート管理", async () => {
@@ -180,7 +180,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     expect(response.url()).toEqual(
-      "http://localhost:8080/admin/blog_templates/index"
+      c.getBaseUrl() + "/admin/blog_templates/index"
     );
   });
 
@@ -195,7 +195,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     expect(response.url()).toEqual(
-      "http://localhost:8080/admin/blog_plugins/index"
+      c.getBaseUrl() + "/admin/blog_plugins/index"
     );
   });
 
@@ -210,7 +210,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     expect(response.url()).toEqual(
-      "http://localhost:8080/admin/categories/create"
+      c.getBaseUrl() + "/admin/categories/create"
     );
   });
 
@@ -224,7 +224,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/tags/index");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/tags/index");
   });
 
   it("open ブログ一覧", async () => {
@@ -237,7 +237,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/blogs/index");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/blogs/index");
   });
 
   it("open ユーザー設定", async () => {
@@ -250,7 +250,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/users/edit");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/edit");
   });
 
   it("change language to en", async () => {
@@ -261,7 +261,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/users/edit");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/edit");
 
     const home_string = await c.page.$eval(
       "#left-nav > div:nth-child(1) > h3",
@@ -278,7 +278,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/users/edit");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/edit");
 
     const home_string = await c.page.$eval(
       "#left-nav > div:nth-child(1) > h3",
@@ -297,7 +297,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/users/login");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/login");
 
     const h2_text = await c.page.$eval(
       "#main-contents > header > h2",

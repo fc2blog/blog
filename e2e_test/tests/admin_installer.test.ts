@@ -9,12 +9,12 @@ describe("crawl admin pages", () => {
     await c.init();
   });
 
-  const start_url = "http://localhost:8080/admin/common/install";
+  const start_url = "/admin/common/install";
 
   it("open login page", async () => {
     const [response] = await Promise.all([
       c.waitLoad(),
-      c.page.goto(start_url),
+      c.page.goto(c.getBaseUrl() + start_url),
     ]);
 
     await c.getSS("admin_install.png");

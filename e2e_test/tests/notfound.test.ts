@@ -13,7 +13,7 @@ describe("crawl notfound page", () => {
   });
 
   it("open user not found page", async () => {
-    const url = 'http://localhost:8080/testblog2/?no=99999999999';
+    const url = c.getBaseUrl() + '/testblog2/?no=99999999999';
     const [response] = await Promise.all([
       c.waitLoad(),
       c.page.goto(url),
@@ -30,7 +30,7 @@ describe("crawl notfound page", () => {
   });
 
   it("login admin page", async () => {
-    const start_url = "http://localhost:8080/admin/";
+    const start_url = c.getBaseUrl() + "/admin/";
     const [response] = await Promise.all([
       c.waitLoad(),
       c.page.goto(start_url),
@@ -39,7 +39,7 @@ describe("crawl notfound page", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     // ログインページにリダイレクトされる
-    expect(response.url()).toEqual("http://localhost:8080/admin/users/login");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/login");
 
     await c.page.$eval(
         "#id_form input[name='user[login_id]']",
@@ -59,12 +59,12 @@ describe("crawl notfound page", () => {
 
     expect(response2.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response2.url()).toEqual("http://localhost:8080/admin/common/notice");
+    expect(response2.url()).toEqual(c.getBaseUrl() + "/admin/common/notice");
 
   });
 
   it("open admin not found page", async () => {
-    const url = 'http://localhost:8080/admin/common/invalid_method';
+    const url = c.getBaseUrl() + '/admin/common/invalid_method';
     const [response] = await Promise.all([
       c.waitLoad(),
       c.page.goto(url),
@@ -85,7 +85,7 @@ describe("crawl notfound page", () => {
   });
 
   it("open not exists class in admin context, must be found page", async () => {
-    const url = 'http://localhost:8080/admin/missing_class/invalid_method';
+    const url = c.getBaseUrl() + '/admin/missing_class/invalid_method';
     const [response] = await Promise.all([
       c.waitLoad(),
       c.page.goto(url),

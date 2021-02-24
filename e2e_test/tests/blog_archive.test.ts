@@ -9,18 +9,19 @@ describe("crawl some blog", () => {
     await c.init();
   });
 
-  const start_url = "http://localhost:8080/testblog2/";
+  const start_url = "/testblog2/";
 
   it("open blog top", async () => {
+    console.log(c.getBaseUrl() + start_url);
     const [response] = await Promise.all([
       c.waitLoad(),
-      c.page.goto(start_url),
+      c.page.goto(c.getBaseUrl() + start_url),
     ]);
 
     await c.getSS("blog_top");
 
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url);
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url);
     expect(await c.page.title()).toEqual("testblog2");
   });
 
@@ -32,7 +33,7 @@ describe("crawl some blog", () => {
 
     await c.getSS("blog_archive.png");
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "archives.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "archives.html");
 
     expect(await c.page.title()).toEqual("記事一覧 - testblog2");
 
@@ -62,7 +63,7 @@ describe("crawl some blog", () => {
 
     await c.getSS("blog_archive.png");
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html");
 
     expect(await c.page.title()).toEqual("3rd - testblog2");
   });
@@ -70,11 +71,11 @@ describe("crawl some blog", () => {
   it("open archive page", async () => {
     const [response] = await Promise.all([
       c.waitLoad(),
-      c.page.goto(start_url + "archives.html"),
+      c.page.goto(c.getBaseUrl() + start_url + "archives.html"),
     ]);
 
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "archives.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "archives.html");
   });
 
   it("open some category", async () => {
@@ -87,7 +88,7 @@ describe("crawl some blog", () => {
 
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual(
-      start_url + "index.php?mode=entries&process=category&cat=1"
+      c.getBaseUrl() + start_url + "index.php?mode=entries&process=category&cat=1"
     );
 
     expect(await c.page.title()).toEqual("未分類 - testblog2");

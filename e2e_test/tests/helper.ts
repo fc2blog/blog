@@ -14,7 +14,7 @@ export class Helper {
   }
 
   getBaseUrl(): string {
-    return process.env.BASE_URL || "https://localhost:8480/";
+    return process.env.BASE_URL || "http://localhost:8080";
   }
 
   async init(): Promise<void> {
@@ -23,7 +23,7 @@ export class Helper {
       'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 THIS_IS_TEST'
     };
     this.browser = await puppeteer.launch({
-      args: ['--lang=ja'],
+      args: ['--lang=ja', '--no-sandbox', '--disable-setuid-sandbox'],
       ignoreHTTPSErrors: true,
       headless: !(process.env.NO_HEAD_LESS === "1") // 動作を確認するなら NO_HEAD_LESS=1 npm run test
     });
