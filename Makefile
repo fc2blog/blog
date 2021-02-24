@@ -25,8 +25,8 @@ e2etest: app/vendor e2e_test/node_modules tests/test_images/0.png
 clean:
 	cd dist_zip && make clean
 	docker-compose up -d
-	make fix-permission
-	$(dexec) tests/cli_drop_all_table.php
+	-make fix-permission
+	-$(dexec) tests/cli_drop_all_table.php
 	docker-compose stop
 	-rm -r app/temp/installed.lock
 	-rm -r app/temp/blog_template/*
