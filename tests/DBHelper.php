@@ -40,12 +40,6 @@ class DBHelper extends TestCase
 
   public static function getPdo():PDO
   {
-    var_dump("mysql:host=" . Config::get('MASTER_DB.HOST') .
-      ";port=" . Config::get('MASTER_DB.PORT') .
-      ";dbname=" . Config::get('MASTER_DB.DATABASE') .
-      ";charset=" . strtolower(Config::get('DB_CHARSET')));
-    var_dump([Config::get('MASTER_DB.USER'),
-      Config::get('MASTER_DB.PASSWORD')]);
     $pdo = new PDO(
       "mysql:host=" . Config::get('MASTER_DB.HOST') .
       ";port=" . Config::get('MASTER_DB.PORT') .
