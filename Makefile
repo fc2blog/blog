@@ -1,6 +1,6 @@
-dexec=docker-compose exec --user www-data php
-drun=docker-compose exec --user www-data php
-dexec_root=docker-compose exec --user root php
+dexec=docker-compose exec -T --user www-data php
+drun=docker-compose exec -T --user www-data php
+dexec_root=docker-compose -T exec --user root php
 
 .PHONY: bash
 bash:

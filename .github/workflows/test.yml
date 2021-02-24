@@ -14,10 +14,10 @@ jobs:
       - name: build docker image
         run: make docker-compose-build
 
-      - name: build docker image and up
+      - name: docker-compose up
         run: docker-compose up -d
 
-      - name: build docker image and up
+      - name: wait and debug output
         run: |
           sleep 10
           docker ps -a
