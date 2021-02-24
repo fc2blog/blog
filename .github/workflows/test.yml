@@ -3,7 +3,10 @@ name: Test All
 on:
   push:
     branches:
-      - issue103/gh-action-e2e
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   test:
