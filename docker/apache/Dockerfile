@@ -3,7 +3,10 @@ FROM php:8.0-apache
 RUN set -eux \
  && apt-get update -y \
  && apt-get upgrade -y \
- && apt-get install -y git autoconf g++ libtool make libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libicu-dev locales ssl-cert libfreetype6-dev \
+ && curl -fsSL https://deb.nodesource.com/setup_15.x | bash - \
+ && apt-get install -y git autoconf g++ libtool make mariadb-client wget \
+ && apt-get install -y libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libicu-dev locales ssl-cert libfreetype6-dev \
+ && apt-get install -y nodejs libnss3 libatk1.0-0 libatk-bridge2.0-0 \
  && sed -i -E 's/# (ja_JP.UTF-8)/\1/' /etc/locale.gen \
  && locale-gen \
  && docker-php-ext-configure gd --with-jpeg=/usr --with-freetype=/usr \
