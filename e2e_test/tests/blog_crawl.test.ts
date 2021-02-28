@@ -22,7 +22,7 @@ import {ElementHandle} from "puppeteer";
 describe("crawl some blog", () => {
   let c: Helper;
   let captcha_key: string = "1234";
-  const start_url = "http://localhost:8080/testblog2/";
+  const start_url = "/testblog2/";
 
   beforeAll(async () => {
     c = new Helper();
@@ -30,7 +30,7 @@ describe("crawl some blog", () => {
   });
 
   it("open blog top", async () => {
-    await c.openUrl(start_url);
+    await c.openUrl(c.getBaseUrl() + start_url);
     await c.getSS("blog_top");
     expect(await c.page.title()).toEqual("testblog2");
   });
@@ -91,7 +91,7 @@ describe("crawl some blog", () => {
     const response = await c.clickBySelector("div.entry_body a");
 
     await c.getSS("entry");
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html");
     expect(await c.page.title()).toEqual("3rd - testblog2");
 
     const entry_h2_title = await c.getTextBySelector("h2.entry_header");
@@ -106,7 +106,7 @@ describe("crawl some blog", () => {
 
     await c.getSS("entry_next_page");
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "blog-entry-2.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-2.html");
     expect(await c.page.title()).toEqual("2nd - testblog2");
 
     const entry_h2_title = await c.getTextBySelector("h2.entry_header");
@@ -121,7 +121,7 @@ describe("crawl some blog", () => {
 
     await c.getSS("entry_prev_page");
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html");
     expect(await c.page.title()).toEqual("3rd - testblog2");
 
     const entry_h2_title = await c.getTextBySelector("h2.entry_header");
@@ -169,7 +169,7 @@ describe("crawl some blog", () => {
     const response = await c.clickBySelector("#comment_form input[type=submit]");
     await c.getSS("comment_confirm");
 
-    expect(response.url()).toEqual(start_url);
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url);
   });
 
   it("comment form - fail with wrong captcha", async () => {
@@ -179,7 +179,7 @@ describe("crawl some blog", () => {
     const response = await c.clickBySelector("#sys-comment-form input[type=submit]");
     await c.getSS("comment_wrong_captcha");
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url);
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url);
 
     // 特定しやすいセレクタがないので、回してチェックする
     const is_captcha_failed = await c.page.$$eval("p", (elms) => {
@@ -202,7 +202,7 @@ describe("crawl some blog", () => {
 
     expect(response.status()).toEqual(200);
     const exp = new RegExp(
-      start_url + "index.php\\?mode=entries&process=view&id=[0-9]{1,100}"
+      c.getBaseUrl() + start_url + "index.php\\?mode=entries&process=view&id=[0-9]{1,100}"
     );
     expect(response.url().match(exp)).not.toBeNull();
 
@@ -254,7 +254,7 @@ describe("crawl some blog", () => {
     // click delete button
     let response = await c.clickBySelector("#comment_form > p > input[type=submit]:nth-child(2)");
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url);
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url);
 
     // check shown error text
     const wrong_password_error_text = await c.page.$eval("#comment_form > dl > dd:nth-child(13) > p", elm => elm.textContent);
@@ -262,7 +262,7 @@ describe("crawl some blog", () => {
   });
 
   it("entry page - successfully delete comment", async () => {
-    await c.openUrl(start_url + "blog-entry-3.html");
+    await c.openUrl(c.getBaseUrl() + start_url + "blog-entry-3.html");
 
     // open comment edit page
     await c.getSS("comment_before_delete1");
@@ -272,7 +272,7 @@ describe("crawl some blog", () => {
     await c.getSS("comment_before_delete");
 
     let response = await c.clickBySelector("#comment_form > p > input[type=submit]:nth-child(2)");
-    expect(response.url()).toEqual(start_url + "index.php?mode=entries&process=view&id=3");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "index.php?mode=entries&process=view&id=3");
 
     await c.getSS("comment_deleted");
     const comment_a_text = await c.page.$eval("#e3 > div.entry_footer > ul > li:nth-child(2) > a", elm => elm.textContent);

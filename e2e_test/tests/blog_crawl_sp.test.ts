@@ -5,7 +5,7 @@ import {ElementHandle} from "puppeteer";
 describe("crawl some blog with smartphone", () => {
   let c: Helper;
   let captcha_key: string = "1234";
-  const start_url = "http://localhost:8080/testblog2/";
+  const start_url = "/testblog2/";
 
   beforeAll(async () => {
     c = new Helper();
@@ -14,7 +14,7 @@ describe("crawl some blog with smartphone", () => {
   });
 
   it("open blog top", async () => {
-    await c.openUrl(start_url);
+    await c.openUrl(c.getBaseUrl() + start_url);
     await c.getSS("blog_top_sp.png");
     expect(await c.page.title()).toEqual("testblog2");
   });
@@ -56,7 +56,7 @@ describe("crawl some blog with smartphone", () => {
   it("blog top - click first entry", async () => {
     const response = await c.clickBySelector("ul#entry_list a");
     await c.getSS("entry_sp.png");
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html");
     expect(await c.page.title()).toEqual("3rd - testblog2");
 
     const entry_h2_title = await c.getTextBySelector("div.entry_title h2");
@@ -68,7 +68,7 @@ describe("crawl some blog with smartphone", () => {
 
   it("entry page - click next page", async () => {
     const response = await c.clickBySelector("a.nextpage");
-    expect(response.url()).toEqual(start_url + "blog-entry-2.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-2.html");
     expect(await c.page.title()).toEqual("2nd - testblog2");
 
     const entry_h2_title = await c.getTextBySelector("div.entry_title h2");
@@ -81,7 +81,7 @@ describe("crawl some blog with smartphone", () => {
   it("entry page - click prev page", async () => {
     const response = await c.clickBySelector("a.prevpage");
 
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html");
     expect(await c.page.title()).toEqual("3rd - testblog2");
 
     const entry_h2_title = await c.getTextBySelector("div.entry_title h2");
@@ -96,7 +96,7 @@ describe("crawl some blog with smartphone", () => {
   it("entry page - open comment form", async () => {
     const response = await c.clickBySelector("#entry > ul > li:nth-child(1) > a");
 
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html?m2=form");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html?m2=form");
     expect(await c.page.title()).toEqual("3rd - testblog2");
   });
 
@@ -122,7 +122,7 @@ describe("crawl some blog with smartphone", () => {
     const response = await c.clickBySelector("#comment_post > form > div > a");
     await c.getSS("comment_confirm_sp");
 
-    expect(response.url()).toEqual(start_url);
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url);
   });
 
   it("comment form - failed with wrong captcha", async () => {
@@ -132,7 +132,7 @@ describe("crawl some blog with smartphone", () => {
     const response = await c.clickBySelector("#sys-comment-form > fieldset > div > input");
     await c.getSS("comment_wrong_captcha_sp");
 
-    expect(response.url()).toEqual(start_url);
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url);
 
     // 特定しやすいセレクタがない
     const is_captcha_failed = await c.page.$$eval("p", (elms) => {
@@ -154,7 +154,7 @@ describe("crawl some blog with smartphone", () => {
 
     const response = await c.clickBySelector("#sys-comment-form input[type=submit]");
     const exp = new RegExp(
-      start_url + 'index.php\\?mode=entries&process=view&id=[0-9]{1,100}'
+      c.getBaseUrl() + start_url + 'index.php\\?mode=entries&process=view&id=[0-9]{1,100}'
     );
     expect(response.url().match(exp)).not.toBeNull();
 
@@ -165,13 +165,13 @@ describe("crawl some blog with smartphone", () => {
 
   it("entry page - open comment list", async () => {
     const response = await c.clickBySelector("#entry > ul > li:nth-child(2) > a");
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html?m2=res");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html?m2=res");
     expect(await c.page.title()).toEqual("3rd - testblog2");
   });
 
   it("comment list - open comment form", async () => {
     const response = await c.clickElement(await getEditLinkByTitle(post_comment_title));
-    expect(response.url()).toEqual(expect.stringContaining(start_url + "index.php?mode=entries&process=comment_edit&id="));
+    expect(response.url()).toEqual(expect.stringContaining(c.getBaseUrl() + start_url + "index.php?mode=entries&process=comment_edit&id="));
     expect(await c.page.title()).toEqual("コメントの編集 - testblog2");
     await c.getSS("comment_edit_before_sp");
   });
@@ -203,7 +203,7 @@ describe("crawl some blog with smartphone", () => {
 
   it("comment list - test to fail delete", async () => {
     const response = await c.clickElement(await c.page.$("#entry > ul > li:nth-child(2) > a"));
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html?m2=res");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html?m2=res");
     expect(await c.page.title()).toEqual("3rd - testblog2");
     await c.getSS("comment_list_delete_before_sp");
   });
@@ -213,7 +213,7 @@ describe("crawl some blog with smartphone", () => {
     const response = await c.clickElement(await getEditLinkByTitle("edited_" + post_comment_title));
     await c.getSS("comment_form_delete_before2_sp");
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(expect.stringContaining(start_url + "index.php?mode=entries&process=comment_edit&id="));
+    expect(response.url()).toEqual(expect.stringContaining(c.getBaseUrl() + start_url + "index.php?mode=entries&process=comment_edit&id="));
     expect(await c.page.title()).toEqual("コメントの編集 - testblog2");
   });
 
@@ -228,18 +228,18 @@ describe("crawl some blog with smartphone", () => {
     ]);
 
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url);
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url);
 
     const wrong_password_error_text = await c.page.$eval("#comment_post > form > dl > dd:nth-child(12) > p", elm => elm.textContent);
     expect(/必ず入力してください/.exec(wrong_password_error_text)).toBeTruthy();
   });
 
   it("entry page - open comment list to delete", async () => {
-    await c.openUrl(start_url + "blog-entry-3.html");
+    await c.openUrl(c.getBaseUrl() + start_url + "blog-entry-3.html");
 
     const response = await c.clickElement(await c.page.$("#entry > ul > li:nth-child(2) > a"));
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html?m2=res");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html?m2=res");
     expect(await c.page.title()).toEqual("3rd - testblog2");
     await c.getSS("comment_list_delete_before_sp");
   });
@@ -249,7 +249,7 @@ describe("crawl some blog with smartphone", () => {
     const response = await c.clickElement(await getEditLinkByTitle("edited_" + post_comment_title));
     await c.getSS("comment_form_delete_before2_sp");
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(expect.stringContaining(start_url + "index.php?mode=entries&process=comment_edit&id="));
+    expect(response.url()).toEqual(expect.stringContaining(c.getBaseUrl() + start_url + "index.php?mode=entries&process=comment_edit&id="));
     expect(await c.page.title()).toEqual("コメントの編集 - testblog2");
   });
 
@@ -258,16 +258,16 @@ describe("crawl some blog with smartphone", () => {
     await c.page.type("#comment_post > form > dl > dd:nth-child(12) > input[type=password]", "pass_is_pass");
 
     const response = await c.clickBySelector("#comment_post > form > div > input[type=submit]:nth-child(2)")
-    expect(response.url()).toEqual(start_url + "index.php?mode=entries&process=view&id=3&sp");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "index.php?mode=entries&process=view&id=3&sp");
   });
 
   it("entry page - open entry check delete complete", async () => {
-    await c.openUrl(start_url);
+    await c.openUrl(c.getBaseUrl() + start_url);
 
     const response = await c.clickElement(await c.page.$("#entry_list > li:nth-child(1) > a"));
 
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual(start_url + "blog-entry-3.html");
+    expect(response.url()).toEqual(c.getBaseUrl() + start_url + "blog-entry-3.html");
     expect(await c.page.title()).toEqual("3rd - testblog2");
   });
 

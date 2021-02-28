@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "test": "npm run serial-test && npm run parallel-test",
-    "php-prepare": "docker-compose exec --user www-data php bash -c \"php tests/cli_load_fixture.php\"",
+    "php-prepare": "php ../tests/cli_load_fixture.php",
     "parallel-test": "npm run php-prepare && npm run clear-cache && npx jest tests/*",
     "serial-test": "npm run php-prepare && npm run clear-cache && npx jest -i 1 serial_execute_tests/*",
     "fmt": "npx prettier --check --write \"./tests/*.ts\"",

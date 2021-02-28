@@ -9,18 +9,18 @@ describe("crawl password required blog", () => {
     await c.init();
   });
 
-  const start_url = "http://localhost:8080/testblog3/";
+  const start_url = "/testblog3/";
 
   it("open password required page", async () => {
     const [response] = await Promise.all([
       c.waitLoad(),
-      c.page.goto(start_url),
+      c.page.goto(c.getBaseUrl() + start_url),
     ]);
 
     await c.getSS("password_required_page");
 
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual("http://localhost:8080/testblog3/index.php?mode=entries&process=blog_password");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/testblog3/index.php?mode=entries&process=blog_password");
     expect(await c.page.title()).toEqual("パスワード認証 - testblog3");
 
     const body_text = await c.page.$eval("body", elm=>elm.textContent);
@@ -42,7 +42,7 @@ describe("crawl password required blog", () => {
     ]);
 
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual("http://localhost:8080/testblog3/index.php?mode=entries&process=blog_password");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/testblog3/index.php?mode=entries&process=blog_password");
     expect(await c.page.title()).toEqual("パスワード認証 - testblog3");
 
     const body_text = await c.page.$eval("body", elm=>elm.textContent);
@@ -64,7 +64,7 @@ describe("crawl password required blog", () => {
     ]);
 
     expect(response.status()).toEqual(200);
-    expect(response.url()).toEqual("http://localhost:8080/testblog3/index.php?mode=entries&process=index");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/testblog3/index.php?mode=entries&process=index");
     expect(await c.page.title()).toEqual("testblog3");
 
     const body_text = await c.page.$eval("body", elm=>elm.textContent);

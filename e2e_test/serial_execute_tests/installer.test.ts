@@ -1,8 +1,8 @@
-import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
-import { Helper } from "../tests/helper";
+import {afterAll, beforeAll, describe, expect, it} from "@jest/globals";
+import {Helper} from "../tests/helper";
 import * as fs from "fs";
 
-const { execSync } = require("child_process");
+const {execSync} = require("child_process");
 
 describe("crawl admin pages", () => {
   let c: Helper;
@@ -14,7 +14,7 @@ describe("crawl admin pages", () => {
   const nick_name = "nickname";
 
   beforeAll(async () => {
-    execSync("make -C " + __dirname + "/../../ db-drop-all-table");
+    execSync("php " + __dirname + "/../../tests/cli_drop_all_table.php");
     if (fs.existsSync(__dirname + "/../../app/temp/installed.lock")) {
       fs.unlinkSync(__dirname + "/../../app/temp/installed.lock");
     }
@@ -23,29 +23,29 @@ describe("crawl admin pages", () => {
     await c.init();
   });
 
-  const start_url = "http://localhost:8080/admin";
-  const installer_url = "http://localhost:8080/admin/common/install";
+  const start_url = "/admin";
+  const installer_url = "/admin/common/install";
 
   it("redirect to installer page", async () => {
     const [response] = await Promise.all([
       c.waitLoad(),
-      c.page.goto(start_url),
+      c.page.goto(c.getBaseUrl() + start_url),
     ]);
 
     await c.getSS("installer");
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual("http://localhost:8080/admin/common/install");
+    expect(response.url()).toEqual(c.getBaseUrl() + installer_url);
   });
 
 
   it("open installer page", async () => {
-    const title_text = await c.page.$eval("h2", elm=>elm.textContent);
+    const title_text = await c.page.$eval("h2", elm => elm.textContent);
     expect(/環境チェック/.exec(title_text)).toBeTruthy();
   });
 
-  it("move to form", async()=>{
+  it("move to form", async () => {
     const [response] = await Promise.all([
       c.waitLoad(),
       c.page.click("#main-contents > form > p > input[type=submit]"),
@@ -57,7 +57,7 @@ describe("crawl admin pages", () => {
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
   });
 
-  it("form input error", async()=>{
+  it("form input error", async () => {
 
     const [response] = await Promise.all([
       c.waitLoad(),
@@ -69,12 +69,12 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
 
-    const error_text = await c.page.$eval("#main-contents > div > p", elm=>elm.textContent);
+    const error_text = await c.page.$eval("#main-contents > div > p", elm => elm.textContent);
     expect(/入力エラーがあります/.exec(error_text)).toBeTruthy();
 
   });
 
-  it("form input correctly", async()=>{
+  it("form input correctly", async () => {
     await c.getSS("install_form_before_input");
 
     await c.page.type("#id_form input[name='user[login_id]']", admin_id);
@@ -95,7 +95,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
 
-    const error_text = await c.page.$eval("body", elm=>elm.textContent);
+    const error_text = await c.page.$eval("body", elm => elm.textContent);
     expect(/入力エラーがあります/.exec(error_text)).not.toBeTruthy();
     expect(/ユーザー登録完了/.exec(error_text)).toBeTruthy();
     expect(/インストール完了/.exec(error_text)).toBeTruthy();
@@ -104,7 +104,7 @@ describe("crawl admin pages", () => {
   it("re-open install page. show installed", async () => {
     const [response] = await Promise.all([
       c.waitLoad(),
-      c.page.goto(installer_url),
+      c.page.goto(c.getBaseUrl() + installer_url),
     ]);
 
     await c.getSS("installer_installed");
@@ -112,7 +112,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
 
-    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    const body_text = await c.page.$eval("body", elm => elm.textContent);
     expect(/インストール完了/.exec(body_text)).toBeTruthy();
   });
 
@@ -144,7 +144,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
 
-    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    const body_text = await c.page.$eval("body", elm => elm.textContent);
     expect(/お知らせ/.exec(body_text)).toBeTruthy();
   });
 
