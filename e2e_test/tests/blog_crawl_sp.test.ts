@@ -172,7 +172,7 @@ describe("crawl some blog with smartphone", () => {
   it("comment list - open comment form", async () => {
     const response = await c.clickElement(await getEditLinkByTitle(post_comment_title));
     expect(response.url()).toEqual(expect.stringContaining(start_url + "index.php?mode=entries&process=comment_edit&id="));
-    expect(await c.page.title()).toEqual("- testblog2"); // TODO issue #223
+    expect(await c.page.title()).toEqual("コメントの編集 - testblog2");
     await c.getSS("comment_edit_before_sp");
   });
 
@@ -214,7 +214,7 @@ describe("crawl some blog with smartphone", () => {
     await c.getSS("comment_form_delete_before2_sp");
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual(expect.stringContaining(start_url + "index.php?mode=entries&process=comment_edit&id="));
-    expect(await c.page.title()).toEqual("- testblog2"); // TODO issue #223
+    expect(await c.page.title()).toEqual("コメントの編集 - testblog2");
   });
 
   it("user template comment form - delete fail by wrong password", async () => {
@@ -250,7 +250,7 @@ describe("crawl some blog with smartphone", () => {
     await c.getSS("comment_form_delete_before2_sp");
     expect(response.status()).toEqual(200);
     expect(response.url()).toEqual(expect.stringContaining(start_url + "index.php?mode=entries&process=comment_edit&id="));
-    expect(await c.page.title()).toEqual("- testblog2"); // TODO issue #223
+    expect(await c.page.title()).toEqual("コメントの編集 - testblog2");
   });
 
   it("user template comment form - comment delete success", async () => {

@@ -885,6 +885,7 @@ class EntriesController extends UserController
 
       // FC2用のテンプレートで表示
       $this->setAreaData(['edit_area']);
+      $this->set('sub_title', __("Edit a comment"));
       return $this->getFc2TemplatePath($blog_id);
     }
 
