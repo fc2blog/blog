@@ -42,7 +42,7 @@
             common.formEnterNonSubmit('sys-file-form');
 
             // ajaxで一覧情報をロード
-            $('#sys-ajax-files-index').load('{{ url(req, 'Files', 'ajax_index') }}')
+            $('#sys-ajax-files-index').load('{{ url(req, 'Files', 'ajax_index') }}', writeErrToSysAjaxFilesIndex)
         });
 
         // ページ数初期化有無フラグ
@@ -64,7 +64,8 @@
                     success: function (res) {
                         $('#sys-ajax-files-index').html(res);
                         isAjaxSubmit = true;
-                    }
+                    },
+                    error: writeErrToSysAjaxFilesIndex
                 });
                 return;
             }
@@ -85,7 +86,8 @@
                 success: function (res) {
                     $('#sys-ajax-files-index').html(res);
                     isAjaxSubmit = true;
-                }
+                },
+                error: writeErrToSysAjaxFilesIndex
             });
         }
 
@@ -101,6 +103,14 @@
             }
             $('input[name=order]').val(order);
             ajaxSubmit();
+        }
+
+        function writeErrToSysAjaxFilesIndex( response, status, xhr ) {
+          if ( status === "error" ) {
+            $('#sys-ajax-files-index')
+              .html("<div style='text-align: center; font-size: 2em; font-weight:bold'>エラーが発生しました、ページをリロードしてください。<br>" +
+                "Loading error. Please reload page.</div>");
+          }
         }
     </script>
 {% endblock %}

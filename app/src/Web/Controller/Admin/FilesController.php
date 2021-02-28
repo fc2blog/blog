@@ -13,7 +13,7 @@ class FilesController extends AdminController
 {
 
   /**
-   * 一覧表示
+   * 一覧表示 /admin/files/upload からPartial読み込み
    * @param Request $request
    * @return string
    */

@@ -143,7 +143,12 @@
             };
             $('#sys-comment-reply-dialog').dialog(option);
             $('#sys-comment-reply-dialog').html('now loading..');
-            $('#sys-comment-reply-dialog').load(common.fwURL('Comments', 'ajax_reply', {id: id}))
+            $('#sys-comment-reply-dialog').load(common.fwURL('Comments', 'ajax_reply', {id: id}), function(data, status, xhr){
+              if(status === "error") {
+                alert("エラーが発生しました、ページをリロードしてください。\n" +
+                  "An error occurred, please reload page and try again.");
+              }
+            });
             reply.updateReadStatus(is_private);
         };
         // コメントを閉じる処理
@@ -170,6 +175,10 @@
                     $('#sys-reply-message').hide();
                     $('#sys-reply-error').html(json.error);
                     $('#sys-reply-error').show();
+                },
+                error: function (data, status, xhr){
+                    alert("エラーが発生しました、ページをリロードしてください。\n" +
+                    "An error occurred, please reload page and try again.");
                 }
             });
         };
@@ -193,6 +202,10 @@
                         $('#sys-open-status-' + id + ' > *').show();
                         $('#sys-comment-approval').show();
                         alert(json.error);
+                    },
+                    error: function (data, status, xhr){
+                        alert("エラーが発生しました、ページをリロードしてやり直してください。\n" +
+                          "An error occurred, please reload page and try again.");
                     }
                 });
             });

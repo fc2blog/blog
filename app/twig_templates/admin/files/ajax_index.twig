@@ -1,3 +1,4 @@
+{# /admin/files/upload からPartial読み込み #}
 <h3 id="entry_count">
     {{ _('File search') }}[{{ _('Hits') }}&nbsp;{{ paging.count }}{{ _(' results') }}]
     {{ input(req, 'limit', 'select', {'options': page_list_file, 'default': file_default_limit}) }}
@@ -79,7 +80,7 @@
             return false;
         });
 
-        // ファイル削除ボタン
+        // 複数ファイル削除ボタン
         $('#sys-delete-button').click(function () {
             if (!confirm('{{ _('Are you sure you want to delete?') }}')) {
                 return;
@@ -107,6 +108,15 @@
                     // 削除完了後検索処理を実行
                     isAjaxSubmit = isPageChange = true;
                     ajaxSubmit();
+                },
+                error: function( response, status, xhr ) {
+                  if (status === "error") {
+                    alert("エラーが発生しました、ページをリロードしてください。\n" +
+                      "Request failed. Please reload page and retry.");
+                    // 失敗しているが、画面を復帰させるために検索処理を実行
+                    isAjaxSubmit = isPageChange = true;
+                    ajaxSubmit();
+                  }
                 }
             });
             return false;
