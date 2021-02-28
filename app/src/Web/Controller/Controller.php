@@ -174,8 +174,8 @@ abstract class Controller
   protected function redirectBack(Request $request, $url, $hash = '')
   {
     // 元のURLに戻す
-    if (!empty($_SERVER['HTTP_REFERER'])) {
-      $this->redirect($request, $_SERVER['HTTP_REFERER']);
+    if (!empty($request->server['HTTP_REFERER'])) {
+      $this->redirect($request, $request->server['HTTP_REFERER']);
     }
     // リファラーが取れなければメインへ飛ばす
     $this->redirect($request, $url, $hash);

@@ -66,8 +66,11 @@ trait ClientTrait
     array $filesParams = []
   ): AppController
   {
+    // TODO ＄_をテストからも可能ならば排除する
     $_SESSION = $this->clientTraitSession;
+    // TODO ＄_COOKIEをテストからも可能ならば排除する
     $_COOKIE = $this->clientTraitCookie;
+    // TODO $_SERVERをテストからも可能ならば排除する
     $_SERVER = [];
     if ($https) {
       $_SERVER['HTTPS'] = "on";
