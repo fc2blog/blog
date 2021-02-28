@@ -205,7 +205,7 @@ class IndexTest extends TestCase
 
     $generator = new GenerateSampleComment();
     $generator->removeAllComments('testblog2', 1);
-    $generator->generateSampleComment('testblog2', 1, 20);
+    $generator->generateSampleComment('testblog2', 1, 20, true);
     $generator->removeAllComments('testblog2', 2); // 冪等のため
 
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1"]);
@@ -223,10 +223,18 @@ class IndexTest extends TestCase
     $this->assertEquals($c->get('comments')[19]['id'], $first_comment['id']);
 
     // name_asc とりあえず、違うなら変わっているだろう…。
-    // TODO: 確率によって成功してしまう可能性がある…
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1", 'order' => "name_asc"]);
     $this->assertEquals(20, $c->get('paging')['count']);
-    $this->assertNotEquals($c->get('comments')[0]['id'], $last_comment['id']);
+// 確率によって成功してしまう可能性がある…
+//    if($c->get('comments')[0]['id'] == $last_comment['id']){ // test.
+//      var_dump($c->get('comments')[0]);
+//      var_dump($last_comment);
+//    }
+//    $this->assertNotEquals($c->get('comments')[0]['id'], $last_comment['id']); // todo
+//    if($c->get('comments')[19]['id'] == $last_comment['id']){ // test.
+//      var_dump($c->get('comments')[0]);
+//      var_dump($first_comment);
+//    }
     $this->assertNotEquals($c->get('comments')[19]['id'], $first_comment['id']);
 
     // TODO other patterns created_at_desc,name_asc,body_asc

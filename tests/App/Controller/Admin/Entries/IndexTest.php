@@ -180,16 +180,19 @@ class IndexTest extends TestCase
     $this->mergeAdminSession();
 
     $generator = new GenerateSampleEntry();
+    // 全エントリ削除
     $generator->removeAllEntry('testblog2');
+    // 全エントリ生成しなおし
     $generator->generateSampleEntry('testblog2', 5);
 
+    // 5件あるか取得
     $c = $this->reqGet("/admin/entries/index", []);
     $this->assertEquals(5, $c->get('paging')['count']);
     $first_comment_body = $c->get('entries')[0]['body'];
 
     $c = $this->reqGet("/admin/entries/index", ['keyword' => mb_substr($first_comment_body, 10, 10)]);
-    // TODO 低確率でFailする
-    $this->assertEquals(1, $c->get('paging')['count']);
+    // 1件以上あればOKとする（重複の可能性があるので）
+    $this->assertGreaterThanOrEqual(1, $c->get('paging')['count']);
   }
 
   public function testCountCommentNum(): void

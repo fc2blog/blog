@@ -14,7 +14,7 @@ class GenerateSampleComment
   use FakerTrait;
   use RandomUtilTrait;
 
-  public function generateSampleComment(string $blog_id, int $entry_id, int $num = 10): array
+  public function generateSampleComment(string $blog_id, int $entry_id, int $num = 10, bool $sortable_name = false): array
   {
     $faker = static::getFaker();
     $comment_list = [];
@@ -25,9 +25,10 @@ class GenerateSampleComment
     ];
 
     while ($num-- > 0) {
+      $_name = $sortable_name ? $faker->name : "TT" . (string)microtime(true);
       $request_comment = [
         'entry_id' => $entry_id,
-        'name' => $faker->name,
+        'name' => $_name,
         'title' => $faker->sentence(3),
         'mail' => $faker->email,
         'url' => $faker->url,
