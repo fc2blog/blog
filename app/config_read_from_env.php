@@ -26,6 +26,7 @@ define('APP_DEBUG', (bool)getenv('FC2_APP_DEBUG'));
 
 // DB settings
 define('DB_HOST', (string)getenv("FC2_DB_HOST"));
+define('DB_PORT', (string)getenv("FC2_DB_PORT"));
 define('DB_USER', (string)getenv("FC2_DB_USER"));
 define('DB_PASSWORD', (string)getenv("FC2_DB_PASSWORD"));
 define('DB_DATABASE', (string)getenv("FC2_DB_DATABASE"));

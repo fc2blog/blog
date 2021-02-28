@@ -149,7 +149,7 @@ class UsersModel extends Model
     ];
     $user = $this->find('row', $options);
 
-    if (is_array($user) && password_verify($password, $user['password'])) {
+    if (is_array($user) && count($user) > 0 && password_verify($password, $user['password'])) {
       return $user;
     } else {
       return false;

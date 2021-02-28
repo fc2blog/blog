@@ -14,6 +14,7 @@ class PDOWrap implements DBInterface
 
   // DB情報
   private $host = null;
+  private $port = null;
   private $user = null;
   private $password = null;
   private $database = null;
@@ -22,9 +23,10 @@ class PDOWrap implements DBInterface
   // DBオブジェクト
   private $db = null;
 
-  function __construct($host, $user, $password, $database, $charset)
+  function __construct($host, $port, $user, $password, $database, $charset)
   {
     $this->host = $host;
+    $this->port = $port;
     $this->user = $user;
     $this->password = $password;
     $this->database = $database;
@@ -151,9 +153,9 @@ class PDOWrap implements DBInterface
   public function connect($is_charset = true, $is_database = true)
   {
     if ($this->db == null) {
-      $dsn = "mysql:host={$this->host};";
+      $dsn = "mysql:host={$this->host};port={$this->port}";
       if ($is_database) {
-        $dsn = "mysql:host={$this->host};dbname={$this->database};";
+        $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->database};";
       }
       $options = array(
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
