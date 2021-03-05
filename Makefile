@@ -1,14 +1,16 @@
-dexec=docker-compose exec -T --user www-data php
 drun=docker-compose exec -T --user www-data php
+dexec=docker-compose exec -T --user www-data php
+dexec_tty=docker-compose exec --user www-data php
 dexec_root=docker-compose exec -T --user root php
+dexec_root_tty=docker-compose exec --user root php
 
 .PHONY: bash
 bash:
-	$(dexec) bash
+	$(dexec_tty) bash
 
 .PHONY: root-bash
 root-bash:
-	$(dexec_root) bash
+	$(dexec_root_tty) bash
 
 .PHONY: test
 test: app/vendor e2e_test/node_modules tests/test_images/0.png
