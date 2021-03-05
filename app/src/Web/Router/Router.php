@@ -31,6 +31,13 @@ class Router
       return;
     }
 
+    // assets はこない筈なので404へ. css,js,imgは追って調整
+    if (preg_match('/\A\/(assets|css|js|img)/u', $request->uri)) {
+      $this->className = CommonController::class; // default controller.
+      $this->methodName = 'error404';
+      return;
+    }
+
     // ユーザー用のパラメータを設定する
     $path = $request->getPath();
     $paths = $request->getPaths();

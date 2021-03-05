@@ -1,20 +1,20 @@
 {% block head_include_css %}
-    <link rel="stylesheet" href="/css/sp/category_sp.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/css/sp/entry_sp.css" type="text/css">
+    <link rel="stylesheet" href="/admin/assets/css/sp/category_sp.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/admin/assets/css/sp/entry_sp.css" type="text/css">
 {% endblock %}
 {% block head_include_js %}
     <!-- timepicker-addon -->
-    <script type="text/javascript" src="/js/jquery/jQuery-Timepicker-Addon/src/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="/admin/assets/js/jquery/jquery-timepicker-addons/jquery-ui-timepicker-addon.js"></script>
     {% if lang != 'en' %}
-        <script type="text/javascript" src="/js/jquery/jQuery-Timepicker-Addon/src/i18n/jquery-ui-timepicker-{{ lang }}.js"></script>
+        <script type="text/javascript" src="/admin/assets/js/jquery/jquery-timepicker-addons/i18n/jquery-ui-timepicker-{{ lang }}.js"></script>
     {% endif %}
     <!-- /timepicker-addon -->
 
-    <script type="text/javascript" src="/js/js.cookie.js"></script>
-    <script type="text/javascript" src="/js/admin/entry_editor.js"></script>
+    <script type="text/javascript" src="/assets/js/js.cookie.js"></script>
+    <script type="text/javascript" src="/admin/assets/js/entry_editor.js"></script>
 {% endblock %}
 
-<script type="text/javascript" src="/js/jquery/jquery.fc2tab.js"></script>
+<script type="text/javascript" src="/admin/assets/js/jquery/jquery.fc2tab.js"></script>
 <script type="text/javascript">
     $(function () {
         // 記事 or 追記のタブ
