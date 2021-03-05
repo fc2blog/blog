@@ -30,11 +30,15 @@ class UsersController extends AdminController
     );
     $users_model = Model::load('Users');
     $users = $users_model->find('all', $options);
+    $blogs_model = new BlogsModel();
+    foreach ($users as &$user) {
+      $user['blog_list'] = $blogs_model->findByUserId($user['id']);
+    }
     $paging = $users_model->getPaging($options);
 
     $this->set('users', $users);
     $this->set('paging', $paging);
-    return "";
+    return 'admin/users/index.twig';
   }
 
   /**

@@ -1,0 +1,30 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('User setting') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('List of users') }}</h2></header>
+
+    {% for user in users %}
+        <h3>{{ user.login_id }}</h3>
+        <table>
+            <tr>
+                <th>{{ _('Blog ID') }}</th>
+                <th>{{ _('Blog name') }}</th>
+                <th>{{ _('Nickname') }}</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% for blog in user.blog_list %}
+                <tr>
+                    <td style="width: 100px;">{{ blog.id }}</td>
+                    <td style="width: 200px;">{{ blog.name }}</td>
+                    <td>{{ blog.nickname }}</td>
+                    <td style="width: 120px;">
+                        <a href="{{ blogUrl(req, blog.id) }}" target="_blank">{{ _('Checking the blog') }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+
+    {% include('admin/common/paging.twig') %}
+{% endblock %}
