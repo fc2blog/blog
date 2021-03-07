@@ -44,7 +44,7 @@ class Router
     $args_controller = "mode";
     $args_action = "process";
 
-    if (preg_match('|\A/admin/|u', $request->uri)) { // Admin routing
+    if (preg_match('!\A(/admin\z|/admin/)!u', $request->uri)) { // Admin routing
       // http://example.jp/admin/* が対応
       $request->urlRewrite = true;
       $request->baseDirectory = '/admin/';
