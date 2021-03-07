@@ -8,7 +8,7 @@ $config['WWW_DIR'] = WWW_DIR;
 $config['WWW_UPLOAD_DIR'] = $config['WWW_DIR'] . 'uploads/';
 
 $config['APP_DIR'] = APP_DIR;
-$config['CONFIG_DIR'] = $config['APP_DIR'] . 'config/';
+$config['CONFIG_DIR'] = $config['APP_DIR'] . 'src/config/';
 $config['LOCALE_DIR'] = $config['APP_DIR'] . 'locale/';
 $config['VIEW_DIR'] = $config['APP_DIR'] . 'view/';
 $config['TEMP_DIR'] = $config['APP_DIR'] . 'temp/';

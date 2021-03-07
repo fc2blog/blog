@@ -11,7 +11,7 @@ if (class_exists('mysqli')) {
 }
 
 // 環境設定読み込み
-\Fc2blog\Config::read(__DIR__ . '/../../config/init_config.php');
+\Fc2blog\Config::read(__DIR__ . '/../config/init_config.php');
 
 // タイムゾーン設定
 date_default_timezone_set(\Fc2blog\Config::get('TIMEZONE'));
