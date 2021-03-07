@@ -1,4 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
+require_once(__DIR__ . '/../../vendor/autoload.php');
+
 // config.phpの存在チェック
 if (!file_exists(__DIR__ . '/../config.php') && (string)getenv("FC2_CONFIG_FROM_ENV") !== "1") {
   header("Content-Type: text/html; charset=UTF-8");
@@ -21,7 +26,13 @@ HTML;
 }
 
 if ((string)getenv("FC2_CONFIG_FROM_ENV") === "1") {
-  require(__DIR__ . '/../config_read_from_env.php');
+  require(__DIR__ . '/../../config_read_from_env.php');
 } else {
-  require(__DIR__ . '/../config.php');
+  require(__DIR__ . '/../../config.php');
 }
+
+$request = new \Fc2blog\Web\Request();
+
+$c = new $request->className($request);
+$c->execute($request->methodName);
+$c->emit();
