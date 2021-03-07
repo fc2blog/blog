@@ -152,7 +152,6 @@ describe("crawl some blog", () => {
 
     // generate uniq title
     post_comment_title = "テストタイトル_" + Math.floor(Math.random() * 1000000).toString();
-    console.log(post_comment_title);
 
     await c.getSS("comment_before_fill");
     await fillCommentForm(
