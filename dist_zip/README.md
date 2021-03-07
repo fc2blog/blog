@@ -2,11 +2,13 @@
 
 Create a ZIP file for distribute.
 
+The branch name to build will be same as `git branch --contains |cut -d " " -f 2` (So, same as your local checkout branch).
+
 ## IMPORTANT NOTICE
 
 The script will be make a zip that cloned from `https://github.com/uzulla/fc2blog` (not `fc2blog/blog`).
 
-This situation is temporary on the development. will be change to `fc2blog/blog`.
+> This setup is temporary. will be change to `fc2blog/blog` in future.
 
 ## build zip
 
@@ -24,16 +26,20 @@ that contain `app`, `public`, and `app/vendor/`(libraries that installed by the 
 
 ```
 $ make test
-{some logs output}
+{some build progress...}
+{After a while, will startup bash in docker. you can check something or startup apache and mysql by /startup.sh}
+$ ./startup.sh
+{start up apache and mysql and some logs output}
 If you want exit. please exit or ctrl-D
 ==================================
+{You can open this url by local browser}
 http://172.17.0.2/admin/common/install
 ==================================
-{some logs output}
+{some apache logs output}
 root@2792c09097ef:/# exit
 ```
 
-> All data is not permanent. All data will be lost when exited.
+> All data is not permanent. All data will be lost when bash exited.
 
 ## clean
 
