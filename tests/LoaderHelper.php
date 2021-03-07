@@ -57,6 +57,7 @@ class LoaderHelper extends TestCase
       /** @noinspection PhpIncludeInspection このファイルはないことがあるので */
       require(TEST_APP_DIR . '/config.php');
     }
+    require(__DIR__ . '/../app/src/include/bootstrap.php');
 
     // テストではシングルテナントモードは初期オフにする、必要なテストで都度Onにする
     Config::set('DEFAULT_BLOG_ID', null);

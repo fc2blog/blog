@@ -25,11 +25,13 @@ HTML;
   exit;
 }
 
+// 設定クラス読み込み
 if ((string)getenv("FC2_CONFIG_FROM_ENV") === "1") {
   require(__DIR__ . '/../../config_read_from_env.php');
 } else {
   require(__DIR__ . '/../../config.php');
 }
+require(__DIR__ . '/bootstrap.php');
 
 $request = new \Fc2blog\Web\Request();
 

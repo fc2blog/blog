@@ -134,7 +134,7 @@ class BlogTemplatesModel extends Model
    */
   public static function getCssUrl($blog_id, $device_type, $isPreview = false)
   {
-    return '/' . Config::get('UPLOAD_DIR_NAME') . '/' . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
+    return '/uploads/' . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
   }
 
   /**
