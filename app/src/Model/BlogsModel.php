@@ -71,11 +71,17 @@ class BlogsModel extends Model
    * @param string $value
    * @return bool|string
    */
-  public static function useDirectory(string $value)
+  public static function usableDirectory(string $value)
   {
+    // adminは予約済み
+    if ($value === "admin"){
+      return __('Is already in use');
+    }
+
     if (is_dir(Config::get('WWW_DIR') . $value)) {
       return __('Is already in use');
     }
+
     return true;
   }
 
@@ -96,7 +102,7 @@ class BlogsModel extends Model
         'maxlength' => array('max' => 50),
         'alphanumeric' => array(),
         'strtolower' => array(),
-        'own' => array('method' => 'useDirectory'),
+        'own' => array('method' => 'usableDirectory'),
         'unique' => array(),
       ),
       'name' => array(

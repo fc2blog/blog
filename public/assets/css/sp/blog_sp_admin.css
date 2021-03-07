@@ -124,7 +124,7 @@ table { border-collapse: collapse; }
 
 @media screen and (-webkit-min-device-pixel-ratio:1.5),(min-resolution:1.5dppx) {
 	.fc2logo {
-		background-image: url("../../../admin/assets/img/sp/sp_blog_detail_bg@2x.png");
+		background-image: url("../../../assets/admin/img/sp/sp_blog_detail_bg@2x.png");
 		-webkit-background-size: 105px auto;
 		background-size: 105px auto;
 	}
@@ -382,7 +382,7 @@ h3 {
 #footer_nav #goto_top a span,
 #site_footer .fc2 a:nth-child(1) span,
 #site_footer .fc2 a:nth-child(2) span {
-	background-image: url("../../../admin/assets/img/sp/sp_blog_detail_bg.png");
+	background-image: url("../../../assets/admin/img/sp/sp_blog_detail_bg.png");
 	background-repeat: no-repeat;
 }
 
@@ -392,7 +392,7 @@ h3 {
 	#footer_nav #goto_top a span,
 	#site_footer .fc2 a:nth-child(1) span,
 	#site_footer .fc2 a:nth-child(2) span {
-		background-image: url("../../../admin/assets/img/sp/sp_blog_detail_bg@2x.png");
+		background-image: url("../../../assets/admin/img/sp/sp_blog_detail_bg@2x.png");
 		-webkit-background-size: 105px auto;
 		background-size: 105px auto;
 	}
@@ -474,7 +474,7 @@ i.replied {
 #top_menu i ,
 .list_switch i,
 .file_table_cell_inner .checkbox_bg:after {
-	background: url("../../../admin/assets/img/sp/sp_blog_btn_icon.png") no-repeat;
+	background: url("../../../assets/admin/img/sp/sp_blog_btn_icon.png") no-repeat;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:1.5),(min-resolution:1.5dppx) {
@@ -482,7 +482,7 @@ i.replied {
 	#top_menu i ,
 	.list_switch i,
 	.file_table_cell_inner .checkbox_bg:after {
-		background: url("../../../admin/assets/img/sp/sp_blog_btn_icon@2x.png") no-repeat;
+		background: url("../../../assets/admin/img/sp/sp_blog_btn_icon@2x.png") no-repeat;
 		-webkit-background-size: 50px auto;
 		background-size: 50px auto;
 	}

@@ -193,7 +193,7 @@ body >.sidemenu {height: auto;}
 #left_back i,
 #left_menu_btn i,
 #right_menu_btn i {
-	background: url("../../../admin/assets/img/sp/sp_blog_sidemenu_bg.png") no-repeat;
+	background: url("../../../assets/admin/img/sp/sp_blog_sidemenu_bg.png") no-repeat;
 	display: block;
 }
 @media screen and (-webkit-min-device-pixel-ratio:1.5),(min-resolution:1.5dppx) {
@@ -201,7 +201,7 @@ body >.sidemenu {height: auto;}
 	#left_back i,
 	#left_menu_btn i,
 	#right_menu_btn i {
-		background: url("../../../admin/assets/img/sp/sp_blog_sidemenu_bg@2x.png") no-repeat;
+		background: url("../../../assets/admin/img/sp/sp_blog_sidemenu_bg@2x.png") no-repeat;
 		-webkit-background-size: 50px auto;
 		background-size: 50px auto;
 	}
