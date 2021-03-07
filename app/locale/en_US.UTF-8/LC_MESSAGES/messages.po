@@ -2500,3 +2500,6 @@ msgstr ""
 
 msgid "Host port"
 msgstr ""
+
+msgid "Name that cannot be specified"
+msgstr ""

@@ -75,7 +75,7 @@ class BlogsModel extends Model
   {
     // adminは予約済み
     if ($value === "admin"){
-      return __('Is already in use');
+      return __('Name that cannot be specified');
     }
 
     if (is_dir(Config::get('WWW_DIR') . $value)) {
