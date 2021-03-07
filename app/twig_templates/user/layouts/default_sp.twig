@@ -4,29 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <meta content="telephone=no" name="format-detection" />
-    <meta name="robots" content="noindex, nofollow, noarchive" />
     <title>{{ block('title') }}{% if blog.id %} - {{ blog.id }}{% endif %}</title>
     <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
-    <link rel="stylesheet" href="/css/sp/blog_sp_admin.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/css/sp/side_menu.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/css/sp/blog_comment_sp.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/sp/blog_sp_admin.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/sp/side_menu.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/sp/blog_comment_sp.css" type="text/css" media="all">
 
-    {% if block('head_include_css') is defined %}
-        {{ block('head_include_css') }}
-    {% endif %}
-
-    <script type="text/javascript" src="/js/jquery/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="/js/jquery/jquery-migrate-1.2.1.min.js"></script>
-    <script type="text/javascript" src="/js/jquery/jquery-ui/1.9.2/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/js/jquery/jquery.ui.touch-punch.min.js"></script>
-    <link rel="stylesheet" href="/css/jquery/jquery-ui/1.9.2/themes/ui-lightness/jquery-ui.css" type="text/css" media="screen" charset="utf-8">
-    <script type="text/javascript" src="/js/common_design.js"></script>
-
-    <script type="text/javascript" src="/js/common.js"></script>
-
-    {% if block('head_include_js') is defined %}
-        {{ block('head_include_js') }}
-    {% endif %}
+    <script type="text/javascript" src="/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="/assets/js/common_design.js"></script>
+    <script type="text/javascript" src="/assets/js/common.js"></script>
 </head>
 <body>
 

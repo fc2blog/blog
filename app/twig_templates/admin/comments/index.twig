@@ -1,6 +1,14 @@
 {% extends 'admin/layouts/default.twig' %}
 {% block title %}{{ _('List of comments') }}{% endblock %}
 
+{% block head_include_css %}
+    <link rel="stylesheet" href="/assets/js/jquery-ui/jquery-ui.min.css" type="text/css" media="screen">
+{% endblock %}
+
+{% block head_include_js %}
+    <script type="text/javascript" src="/assets/js/jquery-ui/jquery-ui.min.js"></script>
+{% endblock %}
+
 {% block content %}
     <header><h2>{{ _('List of comments') }}</h2></header>
 
@@ -24,7 +32,7 @@
             <input type="submit" value="{{ _('Search') }}"/>
         </form>
     </div>
-    <script src="/js/admin/search_form.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/admin/assets/js/search_form.js" type="text/javascript" charset="utf-8"></script>
 
     {% include('admin/common/paging.twig') %}
 
@@ -46,7 +54,6 @@
                 <tr>
                     <td class="center ss_cell">
                         <input type="checkbox" name="id[]" value="{{ comment.id }}"/><br/>
-                        {{ comment.entry_id }}
                         <input type="hidden" value="{{ comment.reply_status }}" id="sys-reply-status-value-{{ comment.id }}"/>
                     </td>
                     <td class="s_cell center">
@@ -139,7 +146,7 @@
                 resizable: false,
                 draggable: false,
                 width: $(window).width() - 100,
-                position: ['center', 50]
+                position: {my: "top", at: "top+30", of: window}
             };
             $('#sys-comment-reply-dialog').dialog(option);
             $('#sys-comment-reply-dialog').html('now loading..');

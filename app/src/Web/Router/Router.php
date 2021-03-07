@@ -31,6 +31,13 @@ class Router
       return;
     }
 
+    // /assets, /admin/assets へのアクセス（つまりファイルが無い）時、不備に気づきやすくする為に404をレスポンス。
+    if (preg_match('!\A(/assets|/admin/assets)!u', $request->uri)) {
+      $this->className = CommonController::class; // default controller.
+      $this->methodName = 'error404';
+      return;
+    }
+
     // ユーザー用のパラメータを設定する
     $path = $request->getPath();
     $paths = $request->getPaths();

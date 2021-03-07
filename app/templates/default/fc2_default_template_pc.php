@@ -408,6 +408,6 @@
   </div><!--/footer-->
 </div><!--/container-->
 <script type="text/javascript" src="https://static.fc2.com/share/blog_template/equalbox.js"></script>
-<script type="text/javascript" src="/js/js.cookie.js"></script>
+<script type="text/javascript" src="/assets/js/js.cookie.js"></script>
 </body>
 </html>

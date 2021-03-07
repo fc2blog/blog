@@ -2,26 +2,26 @@
 <html lang="{{ lang }}">
 <head>
     <meta charset="utf-8">
+    <meta name="robots" content="noindex, nofollow, noarchive"/>
     <title>{{ block('title') }}{% if blog.id %} - {{ blog.id }}{% endif %}</title>
     <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
-    <link rel="stylesheet" href="/css/normalize.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/css/admin-fc2.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/css/admin-form.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/css/common.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/css/main.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/css/admin_style.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/normalize.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/common.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/main.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/admin/assets/css/admin-fc2.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/admin/assets/css/admin-form.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/admin/assets/css/admin_style.css" type="text/css" media="all">
 
     {% if block('head_include_css') is defined %}
         {{ block('head_include_css') }}
     {% endif %}
 
-    <script type="text/javascript" src="/js/jquery/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="/js/jquery/jquery-migrate-1.2.1.min.js"></script>
-    <script type="text/javascript" src="/js/jquery/jquery-ui/1.9.2/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="/css/jquery/jquery-ui/1.9.2/themes/ui-lightness/jquery-ui.css" type="text/css" media="screen">
-    <script type="text/javascript" src="/js/common_design.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.js"></script>
 
-    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/assets/js/common_design.js"></script>
+    <script type="text/javascript" src="/assets/js/common.js"></script>
+    <script type="text/javascript" src="/assets/js/js.cookie.js"></script>
+
     <script>
         // フレームワーク用のjsの設定
         common = Object.assign(common, {{ js_common|json_encode()|raw }});

@@ -1,0 +1,80 @@
+/* ============================================================
+	Element
+============================================================ */
+a:link,a:visited { color:#0044cc; }
+a:hover,a:active { text-decoration: underline; }
+textarea { font-size:12px; }
+
+.form-button input[type=button],.form-button input[type=submit] {
+	cursor: pointer;
+	margin: 0 10px;
+	min-width: 90px;
+	padding: 5px 10px;
+}
+
+
+
+/* ============================================================
+	Layout
+============================================================ */
+#main-contents {
+	width: 900px;
+	padding: 20px 0;
+	text-align: left;
+}
+
+
+
+/* ============================================================
+	Main
+============================================================ */
+#main-contents header {
+	border-bottom: 1px dotted #333333;
+	margin: 0 0 15px;
+	overflow: hidden;
+}
+#main-contents header h2 {
+	background: url("../../admin/assets/img/admin_icon3.png") no-repeat scroll 0 -195px;
+	border: medium none;
+	float: left;
+	margin-bottom: 0;
+	padding: 2px 5px 2px 28px;
+}
+/* -_-_-_- Pager _-_-_-_ */
+ul.paging {
+	font-family: Verdana,sans-serif;
+	font-size: 11px;
+	text-align: center;
+}
+ul.paging li {
+	display: inline-block;
+	padding: 1px 3px;
+	*display: inline;
+	*zoom: 1;
+	vertical-align: bottom;
+}
+ul.paging li a {
+	display: block;
+	padding: 1px 3px;
+}
+ul.paging li a:link ,
+ul.paging li a:visited {
+	background-color: #E6E6E6;
+	border: 1px solid #999999;
+	color: #666666;
+}
+ul.paging li a:focus,
+ul.paging li a:hover,
+ul.paging li a:active {
+	background-color: #FAFAFA;
+	border: 1px solid #999999;
+	text-decoration: none;
+}
+ul.paging li.active {
+	background-color: #FFFFFF;
+	border: 1px solid #999999;
+	color: #666666;
+	font-weight: normal;
+	margin: 0 2px 1px;
+}
+ul.paging + table { margin-top: 10px; }
