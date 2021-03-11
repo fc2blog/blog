@@ -42,7 +42,7 @@ RUN sh -c "/usr/bin/mysqld_safe --user=mysql &" \
  && echo "CREATE USER 'dbuser'@'127.0.0.1' IDENTIFIED BY 'd1B2p3a#s!s';" | mysql \
  && echo "GRANT ALL ON fc2.* TO 'dbuser'@'127.0.0.1';" | mysql
 
-COPY fc2.zip /tmp
+COPY fc2blog_dist.zip /tmp
 RUN cd tmp \
  && unzip fc2.zip \
  && mv app /var/www/ \
