@@ -13,7 +13,7 @@ RUN set -eux \
 RUN add-apt-repository -y ppa:ondrej/php \
  && add-apt-repository -y ppa:ondrej/apache2 \
  && apt-get update \
- && apt-get install -y apache2 mysql-server php8.0 libapache2-mod-php8.0 php8.0-intl php8.0-mbstring php8.0-gd php8.0-mysql
+ && apt-get install -y apache2 mysql-server php8.0 libapache2-mod-php8.0 php8.0-intl php8.0-mbstring php8.0-gd php8.0-mysql php8.0-zip
 
 ARG PUID=1000
 ARG PGID=1000
@@ -34,7 +34,6 @@ RUN make-ssl-cert generate-default-snakeoil --force-overwrite \
 RUN mkdir /var/run/mysqld \
  && chmod 777 /var/run/mysqld
 
-# XXX
 RUN sh -c "/usr/bin/mysqld_safe --user=mysql &" \
  && sleep 3 \
  && mysql_secure_installation -ppass -D \
@@ -42,15 +41,8 @@ RUN sh -c "/usr/bin/mysqld_safe --user=mysql &" \
  && echo "CREATE USER 'dbuser'@'127.0.0.1' IDENTIFIED BY 'd1B2p3a#s!s';" | mysql \
  && echo "GRANT ALL ON fc2.* TO 'dbuser'@'127.0.0.1';" | mysql
 
-COPY fc2blog_dist.zip /tmp
-RUN cd tmp \
- && unzip fc2.zip \
- && mv app /var/www/ \
- && mv public/* /var/www/html/ \
- && mv public/.htaccess /var/www/html/ \
- && chown -R www-data:www-data /var/www/ \
- && rm /var/www/html/index.html
-
-COPY config.php /var/www/app/
+COPY fc2blog_dist.zip /var/www/html/
+COPY fc2blog_installer.php /var/www/html/
+RUN chown -R www-data:www-data /var/www/
 
 COPY startup.sh /
