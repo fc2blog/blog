@@ -255,7 +255,7 @@ ob_start(); // for redirect.
   // Get zip
   if (
     get_post_val('install_source') === "" &&
-    strlen(get_post_val('install_other')) > 0
+    strlen(get_post_val('install_source_other')) > 0
   ) {
     // use local zip
     $dist_zip_path = get_post_val('install_source_other');
@@ -329,16 +329,16 @@ ob_start(); // for redirect.
     echo "Generate config.php<br>" . PHP_EOL;
     $config_php_path = $app_dir . "/config.php";
     file_put_contents($config_php_path, "<?php
-define('DB_HOST', '" . get_post_val('db_host') . "');
-define('DB_PORT', '" . get_post_val('db_port') . "');
-define('DB_USER', '" . get_post_val('db_user') . "');
-define('DB_PASSWORD', '" . get_post_val('db_password') . "');
-define('DB_DATABASE', '" . get_post_val('db_name') . "');
-define('DB_CHARSET', '" . get_post_val('db_charset') . "');
-define('DOMAIN', '" . get_post_val('domain') . "');
-define('HTTP_PORT', '" . get_post_val('http_port') . "');
-define('HTTPS_PORT', '" . get_post_val('https_port') . "');
-define('WWW_DIR', '" . __DIR__ . "/');
+define('DB_HOST', '" . escape_single_quote(get_post_val('db_host')) . "');
+define('DB_PORT', '" . escape_single_quote(get_post_val('db_port')) . "');
+define('DB_USER', '" . escape_single_quote(get_post_val('db_user')) . "');
+define('DB_PASSWORD', '" . escape_single_quote(get_post_val('db_password')) . "');
+define('DB_DATABASE', '" . escape_single_quote(get_post_val('db_name')) . "');
+define('DB_CHARSET', '" . escape_single_quote(get_post_val('db_charset')) . "');
+define('DOMAIN', '" . escape_single_quote(get_post_val('domain')) . "');
+define('HTTP_PORT', '" . escape_single_quote(get_post_val('http_port')) . "');
+define('HTTPS_PORT', '" . escape_single_quote(get_post_val('https_port')) . "');
+define('WWW_DIR', '" . escape_single_quote(__DIR__) . "/');
   ");
   }
 
@@ -503,6 +503,13 @@ function get_post_val(string $key): ?string
   }
 
   return $_POST[$key];
+}
+
+function escape_single_quote(string $str): string
+{
+  $str = preg_replace('/\\\\/u', '\\\\\\', $str);
+  $str = preg_replace("/'/u", "\'", $str);
+  return $str;
 }
 
 function is_windows(): bool
