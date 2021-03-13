@@ -121,14 +121,14 @@ ob_start(); // for redirect.
             <ul>
                 <li><label><input type="radio" name="install_source" value="GITHUB"
                                   <?php if (!file_exists("fc2blog_dist.zip")){ ?>checked<?php } ?>>
-                        <b>Download from GitHub latest release (<a
+                        <b>Download latest release from GitHub (<a
                                     href="<?= GITHUB_REPO_URL ?>"><?= GITHUB_REPO_URL ?></a>)</b>
                     </label></li>
                 <li>
                     <label>
                         <input type="radio" name="install_source" value=""
                                <?php if (file_exists("fc2blog_dist.zip")){ ?>checked<?php } ?>>
-                        Other, you can set path to your `fc2blog_dist.zip` . <b>path</b>:
+                        Other, specify path to your `fc2blog_dist.zip` . <b>path</b>:
                         <input type="text" name="install_source_other" size="80"
                                value="<?= hsc(__DIR__) ?>/fc2blog_dist.zip">
                     </label>
