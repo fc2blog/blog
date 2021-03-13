@@ -46,3 +46,31 @@ root@2792c09097ef:/# exit
 ```
 $ make clean
 ```
+
+## Fc2blog handy installer
+
+[`installer/fc2blog_installer.php`](installer/fc2blog_installer.php)
+
+Handy deploy tool. 
+
+Installation can be done by simply, uploading one small php file and running it.
+
+**It works, but under development now.**
+
+**Currently, Download zip from an unofficial repository.**
+
+### overview
+
+- Self download distribute zip file.
+- Download zip from github release's assets.
+    - **Currently, Download zip from an unofficial repository.**
+- Extract and deploy fc2blog app.
+- Generate `app/config.php` from user input.
+- redirect to `/admin/common/install` when complete.
+
+### how to use
+
+1. Upload [`installer/fc2blog_installer.php`](installer/fc2blog_installer.php) to server's (VirtualHost's) document root.
+2. Open `fc2blog_installer.php` by browser.
+3. Fill some configuration and click execute button
+4. Ta-da! After that, follow the normal installer.
