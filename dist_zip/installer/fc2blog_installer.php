@@ -368,10 +368,65 @@ define('WWW_DIR', '" . __DIR__ . "/');
 <?php
 // === functions
 
-function copy_r(string $source, string $dest)
+function copy_r(string $src_path, string $dest_dir)
 {
-  // TODO rewrite by PHP
-  `cp -a {$source} {$dest}`;
+  $src_base_dir = realpath(dirname($src_path));
+  $src_file_name = basename($src_path);
+
+  // コピー先ディレクトリの準備
+  if (!file_exists($dest_dir)) {
+    // コピー先ディレクトリがないので作成
+    mkdir($dest_dir, 0777, true);
+  } else if (is_dir($src_path) && (is_file($dest_dir) || is_link($dest_dir))) {
+    // srcがdirだが、コピー先はdirでない既存がある場合、削除してディレクトリを作成
+    // (ファイルなら後で上書きするので、そのまま進める）
+    unlink($dest_dir);
+    mkdir($dest_dir, 0777, true);
+  }
+
+  // 単なるファイルやSymlinkならコピーして終わり
+  if (!is_dir($src_path)) {
+    copy($src_path, $dest_dir."/".$src_file_name);
+    return;
+  }
+
+  $dirObj = new RecursiveDirectoryIterator($src_path, RecursiveDirectoryIterator::SKIP_DOTS);
+  $files = new RecursiveIteratorIterator($dirObj, RecursiveIteratorIterator::CHILD_FIRST);
+
+  foreach ($files as $path) {
+    $relative_path = substr($path, strlen($src_base_dir) + 1);
+    $src_full_path = $src_base_dir . "/" . $relative_path;
+    $dest_full_path = $dest_dir . "/" . $relative_path;
+
+    if (is_dir($dest_full_path) && file_exists($dest_full_path)) {
+      // ディレクトリで、すでにディレクトリが存在しているならスキップ
+      continue;
+
+    } else if (is_dir($src_full_path) && !file_exists($dest_full_path)) {
+      // ディレクトリを作成
+      mkdir($dest_full_path);
+
+    } else if (is_dir($src_full_path) && file_exists($dest_full_path) && !is_dir($dest_full_path)) {
+      // ファイルがディレクトリになっているので、削除してディレクトリへ
+      unlink($dest_full_path);
+      mkdir($dest_full_path);
+
+    } else if (is_file($src_full_path) && file_exists($dest_full_path) && is_dir($dest_full_path)) {
+      // ディレクトリがファイルになっているので、削除してファイルへ
+      rmdir_r($dest_full_path);
+      copy($src_full_path, $dest_full_path);
+
+    } else {
+      // ファイルなら、コピー
+
+      // コピー先親ディレクトリがなければ作成
+      $parent_dir = dirname($dest_full_path);
+      if (!file_exists($parent_dir)) {
+        mkdir($parent_dir, 0777, true);
+      }
+      copy($src_full_path, $dest_full_path);
+    }
+  }
 }
 
 function rmdir_r(string $dirPath): bool
