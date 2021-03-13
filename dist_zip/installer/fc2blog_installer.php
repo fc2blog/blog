@@ -9,7 +9,9 @@ set_error_handler(function ($errno, $errstr, $errfile, $errline) {
 ob_start();
 
 // config
-define("GITHUB_RELEASE_URL", "https://api.github.com/repos/uzulla/fc2blog/releases");
+define("GITHUB_REPO", "/uzulla/fc2blog"); // TODO: change to fc2blog/blog
+define("GITHUB_URL", "https://github.com" . GITHUB_REPO . "/");
+define("GITHUB_RELEASE_API_URL", "https://api.github.com/repos" . GITHUB_REPO . "/releases");
 ?>
 <!doctype html>
 <html lang="en">
@@ -116,7 +118,7 @@ define("GITHUB_RELEASE_URL", "https://api.github.com/repos/uzulla/fc2blog/releas
             <ul>
                 <li><label><input type="radio" name="install_source" value="GITHUB"
                                   <?php if (!file_exists("fc2blog_dist.zip")){ ?>checked<?php } ?>>
-                        <b>Download from GitHub latest release (<?= GITHUB_RELEASE_URL ?>)</b>
+                        <b>Download from GitHub latest release (<a href="<?= GITHUB_URL ?>"><?= GITHUB_URL ?></a>)</b>
                     </label></li>
                 <li>
                     <label>
@@ -255,7 +257,7 @@ define("GITHUB_RELEASE_URL", "https://api.github.com/repos/uzulla/fc2blog/releas
 
   } elseif ($_POST['install_source'] === "GITHUB") {
     // get latest version url from GitHub
-    $release_data_url = GITHUB_RELEASE_URL; // TODO: change to fc2blog/blog
+    $release_data_url = GITHUB_RELEASE_API_URL;
     $options = ['http' => ['header' => "User-Agent: fc2blog_installer"]];
     if (!($releases_json = file_get_contents($release_data_url, false, stream_context_create($options)))) {
       exit("releases data download failed. url:{$release_data_url}");
