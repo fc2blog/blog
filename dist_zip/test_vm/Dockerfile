@@ -37,9 +37,9 @@ RUN mkdir /var/run/mysqld \
 RUN sh -c "/usr/bin/mysqld_safe --user=mysql &" \
  && sleep 3 \
  && mysql_secure_installation -ppass -D \
- && echo "CREATE DATABASE fc2" | mysql \
+ && echo "CREATE DATABASE fc2blog_db" | mysql \
  && echo "CREATE USER 'dbuser'@'127.0.0.1' IDENTIFIED BY 'd1B2p3a#s!s';" | mysql \
- && echo "GRANT ALL ON fc2.* TO 'dbuser'@'127.0.0.1';" | mysql
+ && echo "GRANT ALL ON fc2blog_db.* TO 'dbuser'@'127.0.0.1';" | mysql
 
 COPY fc2blog_dist.zip /var/www/html/
 COPY fc2blog_installer.php /var/www/html/

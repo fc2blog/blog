@@ -11,18 +11,17 @@ APACHE_CONFDIR=/etc/apache2 \
 /usr/sbin/apache2  -DFOREGROUND &
 
 sleep 3
-echo "If you want exit. please exit or ctrl-D"
 
 echo ==================================
 echo "Please use this settings in installer"
-echo "DB_HOST          : '127.0.0.1'"
-echo "DB_PORT          : '3306'"
-echo "DB_DATABASE NAME : 'fc2'"
-echo "DB_USER          : 'dbuser'"
-echo "DB_PASSWORD      : 'd1B2p3a#s!s'"
-echo "DB_CHARSET       : 'UTF8MB4'"
-echo "HTTP_PORT        : '80'"
-echo "HTTPS_PORT       : '443'"
+echo "DB_HOST          : 127.0.0.1"
+echo "DB_PORT          : 3306"
+echo "DB_DATABASE NAME : fc2blog_db"
+echo "DB_USER          : dbuser"
+echo "DB_PASSWORD      : d1B2p3a#s!s"
+echo "DB_CHARSET       : UTF8MB4"
+echo "HTTP_PORT        : 80"
+echo "HTTPS_PORT       : 443"
 echo ""
 echo "http://`ip -4 addr | grep -oP '(?<=inet\s)\d+(\.\d+){3}' |grep -v 127.0.0.1`/fc2blog_installer.php"
 echo ==================================
