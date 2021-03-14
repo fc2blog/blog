@@ -34,7 +34,8 @@ jobs:
 
       - name: create version file
         run: |
-          cd dist_zip && echo ${{ github.ref }} > fc2blog/app/version
+          VERSION=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
+          cd dist_zip && echo $VERSION > fc2blog/app/version
 
       - name: make zip
         run: |
