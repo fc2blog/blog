@@ -1,7 +1,7 @@
 .PHONY:
 build:
 	make clean
-	git clone --depth=1 --branch=`git branch --contains |cut -d " " -f 2| sed '/^$/d'` https://github.com/uzulla/fc2blog.git fc2blog
+	git clone --depth=1 --branch=`git branch --contains |cut -d " " -f 2` https://github.com/uzulla/fc2blog.git fc2blog
 	rm -rf fc2blog/.git
 	cd fc2blog && php ../../composer.phar install --no-dev --optimize-autoloader
 	# get tag from current commit id.
