@@ -1,0 +1,64 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('System Update') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('System Update') }}</h2></header>
+
+    <h3>{{ _('Releases') }}</h3>
+
+    <style>
+        #version-select-table thead td {
+            background-color: lightgrey;
+            font-weight: bold;
+        }
+
+        #version-select-table thead td.ver_col {
+            width: 50px;
+            text-align: center;
+        }
+
+        #version-select-table thead td.desc_col {
+            text-align: center;
+        }
+
+        #version-select-table thead td.op_col {
+            width: 100px;
+            text-align: center;
+        }
+
+        #version-select-table td.ver_col {
+            text-align: center;
+        }
+
+        #version-select-table td.op_col {
+            text-align: center;
+        }
+    </style>
+
+    {% if not release_list %}
+        {{ _('Release information query failed. Please try again later.') }}
+    {% else %}
+        <table id="version-select-table">
+            <thead>
+            <tr>
+                <td class="ver_col">{{ _('Version') }}</td>
+                <td class="desc_col">{{ _('Description') }}</td>
+                <td class="op_col">{{ _('Operation') }}</td>
+            </tr>
+            </thead>
+            {% for release in release_list %}
+                <tr>
+                    <td class="ver_col"><a href="{{ release.html_url }}">{{ release.tag_name }}</a></td>
+                    <td class="desc_col">
+                        <h4><a href="{{ release.html_url }}">{{ release.name }}</a></h4>
+                        <p>{{ release.body|nl2br }}</p>
+                    </td>
+                    <td class="op_col">
+                        <button>update</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock %}

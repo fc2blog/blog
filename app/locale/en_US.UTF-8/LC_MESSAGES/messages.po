@@ -2503,3 +2503,18 @@ msgstr ""
 
 msgid "Name that cannot be specified"
 msgstr ""
+
+msgid "System Update"
+msgstr ""
+
+msgid "Releases"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Operation"
+msgstr ""
+
+msgid "Release information query failed. Please try again later."
+msgstr ""

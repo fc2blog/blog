@@ -2550,3 +2550,18 @@ msgstr "ホスト ポート番号"
 
 msgid "Name that cannot be specified"
 msgstr "指定できない名称です"
+
+msgid "System Update"
+msgstr "システム更新"
+
+msgid "Releases"
+msgstr "リリース一覧"
+
+msgid "Version"
+msgstr "バージョン"
+
+msgid "Operation"
+msgstr "操作"
+
+msgid "Release information query failed. Please try again later."
+msgstr "情報取得に失敗しました、時間をおいてから再度お試しください。"
