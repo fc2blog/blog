@@ -1,14 +1,15 @@
 .PHONY:
 build:
 	make clean
+	echo `git branch --contains |cut -d " " -f 2`
 	git clone --depth=1 --branch=`git branch --contains |cut -d " " -f 2` https://github.com/uzulla/fc2blog.git fc2blog
 	rm -rf fc2blog/.git
-	cd fc2blog && php ../../composer.phar install --no-dev --optimize-autoloader
+	cd fc2blog && php ../../composer.phar install --no-dev --optimize-autoloader -q
 	# get tag from current commit id.
 	git tag -l --contains `git show -s --format=%H` > fc2blog/app/version
 	# Set "dev" to contents/version, If contents/version is zero size file.
 	if [ ! -s fc2blog/app/version ]; then echo "dev:"`git branch --contains |cut -d " " -f 2 | grep -e '.'`":"`git rev-parse --short HEAD` > fc2blog/app/version; fi
-	cd fc2blog && zip -r ../fc2blog_dist.zip app public
+	cd fc2blog && zip -q -r ../fc2blog_dist.zip app public
 
 .PHONY:
 build-no-pushed-branch:
