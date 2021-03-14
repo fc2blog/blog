@@ -1,0 +1,55 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup PHP 8.0
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring, gd, gettext, fileinfo, pdo, pdo_mysql, mysqli, zip
+
+      - uses: actions/checkout@v2
+
+      - name: get composer
+        run: |
+          curl -sSfL -o composer-setup.php https://getcomposer.org/installer
+          php composer-setup.php --filename=composer.phar
+          rm composer-setup.php
+
+      - name: composer install
+        run: php composer.phar install --no-ansi --no-interaction --no-scripts --no-progress
+
+      - name: build zip
+        run: |
+          cd dist_zip && make build
+
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: attach zip
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist_zip/fc2blog_dist.zip
+          asset_name: fc2blog_dist.zip
+          asset_content_type: application/zip
