@@ -28,9 +28,17 @@ jobs:
       - name: composer install
         run: php composer.phar install --no-ansi --no-interaction --no-scripts --no-progress
 
-      - name: build zip
+      - name: pre build
         run: |
-          cd dist_zip && make build
+          cd dist_zip && make pre-build
+
+      - name: create version file
+        run: |
+          cd dist_zip && echo ${{ github.ref }} > fc2blog/app/version
+
+      - name: make zip
+        run: |
+          cd dist_zip && make make-zip
 
       - name: create release
         id: create_release

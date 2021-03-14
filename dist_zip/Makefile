@@ -12,6 +12,19 @@ build:
 	cd fc2blog && zip -q -r ../fc2blog_dist.zip app public
 
 .PHONY:
+pre-build:
+	make clean
+	mkdir fc2blog
+	cp -a ../app ../public ../composer.json ../composer.lock fc2blog
+	-rm fc2blog/app/temp/installed.lock
+	cd fc2blog && php ../../composer.phar install --no-dev --optimize-autoloader
+	rm fc2blog/composer.*
+
+.PHONY:
+make-zip:
+	cd fc2blog && zip -r ../fc2blog_dist.zip app public
+
+.PHONY:
 build-no-pushed-branch:
 	make clean
 	mkdir fc2blog
