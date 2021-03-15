@@ -18,7 +18,7 @@ ob_start(); // for redirect.
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>fc2blog installer (alpha version)</title>
+    <title>fc2blog installer</title>
     <style>
         .notice {
             color: red;
@@ -29,14 +29,15 @@ ob_start(); // for redirect.
 <body>
 
 <?php if (get_post_val('mode') === null) { ?>
-    <h1>fc2blog installer (alpha version)</h1>
+    <h1>fc2blog installer</h1>
     This is fc2blog installer. Download fc2blog release file and extract, generate config. <br>
-    <b class="notice">The installer is now UNDER DEVELOPMENT, ALPHA VERSION.</b> <br>
-    <b>The installer will manipulate files. </b><span class="notice">PLEASE BACKUP YOUR SITE before use, And remove this script as
-            soon as possible after install</span> (will be self delete when completed). <br>
+    <b>The installer will manipulate files. </b>
+    <span class="notice">
+        PLEASE BACKUP YOUR SITE FIRST,
+        And remove this script as soon as possible after install
+    </span> (will be self delete when completed). <br>
     <b>The installer should be place to DocumentRoot dir.</b> <br>
     <br>
-    <!--<b>If you want update. please put to dir that same as `index.php`.</b> <br> TODO -->
     <hr>
 
     <h2># requirement check</h2>
@@ -90,10 +91,6 @@ ob_start(); // for redirect.
         </li>
     </ul>
 
-  <?php
-  // TODO update (read config exists install) not implemented yet.
-  ?>
-
     <form action="" method="post" onsubmit="return block_duplicate_execute();">
         <script>
           let is_submitted = false;
@@ -135,33 +132,59 @@ ob_start(); // for redirect.
             </li>
         </ul>
 
+      <?php
+      // Try recognize $app_dir from index.php if exists.
+      $is_exists_valid_index_php = false;
+      $is_found_config_php = false;
+      $app_dir_path = null;
+      if (file_exists(__DIR__ . "/index.php") && is_file(__DIR__ . "/index.php")) {
+        define("READ_FROM_INSTALLER", 1);
+        $index_php_app_dir_path = require(__DIR__ . "/index.php");
+        // check exists app dir
+        if (file_exists($index_php_app_dir_path) && is_dir($index_php_app_dir_path)) {
+          // found exists app dir.
+          $app_dir_path = $index_php_app_dir_path;
+          $is_exists_valid_index_php = true;
+          if (file_exists($app_dir_path . "/config.php")) {
+            $is_found_config_php = true;
+          }
+        }
+      }
+      if (is_null($app_dir_path)) {
+        $app_dir_path = __DIR__ . '/app';
+      }
+      ?>
         <h2># install dir</h2>
-        <b>(index.php</b> and <b>assets</b> will be install to
-        <b><?= hsc(__DIR__) ?></b> (this dir). this is not changeable.) <br>
+        <b>index.php</b> and <b>assets</b> will be install to
+        <b><?= hsc(__DIR__) ?></b> (this dir). this is not changeable. <br>
         <br>
         Please select <b>app</b> directory. (app directory contain code and config. No need to expose.) <br>
         <ul>
             <li>
                 <label>
                     <input type="radio" name="app_dir"
-                           value="<?= hsc(__DIR__) ?>/../app/">
+                           value="<?= hsc(dirname(__DIR__)) ?>/app/">
                     <b><?= hsc(dirname(__DIR__)) ?>/app/</b>
-                    (In document root parent dir. recommend, but some server will be has problem. please carefull
-                    conflict other installation.)
+                    (In document root's parent dir. recommend, but some server will be has problem.
+                    please careful conflict other installation.)
                 </label>
             </li>
             <li><label><input type="radio" name="app_dir"
                               value="<?= hsc(__DIR__) ?>/app/"
-                              checked>
+                              <?php if (!$is_exists_valid_index_php){ ?>checked<?php } ?>>
                     <b><?= hsc(__DIR__) ?>/app/</b>
                     (In document root. less secure, more compatibility)
                 </label></li>
             <li>
                 <label>
-                    <input type="radio" name="app_dir" value="">
-                    other, path input. <b>path</b>:
-                    <input type="text" name="app_dir_other" size="80"
-                           value="<?= hsc(dirname(__DIR__)) ?>/app">
+                    <input type="radio" name="app_dir" value=""
+                           <?php if ($is_exists_valid_index_php){ ?>checked<?php } ?>>
+                  <?php if ($is_exists_valid_index_php) { ?>
+                      Load from exists index.php :
+                  <?php } else { ?>
+                      Specify another path :
+                  <?php } ?>
+                    <input type="text" name="app_dir_other" size="80" value="<?= hsc($app_dir_path) ?>">
                 </label>
             </li>
         </ul>
@@ -171,9 +194,10 @@ ob_start(); // for redirect.
         <ul>
             <li>
                 <label>
-                    <input type="checkbox" name="generate_config" value="Y">
-                    Generate <b>config.php</b> (if checked, generate config.php.
-                    if not, should be create yourself.) <br>
+                    <input type="checkbox" name="generate_config" value="Y"
+                           <?php if (!$is_found_config_php) { ?>checked<?php } ?>>
+                    Generate <b>config.php</b>
+                    (if checked, generate/overwrite config.php. if not, should be create yourself.) <br>
                 </label>
             </li>
             <li>
@@ -290,6 +314,7 @@ ob_start(); // for redirect.
 
   // decide app dir.
   $app_dir = get_post_val('app_dir');
+
   if ($app_dir === '') { // read from app_dir_other
     $app_dir = get_post_val('app_dir_other');
   }
@@ -338,7 +363,7 @@ define('WWW_DIR', '" . escape_single_quote(__DIR__) . "/');
 
   // rewrite app dir path in index.php
   $index_php = file_get_contents("index.php");
-  $index_php = preg_replace('/\n\$app_dir_path.+;/u', "\n\$app_dir_path = \"{$app_dir}\";", $index_php);
+  $index_php = preg_replace('/\n\$app_dir_path.+;/u', "\n\$app_dir_path = '{$app_dir}';", $index_php);
   file_put_contents("index.php", $index_php);
 
   // clean up. delete self.
