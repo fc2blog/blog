@@ -10,10 +10,12 @@ build:
 clean:
 	-rm -rf fc2blog
 	-rm fc2blog_dist_*
-	-rm test_vm/fc2.zip
+	-rm test_vm/fc2blog_dist.zip
+	-rm test_vm/fc2blog_installer.php
 
 .PHONY:
 test:
 	make build
-	cp fc2blog_dist_`git -C fc2blog  rev-parse --short HEAD`.zip test_vm/fc2.zip
-	cd test_vm && make image-no-cache && make bash
+	cp fc2blog_dist_`git -C fc2blog  rev-parse --short HEAD`.zip test_vm/fc2blog_dist.zip
+	cp installer/fc2blog_installer.php test_vm/fc2blog_installer.php
+	cd test_vm && make image && make bash

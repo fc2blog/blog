@@ -9,6 +9,7 @@
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-pdo": "*",
+        "ext-zip": "*",
         "monolog/monolog": "^2.1",
         "league/flysystem": "^1.1",
         "twig/twig": "^3.0",
@@ -21,7 +22,6 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.2",
-        "ext-pdo": "*",
         "fzaninotto/faker": "dev-master",
         "simplepie/simplepie": "^1.5"
     },
