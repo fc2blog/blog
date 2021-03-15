@@ -2547,3 +2547,6 @@ msgstr "(パスワードを変更しない場合、空欄のままとしてく�
 
 msgid "Host port"
 msgstr "ホスト ポート番号"
+
+msgid "Name that cannot be specified"
+msgstr "指定できない名称です"

@@ -15,5 +15,3 @@ define('HTTP_PORT', '80'); // HTTP時ポート
 define('HTTPS_PORT', '443'); // HTTPS時ポート
 
 define('WWW_DIR', __DIR__ . '/../html/');
-
-require(__DIR__ . '/core/bootstrap.php');

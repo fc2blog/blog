@@ -55,6 +55,14 @@ docker-compose-build:
 	$(eval GID := $(shell id -g))
 	@docker-compose build --build-arg PUID=$(UID) --build-arg PGID=$(GID) php
 
+.PHONY: mysql-shell
+mysql-shell:
+	$(dexec_tty) make d-mysql-shell
+
+.PHONY: d-mysql-shell
+d-mysql-shell:
+	mysql -u $(FC2_DB_USER) -p$(FC2_DB_PASSWORD) -h $(FC2_DB_HOST) -P $(FC2_DB_PORT) "$(FC2_DB_DATABASE)"
+
 .PHONY: db-dump-schema
 db-dump-schema:
 	$(dexec) make d-db-dump-schema

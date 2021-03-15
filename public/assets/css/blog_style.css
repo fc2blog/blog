@@ -34,7 +34,7 @@ textarea { font-size:12px; }
 	overflow: hidden;
 }
 #main-contents header h2 {
-	background: url("../../admin/assets/img/admin_icon3.png") no-repeat scroll 0 -195px;
+	background: url("../../assets/admin/img/admin_icon3.png") no-repeat scroll 0 -195px;
 	border: medium none;
 	float: left;
 	margin-bottom: 0;

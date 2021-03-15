@@ -30,7 +30,7 @@
             "Fc2blog\\": "app/src/"
         },
         "files": [
-            "app/core/common_functions.php"
+            "app/src/include/common_functions.php"
         ]
     },
     "autoload-dev": {

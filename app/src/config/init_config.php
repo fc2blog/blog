@@ -4,15 +4,11 @@ $config = [];
 
 // -------------------- ディレクトリ構造関連 --------------------//
 
-$config['ROOT_DIR'] = realpath(__DIR__ . '/../../') . '/';
+$config['WWW_DIR'] = WWW_DIR;
+$config['WWW_UPLOAD_DIR'] = $config['WWW_DIR'] . 'uploads/';
 
-$config['UPLOAD_DIR_NAME'] = 'uploads';
-
-$config['WWW_DIR'] = defined('WWW_DIR') ? WWW_DIR : $config['ROOT_DIR'] . 'public/';
-$config['WWW_UPLOAD_DIR'] = $config['WWW_DIR'] . $config['UPLOAD_DIR_NAME'] . '/';
-
-$config['APP_DIR'] = defined('APP_DIR') ? APP_DIR : $config['ROOT_DIR'] . 'app/';
-$config['CONFIG_DIR'] = $config['APP_DIR'] . 'config/';
+$config['APP_DIR'] = APP_DIR;
+$config['CONFIG_DIR'] = $config['APP_DIR'] . 'src/config/';
 $config['LOCALE_DIR'] = $config['APP_DIR'] . 'locale/';
 $config['VIEW_DIR'] = $config['APP_DIR'] . 'view/';
 $config['TEMP_DIR'] = $config['APP_DIR'] . 'temp/';

@@ -1,27 +1,27 @@
 {% block head_include_css %}
     <link rel="stylesheet" href="/assets/js/jquery-ui/jquery-ui.min.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="/admin/assets/js/elrte/css/elrte.min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="/assets/admin/js/elrte/css/elrte.min.css" type="text/css" media="screen">
 {% endblock %}
 
 {% block head_include_js %}
     {# jquery-ui needs load before time picker. #}
     <script type="text/javascript" src="/assets/js/jquery-ui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/admin/assets/js/elrte/js/elrte.full.js"></script>
+    <script type="text/javascript" src="/assets/admin/js/elrte/js/elrte.full.js"></script>
 
     <!-- elRTE translation messages -->
-    <script type="text/javascript" src="/admin/assets/js/elrte/js/elRTE.options.js"></script>
-    <script type="text/javascript" src="/admin/assets/js/elrte/js/i18n/elrte.{{ lang_elrte }}.js"></script>
+    <script type="text/javascript" src="/assets/admin/js/elrte/js/elRTE.options.js"></script>
+    <script type="text/javascript" src="/assets/admin/js/elrte/js/i18n/elrte.{{ lang_elrte }}.js"></script>
     <!-- /elRTE -->
 
     <!-- timepicker-addon -->
-    <script type="text/javascript" src="/admin/assets/js/jquery/jquery-timepicker-addons/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="/assets/admin/js/jquery/jquery-timepicker-addons/jquery-ui-timepicker-addon.js"></script>
     {% if lang != 'en' %}
-        <script type="text/javascript" src="/admin/assets/js/jquery/jquery-timepicker-addons/i18n/jquery-ui-timepicker-{{ lang }}.js"></script>
+        <script type="text/javascript" src="/assets/admin/js/jquery/jquery-timepicker-addons/i18n/jquery-ui-timepicker-{{ lang }}.js"></script>
     {% endif %}
     <!-- /timepicker-addon -->
 
     <script type="text/javascript" src="/assets/js/js.cookie.js"></script>
-    <script type="text/javascript" src="/admin/assets/js/entry_editor.js"></script>
+    <script type="text/javascript" src="/assets/admin/js/entry_editor.js"></script>
 {% endblock %}
 
 <!-- メディアを追加する -->
@@ -147,7 +147,7 @@
             height: 450,
             toolbar: 'custome',
             lang: '{{ lang_elrte }}',
-            cssfiles: ['/admin/assets/js/elrte/css/elrte-inner.css']
+            cssfiles: ['/assets/admin/js/elrte/css/elrte-inner.css']
         }
 
         var isSetupString = false;

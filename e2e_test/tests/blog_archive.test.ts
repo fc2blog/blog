@@ -12,7 +12,6 @@ describe("crawl some blog", () => {
   const start_url = "/testblog2/";
 
   it("open blog top", async () => {
-    console.log(c.getBaseUrl() + start_url);
     const [response] = await Promise.all([
       c.waitLoad(),
       c.page.goto(c.getBaseUrl() + start_url),

@@ -36,7 +36,7 @@ class App
   public static function getUserFilePath(array $file, $abs = false, $timestamp = false): string
   {
     $file_path = static::getBlogLayer($file['blog_id']) . '/file/' . $file['id'] . '.' . $file['ext'];
-    return ($abs ? Config::get('WWW_UPLOAD_DIR') : '/' . Config::get('UPLOAD_DIR_NAME') . '/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
+    return ($abs ? Config::get('WWW_UPLOAD_DIR') : '/uploads/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
   }
 
   /**

@@ -70,7 +70,7 @@ class Request
     $this->cookie = $cookie ?? $_COOKIE;
 
     $urls = parse_url($this->uri);
-    $this->path = $urls['path'];
+    $this->path = $urls['path'] ?? '';
     if (isset($urls['query'])) {
       $this->query = $urls['query'];
       parse_str($urls['query'], $this->get);
