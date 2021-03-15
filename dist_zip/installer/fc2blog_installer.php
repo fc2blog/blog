@@ -90,154 +90,153 @@ ob_start(); // for redirect.
         </li>
     </ul>
 
-  <?php if (file_exists(__DIR__ . "/index.php")) { ?>
-        UPDATE IS NOT IMPLEMENTED YET. please delete index.php(and apps).
+  <?php
+  // TODO update (read config exists install) not implemented yet.
+  ?>
 
-  <?php } else { ?>
-        <form action="" method="post" onsubmit="return block_duplicate_execute();">
-            <script>
-              let is_submitted = false;
+    <form action="" method="post" onsubmit="return block_duplicate_execute();">
+        <script>
+          let is_submitted = false;
 
-              function block_duplicate_execute() {
-                if (is_submitted) {
-                  alert("already executed. please wait a minutes.");
-                  return false;
+          function block_duplicate_execute() {
+            if (is_submitted) {
+              alert("already executed. please wait a minutes.");
+              return false;
+            } else {
+              if (confirm("all settings ok?")) {
+                if (!is_submitted) {
+                  is_submitted = true;
+                  return true;
                 } else {
-                  if (confirm("all settings ok?")) {
-                    if (!is_submitted) {
-                      is_submitted = true;
-                      return true;
-                    } else {
-                      return false;
-                    }
-                  } else {
-                    return false;
-                  }
+                  return false;
                 }
+              } else {
+                return false;
               }
-            </script>
+            }
+          }
+        </script>
 
-            <h2># install source</h2>
-            <ul>
-                <li><label><input type="radio" name="install_source" value="GITHUB"
-                                  <?php if (!file_exists("fc2blog_dist.zip")){ ?>checked<?php } ?>>
-                        <b>Download latest release from GitHub (<a
-                                    href="<?= GITHUB_REPO_URL ?>"><?= GITHUB_REPO_URL ?></a>)</b>
-                    </label></li>
-                <li>
-                    <label>
-                        <input type="radio" name="install_source" value=""
-                               <?php if (file_exists("fc2blog_dist.zip")){ ?>checked<?php } ?>>
-                        Other, specify path to your `fc2blog_dist.zip` . <b>path</b>:
-                        <input type="text" name="install_source_other" size="80"
-                               value="<?= hsc(__DIR__) ?>/fc2blog_dist.zip">
-                    </label>
-                </li>
-            </ul>
+        <h2># install source</h2>
+        <ul>
+            <li><label><input type="radio" name="install_source" value="GITHUB"
+                              <?php if (!file_exists("fc2blog_dist.zip")){ ?>checked<?php } ?>>
+                    <b>Download latest release from GitHub (<a
+                                href="<?= GITHUB_REPO_URL ?>"><?= GITHUB_REPO_URL ?></a>)</b>
+                </label></li>
+            <li>
+                <label>
+                    <input type="radio" name="install_source" value=""
+                           <?php if (file_exists("fc2blog_dist.zip")){ ?>checked<?php } ?>>
+                    Other, specify path to your `fc2blog_dist.zip` . <b>path</b>:
+                    <input type="text" name="install_source_other" size="80"
+                           value="<?= hsc(__DIR__) ?>/fc2blog_dist.zip">
+                </label>
+            </li>
+        </ul>
 
-            <h2># install dir</h2>
-            <b>(index.php</b> and <b>assets</b> will be install to
-            <b><?= hsc(__DIR__) ?></b> (this dir). this is not changeable.) <br>
-            <br>
-            Please select <b>app</b> directory. (app directory contain code and config. No need to expose.) <br>
-            <ul>
-                <li>
-                    <label>
-                        <input type="radio" name="app_dir"
-                               value="<?= hsc(__DIR__) ?>/../app/">
-                        <b><?= hsc(dirname(__DIR__)) ?>/app/</b>
-                        (In document root parent dir. recommend, but some server will be has problem. please carefull
-                        conflict other installation.)
-                    </label>
-                </li>
-                <li><label><input type="radio" name="app_dir"
-                                  value="<?= hsc(__DIR__) ?>/app/"
-                                  checked>
-                        <b><?= hsc(__DIR__) ?>/app/</b>
-                        (In document root. less secure, more compatibility)
-                    </label></li>
-                <li>
-                    <label>
-                        <input type="radio" name="app_dir" value="">
-                        other, path input. <b>path</b>:
-                        <input type="text" name="app_dir_other" size="80"
-                               value="<?= hsc(dirname(__DIR__)) ?>/app">
-                    </label>
-                </li>
-            </ul>
-            <h2># generate config.php</h2>
-            If you want generate <b>app/config.php</b>. <br>
-            <b>Please change to your server settings.</b> <br>
-            <ul>
-                <li>
-                    <label>
-                        <input type="checkbox" name="generate_config" value="Y">
-                        Generate <b>config.php</b> (if checked, generate config.php.
-                        if not, should be create yourself.) <br>
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <b>Data base host name</b>
-                        <input type="text" name="db_host" value="127.0.0.1">
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <b>Data base port</b>
-                        <input type="text" name="db_port" value="3306">
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <b>Data base name</b>
-                        <input type="text" name="db_name" value="fc2blog_db">
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <b>Data base user id</b>
-                        <input type="text" name="db_user" value="dbuser">
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <b>Data base password</b>
-                        <input type="text" name="db_password" value="d1B2p3a#s!s">
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <b>Data base charset</b>
-                        <input type="text" name="db_charset" value="UTF8MB4">
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <b>Web server domain</b>
-                        <input type="text" name="domain"
-                               value="<?= hsc($_SERVER['SERVER_NAME']) ?>">
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <b>Web server http port</b>
-                        <input type="text" name="http_port" value="80">
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <b>Web server https port</b>
-                        <input type="text" name="https_port" value="443">
-                    </label>
-                </li>
-            </ul>
+        <h2># install dir</h2>
+        <b>(index.php</b> and <b>assets</b> will be install to
+        <b><?= hsc(__DIR__) ?></b> (this dir). this is not changeable.) <br>
+        <br>
+        Please select <b>app</b> directory. (app directory contain code and config. No need to expose.) <br>
+        <ul>
+            <li>
+                <label>
+                    <input type="radio" name="app_dir"
+                           value="<?= hsc(__DIR__) ?>/../app/">
+                    <b><?= hsc(dirname(__DIR__)) ?>/app/</b>
+                    (In document root parent dir. recommend, but some server will be has problem. please carefull
+                    conflict other installation.)
+                </label>
+            </li>
+            <li><label><input type="radio" name="app_dir"
+                              value="<?= hsc(__DIR__) ?>/app/"
+                              checked>
+                    <b><?= hsc(__DIR__) ?>/app/</b>
+                    (In document root. less secure, more compatibility)
+                </label></li>
+            <li>
+                <label>
+                    <input type="radio" name="app_dir" value="">
+                    other, path input. <b>path</b>:
+                    <input type="text" name="app_dir_other" size="80"
+                           value="<?= hsc(dirname(__DIR__)) ?>/app">
+                </label>
+            </li>
+        </ul>
+        <h2># generate config.php</h2>
+        If you want generate <b>app/config.php</b>. <br>
+        <b>Please change to your server settings.</b> <br>
+        <ul>
+            <li>
+                <label>
+                    <input type="checkbox" name="generate_config" value="Y">
+                    Generate <b>config.php</b> (if checked, generate config.php.
+                    if not, should be create yourself.) <br>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <b>Data base host name</b>
+                    <input type="text" name="db_host" value="127.0.0.1">
+                </label>
+            </li>
+            <li>
+                <label>
+                    <b>Data base port</b>
+                    <input type="text" name="db_port" value="3306">
+                </label>
+            </li>
+            <li>
+                <label>
+                    <b>Data base name</b>
+                    <input type="text" name="db_name" value="fc2blog_db">
+                </label>
+            </li>
+            <li>
+                <label>
+                    <b>Data base user id</b>
+                    <input type="text" name="db_user" value="dbuser">
+                </label>
+            </li>
+            <li>
+                <label>
+                    <b>Data base password</b>
+                    <input type="text" name="db_password" value="d1B2p3a#s!s">
+                </label>
+            </li>
+            <li>
+                <label>
+                    <b>Data base charset</b>
+                    <input type="text" name="db_charset" value="UTF8MB4">
+                </label>
+            </li>
+            <li>
+                <label>
+                    <b>Web server domain</b>
+                    <input type="text" name="domain"
+                           value="<?= hsc($_SERVER['SERVER_NAME']) ?>">
+                </label>
+            </li>
+            <li>
+                <label>
+                    <b>Web server http port</b>
+                    <input type="text" name="http_port" value="80">
+                </label>
+            </li>
+            <li>
+                <label>
+                    <b>Web server https port</b>
+                    <input type="text" name="https_port" value="443">
+                </label>
+            </li>
+        </ul>
 
-            <hr>
-            <input type="hidden" name="mode" value="extract">
-            <button type="submit" id="extract_button">Execute</button>
-        </form>
-  <?php } ?>
+        <hr>
+        <input type="hidden" name="mode" value="extract">
+        <button type="submit" id="extract_button">Execute</button>
+    </form>
 
 <?php } elseif (get_post_val('mode') === 'extract') { ?>
     <h2>Extract....</h2>
@@ -305,23 +304,18 @@ ob_start(); // for redirect.
   }
 
   // check exists app dir
-  if (file_exists($app_dir)) {
-    // TODO update mode
-    exit("update is not implemented yet");
-  } else {
-    // new install mode
-
+  if (!file_exists($app_dir)) {
     mkdir($app_dir);
+  }
 
-    // deploy files
-    $files_in_tmp_dir_app = glob($tmp_dir_app . '/{*,.[!.]*,..?*}', GLOB_BRACE);
-    foreach ($files_in_tmp_dir_app as $files_in_tmp_dir_app_row) {
-      copy_r($files_in_tmp_dir_app_row, $app_dir); // todo error handling
-    }
-    $files_in_tmp_dir_public = glob($tmp_dir_public . '/{*,.[!.]*,..?*}', GLOB_BRACE);
-    foreach ($files_in_tmp_dir_public as $files_in_tmp_dir_public_row) {
-      copy_r($files_in_tmp_dir_public_row, __DIR__); // todo error handling
-    }
+  // deploy files
+  $files_in_tmp_dir_app = glob($tmp_dir_app . '/{*,.[!.]*,..?*}', GLOB_BRACE);
+  foreach ($files_in_tmp_dir_app as $files_in_tmp_dir_app_row) {
+    copy_r($files_in_tmp_dir_app_row, $app_dir); // todo error handling
+  }
+  $files_in_tmp_dir_public = glob($tmp_dir_public . '/{*,.[!.]*,..?*}', GLOB_BRACE);
+  foreach ($files_in_tmp_dir_public as $files_in_tmp_dir_public_row) {
+    copy_r($files_in_tmp_dir_public_row, __DIR__); // todo error handling
   }
 
   // generate config.php
@@ -386,7 +380,7 @@ function copy_r(string $src_path, string $dest_dir)
 
   // 単なるファイルやSymlinkならコピーして終わり
   if (!is_dir($src_path)) {
-    copy($src_path, $dest_dir."/".$src_file_name);
+    copy($src_path, $dest_dir . "/" . $src_file_name);
     return;
   }
 
