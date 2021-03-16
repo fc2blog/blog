@@ -59,7 +59,7 @@ class SystemUpdateModel
       try {
         return json_decode($releases_json, true, 512, JSON_THROW_ON_ERROR);
       } catch (JsonException $e) {
-        error_log("invalid json. but on going.");
+        error_log("Invalid cached release json. but on going.");
       }
     }
 
@@ -208,7 +208,7 @@ class SystemUpdateModel
     $tmp_path = tempnam(sys_get_temp_dir(), "fc2blog_dist_");
     unlink($tmp_path); // use to directory. file is not important.
 
-    if (!mkdir($tmp_path)) {
+    if (!mkdir($tmp_path, 0777, true)) {
       throw new RuntimeException("mkdir({$tmp_path}) failed");
     }
 
@@ -229,22 +229,45 @@ class SystemUpdateModel
 
       // decide app dir.
       $app_dir = APP_DIR;
+      $public_dir = WWW_DIR;
 
       // deploy files
-      // TODO remove src dir
       $files_in_tmp_dir_app = glob($tmp_dir_app . '/{*,.[!.]*,..?*}', GLOB_BRACE);
       foreach ($files_in_tmp_dir_app as $files_in_tmp_dir_app_row) {
+        // `temp` and `config.php` will skip delete/copy.
+        if ($tmp_dir_app . "/temp" === $files_in_tmp_dir_app_row) continue;
+        if ($tmp_dir_app . "/config.php" === $files_in_tmp_dir_app_row) continue;
+        // delete/reset dir/files.
+        static::rm_r($app_dir . substr($files_in_tmp_dir_app_row, strlen($tmp_dir_app)+1));
         static::copy_r($files_in_tmp_dir_app_row, $app_dir); // todo error handling
       }
+
       $files_in_tmp_dir_public = glob($tmp_dir_public . '/{*,.[!.]*,..?*}', GLOB_BRACE);
       foreach ($files_in_tmp_dir_public as $files_in_tmp_dir_public_row) {
-        static::copy_r($files_in_tmp_dir_public_row, __DIR__); // todo error handling
+        // `user_uploads` will skip delete/copy.
+        if ($tmp_dir_app . "/user_uploads" === $files_in_tmp_dir_public_row) continue;
+        // delete/reset dir/files.
+        static::rm_r($public_dir . substr($files_in_tmp_dir_public_row, strlen($tmp_dir_public)+1));
+        static::copy_r($files_in_tmp_dir_public_row, WWW_DIR); // todo error handling
       }
+
+      // index.phpのみ、環境によって動的なので更新する
+      $index_php = file_get_contents(WWW_DIR."/index.php");
+      $index_php = preg_replace('/\n\$app_dir_path.+;/u', "\n\$app_dir_path = '" . APP_DIR . "';", $index_php);
+      file_put_contents(WWW_DIR."/index.php", $index_php);
 
     } finally {
       static::rmdir_r($tmp_path);
     }
 
+  }
+
+  private static function rm_r(string $path): bool
+  {
+    if (!file_exists($path)) return false;
+    if (!is_dir($path)) return unlink($path);
+    if (is_dir($path)) return static::rmdir_r($path);
+    return false;
   }
 
   private static function rmdir_r(string $dirPath): bool
@@ -297,22 +320,23 @@ class SystemUpdateModel
     $files = new RecursiveIteratorIterator($dirObj, RecursiveIteratorIterator::CHILD_FIRST);
 
     foreach ($files as $path) {
-      $relative_path = substr($path->getPath(), strlen($src_base_dir) + 1);
+      $relative_path = substr($path->getRealPath(), strlen($src_base_dir) + 1);
       $src_full_path = $src_base_dir . "/" . $relative_path;
       $dest_full_path = $dest_dir . "/" . $relative_path;
 
-      if (is_dir($dest_full_path) && file_exists($dest_full_path)) {
+      if (file_exists($dest_full_path) && is_dir($dest_full_path)) {
         // ディレクトリで、すでにディレクトリが存在しているならスキップ
+        touch($dest_full_path); // update mtime
         continue;
 
-      } else if (is_dir($src_full_path) && !file_exists($dest_full_path)) {
+      } else if (!file_exists($dest_full_path) && is_dir($src_full_path)) {
         // ディレクトリを作成
-        mkdir($dest_full_path);
+        mkdir($dest_full_path, 0777, true);
 
       } else if (is_dir($src_full_path) && file_exists($dest_full_path) && !is_dir($dest_full_path)) {
         // ファイルがディレクトリになっているので、削除してディレクトリへ
         unlink($dest_full_path);
-        mkdir($dest_full_path);
+        mkdir($dest_full_path, 0777, true);
 
       } else if (is_file($src_full_path) && file_exists($dest_full_path) && is_dir($dest_full_path)) {
         // ディレクトリがファイルになっているので、削除してファイルへ

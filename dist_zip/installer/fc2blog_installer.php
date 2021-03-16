@@ -411,11 +411,10 @@ function copy_r(string $src_path, string $dest_dir)
   }
 
   $dirObj = new RecursiveDirectoryIterator($src_path, RecursiveDirectoryIterator::SKIP_DOTS);
-  /** @var SplFileInfo[] $files */
   $files = new RecursiveIteratorIterator($dirObj, RecursiveIteratorIterator::CHILD_FIRST);
 
   foreach ($files as $path) {
-    $relative_path = substr($path->getPath(), strlen($src_base_dir) + 1);
+    $relative_path = substr($path, strlen($src_base_dir) + 1);
     $src_full_path = $src_base_dir . "/" . $relative_path;
     $dest_full_path = $dest_dir . "/" . $relative_path;
 
