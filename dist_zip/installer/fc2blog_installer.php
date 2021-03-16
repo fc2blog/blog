@@ -139,6 +139,7 @@ ob_start(); // for redirect.
       $app_dir_path = null;
       if (file_exists(__DIR__ . "/index.php") && is_file(__DIR__ . "/index.php")) {
         define("READ_FROM_INSTALLER", 1);
+        /** @noinspection PhpIncludeInspection */
         $index_php_app_dir_path = require(__DIR__ . "/index.php");
         // check exists app dir
         if (file_exists($index_php_app_dir_path) && is_dir($index_php_app_dir_path)) {
@@ -410,10 +411,11 @@ function copy_r(string $src_path, string $dest_dir)
   }
 
   $dirObj = new RecursiveDirectoryIterator($src_path, RecursiveDirectoryIterator::SKIP_DOTS);
+  /** @var SplFileInfo[] $files */
   $files = new RecursiveIteratorIterator($dirObj, RecursiveIteratorIterator::CHILD_FIRST);
 
   foreach ($files as $path) {
-    $relative_path = substr($path, strlen($src_base_dir) + 1);
+    $relative_path = substr($path->getPath(), strlen($src_base_dir) + 1);
     $src_full_path = $src_base_dir . "/" . $relative_path;
     $dest_full_path = $dest_dir . "/" . $relative_path;
 
@@ -444,6 +446,7 @@ function copy_r(string $src_path, string $dest_dir)
         mkdir($parent_dir, 0777, true);
       }
       copy($src_full_path, $dest_full_path);
+      touch($dest_full_path); // update file timestamp
     }
   }
 }

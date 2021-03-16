@@ -8,6 +8,7 @@ use JsonException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
+use SplFileInfo;
 use ZipArchive;
 
 class SystemUpdateModel
@@ -134,7 +135,7 @@ class SystemUpdateModel
       return null;
     }
 
-    $version = file_get_contents(static::$version_file_path);
+    $version = trim(file_get_contents(static::$version_file_path));
 
     if ($allow_raw) {
       return $version;
@@ -205,6 +206,7 @@ class SystemUpdateModel
   public static function updateSystemByLocalZip(string $dist_zip_path)
   {
     $tmp_path = tempnam(sys_get_temp_dir(), "fc2blog_dist_");
+    unlink($tmp_path); // use to directory. file is not important.
 
     if (!mkdir($tmp_path)) {
       throw new RuntimeException("mkdir({$tmp_path}) failed");
@@ -229,13 +231,14 @@ class SystemUpdateModel
       $app_dir = APP_DIR;
 
       // deploy files
+      // TODO remove src dir
       $files_in_tmp_dir_app = glob($tmp_dir_app . '/{*,.[!.]*,..?*}', GLOB_BRACE);
       foreach ($files_in_tmp_dir_app as $files_in_tmp_dir_app_row) {
-        copy_r($files_in_tmp_dir_app_row, $app_dir); // todo error handling
+        static::copy_r($files_in_tmp_dir_app_row, $app_dir); // todo error handling
       }
       $files_in_tmp_dir_public = glob($tmp_dir_public . '/{*,.[!.]*,..?*}', GLOB_BRACE);
       foreach ($files_in_tmp_dir_public as $files_in_tmp_dir_public_row) {
-        copy_r($files_in_tmp_dir_public_row, __DIR__); // todo error handling
+        static::copy_r($files_in_tmp_dir_public_row, __DIR__); // todo error handling
       }
 
     } finally {
@@ -267,4 +270,66 @@ class SystemUpdateModel
     return false;
   }
 
+  private static function copy_r(string $src_path, string $dest_dir)
+  {
+    $src_base_dir = realpath(dirname($src_path));
+    $src_file_name = basename($src_path);
+
+    // コピー先ディレクトリの準備
+    if (!file_exists($dest_dir)) {
+      // コピー先ディレクトリがないので作成
+      mkdir($dest_dir, 0777, true);
+    } else if (is_dir($src_path) && (is_file($dest_dir) || is_link($dest_dir))) {
+      // srcがdirだが、コピー先はdirでない既存がある場合、削除してディレクトリを作成
+      // (ファイルなら後で上書きするので、そのまま進める）
+      unlink($dest_dir);
+      mkdir($dest_dir, 0777, true);
+    }
+
+    // 単なるファイルやSymlinkならコピーして終わり
+    if (!is_dir($src_path)) {
+      copy($src_path, $dest_dir . "/" . $src_file_name);
+      return;
+    }
+
+    $dirObj = new RecursiveDirectoryIterator($src_path, RecursiveDirectoryIterator::SKIP_DOTS);
+    /** @var SplFileInfo[] $files */
+    $files = new RecursiveIteratorIterator($dirObj, RecursiveIteratorIterator::CHILD_FIRST);
+
+    foreach ($files as $path) {
+      $relative_path = substr($path->getPath(), strlen($src_base_dir) + 1);
+      $src_full_path = $src_base_dir . "/" . $relative_path;
+      $dest_full_path = $dest_dir . "/" . $relative_path;
+
+      if (is_dir($dest_full_path) && file_exists($dest_full_path)) {
+        // ディレクトリで、すでにディレクトリが存在しているならスキップ
+        continue;
+
+      } else if (is_dir($src_full_path) && !file_exists($dest_full_path)) {
+        // ディレクトリを作成
+        mkdir($dest_full_path);
+
+      } else if (is_dir($src_full_path) && file_exists($dest_full_path) && !is_dir($dest_full_path)) {
+        // ファイルがディレクトリになっているので、削除してディレクトリへ
+        unlink($dest_full_path);
+        mkdir($dest_full_path);
+
+      } else if (is_file($src_full_path) && file_exists($dest_full_path) && is_dir($dest_full_path)) {
+        // ディレクトリがファイルになっているので、削除してファイルへ
+        rmdir_r($dest_full_path);
+        copy($src_full_path, $dest_full_path);
+
+      } else {
+        // ファイルなら、コピー
+
+        // コピー先親ディレクトリがなければ作成
+        $parent_dir = dirname($dest_full_path);
+        if (!file_exists($parent_dir)) {
+          mkdir($parent_dir, 0777, true);
+        }
+        copy($src_full_path, $dest_full_path);
+        touch($dest_full_path); // update file timestamp
+      }
+    }
+  }
 }

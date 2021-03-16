@@ -12,10 +12,11 @@ class SystemUpdateController extends AdminController
 {
   public function index(Request $request): string
   {
+    $request->generateNewSig();
     $release_list = SystemUpdateModel::getReleaseInfo();
     $this->set('release_list', $release_list);
     $this->set('repo_site_url', SystemUpdateModel::$releases_url);
-    $this->set('now_version', SystemUpdateModel::getVersion());
+    $this->set('now_version', SystemUpdateModel::getVersion(true));
     return 'admin/system_update/index.twig';
   }
 
@@ -23,15 +24,15 @@ class SystemUpdateController extends AdminController
   {
     // check sig
     if(!$request->isValidSig()){
-      $this->setWarnMessage("request failed. please retry."); // TODO i18n
-      $this->redirect($request, Html::url($request, ['controller'=>'ServerUpdate', 'action'=>'index']));
+      $this->setWarnMessage("request failed. invalid sig. please retry."); // TODO i18n
+      $this->redirect($request, Html::url($request, ['controller'=>'system_update', 'action'=>'index']));
     }
 
     // check request
     $request_version = $request->get('version');
     if(is_null($request_version)){
       $this->setWarnMessage("request failed. missing version."); // TODO i18n
-      $this->redirect($request, Html::url($request, ['controller'=>'ServerUpdate', 'action'=>'index']));
+      $this->redirect($request, Html::url($request, ['controller'=>'system_update', 'action'=>'index']));
     }
 
     $release_list = SystemUpdateModel::getReleaseInfo();
@@ -46,7 +47,7 @@ class SystemUpdateController extends AdminController
     $this->setInfoMessage("updated");
 
     // redirect to index
-    $this->redirect($request, Html::url($request, ['controller'=>'ServerUpdate', 'action'=>'index']));
+    $this->redirect($request, Html::url($request, ['controller'=>'system_update', 'action'=>'index']));
 
     throw new LogicException("must be redirect");
   }
