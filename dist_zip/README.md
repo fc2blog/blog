@@ -4,23 +4,30 @@ Create a ZIP file for distribute.
 
 The branch name to build will be same as `git branch --contains |cut -d " " -f 2` (So, same as your local checkout branch).
 
-## IMPORTANT NOTICE
-
-The script will be make a zip that cloned from `https://github.com/uzulla/fc2blog` (not `fc2blog/blog`).
-
-> This setup is temporary. will be change to `fc2blog/blog` in future.
-
 ## build zip
 
 ```
 $ make build
-$ ls fc2blog_dist_*
-fc2blog_dist_*****.zip
+$ ls fc2blog_dist.zip
+fc2blog_dist.zip
 ```
 
-`fc2blog_dist_*****.zip` is distributable zip. (***** is short commit id)
+`fc2blog_dist.zip` is distributable zip.
 
 that contain `app`, `public`, and `app/vendor/`(libraries that installed by the composer).
+
+### build zip from your repo
+
+```
+$ export GITHUB_REPO_URL="https://github.com/uzulla/fc2blog.git"
+$ make build
+```
+
+### build local src (no checkout)
+
+```
+$ make build-no-pushed-branch
+```
 
 ## test on Ubuntu vm(docker)
 
@@ -41,6 +48,12 @@ root@2792c09097ef:/# exit
 
 > All data is not permanent. All data will be lost when bash exited.
 
+### test local src (no checkout)
+
+```
+$ make test-no-pushed-branch
+```
+
 ## clean
 
 ```
@@ -51,7 +64,7 @@ $ make clean
 
 [`installer/fc2blog_installer.php`](installer/fc2blog_installer.php)
 
-Handy deploy tool. 
+Handy deploy tool.
 
 Installation can be done by simply, uploading one small php file and running it.
 
@@ -70,7 +83,8 @@ Installation can be done by simply, uploading one small php file and running it.
 
 ### how to use
 
-1. Upload [`installer/fc2blog_installer.php`](installer/fc2blog_installer.php) to server's (VirtualHost's) document root.
+1. Upload [`installer/fc2blog_installer.php`](installer/fc2blog_installer.php) to server's (VirtualHost's) document
+   root.
 2. Open `fc2blog_installer.php` by browser.
 3. Fill some configuration and click execute button
 4. Ta-da! After that, follow the normal installer.

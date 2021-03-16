@@ -1,7 +1,7 @@
 <!doctype html>
 <?php
 // config
-define("GITHUB_REPO", "/uzulla/fc2blog"); // TODO: change to fc2blog/blog
+define("GITHUB_REPO", "/fc2blog/blog");
 define("GITHUB_REPO_URL", "https://github.com" . GITHUB_REPO . "/");
 define("GITHUB_REPO_RELEASE_API_URL", "https://api.github.com/repos" . GITHUB_REPO . "/releases");
 

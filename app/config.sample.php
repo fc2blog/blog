@@ -21,3 +21,6 @@ define('HTTPS_PORT', '443'); // HTTPS時ポート
 // publicとappの位置関係を修正した場合には変更してください
 // Please edit the path when change `app` and `public` relative path condition.
 define('WWW_DIR', __DIR__ . '/../public/'); // this path need finish with slash.
+
+// 別のGitHub repoを追従する場合に設定してください
+// define('GITHUB_REPO', '/uzulla/fc2blog');

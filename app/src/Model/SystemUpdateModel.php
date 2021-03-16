@@ -14,13 +14,23 @@ use ZipArchive;
 class SystemUpdateModel
 {
   /** @var string */
-  static public $releases_url = "https://www.github.com/uzulla/fc2blog/releases"; // TODO: change to fc2blog/blog
-  /** @var string */
-  static public $releases_api_url = "https://api.github.com/repos/uzulla/fc2blog/releases"; // TODO: change to fc2blog/blog
-  /** @var string */
   static public $cached_release_info_path = __DIR__ . "/../../temp/github_release_cache.json";
   /** @var string */
   static public $version_file_path = __DIR__ . "/../../version";
+
+  public static function getReleasesUrl(): string
+  {
+    return defined("GITHUB_REPO")
+      ? "https://www.github.com" . GITHUB_REPO . "/releases"
+      : "https://www.github.com/fc2blog/blog/releases";
+  }
+
+  public static function getReleasesApiUrl(): string
+  {
+    return defined("GITHUB_REPO")
+      ? "https://api.github.com/repos" . GITHUB_REPO . "/releases"
+      : "https://api.github.com/repos/fc2blog/blog/releases";
+  }
 
   /**
    * Get download url of `fc2blog_dist.zip` in assets from release array.
@@ -71,7 +81,7 @@ class SystemUpdateModel
     // JSONのrelease情報JSONをGitHub APIより取得
     $options = ['http' => ['header' => "User-Agent: fc2blog_installer"]];
     $releases_json = @file_get_contents(
-      static::$releases_api_url,
+      static::getReleasesApiUrl(),
       false,
       stream_context_create($options)
     );
@@ -238,7 +248,7 @@ class SystemUpdateModel
         if ($tmp_dir_app . "/temp" === $files_in_tmp_dir_app_row) continue;
         if ($tmp_dir_app . "/config.php" === $files_in_tmp_dir_app_row) continue;
         // delete/reset dir/files.
-        static::rm_r($app_dir . substr($files_in_tmp_dir_app_row, strlen($tmp_dir_app)+1));
+        static::rm_r($app_dir . substr($files_in_tmp_dir_app_row, strlen($tmp_dir_app) + 1));
         static::copy_r($files_in_tmp_dir_app_row, $app_dir); // todo error handling
       }
 
@@ -248,14 +258,14 @@ class SystemUpdateModel
         if ($tmp_dir_app . "/user_uploads" === $files_in_tmp_dir_public_row) continue;
         if ($tmp_dir_app . "/uploads" === $files_in_tmp_dir_public_row) continue;
         // delete/reset dir/files.
-        static::rm_r($public_dir . substr($files_in_tmp_dir_public_row, strlen($tmp_dir_public)+1));
+        static::rm_r($public_dir . substr($files_in_tmp_dir_public_row, strlen($tmp_dir_public) + 1));
         static::copy_r($files_in_tmp_dir_public_row, WWW_DIR); // todo error handling
       }
 
       // index.phpのみ、環境によって動的なので更新する
-      $index_php = file_get_contents(WWW_DIR."/index.php");
+      $index_php = file_get_contents(WWW_DIR . "/index.php");
       $index_php = preg_replace('/\n\$app_dir_path.+;/u', "\n\$app_dir_path = '" . APP_DIR . "';", $index_php);
-      file_put_contents(WWW_DIR."/index.php", $index_php);
+      file_put_contents(WWW_DIR . "/index.php", $index_php);
 
     } finally {
       static::rmdir_r($tmp_path);

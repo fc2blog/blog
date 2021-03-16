@@ -1,8 +1,10 @@
 .PHONY:
 build:
 	make clean
-	echo `git branch --contains |cut -d " " -f 2`
-	git clone --depth=1 --branch=`git branch --contains |cut -d " " -f 2` https://github.com/uzulla/fc2blog.git fc2blog
+	# git clone from GITHUB_REPO_URL env
+	if [ ! -z "${GITHUB_REPO_URL}" ]; then git clone --depth=1 --branch=`git branch --contains |cut -d " " -f 2` ${GITHUB_REPO_URL} fc2blog ;fi
+	# or not
+	if [ -z "${GITHUB_REPO_URL}" ]; then git clone --depth=1 --branch=`git branch --contains |cut -d " " -f 2` https://github.com/fc2blog/blog.git fc2blog ;fi
 	rm -rf fc2blog/.git
 	cd fc2blog && php ../../composer.phar install --no-dev --optimize-autoloader -q
 	# get tag from current commit id.
@@ -30,6 +32,7 @@ build-no-pushed-branch:
 	mkdir fc2blog
 	cp -a ../app ../public ../composer.json ../composer.lock fc2blog
 	-rm fc2blog/app/temp/installed.lock
+	-rm fc2blog/app/temp/github_release_cache.json
 	cd fc2blog && php ../../composer.phar install --no-dev --optimize-autoloader
 	rm fc2blog/composer.*
 	echo "dev:"`git branch --contains |cut -d " " -f 2 | grep -e '.'`":"`git rev-parse --short HEAD` > fc2blog/app/version
