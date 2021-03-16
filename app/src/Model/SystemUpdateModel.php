@@ -246,6 +246,7 @@ class SystemUpdateModel
       foreach ($files_in_tmp_dir_public as $files_in_tmp_dir_public_row) {
         // `user_uploads` will skip delete/copy.
         if ($tmp_dir_app . "/user_uploads" === $files_in_tmp_dir_public_row) continue;
+        if ($tmp_dir_app . "/uploads" === $files_in_tmp_dir_public_row) continue;
         // delete/reset dir/files.
         static::rm_r($public_dir . substr($files_in_tmp_dir_public_row, strlen($tmp_dir_public)+1));
         static::copy_r($files_in_tmp_dir_public_row, WWW_DIR); // todo error handling
