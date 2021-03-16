@@ -2518,3 +2518,6 @@ msgstr ""
 
 msgid "Release information query failed. Please try again later."
 msgstr ""
+
+msgid "Please backup your site before update."
+msgstr ""

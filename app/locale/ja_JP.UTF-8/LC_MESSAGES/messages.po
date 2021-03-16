@@ -2565,3 +2565,6 @@ msgstr "操作"
 
 msgid "Release information query failed. Please try again later."
 msgstr "情報取得に失敗しました、時間をおいてから再度お試しください。"
+
+msgid "Please backup your site before update."
+msgstr "更新前にはかならずサイトのバックアップを作成してください。"
