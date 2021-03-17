@@ -8,7 +8,7 @@
   "scripts": {
     "test": "npm run serial-test && npm run parallel-test",
     "php-prepare": "php ../tests/cli_load_fixture.php",
-    "parallel-test": "npm run php-prepare && npm run clear-cache && npx jest tests/*",
+    "parallel-test": "npm run php-prepare && npm run clear-cache && curl -D - -s -o /dev/null http://localhost && npx jest tests/*",
     "serial-test": "npm run php-prepare && npm run clear-cache && npx jest --runInBand serial_execute_tests/*",
     "fmt": "npx prettier --check --write \"./tests/*.ts\"",
     "clear-cache": "npx jest --clearCache",
