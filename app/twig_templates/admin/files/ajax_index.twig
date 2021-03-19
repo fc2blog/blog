@@ -42,8 +42,14 @@
                 </td>
                 <td>{{ file.created_at|date('y/m/d') }}</td>
                 <td><a href="{{ file.path }}" target="_blank">{{ t(file.name,30) }}</a></td>
-                <td class="center s_cell"><a href="{{ url(req, 'Files', 'edit', {id: file.id}) }}">{{ _('Edit') }}</a></td>
-                <td class="center s_cell"><a href="{{ url(req, 'Files', 'delete', {id: file.id, sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a></td>
+                <td class="center m_cell"><a href="{{ url(req, 'Files', 'edit', {id: file.id}) }}">{{ _('Edit') }}</a></td>
+                <td class="center m_cell">
+                    <form action="{{ url(req, 'Files', 'delete') }}" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
+                        <input type="hidden" name ="id" value="{{ file.id }}">
+                        <input type="hidden" name ="sig" value="{{ sig }}">
+                        <button type="submit">{{ _('Delete') }}</button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
     {% endif %}

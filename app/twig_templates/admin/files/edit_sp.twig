@@ -45,7 +45,14 @@
     <div class="btn_area">
         <ul class="btn_area_inner">
             <li><a class="btn_contents touch" href="{% if req.isArgs('back_url') %}{{ req.get('back_url') }}{% endif %}{% if not req.isArgs('back_url') %}{{ url(req, 'Files', 'upload') }}{% endif %}"><i class="return_icon btn_icon"></i>{{ _('I Back to List') }}</a></li>
-            <li><a class="btn_contents touch" href="{{ url(req, 'Files', 'delete', {id: file.id, back_url: req.get('back_url'), sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</a></li>
+            <li>
+                <form action="{{ url(req, 'Files', 'delete') }}" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
+                    <input type="hidden" name="id" value="{{ file.id }}">
+                    <input type="hidden" name="back_url" value="{{ req.get('back_url') }}">
+                    <input type="hidden" name="sig" value="{{ sig }}">
+                    <button type="submit" class="btn_contents touch" ><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</button>
+                </form>
+            </li>
         </ul>
     </div>
 {% endblock %}
