@@ -44,7 +44,8 @@ class BlogsController extends UserController
     $entries = $entries_model->find('all', [
       'where' => 'blog_id=?',
       'params' => [$blog['id']],
-      'limit' => 5
+      'limit' => 10,
+      'order' => 'updated_at DESC',
     ]);
 
     // 非公開ブログはRSS拒否
