@@ -23,8 +23,9 @@
             <div class="up_file_btn">
                 {{ input(req, 'file[name]', 'text', {'id': 'sys-file-name'}) }}
                 {{ input(req, 'file[file]', 'file', {'style': 'opacity: 0; position: absolute; width: 120px;', 'onchange': "$('#sys-file-name').val($(this).val().split('\\\\').pop());"}) }}
-                <button type="button" class="lineform_btn touch" onclick="$(this).prev().click();" style="width: 120px;"/>
-                {{ _('File selection') }}</button>
+                <button type="button" class="lineform_btn touch" onclick="$(this).prev().click();" style="width: 120px;">
+                    {{ _('File selection') }}
+                </button>
             </div>
             {% if errors.file.ext %}
                 <p class="error">{{ errors.file.ext }}</p>
