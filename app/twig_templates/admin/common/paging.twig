@@ -17,14 +17,18 @@
         <li>...</li>
     {% endif %}
 
-    {% for i in range(paging.start, paging.end-1) %}
-        {% if paging.page == i %}
-            <li class="active">{{ i+1 }}</li>
-        {% endif %}
-        {% if paging.page != i %}
-            <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':i}, true) }}">{{ i+1 }}</a></li>
-        {% endif %}
-    {% endfor %}
+    {% if paging.end == 0 %}
+        <li class="active">1</li>
+    {% else %}
+        {% for i in range(paging.start, paging.end-1) %}
+            {% if paging.page == i %}
+                <li class="active">{{ i+1 }}</li>
+            {% endif %}
+            {% if paging.page != i %}
+                <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':i}, true) }}">{{ i+1 }}</a></li>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 
     {% if paging.end < (paging.max_page-1) %}
         <li>...</li>
