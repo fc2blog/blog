@@ -110,13 +110,14 @@ describe("admin create entry", () => {
   });
 
   it("delete test", async () => {
+    await c.getSS("delete_test");
     c.page.on('dialog', async dialog => {
       await dialog.accept();
     });
 
     let [response] = await Promise.all([
       c.waitLoad(),
-      c.page.click("#sys-list-form > table > tbody > tr:nth-child(1) > td:nth-child(8) > a")
+      c.page.click("#sys-list-form > table > tbody > tr:nth-child(1) > td:nth-child(7) > a")
     ]);
 
     expect(response.status()).toEqual(200);
