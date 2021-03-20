@@ -39,7 +39,7 @@ class GenerateSampleCategory
       $errors = $categories_model->validate($insert_data, $data);
 
       if (count($errors) > 0) {
-        if ("Same name exists in the same hierarchy"/*"同一階層に同じ名前が存在しています"*/ === ($errors['name'] ?? false)) {
+        if (/*"Same name exists in the same hierarchy"*/"同一階層に同じ名前が存在しています" === ($errors['name'] ?? false)) {
           continue;
         }
 

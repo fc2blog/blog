@@ -7,6 +7,7 @@ use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\CommentsModel;
 use InvalidArgumentException;
+use Ramsey\Uuid\Uuid;
 use RuntimeException;
 
 class GenerateSampleComment
@@ -14,7 +15,14 @@ class GenerateSampleComment
   use FakerTrait;
   use RandomUtilTrait;
 
-  public function generateSampleComment(string $blog_id, int $entry_id, int $num = 10, bool $sortable_name = false): array
+  /**
+   * @param string $blog_id
+   * @param int $entry_id
+   * @param int $num
+   * @param bool $use_uuid_name fakerで名前を生成すると衝突する可能性があるので、衝突しづらいランダムを生成するか？
+   * @return array
+   */
+  public function generateSampleComment(string $blog_id, int $entry_id, int $num = 10, bool $use_uuid_name = false): array
   {
     $faker = static::getFaker();
     $comment_list = [];
@@ -25,7 +33,11 @@ class GenerateSampleComment
     ];
 
     while ($num-- > 0) {
-      $_name = $sortable_name ? $faker->name : "TT" . (string)microtime(true);
+      if ($use_uuid_name) {
+        $_name = (Uuid::uuid4())->toString();
+      } else {
+        $_name = $faker->name;;
+      }
       $request_comment = [
         'entry_id' => $entry_id,
         'name' => $_name,

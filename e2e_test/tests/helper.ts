@@ -92,6 +92,27 @@ export class Helper {
     return response;
   }
 
+  async openUrlWithNoCheck(url: string): Promise<Response> {
+    const [response] = await Promise.all([
+      this.waitLoad(),
+      this.page.goto(url),
+    ]);
+
+    if (response == null) {
+      throw new Error(`openUrl failed: response:null, url: ${url}`);
+    }
+
+    if (response.status() !== 200) {
+      // noop for stability tweak
+    }
+
+    if (response.url() !== url) {
+      // noop for stability tweak
+    }
+
+    return response;
+  }
+
   async clickBySelector(selector: string): Promise<Response> {
     const [response] = await Promise.all([
       this.waitLoad(),

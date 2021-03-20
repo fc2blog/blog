@@ -211,8 +211,6 @@ class IndexTest extends TestCase
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1"]);
     $this->assertEquals(20, $c->get('paging')['count']);
 
-//    var_dump($c->get('comments'));
-
     $first_comment = $c->get('comments')[0];
     $last_comment = $c->get('comments')[19];
 
@@ -222,20 +220,15 @@ class IndexTest extends TestCase
     $this->assertEquals($c->get('comments')[0]['id'], $last_comment['id']);
     $this->assertEquals($c->get('comments')[19]['id'], $first_comment['id']);
 
-    // name_asc とりあえず、違うなら変わっているだろう…。
+    // name_asc とりあえず、先頭と終端が違うなら変わっているだろう…。
     $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1", 'order' => "name_asc"]);
     $this->assertEquals(20, $c->get('paging')['count']);
-// 確率によって成功してしまう可能性がある…
-//    if($c->get('comments')[0]['id'] == $last_comment['id']){ // test.
-//      var_dump($c->get('comments')[0]);
-//      var_dump($last_comment);
-//    }
-//    $this->assertNotEquals($c->get('comments')[0]['id'], $last_comment['id']); // todo
-//    if($c->get('comments')[19]['id'] == $last_comment['id']){ // test.
-//      var_dump($c->get('comments')[0]);
-//      var_dump($first_comment);
-//    }
-    $this->assertNotEquals($c->get('comments')[19]['id'], $first_comment['id']);
+    $this->assertNotEquals($c->get('comments')[0]['id'], $last_comment['id']);
+
+    if($c->get('comments')[19]['id'] == $first_comment['id']){ // 確立で失敗する調査用
+      var_dump([$c->get('comments')[19]['name'], $first_comment['name']]);
+    }
+    $this->assertNotEquals($c->get('comments')[19]['id'], $first_comment['id']); // 確立で失敗することがある
 
     // TODO other patterns created_at_desc,name_asc,body_asc
   }
@@ -257,9 +250,14 @@ class IndexTest extends TestCase
     $this->assertEquals(5, $c->get('paging')['count']);
     $first_comment_body = $c->get('comments')[0]['body'];
 
-    // 確率でコケる
-    $c = $this->reqGet("/admin/comments/index", ["reply_status" => "1", 'keyword' => mb_substr($first_comment_body, 10, 10)]);
+    $c = $this->reqGet(
+      "/admin/comments/index",
+      ["reply_status" => "1", 'keyword' => mb_substr($first_comment_body, 10, 10)]
+    );
     $this->assertGreaterThanOrEqual(1, $c->get('paging')['count']);
-    $this->assertLessThan(4, $c->get('paging')['count']);
+    if($c->get('paging')['count'] == 5 || $c->get('paging')['count'] == 4){ // 確立で失敗する調査用
+      var_dump($c->getData());
+    }
+    $this->assertLessThan(4, $c->get('paging')['count']); // 確立で失敗することがある
   }
 }
