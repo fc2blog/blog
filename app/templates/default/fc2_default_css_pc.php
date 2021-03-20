@@ -746,6 +746,10 @@ dd.baton_a {
 }
 .p_area .entry_body table th { background-color: #EFEFEF; }
 
+.entry img {
+  max-width: 100%;
+}
+
 /* =================================================
   Sidemenu
 ================================================= */
