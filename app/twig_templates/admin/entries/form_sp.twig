@@ -80,7 +80,7 @@
     <div class="form_contents common_input_text">
         <!--{{ _('Title') }}-->
         {{ input(req, 'entry[title]', 'text', {'placeholder' : _('Article Title')}) }}
-        {% if error.entry.title %}<p class="error">{{ error.entry.title }}</p>{% endif %}
+        {% if errors.entry.title %}<p class="error">{{ errors.entry.title }}</p>{% endif %}
     </div>
 </div>
 
@@ -94,12 +94,12 @@
 </ul>
 <div class="content_wrap" style="display: block;">
     <div class="edit_area_box">{{ input(req, 'entry[body]', 'textarea', {'id' : 'sys-entry-body','placeholder' : _('Body')}) }}</div>
-    {% if error.entry.body %}<p class="error">{{ error.entry.body }}</p>{% endif %}
+    {% if errors.entry.body %}<p class="error">{{ errors.entry.body }}</p>{% endif %}
 </div>
 
 <div class="content_wrap nondisplay" style="display: none; ">
     <div class="edit_area_box">{{ input(req, 'entry[extend]', 'textarea', {'id' : 'sys-entry-extend','placeholder' : _('Edit a postscript')}) }}</div>
-    {% if error.entry.extend %}<p class="error">{{ error.entry.extend }}</p>{% endif %}
+    {% if errors.entry.extend %}<p class="error">{{ errors.entry.extend }}</p>{% endif %}
 </div>
 
 <section>
@@ -110,7 +110,7 @@
             <div class="form_contents">
                 <div class="radio_vertical_box">
                     {{ input(req, 'entry[open_status]', 'radio', {'options' : open_status_list, 'default' : open_status_open, 'class' : 'radio_vertical_input'}) }}
-                    {% if error.entry.open_status %}<p class="error">{{ error.entry.open_status }}</p>{% endif %}
+                    {% if errors.entry.open_status %}<p class="error">{{ errors.entry.open_status }}</p>{% endif %}
                 </div>
                 <div class="sys-entry-password">
                     <h4>{{ _('Set Password') }}</h4>
@@ -119,7 +119,7 @@
                         {{ _('They are authenticated with a password of the entire If empty') }}<br/>
                         <a href="{{ url(req, 'BlogSettings', 'entry_edit') }}" target="_blank">{{ _('Passwords in the whole place') }}</a><br/>
                     </p>
-                    {% if error.entry.password %}<p class="error">{{ error.entry.password }}</p>{% endif %}
+                    {% if errors.entry.password %}<p class="error">{{ errors.entry.password }}</p>{% endif %}
                 </div>
             </div><!--/form_contents-->
         </div><!--/form_area-->
@@ -156,7 +156,7 @@
                     </table>
                 </div>
                 {{ input(req, 'entry[posted_at]', 'hidden') }}
-                {% if error.entry.posted_at %}<p class="error">{{ error.entry.posted_at }}</p>{% endif %}
+                {% if errors.entry.posted_at %}<p class="error">{{ errors.entry.posted_at }}</p>{% endif %}
             </div><!--/form_contents-->
         </div><!--/form_area-->
         <div class="form_area">
@@ -165,7 +165,7 @@
                 <div class="radio_horizontal_box">
                     {{ input(req, 'entry[comment_accepted]', 'radio', {'options': comment_accepted_list, 'default': comment_accepted_accepted, 'class' : 'common_input_radio'}) }}
                 </div>
-                {% if error.entry.comment_accepted %}<p class="error">{{ error.entry.comment_accepted }}</p>{% endif %}
+                {% if errors.entry.comment_accepted %}<p class="error">{{ errors.entry.comment_accepted }}</p>{% endif %}
             </div><!--/form_contents-->
         </div><!--/formarea-->
         <div class="form_area">
@@ -174,7 +174,7 @@
                 <div class="radio_horizontal_box">
                     {{ input(req, 'entry[auto_linefeed]', 'radio', {'options' : auto_line_feed_list, 'default' : auto_line_feed_use}) }}
                 </div>
-                {% if error.entry.auto_linefeed %}<p class="error">{{ error.entry.auto_linefeed }}</p>{% endif %}
+                {% if errors.entry.auto_linefeed %}<p class="error">{{ errors.entry.auto_linefeed }}</p>{% endif %}
             </div><!--/form_contents-->
         </div><!--/formarea-->
     </div><!--/accordion_inner-->
