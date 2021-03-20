@@ -653,11 +653,17 @@ class BlogsModel extends Model
     $schema = static::getSchemaByBlogId($blog_id);
     $domain = Config::get("DOMAIN");
     $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
-    return $schema . "//" . $domain . $port . "/" . $blog_id . "/blog-entry-" . (int)$entry_id . ".html";
+    // default blog ならば blog_idは省略する
+    if ($blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+      $blog_id_path = '/' . $blog_id ;
+    }else{
+      $blog_id_path = "";
+    }
+    return $schema . "//" . $domain . $port . $blog_id_path . "/blog-entry-" . (int)$entry_id . ".html";
   }
 
   /**
-   * Blog Idをキーとして、そのブログの`http(s)://FQDN(:port)/(blog_id)/`を生成する
+   * Blog Idをキーとして、そのブログの`http(s)?://FQDN(:port)/(blog_id)?/`を生成する
    * @param string $blog_id
    * @param ?string $domain 省略時、\Fc2blog\Config::get("DOMAIN")
    * @return string
@@ -668,8 +674,14 @@ class BlogsModel extends Model
     if (is_null($domain)) {
       $domain = Config::get("DOMAIN");
     }
+    // default blog ならば blog_idは省略する
+    if ($blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+      $blog_id_path = '/' . $blog_id ;
+    }else{
+      $blog_id_path = "";
+    }
     $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
-    return $schema . "//" . $domain . $port . "/" . $blog_id . "/";
+    return $schema . "//" . $domain . $port . $blog_id_path . "/";
   }
 
   /**
