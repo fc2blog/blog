@@ -2550,3 +2550,30 @@ msgstr "ホスト ポート番号"
 
 msgid "Name that cannot be specified"
 msgstr "指定できない名称です"
+
+msgid "System Update"
+msgstr "システム更新"
+
+msgid "Releases"
+msgstr "リリース一覧"
+
+msgid "Version"
+msgstr "バージョン"
+
+msgid "Operation"
+msgstr "操作"
+
+msgid "Release information query failed. Please try again later."
+msgstr "情報取得に失敗しました、時間をおいてから再度お試しください。"
+
+msgid "Please backup your site before update."
+msgstr "更新前にはかならずサイトのバックアップを作成してください。"
+
+msgid "Request failed: invalid sig, please retry."
+msgstr "失敗しました、再度試してください。"
+
+msgid "Request failed: notfound request version."
+msgstr "失敗しました、指定のバージョンがみつかりませんでした。"
+
+msgid "Update success."
+msgstr "更新成功しました。"

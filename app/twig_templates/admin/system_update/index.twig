@@ -1,0 +1,82 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('System Update') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('System Update') }}</h2></header>
+
+    <p>Now version {{ now_version }}</p>
+
+    <span style="color:red; font-weight: bold">{{ _('Please backup your site before update.') }}</span>
+
+    <h3>{{ _('Releases') }}</h3>
+
+    <p>Source repository : <a href="{{ repo_site_url }}">{{ repo_site_url }}</a></p>
+
+    <style>
+        #version-select-table thead td {
+            background-color: lightgrey;
+            font-weight: bold;
+        }
+
+        #version-select-table thead td.ver_col {
+            width: 100px;
+            text-align: center;
+        }
+
+        #version-select-table thead td.desc_col {
+            text-align: center;
+        }
+
+        #version-select-table thead td.op_col {
+            width: 100px;
+            text-align: center;
+        }
+
+        #version-select-table td.ver_col {
+            text-align: center;
+        }
+
+        #version-select-table td.op_col {
+            text-align: center;
+        }
+    </style>
+
+    {% if not release_list %}
+        {{ _('Release information query failed. Please try again later.') }}
+    {% else %}
+        <table id="version-select-table">
+            <thead>
+            <tr>
+                <td class="ver_col">{{ _('Version') }}</td>
+                <td class="desc_col">{{ _('Description') }}</td>
+                <td class="op_col">{{ _('Operation') }}</td>
+            </tr>
+            </thead>
+            {% for release in release_list %}
+                <tr>
+                    <td class="ver_col">
+                        {% if release.tag_name ==  now_version %}✔{% endif %}
+                        <a href="{{ release.html_url }}">{{ release.tag_name }}</a>
+                    </td>
+                    <td class="desc_col">
+                        <h4><a href="{{ release.html_url }}">{{ release.name }}</a></h4>
+                        <p>{{ release.body|nl2br }}</p>
+                    </td>
+                    <td class="op_col">
+                        <form action="{{ url(request, "SystemUpdate", "update", {sig:sig}) }}"
+                        onsubmit="return confirm('{{ _('CAUTION: System will be update. Did you make backup?') }}')">
+                            <input type="hidden" name="version" value="{{ release.tag_name }}">
+                            <input type="hidden" name="sig" value="{{ sig }}">
+                        {% if release.tag_name ==  now_version %}
+                            <button type="submit">reload</button>
+                        {% else %}
+                            <button type="submit">update</button>
+                        {% endif %}
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock %}

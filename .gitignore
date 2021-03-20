@@ -2,6 +2,8 @@
 /app/temp/debug_html/*
 /app/temp/log/*
 /app/temp/installed.lock
+/app/temp/github_release_cache.json
+/app/version
 /app/vendor/
 /public/uploads/[0-9a-zA-Z]
 /public/config.php
