@@ -33,30 +33,29 @@
         <table>
             <thead>
             <tr>
-                <th><input type="checkbox" onclick="common.fullCheck(this);"/></th>
-                <th><a href="javascript:void(0);" onclick="orderChange('posted_at_desc'); return false;">{{ _('Date') }}</a></th>
-                <th><a href="javascript:void(0);" onclick="orderChange('title_asc'); return false;">{{ _('Title') }}</a></th>
-                <th><a href="javascript:void(0);" onclick="orderChange('body_asc'); return false;">{{ _('Body') }}</a></th>
-                <th>{{ _('Edit') }}</th>
-                <th>{{ _('State') }}</th>
-                <th><a href="javascript:void(0);" onclick="orderChange('comment_desc'); return false;">{{ _('Comment') }}</a></th>
-                <th>{{ _('Delete') }}</th>
+                <th class="center ss_cell"><input type="checkbox" onclick="common.fullCheck(this);"/></th>
+                <th class="center m_cell"><a href="javascript:void(0);" onclick="orderChange('posted_at_desc'); return false;">{{ _('Date') }}</a></th>
+                <th><a href="javascript:void(0);" onclick="orderChange('title_asc'); return false;">{{ _('Title') }}</a> / {{ _('Body') }}</th>
+                <th class="center s_cell">{{ _('Edit') }}</th>
+                <th class="center s_cell">{{ _('State') }}</th>
+                <th class="center s_cell" style="white-space: nowrap"><a href="javascript:void(0);" onclick="orderChange('comment_desc'); return false;">{{ _('Comment') }}</a></th>
+                <th class="center s_cell">{{ _('Delete') }}</th>
             </tr>
             </thead>
             <tbody>
             {% for entry in entries %}
                 <tr>
                     <td class="center ss_cell"><input type="checkbox" name="id[]" value="{{ entry.id }}"/></td>
-                    <td>{{ entry.posted_at|date('Y-m-d') }}</td>
-                    <td class="m_cell">
-                        <a href="{{ entryUrl(req, entry.blog_id, entry.id) }}" target="_blank">
-                            {{ t(entry.title, 10) }}
-                        </a>
+                    <td class="center m_cell">{{ entry.posted_at|date('Y-m-d') }}</td>
+                    <td style="overflow-wrap: anywhere;">
+                        <b><a href="{{ entryUrl(req, entry.blog_id, entry.id) }}" target="_blank">
+                            {{ t(entry.title, 100) }}
+                        </a></b><br>
+                        {{ t(entry.body|striptags, 200) }}
                     </td>
-                    <td>{{ t(entry.body) }}</td>
                     <td class="center s_cell"><a href="{{ url(req, 'entries', 'edit', {'id':entry.id}) }}">{{ _('Edit') }}</a></td>
-                    <td>{{ open_status_list[entry.open_status] }}</td>
-                    <td>
+                    <td class="center s_cell">{{ open_status_list[entry.open_status] }}</td>
+                    <td class="center s_cell">
                         {% if entry.comment_count>0 %}
                             <a href="{{ url(req, 'Comments', 'index', {'entry_id': entry.id}) }}">{{ entry.comment_count }}</a>
                         {% endif %}
