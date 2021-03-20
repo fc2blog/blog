@@ -5,6 +5,7 @@ namespace Fc2blog\Tests\App\Controller\User\BlogsController;
 
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Tests\Helper\ClientTrait;
+use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleEntry;
 use PHPUnit\Framework\TestCase;
 use SimplePie;
 use SimplePie_Item;
@@ -51,5 +52,35 @@ class FeedTest extends TestCase
     $c = $this->reqGet('/testblog3/?xml');
     $this->assertStringNotContainsString('<?xml version=', $c->getOutput());
     $this->assertEquals(403, $c->getStatusCode());
+  }
+
+  public function testFeedItemDateOrderIsDesc(): void
+  {
+    $generator = new GenerateSampleEntry;
+    $generator->generateSampleEntry("testblog2", 1);
+    sleep(2);
+    $generator->generateSampleEntry("testblog2", 1);
+
+    $c = $this->reqGet('/testblog2/?xml');
+
+    // 実際にRSSとしてパースして確認
+    $feed = new SimplePie();
+    $feed->set_raw_data($c->getOutput());
+    $feed->init();
+
+    /** @var SimplePie_Item[] $items */
+    $items = $feed->get_items();
+
+    $this->assertGreaterThan(
+      (int)$items[count($items)-1]->get_date("YmdHis"),
+      (int)$items[0]->get_date("YmdHis"),
+      "RSS配列の先頭が一番新しい"
+    );
+
+    $this->assertGreaterThan(
+      (int)$items[1]->get_date("YmdHis"),
+      (int)$items[0]->get_date("YmdHis"),
+      "RSS配列の先頭が一番新しい"
+    );
   }
 }

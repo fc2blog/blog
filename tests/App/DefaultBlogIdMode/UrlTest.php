@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Tests\App\DefaultBlogIdMode;
 
 use Fc2blog\Config;
+use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -11,6 +12,12 @@ use PHPUnit\Framework\TestCase;
 class UrlTest extends TestCase
 {
   use ClientTrait;
+
+  public function setUp(): void
+  {
+    DBHelper::clearDbAndInsertFixture();
+    parent::setUp();
+  }
 
   public function testHeaderLinkUrlWithOutDefaultBlogId(): void
   {
