@@ -202,7 +202,6 @@ class EntriesController extends AdminController
       $this->redirect($request, array('action' => 'index'));
     }
 
-
     // 編集画面の表示
     if (!$request->get('entry') || !$request->isValidSig()) {
       $request->generateNewSig();
@@ -255,10 +254,32 @@ class EntriesController extends AdminController
       }
     }
 
+    // フォームレンダリング用のデータロード
+    $this->set('open_status_list', EntriesModel::getOpenStatusList());
+    $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
+    $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
+    $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
+    $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
+    $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
+    $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
+    $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+    $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
+    $this->set('categories', $categories_model->getList($blog_id));
+    // 以下はSPテンプレ用で追加
+    $now = strtotime($request->get('entry.posted_at'));
+    $now = $now === false ? time() : $now;
+    $date_list = explode('/', date('Y/m/d/H/i/s', $now));
+    $this->set('entry_date_list', $date_list);
+    $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
+    $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
+    $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
+    $this->set('domain_user', Config::get('DOMAIN_USER'));
+    $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogId($request)], false, true));
+
     // エラー情報の設定
     $this->setErrorMessage(__('Input error exists'));
     $this->set('errors', $errors);
-    return "admin/entries/exit.twig";
+    return "admin/entries/edit.twig";
   }
 
   /**
