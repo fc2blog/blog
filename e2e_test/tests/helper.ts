@@ -25,7 +25,6 @@ export class Helper {
     this.browser = await puppeteer.launch({
       args: ['--lang=ja', '--no-sandbox', '--disable-setuid-sandbox'],
       ignoreHTTPSErrors: true,
-      slowMo: 100, // sometime got `net::ERR_CONNECTION_REFUSED at http://localhost`. this is tweak...
       headless: !(process.env.NO_HEAD_LESS === "1") // 動作を確認するなら NO_HEAD_LESS=1 npm run test
     });
     this.page = await this.browser.newPage();
