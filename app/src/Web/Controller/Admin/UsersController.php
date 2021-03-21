@@ -173,13 +173,16 @@ class UsersController extends AdminController
       $user = $users_model->findByLoginIdAndPassword($data['login_id'], $data['password']);
       if ($user) {
         // ログイン処理
-        $blog = Model::load('Blogs')->getLoginBlog($user);
+        $blog = (new BlogsModel())->getLoginBlog($user);
         $this->loginProcess($user, $blog);
         $users_model->updateById(['logged_at' => date('Y-m-d H:i:s')], $user['id']);
         if (!$this->isSelectedBlog()) {
           $this->redirect($request, ['controller' => 'Blogs', 'action' => 'create']);
         }
         $this->redirect($request, $request->baseDirectory);   // トップページへリダイレクト
+      } else {
+        // Penalty for failed login
+        sleep(3);
       }
       $errors = ['login_id' => __('Login ID or password is incorrect')];
     }
