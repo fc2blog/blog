@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
+// For security reasons.
+// if you want set enable, please see FC2_ERROR_ON_DISPLAY in config.sample.php
 ini_set("display_errors", "0");
 ini_set("display_startup_errors", "0");
 ini_set('html_errors', "0");
-error_reporting(-1);
 
 // Check all errors when shutdown applications.
 register_shutdown_function(function () {
@@ -37,18 +38,25 @@ register_shutdown_function(function () {
     http_response_code(500);
   }
   echo <<<HTML
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <title>Internal Server Error</title>
-    </head>
-    <body>
-      <h1>500 Internal Server Error</h1>
-      <p>Something went wrong.</p>
-      <p>(Please check error log)</p>
-    </body>
-    </html>
-    HTML;
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <title>Internal Server Error</title>
+  </head>
+  <body>
+    <h1>500 Internal Server Error</h1>
+    <p>Something went wrong.</p>
+    <p>(Please check error log)</p>
+  HTML;
+  if(defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY==="1"){
+    echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><br>";
+    echo nl2br(htmlspecialchars($something.PHP_EOL, ENT_QUOTES));
+    echo nl2br(htmlspecialchars("Uncaught Fatal Error: {$error['type']}:{$error['message']} in {$error['file']}:{$error['line']}"));
+  }
+  echo <<<HTML
+  </body>
+  </html>
+  HTML;
 });
 
 try {
@@ -66,20 +74,20 @@ try {
   if (!file_exists(__DIR__ . '/../../config.php') && (string)getenv("FC2_CONFIG_FROM_ENV") !== "1") {
     header("Content-Type: text/html; charset=UTF-8");
     echo <<<HTML
-      <!DOCTYPE html>
-      <html lang="ja">
-      <head>
-      <title>Does not exists config.php</title>
-      </head>
-      <body>
-        Does not exists config.php / config.phpが存在しておりません
-        <p class="ng">
-          Please copy app/config.sample.php to app/config.php and edit them.<br>
-          app/config.sample.phpをapp/config.phpにコピーしファイル内に存在するDBの接続情報とサーバーの設定情報を入力してください。
-        </p>
-      </body>
-      </html>
-      HTML;
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+    <title>Does not exists config.php</title>
+    </head>
+    <body>
+      Does not exists config.php / config.phpが存在しておりません
+      <p class="ng">
+        Please copy app/config.sample.php to app/config.php and edit them.<br>
+        app/config.sample.phpをapp/config.phpにコピーしファイル内に存在するDBの接続情報とサーバーの設定情報を入力してください。
+      </p>
+    </body>
+    </html>
+    HTML;
     return;
   }
 
@@ -106,6 +114,9 @@ try {
   //  ob_start();
   // TODO remove all `echo` in app. ex: captcha
 
+  if(defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY==="1") {
+    echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><hr>";
+  }
   $c->emit();
   ob_end_flush();
   return;
@@ -129,17 +140,24 @@ try {
     http_response_code(500);
   }
   echo <<<HTML
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <title>Internal Server Error</title>
-    </head>
-    <body>
-      <h1>500 Internal Server Error</h1>
-      <p>Something went wrong.</p>
-      <p>(Please check error log)</p>
-    </body>
-    </html>
-    HTML;
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <title>Internal Server Error</title>
+  </head>
+  <body>
+    <h1>500 Internal Server Error</h1>
+    <p>Something went wrong.</p>
+    <p>(Please check error log)</p>
+  HTML;
+  if(defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY==="1"){
+    echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><br>";
+    echo nl2br(htmlspecialchars($something.PHP_EOL, ENT_QUOTES));
+    echo nl2br(htmlspecialchars("Uncaught Exception {$error_class_name}: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}\n{$e->getTraceAsString()}"));
+  }
+  echo <<<HTML
+  </body>
+  </html>
+  HTML;
   return;
 }

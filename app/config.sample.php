@@ -2,8 +2,7 @@
 // Sample Config file
 // Please copy `config.sample.php` to `config.php` and edit them.
 
-//error_reporting(-1);
-error_reporting(0);
+error_reporting(-1);
 
 // DBの接続情報
 define('DB_HOST', 'localhost'); // dbのホスト名
@@ -21,6 +20,10 @@ define('HTTPS_PORT', '443'); // HTTPS時ポート
 // publicとappの位置関係を修正した場合には変更してください
 // Please edit the path when change `app` and `public` relative path condition.
 define('WWW_DIR', __DIR__ . '/../public/'); // this path need finish with slash.
+
+// If you want get error log on display.
+// define('ERROR_ON_DISPLAY', "1");
+// ini_set('display_errors', '1');
 
 // 別のGitHub repoを追従する場合に設定してください
 // define('GITHUB_REPO', '/uzulla/fc2blog');
