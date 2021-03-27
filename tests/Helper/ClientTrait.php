@@ -5,8 +5,7 @@ namespace Fc2blog\Tests\Helper;
 
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\EntriesModel;
-use Fc2blog\Web\Controller\AppController;
-use Fc2blog\Web\Controller\Controller;
+  use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Controller\User\UserController;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -64,7 +63,7 @@ trait ClientTrait
     array $postParams = [],
     array $getParams = [],
     array $filesParams = []
-  ): AppController
+  ):  Controller
   {
     // TODO ＄_をテストからも可能ならば排除する
     $_SESSION = $this->clientTraitSession;
@@ -161,12 +160,12 @@ trait ClientTrait
     return $exception;
   }
 
-  public function reqGet(string $path = "/", array $params = []): AppController
+  public function reqGet(string $path = "/", array $params = []): Controller
   {
     return static::reqBase(false, "GET", $path, [], $params);
   }
 
-  public function reqHttpsGet(string $path = "/", array $params = []): AppController
+  public function reqHttpsGet(string $path = "/", array $params = []): Controller
   {
     return static::reqBase(true, "GET", $path, [], $params);
   }
@@ -181,12 +180,12 @@ trait ClientTrait
     return static::reqBaseBeRedirect(true, "GET", $path, [], $params);
   }
 
-  public function reqPost(string $path = "/", array $params = []): AppController
+  public function reqPost(string $path = "/", array $params = []): Controller
   {
     return static::reqBase(false, "POST", $path, $params);
   }
 
-  public function reqHttpsPost(string $path = "/", array $params = []): AppController
+  public function reqHttpsPost(string $path = "/", array $params = []): Controller
   {
     return static::reqBase(true, "POST", $path, $params);
   }
