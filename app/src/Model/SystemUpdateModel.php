@@ -209,7 +209,7 @@ class SystemUpdateModel
     try {
       static::updateSystemByLocalZip($zip_path);
     } finally {
-      @unlink($zip_url);
+      @unlink($zip_path);
     }
   }
 
