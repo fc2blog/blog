@@ -3,11 +3,11 @@
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\Config;
-use Fc2blog\Web\Controller\AppController;
+use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
-abstract class AdminController extends AppController
+abstract class AdminController extends Controller
 {
   protected function beforeFilter(Request $request)
   {

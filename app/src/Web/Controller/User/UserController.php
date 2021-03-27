@@ -3,11 +3,11 @@
 namespace Fc2blog\Web\Controller\User;
 
 use Fc2blog\Model\BlogsModel;
-use Fc2blog\Web\Controller\AppController;
+use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
-abstract class UserController extends AppController
+abstract class UserController extends Controller
 {
 
   /**
