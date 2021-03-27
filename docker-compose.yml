@@ -29,7 +29,7 @@ services:
       FC2_ERROR_LOG_PATH: "php://stderr"
       FC2_APP_LOG_PATH: "php://stderr"
       FC2_LOG_LEVEL: 100
-      FC2_ERROR_ON_DISPLAY: 1
+      FC2_ERROR_ON_DISPLAY: 0
       FC2_DB_HOST: "db"
       FC2_DB_PORT: "3306"
       FC2_DB_USER: "docker"
