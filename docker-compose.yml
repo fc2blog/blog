@@ -42,6 +42,7 @@ services:
       FC2_DOCUMENT_ROOT_PATH: "/fc2blog/public/"
       DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
       # FC2_DEFAULT_BLOG_ID: "testblog2" # experimental single tenant mode.
+      # FC2_GITHUB_REPO: "/uzulla/fc2blog" # experimental update from unofficial repo
     depends_on:
       - db
     working_dir: "/fc2blog"

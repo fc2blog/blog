@@ -43,3 +43,7 @@ define('HTTPS_PORT', (string)getenv("FC2_HTTPS_PORT")); // ex: 443, 8480
 define('WWW_DIR', (string)getenv("FC2_DOCUMENT_ROOT_PATH"));
 
 define("DEFAULT_BLOG_ID", (string)getenv("FC2_DEFAULT_BLOG_ID"));
+
+if(strlen((string)getenv("FC2_GITHUB_REPO")) > 0) {
+  define("GITHUB_REPO", (string)getenv("FC2_GITHUB_REPO"));
+}
