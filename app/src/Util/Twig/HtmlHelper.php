@@ -25,7 +25,7 @@ class HtmlHelper extends AbstractExtension
       ),
       new TwigFunction(
         'url',
-        function (Request $request, string $controller, string $action, array $args = [], $reused = false, $full_url = false) {
+        function (Request $request, string $controller, string $action, array $args = [], $reused = false, $full_url = false, $use_base_dir = true) {
           $args = array_merge(
             [
               'controller' => $controller,
@@ -33,7 +33,7 @@ class HtmlHelper extends AbstractExtension
             ],
             $args
           );
-          return Html::url($request, $args, $reused, $full_url);
+          return Html::url($request, $args, $reused, $full_url, $use_base_dir);
         },
         ['is_safe' => ['html']]
       ),
