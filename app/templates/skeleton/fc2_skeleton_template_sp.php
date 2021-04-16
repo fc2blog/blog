@@ -313,7 +313,7 @@
 <ul>
     <li><a href="<%url>">ホーム</a></li>
     <li><a href="#header">ページトップ</a></li>
-    <li><a href="<%server_url><%blog_id>/admin.php">ログイン</a></li>
+    <li><a href="<%server_url>admin/">ログイン</a></li>
 </ul>
 
 </body>
