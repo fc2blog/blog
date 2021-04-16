@@ -83,8 +83,6 @@ class EntriesController extends AdminController
         break;
     }
 
-    $request->generateNewSig();
-
     // オプション設定
     $options = [
       'fields' => 'entries.*',
@@ -154,7 +152,6 @@ class EntriesController extends AdminController
 
     // 初期表示時
     if (!$request->get('entry') || !$request->isValidSig()) {
-      $request->generateNewSig();
       return "admin/entries/create.twig";
     }
 
@@ -204,8 +201,6 @@ class EntriesController extends AdminController
 
     // 編集画面の表示
     if (!$request->get('entry') || !$request->isValidSig()) {
-      $request->generateNewSig();
-
       // data load
       $request->set('entry', $entry);
       $request->set('entry_categories', array('category_id' => $entry_categories_model->getCategoryIds($blog_id, $id)));

@@ -45,6 +45,7 @@ trait ClientTrait
         'user_type' => 1,
         'blog_id' => 'testblog2',
         'nickname' => 'testnick2',
+        'sig' => 'test-sig'
       ],
       $this->clientTraitSession
     );
@@ -207,10 +208,9 @@ trait ClientTrait
 
   public function getSig(): string
   {
-    // sig(CSRF Token)を裏側で更新してそれを返す。
-    // TODO コントローラでsigが作られていたりいなかったりするのをどうにかしたい。
-    $this->reqGet("/admin/entries/index");
-    return $this->clientTraitSession['sig'];
+    // sig(CSRF Token)を返す。
+    $sig = $this->clientTraitSession['sig'];
+    return $sig;
   }
 
   public function getFlashMessages(): array

@@ -14,7 +14,6 @@ class SystemUpdateController extends AdminController
   {
     // TODO unit test
 
-    $request->generateNewSig();
     $release_list = SystemUpdateModel::getReleaseInfo();
     $this->set('release_list', $release_list);
     $this->set('repo_site_url', SystemUpdateModel::getReleasesUrl());

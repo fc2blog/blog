@@ -84,7 +84,6 @@ class FilesController extends AdminController
   {
     $files_model = new FilesModel();
     $blog_id = $this->getBlogId($request);
-    $request->generateNewSig();
 
     $this->set('file_max_size', Config::get('FILE.MAX_SIZE'));
     $this->set('page_limit_file', App::getPageLimit($request, 'FILE'));
@@ -203,7 +202,6 @@ class FilesController extends AdminController
       if (!empty($back_url)) {
         $request->set('back_url', $back_url);    // 戻る用のURL
       }
-      $request->generateNewSig();
       return 'admin/files/edit.twig';
     }
 

@@ -97,7 +97,6 @@ class UsersController extends AdminController
 
     // 初期表示時に編集データの取得&設定
     if (!$request->get('user') || !$request->isValidSig()) {
-      $request->generateNewSig();
       $user = $users_model->findById($user_id);
       unset($user['password']);
       $request->set('user', $user);
@@ -135,7 +134,6 @@ class UsersController extends AdminController
 
     // 退会チェック
     if (!$request->get('user.delete') || !$request->isValidSig()) {
-      $request->generateNewSig();
       return 'admin/users/withdrawal.twig';
     }
 
