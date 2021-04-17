@@ -19,9 +19,10 @@ class Html
    * @param array $args
    * @param bool $reused
    * @param bool $full_url
+   * @param bool $use_base_dir
    * @return string
    */
-  public static function url(Request $request, $args = array(), $reused = false, $full_url = false)
+  public static function url(Request $request, $args = array(), $reused = false, $full_url = false, $use_base_dir = true)
   {
     // 現在のURLの引数を引き継ぐ
     if ($reused == true) {
@@ -84,7 +85,11 @@ class Html
       $params[] = $device_name;
     }
 
-    $url = $request->baseDirectory . Config::get('DIRECTORY_INDEX');
+    if($use_base_dir) {
+      $url = $request->baseDirectory . Config::get('DIRECTORY_INDEX');
+    }else{
+      $url = "/" . Config::get('DIRECTORY_INDEX');
+    }
     if (count($params)) {
       $url .= '?' . implode('&', $params);
     }
