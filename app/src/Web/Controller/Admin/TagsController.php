@@ -20,7 +20,6 @@ class TagsController extends AdminController
   {
     $tags_model = new TagsModel();
     $blog_id = $this->getBlogId($request);
-    $request->generateNewSig();
 
     $this->set('tag_limit_list', Config::get('TAG.LIMIT_LIST'));
     $this->set('tag_default_limit', Config::get('TAG.DEFAULT_LIMIT'));

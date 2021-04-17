@@ -19,8 +19,6 @@ class BlogPluginsController extends AdminController
    */
   public function index(Request $request): string
   {
-    $request->generateNewSig();
-
     $blog_id = $this->getBlogId($request);
     $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
     $this->set('device_type', $device_type);
@@ -190,7 +188,6 @@ class BlogPluginsController extends AdminController
     // 初期表示時に編集データの設定
     if (!$request->get('blog_plugin') || !$request->isValidSig()) {
       $request->set('blog_plugin', $blog_plugin);
-      $request->generateNewSig();
       return "admin/blog_plugins/edit.twig";
     }
 
@@ -268,7 +265,6 @@ class BlogPluginsController extends AdminController
         // 未登録
         $request->set('plugin.title', $blog_plugin['title']);
       }
-      $request->generateNewSig();
       return 'admin/blog_plugins/register.twig';
     }
 

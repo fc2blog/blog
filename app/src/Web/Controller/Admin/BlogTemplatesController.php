@@ -21,7 +21,6 @@ class BlogTemplatesController extends AdminController
    */
   public function index(Request $request): string
   {
-    $request->generateNewSig();
     $blog_id = $this->getBlogId($request);
     if (App::isPC($request)) {
       $device_type = $request->get('device_type', 0);
@@ -133,7 +132,7 @@ class BlogTemplatesController extends AdminController
       } else {
         $request->set('blog_template.device_type', $request->get('device_type'));
       }
-      $request->generateNewSig();
+
       return "admin/blog_templates/create.twig";
     }
 
@@ -173,7 +172,6 @@ class BlogTemplatesController extends AdminController
         $this->redirect($request, ['action' => 'index']);
       }
       $request->set('blog_template', $blog_template);
-      $request->generateNewSig();
       return "admin/blog_templates/edit.twig";
     }
 

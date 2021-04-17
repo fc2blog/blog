@@ -42,7 +42,6 @@ class CategoriesController extends AdminController
 
     // 初期表示時
     if (!$request->get('category') || !$request->isValidSig()) {
-      $request->generateNewSig();
       return "admin/categories/create.twig";
     }
 

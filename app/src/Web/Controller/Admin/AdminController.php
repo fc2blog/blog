@@ -2,6 +2,7 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Request;
@@ -76,6 +77,8 @@ abstract class AdminController extends Controller
       Session::set('blog_id', $blog['id']);
       Session::set('nickname', $blog['nickname']);
     }
+
+    Session::set('sig', App::genRandomString());
   }
 
   /**

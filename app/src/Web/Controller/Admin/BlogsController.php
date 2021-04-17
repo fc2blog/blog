@@ -19,8 +19,6 @@ class BlogsController extends AdminController
    */
   public function index(Request $request): string
   {
-    $request->generateNewSig();
-
     // ブログの一覧取得
     $options = [
       'where' => 'user_id=?',
@@ -52,7 +50,6 @@ class BlogsController extends AdminController
   {
     // 初期表示時
     if (!$request->get('blog') || !$request->isValidSig()) {
-      $request->generateNewSig();
       return 'admin/blogs/create.twig';
     }
 
@@ -94,7 +91,6 @@ class BlogsController extends AdminController
 
     // 初期表示時に編集データの設定
     if (!$request->get('blog') || !$request->isValidSig()) {
-      $request->generateNewSig();
       if (!$blog = $blogs_model->findById($blog_id)) {
         $this->redirect($request, ['action' => 'index']);
       }
@@ -157,7 +153,6 @@ class BlogsController extends AdminController
     $this->set('tab', 'blog_delete');
     // 退会チェック
     if (!$request->get('blog.delete') || !$request->isValidSig()) {
-      $request->generateNewSig();
       return 'admin/blogs/delete.twig';
     }
 
