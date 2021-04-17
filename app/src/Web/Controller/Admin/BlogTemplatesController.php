@@ -131,6 +131,8 @@ class BlogTemplatesController extends AdminController
         ]);
       } else {
         $request->set('blog_template.device_type', $request->get('device_type'));
+        $request->set('blog_template.html', BlogTemplatesModel::getBodyDefaultTemplateHtmlWithDevice($request->get('device_type')));
+        $request->set('blog_template.css', BlogTemplatesModel::getBodyDefaultTemplateCssWithDevice($request->get('device_type')));
       }
 
       return "admin/blog_templates/create.twig";

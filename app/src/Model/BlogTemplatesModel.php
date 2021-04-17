@@ -367,4 +367,14 @@ class BlogTemplatesModel extends Model
   {
     return Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
   }
+
+  static public function getBodyDefaultTemplateHtmlWithDevice(string $device): string
+  {
+    return file_get_contents(static::getPathDefaultTemplateWithDevice($device));
+  }
+
+  static public function getBodyDefaultTemplateCssWithDevice(string $device): string
+  {
+    return file_get_contents(static::getPathDefaultCssWithDevice($device));
+  }
 }
