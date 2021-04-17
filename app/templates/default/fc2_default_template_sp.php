@@ -299,7 +299,7 @@
 
   <div id="footer">
     <div class="footer_menu">
-      <a href="<%server_url><%blog_id>/admin.php"><%template_login></a>
+      <a href="<%server_url>admin/"><%template_login></a>
       <a href="mailto:@?subject=FC2%E3%83%96%E3%83%AD%E3%82%B0&body=<%url>"><%template_tell_friend></a>
     </div>
     <p class="copyright">Copyright (c) <%blog_name></p>

@@ -434,4 +434,9 @@ class Request
       return null;
     }
   }
+  
+  public function isHttps(): bool
+  {
+    return isset($this->server["HTTPS"]) && $this->server["HTTPS"] === "on";
+  }
 }

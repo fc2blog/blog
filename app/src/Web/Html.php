@@ -246,8 +246,9 @@ class Html
 
   public static function getServerUrl(Request $request): string
   {
-    $url = (isset($request->server["HTTPS"]) && $request->server["HTTPS"] === "on") ? 'http://' : 'https://';
+    $url = $request->isHttps() ? 'https://' : 'http://';
     $url .= Config::get('DOMAIN');
+    $url .= $request->isHttps() ? Config::get('HTTPS_PORT_STR') : Config::get('HTTP_PORT_STR');
     return $url;
   }
 }
