@@ -111,7 +111,8 @@ abstract class Controller
   {
     return (
       !isset($request->server['HTTP_X_REQUESTED_WITH']) ||
-      $request->server['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest'
+      $request->server['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest' ||
+      isset($request->server['ORIGIN'])
     );
   }
 
