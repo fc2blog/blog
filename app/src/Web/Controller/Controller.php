@@ -112,7 +112,8 @@ abstract class Controller
     return (
       !isset($request->server['HTTP_X_REQUESTED_WITH']) ||
       $request->server['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest' ||
-      isset($request->server['ORIGIN'])
+      # クロスサイトアクセスは想定していない
+      isset($request->server['HTTP_ORIGIN'])
     );
   }
 
