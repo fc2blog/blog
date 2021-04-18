@@ -19,6 +19,10 @@ class FilesController extends AdminController
    */
   public function ajax_index(Request $request): string
   {
+    if ($this->isInvalidAjaxRequest($request)) {
+      return $this->error403();
+    }
+
     $files_model = new FilesModel();
 
     $blog_id = $this->getBlogId($request);
@@ -280,6 +284,10 @@ class FilesController extends AdminController
    */
   public function ajax_delete(Request $request): string
   {
+    if ($this->isInvalidAjaxRequest($request)) {
+      return $this->error403();
+    }
+
     // 削除処理
     $json = array('status' => 0);
     if (!Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {

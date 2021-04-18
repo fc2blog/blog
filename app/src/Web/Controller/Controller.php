@@ -28,7 +28,9 @@ use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
-  protected $data = [];    // テンプレートへ渡す変数の保存領域
+  protected $data = [
+    'http_status_code' => 200
+  ];    // テンプレートへ渡す変数の保存領域
   protected $layout = '';  // 表示ページのレイアウトテンプレート
   protected $output = '';  // 送信するデータ、HTML等
   private $resolvedMethod;
@@ -94,9 +96,7 @@ abstract class Controller
    */
   public function emit(): void
   {
-    if (isset($this->data['http_status_code']) && is_int($this->data['http_status_code'])) {
-      http_response_code($this->getStatusCode());
-    }
+    http_response_code($this->getStatusCode());
 
     if (!headers_sent()) {
       foreach($this->responseHeaders as $header_name => $header_value){
@@ -105,6 +105,14 @@ abstract class Controller
     }
 
     echo $this->output;
+  }
+
+  protected function isInvalidAjaxRequest(Request $request): bool
+  {
+    return (
+      !isset($request->server['HTTP_X_REQUESTED_WITH']) ||
+      $request->server['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest'
+    );
   }
 
   protected function beforeFilter(Request $request)

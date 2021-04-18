@@ -143,6 +143,10 @@ class CategoriesController extends AdminController
    */
   public function ajax_add(Request $request): string
   {
+    if ($this->isInvalidAjaxRequest($request)) {
+      return $this->error403();
+    }
+
     /** @var CategoriesModel $categories_model */
     $categories_model = Model::load('Categories');
 
