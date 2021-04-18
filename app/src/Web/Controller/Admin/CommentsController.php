@@ -177,21 +177,21 @@ class CommentsController extends AdminController
     if (!$comment = $comments_model->findByIdAndBlogId($id, $blog_id)) {
       $this->set('json', ['error' => __('Comments subject to approval does not exist')]);
       // error だが、JS側でsuccessプロパティ存在をみて判定しているので、 status codeは200を返す
-      $this->set('http_content_type', "application/json; charset=utf-8");
+      $this->setContentType("application/json; charset=utf-8");
       return "admin/common/json.twig";
     }
 
     // すでに許可済み
     if ($comment['open_status'] != Config::get('COMMENT.OPEN_STATUS.PENDING')) {
       $this->set('json', ['success' => 1]);
-      $this->set('http_content_type', "application/json; charset=utf-8");
+      $this->setContentType("application/json; charset=utf-8");
       return "admin/common/json.twig";
     }
 
     // 承認処理
     $comments_model->updateApproval($blog_id, $id);
     $this->set('json', ['success' => 1]);
-    $this->set('http_content_type', "application/json; charset=utf-8");
+    $this->setContentType("application/json; charset=utf-8");
     return "admin/common/json.twig";
   }
 
@@ -284,7 +284,7 @@ class CommentsController extends AdminController
       return "admin/comments/ajax_reply.twig";
     }
 
-    $this->set('http_content_type', "application/json; charset=utf-8");
+    $this->setContentType("application/json; charset=utf-8");
 
     // コメント投稿処理
     $errors = $comments_model->replyValidate($request->get('comment'), $data, ['reply_body']);

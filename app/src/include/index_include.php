@@ -102,6 +102,7 @@ try {
 
   // アプリケーション実行
   $request = new \Fc2blog\Web\Request();
+  /** @var \Fc2blog\Web\Controller\Controller $c */
   $c = new $request->className($request);
   $c->execute($request->methodName);
 

@@ -286,7 +286,7 @@ class FilesController extends AdminController
       $json = array('status' => 1);
     }
 
-    $this->set('http_content_type', "application/json; charset=utf-8");
+    $this->setContentType("application/json; charset=utf-8");
     $this->set('json', $json);
     return "admin/common/json.twig";
   }

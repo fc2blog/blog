@@ -151,7 +151,7 @@ class CategoriesController extends AdminController
     $json = array('status' => 0);
 
     if (!$request->isValidSig()) {
-      $this->set('http_content_type', "application/json; charset=utf-8");
+      $this->setContentType("application/json; charset=utf-8");
       $this->setStatusCode(404);
       $this->set('json', ['error' => 'invalid sig']);
       return "admin/common/json.twig";
@@ -174,7 +174,7 @@ class CategoriesController extends AdminController
 
     $json['error'] = $errors;
 
-    $this->set('http_content_type', "application/json; charset=utf-8");
+    $this->setContentType("application/json; charset=utf-8");
     $this->set('json', $json);
     return "admin/common/json.twig";
   }

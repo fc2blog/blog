@@ -33,6 +33,10 @@ abstract class Controller
   protected $output = '';  // 送信するデータ、HTML等
   private $resolvedMethod;
   protected $request;
+  protected $responseHeaders = [
+    'X-Frame-Options' => 'DENY',
+    'Content-Type' => 'text/html; charset=UTF-8',
+  ];
 
   public function __construct(Request $request)
   {
@@ -95,11 +99,8 @@ abstract class Controller
     }
 
     if (!headers_sent()) {
-      // Content typeの送信
-      if (isset($this->data['http_content_type']) && strlen($this->data['http_content_type']) > 0) {
-        header("Content-Type: {$this->getContentType()}");
-      } else {
-        header("Content-Type: text/html; charset=UTF-8");
+      foreach($this->responseHeaders as $header_name => $header_value){
+        header("{$header_name}: {$header_value}");
       }
     }
 
@@ -435,14 +436,9 @@ abstract class Controller
     $this->data['http_status_code'] = $code;
   }
 
-  public function getContentType(): string
-  {
-    return $this->data['http_content_type'];
-  }
-
   public function setContentType(string $mime_type = 'text/html; charset=UTF-8'): void
   {
-    $this->data['http_content_type'] = $mime_type;
+    $this->responseHeaders['Content-Type'] = $mime_type;
   }
 
   public function getResolvedMethod(): string
