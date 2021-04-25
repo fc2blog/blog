@@ -28,11 +28,17 @@ use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
-  protected $data = [];    // テンプレートへ渡す変数の保存領域
+  protected $data = [
+    'http_status_code' => 200
+  ];    // テンプレートへ渡す変数の保存領域
   protected $layout = '';  // 表示ページのレイアウトテンプレート
   protected $output = '';  // 送信するデータ、HTML等
   private $resolvedMethod;
   protected $request;
+  protected $responseHeaders = [
+    'X-Frame-Options' => 'DENY',
+    'Content-Type' => 'text/html; charset=UTF-8',
+  ];
 
   public function __construct(Request $request)
   {
@@ -90,20 +96,25 @@ abstract class Controller
    */
   public function emit(): void
   {
-    if (isset($this->data['http_status_code']) && is_int($this->data['http_status_code'])) {
-      http_response_code($this->getStatusCode());
-    }
+    http_response_code($this->getStatusCode());
 
     if (!headers_sent()) {
-      // Content typeの送信
-      if (isset($this->data['http_content_type']) && strlen($this->data['http_content_type']) > 0) {
-        header("Content-Type: {$this->getContentType()}");
-      } else {
-        header("Content-Type: text/html; charset=UTF-8");
+      foreach($this->responseHeaders as $header_name => $header_value){
+        header("{$header_name}: {$header_value}");
       }
     }
 
     echo $this->output;
+  }
+
+  protected function isInvalidAjaxRequest(Request $request): bool
+  {
+    return (
+      !isset($request->server['HTTP_X_REQUESTED_WITH']) ||
+      $request->server['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest' ||
+      # クロスサイトアクセスは想定していない
+      isset($request->server['HTTP_ORIGIN'])
+    );
   }
 
   protected function beforeFilter(Request $request)
@@ -435,14 +446,9 @@ abstract class Controller
     $this->data['http_status_code'] = $code;
   }
 
-  public function getContentType(): string
-  {
-    return $this->data['http_content_type'];
-  }
-
   public function setContentType(string $mime_type = 'text/html; charset=UTF-8'): void
   {
-    $this->data['http_content_type'] = $mime_type;
+    $this->responseHeaders['Content-Type'] = $mime_type;
   }
 
   public function getResolvedMethod(): string

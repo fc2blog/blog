@@ -21,6 +21,28 @@ class UploadTest extends TestCase
     parent::setUp();
   }
 
+  public function testWithOutXRequestedWithRequestHeader(): void
+  {
+    Session::destroy(new Request());
+    $this->resetSession();
+    $this->resetCookie();
+    $this->mergeAdminSession();
+
+    $c = $this->reqGet("/admin/files/ajax_index");
+    $this->assertEquals(200, $c->get('http_status_code'));
+
+    $c = $this->reqBase(
+      false,
+      'GET',
+      "/admin/files/ajax_index",
+      [],
+      [],
+      [],
+      false
+    );
+    $this->assertEquals(403, $c->get('http_status_code'));
+  }
+
   public function testIndexAndUploadFile(): void
   {
     Session::destroy(new Request());

@@ -63,7 +63,8 @@ trait ClientTrait
     string $path,
     array $postParams = [],
     array $getParams = [],
-    array $filesParams = []
+    array $filesParams = [],
+    bool $addHttpXRequestedWithHeader = true
   ):  Controller
   {
     // TODO ＄_をテストからも可能ならば排除する
@@ -79,6 +80,11 @@ trait ClientTrait
     }
     $_SERVER['HTTP_USER_AGENT'] = "phpunit";
     $_SERVER['HTTP_ACCEPT_LANGUAGE'] = "ja,en-US;q=0.9,en;q=0.8";
+    if($addHttpXRequestedWithHeader) {
+      // Ajax系のreqには以下ヘッダが必須だが、現状非ajax系でも入っていても問題ないのでデフォルトでは挿入
+      // 「外れている」テストが指定したい時だけ指定
+      $_SERVER['HTTP_X_REQUESTED_WITH'] = "XMLHttpRequest";
+    }
 
     $request = new Request(
       $method,

@@ -298,6 +298,10 @@ class EntriesController extends AdminController
    */
   public function ajax_media_load(Request $request)
   {
+    if ($this->isInvalidAjaxRequest($request)) {
+      return $this->error403();
+    }
+
     $files_model = new FilesModel();
     $blog_id = $this->getBlogId($request);
 
