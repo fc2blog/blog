@@ -168,7 +168,7 @@ class CommentsController extends AdminController
    */
   public function ajax_approval(Request $request):string
   {
-    if ($this->isInvalidAjaxRequest($request)) {
+    if ($this->isInvalidAjaxRequest($request) || $request->method !== 'POST' || !$request->isValidSig()) {
       return $this->error403();
     }
 

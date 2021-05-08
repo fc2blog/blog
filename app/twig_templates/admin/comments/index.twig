@@ -196,8 +196,9 @@
             }
             $('#sys-comment-approval').hide();
             $.ajax({
-                type: 'GET',
-                url: common.fwURL('comments', 'ajax_approval', {id: id}),
+                type: 'POST',
+                url: common.fwURL('comments', 'ajax_approval'),
+                data: {id: id, sig: '{{ sig }}'},
                 dataType: 'json',
                 success: function (json) {
                     if (json.success) {
