@@ -168,8 +168,8 @@
             $('#sys-reply-message').show();
             $.ajax({
                 type: 'POST',
-                url: common.fwURL('comments', 'ajax_reply', {id: id}),
-                data: {comment: {reply_body: $('textarea[name="comment[reply_body]"]').val()}},
+                url: common.fwURL('comments', 'ajax_reply'),
+                data: {id: id, sig: '{{ sig }}', comment: {reply_body: $('textarea[name="comment[reply_body]"]').val()}},
                 dataType: 'json',
                 success: function (json) {
                     if (json.success) {

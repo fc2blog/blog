@@ -293,6 +293,10 @@ class CommentsController extends AdminController
     }
 
     // コメント投稿処理
+    if ($request->method !== 'POST' || !$request->isValidSig()) {
+      return $this->error403();
+    }
+
     $errors = $comments_model->replyValidate($request->get('comment'), $data, ['reply_body']);
 
     if (empty($errors)) {
