@@ -8,12 +8,12 @@ use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function testGet(): void
-  {
-    $c = $this->reqHttpsGet('/testblog1/?no=1');
-    $this->assertStringStartsWith("<!DOCTYPE html", $c->getOutput());
-    $this->assertStringContainsString("testblog1", $c->getOutput());
-  }
+    public function testGet(): void
+    {
+        $c = $this->reqHttpsGet('/testblog1/?no=1');
+        $this->assertStringStartsWith("<!DOCTYPE html", $c->getOutput());
+        $this->assertStringContainsString("testblog1", $c->getOutput());
+    }
 }

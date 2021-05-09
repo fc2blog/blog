@@ -12,41 +12,41 @@ use PHPUnit\Framework\TestCase;
 
 class DeleteTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function testForm(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+    public function testForm(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $c = $this->reqGet("/admin/blogs/delete");
-    $this->assertInstanceOf(BlogsController::class, $c);
-    $this->assertEquals("delete", $c->getResolvedMethod());
-  }
+        $c = $this->reqGet("/admin/blogs/delete");
+        $this->assertInstanceOf(BlogsController::class, $c);
+        $this->assertEquals("delete", $c->getResolvedMethod());
+    }
 
-  public function testDelete(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
-    $sig = $this->getSig();
+    public function testDelete(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
+        $sig = $this->getSig();
 
-    $request_data = [
-      'blog' => [
-        'delete' => '1',
-      ],
-      'sig' => $sig
-    ];
+        $request_data = [
+            'blog' => [
+                'delete' => '1',
+            ],
+            'sig' => $sig
+        ];
 
-    $r = $this->reqPostBeRedirect("/admin/blogs/delete", $request_data);
-    $this->assertEquals('/admin/blogs/index', $r->redirectUrl);
+        $r = $this->reqPostBeRedirect("/admin/blogs/delete", $request_data);
+        $this->assertEquals('/admin/blogs/index', $r->redirectUrl);
 
-    $c = $this->reqGet("/admin/blogs/index");
-    $this->assertStringContainsString('testblog1', $c->getOutput());
-    $this->assertStringNotContainsString('testblog2', $c->getOutput());
-  }
+        $c = $this->reqGet("/admin/blogs/index");
+        $this->assertStringContainsString('testblog1', $c->getOutput());
+        $this->assertStringNotContainsString('testblog2', $c->getOutput());
+    }
 }

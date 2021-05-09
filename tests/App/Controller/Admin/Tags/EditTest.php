@@ -12,56 +12,56 @@ use PHPUnit\Framework\TestCase;
 
 class EditTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function setUp(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    parent::setUp();
-  }
+    public function setUp(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        parent::setUp();
+    }
 
-  public function testForm(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
+    public function testForm(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
 
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $c = $this->reqGet("/admin/tags/edit", ["id" => 1]);
+        $c = $this->reqGet("/admin/tags/edit", ["id" => 1]);
 
-    $this->assertInstanceOf(TagsController::class, $c);
-    $this->assertEquals('edit', $c->getResolvedMethod());
+        $this->assertInstanceOf(TagsController::class, $c);
+        $this->assertEquals('edit', $c->getResolvedMethod());
 
-    $d = $c->getData();
+        $d = $c->getData();
 //    var_export($d);
 
-    $this->assertArrayHasKey('tag', $d);
-    $this->assertEquals('alphnum', $d['tag']['name']);
-  }
+        $this->assertArrayHasKey('tag', $d);
+        $this->assertEquals('alphnum', $d['tag']['name']);
+    }
 
-  public function testUpdate(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
-    $sig = $this->getSig();
+    public function testUpdate(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
+        $sig = $this->getSig();
 
-    $request_data = [
-      'id' => "1",
-      'sig' => $sig,
-      'tag' => ['name' => "testtagname"]
-    ];
+        $request_data = [
+            'id' => "1",
+            'sig' => $sig,
+            'tag' => ['name' => "testtagname"]
+        ];
 
-    $r = $this->reqGetBeRedirect("/admin/tags/edit", $request_data);
-    $this->assertEquals('/admin/tags/index', $r->redirectUrl);
+        $r = $this->reqGetBeRedirect("/admin/tags/edit", $request_data);
+        $this->assertEquals('/admin/tags/index', $r->redirectUrl);
 
-    $c = $this->reqGet("/admin/tags/index");
+        $c = $this->reqGet("/admin/tags/index");
 
-    $data = $c->getData();
+        $data = $c->getData();
 //    var_export($data);
-    $this->assertEquals('testtagname', $data['tags'][0]['name']);
-  }
+        $this->assertEquals('testtagname', $data['tags'][0]['name']);
+    }
 }

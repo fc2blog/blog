@@ -5,10 +5,10 @@ $config = array();
 $config['official_plugins'] = array();
 
 $config['official_plugins'][] = array(
-  'device_type' => 1,
-  'title'       => '最新記事',
-  'body'        => '最近の記事を表示します',
-  'contents'    => <<<HTML
+    'device_type' => 1,
+    'title' => '最新記事',
+    'body' => '最近の記事を表示します',
+    'contents' => <<<HTML
 <ul>
   <!--recent-->
     <li>
@@ -21,10 +21,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 1,
-  'title'       => '最新コメント',
-  'body'        => '最近のコメントを表示します',
-  'contents'    => <<<HTML
+    'device_type' => 1,
+    'title' => '最新コメント',
+    'body' => '最近のコメントを表示します',
+    'contents' => <<<HTML
 <ul>
   <!--rcomment-->
   <li>
@@ -37,10 +37,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 1,
-  'title'       => '月別アーカイブ',
-  'body'        => '月別アーカイブの一覧を表示します',
-  'contents'    => <<<HTML
+    'device_type' => 1,
+    'title' => '月別アーカイブ',
+    'body' => '月別アーカイブの一覧を表示します',
+    'contents' => <<<HTML
 <ul>
   <!--archive-->
   <li>
@@ -53,10 +53,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 1,
-  'title'       => 'カテゴリー',
-  'body'        => 'カテゴリーの一覧を表示します',
-  'contents'    => <<<HTML
+    'device_type' => 1,
+    'title' => 'カテゴリー',
+    'body' => 'カテゴリーの一覧を表示します',
+    'contents' => <<<HTML
 <div>
   <!--category-->
   <div>
@@ -71,10 +71,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 1,
-  'title'       => 'カテゴリー',
-  'body'        => '多階層のカテゴリーの一覧を表示します',
-  'contents'    => <<<HTML
+    'device_type' => 1,
+    'title' => 'カテゴリー',
+    'body' => '多階層のカテゴリーの一覧を表示します',
+    'contents' => <<<HTML
 <ul class="plugin-multi-tree">
   <!--category-->
   <li><a href="<%category_link>" title="<%category_name>"><%category_name>(<%category_count>)</a></li>
@@ -100,10 +100,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 1,
-  'title'       => 'カレンダー',
-  'body'        => '月ごとのカレンダーを表示します',
-  'contents'    => <<<HTML
+    'device_type' => 1,
+    'title' => 'カレンダー',
+    'body' => '月ごとのカレンダーを表示します',
+    'contents' => <<<HTML
 <div class="plugin-calender">
   <table summary="カレンダー" class="calender">
     <caption>
@@ -138,10 +138,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 1,
-  'title'       => '検索フォーム',
-  'body'        => 'ブログ内検索フォームを表示します',
-  'contents'    => <<<HTML
+    'device_type' => 1,
+    'title' => '検索フォーム',
+    'body' => 'ブログ内検索フォームを表示します',
+    'contents' => <<<HTML
 <form action="./" method="get">
   <p class="plugin-search">
     <input type="text" size="20" name="q" value="" maxlength="200" /><br />
@@ -153,10 +153,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 4,
-  'title'       => '最新記事',
-  'body'        => '最近の記事を表示します',
-  'contents'    => <<<HTML
+    'device_type' => 4,
+    'title' => '最新記事',
+    'body' => '最近の記事を表示します',
+    'contents' => <<<HTML
 <ul class="plugin_list">
 <!--recent-->
   <li>
@@ -172,10 +172,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 4,
-  'title'       => '最新コメント',
-  'body'        => '最近のコメントを表示します',
-  'contents'    => <<<HTML
+    'device_type' => 4,
+    'title' => '最新コメント',
+    'body' => '最近のコメントを表示します',
+    'contents' => <<<HTML
 <ul class="plugin_list">
 <!--rcomment-->
   <li>
@@ -191,10 +191,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 4,
-  'title'       => '月別アーカイブ',
-  'body'        => '月別アーカイブの一覧を表示します',
-  'contents'    => <<<HTML
+    'device_type' => 4,
+    'title' => '月別アーカイブ',
+    'body' => '月別アーカイブの一覧を表示します',
+    'contents' => <<<HTML
 <ul class="plugin_list">
 <!--archive-->
   <li>
@@ -209,10 +209,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 4,
-  'title'       => 'カテゴリー',
-  'body'        => 'カテゴリーの一覧を表示します',
-  'contents'    => <<<HTML
+    'device_type' => 4,
+    'title' => 'カテゴリー',
+    'body' => 'カテゴリーの一覧を表示します',
+    'contents' => <<<HTML
 <ul class="plugin_list">
 <!--category-->
   <li>
@@ -227,10 +227,10 @@ HTML
 );
 
 $config['official_plugins'][] = array(
-  'device_type' => 4,
-  'title'       => 'カテゴリー',
-  'body'        => '多階層のカテゴリーの一覧を表示します',
-  'contents'    => <<<HTML
+    'device_type' => 4,
+    'title' => 'カテゴリー',
+    'body' => '多階層のカテゴリーの一覧を表示します',
+    'contents' => <<<HTML
 <ul class="plugin_list plugin-multi-tree">
   <!--category-->
   <li><a href="<%category_link>" title="<%category_name>"><%category_name>(<%category_count>)</a></li>

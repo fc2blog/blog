@@ -13,46 +13,46 @@ use PHPUnit\Framework\TestCase;
 
 class DeleteTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function setUp(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    parent::setUp();
-  }
+    public function setUp(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        parent::setUp();
+    }
 
-  public function testDelete(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+    public function testDelete(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $ut = new UploadTest();
-    $ut->uploadFile();
-    $ut->uploadFile();
-    $ut->uploadFile();
+        $ut = new UploadTest();
+        $ut->uploadFile();
+        $ut->uploadFile();
+        $ut->uploadFile();
 
-    // admin/files/uploadはガワの部分（アップロードフォームまで）
-    $c = $this->reqGet("/admin/files/upload");
-    $this->assertInstanceOf(FilesController::class, $c);
+        // admin/files/uploadはガワの部分（アップロードフォームまで）
+        $c = $this->reqGet("/admin/files/upload");
+        $this->assertInstanceOf(FilesController::class, $c);
 
-    $fm = new FilesModel();
-    $before_files = $fm->find('all');
+        $fm = new FilesModel();
+        $before_files = $fm->find('all');
 
-    $sig = $this->getSig();
+        $sig = $this->getSig();
 
-    $delete_file_id = $before_files[0]['id'];
-    $r = $this->reqGetBeRedirect("/admin/files/delete", ['id' => $delete_file_id, 'sig' => $sig]);
+        $delete_file_id = $before_files[0]['id'];
+        $r = $this->reqGetBeRedirect("/admin/files/delete", ['id' => $delete_file_id, 'sig' => $sig]);
 
-    $this->assertEquals('/admin/files/upload', $r->redirectUrl);
+        $this->assertEquals('/admin/files/upload', $r->redirectUrl);
 
-    $after_files = $fm->find('all');
+        $after_files = $fm->find('all');
 
-    $this->assertCount(count($before_files) - 1, $after_files);
+        $this->assertCount(count($before_files) - 1, $after_files);
 
-    $deleted_file = $fm->findByIdAndBlogId($delete_file_id, 'testblog2');
+        $deleted_file = $fm->findByIdAndBlogId($delete_file_id, 'testblog2');
 
-    $this->assertEmpty($deleted_file);
-  }
+        $this->assertEmpty($deleted_file);
+    }
 }

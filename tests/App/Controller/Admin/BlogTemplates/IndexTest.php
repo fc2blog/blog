@@ -12,29 +12,29 @@ use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function setUp(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    parent::setUp();
-  }
+    public function setUp(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        parent::setUp();
+    }
 
-  public function testIndex(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+    public function testIndex(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $c = $this->reqGet("/admin/blog_templates/index");
-    $this->assertInstanceOf(BlogTemplatesController::class, $c);
-    $this->assertEquals('index', $c->getResolvedMethod());
+        $c = $this->reqGet("/admin/blog_templates/index");
+        $this->assertInstanceOf(BlogTemplatesController::class, $c);
+        $this->assertEquals('index', $c->getResolvedMethod());
 
-    $d = $c->getData();
+        $d = $c->getData();
 //    var_export($d);
 
-    $this->assertCount(2, $d['template_ids']);
-    $this->assertCount(2, $d['device_blog_templates']);
-  }
+        $this->assertCount(2, $d['template_ids']);
+        $this->assertCount(2, $d['device_blog_templates']);
+    }
 }

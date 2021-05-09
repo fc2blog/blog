@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 # Noticeを含むすべてのエラーをキャッチしてExceptionに変換
 set_error_handler(function (int $severity, string $message, string $file, int $line) {
-  /** @noinspection PhpUnhandledExceptionInspection */
-  throw new ErrorException($message, 0, $severity, $file, $line);
+    /** @noinspection PhpUnhandledExceptionInspection */
+    throw new ErrorException($message, 0, $severity, $file, $line);
 });
 
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleEntry;

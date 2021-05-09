@@ -11,38 +11,38 @@ use PHPUnit\Framework\TestCase;
 
 class ChoiceTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function testDefaultSelectedBlog(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+    public function testDefaultSelectedBlog(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    // Ja表記を確認
-    $c = $this->reqGet("/admin/common/notice");
-    $this->assertStringContainsString("testblog2", $c->getOutput());
-    $this->assertEquals("testblog2", $this->clientTraitSession['blog_id']);
-  }
+        // Ja表記を確認
+        $c = $this->reqGet("/admin/common/notice");
+        $this->assertStringContainsString("testblog2", $c->getOutput());
+        $this->assertEquals("testblog2", $this->clientTraitSession['blog_id']);
+    }
 
-  public function testChangeSelectedBlog(): void
-  {
-    $this->mergeAdminSession();
-    $this->assertEquals("testblog2", $this->clientTraitSession['blog_id']);
+    public function testChangeSelectedBlog(): void
+    {
+        $this->mergeAdminSession();
+        $this->assertEquals("testblog2", $this->clientTraitSession['blog_id']);
 
-    $r = $this->reqGetBeRedirect("/admin/blogs/choice", ['blog_id' => 'testblog1']);
-    $this->assertEquals('/admin/', $r->redirectUrl);
-    $this->assertEquals("testblog1", $this->clientTraitSession['blog_id']);
-  }
+        $r = $this->reqGetBeRedirect("/admin/blogs/choice", ['blog_id' => 'testblog1']);
+        $this->assertEquals('/admin/', $r->redirectUrl);
+        $this->assertEquals("testblog1", $this->clientTraitSession['blog_id']);
+    }
 
-  public function testCreateNewBlog(): void
-  {
-    $this->mergeAdminSession();
-    $this->assertEquals("testblog2", $this->clientTraitSession['blog_id']);
+    public function testCreateNewBlog(): void
+    {
+        $this->mergeAdminSession();
+        $this->assertEquals("testblog2", $this->clientTraitSession['blog_id']);
 
-    $c = $this->reqGet("/admin/blogs/create");
-    $this->assertInstanceOf(BlogsController::class, $c);
-    $this->assertEquals('create', $c->getResolvedMethod());
-  }
+        $c = $this->reqGet("/admin/blogs/create");
+        $this->assertInstanceOf(BlogsController::class, $c);
+        $this->assertEquals('create', $c->getResolvedMethod());
+    }
 }

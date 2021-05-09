@@ -10,6 +10,6 @@ namespace Fc2blog\Exception;
  */
 class RedirectExit extends PseudoExit
 {
-  public $redirectUrl = "";
-  public $statusCode = 0;
+    public $redirectUrl = "";
+    public $statusCode = 0;
 }

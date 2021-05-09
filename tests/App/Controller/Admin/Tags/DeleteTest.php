@@ -13,59 +13,59 @@ use PHPUnit\Framework\TestCase;
 
 class DeleteTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function setUp(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    parent::setUp();
-  }
-
-  public function testMultiDelete(): void
-  {
-    $generator = new GenerateSampleTag();
-    $generator->generateSampleTagsToSpecifyEntry('testblog2', 0, 5);
-
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
-
-    $c = $this->reqGet("/admin/tags/index");
-    $this->assertInstanceOf(TagsController::class, $c);
-    $this->assertEquals('index', $c->getResolvedMethod());
-
-    $data = $c->getData();
-//    var_export($data);
-
-    $tags = $data['tags'];
-
-    $before_count = count($tags);
-
-    $delete_ids = [];
-    foreach ($tags as $tag) {
-      if ($tag['id'] === 1) continue;
-      $delete_ids[] = $tag['id'];
+    public function setUp(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        parent::setUp();
     }
 
-    $sig = $this->getSig();
+    public function testMultiDelete(): void
+    {
+        $generator = new GenerateSampleTag();
+        $generator->generateSampleTagsToSpecifyEntry('testblog2', 0, 5);
 
-    $request_data = [
-      'id' => $delete_ids,
-      'sig' => $sig,
-      'process' => 'delete',
-      'mode' => 'tags',
-    ];
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $r = $this->reqPostBeRedirect("/admin/tags/delete", $request_data);
-    $this->assertEquals('/admin/tags/index', $r->redirectUrl);
+        $c = $this->reqGet("/admin/tags/index");
+        $this->assertInstanceOf(TagsController::class, $c);
+        $this->assertEquals('index', $c->getResolvedMethod());
 
-    $c = $this->reqGet("/admin/tags/index");
-
-    $data = $c->getData();
+        $data = $c->getData();
 //    var_export($data);
-    $tags = $data['tags'];
-    $this->assertNotCount($before_count, $tags);
-    $this->assertCount(1, $tags);
-  }
+
+        $tags = $data['tags'];
+
+        $before_count = count($tags);
+
+        $delete_ids = [];
+        foreach ($tags as $tag) {
+            if ($tag['id'] === 1) continue;
+            $delete_ids[] = $tag['id'];
+        }
+
+        $sig = $this->getSig();
+
+        $request_data = [
+            'id' => $delete_ids,
+            'sig' => $sig,
+            'process' => 'delete',
+            'mode' => 'tags',
+        ];
+
+        $r = $this->reqPostBeRedirect("/admin/tags/delete", $request_data);
+        $this->assertEquals('/admin/tags/index', $r->redirectUrl);
+
+        $c = $this->reqGet("/admin/tags/index");
+
+        $data = $c->getData();
+//    var_export($data);
+        $tags = $data['tags'];
+        $this->assertNotCount($before_count, $tags);
+        $this->assertCount(1, $tags);
+    }
 }

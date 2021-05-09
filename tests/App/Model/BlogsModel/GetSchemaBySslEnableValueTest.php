@@ -9,9 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 class GetSchemaBySslEnableValueTest extends TestCase
 {
-  public function testGetSchemaBySslEnableValue(): void
-  {
-    $this->assertEquals('https:', BlogsModel::getSchemaBySslEnableValue(Config::get('BLOG.SSL_ENABLE.ENABLE')));
-    $this->assertEquals('http:', BlogsModel::getSchemaBySslEnableValue(Config::get('BLOG.SSL_ENABLE.DISABLE')));
-  }
+    public function testGetSchemaBySslEnableValue(): void
+    {
+        $this->assertEquals('https:', BlogsModel::getSchemaBySslEnableValue(Config::get('BLOG.SSL_ENABLE.ENABLE')));
+        $this->assertEquals('http:', BlogsModel::getSchemaBySslEnableValue(Config::get('BLOG.SSL_ENABLE.DISABLE')));
+    }
 }

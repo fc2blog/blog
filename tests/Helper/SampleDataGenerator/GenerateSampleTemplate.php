@@ -10,45 +10,45 @@ use RuntimeException;
 
 class GenerateSampleTemplate
 {
-  use FakerTrait;
-  use RandomUtilTrait;
+    use FakerTrait;
+    use RandomUtilTrait;
 
-  public function generateSampleTemplate(string $blog_id, int $num = 10, int $device_type = null): array
-  {
-    $faker = static::getFaker();
-    $template_list = [];
+    public function generateSampleTemplate(string $blog_id, int $num = 10, int $device_type = null): array
+    {
+        $faker = static::getFaker();
+        $template_list = [];
 
-    $blog_templates_model = new BlogTemplatesModel();
+        $blog_templates_model = new BlogTemplatesModel();
 
-    while ($num-- > 0) {
-      $device_list = Config::get("DEVICES");
+        while ($num-- > 0) {
+            $device_list = Config::get("DEVICES");
 
-      $template_request = [
-        "device_type" => $device_type ?? static::getRandomValue($device_list),
-        "title" => $faker->sentence(3),
-        "html" => $faker->randomHtml(),
-        "css" => "/* this is pseudo css " . $faker->text() . "*/",
-      ];
+            $template_request = [
+                "device_type" => $device_type ?? static::getRandomValue($device_list),
+                "title" => $faker->sentence(3),
+                "html" => $faker->randomHtml(),
+                "css" => "/* this is pseudo css " . $faker->text() . "*/",
+            ];
 
-      // 新規登録処理
-      $white_list = ['title', 'html', 'css', 'device_type'];
-      $errors_blog_template = $blog_templates_model->validate($template_request, $blog_template_data, $white_list);
+            // 新規登録処理
+            $white_list = ['title', 'html', 'css', 'device_type'];
+            $errors_blog_template = $blog_templates_model->validate($template_request, $blog_template_data, $white_list);
 
-      if (count($errors_blog_template) > 0) {
-        throw new InvalidArgumentException("invalid request:" . print_r($template_request, true));
-      }
+            if (count($errors_blog_template) > 0) {
+                throw new InvalidArgumentException("invalid request:" . print_r($template_request, true));
+            }
 
-      $blog_template_data['blog_id'] = $blog_id;
+            $blog_template_data['blog_id'] = $blog_id;
 
-      $id = $blog_templates_model->insert($blog_template_data);
+            $id = $blog_templates_model->insert($blog_template_data);
 
-      if ($id === false) {
-        throw new RuntimeException("insert failed");
-      }
+            if ($id === false) {
+                throw new RuntimeException("insert failed");
+            }
 
-      $template_list[] = $blog_templates_model->findById($id);
+            $template_list[] = $blog_templates_model->findById($id);
+        }
+
+        return $template_list;
     }
-
-    return $template_list;
-  }
 }
