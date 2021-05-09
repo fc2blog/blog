@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html lang="{{ lang }}">
 <head>
-  <meta charset="utf-8">
-  <meta name="robots" content="noindex, nofollow, noarchive"/>
-  <title>{{ block('title') }}</title>
-  <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
-  <link rel="stylesheet" href="/assets/css/normalize.css" type="text/css" media="all">
-  <link rel="stylesheet" href="/assets/css/common.css" type="text/css" media="all">
-  <link rel="stylesheet" href="/assets/css/main.css" type="text/css" media="all">
-  <link rel="stylesheet" href="/assets/admin/css/admin-fc2.css" type="text/css" media="all">
-  <link rel="stylesheet" href="/assets/admin/css/admin-form.css" type="text/css" media="all">
-  <link rel="stylesheet" href="/assets/admin/css/admin_style.css" type="text/css" media="all">
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex, nofollow, noarchive"/>
+    <title>{{ block('title') }}</title>
+    <link rel="icon" href="https://static.fc2.com/share/image/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/normalize.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/common.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/css/main.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/admin/css/admin-fc2.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/admin/css/admin-form.css" type="text/css" media="all">
+    <link rel="stylesheet" href="/assets/admin/css/admin_style.css" type="text/css" media="all">
 
-  <script type="text/javascript" src="/assets/js/jquery.js"></script>
-  <script type="text/javascript" src="/assets/js/common_design.js"></script>
-  <script type="text/javascript" src="/assets/js/common.js"></script>
-  <script>
-    // フレームワーク用のjsの設定
-    let common = {{ js_common|json_encode() }};
-  </script>
+    <script type="text/javascript" src="/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="/assets/js/common_design.js"></script>
+    <script type="text/javascript" src="/assets/js/common.js"></script>
+    <script>
+        // フレームワーク用のjsの設定
+        let common = {{ js_common|json_encode() }};
+    </script>
 </head>
 <body>
 
-  <header class="clear">
+<header class="clear">
     <div>
-      <div id="switch_lang">
-        <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
-          <option value="ja" {% if lang == 'ja' %}selected="selected"{% endif %}>日本語</option>
-          <option value="en" {% if lang == 'en' %}selected="selected"{% endif %}>English</option>
-        </select>
-      </div>
+        <div id="switch_lang">
+            <select id="sys-language-setting" onchange="location.href=common.fwURL('common', 'lang', {lang: $(this).val()});">
+                <option value="ja" {% if lang == 'ja' %}selected="selected"{% endif %}>日本語</option>
+                <option value="en" {% if lang == 'en' %}selected="selected"{% endif %}>English</option>
+            </select>
+        </div>
     </div>
-  </header>
+</header>
 
-  <article>
+<article>
     <article id="main-contents" style="margin-left: auto; margin-right: auto; float: none;">
-      {% include 'admin/flagments/flash_message.twig' %}
-      {{ block('content') }}
+        {% include 'admin/flagments/flash_message.twig' %}
+        {{ block('content') }}
     </article>
-  </article>
+</article>
 
 </body>
 </html>

@@ -45,8 +45,8 @@
                 <td class="center m_cell"><a href="{{ url(req, 'Files', 'edit', {id: file.id}) }}">{{ _('Edit') }}</a></td>
                 <td class="center m_cell">
                     <form action="{{ url(req, 'Files', 'delete') }}" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
-                        <input type="hidden" name ="id" value="{{ file.id }}">
-                        <input type="hidden" name ="sig" value="{{ sig }}">
+                        <input type="hidden" name="id" value="{{ file.id }}">
+                        <input type="hidden" name="sig" value="{{ sig }}">
                         <button type="submit">{{ _('Delete') }}</button>
                     </form>
                 </td>
@@ -115,14 +115,14 @@
                     isAjaxSubmit = isPageChange = true;
                     ajaxSubmit();
                 },
-                error: function( response, status, xhr ) {
-                  if (status === "error") {
-                    alert("エラーが発生しました、ページをリロードしてください。\n" +
-                      "Request failed. Please reload page and retry.");
-                    // 失敗しているが、画面を復帰させるために検索処理を実行
-                    isAjaxSubmit = isPageChange = true;
-                    ajaxSubmit();
-                  }
+                error: function (response, status, xhr) {
+                    if (status === "error") {
+                        alert("エラーが発生しました、ページをリロードしてください。\n" +
+                            "Request failed. Please reload page and retry.");
+                        // 失敗しているが、画面を復帰させるために検索処理を実行
+                        isAjaxSubmit = isPageChange = true;
+                        ajaxSubmit();
+                    }
                 }
             });
             return false;

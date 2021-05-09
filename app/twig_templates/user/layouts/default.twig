@@ -30,9 +30,9 @@
                 <option value="en" {% if lang=="en" %}selected="selected"{% endif %}>English</option>
             </select>
             <script>
-                $(function(){
-                    $('#sys-language-setting').on('change', function(){
-                        location.href="{{ url(req, 'Common', 'lang' ) }}&lang=" + $('#sys-language-setting').val();
+                $(function () {
+                    $('#sys-language-setting').on('change', function () {
+                        location.href = "{{ url(req, 'Common', 'lang' ) }}&lang=" + $('#sys-language-setting').val();
                     });
                 });
             </script>

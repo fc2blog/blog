@@ -49,8 +49,8 @@
                     <td class="center m_cell">{{ entry.posted_at|date('Y-m-d') }}</td>
                     <td style="overflow-wrap: anywhere;">
                         <b><a href="{{ entryUrl(req, entry.blog_id, entry.id) }}" target="_blank">
-                            {{ t(entry.title, 100) }}
-                        </a></b><br>
+                                {{ t(entry.title, 100) }}
+                            </a></b><br>
                         {{ t(entry.body|striptags, 200) }}
                     </td>
                     <td class="center s_cell"><a href="{{ url(req, 'entries', 'edit', {'id':entry.id}) }}">{{ _('Edit') }}</a></td>

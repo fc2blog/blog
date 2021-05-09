@@ -137,12 +137,12 @@
 
     {% if not isLogin %}
         <div id="left_menu" class="sidemenu">
-          <ul>
-              {% if is_register_able %}
-              <li {% if active_menu == 'users/register' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'register') }}"><span><i class="sidemenu_editor"></i></span><span>{{ _('User registration') }}</span></a></li>
-              {% endif %}
-            <li {% if active_menu == 'users/login' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'login') }}"><span></span><span>{{ _('Login') }}</span></a></li>
-          </ul>
+            <ul>
+                {% if is_register_able %}
+                    <li {% if active_menu == 'users/register' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'register') }}"><span><i class="sidemenu_editor"></i></span><span>{{ _('User registration') }}</span></a></li>
+                {% endif %}
+                <li {% if active_menu == 'users/login' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'login') }}"><span></span><span>{{ _('Login') }}</span></a></li>
+            </ul>
         </div>
     {% endif %}
 

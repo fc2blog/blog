@@ -105,12 +105,12 @@
             ajaxSubmit();
         }
 
-        function writeErrToSysAjaxFilesIndex( response, status, xhr ) {
-          if ( status === "error" ) {
-            $('#sys-ajax-files-index')
-              .html("<div style='text-align: center; font-size: 2em; font-weight:bold'>エラーが発生しました、ページをリロードしてください。<br>" +
-                "Loading error. Please reload page.</div>");
-          }
+        function writeErrToSysAjaxFilesIndex(response, status, xhr) {
+            if (status === "error") {
+                $('#sys-ajax-files-index')
+                    .html("<div style='text-align: center; font-size: 2em; font-weight:bold'>エラーが発生しました、ページをリロードしてください。<br>" +
+                        "Loading error. Please reload page.</div>");
+            }
         }
     </script>
 {% endblock %}

@@ -6,6 +6,6 @@
     <br>
     <p><a href="{{ url(request, 'comments', 'index') }}">please move back to comments list page.</a></p>
     <script>
-        location.href="{{ url(request, 'comments', 'index') }}";
+        location.href = "{{ url(request, 'comments', 'index') }}";
     </script>
 {% endblock %}

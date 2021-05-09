@@ -64,14 +64,14 @@
                     </td>
                     <td class="op_col">
                         <form action="{{ url(request, "SystemUpdate", "update", {sig:sig}) }}"
-                        onsubmit="return confirm('{{ _('CAUTION: System will be update. Did you make backup?') }}')">
+                              onsubmit="return confirm('{{ _('CAUTION: System will be update. Did you make backup?') }}')">
                             <input type="hidden" name="version" value="{{ release.tag_name }}">
                             <input type="hidden" name="sig" value="{{ sig }}">
-                        {% if release.tag_name ==  now_version %}
-                            <button type="submit">reload</button>
-                        {% else %}
-                            <button type="submit">update</button>
-                        {% endif %}
+                            {% if release.tag_name ==  now_version %}
+                                <button type="submit">reload</button>
+                            {% else %}
+                                <button type="submit">update</button>
+                            {% endif %}
                         </form>
                     </td>
                 </tr>
