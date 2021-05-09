@@ -10,38 +10,38 @@ use PHPUnit\Framework\TestCase;
 
 class IsCorrectHttpSchemaByBlogArrayTest extends TestCase
 {
-  public function testIsCorrectHttpSchemaByBlogArray(): void
-  {
-    $request = new Request(
-      'GET', '/', null, null, null, null,
-      [
-        'HTTP_USER_AGENT' => 'phpunit',
-        'HTTPS' => "on"
-      ]
-    );
-    $this->assertFalse(BlogsModel::isCorrectHttpSchemaByBlogArray($request, ['ssl_enable' => Config::get('BLOG.SSL_ENABLE.DISABLE')]));
-    $request = new Request(
-      'GET', '/', null, null, null, null,
-      [
-        'HTTP_USER_AGENT' => 'phpunit',
-      ]
-    );
-    $this->assertTrue(BlogsModel::isCorrectHttpSchemaByBlogArray($request, ['ssl_enable' => Config::get('BLOG.SSL_ENABLE.DISABLE')]));
+    public function testIsCorrectHttpSchemaByBlogArray(): void
+    {
+        $request = new Request(
+            'GET', '/', null, null, null, null,
+            [
+                'HTTP_USER_AGENT' => 'phpunit',
+                'HTTPS' => "on"
+            ]
+        );
+        $this->assertFalse(BlogsModel::isCorrectHttpSchemaByBlogArray($request, ['ssl_enable' => Config::get('BLOG.SSL_ENABLE.DISABLE')]));
+        $request = new Request(
+            'GET', '/', null, null, null, null,
+            [
+                'HTTP_USER_AGENT' => 'phpunit',
+            ]
+        );
+        $this->assertTrue(BlogsModel::isCorrectHttpSchemaByBlogArray($request, ['ssl_enable' => Config::get('BLOG.SSL_ENABLE.DISABLE')]));
 
-    $request = new Request(
-      'GET', '/', null, null, null, null,
-      [
-        'HTTP_USER_AGENT' => 'phpunit',
-        'HTTPS' => "on"
-      ]
-    );
-    $this->assertTrue(BlogsModel::isCorrectHttpSchemaByBlogArray($request, ['ssl_enable' => Config::get('BLOG.SSL_ENABLE.ENABLE')]));
-    $request = new Request(
-      'GET', '/', null, null, null, null,
-      [
-        'HTTP_USER_AGENT' => 'phpunit',
-      ]
-    );
-    $this->assertFalse(BlogsModel::isCorrectHttpSchemaByBlogArray($request, ['ssl_enable' => Config::get('BLOG.SSL_ENABLE.ENABLE')]));
-  }
+        $request = new Request(
+            'GET', '/', null, null, null, null,
+            [
+                'HTTP_USER_AGENT' => 'phpunit',
+                'HTTPS' => "on"
+            ]
+        );
+        $this->assertTrue(BlogsModel::isCorrectHttpSchemaByBlogArray($request, ['ssl_enable' => Config::get('BLOG.SSL_ENABLE.ENABLE')]));
+        $request = new Request(
+            'GET', '/', null, null, null, null,
+            [
+                'HTTP_USER_AGENT' => 'phpunit',
+            ]
+        );
+        $this->assertFalse(BlogsModel::isCorrectHttpSchemaByBlogArray($request, ['ssl_enable' => Config::get('BLOG.SSL_ENABLE.ENABLE')]));
+    }
 }

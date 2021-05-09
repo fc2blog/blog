@@ -2,7 +2,8 @@
 
 Create a ZIP file for distribute.
 
-The branch name to build will be same as `git branch --contains |cut -d " " -f 2` (So, same as your local checkout branch).
+The branch name to build will be same as `git branch --contains |cut -d " " -f 2` (So, same as your local checkout
+branch).
 
 ## build zip
 

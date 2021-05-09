@@ -15,95 +15,95 @@ use RuntimeException;
 
 class EditTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function setUp(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    parent::setUp();
-  }
+    public function setUp(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        parent::setUp();
+    }
 
-  public function testForm(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+    public function testForm(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $ut = new UploadTest();
-    $ut->uploadFile();
-    $fm = new FilesModel();
-    $files = $fm->find('all');
+        $ut = new UploadTest();
+        $ut->uploadFile();
+        $fm = new FilesModel();
+        $files = $fm->find('all');
 //    var_dump($files);
 
-    $c = $this->reqGet("/admin/files/edit", ['id' => $files[0]['id']]);
-    $this->assertInstanceOf(FilesController::class, $c);
-    $this->assertEquals('edit', $c->getResolvedMethod());
+        $c = $this->reqGet("/admin/files/edit", ['id' => $files[0]['id']]);
+        $this->assertInstanceOf(FilesController::class, $c);
+        $this->assertEquals('edit', $c->getResolvedMethod());
 
 //    var_dump($c->getData()['file']);
 
-    $this->assertEquals($files[0]['id'], $c->getData()['file']['id']);
-    // TODO 増やすと良い
-  }
-
-  public function testUpdateFile(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
-
-    $c = $this->reqGet("/admin/files/upload");
-    $this->assertInstanceOf(FilesController::class, $c);
-
-    $ut = new UploadTest();
-    $ut->uploadFile();
-
-    $fm = new FilesModel();
-    $files = $fm->find('all');
-    $before_count = count($files);
-
-    try {
-      $orig_file_path = realpath(__DIR__ . "/../../../../test_images/" . random_int(0, 9) . ".png");
-    } catch (Exception $e) {
-      throw new RuntimeException("failed random_int");
+        $this->assertEquals($files[0]['id'], $c->getData()['file']['id']);
+        // TODO 増やすと良い
     }
-    $tmp_file = __DIR__ . "/../../../../test_images/_temp_img.png";
-    copy($orig_file_path, $tmp_file);
-    $tmp_file = realpath(__DIR__ . "/../../../../test_images/_temp_img.png");
 
-    $sig = $this->getSig();
+    public function testUpdateFile(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $request_file = [
-      'file' => [
-        "name" => ['file' => pathinfo($tmp_file, PATHINFO_BASENAME)],
-        "type" => ['file' => "image/png"],
-        "size" => ['file' => filesize($tmp_file)],
-        "tmp_name" => ['file' => $tmp_file],
-        "error" => ['file' => UPLOAD_ERR_OK],
-      ]
-    ];
-    $filename = "test" . microtime(true) . ".png";
-    $request_data = [
-      'id' => $files[0]['id'],
-      'file' => [
-        "name" => $filename,
-      ],
-      'sig' => $sig,
-      'MAX_FILE_SIZE' => "5242880"
-    ];
+        $c = $this->reqGet("/admin/files/upload");
+        $this->assertInstanceOf(FilesController::class, $c);
 
-    $r = $this->reqPostFileBeRedirect("/admin/files/edit", $request_data, $request_file);
+        $ut = new UploadTest();
+        $ut->uploadFile();
 
-    $this->assertEquals('/admin/files/upload', $r->redirectUrl);
+        $fm = new FilesModel();
+        $files = $fm->find('all');
+        $before_count = count($files);
 
-    $files = $fm->find('all');
-    $this->assertCount($before_count, $files);
+        try {
+            $orig_file_path = realpath(__DIR__ . "/../../../../test_images/" . random_int(0, 9) . ".png");
+        } catch (Exception $e) {
+            throw new RuntimeException("failed random_int");
+        }
+        $tmp_file = __DIR__ . "/../../../../test_images/_temp_img.png";
+        copy($orig_file_path, $tmp_file);
+        $tmp_file = realpath(__DIR__ . "/../../../../test_images/_temp_img.png");
 
-    $file = $fm->findByIdAndBlogId($files[0]['id'], "testblog2");
+        $sig = $this->getSig();
+
+        $request_file = [
+            'file' => [
+                "name" => ['file' => pathinfo($tmp_file, PATHINFO_BASENAME)],
+                "type" => ['file' => "image/png"],
+                "size" => ['file' => filesize($tmp_file)],
+                "tmp_name" => ['file' => $tmp_file],
+                "error" => ['file' => UPLOAD_ERR_OK],
+            ]
+        ];
+        $filename = "test" . microtime(true) . ".png";
+        $request_data = [
+            'id' => $files[0]['id'],
+            'file' => [
+                "name" => $filename,
+            ],
+            'sig' => $sig,
+            'MAX_FILE_SIZE' => "5242880"
+        ];
+
+        $r = $this->reqPostFileBeRedirect("/admin/files/edit", $request_data, $request_file);
+
+        $this->assertEquals('/admin/files/upload', $r->redirectUrl);
+
+        $files = $fm->find('all');
+        $this->assertCount($before_count, $files);
+
+        $file = $fm->findByIdAndBlogId($files[0]['id'], "testblog2");
 
 //    var_dump($file);
 
-    $this->assertEquals($filename, $file['name']);
-  }
+        $this->assertEquals($filename, $file['name']);
+    }
 }

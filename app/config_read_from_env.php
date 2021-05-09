@@ -3,20 +3,20 @@
 // ENV and config.php bridge.
 
 if (strlen((string)getenv("FC2_ERROR_LOG_PATH")) > 0) {
-  ini_set('error_log', (string)getenv("FC2_ERROR_LOG_PATH"));
+    ini_set('error_log', (string)getenv("FC2_ERROR_LOG_PATH"));
 }
 
 if ((string)getenv("FC2_STRICT_ERROR_REPORT") === "1") {
-  error_reporting(-1);
-  ini_set('log_errors', '1');
-  ini_set('ignore_repeated_errors', '0');
+    error_reporting(-1);
+    ini_set('log_errors', '1');
+    ini_set('ignore_repeated_errors', '0');
 }
 
 if ((string)getenv("FC2_ERROR_ON_DISPLAY") === "1") {
-  define("ERROR_ON_DISPLAY", "1");
-  ini_set('display_errors', '1');
-  ini_set('display_startup_errors', '1');
-  ini_set('html_errors', '1');
+    define("ERROR_ON_DISPLAY", "1");
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+    ini_set('html_errors', '1');
 }
 
 // Log settings
@@ -44,6 +44,6 @@ define('WWW_DIR', (string)getenv("FC2_DOCUMENT_ROOT_PATH"));
 
 define("DEFAULT_BLOG_ID", (string)getenv("FC2_DEFAULT_BLOG_ID"));
 
-if(strlen((string)getenv("FC2_GITHUB_REPO")) > 0) {
-  define("GITHUB_REPO", (string)getenv("FC2_GITHUB_REPO"));
+if (strlen((string)getenv("FC2_GITHUB_REPO")) > 0) {
+    define("GITHUB_REPO", (string)getenv("FC2_GITHUB_REPO"));
 }

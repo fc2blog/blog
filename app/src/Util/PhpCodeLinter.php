@@ -9,19 +9,19 @@ use PhpParser\ParserFactory;
 
 class PhpCodeLinter
 {
-  /**
-   * 文字列がPHPのコードとして正しいかLintする
-   * @param $string
-   * @return bool
-   */
-  public static function isParsablePhpCode($string)
-  {
-    $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-    try {
-      $parser->parse($string);
-    } catch (Error $error) {
-      return false;
+    /**
+     * 文字列がPHPのコードとして正しいかLintする
+     * @param $string
+     * @return bool
+     */
+    public static function isParsablePhpCode($string)
+    {
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        try {
+            $parser->parse($string);
+        } catch (Error $error) {
+            return false;
+        }
+        return true;
     }
-    return true;
-  }
 }

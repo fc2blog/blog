@@ -12,45 +12,45 @@ use PHPUnit\Framework\TestCase;
 
 class NoticeTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function setUp(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    parent::setUp();
-  }
+    public function setUp(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        parent::setUp();
+    }
 
-  public function testCheckNoNewNotice(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+    public function testCheckNoNewNotice(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $c = $this->reqGet("/admin/common/notice");
-    $this->assertEquals(0, $c->get("unread_count"));
-    $this->assertEquals(0, $c->get("unapproved_count"));
-  }
+        $c = $this->reqGet("/admin/common/notice");
+        $this->assertEquals(0, $c->get("unread_count"));
+        $this->assertEquals(0, $c->get("unapproved_count"));
+    }
 
-  public function testCheckNewNotice(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+    public function testCheckNewNotice(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $generator = new GenerateSampleComment();
-    $generator->generateSampleComment('testblog2', 1, 1);
+        $generator = new GenerateSampleComment();
+        $generator->generateSampleComment('testblog2', 1, 1);
 
-    $c = $this->reqGet("/admin/common/notice");
-    $this->assertEquals(1, $c->get("unread_count"));
-    $this->assertEquals(0, $c->get("unapproved_count"));
+        $c = $this->reqGet("/admin/common/notice");
+        $this->assertEquals(1, $c->get("unread_count"));
+        $this->assertEquals(0, $c->get("unapproved_count"));
 
-    $generator->generateSampleComment('testblog2', 1, 5);
-    $c = $this->reqGet("/admin/common/notice");
-    $this->assertEquals(6, $c->get("unread_count"));
-    $this->assertEquals(0, $c->get("unapproved_count"));
-  }
+        $generator->generateSampleComment('testblog2', 1, 5);
+        $c = $this->reqGet("/admin/common/notice");
+        $this->assertEquals(6, $c->get("unread_count"));
+        $this->assertEquals(0, $c->get("unapproved_count"));
+    }
 
-  // TODO 未承認コメントカウント、コメント設定周りの設定テストを書いてからか
+    // TODO 未承認コメントカウント、コメント設定周りの設定テストを書いてからか
 }

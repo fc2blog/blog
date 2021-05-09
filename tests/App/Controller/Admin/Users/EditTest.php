@@ -12,55 +12,55 @@ use PHPUnit\Framework\TestCase;
 
 class EditTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function testEditForm(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+    public function testEditForm(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $c = $this->reqGet("/admin/users/edit");
-    $this->assertInstanceOf(UsersController::class, $c);
-    $this->assertEquals("edit", $c->getResolvedMethod());
-  }
+        $c = $this->reqGet("/admin/users/edit");
+        $this->assertInstanceOf(UsersController::class, $c);
+        $this->assertEquals("edit", $c->getResolvedMethod());
+    }
 
-  public function testUpdateUser(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
-    $sig = $this->getSig();
+    public function testUpdateUser(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
+        $sig = $this->getSig();
 
-    $request_data = [
-      'sig' => $sig,
-      'user' => [
-        "login_blog_id" => "testblog1",
-        "password" => "password123",
-      ]
-    ];
-    $r = $this->reqPostBeRedirect("/admin/users/edit", $request_data);
-    $this->assertEquals("/admin/users/edit", $r->redirectUrl);
+        $request_data = [
+            'sig' => $sig,
+            'user' => [
+                "login_blog_id" => "testblog1",
+                "password" => "password123",
+            ]
+        ];
+        $r = $this->reqPostBeRedirect("/admin/users/edit", $request_data);
+        $this->assertEquals("/admin/users/edit", $r->redirectUrl);
 
-    // ログインのトライ
-    $this->resetSession();
-    $this->resetCookie();
+        // ログインのトライ
+        $this->resetSession();
+        $this->resetCookie();
 
-    $r = $this->reqPostBeRedirect("/admin/users/login", [
-      'user' => [
-        'login_id' => 'testadmin',
-        'password' => 'password123',
-      ]
-    ]);
+        $r = $this->reqPostBeRedirect("/admin/users/login", [
+            'user' => [
+                'login_id' => 'testadmin',
+                'password' => 'password123',
+            ]
+        ]);
 
-    $this->assertEquals('/admin/', $r->redirectUrl);
-    $this->assertEquals(302, $r->statusCode);
-    $this->assertEquals('testblog1', $this->clientTraitSession['blog_id']);
+        $this->assertEquals('/admin/', $r->redirectUrl);
+        $this->assertEquals(302, $r->statusCode);
+        $this->assertEquals('testblog1', $this->clientTraitSession['blog_id']);
 
-    DBHelper::clearDbAndInsertFixture();
-  }
+        DBHelper::clearDbAndInsertFixture();
+    }
 }

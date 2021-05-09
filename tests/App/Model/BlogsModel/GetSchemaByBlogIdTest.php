@@ -8,9 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 class GetSchemaByBlogIdTest extends TestCase
 {
-  public function testGetSchemaByBlogIdTest(): void
-  {
-    $this->assertEquals('https:', BlogsModel::getSchemaByBlogId('testblog1'));
-    $this->assertEquals('http:', BlogsModel::getSchemaByBlogId('testblog2'));
-  }
+    public function testGetSchemaByBlogIdTest(): void
+    {
+        $this->assertEquals('https:', BlogsModel::getSchemaByBlogId('testblog1'));
+        $this->assertEquals('http:', BlogsModel::getSchemaByBlogId('testblog2'));
+    }
 }

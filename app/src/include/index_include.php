@@ -10,34 +10,34 @@ ini_set('html_errors', "0");
 
 // Check all errors when shutdown applications.
 register_shutdown_function(function () {
-  $error = error_get_last();
-  if (
-    !is_array($error) ||
-    !(
-      $error['type'] &
-      (E_ERROR | E_PARSE | E_CORE_ERROR | E_USER_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR)
-    )
-  ) {
-    return; // normal closing.
-  }
+    $error = error_get_last();
+    if (
+        !is_array($error) ||
+        !(
+            $error['type'] &
+            (E_ERROR | E_PARSE | E_CORE_ERROR | E_USER_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR)
+        )
+    ) {
+        return; // normal closing.
+    }
 
-  // abnormal end. try print gentle errors.
+    // abnormal end. try print gentle errors.
 
-  // Logging un-excepted output buffer(debug|error messages)
-  $something = ob_get_contents();
-  if (strlen($something) > 0) {
-    error_log($something);
-  }
-  ob_end_clean();
+    // Logging un-excepted output buffer(debug|error messages)
+    $something = ob_get_contents();
+    if (strlen($something) > 0) {
+        error_log($something);
+    }
+    ob_end_clean();
 
-  // Error Logging
-  error_log("Uncaught Fatal Error: {$error['type']}:{$error['message']} in {$error['file']}:{$error['line']}");
+    // Error Logging
+    error_log("Uncaught Fatal Error: {$error['type']}:{$error['message']} in {$error['file']}:{$error['line']}");
 
-  // response error
-  if (!headers_sent()) {
-    http_response_code(500);
-  }
-  echo <<<HTML
+    // response error
+    if (!headers_sent()) {
+        http_response_code(500);
+    }
+    echo <<<HTML
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -48,32 +48,32 @@ register_shutdown_function(function () {
     <p>Something went wrong.</p>
     <p>(Please check error log)</p>
   HTML;
-  if(defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY==="1"){
-    echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><br>";
-    echo nl2br(htmlspecialchars($something.PHP_EOL, ENT_QUOTES));
-    echo nl2br(htmlspecialchars("Uncaught Fatal Error: {$error['type']}:{$error['message']} in {$error['file']}:{$error['line']}"));
-  }
-  echo <<<HTML
+    if (defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY === "1") {
+        echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><br>";
+        echo nl2br(htmlspecialchars($something . PHP_EOL, ENT_QUOTES));
+        echo nl2br(htmlspecialchars("Uncaught Fatal Error: {$error['type']}:{$error['message']} in {$error['file']}:{$error['line']}"));
+    }
+    echo <<<HTML
   </body>
   </html>
   HTML;
 });
 
 try {
-  // Catch all error (include notice/warn) and convert to ErrorException.
-  set_error_handler(function ($severity, $message, $file, $line) {
-    throw new ErrorException($message, 0, $severity, $file, $line);
-  });
+    // Catch all error (include notice/warn) and convert to ErrorException.
+    set_error_handler(function ($severity, $message, $file, $line) {
+        throw new ErrorException($message, 0, $severity, $file, $line);
+    });
 
-  // enable output buffer
-  ob_start();
+    // enable output buffer
+    ob_start();
 
-  require_once(__DIR__ . '/../../vendor/autoload.php');
+    require_once(__DIR__ . '/../../vendor/autoload.php');
 
-  // config.phpの存在チェック
-  if (!file_exists(__DIR__ . '/../../config.php') && (string)getenv("FC2_CONFIG_FROM_ENV") !== "1") {
-    header("Content-Type: text/html; charset=UTF-8");
-    echo <<<HTML
+    // config.phpの存在チェック
+    if (!file_exists(__DIR__ . '/../../config.php') && (string)getenv("FC2_CONFIG_FROM_ENV") !== "1") {
+        header("Content-Type: text/html; charset=UTF-8");
+        echo <<<HTML
     <!DOCTYPE html>
     <html lang="ja">
     <head>
@@ -88,59 +88,59 @@ try {
     </body>
     </html>
     HTML;
-    return;
-  }
+        return;
+    }
 
 // 設定クラス読み込み
-  if ((string)getenv("FC2_CONFIG_FROM_ENV") === "1") {
-    require(__DIR__ . '/../../config_read_from_env.php');
-  } else {
-    /** @noinspection PhpIncludeInspection */
-    require(__DIR__ . '/../../config.php');
-  }
-  require(__DIR__ . '/bootstrap.php');
+    if ((string)getenv("FC2_CONFIG_FROM_ENV") === "1") {
+        require(__DIR__ . '/../../config_read_from_env.php');
+    } else {
+        /** @noinspection PhpIncludeInspection */
+        require(__DIR__ . '/../../config.php');
+    }
+    require(__DIR__ . '/bootstrap.php');
 
-  // アプリケーション実行
-  $request = new \Fc2blog\Web\Request();
-  /** @var \Fc2blog\Web\Controller\Controller $c */
-  $c = new $request->className($request);
-  $c->execute($request->methodName);
+    // アプリケーション実行
+    $request = new \Fc2blog\Web\Request();
+    /** @var \Fc2blog\Web\Controller\Controller $c */
+    $c = new $request->className($request);
+    $c->execute($request->methodName);
 
-  // TODO Logging un-excepted output buffer(debug|error messages|other)
-  //  $something = ob_get_contents();
-  //  if (strlen($something) > 0) {
-  //    error_log($something);
-  //  }
-  //  ob_end_clean();
-  //  ob_start();
-  // TODO remove all `echo` in app. ex: captcha
+    // TODO Logging un-excepted output buffer(debug|error messages|other)
+    //  $something = ob_get_contents();
+    //  if (strlen($something) > 0) {
+    //    error_log($something);
+    //  }
+    //  ob_end_clean();
+    //  ob_start();
+    // TODO remove all `echo` in app. ex: captcha
 
-  if(defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY==="1") {
-    echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><hr>";
-  }
-  $c->emit();
-  ob_end_flush();
-  return;
+    if (defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY === "1") {
+        echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><hr>";
+    }
+    $c->emit();
+    ob_end_flush();
+    return;
 
 } catch (Throwable $e) {
-  // Uncaught Exception
+    // Uncaught Exception
 
-  // Logging un-excepted output buffer(debug|error messages)
-  $something = ob_get_contents();
-  if (strlen($something) > 0) {
-    error_log($something);
-  }
-  ob_end_clean();
+    // Logging un-excepted output buffer(debug|error messages)
+    $something = ob_get_contents();
+    if (strlen($something) > 0) {
+        error_log($something);
+    }
+    ob_end_clean();
 
-  // Stack trace Logging
-  $error_class_name = get_class($e);
-  error_log("Uncaught Exception {$error_class_name}: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}\n{$e->getTraceAsString()}");
+    // Stack trace Logging
+    $error_class_name = get_class($e);
+    error_log("Uncaught Exception {$error_class_name}: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}\n{$e->getTraceAsString()}");
 
-  // response error
-  if (!headers_sent()) {
-    http_response_code(500);
-  }
-  echo <<<HTML
+    // response error
+    if (!headers_sent()) {
+        http_response_code(500);
+    }
+    echo <<<HTML
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -151,14 +151,14 @@ try {
     <p>Something went wrong.</p>
     <p>(Please check error log)</p>
   HTML;
-  if(defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY==="1"){
-    echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><br>";
-    echo nl2br(htmlspecialchars($something.PHP_EOL, ENT_QUOTES));
-    echo nl2br(htmlspecialchars("Uncaught Exception {$error_class_name}: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}\n{$e->getTraceAsString()}"));
-  }
-  echo <<<HTML
+    if (defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY === "1") {
+        echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><br>";
+        echo nl2br(htmlspecialchars($something . PHP_EOL, ENT_QUOTES));
+        echo nl2br(htmlspecialchars("Uncaught Exception {$error_class_name}: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}\n{$e->getTraceAsString()}"));
+    }
+    echo <<<HTML
   </body>
   </html>
   HTML;
-  return;
+    return;
 }

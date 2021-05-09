@@ -7,8 +7,8 @@ use Faker\Factory;
 
 trait FakerTrait
 {
-  public function getFaker()
-  {
-    return Factory::create('ja_JP');
-  }
+    public function getFaker()
+    {
+        return Factory::create('ja_JP');
+    }
 }

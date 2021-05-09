@@ -1,5 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
-import { Helper } from "./helper";
+import {afterAll, beforeAll, describe, expect, it} from "@jest/globals";
+import {Helper} from "./helper";
 
 describe("crawl password required blog", () => {
   let c: Helper;
@@ -23,14 +23,14 @@ describe("crawl password required blog", () => {
     expect(response.url()).toEqual(c.getBaseUrl() + "/testblog3/index.php?mode=entries&process=blog_password");
     expect(await c.page.title()).toEqual("パスワード認証 - testblog3");
 
-    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    const body_text = await c.page.$eval("body", elm => elm.textContent);
     expect(body_text.match(/パスワード認証/));
   });
 
   it("access with wrong password", async () => {
     await c.page.type(
-        "input[name='blog[password]']",
-        "wrongpass"
+      "input[name='blog[password]']",
+      "wrongpass"
     );
 
     await c.getSS("wrong_password_typed");
@@ -45,14 +45,14 @@ describe("crawl password required blog", () => {
     expect(response.url()).toEqual(c.getBaseUrl() + "/testblog3/index.php?mode=entries&process=blog_password");
     expect(await c.page.title()).toEqual("パスワード認証 - testblog3");
 
-    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    const body_text = await c.page.$eval("body", elm => elm.textContent);
     expect(body_text.match(/パスワードが違います/));
   });
 
   it("access with password", async () => {
     await c.page.type(
-        "input[name='blog[password]']",
-        "password"
+      "input[name='blog[password]']",
+      "password"
     );
 
     await c.getSS("password_typed");
@@ -67,7 +67,7 @@ describe("crawl password required blog", () => {
     expect(response.url()).toEqual(c.getBaseUrl() + "/testblog3/index.php?mode=entries&process=index");
     expect(await c.page.title()).toEqual("testblog3");
 
-    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    const body_text = await c.page.$eval("body", elm => elm.textContent);
     expect(body_text.match(/パスワードが必要なブログです。/));
   });
 

@@ -9,13 +9,13 @@ use Twig\TwigFunction;
 
 class GetTextHelper extends AbstractExtension
 {
-  public function getFunctions(): array
-  {
-    return [new TwigFunction(
-      '_',
-      function (string $str) {
-        return __($str);
-      }
-    )];
-  }
+    public function getFunctions(): array
+    {
+        return [new TwigFunction(
+            '_',
+            function (string $str) {
+                return __($str);
+            }
+        )];
+    }
 }

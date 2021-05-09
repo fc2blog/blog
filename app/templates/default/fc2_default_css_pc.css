@@ -1,0 +1,1134 @@
+@charset "utf-8";
+
+/* =================================================
+  Reset
+================================================= */
+html, body, div,
+dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6,
+pre, form, fieldset, input, textarea,
+blockquote, th, td, p {
+    margin: 0;
+    padding: 0;
+}
+
+/* =================================================
+  Element
+================================================= */
+body {
+    width: 100%;
+    text-align: center;
+    font-family: "メイリオ", Meiryo, Verdana, Helvetica, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "ＭＳ Ｐゴシック", sans-serif;
+    line-height: 1.4;
+    font-size: small !important;
+    word-break: break-all;
+}
+
+/* Modern browser */
+html > /**/ body {
+    font-size: 13px;
+}
+
+a {
+    text-decoration: none;
+    /*\*/
+    overflow: hidden; /* for Fx */
+    /**/
+}
+
+img, a img {
+    border: none;
+}
+
+ul, ol, li, dl, dt, dd {
+    list-style: none;
+}
+
+table {
+    border: 0;
+    font-size: small !important;
+}
+
+th, td {
+    padding: 0;
+}
+
+th {
+    font-weight: normal;
+}
+
+input, select, textarea {
+    padding: 2px;
+}
+
+textarea {
+    font-size: 100%;
+}
+
+html > /**/ textarea {
+    font-size: 13px;
+}
+
+fieldset {
+    border: none;
+}
+
+pre {
+    font-family: monospace;
+}
+
+.emoji {
+    vertical-align: middle;
+}
+
+/* =================================================
+  Hyper text
+================================================= */
+a {
+    text-decoration: none;
+    /*\*/
+    overflow: hidden; /* for Fx */
+    /**/
+}
+
+a:link,
+a:visited {
+    color: #5DA7D1; /* リンク、訪問済みリンクの文字色 */
+}
+
+a:focus,
+a:hover,
+a:active {
+    color: #8ADAE6; /* リンクにポインタをのせた時の文字色 */
+}
+
+/* =================================================
+  Headline
+================================================= */
+h1 {
+    font-size: 276%;
+    font-weight: normal;
+}
+
+/* 36px */
+h2,
+h3 {
+    font-size: 124%;
+    font-weight: normal;
+}
+
+/* 16px */
+h4 {
+    font-size: 108%;
+    font-weight: normal;
+}
+
+/* 14px */
+h5,
+h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+/* 13px */
+
+/* =================================================
+  Font Color
+================================================= */
+body {
+    color: #444444;
+}
+
+#header h1 a /* ブログタイトル */
+{
+    color: #333333;
+}
+
+#headermenu .archives a /* 「記事一覧」のリンク */,
+#main_contents h2 a /* 記事タイトル */,
+#main_contents .entry_body .entry_more a /* 「続きを読む」のリンク */
+{
+    color: #333333;
+}
+
+#main_contents blockquote /* 引用部分 */,
+#main_contents .entry_date /* 記事の日付 */,
+#main_contents .content .entry_state li /* カテゴリ等 */,
+#main_contents .content .entry_state li a /* CM数,TB数等 */,
+#main_contents .sub_content .sub_footer /* CM,TBのフッタ */,
+#main_contents .page_navi a /* ページナビ */
+{
+    color: #999999;
+}
+
+#main_contents .list_body li /* 記事一覧ページ */
+{
+    color: #666666;
+}
+
+/* =================================================
+  Font Size
+================================================= */
+#header p /* ブログ紹介文 */
+{
+    font-size: 158%; /* 21px */
+}
+
+#headermenu /* 「記事一覧」の文字 */
+{
+    font-size: 139%; /* 18px */
+}
+
+#main_contents /* 記事本文等 */
+{
+    font-size: 124%; /* 16px */
+}
+
+#main_contents .entry_date /* 記事日付 */,
+#main_contents .entry_state /* CM数,TB数,カテゴリ等 */
+{
+    font-size: 85%; /* 14px */
+}
+
+#main_contents .entry_body .entry_more /* 「続きを読む」の文字 */
+{
+    font-size: 108%; /* 17px */
+}
+
+#main_contents .sub_content .sub_footer /* CM,TBのフッタ */
+{
+    font-size: 85%; /* 14px */
+}
+
+#sidemenu /* サイドメニュー(プラグイン) */
+{
+    font-size: 116%; /* 15px */
+}
+
+#sidemenu h3 /* サイドメニュー(プラグイン)タイトル */
+{
+    font-size: 131%; /* 20px */
+}
+
+#footer /* フッター */
+{
+    font-size: 124%; /* 16px */
+}
+
+
+/* =================================================
+  Content Width
+  ※ 幅を固定にする場合は、それぞれのmin-width、
+  max-widthを削除し、widthで好きな幅を指定して下さい
+================================================= */
+#container {
+    min-width: 800px;
+}
+
+#headermenu, #wrap,
+#footer_plg, #footer_inner {
+    min-width: 800px;
+    max-width: 1200px;
+}
+
+/* =================================================
+  Layout
+================================================= */
+#container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#header {
+    overflow: hidden;
+    margin-bottom: -40px;
+    padding: 20px 0 80px 0;
+    text-align: left;
+}
+
+#headermenu {
+    height: 39px;
+    margin: 0 auto;
+}
+
+#wrap {
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    text-align: right;
+}
+
+#main {
+    float: left;
+    position: relative;
+    width: 100%;
+    margin-top: 35px;
+    margin-right: -340px;
+    text-align: left;
+}
+
+#main_contents {
+    margin: -36px 340px 0 0; /* 2番目の数字(右側)はsidemenuのwidthの変更に合わせて調整して下さい */
+    padding-top: 35px;
+}
+
+#sidemenu {
+    float: right;
+    position: relative;
+    overflow: hidden;
+    width: 320px; /* サイドメニューの幅 */
+    padding-top: 35px;
+}
+
+#footer {
+    clear: both;
+    padding: 20px 0;
+}
+
+#footer_plg {
+    clear: both;
+    margin: 0 auto;
+}
+
+#footer_inner {
+    clear: both;
+    margin: 0 auto;
+}
+
+/* =================================================
+  Container
+================================================= */
+#container {
+    background-color: #FFFFFF; /* 全体の背景色 */
+}
+
+/* =================================================
+  Header
+================================================= */
+#header {
+    background: #FFFFFF url(https://blog-imgs-43.fc2.com/t/e/m/templates/header_background.png) repeat-x bottom left; /* ヘッダー背景 */
+    border-bottom: 1px solid #cfcfcf;
+    -webkit-box-shadow: 0px 1px 1px 0px #CCC;
+    -moz-box-shadow: 0px 1px 1px 0px #CCC;
+    box-shadow: 0px 1px 1px 0px #CCC;
+}
+
+#header h1,
+#header p {
+    min-width: 785px;
+    max-width: 1185px;
+    margin: 0 auto;
+}
+
+#header h1 {
+    margin-bottom: 20px;
+    padding-left: 15px;
+    background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/blog_name.png) no-repeat left center; /* ブログタイトル前のアイコン */
+}
+
+/* =================================================
+  Headermenu
+================================================= */
+#headermenu {
+    height: 39px;
+    background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/headermenu.png) no-repeat -1px 0;
+}
+
+#headermenu .archives {
+    float: left;
+    width: 135px;
+    background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/headermenu.png) no-repeat 103px 0;
+}
+
+#headermenu .archives a {
+    display: block;
+    width: 135px;
+    height: 39px;
+    line-height: 39px;
+}
+
+#headermenu .archives a:hover {
+    background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/headermenu_hover.png) no-repeat bottom left;
+    background-size: 100% 100%;
+}
+
+#headermenu .switch {
+    float: right;
+    width: 100px;
+}
+
+#headermenu .switch li {
+    float: right;
+    width: 49px;
+}
+
+#headermenu .switch li.grid {
+    width: 49px;
+}
+
+#headermenu .switch li a {
+    display: block;
+    width: 49px;
+    height: 39px;
+    background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/switch_btn.png) no-repeat -1px 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#headermenu .switch li.list a {
+    background-position: -1px 0;
+}
+
+#headermenu .switch li.grid a {
+    background-position: -49px 0;
+    width: 49px;
+}
+
+#headermenu .switch li.list a:hover {
+    background-position: -1px -39px;
+}
+
+#headermenu .switch li.grid a:hover {
+    background-position: -49px -39px
+}
+
+#headermenu .switch li.list a.selected {
+    background-position: -1px -39px;
+}
+
+#headermenu .switch li.grid a.selected {
+    background-position: -49px -39px
+}
+
+/* =================================================
+  Main
+================================================= */
+#main {
+    border-top: 1px dotted #B5B5B6;
+    border-bottom: 1px dotted #B5B5B6;
+}
+
+#main_contents {
+    border-left: 1px dotted #B5B5B6;
+    border-right: 1px dotted #B5B5B6;
+}
+
+/*  content
+-------------------------------------------------- */
+#main_contents .content {
+    position: relative;
+    margin-bottom: 20px;
+    padding: 15px 0 20px;
+    background-color: #FFFFFF; /* メインカラムのコンテンツ背景色 */
+    border-top: 1px dotted #B5B5B6; /* メインカラムのコンテンツ上のライン */
+    border-bottom: 1px dotted #B5B5B6; /* メインカラムのコンテンツ下のライン */
+}
+
+#main_contents h2.entry_header,
+#main_contents h2.sub_header {
+    margin: 0 0 15px;
+    padding: 5px 0 5px 35px;
+    background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 20px 5px; /* 記事タイトル前のアイコン */
+}
+
+#main_contents h2.entry_header a,
+#main_contents h2.sub_header a {
+    display: block;
+    width: 100%;
+    height: 1.4em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#main_contents h3.sub_header {
+    margin: -15px 0 20px;
+    padding: 10px 20px 10px 35px;
+    background: #F4F4F4 url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 15px 10px; /* メインカラムのプラグインタイトル前のアイコン */
+    border-bottom: 1px dotted #B5B5B6;
+}
+
+#main_contents h4.sub_title {
+    padding: 3px 0 3px 15px;
+    margin-bottom: 20px;
+    background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat left 2px; /* コメント・TB見出し前のアイコン */
+}
+
+/* content style */
+#main_contents blockquote {
+    margin-bottom: 10px;
+    padding: 15px;
+    background-color: #F4F4F4;
+}
+
+#main_contents input {
+    padding: 2px;
+}
+
+/* entry_date  */
+#main_contents .entry_date {
+    float: left;
+    width: 170px;
+    margin: 0 0 10px 20px;
+    text-align: left;
+}
+
+#main_contents .entry_date li {
+    display: inline;
+    margin-right: 1em;
+}
+
+/* entry_state */
+#main_contents .entry_state {
+    float: right;
+    overflow: hidden;
+    width: 140px;
+    margin: 0 20px 10px 0;
+    text-align: right;
+}
+
+#main_contents .content .entry_state li {
+    display: inline;
+    margin-left: 1em;
+    padding-right: 1em;
+    border-right: 1px solid #999999;
+}
+
+#main_contents .content .entry_state li:last-child {
+    padding-right: 0;
+    border-right: none;
+}
+
+/* entry_body  */
+#main_contents .entry_body {
+    clear: both;
+    overflow: hidden;
+    margin: 0 20px;
+    padding-bottom: 40px;
+    zoom: 100%;
+}
+
+#main_contents .entry_body:after {
+    content: "";
+    clear: both;
+    height: 0;
+    display: block;
+    visibility: hidden;
+}
+
+#main_contents .entry_body .entry_image {
+    position: absolute;
+    left: 20px;
+}
+
+#main_contents .entry_body .entry_image img {
+    max-width: 200px; /* リスト表示の時のサムネイルの幅の上限 */
+    max-height: 250px;
+    border: 4px solid #FFFFFF;
+    -webkit-box-shadow: 0px 1px 1px 0px #999999;
+    -moz-box-shadow: 0px 1px 1px 0px #999999;
+    box-shadow: 0px 1px 1px 0px #999999;
+}
+
+#main_contents .entry_body .entry_discription {
+    margin-left: 238px; /* サムネイル幅を変更した場合はこちらも調整して下さい */
+    min-height: 228px;
+}
+
+#main_contents .entry_body .entry_more {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    padding: 15px 0;
+    text-align: right;
+}
+
+#main_contents #e .entry_body .entry_more {
+    display: none;
+}
+
+#main_contents .entry_body .entry_more a { /* 「続きを読む」リンク */
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background: #EAEAEA;
+    border-top: 1px solid #DCDDDD;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    text-align: center;
+}
+
+#main_contents .entry_body .entry_more a:hover { /* 「続きを読む」リンクにポインタをのせた時の設定 */
+    background: #8ADAE6;
+    border-top: 1px solid #6BA9B3;
+    color: #FFFFFF;
+}
+
+#main_contents .entry_body .more {
+    margin-top: 10px;
+}
+
+#main_contents .entry_body .fc2_footer {
+    margin-top: 10px;
+}
+
+/* Baton */
+dl.blog_baton {
+    border: 1px solid #EFEFEF;
+    padding: 20px 20px 10px;
+}
+
+dt.baton_q {
+    padding-bottom: 5px;
+}
+
+dd.baton_a {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #EFEFEF;
+}
+
+/* relate 関連記事リンク */
+.relate_dl {
+    margin-top: 25px;
+}
+
+.relate_dl dt {
+    font-size: 124%;
+    margin-bottom: 10px;
+    padding-left: 5px;
+    border-left: 5px solid #CCC;
+}
+
+/* fc2twtr */
+.fc2twtr {
+    zoom: 100%;
+}
+
+.fc2twtr:after {
+    content: "";
+    clear: both;
+    height: 0;
+    display: block;
+    visibility: hidden;
+}
+
+.fc2twtr dt {
+    margin-bottom: 20px;
+}
+
+.fc2twtr dd {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #EFEFEF;
+    color: #666666;
+}
+
+/* entry_footer */
+#main_contents .entry_footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 15px 0;
+    background: #F4F4F4; /* 個別ページ 記事フッタの背景色 */
+    zoom: 100%;
+}
+
+#main_contents .entry_footer:after {
+    content: "";
+    clear: both;
+    height: 0;
+    display: block;
+    visibility: hidden;
+}
+
+#main_contents .entry_footer .entry_state {
+    margin-bottom: 0;
+    width: auto;
+}
+
+/* titlelist search */
+#main_contents .list_body {
+    padding: 0 20px;
+}
+
+#main_contents .list_body li {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #EFEFEF;
+}
+
+/* sub content */
+#main_contents .sub_content {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: 1px dotted #B5B5B6;
+}
+
+#main_contents .sub_content .sub_footer {
+    margin-top: 20px;
+    text-align: right;
+}
+
+#main_contents .sub_content .sub_footer li {
+    display: inline;
+    margin-left: 1em;
+}
+
+#main_contents .sub_content .sub_footer li a {
+    color: #999999;
+}
+
+#main_contents .sub_content .sub_footer li a:hover {
+    color: #8ADAE6;
+}
+
+/* form */
+#main_contents .form {
+    margin: 0 20px;
+}
+
+/* trackback */
+#main_contents .trackback {
+    margin: 0 20px;
+}
+
+#main_contents .trackback input {
+    width: 396px;
+}
+
+/* list_content 
+-------------------------------------------------- */
+#main_contents .list_content {
+    float: none;
+}
+
+/* grid_content
+-------------------------------------------------- */
+#main_contents .grid_content {
+    float: left;
+    margin-left: -1px;
+    margin-right: -1px;
+    width: 50%;
+    height: 310px; /* グリッド表示の時の記事の高さ */
+    border-left: 1px dotted #B5B5B6;
+    border-right: 1px dotted #B5B5B6;
+}
+
+#main_contents .grid_content .fc2blomaga_buy_area {
+    display: none;
+}
+
+#main_contents .grid_content .entry_body {
+    overflow: hidden;
+    height: 5.8em;
+}
+
+#main_contents #e, #main_contents #e .entry_body {
+    height: auto;
+}
+
+#main_contents .p_area, #main_contents .p_area .entry_body {
+    height: auto;
+}
+
+#main_contents .grid_content .entry_body .entry_image img {
+    max-width: 150px; /* グリッド表示の時のサムネイルの幅の上限 */
+    max-height: 210px;
+}
+
+#main_contents .grid_content .entry_body .entry_discription {
+    margin-left: 178px; /* ↑の.entry_image imgのmax-widthを変更した場合はこちらも調整して下さい */
+}
+
+#main_contents .grid_content:first-child, #main_contents .p_area {
+    float: none;
+    width: 100%;
+    min-height: 110px;
+    margin-left: 0;
+    margin-right: 0;
+    border-left: none;
+    border-right: none;
+}
+
+#main_contents .no_br:first-child br {
+    display: none;
+}
+
+#main_contents .p_area .entry_body {
+    height: auto;
+}
+
+#main_contents .p_area .entry_body .fc2blomaga_buy_area {
+    display: block;
+}
+
+#main_contents .grid_content:first-child .entry_image img, #main_contents .p_area .entry_image img {
+    max-width: 200px; /* グリッド表示の時の最初の記事のサムネイルの幅の上限 */
+    max-height: 220px;
+}
+
+#main_contents .grid_content:first-child .entry_discription {
+    margin-left: 238px; /* ↑の.entry_image imgのmax-widthを変更した場合はこちらも調整して下さい */
+    min-height: 228px;
+}
+
+/* page_navi
+-------------------------------------------------- */
+#main_contents .page_navi {
+    position: relative;
+    clear: both;
+    height: 123px;
+    margin-top: -20px;
+    text-align: center;
+    zoom: 100%;
+}
+
+#main_contents .page_navi:after {
+    content: "";
+    clear: both;
+    height: 0;
+    display: block;
+    visibility: hidden;
+}
+
+#main_contents .page_navi a {
+    display: block;
+    overflow: hidden;
+    height: 18px;
+    width: 123px;
+    padding-top: 45px;
+    padding-bottom: 60px;
+    background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/page_navi.png) no-repeat 0 0;
+}
+
+#main_contents .page_navi a:hover {
+    color: #8ADAE6;
+}
+
+#main_contents .page_navi .prev {
+    float: left;
+    width: 30%;
+    background-position: left -145px;
+    text-align: left;
+
+}
+
+#main_contents .page_navi .next {
+    float: right;
+    width: 30%;
+    background-position: right -145px;
+    text-align: right;
+}
+
+#main_contents .page_navi .home {
+    position: absolute;
+    left: 50%;
+    margin-left: -61px;
+    background-position: -375px -145px;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#main_contents .page_navi a.prev:hover {
+    background-position: left 15px;
+}
+
+#main_contents .page_navi a.next:hover {
+    background-position: right 15px;
+}
+
+#main_contents .page_navi a.home:hover {
+    background-position: -375px 15px;
+}
+
+#main_contents .page_navi .prevpage,
+#main_contents .page_navi .nextpage {
+    text-align: left;
+    text-indent: -100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#main_contents .page_navi .preventry {
+    padding-left: 80px;
+}
+
+#main_contents .page_navi .nextentry {
+    padding-right: 80px;
+}
+
+/* =================================================
+  Entry (html tag)
+================================================= */
+.p_area .entry_body h2, .p_area .entry_body h3,
+.p_area .entry_body h4, .p_area .entry_body h5 {
+    background: url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 5px 5px;
+    margin: 0 0 10px;
+    padding: 5px 0 5px 20px;
+}
+
+.p_area .entry_body ul,
+.p_area .entry_body ol {
+    margin: 1em 0em 1em;
+}
+
+.p_area .entry_body ul li {
+    list-style: disc outside;
+    margin-left: 2em;
+}
+
+.p_area .entry_body ol li {
+    list-style: decimal outside;
+    margin-left: 2em;
+}
+
+.p_area .entry_body table {
+    border-collapse: collapse;
+}
+
+.p_area .entry_body table th,
+.p_area .entry_body table td {
+    padding: 5px;
+}
+
+.p_area .entry_body table th {
+    background-color: #EFEFEF;
+}
+
+.entry img {
+    max-width: 100%;
+}
+
+/* =================================================
+  Sidemenu
+================================================= */
+#sidemenu {
+    border-left: 1px dotted #B5B5B6;
+    border-right: 1px dotted #B5B5B6;
+}
+
+#sidemenu .sidemenu_content {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #FFFFFF; /* サイドメニュー(プラグイン)の背景色、アイコン */
+    border-bottom: 1px dotted #B5B5B6;
+}
+
+#sidemenu h3 {
+    margin: -10px -10px 0;
+    padding: 10px 10px 10px 25px;
+    background: #F4F4F4 url(https://blog-imgs-43.fc2.com/t/e/m/templates/content_title.png) no-repeat 10px 10px; /* サイドメニュー(プラグイン)のタイトルの背景色、アイコン */
+    border-top: 1px dotted #B5B5B6;
+    border-bottom: 1px dotted #B5B5B6;
+}
+
+/* =================================================
+  pagetop
+================================================= */
+#pagetop {
+    position: fixed;
+    right: 200px;
+    bottom: 50px;
+    z-index: 100;
+}
+
+#pagetop a {
+    display: block;
+    width: 58px;
+    height: 58px;
+    background: #EEEEEE url(https://blog-imgs-43.fc2.com/t/e/m/templates/page_top.png) no-repeat 13px 13px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#pagetop a:hover {
+    opacity: 1;
+    background-position: 13px -48px;
+}
+
+/* =================================================
+  plgin
+================================================= */
+.plg .plg_description,
+.plg .plg_body,
+.plg .plg_footer {
+    margin-top: 10px;
+}
+
+#main_contents .plg .plg_description,
+#main_contents .plg .plg_body,
+#main_contents .plg .plg_footer {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.plg li {
+    margin-bottom: 5px;
+}
+
+.plg input {
+    margin: 2px;
+}
+
+/* plugin-search
+------------------------------------------------- */
+.plg .plugin-search input[type="text"] {
+    width: 90%;
+}
+
+/* Calendar(Plugin)
+------------------------------------------------- */
+.plg table.calender {
+    width: 100%;
+    margin: 0px auto;
+    font-size: 100%;
+}
+
+.plg table.calender caption {
+    margin: 0px auto;
+}
+
+.plg table.calender th,
+.plg table.calender td {
+    padding: 0.1em;
+    border-bottom: 1px solid #EFEFEF;
+    text-align: center;
+}
+
+.plg table.calender td a {
+    display: block;
+    background-color: #EFEFEF;
+}
+
+.plg table.calender td a:hover {
+    background-color: #8ADAE6;
+    color: #ffffff;
+}
+
+.plg table.calender th#sun {
+    color: #FF0000;
+}
+
+.plg table.calender th#sat {
+    color: #0000FF;
+}
+
+/* Piyo(Plugin)
+------------------------------------------------- */
+.plg .mylog {
+    padding: 10px;
+    background: #F9F9F9;
+    border: 1px solid #EFEFEF;
+}
+
+.plg .mylog .title {
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #EFEFEF;
+    font-weight: bold;
+}
+
+.plg .mylog dl {
+    margin: 0px;
+    padding: 0px;
+}
+
+.plg .mylog dt.day {
+    margin: 0px;
+    padding: 0px 0px 5px;
+    background-image: none;
+    text-align: left;
+    font-size: 85% !important;
+}
+
+.plg .mylog dt.day img {
+    vertical-align: middle;
+}
+
+.plg .mylog dd.piyolog {
+    margin: 0px 0px 5px;
+    padding: 0px 0px 10px;
+    border-bottom: 1px solid #EFEFEF;
+}
+
+.plg .tab {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.plg .tab input {
+    padding: 2px 5px;
+}
+
+.plg .tab input.b1 {
+    margin-right: 5px;
+}
+
+.plg .license {
+    text-align: right;
+    font-size: 85% !important;
+}
+
+/* =================================================
+  Footer
+================================================= */
+#footer {
+    background: #EFEFEF; /* フッターの背景色 */
+    -webkit-box-shadow: 0px 1px 3px 0px #CCC inset;
+    -moz-box-shadow: 0px 1px 3px 0px #CCC inset;
+    box-shadow: 0px 1px 3px 0px #CCC inset;
+    text-shadow: 0px 1px 2px #FFFFFF;
+}
+
+/* footer_plg
+------------------------------------------------- */
+#footer_plg {
+    padding-bottom: 40px;
+    border-left: 1px dotted #9FA0A0;
+    zoom: 100%;
+}
+
+#footer_plg:after {
+    content: "";
+    clear: both;
+    height: 0;
+    display: block;
+    visibility: hidden;
+}
+
+#footer_plg .footer_content {
+    float: left;
+    width: 199px;
+    padding: 0 20px;
+    border-right: 1px dotted #9FA0A0;
+}
+
+#footer_plg h3 {
+    margin-bottom: 10px;
+}
+
+/* footer_inner
+------------------------------------------------- */
+#footer_inner /* フッター(コピーライト等) */
+{
+    color: #B5B5B6;
+}
+
+textarea, input, select {
+    font-family: "ＭＳ Ｐゴシック", "Osaka", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku GothicPro", sans-serif;
+}
+

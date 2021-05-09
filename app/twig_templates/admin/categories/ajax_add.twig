@@ -154,9 +154,9 @@
                     $('#sys-category-add').removeAttr('disabled');
                     $('#sys-category-add').val('{{ _('Add') }}');
                 },
-                error: function (data, status, xhr){
+                error: function (data, status, xhr) {
                     alert("カテゴリ追加時にエラーが発生しました、時間をおいてから再度試行してください。\n" +
-                      "An error occurred when adding the category, please wait a while and try again.");
+                        "An error occurred when adding the category, please wait a while and try again.");
                     $('#sys-category-add-name').val('');
                     $('#sys-category-add').removeAttr('disabled');
                     $('#sys-category-add').val('{{ _('Add') }}');

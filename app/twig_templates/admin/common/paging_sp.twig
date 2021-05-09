@@ -10,7 +10,7 @@
                 <li><a href="{{ url(req, req.shortControllerName, req.methodName, {'page':paging.page-1}, true) }}">{{ _('Previous page') }}</a></li>
             {% endif %}
             {% if not paging.is_prev %}
-            <li><span>{{ _('Previous page') }}</span></li>
+                <li><span>{{ _('Previous page') }}</span></li>
             {% endif %}
 
             {% if paging.is_next %}

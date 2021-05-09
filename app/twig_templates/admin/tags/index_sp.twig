@@ -21,14 +21,14 @@
 
     <ul class="link_list">
         {% for tag in tags %}
-        <li class="link_list_item">
-            <a href="{{ url(req, 'Tags', 'edit', {id: tag.id}) }}" class="common_next_link next_bg">
-                <dl>
-                    <dt class="item_title">{{ tag.name }}</dt>
-                    <dd class="state"><i class="entry_state detail_icon"></i>{{ tag.count }}</dd>
-                </dl>
-            </a>
-        </li>
+            <li class="link_list_item">
+                <a href="{{ url(req, 'Tags', 'edit', {id: tag.id}) }}" class="common_next_link next_bg">
+                    <dl>
+                        <dt class="item_title">{{ tag.name }}</dt>
+                        <dd class="state"><i class="entry_state detail_icon"></i>{{ tag.count }}</dd>
+                    </dl>
+                </a>
+            </li>
         {% endfor %}
     </ul>
 

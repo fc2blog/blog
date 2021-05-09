@@ -10,54 +10,54 @@ use PHPUnit\Framework\TestCase;
 
 class CreateTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function testForm(): void
-  {
-    $this->mergeAdminSession();
+    public function testForm(): void
+    {
+        $this->mergeAdminSession();
 
-    // Ja表記を確認
-    $c = $this->reqGet("/admin/entries/create");
-    $this->assertInstanceOf(EntriesController::class, $c);
-    $this->assertEquals("create", $c->getResolvedMethod());
-    $this->assertStringContainsString("新しく記事を書く", $c->getOutput());
+        // Ja表記を確認
+        $c = $this->reqGet("/admin/entries/create");
+        $this->assertInstanceOf(EntriesController::class, $c);
+        $this->assertEquals("create", $c->getResolvedMethod());
+        $this->assertStringContainsString("新しく記事を書く", $c->getOutput());
 //    var_dump($this->clientTraitSession);
 //    var_dump($this->clientTraitCookie);
-  }
+    }
 
-  public function testPost(): void
-  {
-    $this->mergeAdminSession();
+    public function testPost(): void
+    {
+        $this->mergeAdminSession();
 
-    $em = new EntriesModel();
-    $entries = $em->forTestGetAll('testblog2');
-    $entries_count = count($entries);
+        $em = new EntriesModel();
+        $entries = $em->forTestGetAll('testblog2');
+        $entries_count = count($entries);
 
-    $sig = $this->getSig();
+        $sig = $this->getSig();
 
-    $r = $this->reqPostBeRedirect("/admin/entries/create", [
-      "sig" => $sig,
-      "entry" => [ // 最低限の投稿
-        "title" => "test",
-        "body" => "body",
-        "extend" => "",
-        "posted_at" => "",
-        "open_status" => "1",
-        "password" => "",
-        "auto_linefeed" => "1",
-        "comment_accepted" => "1",
-      ]
-    ]);
+        $r = $this->reqPostBeRedirect("/admin/entries/create", [
+            "sig" => $sig,
+            "entry" => [ // 最低限の投稿
+                "title" => "test",
+                "body" => "body",
+                "extend" => "",
+                "posted_at" => "",
+                "open_status" => "1",
+                "password" => "",
+                "auto_linefeed" => "1",
+                "comment_accepted" => "1",
+            ]
+        ]);
 
-    $this->assertEquals("/admin/entries/index", $r->redirectUrl);
+        $this->assertEquals("/admin/entries/index", $r->redirectUrl);
 
-    $entries = $em->forTestGetAll('testblog2');
-    $this->assertCount($entries_count + 1, $entries);
+        $entries = $em->forTestGetAll('testblog2');
+        $this->assertCount($entries_count + 1, $entries);
 //    var_dump($entries[count($entries)-1]);
-    $latest_entry = $entries[count($entries) - 1];
-    $this->assertEquals('test', $latest_entry['title']);
-    $this->assertEquals('body', $latest_entry['body']);
-  }
+        $latest_entry = $entries[count($entries) - 1];
+        $this->assertEquals('test', $latest_entry['title']);
+        $this->assertEquals('body', $latest_entry['body']);
+    }
 
-  // TODO 様々なパラメタをつかったテストの追加
+    // TODO 様々なパラメタをつかったテストの追加
 }

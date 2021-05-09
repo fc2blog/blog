@@ -1,5 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
-import { Helper } from "../tests/helper";
+import {afterAll, beforeAll, describe, expect, it} from "@jest/globals";
+import {Helper} from "../tests/helper";
 
 describe("admin create entry", () => {
   let c: Helper;
@@ -72,7 +72,7 @@ describe("admin create entry", () => {
     expect(response.url()).toEqual(c.getBaseUrl() + "/admin/entries/create");
   });
 
-  const find_text = async(c, str, selector)=>{
+  const find_text = async (c, str, selector) => {
     const whole_text = await c.page.$eval(selector, (elm) => elm.textContent);
     const match = whole_text.match(new RegExp(str));
     return !!match;
@@ -89,7 +89,7 @@ describe("admin create entry", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     expect(response.url()).toEqual(c.getBaseUrl() + "/admin/entries/create");
-    expect(await find_text(c, "必ず入力してください","#sys-entry-form > table > tbody > tr > td > p")).toEqual(true);
+    expect(await find_text(c, "必ず入力してください", "#sys-entry-form > table > tbody > tr > td > p")).toEqual(true);
   });
 
 
@@ -106,7 +106,7 @@ describe("admin create entry", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(await find_text(c, "記事を作成しました","#main-contents > div.flash-message.flash-message-info > p")).toEqual(true);
+    expect(await find_text(c, "記事を作成しました", "#main-contents > div.flash-message.flash-message-info > p")).toEqual(true);
   });
 
   it("delete test", async () => {
@@ -122,7 +122,7 @@ describe("admin create entry", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(await find_text(c, "記事を削除しました","#main-contents > div.flash-message.flash-message-info > p")).toEqual(true);
+    expect(await find_text(c, "記事を削除しました", "#main-contents > div.flash-message.flash-message-info > p")).toEqual(true);
   });
 
   //

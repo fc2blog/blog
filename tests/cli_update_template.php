@@ -16,8 +16,8 @@ LoaderHelper::requireBootStrap();
 
 // CLI param check
 if ($argc !== 2) {
-  echo "usage: this_cli.php {blog_id}" . PHP_EOL;
-  exit(1);
+    echo "usage: this_cli.php {blog_id}" . PHP_EOL;
+    exit(1);
 }
 $blog_id = $argv[1];
 
@@ -26,8 +26,8 @@ $blogs = new BlogsModel();
 $blog = $blogs->findById($blog_id);
 
 if (empty($blog)) {
-  echo "not found blog_id:{$blog_id}" . PHP_EOL;
-  exit(1);
+    echo "not found blog_id:{$blog_id}" . PHP_EOL;
+    exit(1);
 }
 
 $blogs->resetToDefaultTemplateByBlogId($blog_id);

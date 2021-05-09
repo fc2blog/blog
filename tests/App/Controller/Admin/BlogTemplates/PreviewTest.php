@@ -12,24 +12,24 @@ use PHPUnit\Framework\TestCase;
 
 class PreviewTest extends TestCase
 {
-  use ClientTrait;
+    use ClientTrait;
 
-  public function setUp(): void
-  {
-    DBHelper::clearDbAndInsertFixture();
-    parent::setUp();
-  }
+    public function setUp(): void
+    {
+        DBHelper::clearDbAndInsertFixture();
+        parent::setUp();
+    }
 
-  public function testPreview(): void
-  {
-    Session::destroy(new Request());
-    $this->resetSession();
-    $this->resetCookie();
-    $this->mergeAdminSession();
+    public function testPreview(): void
+    {
+        Session::destroy(new Request());
+        $this->resetSession();
+        $this->resetCookie();
+        $this->mergeAdminSession();
 
-    $c = $this->reqGet("/testblog2/index.php?mode=entries&process=preview&template_id=1&pc=1");
+        $c = $this->reqGet("/testblog2/index.php?mode=entries&process=preview&template_id=1&pc=1");
 //    var_dump($c);
-    $this->assertInstanceOf(EntriesController::class, $c);
-    $this->assertEquals('preview', $c->getResolvedMethod());
-  }
+        $this->assertInstanceOf(EntriesController::class, $c);
+        $this->assertEquals('preview', $c->getResolvedMethod());
+    }
 }

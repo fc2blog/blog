@@ -12,7 +12,7 @@
  */
 function h(?string $text): string
 {
-  return htmlentities($text, ENT_QUOTES, \Fc2blog\Config::get('INTERNAL_ENCODING'));
+    return htmlentities($text, ENT_QUOTES, \Fc2blog\Config::get('INTERNAL_ENCODING'));
 }
 
 /**
@@ -24,13 +24,13 @@ function h(?string $text): string
  */
 function t(?string $text, int $length = 10, string $etc = '...'): string
 {
-  if (!$length) {
-    return '';
-  }
-  if (mb_strlen($text, \Fc2blog\Config::get('INTERNAL_ENCODING')) > $length) {
-    return mb_substr($text, 0, $length, \Fc2blog\Config::get('INTERNAL_ENCODING')) . $etc;
-  }
-  return $text;
+    if (!$length) {
+        return '';
+    }
+    if (mb_strlen($text, \Fc2blog\Config::get('INTERNAL_ENCODING')) > $length) {
+        return mb_substr($text, 0, $length, \Fc2blog\Config::get('INTERNAL_ENCODING')) . $etc;
+    }
+    return $text;
 }
 
 /**
@@ -41,10 +41,10 @@ function t(?string $text, int $length = 10, string $etc = '...'): string
  */
 function d(?string $text, $default): string
 {
-  if ($text === null || $text === '') {
-    return $default;
-  }
-  return $text;
+    if ($text === null || $text === '') {
+        return $default;
+    }
+    return $text;
 }
 
 /**
@@ -56,17 +56,17 @@ function d(?string $text, $default): string
  */
 function th(?string $text, int $length = 10, string $etc = '...'): string
 {
-  return h(t($text, $length, $etc));
+    return h(t($text, $length, $etc));
 }
 
 /**
  * URLのエンコードエイリアス
- * @param string|null$text
+ * @param string|null $text
  * @return string
  */
 function ue(?string $text): string
 {
-  return rawurlencode($text);
+    return rawurlencode($text);
 }
 
 /**
@@ -77,7 +77,7 @@ function ue(?string $text): string
  */
 function df($date, $format = 'Y/m/d H:i:s'): string
 {
-  return date($format, strtotime($date));
+    return date($format, strtotime($date));
 }
 
 /**
@@ -87,5 +87,5 @@ function df($date, $format = 'Y/m/d H:i:s'): string
  */
 function __(?string $msg): string
 {
-  return _($msg);
+    return _($msg);
 }
