@@ -48,7 +48,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #E0E0E0;
-    font-family: Helvetica, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3";
+    font-family: Helvetica, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", serif;
     font-size: 16px;
     color: #666666;
     -webkit-text-size-adjust: none;
@@ -327,7 +327,7 @@ input, textarea, select {
 
 /* 見出しの文字色 */
 .section .page_title h2,
-.section entry_title h2,
+.section .entry_title h2,
 .section .page_title h2 a,
 .section .entry_title h2 a {
     color: #000000;
@@ -598,10 +598,8 @@ dl.profile dd {
     padding: 0;
     margin: 0;
     -webkit-border-bottom-right-radius: 5px;
-    -moz-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -moz-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
 
@@ -636,10 +634,8 @@ dl.profile dd {
     width: 100%;
     background-color: #000000;
     -webkit-border-bottom-right-radius: 5px;
-    -moz-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -moz-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
     font-size: 13px;
 }
@@ -676,10 +672,8 @@ dl.profile dd {
     width: 100%;
     background-color: #000000;
     -webkit-border-bottom-right-radius: 5px;
-    -moz-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -moz-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
 

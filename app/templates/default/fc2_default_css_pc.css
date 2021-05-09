@@ -20,8 +20,7 @@ body {
     text-align: center;
     font-family: "メイリオ", Meiryo, Verdana, Helvetica, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "ＭＳ Ｐゴシック", sans-serif;
     line-height: 1.4;
-    font-size: small !important; /* IE7 */
-    font-size: 82%; /* IE6 */
+    font-size: small !important;
     word-break: break-all;
 }
 
@@ -47,8 +46,7 @@ ul, ol, li, dl, dt, dd {
 
 table {
     border: 0;
-    font-size: small　 !important; /* for Modern browser */
-    font-size: 82%; /* for IE6 */
+    font-size: small !important;
 }
 
 th, td {
@@ -163,7 +161,7 @@ body {
     color: #999999;
 }
 
-#main_contents .list_body li /* 記事一覧ページ */,
+#main_contents .list_body li /* 記事一覧ページ */
 {
     color: #666666;
 }
@@ -231,7 +229,6 @@ body {
 #footer_plg, #footer_inner {
     min-width: 800px;
     max-width: 1200px;
-    width: expression(document.body.clientWidth < 802? "800px" : document.body.clientWidth > 1202? "1200px" : "auto"); /* For IE */
 }
 
 /* =================================================
@@ -323,7 +320,6 @@ body {
 #header p {
     min-width: 785px;
     max-width: 1185px;
-    width: expression(document.body.clientWidth < 802? "800px" : document.body.clientWidth > 1202? "1200px" : "auto"); /* For IE */
     margin: 0 auto;
 }
 
@@ -556,7 +552,7 @@ body {
 }
 
 #main_contents .entry_body .entry_more a { /* 「続きを読む」リンク */
-    display: inline-brock;
+    display: inline-block;
     margin-top: 10px;
     padding: 5px 10px;
     background: #EAEAEA;
@@ -858,7 +854,6 @@ dd.baton_a {
     text-indent: -100%;
     white-space: nowrap;
     overflow: hidden;
-    white-space: nowrap;
     text-overflow: ellipsis;
 }
 
@@ -1004,7 +999,6 @@ dd.baton_a {
 }
 
 .plg table.calender caption {
-    margin-bottom: 10px;
     margin: 0px auto;
 }
 
@@ -1058,8 +1052,7 @@ dd.baton_a {
     padding: 0px 0px 5px;
     background-image: none;
     text-align: left;
-    font-size: 85% !important; /* for Modern browser */
-    font-size: 93%; /* for IE6 */
+    font-size: 85% !important;
 }
 
 .plg .mylog dt.day img {
@@ -1087,8 +1080,7 @@ dd.baton_a {
 
 .plg .license {
     text-align: right;
-    font-size: 85% !important; /* for Modern browser */
-    font-size: 93%; /* for IE6 */
+    font-size: 85% !important;
 }
 
 /* =================================================
@@ -1135,15 +1127,6 @@ dd.baton_a {
 {
     color: #B5B5B6;
 }
-
-/* =================================================
-  for MacIE
-================================================= */
-/*\*//*/
-textarea, select, input {
-  font-family:Osaka;
-}
-/**/
 
 textarea, input, select {
     font-family: "ＭＳ Ｐゴシック", "Osaka", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku GothicPro", sans-serif;
