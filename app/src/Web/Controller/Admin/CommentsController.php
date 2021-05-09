@@ -168,7 +168,7 @@ class CommentsController extends AdminController
    */
   public function ajax_approval(Request $request):string
   {
-    if ($this->isInvalidAjaxRequest($request)) {
+    if ($this->isInvalidAjaxRequest($request) || $request->method !== 'POST' || !$request->isValidSig()) {
       return $this->error403();
     }
 
@@ -293,6 +293,10 @@ class CommentsController extends AdminController
     }
 
     // コメント投稿処理
+    if ($request->method !== 'POST' || !$request->isValidSig()) {
+      return $this->error403();
+    }
+
     $errors = $comments_model->replyValidate($request->get('comment'), $data, ['reply_body']);
 
     if (empty($errors)) {

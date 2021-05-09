@@ -109,12 +109,23 @@ abstract class Controller
 
   protected function isInvalidAjaxRequest(Request $request): bool
   {
-    return (
+    # HTTP_X_REQUESTED_WITHを検証
+    if(
       !isset($request->server['HTTP_X_REQUESTED_WITH']) ||
-      $request->server['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest' ||
-      # クロスサイトアクセスは想定していない
-      isset($request->server['HTTP_ORIGIN'])
-    );
+      $request->server['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest'
+    ) {
+      return true;
+    }
+
+    # ORIGINを検証
+    if(
+      isset($request->server['HTTP_ORIGIN']) &&
+      $request->server['HTTP_ORIGIN'] !== AdminController::getHostUrl()
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   protected function beforeFilter(Request $request)

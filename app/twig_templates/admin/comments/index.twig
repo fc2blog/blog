@@ -168,8 +168,8 @@
             $('#sys-reply-message').show();
             $.ajax({
                 type: 'POST',
-                url: common.fwURL('comments', 'ajax_reply', {id: id}),
-                data: {comment: {reply_body: $('textarea[name="comment[reply_body]"]').val()}},
+                url: common.fwURL('comments', 'ajax_reply'),
+                data: {id: id, sig: '{{ sig }}', comment: {reply_body: $('textarea[name="comment[reply_body]"]').val()}},
                 dataType: 'json',
                 success: function (json) {
                     if (json.success) {
@@ -195,26 +195,25 @@
                 return;
             }
             $('#sys-comment-approval').hide();
-            $('#sys-open-status-' + id + ' > *').fadeOut('fast', function () {
-                $.ajax({
-                    type: 'GET',
-                    url: common.fwURL('comments', 'ajax_approval', {id: id}),
-                    dataType: 'json',
-                    success: function (json) {
-                        if (json.success) {
-                            $('#sys-open-status-' + id).html('<span class="published">{{ _('Published') }}</span>');
-                            $('#sys-open-status').html('<span class="published">{{ _('Published') }}</span>');
-                            return;
-                        }
-                        $('#sys-open-status-' + id + ' > *').show();
-                        $('#sys-comment-approval').show();
-                        alert(json.error);
-                    },
-                    error: function (data, status, xhr){
-                        alert("エラーが発生しました、ページをリロードしてやり直してください。\n" +
-                          "An error occurred, please reload page and try again.");
+            $.ajax({
+                type: 'POST',
+                url: common.fwURL('comments', 'ajax_approval'),
+                data: {id: id, sig: '{{ sig }}'},
+                dataType: 'json',
+                success: function (json) {
+                    if (json.success) {
+                        $('#sys-open-status-' + id + ' > *').fadeOut('fast');
+                        $('#sys-open-status-' + id).html('<span class="published">{{ _('Published') }}</span>');
+                        $('#sys-open-status').html('<span class="published">{{ _('Published') }}</span>');
+                        return;
                     }
-                });
+                    $('#sys-comment-approval').show();
+                    alert(json.error);
+                },
+                error: function (data, status, xhr){
+                    alert("エラーが発生しました、ページをリロードしてやり直してください。\n" +
+                      "An error occurred, please reload page and try again.");
+                }
             });
         };
 
