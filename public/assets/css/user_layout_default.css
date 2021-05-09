@@ -62,7 +62,7 @@ form.user-form {
 }
 
 form.user-form dl {
-    font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3";
+    font-family: Helvetica, "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", serif;
     color: #666;
     margin: 10px;
     padding: 10px;
@@ -97,12 +97,7 @@ form.user-form dd select {
     margin: 0 0 10px 0;
     padding: 5px;
     border: 1px solid #DFDFDF;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
     border-radius: 5px;
-    -webkit-appearance: textarea;
-    -moz-appearance: textarea;
-    -o-appearance: textarea;
 }
 
 form.user-form .form-button {
@@ -126,13 +121,12 @@ form.user-form span.error {
     border: 1px solid #fcc;
 }
 
-@charset "utf-8";
 /* -------------------------------------------------
 	-Index-
 	1.Reset
 	2.Element
 	3.Headline
-	4.Cler fix
+	4.Clear fix
 	5.for MacIE
 -------------------------------------------------- */
 
@@ -156,7 +150,7 @@ body {
     width: 100%;
     text-align: center;
     line-height: 1.4;
-    font-size: 82%; /* 13px */
+    font-size: 13px;
 }
 
 body, input {
@@ -167,16 +161,8 @@ input[type="text"] {
     font-family: "ＭＳ Ｐゴシック", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Osaka", sans-serif;
 }
 
-/* Modern browser */
-html > /**/ body {
-    font-size: 13px;
-}
-
 a {
     text-decoration: none;
-    /*\*/
-    overflow: hidden; /* for Fx */
-    /**/
 }
 
 img, a img {
@@ -242,7 +228,7 @@ h6 {
 /* 13px */
 
 /* =================================================
-	4.Cler fix
+	4.Clear fix
 ================================================= */
 .clear:after {
     content: "";
@@ -251,23 +237,6 @@ h6 {
     clear: both;
     height: 0;
 }
-
-/*\*/
-* html .clear {
-    overflow: visible;
-    height: 1%;
-}
-
-/**/
-
-/* =================================================
-	5.for MacIE
-================================================= */
-/*\*//*/
-textarea, select, input {
-	font-family:Osaka;
-}
-/**/
 
 /* ============================================================
 	Common Style
@@ -444,10 +413,9 @@ ul.paging + table {
     margin-top: 10px;
 }
 
-/*--- mode=privete ---*/
 html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, blockquote, th, td, p {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -468,11 +436,11 @@ a {
 }
 
 table {
-    border: 0px none;
+    border: 0 none;
 }
 
 th, td {
-    padding: 0px;
+    padding: 0;
 }
 
 input, select, textarea {
@@ -489,18 +457,6 @@ h2 {
 
 h3 {
     font-size: 116%;
-}
-
-body:not(:target) .sh_heading_main_b, body:not(:target) html:not([lang*=""]) .sh_heading_main_b, html:not([lang*=""]) .sh_heading_main_b_wide {
-    /*
-    文法エラー（centor topが）なのでLinterがエラーを出す。
-    ただし、
-    - secret.css(本ファイル)を読み込んでいるのが default.htmlのみであり、
-    - なおかつ、`sh_heading_main_b_wide`クラスを利用しているテンプレートは（本レポジトリ内には）無く
-    - なおかつ、`sh_heading_main_b`クラスを利用しているのはSPページのみであり
-    - SPページにおいて、このセレクタをオンオフしても見た目に差がみつからなかったので、コメントアウト。
-    background: -moz-linear-gradient(center top, rgb(255, 255, 255), rgb(240, 240, 240)) repeat scroll 0% 0% transparent;
-     */
 }
 
 body, input {
@@ -527,7 +483,7 @@ a:hover, a:focus, a:active {
 
 table {
     border-collapse: collapse;
-    border-spacing: 0px;
+    border-spacing: 0;
     width: 100%;
     margin-bottom: 20px;
     background-color: rgb(255, 255, 255);
@@ -550,7 +506,7 @@ html, body {
 }
 
 .private_lock_left {
-    padding: 0px;
+    padding: 0;
     width: 33%;
     border: none;
 }
@@ -571,7 +527,7 @@ html, body {
 
 .private_lock_title {
     font-size: 22px;
-    background: url(../img/private_lock_icon.png) no-repeat left 0px;
+    background: url(../img/private_lock_icon.png) no-repeat left 0;
     padding: 0 0 0 28px;
 }
 
@@ -626,7 +582,6 @@ html, body {
     background-image: -o-linear-gradient(bottom, #2085d8, #3ca2e4);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3ca2e4', endColorstr='#2085d8', GradientType=0);
     padding: 11px 25px 14px;
-    *padding: 11px 25px 12px;
 }
 
 .private_lock_btn:not(:target) {
