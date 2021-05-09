@@ -1,5 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
-import { Helper } from "./helper";
+import {afterAll, beforeAll, describe, expect, it} from "@jest/globals";
+import {Helper} from "./helper";
 
 describe("crawl some blog", () => {
   let c: Helper;

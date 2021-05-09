@@ -1,4 +1,4 @@
-import {afterAll, beforeAll, describe, expect, it} from "@jest/globals";
+import {afterAll, beforeAll, describe, it} from "@jest/globals";
 import {Helper} from "./helper";
 
 describe("will be redirect to random blog page", () => {

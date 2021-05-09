@@ -1,5 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
-import { Helper } from "./helper";
+import {afterAll, beforeAll, describe, expect, it} from "@jest/globals";
+import {Helper} from "./helper";
 
 describe("crawl admin pages", () => {
   let c: Helper;
@@ -59,7 +59,7 @@ describe("crawl admin pages", () => {
 
   let upload_file_op = async () => {
     const input_file = await c.page.$('input[type=file][name="file[file]"]');
-    const test_image_path = __dirname+'/test.png';
+    const test_image_path = __dirname + '/test.png';
     await input_file.uploadFile(test_image_path);
 
     let [response] = await Promise.all([
@@ -75,18 +75,18 @@ describe("crawl admin pages", () => {
   it("upload file 1", upload_file_op);
   it("upload file 2", upload_file_op);
 
-  const count_file_num = async(c)=>{
+  const count_file_num = async (c) => {
     const whole_text = await c.page.$eval("html", (elm) => elm.textContent);
     const match = whole_text.match(/ファイル検索\[該当[\s]*([0-9]+)件]/);
-    if(!match){
+    if (!match) {
       console.log("一件もない");
       return null;
-    }else{
+    } else {
       return Number.parseInt(match[1]);
     }
   }
 
-  let before_file_num ;
+  let before_file_num;
   it("count before file num", async () => {
     before_file_num = await count_file_num(c);
   });
@@ -106,7 +106,7 @@ describe("crawl admin pages", () => {
   });
 
   it("count result file num", async () => {
-    expect(await count_file_num(c)).toEqual(before_file_num-1);
+    expect(await count_file_num(c)).toEqual(before_file_num - 1);
   });
 
   afterAll(async () => {

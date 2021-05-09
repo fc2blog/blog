@@ -1,5 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
-import { Helper } from "./helper";
+import {afterAll, beforeAll, describe, expect, it} from "@jest/globals";
+import {Helper} from "./helper";
 
 describe("crawl notfound page", () => {
   let c: Helper;
@@ -25,7 +25,7 @@ describe("crawl notfound page", () => {
     expect(response.url()).toEqual(url);
     expect(await c.page.title()).toEqual("404 Not Found. - testblog2");
 
-    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    const body_text = await c.page.$eval("body", elm => elm.textContent);
     expect(body_text.match(/404 Not Found お探しのページは存在しません/));
   });
 
@@ -42,13 +42,13 @@ describe("crawl notfound page", () => {
     expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/login");
 
     await c.page.$eval(
-        "#id_form input[name='user[login_id]']",
-        (elm: HTMLInputElement) => (elm.value = "")
+      "#id_form input[name='user[login_id]']",
+      (elm: HTMLInputElement) => (elm.value = "")
     );
     await c.page.type("#id_form input[name='user[login_id]']", admin_id);
     await c.page.$eval(
-        "#id_form input[name='user[password]']",
-        (elm: HTMLInputElement) => (elm.value = "")
+      "#id_form input[name='user[password]']",
+      (elm: HTMLInputElement) => (elm.value = "")
     );
     await c.page.type("#id_form input[name='user[password]']", admin_pass);
 
@@ -76,7 +76,7 @@ describe("crawl notfound page", () => {
     expect(response.status()).toEqual(404);
     expect(await c.page.title()).toEqual("404 Not Found.");
 
-    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    const body_text = await c.page.$eval("body", elm => elm.textContent);
     expect(body_text.match(/404 Not Found お探しのページは存在しません/));
   });
 
@@ -97,7 +97,7 @@ describe("crawl notfound page", () => {
     expect(response.status()).toEqual(404);
     // expect(await c.page.title()).toEqual("404 Not Found."); // TODO: ユーザースペースのテンプレートのTwig化
 
-    const body_text = await c.page.$eval("body", elm=>elm.textContent);
+    const body_text = await c.page.$eval("body", elm => elm.textContent);
     expect(body_text.match(/404 Not Found お探しのページは存在しません/));
   });
 
