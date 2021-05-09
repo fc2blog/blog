@@ -365,7 +365,7 @@ class BlogTemplatesModel extends Model
 
     static public function getPathDefaultCssWithDevice(string $device): string
     {
-        return Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+        return Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.css';
     }
 
     static public function getBodyDefaultTemplateHtmlWithDevice(string $device): string
