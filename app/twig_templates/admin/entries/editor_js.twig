@@ -30,6 +30,9 @@
     <div id="sys-add-media-search">
         <input type="text" id="sys-add-media-search-keyword"/>
         <input type="button" value="{{ _('Search') }}" id="sys-add-media-search-button"/>
+        /
+        <input id="ajax_file_upload_file" type="file" name="file[file]">
+        <button type="button" onclick="ajax_file_upload('{{ sig }}');">{{ _('Upload') }}</button>
     </div>
     <hr/>
 
