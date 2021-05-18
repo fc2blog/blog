@@ -299,5 +299,49 @@ class FilesController extends AdminController
         return "admin/common/json.twig";
     }
 
+    /**
+     * ajaxによるファイルアップロード受付
+     * @param Request $request
+     * @return string
+     */
+    public function ajax_file_upload(Request $request): string
+    {
+        if ($this->isInvalidAjaxRequest($request) || $request->method !== 'POST' || !$request->isValidSig()) {
+            return $this->error403();
+        }
+
+        $files_model = new FilesModel();
+        $blog_id = $this->getBlogId($request);
+
+        // アップロード時処理
+        if ($request->file('file')) {
+            // 新規登録処理
+            $errors = [];
+            $errors['file'] = $files_model->insertValidate($request->file('file'), $request->get('file'), $data_file);
+            if (empty($errors['file'])) {
+                $data_file['blog_id'] = $blog_id;
+                $tmp_name = $data_file['tmp_name'];
+                unset($data_file['tmp_name']);
+                if ($id = $files_model->insert($data_file)) {
+                    // ファイルの移動
+                    $data_file['id'] = $id;
+                    $move_file_path = App::getUserFilePath($data_file, true);
+                    App::mkdir($move_file_path);
+                    if (defined("THIS_IS_TEST")) {
+                        rename($tmp_name, $move_file_path);
+                    } else {
+                        move_uploaded_file($tmp_name, $move_file_path);
+                    }
+                    $this->setContentType("application/json; charset=utf-8");
+                    $this->set('json', ['status' => 'ok']);
+                    return "admin/common/json.twig";
+                }
+            }
+        }
+
+        $this->setContentType("application/json; charset=utf-8");
+        $this->set('json', ['status' => 'ng']);
+        return "admin/common/json.twig";
+    }
 }
 
