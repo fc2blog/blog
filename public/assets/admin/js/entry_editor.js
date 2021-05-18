@@ -138,7 +138,48 @@ var addMedia = {
 };
 
 // 画面外クリック時にダイアログを閉じる処理
-$(document).on('click', '.ui-widget-overlay', function(){
+$(document).on('click', '.ui-widget-overlay', function () {
   $(this).prev().find('.ui-dialog-content').dialog('close');
 });
 
+// 画像選択ダイアログ内からのファイルアップロード
+const ajax_file_upload = (sig) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', common.fwURL('Files', 'ajax_file_upload'));
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      const data = JSON.parse(xhr.response);
+      if (data && data.status === "ok") {
+        $('#sys-add-media-load').load(
+            common.fwURL('Entries', 'ajax_media_load'),
+            function (response, status, xhr) {
+              if (status === "error") {
+                alert("エラーが発生しました、ページをリロードしてください。\n" +
+                    "Loading error. Please reload page.");
+              } else {
+                $('#sys-add-media-load').fadeIn('fast');
+                $('#sys-add-media-load').find('input[type=checkbox]').on('click', function () {
+                  if ($(this).prop('checked')) {
+                    $(this).closest('li').addClass('selected');
+                  } else {
+                    $(this).closest('li').removeClass('selected');
+                  }
+                });
+              }
+            }
+        );
+      } else {
+        alert("エラーが発生しました、ページをリロードしてください。\n" +
+            "Loading error. Please reload page.");
+      }
+    }
+  }
+
+  const form = new FormData();
+  const file_elm = document.getElementById("ajax_file_upload_file");
+  form.append('sig', sig);
+  form.append(file_elm.name, file_elm.files[0], file_elm.files[0].name);
+
+  xhr.send(form);
+}
