@@ -389,6 +389,9 @@ msgstr ""
 msgid "403 Forbidden."
 msgstr ""
 
+msgid "400 BadRequest."
+msgstr ""
+
 #: shell/../view/user/entries/comment_edit_sp.html:2
 #: shell/../view/user/entries/comment_edit.html:1
 msgid "I edit a comment"

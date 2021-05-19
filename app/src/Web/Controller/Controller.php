@@ -432,6 +432,13 @@ abstract class Controller
         return 'user/common/error403.twig';
     }
 
+    // 400 BadRequest
+    public function error400()
+    {
+        $this->setStatusCode(400);
+        return 'user/common/error400.twig';
+    }
+
     public function get(string $key)
     {
         return $this->data[$key];
