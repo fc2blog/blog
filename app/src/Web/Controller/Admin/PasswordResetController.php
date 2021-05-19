@@ -34,12 +34,9 @@ class PasswordResetController extends AdminController
 
             // TODO send mail
 
-            // Avoid brute force account search attack.
-            sleep(3);
-        } else {
-            // Avoid brute force account search attack.
-            sleep(3);
         }
+        // Avoid brute force account search attack.
+        sleep(3);
 
         return 'admin/password_reset/requested.twig';
     }
