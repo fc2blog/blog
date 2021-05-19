@@ -9,6 +9,7 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Service\TwigService;
 use Fc2blog\Util\Log;
 use Fc2blog\Util\Twig\GetTextHelper;
 use Fc2blog\Util\Twig\HtmlHelper;
@@ -20,11 +21,9 @@ use Fc2blog\Web\Session;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
-use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
@@ -212,9 +211,7 @@ abstract class Controller
      */
     private function renderByTwig(Request $request, string $twig_template): string
     {
-        $base_path = realpath(__DIR__ . "/../../../twig_templates/") . "/";
-        $loader = new FilesystemLoader($base_path);
-        $twig = new Environment($loader);
+        $twig = TwigService::getTwigInstance();
 
         foreach (
             array_merge(
@@ -226,11 +223,12 @@ abstract class Controller
 
         $twig_template_path = $twig_template;
         $twig_template_device_path = preg_replace("/\.twig\z/u", '_' . App::getDeviceTypeStr($request) . '.twig', $twig_template_path);
-        if (is_file($base_path . $twig_template_device_path)) { // デバイス用ファイルがある
+        if (is_file(TwigService::getTwigBasePath() . $twig_template_device_path)) { // デバイス用ファイルがある
             $twig_template_path = $twig_template_device_path;
         }
 
-        if (!is_file($base_path . $twig_template_path)) {
+        if (!is_file(TwigService::getTwigBasePath() . $twig_template_path)) {
+            $base_path = TwigService::getTwigBasePath();
             throw new InvalidArgumentException("Twig error: missing template: {$base_path}{$twig_template_path}");
         }
 
