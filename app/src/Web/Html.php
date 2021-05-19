@@ -13,6 +13,31 @@ use Fc2blog\Util\StringCaseConverter;
 class Html
 {
     /**
+     * url()のwrapper, コントローラー名とアクション名を簡便に指定する
+     * @param Request $request
+     * @param string $controller
+     * @param string $action
+     * @param array $args
+     * @param false $reused
+     * @param false $full_url
+     * @param bool $use_base_dir
+     * @return string
+     */
+    public static function controllerUrl(Request $request, string $controller, string $action, $args = array(), $reused = false, $full_url = false, $use_base_dir = true): string
+    {
+        return static::url(
+            $request,
+            array_merge(
+                ['controller' => $controller, 'action' => $action],
+                $args
+            ),
+            $reused,
+            $full_url,
+            $use_base_dir
+        );
+    }
+
+    /**
      * URLを作成する
      * TODO: ユーザー側のURL生成時はApp:userURLを使用に置き換え最終的にblog_idの部分を削る
      * @param Request $request
