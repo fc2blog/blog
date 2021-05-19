@@ -1,0 +1,25 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Password reset') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Password reset request form') }}</h2></header>
+
+    <form action="{{ url(request, "PasswordReset", "request") }}" method="post">
+        <input type="hidden" name="sig" value="{{ sig }}">
+        <table id="id_form">
+            <tbody>
+            <tr>
+                <th><label for="login_id"></label>{{ _("Your login id") }}</th>
+                <td>
+                    <input type="text" id="login_id" name="login_id">
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <button type="submit">{{ _('Request password reset mail') }}</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+{% endblock %}

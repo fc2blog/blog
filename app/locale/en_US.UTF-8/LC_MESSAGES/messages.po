@@ -2533,3 +2533,27 @@ msgstr ""
 
 msgid "Update success."
 msgstr ""
+
+msgid "If you forget password"
+msgstr ""
+
+msgid "Password reset"
+msgstr ""
+
+msgid "Password reset request form"
+msgstr ""
+
+msgid "Your login id"
+msgstr ""
+
+msgid "Request password reset mail"
+msgstr ""
+
+msgid "Sent password reset mail"
+msgstr ""
+
+msgid "Password reset mail submitted. Please check your mailbox."
+msgstr ""
+
+msgid "If you do not receive a password reset mail, please check your spam folder."
+msgstr ""

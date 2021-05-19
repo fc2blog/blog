@@ -2580,3 +2580,27 @@ msgstr "失敗しました、指定のバージョンがみつかりませんで
 
 msgid "Update success."
 msgstr "更新成功しました。"
+
+msgid "If you forget password"
+msgstr "パスワードをお忘れの場合はこちら"
+
+msgid "Password reset"
+msgstr "パスワードリセット"
+
+msgid "Password reset request form"
+msgstr "パスワードリセットフォーム"
+
+msgid "Your login id"
+msgstr "ログインID"
+
+msgid "Request password reset mail"
+msgstr "パスワードリセットメールを要求"
+
+msgid "Sent password reset mail"
+msgstr "パスワードリセットのメールを送信しました"
+
+msgid "Password reset mail submitted. Please check your mailbox."
+msgstr "パスワードをリセットするためのメールを送信しました、メールボックスを確認してください。"
+
+msgid "If you do not receive a password reset mail, please check your spam folder."
+msgstr "もしメールが到着しない場合、スパムメールとして判定されていないかご確認ください。"
