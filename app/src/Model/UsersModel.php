@@ -159,6 +159,26 @@ class UsersModel extends Model
     }
 
     /**
+     * ログインIDからユーザーを取得する
+     * @param string $login_id
+     * @return array|false
+     */
+    public function findByLoginId(string $login_id)
+    {
+        $options = [
+            'where' => 'login_id=?',
+            'params' => [$login_id],
+        ];
+        $user = $this->find('row', $options);
+
+        if (is_array($user) && count($user) > 0) {
+            return $user;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * 管理者ユーザーが存在するかを取得する
      */
     public function isExistAdmin()
