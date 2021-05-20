@@ -21,6 +21,8 @@ define('HTTPS_PORT', '443'); // HTTPS時ポート
 // Please edit the path when change `app` and `public` relative path condition.
 define('WWW_DIR', __DIR__ . '/../public/'); // this path need finish with slash.
 
+define("ADMIN_MAIL_ADDRESS", "your_email_addr@example.jp");
+
 // If you want get error log on display.
 // define('ERROR_ON_DISPLAY', "1");
 // ini_set('display_errors', '1');
