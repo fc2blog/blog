@@ -54,7 +54,12 @@ class PasswordResetTokenService
         );
 
         $email = new Email();
-        $email->setFrom("noreply@example.jp", "fc2blog oss");
+        $email->setFrom(
+            defined('ADMIN_MAIL_ADDRESS') && strlen(ADMIN_MAIL_ADDRESS) > 0 ?
+                MAILER_CLASS_NAME :
+                "noreply@example.jp",
+            "Fc2blog OSS"
+        );
         $email->setTo($user->login_id);
         $email->setSubjectAndBodyByTwig(
             TwigService::getTwigInstance(),

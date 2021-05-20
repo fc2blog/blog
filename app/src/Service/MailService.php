@@ -4,13 +4,21 @@ declare(strict_types=1);
 namespace Fc2blog\Service;
 
 use Fc2blog\Model\Email;
+use Fc2blog\Repo\ErrorLogMailer;
+use Fc2blog\Repo\MailerInterface;
 
 class MailService
 {
     public static function send(Email $email): bool
     {
-        // TODO this is mock
-        file_put_contents("php://stderr", print_r($email, true));
-        return true;
+        $mailer = static::getMailer();
+        return $mailer->send($email);
+    }
+
+    public static function getMailer(): MailerInterface
+    {
+        return defined('MAILER_CLASS_NAME') && strlen(MAILER_CLASS_NAME) > 0 ?
+            new ('\\Fc2blog\\Repo\\' . MAILER_CLASS_NAME)() :
+            new ErrorLogMailer();
     }
 }
