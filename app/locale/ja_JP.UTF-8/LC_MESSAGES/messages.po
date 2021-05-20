@@ -2604,3 +2604,24 @@ msgstr "パスワードをリセットするためのメールを送信しまし
 
 msgid "If you do not receive a password reset mail, please check your spam folder."
 msgstr "もしメールが到着しない場合、スパムメールとして判定されていないかご確認ください。"
+
+msgid "Password reset request expired."
+msgstr "このパスワードリセットリクエストは失効しています"
+
+msgid "The password reset request is expired. Please try again from reset request form."
+msgstr "このパスワードリセットリクエストは無効です、お手数ですが最初のフォームからやりなおしてください。"
+
+msgid "Password reset completed."
+msgstr "パスワードリセットが完了しました。"
+
+msgid "Password reset completed. Please login form login page."
+msgstr "パスワードリセットが完了しました。ログイン画面からログインしてください。"
+
+msgid "New password"
+msgstr "新しいパスワード"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Password is too short (least 6chars)"
+msgstr "パスワードは最低6文字必要です。"

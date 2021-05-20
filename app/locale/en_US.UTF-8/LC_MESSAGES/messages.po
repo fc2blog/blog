@@ -2557,3 +2557,25 @@ msgstr ""
 
 msgid "If you do not receive a password reset mail, please check your spam folder."
 msgstr ""
+
+msgid "Password reset request expired."
+msgstr ""
+
+msgid "The password reset request is expired. Please try again from reset request form."
+msgstr ""
+
+msgid "Password reset completed."
+msgstr ""
+
+msgid "Password reset completed. Please login form login page."
+msgstr ""
+
+msgid "New password"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Password is too short (least 6chars)"
+msgstr ""
+

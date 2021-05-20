@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\Model\PasswordResetToken;
+use Fc2blog\Model\PasswordResetTokenService;
 use Fc2blog\Service\UserService;
 use Fc2blog\Web\Request;
 
@@ -28,12 +30,12 @@ class PasswordResetController extends AdminController
         $request->generateNewSig();
 
         if (!is_null($user = UserService::getByLoginId($login_id))) {
-            error_log("password reset requested:{$login_id}");
+            $token = PasswordResetToken::factoryWithUser($user);
+            PasswordResetTokenService::create($token);
 
-            // TODO create password reset token
+//            error_log("password reset token: " . print_r($token, true));
 
             // TODO send mail
-
         }
         // Avoid brute force account search attack.
         sleep(3);
@@ -43,11 +45,45 @@ class PasswordResetController extends AdminController
 
     public function resetForm(Request $request): string
     {
-        //TODO
+        $token_str = $request->get('token');
+        $token = PasswordResetTokenService::getByToken($token_str);
+
+        if (is_null($token) || $token->isExpired()) {
+            return 'admin/password_reset/expired.twig';
+        }
+
+        $this->set('token', $token->token);
+        return 'admin/password_reset/reset_form.twig';
     }
 
     public function reset(Request $request): string
     {
-        //TODO
+        if (!$request->isValidPost()) {
+            return $this->error400();
+        }
+
+        $token_str = $request->get('token');
+        $new_password = $request->get('password');
+
+        $token = PasswordResetTokenService::getByToken($token_str);
+        if (is_null($token) || $token->isExpired()) {
+            return 'admin/password_reset/expired.twig';
+        }
+
+        if (strlen($new_password) < 8) {
+            $this->set('token', $token->token);
+            $this->set('errors', ['password' => __("Password is too short (least 6chars)")]);
+            return 'admin/password_reset/reset_form.twig';
+        }
+
+        $user = UserService::getById($token->user_id);
+        if (is_null($user)) {
+            return 'admin/password_reset/expired.twig';
+        }
+
+        UserService::updatePassword($user, $new_password);
+        PasswordResetTokenService::revokeToken($token);
+
+        return 'admin/password_reset/complete.twig';
     }
 }
