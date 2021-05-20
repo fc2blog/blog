@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\Model\PasswordResetToken;
 use Fc2blog\Model\PasswordResetTokenService;
 use Fc2blog\Service\UserService;
 use Fc2blog\Web\Request;
@@ -26,18 +25,15 @@ class PasswordResetController extends AdminController
 
         $login_id = $request->get('login_id');
 
-        // Avoid some mass mail sending attack.
+        // Avoid abuse use to mass mail sending.
         $request->generateNewSig();
 
+        // Show same complete page if user exists or not exists.
         if (!is_null($user = UserService::getByLoginId($login_id))) {
-            $token = PasswordResetToken::factoryWithUser($user);
-            PasswordResetTokenService::create($token);
-
-//            error_log("password reset token: " . print_r($token, true));
-
-            // TODO send mail
+            PasswordResetTokenService::createAndSendToken($request, $user);
         }
-        // Avoid brute force account search attack.
+
+        // Avoid abuse use to mass mail sending.
         sleep(3);
 
         return 'admin/password_reset/requested.twig';
