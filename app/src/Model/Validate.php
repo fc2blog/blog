@@ -1,24 +1,21 @@
 <?php
-/**
- * 入力エラーチェッククラス
- */
+declare(strict_types=1);
 
 namespace Fc2blog\Model;
 
 class Validate
 {
-
     /**
      * 必須チェック
      * @param $value
-     * @param $options
-     * @return bool|string
+     * @param bool $isNeed true/false
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function required($value, $options)
+    public static function required($value, bool $isNeed)
     {
         if ($value == null || $value === '') {
             // データが存在しない場合
-            if ($options === false) {
+            if ($isNeed === false) {
                 return false;
             }
             return __('Please be sure to input');
@@ -29,162 +26,165 @@ class Validate
 
     /**
      * 数値チェック
-     * @param $value
-     * @param $options
-     * @return bool|string
+     * @param int|string $value
+     * @param array $options
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function numeric($value, $options)
+    public static function numeric($value, array $options)
     {
         $tmp = intval($value);
         if ((string)$tmp === (string)$value) {
             return true;
         }
-        return isset($options['message']) ? $options['message'] : __('Please enter a number');
+        return $options['message'] ?? __('Please enter a number');
     }
 
     /**
      * 半角英数チェック
-     * @param $value
-     * @param $options
-     * @return bool|string
+     * @param string $value
+     * @param array $options
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function alphanumeric($value, $options)
+    public static function alphanumeric(string $value, array $options)
     {
         if (preg_match("/^[a-zA-Z0-9]+$/", $value)) {
             return true;
         }
-        return isset($options['message']) ? $options['message'] : __('Please enter alphanumeric');
+        return $options['message'] ?? __('Please enter alphanumeric');
     }
 
     /**
      * 最大文字列チェック
-     * @param string $value
+     * @param ?string $value (comment編集で、NULLがくることがある)
      * @param array $options [*max] 最大文字列
-     * @return bool|string
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function maxlength($value, $options)
+    public static function maxlength(?string $value, array $options)
     {
-        if (mb_strlen($value) <= $options['max']) {
+        if (mb_strlen((string)$value) <= $options['max']) {
             return true;
         }
-        $message = isset($options['message']) ? $options['message'] : __('Please enter at %d characters or less');
+        $message = $options['message'] ?? __('Please enter at %d characters or less');
         return sprintf($message, $options['max']);
     }
 
     /**
      * 最小文字列チェック
-     * @param string $value
+     * @param string|null $value
      * @param array $options [*min] 最小文字列
-     * @return bool|string
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function minlength($value, $options)
+    public static function minlength(?string $value, array $options)
     {
-        if (mb_strlen($value) >= $options['min']) {
+        if (mb_strlen((string)$value) >= $options['min']) {
             return true;
         }
-        $message = isset($options['message']) ? $options['message'] : __('Please enter at %d characters or more');
+        $message = $options['message'] ?? __('Please enter at %d characters or more');
         return sprintf($message, $options['min']);
     }
 
     /**
      * 最大値チェック
-     * @param string $value
+     * @param int|string $value
      * @param array $options [*max] 最大値
-     * @return bool|string
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function max($value, $options)
+    public static function max($value, array $options)
     {
         if ($value <= $options['max']) {
             return true;
         }
-        $message = isset($options['message']) ? $options['message'] : __('Please enter a value of %d or less');
+        $message = $options['message'] ?? __('Please enter a value of %d or less');
         return sprintf($message, $options['max']);
     }
 
     /**
      * 最小値チェック
-     * @param string $value
+     * @param int|string $value
      * @param array $options [*min] 最小値
-     * @return bool|string
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function min($value, $options)
+    public static function min($value, array $options)
     {
         if ($value >= $options['min']) {
             return true;
         }
-        $message = isset($options['message']) ? $options['message'] : __('Please enter a value of %d or more');
+        $message = $options['message'] ?? __('Please enter a value of %d or more');
         return sprintf($message, $options['min']);
     }
 
     /**
      * 日時チェック
-     * @param $value
-     * @param $options
-     * @return bool|string
+     * @param string $value
+     * @param array $options
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function datetime($value, $options)
+    public static function datetime(string $value, array $options)
     {
-        $format = isset($options['format']) ? $options['format'] : '%Y-%m-%d %H:%M:%S';
+        $format = $options['format'] ?? '%Y-%m-%d %H:%M:%S';
         if (strptime($value, $format) === false || strtotime($value) === false) {
-            return isset($options['message']) ? $options['message'] : __('Please enter the date and time');
+            return $options['message'] ?? __('Please enter the date and time');
         }
         return true;
     }
 
     /**
      * メールアドレスチェック
-     * @param $value
-     * @param $options
-     * @return bool|string
+     * @param string $value
+     * @param array $options
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function email($value, $options)
+    public static function email(string $value, array $options)
     {
         /** @noinspection Annotator */
+        /** @noinspection RegExpUnnecessaryNonCapturingGroup */
+        /** @noinspection RegExpRedundantEscape */
+        /** @noinspection RegExpUnexpectedAnchor */
         if (preg_match('/^(?:(?:(?:(?:[a-zA-Z0-9_!#\$\%&\'*+\/=?\^`{}~|\-]+)(?:\.(?:[a-zA-Z0-9_!#\$\%&\'*+\/=?\^`{}~|\-]+))*)|(?:"(?:\\[^\r\n]|[^\\"])*")))\@(?:(?:(?:(?:[a-zA-Z0-9_!#\$\%&\'*+\/=?\^`{}~|\-]+)(?:\.(?:[a-zA-Z0-9_!#\$\%&\'*+\/=?\^`{}~|\-]+))*)|(?:\[(?:\\\S|[\x21-\x5a\x5e-\x7e])*\])))$/', $value)) {
             return true;
         }
-        return isset($options['message']) ? $options['message'] : __('Please enter your e-mail address');
+        return $options['message'] ?? __('Please enter your e-mail address');
     }
 
     /**
      * URLチェック
-     * @param $value
-     * @param $options
-     * @return bool|string
+     * @param string $value
+     * @param array $options
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function url($value, $options)
+    public static function url(string $value, array $options)
     {
-        if (preg_match('/^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/', $value)) {
+        if (preg_match('/^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:@&=+\$,%#]+)$/', $value)) {
             return true;
         }
-        return isset($options['message']) ? $options['message'] : __('Please enter the URL');
+        return $options['message'] ?? __('Please enter the URL');
     }
 
     /**
      * ユニークチェック
      * @param $value
-     * @param $options
-     * @param $key
+     * @param array $options
+     * @param string $key
      * @param $data
      * @param $model
-     * @return bool|string
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function unique($value, $options, $key, $data, $model)
+    public static function unique($value, array $options, string $key, $data, $model)
     {
         if (!$model->isExist(array('where' => $key . '=?', 'params' => array($value)))) {
             return true;
         }
-        return isset($options['message']) ? $options['message'] : __('Is already in use');
+        return $options['message'] ?? __('Is already in use');
     }
 
 
     /**
      * 配列に存在する値かチェック
      * @param $value
-     * @param $options
-     * @return bool|string
+     * @param array $options
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function in_array($value, $options)
+    public static function in_array($value, array $options)
     {
         if (is_scalar($value)) {
             $tmp = array_flip($options['values']);
@@ -192,17 +192,17 @@ class Validate
                 return true;
             }
         }
-        return isset($options['message']) ? $options['message'] : __('Value that does not exist has been entered');
+        return $options['message'] ?? __('Value that does not exist has been entered');
     }
 
 
     /**
      * Fileチェック
-     * @param $value
-     * @param $option
-     * @return bool|string
+     * @param array $value
+     * @param array $option
+     * @return bool|string True is valid, string is some error message.
      */
-    public static function file($value, $option)
+    public static function file(array $value, array $option)
     {
         switch ($value['error']) {
             case UPLOAD_ERR_OK:
@@ -224,7 +224,6 @@ class Validate
 
         // mimetype取得チェック
         if (!empty($option['mime_type'])) {
-            $mime_type = null;
             if (function_exists('finfo_file') && defined('FILEINFO_MIME_TYPE')) {
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mime_type = finfo_file($finfo, $value['tmp_name']);
@@ -236,6 +235,7 @@ class Validate
                 // 調べる関数がライブラリに存在しない
                 return __('It was not possible to determine the mime type of the file');
             }
+
             if (!in_array($mime_type, $option['mime_type'])) {
                 return __('File format is different');
             }
@@ -252,13 +252,13 @@ class Validate
     /**
      * 独自チェック
      * @param $value
-     * @param $option
-     * @param $key
+     * @param array $option
+     * @param string $key
      * @param $data
      * @param $model
      * @return mixed
      */
-    public static function own(&$value, $option, $key, $data, $model)
+    public static function own(&$value, array $option, string $key, $data, $model)
     {
         $method = $option['method'];
         return $model->$method($value, $option, $key, $data, $model);
@@ -267,13 +267,13 @@ class Validate
     /**
      * 配列チェック関数
      * @param $values
-     * @param $valid
+     * @param array $valid
      * @param $k
      * @param $d
      * @param $model
-     * @return bool
+     * @return mixed
      */
-    public static function multiple(&$values, $valid, $k, $d, $model)
+    public static function multiple(&$values, array $valid, $k, $d, $model): bool
     {
         if (!is_array($values)) {
             $values = array();
@@ -281,7 +281,7 @@ class Validate
         foreach ($valid as $mKey => $options) {
             $method = is_array($options) && isset($options['rule']) ? $options['rule'] : $mKey;
             foreach ($values as $key => $value) {
-                $error = Validate::$method($values[$key], $options, $key, $values, $model);
+                $error = Validate::$method($value, $options, $key, $values, $model);
                 if ($error === false) {
                     break;
                 }
@@ -295,10 +295,10 @@ class Validate
 
     /**
      * 空白除去処理
-     * @param $value
+     * @param string $value
      * @return bool
      */
-    public static function trim(&$value)
+    public static function trim(string &$value): bool
     {
         if (is_string($value)) {
             $value = preg_replace("/(^\s+)|(\s+$)/us", "", $value);
@@ -308,10 +308,10 @@ class Validate
 
     /**
      * int型に変換
-     * @param $value
+     * @param string|int $value
      * @return bool
      */
-    public static function int(&$value)
+    public static function int(&$value): bool
     {
         $value = intval($value);
         return true;
@@ -319,10 +319,10 @@ class Validate
 
     /**
      * 小文字に変換
-     * @param $value
+     * @param string $value
      * @return bool
      */
-    public static function strtolower(&$value)
+    public static function strtolower(string &$value): bool
     {
         $value = strtolower($value);
         return true;
@@ -331,10 +331,10 @@ class Validate
     /**
      * 配列内重複排除
      * @param $values
-     * @param $options
+     * @param bool $options
      * @return bool
      */
-    public static function array_unique(&$values, $options)
+    public static function array_unique(&$values, bool $options): bool
     {
         if (!is_array($values)) {
             $values = array();
@@ -350,8 +350,9 @@ class Validate
      * @param $value
      * @param $default
      * @return bool
+     * @noinspection PhpUnused
      */
-    public static function default_value(&$value, $default)
+    public static function default_value(&$value, $default): bool
     {
         if ($value === null || $value === "") {
             $value = $default;
@@ -365,9 +366,9 @@ class Validate
      * @param $replaces
      * @return bool
      */
-    public static function replace(&$value, $replaces)
+    public static function replace(&$value, $replaces): bool
     {
-        $value = str_replace(array_keys($replaces), array_values($replaces), $value);
+        $value = str_replace(array_keys($replaces), array_values($replaces), (string)$value);
         return true;
     }
 }
