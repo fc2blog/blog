@@ -46,6 +46,9 @@ define("DEFAULT_BLOG_ID", (string)getenv("FC2_DEFAULT_BLOG_ID"));
 
 define("ADMIN_MAIL_ADDRESS", (string)getenv("FC2_ADMIN_MAIL_ADDRESS"));
 define("MAILER_CLASS_NAME", (string)getenv("FC2_MAILER_CLASS_NAME"));
+if (strlen(MAILER_CLASS_NAME) > 0) {
+    \Fc2blog\Service\MailService::$mailerClassName = '\\Fc2blog\\Repo\\StdErrOutputMailer';
+}
 define("SENDMAIL_PATH", (string)getenv("FC2_SENDMAIL_PATH"));
 
 if (strlen((string)getenv("FC2_GITHUB_REPO")) > 0) {
