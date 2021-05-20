@@ -2625,3 +2625,16 @@ msgstr "保存"
 
 msgid "Password is too short (least 6chars)"
 msgstr "パスワードは最低6文字必要です。"
+
+msgid "[Fc2blog OSS] Password reset requested"
+msgstr "[Fc2blog OSS] パスワードリセットURLのお知らせ"
+
+msgid "You requested password reset."
+msgstr "これはパスワードリセットを行うためのメールです。"
+
+msgid "! If you have no idea about this email, please ignore it. !"
+msgstr "※ もしこのメールに心当たりがない場合には、無視してください ※"
+
+msgid "You can change your login password at the following URL."
+msgstr "以下のURLにアクセスして、パスワードを再設定してください。"
+

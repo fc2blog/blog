@@ -2579,3 +2579,15 @@ msgstr ""
 msgid "Password is too short (least 6chars)"
 msgstr ""
 
+msgid "[Fc2blog OSS] Password reset requested"
+msgstr ""
+
+msgid "You requested password reset."
+msgstr ""
+
+msgid "! If you have no idea about this email, please ignore it. !"
+msgstr ""
+
+msgid "You can change your login password at the following URL."
+msgstr ""
+
