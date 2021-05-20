@@ -38,7 +38,7 @@ class UsersModel extends Model
                 'required' => true,
                 'trim' => true,
                 'minlength' => array('min' => 6),
-                'maxlength' => array('max' => 50),
+                'maxlength' => array('max' => 512),
             ),
             'password' => array(
                 'required' => true,

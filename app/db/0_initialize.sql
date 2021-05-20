@@ -347,7 +347,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users`
 (
     `id`            int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `login_id`      varchar(50)      NOT NULL,
+    `login_id`      varchar(512)     NOT NULL,
     `password`      varchar(64)      NOT NULL,
     `login_blog_id` varchar(50)               DEFAULT NULL,
     `type`          tinyint(4)       NOT NULL DEFAULT '0',
