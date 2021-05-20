@@ -53,7 +53,7 @@ class BlogSettingsModel extends Model
             ),
             'comment_display_count' => array(
                 'required' => true,
-                'numeric' => true,
+                'numeric' => [],
                 'min' => array('min' => 1),
                 'max' => array('max' => 50),
             ),
@@ -65,13 +65,13 @@ class BlogSettingsModel extends Model
             ),
             'entry_recent_display_count' => array(
                 'required' => true,
-                'numeric' => true,
+                'numeric' => [],
                 'min' => array('min' => 1),
                 'max' => array('max' => 50),
             ),
             'entry_display_count' => array(
                 'required' => true,
-                'numeric' => true,
+                'numeric' => [],
                 'min' => array('min' => 1),
                 'max' => array('max' => 50),
             ),
