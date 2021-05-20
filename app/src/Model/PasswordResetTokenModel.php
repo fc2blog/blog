@@ -33,12 +33,13 @@ class PasswordResetTokenModel extends Model
     /**
      * @param array $values
      * @param array $options
-     * @return int last insert id
+     * @return int|null last insert id or null
      */
-    public function insert(array $values, array $options = []): int
+    public function insert(array $values, array $options = []): ?int
     {
         unset($values['id']); // insertのため、pkを削除
         $values['updated_at'] = $values['created_at'] = date('Y-m-d H:i:s');
-        return (int)parent::insert($values, $options);
+        $last_insert_id = parent::insert($values, $options);
+        return $last_insert_id === false ? null : (int)$last_insert_id;
     }
 }

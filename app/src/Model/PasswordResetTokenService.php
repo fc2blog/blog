@@ -5,7 +5,7 @@ namespace Fc2blog\Model;
 
 class PasswordResetTokenService
 {
-    public static function create(PasswordResetToken $token): int
+    public static function create(PasswordResetToken $token): ?int
     {
         $pr_model = new PasswordResetTokenModel();
         return $pr_model->insert((array)$token);
