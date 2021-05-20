@@ -8,7 +8,7 @@ namespace Fc2blog\Model;
 
 use Fc2blog\Util\Log;
 
-abstract class Model implements ModelInterface
+abstract class Model
 {
     const LIKE_WILDCARD = '\\_%'; // MySQL用
 
