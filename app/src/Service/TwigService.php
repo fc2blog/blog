@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Fc2blog\Service;
 
+use Fc2blog\Util\Twig\GetTextHelper;
+use Fc2blog\Util\Twig\HtmlHelper;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -18,6 +20,16 @@ class TwigService
     public static function getTwigInstance(): Environment
     {
         $loader = new FilesystemLoader(static::getTwigBasePath());
-        return new Environment($loader);
+        $twig = new Environment($loader);
+
+        foreach (
+            array_merge(
+                (new GetTextHelper())->getFunctions(),
+                (new HtmlHelper())->getFunctions(),
+            ) as $function) {
+            $twig->addFunction($function);
+        }
+
+        return $twig;
     }
 }

@@ -11,8 +11,6 @@ use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Service\TwigService;
 use Fc2blog\Util\Log;
-use Fc2blog\Util\Twig\GetTextHelper;
-use Fc2blog\Util\Twig\HtmlHelper;
 use Fc2blog\Web\Controller\Admin\AdminController;
 use Fc2blog\Web\Controller\User\UserController;
 use Fc2blog\Web\Html;
@@ -212,14 +210,6 @@ abstract class Controller
     private function renderByTwig(Request $request, string $twig_template): string
     {
         $twig = TwigService::getTwigInstance();
-
-        foreach (
-            array_merge(
-                (new GetTextHelper())->getFunctions(),
-                (new HtmlHelper())->getFunctions(),
-            ) as $function) {
-            $twig->addFunction($function);
-        }
 
         $twig_template_path = $twig_template;
         $twig_template_device_path = preg_replace("/\.twig\z/u", '_' . App::getDeviceTypeStr($request) . '.twig', $twig_template_path);
