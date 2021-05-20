@@ -36,7 +36,7 @@ class PasswordResetTokenService
         $pr_model->deleteById($token->id);
     }
 
-    public static function createAndSendToken(Request $request, User $user): void
+    public static function createAndSendToken(Request $request, User $user): bool
     {
         // create token
         $token = PasswordResetToken::factoryWithUser($user);
@@ -66,7 +66,7 @@ class PasswordResetTokenService
             'mail/password_recovery_request.twig',
             ['url' => $reset_url]
         );
-        MailService::send($email);
+        return MailService::send($email);
     }
 
     // TODO clean up token.

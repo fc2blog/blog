@@ -30,7 +30,10 @@ class PasswordResetController extends AdminController
 
         // Show same complete page if user exists or not exists.
         if (!is_null($user = UserService::getByLoginId($login_id))) {
-            PasswordResetTokenService::createAndSendToken($request, $user);
+            $result = PasswordResetTokenService::createAndSendToken($request, $user);
+            if ($result === false) {
+                return 'admin/password_reset/mail_sending_error.twig';
+            }
         }
 
         // Avoid abuse use to mass mail sending.
