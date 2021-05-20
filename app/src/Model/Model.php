@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Model;
 
@@ -10,6 +11,20 @@ abstract class Model
 
     private static $loaded = [];
     public $validates = [];
+
+    /** @var static */
+    public static $instance;
+
+    /**
+     * @return static
+     */
+    public static function getInstance()
+    {
+        if (!isset(static::$instance)) {
+            static::$instance = new static();
+        }
+        return static::$instance;
+    }
 
     /**
      * 複合キーのAutoIncrement対応
@@ -44,10 +59,10 @@ abstract class Model
         $errors = [];
         $valid_data = [];
 
-        $isWhiteList = !!count($white_list);
+        $isNeedWhiteListCheck = count($white_list) > 0;
         foreach ($this->validates as $key => $valid) {
             // カラムのホワイトリストチェック
-            if ($isWhiteList && !in_array($key, $white_list)) {
+            if ($isNeedWhiteListCheck && !in_array($key, $white_list)) {
                 continue;
             }
             foreach ($valid as $mKey => $options) {
@@ -90,7 +105,7 @@ abstract class Model
 
     /**
      * LIKE検索用にワイルドカードのエスケープ
-     * @param $str
+     * @param string $str
      * @return string
      */
     public static function escape_wildcard(string $str): string
@@ -418,7 +433,7 @@ abstract class Model
     }
 
     /**
-     * idをキーとした更新
+     * idをキーとした削除
      * @param $id
      * @param array $options
      * @return false|int 失敗時:false, 成功時:1
@@ -485,7 +500,7 @@ abstract class Model
 
     /**
      * 階層構造の一覧取得
-     * @param $options
+     * @param array $options
      * @return array|false
      */
     public function findNode(array $options)
@@ -562,11 +577,12 @@ abstract class Model
         /** @noinspection SqlResolve */
         /** @noinspection SqlCaseVsIf */
         $updateSql = <<<SQL
-      UPDATE {$table} SET
-       lft = CASE WHEN lft > {$right} THEN lft + 2 ELSE lft END,
-       rgt = CASE WHEN rgt >= {$right} THEN rgt + 2 ELSE rgt END
-      WHERE $where rgt >= {$right}
-    SQL;
+        UPDATE {$table} SET
+           lft = CASE WHEN lft > {$right} THEN lft + 2 ELSE lft END,
+           rgt = CASE WHEN rgt >= {$right} THEN rgt + 2 ELSE rgt END
+        WHERE {$where} rgt >= {$right}
+        SQL;
+
         if (!$this->executeSql($updateSql, $params)) {
             return false;
         }
@@ -602,7 +618,6 @@ abstract class Model
             return $this->update($data, $idWhere, $self_params, $options);
         }
 
-        $parent = null;
         if ($self['parent_id'] && empty($data['parent_id'])) {
             // 親から外れた時
             $parent = [];
@@ -634,39 +649,43 @@ abstract class Model
             $move = $parent_rgt - $self_lft;
             /** @noinspection SqlResolve */
             $sql = <<<SQL
-      UPDATE $table SET
-      lft = CASE WHEN lft > $parent_rgt AND lft < $self_lft
-                   THEN lft + $space
-                 WHEN lft >= $self_lft AND lft < $self_rgt
-                   THEN lft + $move
-                 ELSE lft END,
-      rgt = CASE WHEN rgt >= $parent_rgt AND rgt < $self_lft
-                   THEN rgt + $space
-                 WHEN rgt > $self_lft AND rgt <= $self_rgt
-                   THEN rgt + $move
-                 ELSE rgt END
-      WHERE $where
-        rgt >= $parent_rgt AND lft < $self_rgt
-      SQL;
+            UPDATE $table SET
+            lft = CASE
+                WHEN lft > $parent_rgt AND lft < $self_lft
+                    THEN lft + $space
+                WHEN lft >= $self_lft AND lft < $self_rgt
+                    THEN lft + $move
+                ELSE lft END,
+            rgt = CASE
+                WHEN rgt >= $parent_rgt AND rgt < $self_lft
+                    THEN rgt + $space
+                WHEN rgt > $self_lft AND rgt <= $self_rgt
+                    THEN rgt + $move
+                ELSE rgt END
+            WHERE $where
+                rgt >= $parent_rgt AND lft < $self_rgt
+            SQL;
         } else {
             // 自身を右へ移動
             $move = $parent_rgt - $self_rgt - 1;
             /** @noinspection SqlResolve */
             $sql = <<<SQL
-      UPDATE $table SET
-      lft = CASE WHEN lft > $self_rgt AND lft < $parent_rgt
-                   THEN lft - $space
-                 WHEN lft >= $self_lft AND lft < $self_rgt
-                   THEN lft + $move
-                 ELSE lft END,
-      rgt = CASE WHEN rgt > $self_rgt AND rgt < $parent_rgt
-                   THEN rgt - $space
-                 WHEN rgt > $self_lft AND rgt <= $self_rgt
-                   THEN rgt + $move
-                 ELSE rgt END
-      WHERE $where
-        rgt > $self_lft AND lft < $parent_rgt
-      SQL;
+            UPDATE $table SET
+            lft = CASE 
+                WHEN lft > $self_rgt AND lft < $parent_rgt
+                    THEN lft - $space
+                WHEN lft >= $self_lft AND lft < $self_rgt
+                    THEN lft + $move
+                ELSE lft END,
+            rgt = CASE
+                WHEN rgt > $self_rgt AND rgt < $parent_rgt
+                    THEN rgt - $space
+                WHEN rgt > $self_lft AND rgt <= $self_rgt
+                    THEN rgt + $move
+                ELSE rgt END
+            WHERE $where
+            rgt > $self_lft AND lft < $parent_rgt
+            SQL;
         }
 
         // 親の位置変更処理
@@ -714,16 +733,19 @@ abstract class Model
         /** @noinspection SqlResolve */
         /** @noinspection SqlCaseVsIf */
         $sql = <<<SQL
-    UPDATE $table SET
-    lft = CASE WHEN lft > $self_rgt
-                THEN lft - $space
-               ELSE lft END,
-    rgt = CASE WHEN rgt > $self_rgt
-                THEN rgt - $space
-               ELSE rgt END
-    WHERE $where
-      rgt > $self_rgt
-    SQL;
+        UPDATE $table SET
+            lft = CASE
+                  WHEN lft > $self_rgt
+                      THEN lft - $space
+                  ELSE lft END,
+            rgt = CASE
+                WHEN rgt > $self_rgt
+                    THEN rgt - $space
+                ELSE rgt END
+        WHERE
+            $where
+            rgt > $self_rgt
+        SQL;
         return $this->executeSql($sql, $params, $options);
     }
 }
