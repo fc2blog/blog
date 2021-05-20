@@ -41,8 +41,8 @@ class LogInTest extends TestCase
 
         $r = $this->reqPostBeRedirect("/admin/users/login", [
             'user' => [
-                'login_id' => 'testadmin',
-                'password' => 'testadmin',
+                'login_id' => 'testadmin@localhost',
+                'password' => 'testadmin@localhost',
             ]
         ]);
 
@@ -50,7 +50,7 @@ class LogInTest extends TestCase
         $this->assertEquals(302, $r->statusCode);
 
         $this->assertEquals(1, $this->clientTraitSession['user_id']);
-        $this->assertEquals('testadmin', $this->clientTraitSession['login_id']);
+        $this->assertEquals('testadmin@localhost', $this->clientTraitSession['login_id']);
         $this->assertEquals(1, $this->clientTraitSession['user_type']);
         $this->assertEquals('testblog2', $this->clientTraitSession['blog_id']);
         $this->assertEquals('testnick2', $this->clientTraitSession['nickname']);

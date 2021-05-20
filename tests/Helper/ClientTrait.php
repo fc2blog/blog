@@ -41,7 +41,7 @@ trait ClientTrait
         $this->clientTraitSession = array_merge(
             [
                 'user_id' => 1,
-                'login_id' => 'testadmin',
+                'login_id' => 'testadmin@localhost',
                 'user_type' => 1,
                 'blog_id' => 'testblog2',
                 'nickname' => 'testnick2',

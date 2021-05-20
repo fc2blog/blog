@@ -48,8 +48,8 @@ class WithdrawalTest extends TestCase
         // ログインのトライ(退会しているので、失敗する
         $c = $this->reqPost("/admin/users/login", [
             'user' => [
-                'login_id' => 'testadmin',
-                'password' => 'testadmin',
+                'login_id' => 'testadmin@localhost',
+                'password' => 'testadmin@localhost',
             ]
         ]);
         $this->assertInstanceOf(UsersController::class, $c);

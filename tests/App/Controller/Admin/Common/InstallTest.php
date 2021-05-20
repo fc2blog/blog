@@ -130,8 +130,8 @@ class InstallTest extends TestCase
         $request_data = [
             'state' => 2,
             'user' => [
-                'login_id' => 'testadmintest',
-                'password' => 'testadmintest',
+                'login_id' => 'testadmintest@localhost',
+                'password' => 'testadmintest@localhost',
             ],
             'blog' => [
                 'id' => 'testblog',
@@ -160,12 +160,12 @@ class InstallTest extends TestCase
         // 本当に登録できたかログインテスト
         $r = $this->reqPostBeRedirect("/admin/users/login", [
             'user' => [
-                'login_id' => 'testadmintest',
-                'password' => 'testadmintest',
+                'login_id' => 'testadmintest@localhost',
+                'password' => 'testadmintest@localhost',
             ]
         ]);
         $this->assertEquals('/admin/', $r->redirectUrl);
         $this->assertEquals(302, $r->statusCode);
-        $this->assertEquals('testadmintest', $this->clientTraitSession['login_id']);
+        $this->assertEquals('testadmintest@localhost', $this->clientTraitSession['login_id']);
     }
 }

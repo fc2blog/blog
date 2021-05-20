@@ -7,8 +7,8 @@ const {execSync} = require("child_process");
 describe("crawl admin pages", () => {
   let c: Helper;
 
-  const admin_id = "testadmin";
-  const admin_pass = "testadmin";
+  const admin_id = "testadmin@localhost";
+  const admin_pass = "testadmin@localhost";
   const blog_id = "testblog1";
   const blog_name = "blog_name";
   const nick_name = "nickname";

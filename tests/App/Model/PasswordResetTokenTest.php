@@ -12,7 +12,7 @@ class PasswordResetTokenTest extends TestCase
 {
     public function testInsert(): void
     {
-        $user = UserService::getByLoginId('testadmin');
+        $user = UserService::getByLoginId('testadmin@localhost');
         $token = PasswordResetToken::factoryWithUser($user);
 
 //        var_dump($token);
@@ -30,7 +30,7 @@ class PasswordResetTokenTest extends TestCase
 
     public function testDelete(): void
     {
-        $user = UserService::getByLoginId('testadmin');
+        $user = UserService::getByLoginId('testadmin@localhost');
         $token = PasswordResetToken::factoryWithUser($user);
         $last_insert_id = PasswordResetTokenService::create($token);
         $this->assertIsInt($last_insert_id);
