@@ -46,6 +46,7 @@ define("DEFAULT_BLOG_ID", (string)getenv("FC2_DEFAULT_BLOG_ID"));
 
 define("ADMIN_MAIL_ADDRESS", (string)getenv("FC2_ADMIN_MAIL_ADDRESS"));
 define("MAILER_CLASS_NAME", (string)getenv("FC2_MAILER_CLASS_NAME"));
+define("SENDMAIL_PATH", (string)getenv("FC2_SENDMAIL_PATH"));
 
 if (strlen((string)getenv("FC2_GITHUB_REPO")) > 0) {
     define("GITHUB_REPO", (string)getenv("FC2_GITHUB_REPO"));
