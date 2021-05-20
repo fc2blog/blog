@@ -1,7 +1,5 @@
 <?php
-/**
- * HTMLの便利関数群
- */
+declare(strict_types=1);
 
 namespace Fc2blog\Web;
 
@@ -13,28 +11,28 @@ use Fc2blog\Util\StringCaseConverter;
 class Html
 {
     /**
-     * url()のwrapper, コントローラー名とアクション名を簡便に指定する
+     * Admin系画面用（BlogId非対応）のurl()のwrapper, コントローラー名とアクション名を簡便に指定する
      * @param Request $request
      * @param string $controller
      * @param string $action
      * @param array $args
-     * @param false $reused
-     * @param false $full_url
-     * @param bool $use_base_dir
+     * @param bool $full_url
      * @return string
      */
-    public static function controllerUrl(Request $request, string $controller, string $action, $args = array(), $reused = false, $full_url = false, $use_base_dir = true): string
+    public static function adminUrl(Request $request, string $controller, string $action, array $args = [], bool $full_url = false): string
     {
-        return static::url(
+        $path = static::url(
             $request,
             array_merge(
                 ['controller' => $controller, 'action' => $action],
                 $args
             ),
-            $reused,
-            $full_url,
-            $use_base_dir
         );
+        if ($full_url) {
+            return static::getServerUrl($request) . $path;
+        } else {
+            return $path;
+        }
     }
 
     /**
@@ -246,7 +244,7 @@ class Html
                 foreach ($options as $key => $option) {
                     $html .= '<li' . $li_attr . '>';
                     $html .= '  <input type="radio" value="' . $key . '" ' . ($key == $rvalue ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
-                    $html .= '  <label for="' . $labelKey . $key . '"' . $label_attr . '>' . $option . '</label>';
+                    $html .= '  <label for="' . $labelKey . $key . '" ' . $label_attr . '>' . $option . '</label>';
                     $html .= '</li>';
                 }
                 $html .= '</ul>';
