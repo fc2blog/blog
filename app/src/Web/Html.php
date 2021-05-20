@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Fc2blog\Web;
 
 use Fc2blog\App;
