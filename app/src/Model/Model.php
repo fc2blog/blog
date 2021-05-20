@@ -1,8 +1,4 @@
 <?php
-/**
- * ControllerとModelの中間ぐらいの位置(ActiveRecordではありません)
- * Sql群の書き出しクラス 子クラスでSingletonで呼び出し予定
- */
 
 namespace Fc2blog\Model;
 
@@ -472,18 +468,6 @@ abstract class Model
             $sql_array[] = '(' . implode(',', array_fill(0, count($columns), '?')) . ')';
         }
         $sql .= implode(',', $sql_array);
-        $options['result'] = DBInterface::RESULT_INSERT_ID;
-        return $this->executeSql($sql, $params, $options);
-    }
-
-    /**
-     * @param string $sql
-     * @param array $params
-     * @param array $options
-     * @return false|mixed
-     */
-    public function insertSql(string $sql, array $params = [], array $options = [])
-    {
         $options['result'] = DBInterface::RESULT_INSERT_ID;
         return $this->executeSql($sql, $params, $options);
     }
