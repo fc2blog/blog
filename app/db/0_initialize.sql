@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.0.19, for osx10.15 (x86_64)
+-- MySQL dump 10.18  Distrib 10.3.27-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: 127.0.0.1    Database: dev_fc2blog
+-- Host: db    Database: dev_fc2blog
 -- ------------------------------------------------------
--- Server version	5.7.30
+-- Server version	5.7.31
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE = @@TIME_ZONE */;
 /*!40103 SET TIME_ZONE = '+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS = @@UNIQUE_CHECKS, UNIQUE_CHECKS = 0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `blog_plugins`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blog_plugins`
 (
     `id`           int(10) unsigned    NOT NULL AUTO_INCREMENT,
@@ -50,7 +50,7 @@ CREATE TABLE `blog_plugins`
 
 DROP TABLE IF EXISTS `blog_settings`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blog_settings`
 (
     `blog_id`                    varchar(50)         NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE `blog_settings`
 
 DROP TABLE IF EXISTS `blog_templates`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blog_templates`
 (
     `id`          int(10) unsigned    NOT NULL AUTO_INCREMENT,
@@ -105,7 +105,7 @@ CREATE TABLE `blog_templates`
 
 DROP TABLE IF EXISTS `blogs`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blogs`
 (
     `id`                   varchar(50)         NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE `blogs`
 
 DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories`
 (
     `id`             int(10) unsigned    NOT NULL AUTO_INCREMENT,
@@ -159,7 +159,7 @@ CREATE TABLE `categories`
 
 DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments`
 (
     `id`               int(10) unsigned    NOT NULL AUTO_INCREMENT,
@@ -190,7 +190,7 @@ CREATE TABLE `comments`
 
 DROP TABLE IF EXISTS `entries`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `entries`
 (
     `id`               int(10) unsigned    NOT NULL AUTO_INCREMENT,
@@ -219,7 +219,7 @@ CREATE TABLE `entries`
 
 DROP TABLE IF EXISTS `entry_categories`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `entry_categories`
 (
     `blog_id`     varchar(50)      NOT NULL,
@@ -237,7 +237,7 @@ CREATE TABLE `entry_categories`
 
 DROP TABLE IF EXISTS `entry_tags`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `entry_tags`
 (
     `blog_id`  varchar(50)      NOT NULL,
@@ -255,7 +255,7 @@ CREATE TABLE `entry_tags`
 
 DROP TABLE IF EXISTS `files`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `files`
 (
     `id`         int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -298,7 +298,7 @@ CREATE TABLE `password_reset_token`
 
 DROP TABLE IF EXISTS `plugins`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `plugins`
 (
     `id`          int(10) unsigned    NOT NULL AUTO_INCREMENT,
@@ -324,7 +324,7 @@ CREATE TABLE `plugins`
 
 DROP TABLE IF EXISTS `tags`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags`
 (
     `id`      int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -343,7 +343,7 @@ CREATE TABLE `tags`
 
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users`
 (
     `id`            int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -367,4 +367,4 @@ CREATE TABLE `users`
 /*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
 
--- Dump completed on 2020-08-18 18:48:28
+-- Dump completed on 2021-05-20 12:52:58
