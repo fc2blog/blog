@@ -10,7 +10,7 @@ class MailService
     public static function send(Email $email): bool
     {
         // TODO this is mock
-        error_log(print_r($email, true));
+        file_put_contents("php://stderr", print_r($email, true));
         return true;
     }
 }
