@@ -25,4 +25,14 @@ class UserService
         $repo = new UsersModel();
         return $repo->updateById($user->asArray(), $user->id) === 1;
     }
+
+    public static function getById(int $user_id): ?User
+    {
+        $repo = new UsersModel();
+        $res = $repo->findById($user_id);
+
+        if ($res === false) return null;
+
+        return User::factory($res);
+    }
 }
