@@ -82,9 +82,8 @@ abstract class Controller
             $this->output = $this->renderByTwig($this->request, $template_path);
         } elseif ($this->layout === 'fc2_template.php') {
             $this->output = $this->renderByFc2Template($this->request, $template_path);
-        } else {
-            // $this->layout === '' の場合は、空ボディか、$this->outputにすでになにか入れられているという想定
         }
+        // $this->layout === '' の場合は、空ボディか、$this->outputにすでになにか入れられているという想定
     }
 
     /**
