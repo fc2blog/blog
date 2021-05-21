@@ -5,7 +5,6 @@ namespace Fc2blog\Model;
 
 use Fc2blog\Service\MailService;
 use Fc2blog\Service\TwigService;
-use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use RuntimeException;
 
@@ -45,13 +44,7 @@ class PasswordResetTokenService
         }
 
         // mail sending.
-        $reset_url = Html::adminUrl(
-            $request,
-            'PasswordReset',
-            'resetForm',
-            ['token' => $token->token],
-            true
-        );
+        $reset_url = $token->getResetUrl($request);
 
         $email = new Email();
         $email->setFrom(

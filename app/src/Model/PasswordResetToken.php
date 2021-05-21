@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Fc2blog\Model;
 
 use Fc2blog\App;
+use Fc2blog\Web\Html;
+use Fc2blog\Web\Request;
 
 class PasswordResetToken
 {
@@ -40,5 +42,16 @@ class PasswordResetToken
     public function isExpired(): bool
     {
         return strtotime($this->expire_at) < time();
+    }
+
+    public function getResetUrl(Request $request): string
+    {
+        return Html::adminUrl(
+            $request,
+            'PasswordReset',
+            'resetForm',
+            ['token' => $this->token],
+            true
+        );
     }
 }

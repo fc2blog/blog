@@ -50,6 +50,7 @@ if (strlen(MAILER_CLASS_NAME) > 0) {
     \Fc2blog\Service\MailService::$mailerClassName = '\\Fc2blog\\Repo\\StdErrOutputMailer';
 }
 define("SENDMAIL_PATH", (string)getenv("FC2_SENDMAIL_PATH"));
+define("EMERGENCY_PASSWORD_RESET_ENABLE", (string)getenv("FC2_EMERGENCY_PASSWORD_RESET_ENABLE"));
 
 if (strlen((string)getenv("FC2_GITHUB_REPO")) > 0) {
     define("GITHUB_REPO", (string)getenv("FC2_GITHUB_REPO"));
