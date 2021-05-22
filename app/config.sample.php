@@ -25,6 +25,7 @@ define("ADMIN_MAIL_ADDRESS", "your_email_addr@example.jp");
 // メールが送信出来ない環境で、パスワードリセットする場合にのみ1を設定してください。
 // パスワードリセットが成功した後は必ず "1" 以外の "0" 等の値に変更してください。
 define("EMERGENCY_PASSWORD_RESET_ENABLE", "0");
+define("NEED_EMAIL_AUTH_WHEN_LOGIN", "0");
 
 // If you want get error log on display.
 // define('ERROR_ON_DISPLAY', "1");
