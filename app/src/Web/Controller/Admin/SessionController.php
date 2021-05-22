@@ -57,6 +57,7 @@ class SessionController extends AdminController
         if (is_null($user = UserService::getByLoginIdAndPassword($data['login_id'], $data['password']))) {
             // Penalty for failed login
             sleep(3);
+            $this->setErrorMessage(__('Input error exists'));
             $this->set('errors', ['login_id' => __('Login ID or password is incorrect')]);
             return 'admin/session/login.twig';
         }
