@@ -11,7 +11,6 @@ use Fc2blog\Web\Session;
 
 class UsersController extends AdminController
 {
-
     /**
      * 一覧表示(デバッグ用)
      * @param Request $request
@@ -140,67 +139,12 @@ class UsersController extends AdminController
         // 削除処理
         Model::load('Users')->deleteById($this->getUserId());
         $this->setInfoMessage(__('Was completed withdrawal'));
-        $this->logout($request);
-        return 'admin/users/withdrawal.twig';
-    }
-
-    /**
-     * ログイン
-     * @param Request $request
-     * @return string
-     */
-    public function login(Request $request): string
-    {
-        $template = 'admin/users/login.twig';
-
-        if ($this->isLogin()) {
-            $this->redirect($request, $request->baseDirectory);   // トップページへリダイレクト
-        }
-
-        // 初期表示時
-        if (!$request->get('user')) {
-            return $template;
-        }
-
-        $users_model = new UsersModel();
-
-        // ログインフォームのバリデート
-        $errors = $users_model->loginValidate($request->get('user'), $data, ['login_id', 'password']);
-
-        if (empty($errors)) {
-            $user = $users_model->findByLoginIdAndPassword($data['login_id'], $data['password']);
-            if ($user) {
-                // ログイン処理
-                $blog = (new BlogsModel())->getLoginBlog($user);
-                $this->loginProcess($user, $blog);
-                $users_model->updateById(['logged_at' => date('Y-m-d H:i:s')], $user['id']);
-                if (!$this->isSelectedBlog()) {
-                    $this->redirect($request, ['controller' => 'Blogs', 'action' => 'create']);
-                }
-                $this->redirect($request, $request->baseDirectory);   // トップページへリダイレクト
-            } else {
-                // Penalty for failed login
-                sleep(3);
-            }
-            $errors = ['login_id' => __('Login ID or password is incorrect')];
-        }
-
-        $this->setErrorMessage(__('Input error exists'));
-        $this->set('errors', $errors);
-        return $template;
-    }
-
-    /**
-     * ログアウト
-     * @param Request $request
-     */
-    public function logout(Request $request)
-    {
         if ($this->isLogin()) {
             Session::destroy($request);
         }
-        $this->redirect($request, array('action' => 'login'));
-    }
 
+        $this->redirect($request, ['controller' => 'session', 'action' => 'login']);
+        return "";
+    }
 }
 

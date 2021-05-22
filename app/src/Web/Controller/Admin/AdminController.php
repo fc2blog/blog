@@ -26,7 +26,8 @@ abstract class AdminController extends Controller
         if (!$this->isLogin()) {
             // 未ログイン時でもアクセス許可するパターンリスト
             $allows = array(
-                UsersController::class => ['login', 'register'],
+                SessionController::class => ['login', 'doLogin'],
+                UsersController::class => ['register'],
                 CommonController::class => ['lang', 'install'],
                 PasswordResetController::class => ['requestForm', 'request', 'resetForm', 'reset'],
             );
@@ -34,7 +35,7 @@ abstract class AdminController extends Controller
             $action_name = $request->methodName;
             // 許可チェック
             if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
-                $this->redirect($request, array('controller' => 'Users', 'action' => 'login'));
+                $this->redirect($request, array('controller' => 'Session', 'action' => 'login'));
             }
             return;
         }
