@@ -44,7 +44,7 @@ services:
       FC2_ADMIN_MAIL_ADDRESS: "noreply@example.jp"
       FC2_MAILER_CLASS_NAME: 'StdErrOutputMailer'
       FC2_EMERGENCY_PASSWORD_RESET_ENABLE: '0'
-      FC2_NEED_EMAIL_AUTH_WHEN_LOGIN: '1'
+      FC2_MFA_EMAIL: '0'
       DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
       # FC2_DEFAULT_BLOG_ID: "testblog2" # experimental single tenant mode.
       # FC2_GITHUB_REPO: "/uzulla/fc2blog" # experimental update from unofficial repo

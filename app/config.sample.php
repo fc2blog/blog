@@ -21,11 +21,15 @@ define('HTTPS_PORT', '443'); // HTTPS時ポート
 // Please edit the path when change `app` and `public` relative path condition.
 define('WWW_DIR', __DIR__ . '/../public/'); // this path need finish with slash.
 
+// パスワード再発行機能などで送信されるメールのFROMとするメールアドレス
 define("ADMIN_MAIL_ADDRESS", "your_email_addr@example.jp");
+
 // メールが送信出来ない環境で、パスワードリセットする場合にのみ1を設定してください。
 // パスワードリセットが成功した後は必ず "1" 以外の "0" 等の値に変更してください。
 define("EMERGENCY_PASSWORD_RESET_ENABLE", "0");
-define("NEED_EMAIL_AUTH_WHEN_LOGIN", "0");
+
+// ログイン時にメール認証を有効化するか
+define("MFA_EMAIL", "0");
 
 // If you want get error log on display.
 // define('ERROR_ON_DISPLAY', "1");
