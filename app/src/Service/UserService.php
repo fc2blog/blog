@@ -14,6 +14,13 @@ class UserService
         return User::factory($repo->findByLoginId($login_id));
     }
 
+    public static function getByLoginIdAndPassword(string $login_id, string $password): ?User
+    {
+        $repo = new UsersModel();
+        $user = User::factory($repo->findByLoginId($login_id));
+        return !is_null($user) && $user->verifyPassword($password) ? $user : null;
+    }
+
     public static function updatePassword(User $user, string $password): bool
     {
         $user->setPassword($password);
