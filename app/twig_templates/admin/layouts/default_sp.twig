@@ -120,7 +120,7 @@
                 <li class="list_titie">{{ _('User Menu') }}</li>
                 <li {% if active_menu == 'blogs/index' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Blogs', 'index') }}"><span><i class="sidemenu_myblog"></i></span><span>{{ _('List of blogs') }}</span></a></li>
                 <li {% if active_menu == 'users/edit' or active_menu == 'users/withdrawal' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'edit') }}"><span><i class="sidemenu_setting"></i></span><span>{{ _('User setting') }}</span></a></li>
-                <li><a class="touch" href="{{ url(req, 'Users', 'logout') }}"><span><i class="sidemenu_logout"></i></span><span>{{ _('Logout') }}</span></a></li>
+                <li><a class="touch" href="{{ url(req, 'Session', 'logout') }}"><span><i class="sidemenu_logout"></i></span><span>{{ _('Logout') }}</span></a></li>
                 {% if debug %}
                     <li class="list_titie">デバッグ用</li>
                     <li><a class="touch" href="{{ url(req, 'Users', 'index') }}"><span><i class="sidemenu_history"></i></span><span>ユーザー一覧</span></a></li>
@@ -140,7 +140,7 @@
                 {% if is_register_able %}
                     <li {% if active_menu == 'users/register' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'register') }}"><span><i class="sidemenu_editor"></i></span><span>{{ _('User registration') }}</span></a></li>
                 {% endif %}
-                <li {% if active_menu == 'users/login' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'login') }}"><span></span><span>{{ _('Login') }}</span></a></li>
+                <li {% if active_menu == 'session/login' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Session', 'login') }}"><span></span><span>{{ _('Login') }}</span></a></li>
             </ul>
         </div>
     {% endif %}

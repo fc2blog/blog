@@ -3,7 +3,8 @@
 
 {% block content %}
     <header><h2>{{ _('Login') }}</h2></header>
-    <form method="POST" class="admin-form">
+    <form method="POST" class="admin-form" action="{{ url(request, "Session", "doLogin") }}">
+        <input type="hidden" name="sig" value="{{ sig }}">
         <table id="id_form">
             <tbody>
             <tr>

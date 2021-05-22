@@ -102,7 +102,7 @@
                 <ul>
                     <li><a href="{{ url(req, 'Blogs', 'index') }}">{{ _('List of blogs') }}</a></li>
                     <li><a href="{{ url(req, 'Users', 'edit') }}">{{ _('User setting') }}</a></li>
-                    <li><a href="{{ url(req, 'Users', 'logout') }}">{{ _('Logout') }}</a></li>
+                    <li><a href="{{ url(req, 'Session', 'logout') }}">{{ _('Logout') }}</a></li>
                 </ul>
             </div>
 
@@ -123,7 +123,7 @@
                     {% if is_register_able %}
                         <li><a href="{{ url(req, 'Users', 'register') }}">{{ _('User registration') }}</a></li>
                     {% endif %}
-                    <li><a href="{{ url(req, 'Users', 'login') }}">{{ _('Login') }}</a></li>
+                    <li><a href="{{ url(req, 'Session', 'login') }}">{{ _('Login') }}</a></li>
                 </ul>
             </div>
         {% endif %}
