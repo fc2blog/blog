@@ -2,7 +2,8 @@
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\Model\BlogsModel;
+use Fc2blog\Config;
+use Fc2blog\Model\EmailLoginTokenService;
 use Fc2blog\Model\UsersModel;
 use Fc2blog\Service\UserService;
 use Fc2blog\Web\Request;
@@ -62,18 +63,61 @@ class SessionController extends AdminController
             return 'admin/session/login.twig';
         }
 
+        // MFA処理
+        if (Config::get('MFA_EMAIL') === "1") {
+            // create and send login mail
+            if (false === EmailLoginTokenService::createAndSendToken($request, $user)) {
+                return "admin/email_login/mail_sending_error.twig";
+            }
+            // MFA必須の場合はメール経由でmailLogin()へ
+            return "admin/email_login/requested.twig";
+        }
+
         // ログイン処理
-        $blog = (new BlogsModel())->getLoginBlog($user);
-        $this->loginProcess($user, $blog);
-        $users_model->updateById(['logged_at' => date('Y-m-d H:i:s')], $user['id']);
+        $this->loginProcess($user);
 
         if (!$this->isSelectedBlog()) {
             $this->redirect($request, ['controller' => 'Blogs', 'action' => 'create']);
-            return "";
         } else {
             $this->redirect($request, $request->baseDirectory);   // トップページへリダイレクト
-            return "";
         }
+        return "";
+    }
+
+    /**
+     * ログイン処理
+     * @param Request $request
+     * @return string
+     */
+    public function mailLogin(Request $request): string
+    {
+        // get&check login token
+        $token_str = $request->get('token');
+
+        $token = EmailLoginTokenService::getByToken($token_str);
+
+        // ok / ng
+        if (is_null($token) || $token->isExpired()) {
+            return "admin/email_login/expired.twig";
+        }
+
+        EmailLoginTokenService::revokeToken($token);
+
+        $user = UserService::getById($token->user_id);
+
+        if (is_null($user)) {
+            return "admin/email_login/expired.twig";
+        }
+
+        // ログイン処理
+        $this->loginProcess($user);
+
+        if (!$this->isSelectedBlog()) {
+            $this->redirect($request, ['controller' => 'Blogs', 'action' => 'create']);
+        } else {
+            $this->redirect($request, $request->baseDirectory);   // トップページへリダイレクト
+        }
+        return "";
     }
 
     /**

@@ -4,6 +4,8 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\UsersModel;
 use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -26,7 +28,7 @@ abstract class AdminController extends Controller
         if (!$this->isLogin()) {
             // 未ログイン時でもアクセス許可するパターンリスト
             $allows = array(
-                SessionController::class => ['login', 'doLogin'],
+                SessionController::class => ['login', 'doLogin', 'mailLogin'],
                 UsersController::class => ['register'],
                 CommonController::class => ['lang', 'install'],
                 PasswordResetController::class => ['requestForm', 'request', 'resetForm', 'reset'],
@@ -67,9 +69,8 @@ abstract class AdminController extends Controller
     /**
      * ログイン処理
      * @param $user
-     * @param null $blog
      */
-    protected function loginProcess($user, $blog = null)
+    protected function loginProcess($user)
     {
         Session::regenerate();
 
@@ -77,12 +78,17 @@ abstract class AdminController extends Controller
         Session::set('login_id', $user['login_id']);
         Session::set('user_type', $user['type']);
 
+        $blog = (new BlogsModel())->getLoginBlog($user);
+
         if (!empty($blog)) {
             Session::set('blog_id', $blog['id']);
             Session::set('nickname', $blog['nickname']);
         }
 
         Session::set('sig', App::genRandomString());
+
+        $users_model = new UsersModel();
+        $users_model->updateById(['logged_at' => date('Y-m-d H:i:s')], $user['id']);
     }
 
     /**
@@ -123,15 +129,15 @@ abstract class AdminController extends Controller
     /**
      * ブログIDが設定中かどうか
      */
-    protected function isSelectedBlog()
+    protected function isSelectedBlog(): bool
     {
         return !!Session::get('blog_id');
     }
 
     /**
-     * 管理人かどうか
+     * ログイン中ユーザーが管理人かどうか
      */
-    protected function isAdmin()
+    protected function isAdmin(): bool
     {
         return Session::get('user_type') === Config::get('USER.TYPE.ADMIN');
     }
@@ -140,6 +146,7 @@ abstract class AdminController extends Controller
      * ブログIDを取得する
      * @param Request $request
      * @return mixed|null
+     * // TODO 現在ではrequestが不要なので消し込み
      */
     protected function getBlogId(Request $request)
     {
@@ -150,7 +157,7 @@ abstract class AdminController extends Controller
      * ブログIDを設定する
      * @param null $blog
      */
-    protected function setBlog($blog = null)
+    protected function setBlog($blog = null): void
     {
         if ($blog) {
             Session::set('nickname', $blog['nickname']);
@@ -165,7 +172,7 @@ abstract class AdminController extends Controller
      * 情報用メッセージを設定する
      * @param $message
      */
-    protected function setInfoMessage($message)
+    protected function setInfoMessage($message): void
     {
         $this->setMessage($message, 'flash-message-info');
     }
@@ -174,7 +181,7 @@ abstract class AdminController extends Controller
      * 警告用メッセージを設定する
      * @param $message
      */
-    protected function setWarnMessage($message)
+    protected function setWarnMessage($message): void
     {
         $this->setMessage($message, 'flash-message-warn');
     }
@@ -183,7 +190,7 @@ abstract class AdminController extends Controller
      * エラー用メッセージを設定する
      * @param $message
      */
-    protected function setErrorMessage($message)
+    protected function setErrorMessage($message): void
     {
         $this->setMessage($message, 'flash-message-error');
     }
@@ -193,7 +200,7 @@ abstract class AdminController extends Controller
      * @param $message
      * @param $type
      */
-    protected function setMessage($message, $type)
+    protected function setMessage($message, $type): void
     {
         $messages = Session::get($type, array());
         $messages[] = $message;
@@ -203,7 +210,7 @@ abstract class AdminController extends Controller
     /**
      * メッセージ情報を削除し取得する
      */
-    protected function removeMessage()
+    protected function removeMessage(): array
     {
         $messages = array();
         $messages['info'] = Session::remove('flash-message-info');
@@ -213,13 +220,13 @@ abstract class AdminController extends Controller
     }
 
     // 存在しないアクションは404へ
-    public function __call($name, $arguments)
+    public function __call($name, $arguments): string
     {
         return $this->error404();
     }
 
     // 404 NotFound Action
-    public function error404()
+    public function error404(): string
     {
         $this->setStatusCode(404);
         return 'admin/common/error404.twig';
