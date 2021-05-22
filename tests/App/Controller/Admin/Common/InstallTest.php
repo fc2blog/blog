@@ -157,8 +157,11 @@ class InstallTest extends TestCase
 
         $this->assertStringContainsString("インストール完了", $c->getOutput());
 
+        // generate sig
+        $this->resetSigOnlySession();
         // 本当に登録できたかログインテスト
-        $r = $this->reqPostBeRedirect("/admin/users/login", [
+        $r = $this->reqPostBeRedirect("/admin/session/doLogin", [
+            'sig' => $this->getSig(),
             'user' => [
                 'login_id' => 'testadmintest@localhost',
                 'password' => 'testadmintest@localhost',

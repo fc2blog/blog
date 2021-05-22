@@ -6,7 +6,7 @@ namespace Fc2blog\Tests\App\Controller\Admin\Users;
 use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
 use Fc2blog\Web\Controller\Admin\CommonController;
-use Fc2blog\Web\Controller\Admin\UsersController;
+use Fc2blog\Web\Controller\Admin\SessionController;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 use PHPUnit\Framework\TestCase;
@@ -21,14 +21,14 @@ class LogInTest extends TestCase
         $this->resetSession();
         $r = $this->reqGetBeRedirect("/admin/");
 
-        $this->assertEquals("/admin/users/login", $r->redirectUrl);
+        $this->assertEquals("/admin/session/login", $r->redirectUrl);
     }
 
     public function testLoginForm(): void
     {
-        $c = $this->reqGet("/admin/users/login");
+        $c = $this->reqGet("/admin/session/login");
 
-        $this->assertInstanceOf(UsersController::class, $c);
+        $this->assertInstanceOf(SessionController::class, $c);
         $this->assertStringContainsString("管理画面へログイン", $c->getOutput());
     }
 
@@ -38,8 +38,10 @@ class LogInTest extends TestCase
         Session::destroy(new Request());
         $this->resetSession();
         $this->resetCookie();
+        $this->resetSigOnlySession();
 
-        $r = $this->reqPostBeRedirect("/admin/users/login", [
+        $r = $this->reqPostBeRedirect("/admin/session/doLogin", [
+            'sig' => $this->getSig(),
             'user' => [
                 'login_id' => 'testadmin@localhost',
                 'password' => 'testadmin@localhost',
@@ -68,9 +70,9 @@ class LogInTest extends TestCase
     public function testLogout(): void
     {
         $this->mergeAdminSession();
-        $r = $this->reqGetBeRedirect("/admin/users/logout");
+        $r = $this->reqGetBeRedirect("/admin/session/logout");
 
-        $this->assertEquals('/admin/users/login', $r->redirectUrl);
+        $this->assertEquals('/admin/session/login', $r->redirectUrl);
         $this->assertEquals(302, $r->statusCode);
         $this->assertEmpty($this->clientTraitSession);
     }

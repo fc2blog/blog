@@ -51,6 +51,11 @@ trait ClientTrait
         );
     }
 
+    public function resetSigOnlySession()
+    {
+        $this->clientTraitSession = ['sig' => 'test-sig'];
+    }
+
     public function setPlainAdminSession()
     {
         $this->resetSession();
