@@ -87,7 +87,7 @@ abstract class AdminController extends Controller
     /**
      * ログイン状況
      */
-    protected function isLogin()
+    protected function isLogin(): bool
     {
         return !!Session::get('user_id');
     }
