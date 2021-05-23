@@ -334,6 +334,8 @@ abstract class Controller
                 $data['comments'][$key]['wayoubi'] = __($data['comments'][$key]['youbi']);
                 $data['comments'][$key]['body'] = $value['body']; // TODO nl2brされていないのは正しいのか？
 
+                $value['reply_updated_at'] = $value['reply_updated_at'] ?? ""; // reply_updated_at is nullable
+                $reply_updated_at = strtotime($value['reply_updated_at']) ?: 0;
                 [
                     $data['comments'][$key]['reply_year'],
                     $data['comments'][$key]['reply_month'],
@@ -342,9 +344,9 @@ abstract class Controller
                     $data['comments'][$key]['reply_minute'],
                     $data['comments'][$key]['reply_second'],
                     $data['comments'][$key]['reply_youbi']
-                ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['reply_updated_at'])));
+                ] = explode('/', date('Y/m/d/H/i/s/D', $reply_updated_at));
                 $data['comments'][$key]['reply_wayoubi'] = __($data['comments'][$key]['reply_youbi']);
-                $data['comments'][$key]['reply_body'] = nl2br($value['reply_body']);
+                $data['comments'][$key]['reply_body'] = nl2br((string)$value['reply_body']);
             }
         }
 
@@ -394,9 +396,9 @@ abstract class Controller
         return ob_get_clean();
     }
 
-    // 存在しないアクションは404へ
-    // TODO 存在しないメソッドコールはエラーにしたほうがわかりやすい
-    public function __call($name, $arguments)
+    // 存在しないアクションはエラーとして404へ
+    // TODO 「アクションではない」メソッドがたたけないようにする。アクション以外を追い出すかシグネチャを見るか。
+    public function __call($name, $arguments): string
     {
         return $this->error404();
     }
