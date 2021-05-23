@@ -362,4 +362,8 @@ if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/THIS_IS_TEST/u", $_SERVER
     $config['DEFAULT_BLOG_ID'] = null;
 }
 
+$config['ADMIN_MAIL_ADDRESS'] = defined("ADMIN_MAIL_ADDRESS") ? ADMIN_MAIL_ADDRESS : "noreply@example.jp";
+
+$config['MFA_EMAIL'] = defined("MFA_EMAIL") ? MFA_EMAIL : null;
+
 return $config;

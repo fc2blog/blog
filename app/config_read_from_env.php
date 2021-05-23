@@ -51,6 +51,7 @@ if (strlen(MAILER_CLASS_NAME) > 0) {
 }
 define("SENDMAIL_PATH", (string)getenv("FC2_SENDMAIL_PATH"));
 define("EMERGENCY_PASSWORD_RESET_ENABLE", (string)getenv("FC2_EMERGENCY_PASSWORD_RESET_ENABLE"));
+define("MFA_EMAIL", (string)getenv("FC2_MFA_EMAIL"));
 
 if (strlen((string)getenv("FC2_GITHUB_REPO")) > 0) {
     define("GITHUB_REPO", (string)getenv("FC2_GITHUB_REPO"));

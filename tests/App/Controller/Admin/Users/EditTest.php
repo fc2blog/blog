@@ -49,8 +49,10 @@ class EditTest extends TestCase
         // ログインのトライ
         $this->resetSession();
         $this->resetCookie();
+        $this->resetSigOnlySession();
 
-        $r = $this->reqPostBeRedirect("/admin/users/login", [
+        $r = $this->reqPostBeRedirect("/admin/session/doLogin", [
+            'sig' => $this->getSig(),
             'user' => [
                 'login_id' => 'testadmin@localhost',
                 'password' => 'password123',

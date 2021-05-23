@@ -185,6 +185,28 @@ CREATE TABLE `comments`
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `email_login_token`
+--
+
+DROP TABLE IF EXISTS `email_login_token`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `email_login_token`
+(
+    `id`         bigint(20)                              NOT NULL AUTO_INCREMENT,
+    `user_id`    int(11)                                 NOT NULL,
+    `token`      varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `expire_at`  datetime                                NOT NULL,
+    `updated_at` datetime                                NOT NULL,
+    `created_at` datetime                                NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `email_login_token_token_uindex` (`token`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `entries`
 --
 

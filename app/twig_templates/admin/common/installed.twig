@@ -6,6 +6,6 @@
 
     {{ _('The installation was completed') }}<br/>
     {{ _('Please log from the following') }}<br/>
-    <a href="{{ url(req, 'Users', 'login') }}">{{ _('Login') }}</a><br/>
+    <a href="{{ url(req, 'Session', 'login') }}">{{ _('Login') }}</a><br/>
     {{ _('If you want to re-enable this installer, please delete `installed.lock` file in temp dir.') }}
 {% endblock %}

@@ -38,6 +38,7 @@ class Fc2TemplatesModel extends Model
             $url .= '&device=' . $condition['device'];
         }
 
+        // TODO offline mode
         $json = file_get_contents($url);
         $json = json_decode($json, true);
 
@@ -74,6 +75,7 @@ class Fc2TemplatesModel extends Model
     {
         $url = 'https://admin.blog.fc2.com/oss_api.php?action=template_view&id=' . $id . '&device=' . $device;
 
+        // TODO Offline mode
         $json = file_get_contents($url);
         $json = json_decode($json, true);
         $json['id'] = $id;

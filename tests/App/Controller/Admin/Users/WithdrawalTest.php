@@ -5,6 +5,7 @@ namespace Fc2blog\Tests\App\Controller\Admin\Users;
 
 use Fc2blog\Tests\DBHelper;
 use Fc2blog\Tests\Helper\ClientTrait;
+use Fc2blog\Web\Controller\Admin\SessionController;
 use Fc2blog\Web\Controller\Admin\UsersController;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -43,17 +44,20 @@ class WithdrawalTest extends TestCase
             ]
         ];
         $r = $this->reqPostBeRedirect("/admin/users/withdrawal", $request_data);
-        $this->assertEquals("/admin/users/login", $r->redirectUrl);
+        $this->assertEquals("/admin/session/login", $r->redirectUrl);
+
+        $this->resetSigOnlySession();
 
         // ログインのトライ(退会しているので、失敗する
-        $c = $this->reqPost("/admin/users/login", [
+        $c = $this->reqPost("/admin/session/doLogin", [
+            'sig' => $this->getSig(),
             'user' => [
                 'login_id' => 'testadmin@localhost',
                 'password' => 'testadmin@localhost',
             ]
         ]);
-        $this->assertInstanceOf(UsersController::class, $c);
-        $this->assertEquals('login', $c->getResolvedMethod());
+        $this->assertInstanceOf(SessionController::class, $c);
+        $this->assertEquals('doLogin', $c->getResolvedMethod());
 
         DBHelper::clearDbAndInsertFixture();
     }

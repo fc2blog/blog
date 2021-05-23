@@ -37,7 +37,7 @@ describe("crawl admin pages", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     // ログインページにリダイレクトされる
-    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/login");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/session/login");
   });
 
   it("login failed", async () => {
@@ -59,7 +59,7 @@ describe("crawl admin pages", () => {
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/login");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/session/doLogin");
 
     const flash_message = await c.page.$eval(
       "#main-contents > div.flash-message-error > p",
@@ -291,13 +291,13 @@ describe("crawl admin pages", () => {
     let [response] = await Promise.all([
       c.waitLoad(),
       await c.page.click(
-        "#left-nav > div:nth-child(3) > ul > li:nth-child(3) > a[href='/admin/users/logout']"
+        "#left-nav > div:nth-child(3) > ul > li:nth-child(3) > a[href='/admin/session/logout']"
       ),
     ]);
 
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
-    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/login");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/session/login");
 
     const h2_text = await c.page.$eval(
       "#main-contents > header > h2",

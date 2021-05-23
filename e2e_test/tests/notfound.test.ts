@@ -39,7 +39,7 @@ describe("crawl notfound page", () => {
     expect(response.status()).toEqual(200);
     expect(await c.isNotAnyNoticeOrWarningsFinishWithEndHtmlTag()).toBeTruthy();
     // ログインページにリダイレクトされる
-    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/users/login");
+    expect(response.url()).toEqual(c.getBaseUrl() + "/admin/session/login");
 
     await c.page.$eval(
       "#id_form input[name='user[login_id]']",

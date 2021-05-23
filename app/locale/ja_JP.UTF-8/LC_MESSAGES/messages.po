@@ -2638,3 +2638,23 @@ msgstr "※ もしこのメールに心当たりがない場合には、無視�
 msgid "You can change your login password at the following URL."
 msgstr "以下のURLにアクセスして、パスワードを再設定してください。"
 
+msgid "Sent login mail."
+msgstr "ログインURLをメールしました"
+
+msgid "Sent one time login url to your mail address. Please check your mailbox."
+msgstr "一度だけ利用可能なログインURLが記載されたメールを送信しました、メールを確認してください。"
+
+msgid "[Fc2blog OSS] Your login url"
+msgstr "[Fc2blog OSS] ログインURLのおしらせ"
+
+msgid "You can login by the following URL."
+msgstr "以下のURLにアクセスし、ログインしてください。"
+
+msgid "You requested site login."
+msgstr "ログイン要求を受け付けました。"
+
+msgid "Login request expired."
+msgstr "ログインURLは無効です"
+
+msgid "Login request was expired. Please try again login form."
+msgstr "このログインURLは無効です、再度ログインフォームから要求してください。"
