@@ -38,6 +38,7 @@ class BlogsModel extends Model
      * @param $key
      * @param $data
      * @return bool|string
+     * @noinspection PhpUnusedParameterInspection // $options and $key needs dynamic call
      */
     public static function privateCheck($value, $option, $key, $data)
     {
@@ -60,7 +61,7 @@ class BlogsModel extends Model
      * @param $blog_id
      * @return bool
      */
-    public static function isPasswordRegistered($blog_id)
+    public static function isPasswordRegistered($blog_id): bool
     {
         $blog = (new BlogsModel)->findById($blog_id);
         return (!empty($blog) && strlen($blog['blog_password']) > 0);
@@ -645,10 +646,10 @@ class BlogsModel extends Model
     /**
      * エントリのパーマリンク
      * @param string $blog_id
-     * @param string $entry_id
+     * @param int $entry_id
      * @return string
      */
-    static public function getEntryFullUrlByBlogIdAndEntryId(string $blog_id, string $entry_id): string
+    static public function getEntryFullUrlByBlogIdAndEntryId(string $blog_id, int $entry_id): string
     {
         $schema = static::getSchemaByBlogId($blog_id);
         $domain = Config::get("DOMAIN");
@@ -659,7 +660,7 @@ class BlogsModel extends Model
         } else {
             $blog_id_path = "";
         }
-        return $schema . "//" . $domain . $port . $blog_id_path . "/blog-entry-" . (int)$entry_id . ".html";
+        return $schema . "//" . $domain . $port . $blog_id_path . "/blog-entry-" . $entry_id . ".html";
     }
 
     /**
