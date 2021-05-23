@@ -23,7 +23,7 @@ class CommonController extends UserController
     {
         // 言語の設定
         $lang = $request->get('lang');
-        if ($language = Config::get('LANGUAGES.' . $lang)) {
+        if (Config::get('LANGUAGES.' . $lang)) {
             Cookie::set($request, 'lang', $lang);
         }
 
