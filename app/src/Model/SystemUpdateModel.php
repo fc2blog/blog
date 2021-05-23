@@ -273,6 +273,7 @@ class SystemUpdateModel
 
     }
 
+    /** @noinspection PhpReturnValueOfMethodIsNeverUsedInspection */
     private static function rm_r(string $path): bool
     {
         if (!file_exists($path)) return false;
