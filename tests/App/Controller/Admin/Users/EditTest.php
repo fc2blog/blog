@@ -52,7 +52,7 @@ class EditTest extends TestCase
 
         $r = $this->reqPostBeRedirect("/admin/users/login", [
             'user' => [
-                'login_id' => 'testadmin',
+                'login_id' => 'testadmin@localhost',
                 'password' => 'password123',
             ]
         ]);

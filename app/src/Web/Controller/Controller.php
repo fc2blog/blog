@@ -9,9 +9,8 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Service\TwigService;
 use Fc2blog\Util\Log;
-use Fc2blog\Util\Twig\GetTextHelper;
-use Fc2blog\Util\Twig\HtmlHelper;
 use Fc2blog\Web\Controller\Admin\AdminController;
 use Fc2blog\Web\Controller\User\UserController;
 use Fc2blog\Web\Html;
@@ -20,11 +19,9 @@ use Fc2blog\Web\Session;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
-use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use Twig\Loader\FilesystemLoader;
 
 abstract class Controller
 {
@@ -85,9 +82,8 @@ abstract class Controller
             $this->output = $this->renderByTwig($this->request, $template_path);
         } elseif ($this->layout === 'fc2_template.php') {
             $this->output = $this->renderByFc2Template($this->request, $template_path);
-        } else {
-            // $this->layout === '' の場合は、空ボディか、$this->outputにすでになにか入れられているという想定
         }
+        // $this->layout === '' の場合は、空ボディか、$this->outputにすでになにか入れられているという想定
     }
 
     /**
@@ -212,25 +208,16 @@ abstract class Controller
      */
     private function renderByTwig(Request $request, string $twig_template): string
     {
-        $base_path = realpath(__DIR__ . "/../../../twig_templates/") . "/";
-        $loader = new FilesystemLoader($base_path);
-        $twig = new Environment($loader);
-
-        foreach (
-            array_merge(
-                (new GetTextHelper())->getFunctions(),
-                (new HtmlHelper())->getFunctions(),
-            ) as $function) {
-            $twig->addFunction($function);
-        }
+        $twig = TwigService::getTwigInstance();
 
         $twig_template_path = $twig_template;
         $twig_template_device_path = preg_replace("/\.twig\z/u", '_' . App::getDeviceTypeStr($request) . '.twig', $twig_template_path);
-        if (is_file($base_path . $twig_template_device_path)) { // デバイス用ファイルがある
+        if (is_file(TwigService::getTwigBasePath() . $twig_template_device_path)) { // デバイス用ファイルがある
             $twig_template_path = $twig_template_device_path;
         }
 
-        if (!is_file($base_path . $twig_template_path)) {
+        if (!is_file(TwigService::getTwigBasePath() . $twig_template_path)) {
+            $base_path = TwigService::getTwigBasePath();
             throw new InvalidArgumentException("Twig error: missing template: {$base_path}{$twig_template_path}");
         }
 
@@ -432,6 +419,13 @@ abstract class Controller
     {
         $this->setStatusCode(403);
         return 'user/common/error403.twig';
+    }
+
+    // 400 BadRequest
+    public function error400()
+    {
+        $this->setStatusCode(400);
+        return 'user/common/error400.twig';
     }
 
     public function get(string $key)

@@ -419,7 +419,7 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users`
     DISABLE KEYS */;
 INSERT INTO `users` (`id`, `login_id`, `password`, `login_blog_id`, `type`, `created_at`, `logged_at`)
-VALUES (1, 'testadmin', '$2y$10$51G30OwrNVa.AFhW0dTUiuR8UE8u1/lFHMv7D3bZ/LhOyN6u4wDmi', 'testblog2', 1,
+VALUES (1, 'testadmin@localhost', '$2y$10$E61bH5dDn5YOmw40qKtbaOpkm2zw6/S6eaeynvPLnAQ1HPk/.bYae', 'testblog2', 1,
         '2020-07-24 11:48:03', '2020-10-12 21:15:09');
 /*!40000 ALTER TABLE `users`
     ENABLE KEYS */;

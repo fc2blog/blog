@@ -40,6 +40,8 @@ services:
       FC2_HTTP_PORT: "8080"
       FC2_HTTPS_PORT: "8480"
       FC2_DOCUMENT_ROOT_PATH: "/fc2blog/public/"
+      FC2_SENDMAIL_PATH: "/fc2blog/app/vendor/uzulla/pseudo_sendmail/bin/sendmail -i -t"
+      FC2_ADMIN_MAIL_ADDRESS: "noreply@example.jp"
       DEBUG_FORCE_CAPTCHA_KEY: "1234" # デバッグ用にCAPTCHAの値を固定する
       # FC2_DEFAULT_BLOG_ID: "testblog2" # experimental single tenant mode.
       # FC2_GITHUB_REPO: "/uzulla/fc2blog" # experimental update from unofficial repo

@@ -386,6 +386,15 @@ class Request
         return $this->cookie[$cookie_name] ?? $default;
     }
 
+    /**
+     * Shorthand to check sig and method === post
+     * @return bool
+     */
+    public function isValidPost(): bool
+    {
+        return $this->method === "POST" && $this->isValidSig();
+    }
+
     public function isValidSig(): bool
     {
         if (

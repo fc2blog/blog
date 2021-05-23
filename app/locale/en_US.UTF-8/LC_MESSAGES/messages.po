@@ -389,6 +389,9 @@ msgstr ""
 msgid "403 Forbidden."
 msgstr ""
 
+msgid "400 BadRequest."
+msgstr ""
+
 #: shell/../view/user/entries/comment_edit_sp.html:2
 #: shell/../view/user/entries/comment_edit.html:1
 msgid "I edit a comment"
@@ -2520,7 +2523,7 @@ msgid "Release information query failed. Please try again later."
 msgstr ""
 
 msgid "Please backup your site before update."
-msgstr "更新前にはかならずサイトのバックアップを作成してください。"
+msgstr ""
 
 msgid "Request failed: invalid sig, please retry."
 msgstr ""
@@ -2530,3 +2533,61 @@ msgstr ""
 
 msgid "Update success."
 msgstr ""
+
+msgid "If you forget password"
+msgstr ""
+
+msgid "Password reset"
+msgstr ""
+
+msgid "Password reset request form"
+msgstr ""
+
+msgid "Your login id"
+msgstr ""
+
+msgid "Request password reset mail"
+msgstr ""
+
+msgid "Sent password reset mail"
+msgstr ""
+
+msgid "Password reset mail submitted. Please check your mailbox."
+msgstr ""
+
+msgid "If you do not receive a password reset mail, please check your spam folder."
+msgstr ""
+
+msgid "Password reset request expired."
+msgstr ""
+
+msgid "The password reset request is expired. Please try again from reset request form."
+msgstr ""
+
+msgid "Password reset completed."
+msgstr ""
+
+msgid "Password reset completed. Please login form login page."
+msgstr ""
+
+msgid "New password"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Password is too short (least 6chars)"
+msgstr ""
+
+msgid "[Fc2blog OSS] Password reset requested"
+msgstr ""
+
+msgid "You requested password reset."
+msgstr ""
+
+msgid "! If you have no idea about this email, please ignore it. !"
+msgstr ""
+
+msgid "You can change your login password at the following URL."
+msgstr ""
+

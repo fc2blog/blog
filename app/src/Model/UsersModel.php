@@ -38,7 +38,7 @@ class UsersModel extends Model
                 'required' => true,
                 'trim' => true,
                 'minlength' => array('min' => 6),
-                'maxlength' => array('max' => 50),
+                'maxlength' => array('max' => 512),
             ),
             'password' => array(
                 'required' => true,
@@ -152,6 +152,26 @@ class UsersModel extends Model
         $user = $this->find('row', $options);
 
         if (is_array($user) && count($user) > 0 && password_verify($password, $user['password'])) {
+            return $user;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * ログインIDからユーザーを取得する
+     * @param string $login_id
+     * @return array|false
+     */
+    public function findByLoginId(string $login_id)
+    {
+        $options = [
+            'where' => 'login_id=?',
+            'params' => [$login_id],
+        ];
+        $user = $this->find('row', $options);
+
+        if (is_array($user) && count($user) > 0) {
             return $user;
         } else {
             return false;

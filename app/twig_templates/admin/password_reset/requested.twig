@@ -1,0 +1,11 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Sent password reset mail') }}{% endblock %}
+
+{% block content %}
+    <header class="mb20"><h2>{{ _('Sent password reset mail') }}</h2></header>
+
+    <div>
+        <p class="mb20">{{ _("Password reset mail submitted. Please check your mailbox.") }}</p>
+        <p class="mb20">{{ _("If you do not receive a password reset mail, please check your spam folder.") }}</p>
+    </div>
+{% endblock %}

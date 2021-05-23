@@ -256,6 +256,12 @@ ob_start(); // for redirect.
                     <input type="text" name="https_port" value="443">
                 </label>
             </li>
+            <li>
+                <label>
+                    <b>Admin(your) email addr</b>
+                    <input type="text" name="admin_mail_address" value="change_me@example.jp">
+                </label>
+            </li>
         </ul>
 
         <hr>
@@ -359,6 +365,7 @@ define('DOMAIN', '" . escape_single_quote(get_post_val('domain')) . "');
 define('HTTP_PORT', '" . escape_single_quote(get_post_val('http_port')) . "');
 define('HTTPS_PORT', '" . escape_single_quote(get_post_val('https_port')) . "');
 define('WWW_DIR', '" . escape_single_quote(__DIR__) . "/');
+define('ADMIN_MAIL_ADDRESS', '" . escape_single_quote(get_post_val('admin_mail_address')) . "');
   ");
     }
 

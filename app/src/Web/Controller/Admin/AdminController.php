@@ -24,13 +24,15 @@ abstract class AdminController extends Controller
         }
 
         if (!$this->isLogin()) {
-            // 未ログイン時は新規登録とログイン以外させない
+            // 未ログイン時でもアクセス許可するパターンリスト
             $allows = array(
-                UsersController::class => array('login', 'register'),
-                CommonController::class => array('lang', 'install'),
+                UsersController::class => ['login', 'register'],
+                CommonController::class => ['lang', 'install'],
+                PasswordResetController::class => ['requestForm', 'request', 'resetForm', 'reset'],
             );
             $controller_name = $request->className;
             $action_name = $request->methodName;
+            // 許可チェック
             if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
                 $this->redirect($request, array('controller' => 'Users', 'action' => 'login'));
             }
@@ -40,15 +42,16 @@ abstract class AdminController extends Controller
         if (!$this->isSelectedBlog()) {
             // ブログ未選択時はブログの新規、編集、削除、一覧、選択以外させない
             $allows = array(
-                UsersController::class => array('logout'),
-                BlogsController::class => array('index', 'create', 'delete', 'choice'),
-                CommonController::class => array('lang', 'install'),
+                UsersController::class => ['logout'],
+                BlogsController::class => ['index', 'create', 'delete', 'choice'],
+                CommonController::class => ['lang', 'install'],
             );
             $controller_name = $request->className;
             $action_name = $request->methodName;
+            // 許可チェック
             if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
                 $this->setWarnMessage(__('Please select a blog'));
-                $this->redirect($request, array('controller' => 'Blogs', 'action' => 'index'));
+                $this->redirect($request, ['controller' => 'Blogs', 'action' => 'index']);
             }
             return;
         }

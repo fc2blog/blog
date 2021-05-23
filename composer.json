@@ -3,28 +3,30 @@
     "description": "オープンソースのブログ",
     "license": "MIT",
     "require": {
-        "ext-mbstring": "*",
-        "ext-gd": "*",
-        "ext-gettext": "*",
-        "ext-fileinfo": "*",
-        "ext-json": "*",
-        "ext-pdo": "*",
-        "ext-zip": "*",
-        "monolog/monolog": "^2.1",
-        "league/flysystem": "^1.1",
-        "twig/twig": "^3.0",
-        "nikic/php-parser": "^4.10",
-        "tuupola/base62": "^2.1",
-        "mibe/feedwriter": "^1.1"
+      "ext-mbstring": "*",
+      "ext-gd": "*",
+      "ext-gettext": "*",
+      "ext-fileinfo": "*",
+      "ext-json": "*",
+      "ext-pdo": "*",
+      "ext-zip": "*",
+      "monolog/monolog": "^2.1",
+      "league/flysystem": "^1.1",
+      "twig/twig": "^3.0",
+      "nikic/php-parser": "^4.10",
+      "tuupola/base62": "^2.1",
+      "mibe/feedwriter": "^1.1",
+      "swiftmailer/swiftmailer": "^6.0"
     },
     "config": {
         "vendor-dir": "app/vendor"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.2",
-        "simplepie/simplepie": "^1.5",
-        "ramsey/uuid": "^4.1",
-        "fakerphp/faker": "^1.13"
+      "phpunit/phpunit": "^9.2",
+      "simplepie/simplepie": "^1.5",
+      "ramsey/uuid": "^4.1",
+      "fakerphp/faker": "^1.13",
+      "uzulla/pseudo_sendmail": "^1.0"
     },
     "autoload": {
         "psr-4": {

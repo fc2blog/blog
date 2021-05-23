@@ -1,8 +1,4 @@
 <?php
-/**
- * HTMLの便利関数群
- */
-
 namespace Fc2blog\Web;
 
 use Fc2blog\App;
@@ -12,6 +8,31 @@ use Fc2blog\Util\StringCaseConverter;
 
 class Html
 {
+    /**
+     * Admin系画面用（BlogId非対応）のurl()のwrapper, コントローラー名とアクション名を簡便に指定する
+     * @param Request $request
+     * @param string $controller
+     * @param string $action
+     * @param array $args
+     * @param bool $full_url
+     * @return string
+     */
+    public static function adminUrl(Request $request, string $controller, string $action, array $args = [], bool $full_url = false): string
+    {
+        $path = static::url(
+            $request,
+            array_merge(
+                ['controller' => $controller, 'action' => $action],
+                $args
+            ),
+        );
+        if ($full_url) {
+            return static::getServerUrl($request) . $path;
+        } else {
+            return $path;
+        }
+    }
+
     /**
      * URLを作成する
      * TODO: ユーザー側のURL生成時はApp:userURLを使用に置き換え最終的にblog_idの部分を削る
@@ -221,7 +242,7 @@ class Html
                 foreach ($options as $key => $option) {
                     $html .= '<li' . $li_attr . '>';
                     $html .= '  <input type="radio" value="' . $key . '" ' . ($key == $rvalue ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
-                    $html .= '  <label for="' . $labelKey . $key . '"' . $label_attr . '>' . $option . '</label>';
+                    $html .= '  <label for="' . $labelKey . $key . '" ' . $label_attr . '>' . $option . '</label>';
                     $html .= '</li>';
                 }
                 $html .= '</ul>';

@@ -4,8 +4,8 @@ import {Helper} from "../tests/helper";
 describe("admin create entry", () => {
   let c: Helper;
 
-  const admin_id = "testadmin";
-  const admin_pass = "testadmin";
+  const admin_id = "testadmin@localhost";
+  const admin_pass = "testadmin@localhost";
 
   beforeAll(async () => {
     c = new Helper();

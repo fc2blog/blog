@@ -29,6 +29,11 @@
                     <input type="submit" value="{{ _('Login') }}"/>
                 </td>
             </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <a href="{{ url(request, "PasswordReset", "requestForm") }}">{{ _('If you forget password') }}</a>
+                </td>
+            </tr>
             </tbody>
         </table>
     </form>

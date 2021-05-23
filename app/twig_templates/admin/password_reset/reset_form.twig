@@ -1,0 +1,30 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Password reset') }}{% endblock %}
+
+{% block content %}
+    <header><h2>{{ _('Password reset') }}</h2></header>
+
+    <form action="{{ url(request, "PasswordReset", "reset") }}" method="post" class="admin-form">
+        <input type="hidden" name="sig" value="{{ sig }}">
+        <input type="hidden" name="token" value="{{ token }}">
+        <table id="id_form">
+            <tbody>
+            <tr>
+                <th><label for="password"></label>{{ _("New password") }}</th>
+                <td>
+                    <input type="password" id="password" name="password">
+                    {% if errors.password %}
+                        <br>
+                        <p class="error">{{ errors.password }}</p>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="form-button" colspan="2">
+                    <button type="submit">{{ _('Save') }}</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+{% endblock %}

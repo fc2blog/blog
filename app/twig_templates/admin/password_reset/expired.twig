@@ -1,0 +1,10 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Password reset request expired.') }}{% endblock %}
+
+{% block content %}
+    <header class="mb20"><h2>{{ _('Password reset request expired.') }}</h2></header>
+
+    <div>
+        <p>{{ _("The password reset request is expired. Please try again from reset request form.") }}</p>
+    </div>
+{% endblock %}

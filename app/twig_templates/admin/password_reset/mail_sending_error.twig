@@ -1,0 +1,11 @@
+{% extends 'admin/layouts/default.twig' %}
+{% block title %}{{ _('Mail sending error.') }}{% endblock %}
+
+{% block content %}
+    <header class="mb20"><h2>{{ _('Mail sending error.') }}</h2></header>
+
+    <div>
+        <p>{{ _("Could not sent mail. Please check error log.") }}</p>
+        <p>{{ _("Some thoughts reason: 1, wrong sendmail configuration. 2, from/to mail address was invalid.") }}</p>
+    </div>
+{% endblock %}
