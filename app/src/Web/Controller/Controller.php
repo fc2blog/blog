@@ -511,7 +511,7 @@ abstract class Controller
     {
         if ($key === null) {
             // 適当な値をトークンに設定
-            $key = App::genRandomStringAlphaNum(32);
+            $key = App::genRandomStringAlphaNum();
         }
         Session::set($name, $key);
     }
