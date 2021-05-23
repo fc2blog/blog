@@ -135,6 +135,7 @@ class Html
         return $url;
     }
 
+    /** @noinspection XmlInvalidId HTML組み立てが複雑で、Linterが解析しきれないため */
     public static function input(Request $request, $name, $type, $attrs = array(), $option_attrs = array()): string
     {
         $default = $attrs['default'] ?? null;    // デフォルト文字列
