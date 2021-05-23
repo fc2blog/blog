@@ -31,7 +31,7 @@ class CategoriesController extends AdminController
 
         // カテゴリ登録数
         $create_limit = Config::get('CATEGORY.CREATE_LIMIT');
-        $is_limit_create_category = ($create_limit > 0) ? ($create_limit <= count($options)) : false;
+        $is_limit_create_category = $create_limit > 0 && $create_limit <= count($options);
         $this->set('is_limit_create_category', $is_limit_create_category);
 
         if ($is_limit_create_category) {
@@ -51,7 +51,7 @@ class CategoriesController extends AdminController
         $errors = $categories_model->validate($category_request, $data, ['parent_id', 'name', 'category_order']);
         if (empty($errors)) {
             $data['blog_id'] = $blog_id;
-            if ($id = $categories_model->addNode($data, 'blog_id=?', [$blog_id])) {
+            if ($categories_model->addNode($data, 'blog_id=?', [$blog_id])) {
                 $this->setInfoMessage(__('I added a category'));
                 $this->redirect($request, ['action' => 'create']);
             }
@@ -126,7 +126,7 @@ class CategoriesController extends AdminController
         }
 
         // 削除データの取得(未分類であるid=1は削除させない)
-        if ($id == 1 || !$category = $categories_model->findByIdAndBlogId($id, $blog_id)) {
+        if ($id == 1 || !$categories_model->findByIdAndBlogId($id, $blog_id)) {
             $this->redirect($request, array('action' => 'create'));
         }
 
@@ -140,6 +140,7 @@ class CategoriesController extends AdminController
      * ajax用のカテゴリ追加 admin/entries/create からインクルード
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function ajax_add(Request $request): string
     {

@@ -165,6 +165,7 @@ class CommentsController extends AdminController
      * コメントの承認(ajax版)
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function ajax_approval(Request $request): string
     {
@@ -203,6 +204,7 @@ class CommentsController extends AdminController
      * 返信
      * @param Request $request
      * @return string
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function reply(Request $request)
     {
@@ -261,6 +263,7 @@ class CommentsController extends AdminController
      * ajax用の返信
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function ajax_reply(Request $request): string
     {

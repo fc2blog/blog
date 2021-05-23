@@ -32,7 +32,7 @@ class BlogPluginsController extends AdminController
         $this->set('app_display_hide', Config::get('APP.DISPLAY.HIDE'));
 
         $blog_plugin_json = [];
-        foreach ($category_blog_plugins as $category => $blog_plugins) {
+        foreach ($category_blog_plugins as $blog_plugins) {
             foreach ($blog_plugins as $blog_plugin) {
                 $json[] = array(
                     'id' => $blog_plugin['id'],
@@ -149,7 +149,7 @@ class BlogPluginsController extends AdminController
         $errors['blog_plugin'] = $blog_plugins_model->validate($request->get('blog_plugin'), $blog_plugin_data, $white_list);
         if (empty($errors['blog_plugin'])) {
             $blog_plugin_data['blog_id'] = $this->getBlogId($request);
-            if ($id = $blog_plugins_model->insert($blog_plugin_data)) {
+            if ($blog_plugins_model->insert($blog_plugin_data)) {
                 $this->setInfoMessage(__('I created a plugin'));
                 $this->redirect($request, array('action' => 'index', 'device_type' => $blog_plugin_data['device_type']));
             }
@@ -301,7 +301,7 @@ class BlogPluginsController extends AdminController
         $user_id = $this->getUserId();
 
         // 削除データの取得
-        if (!$plugin = $plugins_model->findByIdAndUserId($id, $user_id)) {
+        if (!$plugins_model->findByIdAndUserId($id, $user_id)) {
             $this->redirect($request, array('action' => 'search'));
         }
 
@@ -337,7 +337,7 @@ class BlogPluginsController extends AdminController
 
             // 新規登録処理
             $blog_plugin_data['blog_id'] = $this->getBlogId($request);
-            if ($id = Model::load('BlogPlugins')->insert($blog_plugin_data)) {
+            if (Model::load('BlogPlugins')->insert($blog_plugin_data)) {
                 $this->setInfoMessage(__('I created a plugin'));
                 $this->redirect($request, array('action' => 'index', 'device_type' => $plugin['device_type']));
             }
@@ -404,7 +404,7 @@ class BlogPluginsController extends AdminController
         $display = $request->get('display') ? Config::get('APP.DISPLAY.SHOW') : Config::get('APP.DISPLAY.HIDE');  // 表示可否
 
         // 編集対象のデータ取得
-        if (!$blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+        if (!$blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
             $this->redirect($request, array('action' => 'index'));
         }
 
@@ -412,35 +412,5 @@ class BlogPluginsController extends AdminController
         $blog_plugins_model->updateByIdAndBlogId(array('display' => $display), $id, $blog_id);
 //    $blog_plugins_model->updateDisplay(array($id=>$request->get('display')), $blog_id);   // TODO:後でこちらに置き換え
     }
-
-    /**
-     * テンプレートエクスポート
-     */
-    /*
-      public function export(Request $request)
-      {
-
-        $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
-
-        // 登録データの取得
-        if (!$blog_plugin=\Fc2blog\Model\Model::load('BlogPlugins')->findByIdAndBlogId($id, $blog_id)) {
-          $this->redirect($request, array('action'=>'index'));
-        }
-
-        $json = array(
-          'title'       => $blog_plugin['title'],
-          'list'        => $blog_plugin['list'],
-          'contents'    => $blog_plugin['contents'],
-          'attribute'   => $blog_plugin['attribute'],
-          'device_type' => $blog_plugin['device_type'],
-        );
-        $json = json_encode($json);
-
-        $this->set('file_name', time() . '.json');
-        $this->set('data', $json);
-        $this->layout = 'download.php';
-      }
-    */
 }
 

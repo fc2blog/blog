@@ -24,7 +24,7 @@ class CommonController extends AdminController
     {
         // 言語の設定
         $lang = $request->get('lang');
-        if ($language = Config::get('LANGUAGES.' . $lang)) {
+        if (Config::get('LANGUAGES.' . $lang)) {
             Cookie::set($request, 'lang', $lang);
         }
 
@@ -40,6 +40,7 @@ class CommonController extends AdminController
     /**
      * デバイス変更
      * @param Request $request
+     * @noinspection PhpUnused
      */
     public function device_change(Request $request)
     {
@@ -96,7 +97,7 @@ class CommonController extends AdminController
      * @param Request $request
      * @return string
      */
-    public function notice(Request $request)
+    public function notice(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
 
@@ -129,6 +130,7 @@ class CommonController extends AdminController
                 $this->set('temp_dir', Config::get('TEMP_DIR'));
                 $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
                 $this->set('is_db_connect_lib', defined('DB_CONNECT_LIB'));
+            /** @noinspection PhpRedundantOptionalArgumentInspection */
                 $this->set('random_string', App::genRandomStringAlphaNum(32));
 
                 $this->set('DB_HOST', DB_HOST);
@@ -228,8 +230,7 @@ class CommonController extends AdminController
                 }
                 $res = MSDB::getInstance()->multiExecute($sql);
                 if ($res === false) {
-                    /** @noinspection SyntaxError */
-                    $this->setErrorMessage(__('Create table failed.'));
+                    $this->setErrorMessage(__('Create' . ' table failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');
                 }
 
@@ -237,8 +238,7 @@ class CommonController extends AdminController
                 $sql = "SHOW TABLES LIKE 'users'";
                 $table = MSDB::getInstance()->find($sql);
                 if (!is_countable($table)) {
-                    /** @noinspection SyntaxError */
-                    $this->setErrorMessage(__('Create table failed.'));
+                    $this->setErrorMessage(__('Create' . ' table failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');
                 }
 

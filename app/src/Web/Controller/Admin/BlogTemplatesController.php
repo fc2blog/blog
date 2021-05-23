@@ -50,6 +50,7 @@ class BlogTemplatesController extends AdminController
      * FC2のテンプレート一覧
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function fc2_index(Request $request): string
     {
@@ -79,6 +80,7 @@ class BlogTemplatesController extends AdminController
      * FC2のテンプレート詳細（スマホ用）
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function fc2_view(Request $request): string
     {
@@ -144,7 +146,7 @@ class BlogTemplatesController extends AdminController
         $errors['blog_template'] = $blog_templates_model->validate($request->get('blog_template'), $blog_template_data, $white_list);
         if (empty($errors['blog_template'])) {
             $blog_template_data['blog_id'] = $this->getBlogId($request);
-            if ($id = $blog_templates_model->insert($blog_template_data)) {
+            if ($blog_templates_model->insert($blog_template_data)) {
                 $this->setInfoMessage(__('I created a template'));
                 $this->redirect($request, ['action' => 'index']);
             }
@@ -224,7 +226,7 @@ class BlogTemplatesController extends AdminController
      * @param Request $request
      * @return string
      */
-    public function download(Request $request)
+    public function download(Request $request): string
     {
         /** @var BlogTemplatesModel $blog_templates_model */
         $blog_templates_model = Model::load('BlogTemplates');
@@ -256,7 +258,7 @@ class BlogTemplatesController extends AdminController
         $errors['blog_template'] = $blog_templates_model->validate($blog_template, $blog_template_data, $white_list);
         if (empty($errors['blog_template'])) {
             $blog_template_data['blog_id'] = $this->getBlogId($request);
-            if ($id = $blog_templates_model->insert($blog_template_data)) {
+            if ($blog_templates_model->insert($blog_template_data)) {
                 $this->setInfoMessage('「' . h($blog_template['title']) . '」' . __('I downloaded the template'));
                 $this->redirect($request, array('action' => 'index', 'device_type' => $device_type));
             }
@@ -288,7 +290,7 @@ class BlogTemplatesController extends AdminController
         }
 
         // 削除データの取得
-        if (!$blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
+        if (!$blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
             $this->redirect($request, array('action' => 'index'));
         }
 

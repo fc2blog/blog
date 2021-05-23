@@ -10,6 +10,7 @@ use LogicException;
 
 class SystemUpdateController extends AdminController
 {
+    /** @noinspection PhpUnusedParameterInspection */
     public function index(Request $request): string
     {
         // TODO unit test

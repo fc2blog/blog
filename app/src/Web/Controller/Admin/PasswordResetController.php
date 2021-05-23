@@ -10,6 +10,7 @@ use Fc2blog\Web\Request;
 
 class PasswordResetController extends AdminController
 {
+    /** @noinspection PhpUnused */
     public function requestForm(Request $request): string
     {
         // 未ログインだとSigが生成されていないため、ここで生成する。
@@ -33,7 +34,7 @@ class PasswordResetController extends AdminController
         if (!is_null($user = UserService::getByLoginId($login_id))) {
             if (defined("EMERGENCY_PASSWORD_RESET_ENABLE") && EMERGENCY_PASSWORD_RESET_ENABLE === "1") {
                 // Show password reset form directly when EMERGENCY_PASSWORD_RESET_ENABLE is "1".
-                // This is a emergency feature for Unable to send mail enviroment.
+                // This is a emergency feature for Unable to send mail environment.
                 $token = PasswordResetToken::factoryWithUser($user);
                 PasswordResetTokenService::create($token);
                 $this->set('token', $token->token);
@@ -52,6 +53,7 @@ class PasswordResetController extends AdminController
         return 'admin/password_reset/requested.twig';
     }
 
+    /** @noinspection PhpUnused */
     public function resetForm(Request $request): string
     {
         $token_str = $request->get('token');

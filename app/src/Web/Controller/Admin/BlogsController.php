@@ -61,7 +61,7 @@ class BlogsController extends AdminController
         if (empty($errors['blog'])) {
             $blog_data['user_id'] = $this->getUserId();
             $blog_data['trip_salt'] = Base62Proxy::encode(random_bytes(128));
-            if ($id = $blogs_model->insert($blog_data)) {
+            if ($blogs_model->insert($blog_data)) {
                 $this->setInfoMessage(__('I created a blog'));
                 $this->redirect($request, ['action' => 'index']);
             }
@@ -161,14 +161,14 @@ class BlogsController extends AdminController
 
         // 削除するブログが存在するか？
         $blogs_model = Model::load('Blogs');
-        if (!$blog = $blogs_model->findByIdAndUserId($blog_id, $user_id)) {
+        if (!$blogs_model->findByIdAndUserId($blog_id, $user_id)) {
             $this->setErrorMessage(__('I failed to remove'));
             $this->redirect($request, ['action' => 'index']);
         }
 
         // 削除処理
         $blogs_model->deleteByIdAndUserId($blog_id, $user_id);
-        $this->setBlog(null); // ログイン中のブログを削除したのでブログの選択中状態を外す
+        $this->setBlog(); // ログイン中のブログを削除したのでブログの選択中状態を外す
         $this->setInfoMessage(__('I removed the blog'));
         $this->redirect($request, ['action' => 'index']);
         return 'admin/blogs/delete.twig'; // 到達しないはずである

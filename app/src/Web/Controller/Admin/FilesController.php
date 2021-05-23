@@ -16,6 +16,7 @@ class FilesController extends AdminController
      * 一覧表示 /admin/files/upload からPartial読み込み
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function ajax_index(Request $request): string
     {
@@ -218,7 +219,7 @@ class FilesController extends AdminController
         $errors = [];
         $errors['file'] = $files_model->updateValidate($request->file('file'), $request->get('file'), $file, $data_file);
         if (empty($errors['file'])) {
-            $tmp_name = isset($data_file['tmp_name']) ? $data_file['tmp_name'] : null;
+            $tmp_name = $data_file['tmp_name'] ?? null;
             unset($data_file['tmp_name']);
             if ($files_model->updateByIdAndBlogId($data_file, $id, $blog_id)) {
                 // ファイルの移動
@@ -281,6 +282,7 @@ class FilesController extends AdminController
      * 削除
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function ajax_delete(Request $request): string
     {
@@ -303,6 +305,7 @@ class FilesController extends AdminController
      * ajaxによるファイルアップロード受付
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function ajax_file_upload(Request $request): string
     {
