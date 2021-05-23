@@ -13,6 +13,7 @@ use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\TagsModel;
+use Fc2blog\Service\BlogService;
 use Fc2blog\Util\Log;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -22,12 +23,11 @@ use Tuupola\Base62Proxy;
 
 class EntriesController extends UserController
 {
-
     /**
      * 記事系統の前処理
      * @param Request $request
      */
-    protected function beforeFilter(Request $request)
+    protected function beforeFilter(Request $request): void
     {
         parent::beforeFilter($request);
 
@@ -84,7 +84,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    public function index(Request $request)
+    public function index(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
         if (!$blog_id) {
@@ -108,7 +108,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    public function search(Request $request)
+    public function search(Request $request): string
     {
         $where = 'blog_id=?';
         $params = array($this->getBlogId($request));
@@ -135,7 +135,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    public function category(Request $request)
+    public function category(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
         $category_id = $request->get('cat');
@@ -169,7 +169,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    public function tag(Request $request)
+    public function tag(Request $request): string
     {
         // タグ検索
         $blog_id = $this->getBlogId($request);
@@ -202,7 +202,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    public function date(Request $request)
+    public function date(Request $request): string
     {
         // 開始日付と終了日付の計算
         preg_match('/^([0-9]{4})([0-9]{2})?([0-9]{2})?$/', $request->get('date'), $matches);
@@ -227,7 +227,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    public function archive(Request $request)
+    public function archive(Request $request): string
     {
         // 記事一覧データ設定
         $options = array(
@@ -249,7 +249,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    public function preview(Request $request)
+    public function preview(Request $request): string
     {
         // XSS-Protection無効
         if (!headers_sent()) {
@@ -293,7 +293,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    private function preview_fc2_template(Request $request)
+    private function preview_fc2_template(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
 
@@ -332,7 +332,7 @@ class EntriesController extends UserController
      * @param string $css テンプレートのCSS
      * @return string temporary compiled template file path
      */
-    public function test_template(Request $request, string $html, string $css)
+    public function test_template(Request $request, string $html, string $css): string
     {
         if (!defined("THIS_IS_TEST")) { // テスト以外ではブロックする
             throw new LogicException("the method is allowed only in testing.");
@@ -362,7 +362,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    private function preview_template(Request $request)
+    private function preview_template(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
 
@@ -399,12 +399,11 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    private function preview_plugin(Request $request)
+    private function preview_plugin(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
 
         // プラグインのプレビュー情報取得
-        $preview_plugin = null;
         if ($request->get('plugin_id')) {
             // DBからプレビュー情報取得
             $preview_plugin = Model::load('Plugins')->findById($request->get('plugin_id'));
@@ -462,7 +461,7 @@ class EntriesController extends UserController
         $this->setEntriesData($request, $options, $pages);
 
         // 通常のプラグインリストに追加する
-        $plugins = Model::load('BlogPlugins')->findByDeviceTypeAndCategory($this->getDeviceType(), $category, $blog_id);
+        $plugins = (new BlogPluginsModel())->findByDeviceTypeAndCategory($this->getDeviceType(), $category, $blog_id);
         $id = $request->get('id');
         if (empty($id)) {
             // 新規プラグインは最後尾に追加する
@@ -486,7 +485,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    private function preview_entry(Request $request)
+    private function preview_entry(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
 
@@ -589,7 +588,7 @@ class EntriesController extends UserController
      * @param string $blog_id
      * @param array $entry
      */
-    private function setNextPrevEntryData(string $blog_id, array $entry)
+    private function setNextPrevEntryData(string $blog_id, array $entry): void
     {
         $entries_model = new EntriesModel();
         $blog_settings_model = new BlogSettingsModel();
@@ -670,7 +669,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    public function plugin(Request $request)
+    public function plugin(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
         $id = $request->get('id');
@@ -687,8 +686,9 @@ class EntriesController extends UserController
     /**
      * 記事のパスワード認証
      * @param Request $request
+     * @return string
      */
-    public function password(Request $request)
+    public function password(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
         $id = $request->get('id');
@@ -711,6 +711,7 @@ class EntriesController extends UserController
         }
 
         $this->redirect($request, array('action' => 'view', 'blog_id' => $blog_id, 'id' => $id));
+        return "";
     }
 
     /**
@@ -721,7 +722,7 @@ class EntriesController extends UserController
     public function blog_password(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
-        $blog = $this->getBlog($blog_id);
+        $blog = BlogService::getById($blog_id);
 
         // プライベートブログではない、あるいは認証済み、ログイン済みならリダイレクト
         if ($blog['open_status'] != Config::get('BLOG.OPEN_STATUS.PRIVATE') || Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog($request)) {
@@ -937,7 +938,7 @@ class EntriesController extends UserController
      * @param Request $request
      * @return string
      */
-    public function comment_delete(Request $request)
+    public function comment_delete(Request $request): string
     {
         $comments_model = new CommentsModel();
 
@@ -973,7 +974,7 @@ class EntriesController extends UserController
      * @param array $areas
      * TODO: これはコントローラが持つべきなのか？Modelでは？
      */
-    private function setEntriesData(Request $request, $options = [], $areas = []): void
+    private function setEntriesData(Request $request, array $options = [], array $areas = []): void
     {
         $blog_id = $this->getBlogId($request);
         $page_num = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
@@ -985,21 +986,10 @@ class EntriesController extends UserController
         $this->set('entries', $this->getEntriesArray($blog_id, $options));
 
         // paging取得
-        $this->set('paging', $this->getPaging($options));
+        $this->set('paging', (new EntriesModel())->getPaging($options));
 
         // area引数がない場合 TOPページ判定
         $this->setAreaData($areas);
-    }
-
-    /**
-     * @param array $options
-     * @return array
-     * TODO: これはコントローラが持つべきなのか？Modelでは？
-     */
-    public static function getPaging(array $options): array
-    {
-        $entries_model = new EntriesModel();
-        return $entries_model->getPaging($options);
     }
 
     /**
@@ -1058,7 +1048,7 @@ class EntriesController extends UserController
         // 記事のカテゴリ一覧を取得 TODO:後でcacheを使用する形に
         // 記事のカテゴリーとタグを一括で取得＆振り分け
         $entry_ids = [];
-        foreach ($entries as $key => $entry) {
+        foreach ($entries as $entry) {
             $entry_ids[] = $entry['id'];
         }
         $categories_model = new CategoriesModel();
@@ -1077,7 +1067,7 @@ class EntriesController extends UserController
      * ページの表示可否設定を設定する
      * @param array $allows
      */
-    private function setAreaData($allows = [])
+    private function setAreaData(array $allows = []): void
     {
         $areas = [
             'index_area',     // トップページ
@@ -1105,7 +1095,7 @@ class EntriesController extends UserController
      * @param bool $is_preview
      * @return string
      */
-    private function getFc2TemplatePath($blog_id, string $html = null, string $css = null, bool $is_preview = false)
+    private function getFc2TemplatePath($blog_id, string $html = null, string $css = null, bool $is_preview = false): string
     {
         $device_type = $this->getDeviceType();
 
@@ -1138,7 +1128,7 @@ class EntriesController extends UserController
      * @param $errors
      * @param array $data
      */
-    private function fc2CommentError($name, $errors, $data = array())
+    private function fc2CommentError($name, $errors, array $data = []): void
     {
         // FC2テンプレートとDB側の違い吸収
         $combine = array('password' => 'pass', 'open_status' => 'himitu');
@@ -1163,46 +1153,45 @@ class EntriesController extends UserController
         }
         $open_status_private = Config::get('COMMENT.OPEN_STATUS.PRIVATE');
         $comment_error = <<<HTML
-      <script>
-      function insertCommentErrorMessage(name, message){
-        let html = document.createElement('p');
-        html.style.cssText = "background-color: #fdd; color: #f00; border-radius: 3px; border: solid 2px #f44;padding: 3px; margin: 5px 3px;";
-        html.innerHTML = message;
-        let target = document.getElementsByName(name)[0];
-        if (!target) {
-          return ;
-        }
-        let parent = target.parentNode;
-        parent.insertBefore(html, target.nextSibling);
-      }
-      function setCommentData(name, value){
-        let target = document.getElementsByName(name)[0];
-        if (!target) {
-          return ;
-        }
-        if (target.type==='checkbox') {
-          if (value===$open_status_private) {
-            target.checked = 'checked';
+          <script>
+          function insertCommentErrorMessage(name, message){
+            let html = document.createElement('p');
+            html.style.cssText = "background-color: #fdd; color: #f00; border-radius: 3px; border: solid 2px #f44;padding: 3px; margin: 5px 3px;";
+            html.innerHTML = message;
+            let target = document.getElementsByName(name)[0];
+            if (!target) {
+              return ;
+            }
+            let parent = target.parentNode;
+            parent.insertBefore(html, target.nextSibling);
           }
-        } else {
-          target.value = value;
-        }
-      }
-      function displayCommentErrorMessage(){
-        {$js}
-      }
-      if( window.addEventListener ){
-          window.addEventListener( 'load', displayCommentErrorMessage, false );
-      }else { // noinspection JSUnresolvedVariable
-        if( window.attachEvent ){
-          window.attachEvent( 'onload', displayCommentErrorMessage );
-      }else{
-          window.onload = displayCommentErrorMessage;
-      } }
-      </script>
-    HTML;
+          function setCommentData(name, value){
+            let target = document.getElementsByName(name)[0];
+            if (!target) {
+              return ;
+            }
+            if (target.type==='checkbox') {
+              if (value===$open_status_private) {
+                target.checked = 'checked';
+              }
+            } else {
+              target.value = value;
+            }
+          }
+          function displayCommentErrorMessage(){
+            {$js}
+          }
+          if( window.addEventListener ){
+              window.addEventListener( 'load', displayCommentErrorMessage, false );
+          }else { // noinspection JSUnresolvedVariable
+            if( window.attachEvent ){
+              window.attachEvent( 'onload', displayCommentErrorMessage );
+          }else{
+              window.onload = displayCommentErrorMessage;
+          } }
+          </script>
+        HTML;
         $this->set('comment_error', $comment_error);
     }
-
 }
 
