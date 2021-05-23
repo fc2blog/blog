@@ -147,6 +147,7 @@ abstract class AdminController extends Controller
      * @param Request $request
      * @return mixed|null
      * // TODO 現在ではrequestが不要なので消し込み
+     * @noinspection PhpUnusedParameterInspection
      */
     protected function getBlogId(Request $request)
     {
@@ -230,18 +231,6 @@ abstract class AdminController extends Controller
     {
         $this->setStatusCode(404);
         return 'admin/common/error404.twig';
-    }
-
-    /**
-     * ブログの`http(s)://FQDN(:port)`を生成する
-     * @return string
-     */
-    static public function getHostUrl(): string
-    {
-        $schema = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") ? 'https:' : 'http:';
-        $domain = Config::get("DOMAIN");
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
-        return $schema . "//" . $domain . $port;
     }
 }
 
