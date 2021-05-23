@@ -493,10 +493,10 @@ abstract class Controller
 
     /**
      * デバイスタイプを取得する
-     * @return string
+     * @return int
      * @deprecated TODO requestに置換できる
      */
-    protected function getDeviceType(): string
+    protected function getDeviceType(): int
     {
         return $this->request->deviceType;
     }
