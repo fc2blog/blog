@@ -53,7 +53,7 @@ class BlogPluginsController extends AdminController
      */
     public function official_search(Request $request): string
     {
-        return $this->plugin_search($request, true);
+        return $this->plugin_search($request);
     }
 
     /**
