@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
+use Fc2blog\Model\PasswordResetToken;
 use Fc2blog\Model\PasswordResetTokenService;
 use Fc2blog\Service\UserService;
 use Fc2blog\Web\Request;
@@ -30,6 +31,15 @@ class PasswordResetController extends AdminController
 
         // Show same complete page if user exists or not exists.
         if (!is_null($user = UserService::getByLoginId($login_id))) {
+            if (defined("EMERGENCY_PASSWORD_RESET_ENABLE") && EMERGENCY_PASSWORD_RESET_ENABLE === "1") {
+                // Show password reset form directly when EMERGENCY_PASSWORD_RESET_ENABLE is "1".
+                // This is a emergency feature for Unable to send mail enviroment.
+                $token = PasswordResetToken::factoryWithUser($user);
+                PasswordResetTokenService::create($token);
+                $this->set('token', $token->token);
+                return 'admin/password_reset/reset_form.twig';
+            }
+
             $result = PasswordResetTokenService::createAndSendToken($request, $user);
             if ($result === false) {
                 return 'admin/password_reset/mail_sending_error.twig';
