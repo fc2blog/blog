@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection ALL 当面エラーチェックしない */
+
 /**
  * Master/Slaveの切り替え用
  * 基本的にMySqliWrapと同じ機能を有する

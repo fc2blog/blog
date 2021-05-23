@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection ALL 当面エラーチェックしない */
+
 /**
  * DB接続クラス
  * mysqliのラッピング
