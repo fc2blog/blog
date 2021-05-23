@@ -16,8 +16,7 @@ class StringCaseConverter
     {
         $snake_case = str_replace('_', ' ', $snake_case);
         $snake_case = ucwords($snake_case);
-        $snake_case = str_replace(' ', '', $snake_case);
-        return $snake_case;
+        return str_replace(' ', '', $snake_case);
     }
 
     /**
