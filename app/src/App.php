@@ -1,7 +1,5 @@
 <?php
-/**
- * アプリ用の便利関数群
- */
+declare(strict_types=1);
 
 namespace Fc2blog;
 
@@ -15,7 +13,6 @@ use RuntimeException;
 
 class App
 {
-
     /**
      * ブログIDから階層別フォルダ作成
      * @param string $blog_id
@@ -33,7 +30,7 @@ class App
      * @param bool $timestamp
      * @return string
      */
-    public static function getUserFilePath(array $file, $abs = false, $timestamp = false): string
+    public static function getUserFilePath(array $file, bool $abs = false, bool $timestamp = false): string
     {
         $file_path = static::getBlogLayer($file['blog_id']) . '/file/' . $file['id'] . '.' . $file['ext'];
         return ($abs ? Config::get('WWW_UPLOAD_DIR') : '/uploads/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
@@ -55,7 +52,7 @@ class App
         if (!preg_match('{(/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]+/file/[0-9]+)\.(png|gif|jpe?g)(\?t=[0-9]+)?$}', $url, $matches)) {
             return $url;
         }
-        return $matches[1] . '_' . $whs . $size . '.' . $matches[2] . (isset($matches[3]) ? $matches[3] : '');
+        return $matches[1] . '_' . $whs . $size . '.' . $matches[2] . ($matches[3] ?? '');
     }
 
     /**
@@ -67,7 +64,7 @@ class App
      * @param string $whs
      * @return string
      */
-    public static function getCenterThumbnailPath(string $url, $width = 760, $height = 420, $whs = ''): string
+    public static function getCenterThumbnailPath(string $url, int $width = 760, int $height = 420, string $whs = ''): string
     {
         if (empty($url)) {
             return $url;
@@ -75,7 +72,7 @@ class App
         if (!preg_match('{(/uploads/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]/[0-9a-zA-Z]+/file/[0-9]+)\.(png|gif|jpe?g)(\?t=[0-9]+)?$}', $url, $matches)) {
             return $url;
         }
-        return $matches[1] . '_' . $whs . $width . '_' . $height . '.' . $matches[2] . (isset($matches[3]) ? $matches[3] : '');
+        return $matches[1] . '_' . $whs . $width . '_' . $height . '.' . $matches[2] . ($matches[3] ?? '');
     }
 
     /**
@@ -105,14 +102,14 @@ class App
      * @param string $id
      * @return string
      */
-    public static function getPluginFilePath(string $blog_id, string $id)
+    public static function getPluginFilePath(string $blog_id, string $id): string
     {
         return Config::get('BLOG_TEMPLATE_DIR') . static::getBlogLayer($blog_id) . '/plugins/' . $id . '.php';
     }
 
     /**
      * ファイルパスまでのフォルダを作成する
-     * @param $file_path
+     * @param string $file_path
      */
     public static function mkdir(string $file_path): void
     {
@@ -167,7 +164,7 @@ class App
             $end .= '12-31';
         }
         $dates = explode('-', $start);
-        if (!checkdate($dates[1], $dates[2], $dates[0])) {
+        if (!checkdate((int)$dates[1], (int)$dates[2], (int)$dates[0])) {
             // 存在日付の場合は本日を開始、終了日時として割り当てる
             $start = $end = date('Y-m-d');
         }
@@ -179,9 +176,9 @@ class App
     /**
      * デバイスタイプを取得する
      * @param Request $request
-     * @return string|null
+     * @return int
      */
-    public static function getDeviceType(Request $request): string
+    public static function getDeviceType(Request $request): int
     {
         // パラメータによりデバイスタイプを変更(FC2の引数順守)
         if ($request->isArgs('pc')) {
@@ -198,7 +195,7 @@ class App
             Config::get('DEVICE_SP'),
         ];
         if (!empty($device_type) && in_array($device_type, $devices)) {
-            return $device_type;
+            return (int)$device_type;
         }
 
         // ユーザーエージェントからデバイスタイプを取得
@@ -321,7 +318,7 @@ class App
             $args = array_merge($gets, $args);
         }
 
-        $controller = $controller = $request->shortControllerName;
+        $controller = $request->shortControllerName;
         if (isset($args['controller'])) {
             $controller = $args['controller'];
             unset($args['controller']);
@@ -366,8 +363,7 @@ class App
             if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
                 $url = '/' . $blog_id . $url;
             }
-            $url = ($abs ? $full_domain : '') . $url;
-            return $url;
+            return ($abs ? $full_domain : '') . $url;
         }
 
         // 記事の場合
@@ -388,8 +384,7 @@ class App
             if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
                 $url = '/' . $blog_id . $url;
             }
-            $url = ($abs ? $full_domain : '') . $url;
-            return $url;
+            return ($abs ? $full_domain : '') . $url;
         }
 
         $params = [];
@@ -409,14 +404,13 @@ class App
         if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
             $url = '/' . $blog_id . $url;
         }
-        $url = ($abs ? $full_domain : '') . $url;
-        return $url;
+        return ($abs ? $full_domain : '') . $url;
     }
 
     /**
      * ページ毎、デバイス毎の初期制限件数
      * @param Request $request
-     * @param $key
+     * @param string $key
      * @return int
      */
     public static function getPageLimit(Request $request, string $key): int
@@ -427,7 +421,7 @@ class App
     /**
      * ページ毎、デバイス毎の件数一覧
      * @param Request $request
-     * @param $key
+     * @param string $key
      * @return array
      */
     public static function getPageList(Request $request, string $key): array
@@ -441,6 +435,7 @@ class App
      * @param array|string params = array('entries/create', 'entries/edit', ...),
      * @return bool
      * TODO Configの削減
+     * @noinspection PhpUnused
      */
     public static function isActiveMenu(Request $request, $params): bool
     {
