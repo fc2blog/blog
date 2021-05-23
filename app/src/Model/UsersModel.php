@@ -55,8 +55,8 @@ class UsersModel extends Model
 
     /**
      * 登録用のバリデート処理
-     * @param $data
-     * @param $valid_data
+     * @param array $data
+     * @param array|null $valid_data
      * @param array $white_list
      * @return array
      */
@@ -80,8 +80,8 @@ class UsersModel extends Model
 
     /**
      * 更新用のバリデート
-     * @param $data
-     * @param $valid_data
+     * @param array $data
+     * @param array|null $valid_data
      * @param array $white_list
      * @return array
      */
@@ -113,8 +113,8 @@ class UsersModel extends Model
 
     /**
      * ログイン用のバリデート処理
-     * @param $data
-     * @param $valid_data
+     * @param array $data
+     * @param array|null $valid_data
      * @param array $white_list
      * @return array
      */

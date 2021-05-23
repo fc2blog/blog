@@ -35,8 +35,8 @@ class EntriesModel extends Model
 
     /**
      * バリデート処理
-     * @param $data
-     * @param $valid_data
+     * @param array $data
+     * @param array|null $valid_data
      * @param array $white_list
      * @return array
      */

@@ -26,8 +26,8 @@ class EntryTagsModel extends Model
 
     /**
      * バリデート処理
-     * @param $data
-     * @param $valid_data
+     * @param array $data
+     * @param array|null $valid_data
      * @param array $white_list
      * @return array
      */
@@ -85,7 +85,7 @@ class EntryTagsModel extends Model
             $tags = array();
         }
         $temp_tags = array();
-        foreach ($tags as $key => $tag) {
+        foreach ($tags as $tag) {
             if (is_string($tag) && $tag != '') {
                 // 文字列のみ許可
                 $temp_tags[] = $tag;

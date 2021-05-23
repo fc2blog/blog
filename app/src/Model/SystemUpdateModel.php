@@ -338,7 +338,6 @@ class SystemUpdateModel
             if (file_exists($dest_full_path) && is_dir($dest_full_path)) {
                 // ディレクトリで、すでにディレクトリが存在しているならスキップ
                 touch($dest_full_path); // update mtime
-                continue;
 
             } else if (!file_exists($dest_full_path) && is_dir($src_full_path)) {
                 // ディレクトリを作成
@@ -364,6 +363,7 @@ class SystemUpdateModel
                 }
                 copy($src_full_path, $dest_full_path);
                 touch($dest_full_path); // update file timestamp
+
             }
         }
     }

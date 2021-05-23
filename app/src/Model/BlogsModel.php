@@ -88,8 +88,8 @@ class BlogsModel extends Model
 
     /**
      * バリデート処理
-     * @param $data
-     * @param $valid_data
+     * @param array $data
+     * @param array|null $valid_data
      * @param array $white_list
      * @return array
      */
@@ -587,9 +587,9 @@ class BlogsModel extends Model
 
     /**
      * 指定したテンプレートIDが指定したブログIDのデバイステンプレートとして適用されているか判定する
-     * @param $template_id
-     * @param $blog_id
-     * @param $device_type
+     * @param int $template_id
+     * @param string $blog_id
+     * @param int $device_type
      * @return bool
      */
     public function isAppliedTemplate(int $template_id, string $blog_id, int $device_type): bool
@@ -604,8 +604,8 @@ class BlogsModel extends Model
 
     /**
      * 指定したブログID,デバイスIDのテンプレートIDを取得する
-     * @param $blog_id
-     * @param $device_type
+     * @param string $blog_id
+     * @param int $device_type
      * @return int
      */
     public function getAppliedTemplateId(string $blog_id, int $device_type): int
