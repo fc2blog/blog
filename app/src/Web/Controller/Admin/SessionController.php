@@ -8,6 +8,7 @@ use Fc2blog\Model\UsersModel;
 use Fc2blog\Service\UserService;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
+use Twig\Error\Error;
 
 class SessionController extends AdminController
 {
@@ -66,8 +67,12 @@ class SessionController extends AdminController
         // MFA処理
         if (Config::get('MFA_EMAIL') === "1") {
             // create and send login mail
-            if (false === EmailLoginTokenService::createAndSendToken($request, $user)) {
-                return "admin/email_login/mail_sending_error.twig";
+            try {
+                if (false === EmailLoginTokenService::createAndSendToken($request, $user)) {
+                    return "admin/email_login/mail_sending_error.twig";
+                }
+            } catch (Error $e) {
+                return 'admin/email_login/mail_sending_error.twig';
             }
             // MFA必須の場合はメール経由でmailLogin()へ
             return "admin/email_login/requested.twig";

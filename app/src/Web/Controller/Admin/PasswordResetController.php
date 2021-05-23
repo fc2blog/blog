@@ -7,6 +7,7 @@ use Fc2blog\Model\PasswordResetToken;
 use Fc2blog\Model\PasswordResetTokenService;
 use Fc2blog\Service\UserService;
 use Fc2blog\Web\Request;
+use Twig\Error\Error;
 
 class PasswordResetController extends AdminController
 {
@@ -41,8 +42,12 @@ class PasswordResetController extends AdminController
                 return 'admin/password_reset/reset_form.twig';
             }
 
-            $result = PasswordResetTokenService::createAndSendToken($request, $user);
-            if ($result === false) {
+            try {
+                $result = PasswordResetTokenService::createAndSendToken($request, $user);
+                if ($result === false) {
+                    return 'admin/password_reset/mail_sending_error.twig';
+                }
+            } catch (Error $e) {
                 return 'admin/password_reset/mail_sending_error.twig';
             }
         }
