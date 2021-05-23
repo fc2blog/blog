@@ -1,7 +1,5 @@
 <?php
-/**
- * Cookieクラス
- */
+declare(strict_types=1);
 
 namespace Fc2blog\Web;
 
@@ -10,20 +8,16 @@ use InvalidArgumentException;
 
 class Cookie
 {
-
     /**
      * クッキーから情報を取得する
      * @param Request $request
      * @param string $key
-     * @param ?string $default
+     * @param mixed $default
      * @return mixed
      */
     public static function get(Request $request, string $key, $default = null)
     {
-        if (isset($request->cookie[$key])) {
-            return $request->cookie[$key];
-        }
-        return $default;
+        return $request->cookie[$key] ?? $default;
     }
 
     /**
@@ -60,27 +54,26 @@ class Cookie
         string $domain = "",
         bool $secure = false,
         bool $httponly = true,
-        string $samesite = "Lax")
+        string $samesite = "Lax"
+    )
     {
-        $params = [];
-        $params['expires'] = $expires;
-        $params['path'] = $path;
-        $params['domain'] = $domain;
+        $params = [
+            'expires' => $expires,
+            'path' => $path,
+            'domain' => $domain,
+        ];
 
         // SSLターミネーションがある環境においては検討が必要
-        if ($secure === true) {
-            if (!isset($request->server['HTTPS']) || $request->server['HTTPS'] !== "on") {
-                throw new InvalidArgumentException("secure=true needs https.");
-            }
-            $params['secure'] = true;
+        if ($secure === true && !$request->isHttps()) {
+            throw new InvalidArgumentException("secure=true needs https.");
         }
+        $params['secure'] = $secure;
 
         // setcookieではデフォルトfalseだが、セキュリティのためにtrueをデフォルト化
         if ($httponly === true) {
             $params['httponly'] = $httponly;
         }
 
-        // samesiteはhttp対応のために今後通常となるLaxをデフォルト
         if (false === in_array($samesite, static::cookieSamesiteAllowedList)) {
             throw new InvalidArgumentException("invalid samesite parameter");
         }
@@ -90,7 +83,7 @@ class Cookie
         if (strlen($domain) > 0) {
             $params['domain'] = $domain;
         } else if (strlen(Config::get('COOKIE_DEFAULT_DOMAIN')) > 0) {
-            $params['domain'] = $domain = Config::get('COOKIE_DEFAULT_DOMAIN');
+            $params['domain'] = Config::get('COOKIE_DEFAULT_DOMAIN');
         }
 
         // 不可能な組み合わせを拒否
@@ -104,10 +97,10 @@ class Cookie
             throw new InvalidArgumentException("samesite=None needs https.");
         }
 
-        if (defined("THIS_IS_TEST")) {
-            $request->cookie[$key] = $value;
-        } else {
-            $request->cookie[$key] = $value;
+        // 書き込み
+        $request->cookie[$key] = $value;
+        if (!defined("THIS_IS_TEST")) {
+            // unit testでなければcookieを書き込む
             setcookie(
                 $key,
                 $value,
