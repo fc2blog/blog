@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Fc2blog\Web;
 
 use Fc2blog\App;
@@ -43,7 +45,7 @@ class Html
      * @param bool $use_base_dir
      * @return string
      */
-    public static function url(Request $request, $args = array(), $reused = false, $full_url = false, $use_base_dir = true)
+    public static function url(Request $request, array $args = array(), bool $reused = false, bool $full_url = false, bool $use_base_dir = true): string
     {
         // 現在のURLの引数を引き継ぐ
         if ($reused == true) {
@@ -100,7 +102,7 @@ class Html
         $params[] = Config::get('ARGS_CONTROLLER') . '=' . $controller;
         $params[] = Config::get('ARGS_ACTION') . '=' . $action;
         foreach ($args as $key => $value) {
-            $params[] = $key . '=' . rawurlencode($value);
+            $params[] = $key . '=' . rawurlencode((string)$value);
         }
         if (!empty($device_name)) {
             $params[] = $device_name;
@@ -118,7 +120,7 @@ class Html
         if (
             $blog_id && (
                 // Default Blog IDが未指定か
-                strlen(Config::get('DEFAULT_BLOG_ID')) === 0 ||
+                strlen(Config::get('DEFAULT_BLOG_ID', "")) === 0 ||
                 // 指定されたblog_idがDefault blog idと異なる場合
                 $blog_id !== Config::get('DEFAULT_BLOG_ID')
             )
@@ -133,11 +135,11 @@ class Html
         return $url;
     }
 
-    public static function input(Request $request, $name, $type, $attrs = array(), $option_attrs = array())
+    public static function input(Request $request, $name, $type, $attrs = array(), $option_attrs = array()): string
     {
-        $default = isset($attrs['default']) ? $attrs['default'] : null;    // デフォルト文字列
-        $options = isset($attrs['options']) ? $attrs['options'] : array(); // オプション
-        $label = isset($attrs['label']) ? $attrs['label'] : '';          // ラベル
+        $default = $attrs['default'] ?? null;    // デフォルト文字列
+        $options = $attrs['options'] ?? array(); // オプション
+        $label = $attrs['label'] ?? '';          // ラベル
         unset($attrs['default'], $attrs['options'], $attrs['label']);
 
         // Requestの親キー(default判定)
@@ -175,11 +177,11 @@ class Html
                 break;
 
             case 'text':
-                $html = '<input type="text" ' . $attr . ' value="' . h($rvalue) . '" />';
+                $html = '<input type="text" ' . $attr . ' value="' . h((string)$rvalue) . '" />';
                 break;
 
             case 'password':
-                $html = '<input type="password" ' . $attr . ' value="' . h($rvalue) . '" />';
+                $html = '<input type="password" ' . $attr . ' value="' . h((string)$rvalue) . '" />';
                 break;
 
             case 'blank_password':
@@ -192,7 +194,7 @@ class Html
                 break;
 
             case 'hidden':
-                $html = '<input type="hidden" ' . $attr . ' value="' . h($rvalue) . '" />';
+                $html = '<input type="hidden" ' . $attr . ' value="' . h((string)$rvalue) . '" />';
                 break;
 
             case 'token':
@@ -204,7 +206,7 @@ class Html
                 break;
 
             case 'textarea':
-                $html = '<textarea ' . $attr . '>' . h($rvalue) . '</textarea>';
+                $html = '<textarea ' . $attr . '>' . h((string)$rvalue) . '</textarea>';
                 break;
 
             case 'select':
@@ -215,7 +217,7 @@ class Html
                         if (!isset($option['value'])) {
                             $html .= '<optgroup label="' . $key . '">';
                             foreach ($option as $k => $v) {
-                                $html .= '<option value="' . $k . '" ' . ($rvalue !== null && $k == $rvalue ? 'selected="selected"' : '') . '>' . h($v) . '</option>';
+                                $html .= '<option value="' . $k . '" ' . ($rvalue !== null && $k == $rvalue ? 'selected="selected"' : '') . '>' . h((string)$v) . '</option>';
                             }
                             $html .= '</optgroup>';
                             continue;
@@ -225,10 +227,10 @@ class Html
                         if (!empty($option['disabled'])) {
                             $optionAttr .= ' disabled="disabled" ';
                         }
-                        $html .= '<option value="' . $key . '" ' . $optionAttr . '>' . str_repeat('&nbsp;&nbsp;&nbsp;', $option['level'] - 1) . h($option['value']) . '</option>';
+                        $html .= '<option value="' . $key . '" ' . $optionAttr . '>' . str_repeat('&nbsp;&nbsp;&nbsp;', $option['level'] - 1) . h((string)$option['value']) . '</option>';
                     } else {
                         // 通常のオプション
-                        $html .= '<option value="' . $key . '" ' . ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '') . '>' . h($option) . '</option>';
+                        $html .= '<option value="' . $key . '" ' . ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '') . '>' . h((string)$option) . '</option>';
                     }
                 }
                 $html .= '</select>';
@@ -272,6 +274,7 @@ class Html
 
     public static function getServerUrl(Request $request): string
     {
+        /** @noinspection HttpUrlsUsage */
         $url = $request->isHttps() ? 'https://' : 'http://';
         $url .= Config::get('DOMAIN');
         $url .= $request->isHttps() ? Config::get('HTTPS_PORT_STR') : Config::get('HTTP_PORT_STR');
