@@ -6,6 +6,7 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\UsersModel;
+use Fc2blog\Service\BlogService;
 use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -60,7 +61,7 @@ abstract class AdminController extends Controller
         }
 
         // ログイン中でかつブログ選択中の場合ブログ情報を取得し時間設定を行う
-        $blog = $this->getBlog($this->getBlogId($request));
+        $blog = BlogService::getById($this->getBlogId($request));
         if (is_array($blog) && isset($blog['timezone'])) {
             date_default_timezone_set($blog['timezone']);
         }
