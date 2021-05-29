@@ -16,7 +16,7 @@ class UsersController extends AdminController
      * @param Request $request
      * @return string
      */
-    public function index(Request $request)
+    public function index(Request $request): string
     {
         if (!$this->isAdmin()) {
             return $this->error404();
@@ -67,7 +67,7 @@ class UsersController extends AdminController
         $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, array('id', 'name', 'nickname'));
         if (empty($errors['user']) && empty($errors['blog'])) {
             $blog_data['user_id'] = $users_model->insert($user_data);
-            if ($blog_data['user_id'] && $blog_id = $blogs_model->insert($blog_data)) {
+            if ($blog_data['user_id'] && $blogs_model->insert($blog_data)) {
                 $this->setInfoMessage(__('User registration is completed'));
                 $this->redirect($request, array('action' => 'login'));
             } else {
@@ -126,6 +126,7 @@ class UsersController extends AdminController
      * 退会
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused called dynamic
      */
     public function withdrawal(Request $request): string
     {

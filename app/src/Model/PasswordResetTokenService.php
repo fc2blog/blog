@@ -7,6 +7,7 @@ use Fc2blog\Service\MailService;
 use Fc2blog\Service\TwigService;
 use Fc2blog\Web\Request;
 use RuntimeException;
+use Twig\Error\Error;
 
 class PasswordResetTokenService
 {
@@ -35,6 +36,9 @@ class PasswordResetTokenService
         $pr_model->deleteById($token->id);
     }
 
+    /**
+     * @throws Error
+     */
     public static function createAndSendToken(Request $request, User $user): bool
     {
         // create token

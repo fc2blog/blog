@@ -38,6 +38,7 @@ class BlogsModel extends Model
      * @param $key
      * @param $data
      * @return bool|string
+     * @noinspection PhpUnusedParameterInspection // $options and $key needs dynamic call
      */
     public static function privateCheck($value, $option, $key, $data)
     {
@@ -60,7 +61,7 @@ class BlogsModel extends Model
      * @param $blog_id
      * @return bool
      */
-    public static function isPasswordRegistered($blog_id)
+    public static function isPasswordRegistered($blog_id): bool
     {
         $blog = (new BlogsModel)->findById($blog_id);
         return (!empty($blog) && strlen($blog['blog_password']) > 0);
@@ -87,8 +88,8 @@ class BlogsModel extends Model
 
     /**
      * バリデート処理
-     * @param $data
-     * @param $valid_data
+     * @param array $data
+     * @param array|null $valid_data
      * @param array $white_list
      * @return array
      */
@@ -586,9 +587,9 @@ class BlogsModel extends Model
 
     /**
      * 指定したテンプレートIDが指定したブログIDのデバイステンプレートとして適用されているか判定する
-     * @param $template_id
-     * @param $blog_id
-     * @param $device_type
+     * @param int $template_id
+     * @param string $blog_id
+     * @param int $device_type
      * @return bool
      */
     public function isAppliedTemplate(int $template_id, string $blog_id, int $device_type): bool
@@ -603,8 +604,8 @@ class BlogsModel extends Model
 
     /**
      * 指定したブログID,デバイスIDのテンプレートIDを取得する
-     * @param $blog_id
-     * @param $device_type
+     * @param string $blog_id
+     * @param int $device_type
      * @return int
      */
     public function getAppliedTemplateId(string $blog_id, int $device_type): int
@@ -645,10 +646,10 @@ class BlogsModel extends Model
     /**
      * エントリのパーマリンク
      * @param string $blog_id
-     * @param string $entry_id
+     * @param int $entry_id
      * @return string
      */
-    static public function getEntryFullUrlByBlogIdAndEntryId(string $blog_id, string $entry_id): string
+    static public function getEntryFullUrlByBlogIdAndEntryId(string $blog_id, int $entry_id): string
     {
         $schema = static::getSchemaByBlogId($blog_id);
         $domain = Config::get("DOMAIN");
@@ -659,7 +660,7 @@ class BlogsModel extends Model
         } else {
             $blog_id_path = "";
         }
-        return $schema . "//" . $domain . $port . $blog_id_path . "/blog-entry-" . (int)$entry_id . ".html";
+        return $schema . "//" . $domain . $port . $blog_id_path . "/blog-entry-" . $entry_id . ".html";
     }
 
     /**

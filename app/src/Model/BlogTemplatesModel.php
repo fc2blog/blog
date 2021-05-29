@@ -36,8 +36,8 @@ class BlogTemplatesModel extends Model
 
     /**
      * バリデート処理
-     * @param $data
-     * @param $valid_data
+     * @param array $data
+     * @param array|null $valid_data
      * @param array $white_list
      * @return array
      */
@@ -69,7 +69,7 @@ class BlogTemplatesModel extends Model
 
     /**
      * FC2テンプレートの構文チェック
-     * @param $php_code
+     * @param string $php_code
      * @return bool|string
      */
     public static function fc2TemplateSyntax(string $php_code)
@@ -343,9 +343,7 @@ class BlogTemplatesModel extends Model
         // 変数タグの置き換え
         $html = str_replace(Config::get('fc2_template_var_search'), Config::get('fc2_template_var_replace'), $html);
         // 処理されなかった（対応がなかった）変数タグの削除
-        $html = preg_replace('/<%[0-9a-zA-Z_]+?>/', '', $html);
-
-        return $html;
+        return preg_replace('/<%[0-9a-zA-Z_]+?>/', '', $html);
     }
 
     static public function getPathDefaultTemplate(): string

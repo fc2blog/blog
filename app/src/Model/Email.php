@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Model;
 
 use Twig\Environment;
+use Twig\Error\Error;
 
 class Email
 {
@@ -14,6 +15,9 @@ class Email
     public $subject;
     public $body;
 
+    /**
+     * @throws Error
+     */
     public function setSubjectAndBodyByTwig(
         Environment $twig,
         string $twig_template,

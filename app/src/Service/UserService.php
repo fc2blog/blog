@@ -17,7 +17,9 @@ class UserService
     public static function getByLoginIdAndPassword(string $login_id, string $password): ?User
     {
         $repo = new UsersModel();
-        $user = User::factory($repo->findByLoginId($login_id));
+        $row = $repo->findByLoginId($login_id);
+        if ($row === false) return null;
+        $user = User::factory($row);
         return !is_null($user) && $user->verifyPassword($password) ? $user : null;
     }
 
@@ -37,9 +39,7 @@ class UserService
     {
         $repo = new UsersModel();
         $res = $repo->findById($user_id);
-
         if ($res === false) return null;
-
         return User::factory($res);
     }
 }

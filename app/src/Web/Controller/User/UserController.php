@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\User;
 
@@ -9,7 +10,6 @@ use Fc2blog\Web\Session;
 
 abstract class UserController extends Controller
 {
-
     /**
      * ブログID取得
      * @param Request $request
@@ -76,6 +76,7 @@ abstract class UserController extends Controller
      */
     protected static function getEntryPasswordKey(string $blog_id, int $entry_id): string
     {
+        /** @noinspection PhpUnnecessaryStringCastInspection */
         return 'entry_password.' . $blog_id . '.' . (string)$entry_id;
     }
 }

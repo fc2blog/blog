@@ -1,7 +1,5 @@
 <?php
-/**
- * Sessionクラス
- */
+declare(strict_types=1);
 
 namespace Fc2blog\Web;
 
@@ -9,19 +7,9 @@ use Fc2blog\Config;
 
 class Session
 {
-
-    private static $isStart = false;
-
-    private function __construct()
+    public static function start(): void
     {
-    }
-
-    public static function start()
-    {
-        if (self::$isStart) {
-            return;
-        }
-        if (headers_sent()) {
+        if (session_status() === PHP_SESSION_ACTIVE || headers_sent()) {
             return;
         }
 
@@ -40,46 +28,40 @@ class Session
         session_set_cookie_params($session_cookie_options);
         session_name(Config::get('SESSION_NAME'));
         session_start();
-        self::$isStart = true;
     }
 
     /**
      * セッションから情報を取得する
-     * @param $key
+     * @param string $key
      * @param null $default
      * @return mixed|null
      */
-    public static function get($key, $default = null)
+    public static function get(string $key, $default = null)
     {
         self::start();
-        if (isset($_SESSION[$key])) {
-            return $_SESSION[$key];
-        }
-        return $default;
+        return $_SESSION[$key] ?? $default;
     }
 
     /**
      * セッションから情報を取得し破棄する
-     * @param $key
-     * @param null $default
+     * @param string $key
+     * @param mixed|null $default
      * @return mixed|null
      */
-    public static function remove($key, $default = null)
+    public static function remove(string $key, $default = null)
     {
         self::start();
-        if (isset($_SESSION[$key])) {
-            $default = $_SESSION[$key];
-            unset($_SESSION[$key]);
-        }
-        return $default;
+        $tmp = $_SESSION[$key] ?? $default;
+        unset($_SESSION[$key]);
+        return $tmp;
     }
 
     /**
      * セッションに情報を保存する
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      */
-    public static function set($key, $value)
+    public static function set(string $key, $value): void
     {
         self::start();
         $_SESSION[$key] = $value;
@@ -88,7 +70,7 @@ class Session
     /**
      * セッションID置き換え
      */
-    public static function regenerate()
+    public static function regenerate(): void
     {
         self::start();
         if (session_status() === PHP_SESSION_ACTIVE) {
@@ -100,7 +82,7 @@ class Session
      * セッションを破棄
      * @param Request $request
      */
-    public static function destroy(Request $request)
+    public static function destroy(Request $request): void
     {
         $_SESSION = [];
         $request->session = [];
@@ -111,6 +93,5 @@ class Session
             session_destroy();
         }
     }
-
 }
 

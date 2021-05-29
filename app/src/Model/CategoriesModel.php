@@ -161,7 +161,7 @@ class CategoriesModel extends Model
     {
         $options['where'] = (isset($options['where']) && $options['where'] != '') ? 'blog_id=? AND ' . $options['where'] : 'blog_id=?';
         $options['params'] = isset($options['params']) ? array_merge(array($blog_id), $options['params']) : array($blog_id);
-        $options['order'] = isset($options['order']) ? $options['order'] : 'categories.lft';
+        $options['order'] = $options['order'] ?? 'categories.lft';
         return $this->findNode($options);
     }
 

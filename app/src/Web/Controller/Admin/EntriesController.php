@@ -295,8 +295,9 @@ class EntriesController extends AdminController
      * ajaxでメディアを表示する画面
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
-    public function ajax_media_load(Request $request)
+    public function ajax_media_load(Request $request): string
     {
         if ($this->isInvalidAjaxRequest($request)) {
             return $this->error403();

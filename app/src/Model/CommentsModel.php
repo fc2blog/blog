@@ -216,7 +216,7 @@ class CommentsModel extends Model
 
     /**
      * コメントの追加処理 + 記事のコメント数増加処理
-     * @param $request
+     * @param Request $request
      * @param $data
      * @param $blog_setting
      * @return false|int
@@ -412,7 +412,7 @@ class CommentsModel extends Model
         $is_add_comment = $blog_setting[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $request->deviceType)] == Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
 
         $comments = array();
-        foreach ($tmp_comments as $key => $comment) {
+        foreach ($tmp_comments as $comment) {
             if ($self_blog == false) {
                 if ($comment['open_status'] == $flag_pending) {
                     $comment['title'] = '承認待ちです';

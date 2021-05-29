@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection ALL 当面エラーチェックしない */
+
 /**
  * DB接続クラス
  * mysqliのラッピング
@@ -35,7 +36,7 @@ class PDOWrap implements DBInterface
 
     /**
      * 参照系SQL
-     * @param $sql
+     * @param string $sql
      * @param array $params
      * @param array $options
      * @return mixed

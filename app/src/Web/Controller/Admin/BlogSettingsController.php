@@ -38,6 +38,7 @@ class BlogSettingsController extends AdminController
      * 記事編集
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function entry_edit(Request $request): string
     {
@@ -52,6 +53,7 @@ class BlogSettingsController extends AdminController
      * その他編集
      * @param Request $request
      * @return string
+     * @noinspection PhpUnused
      */
     public function etc_edit(Request $request): string
     {

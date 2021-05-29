@@ -31,8 +31,8 @@ class TagsModel extends Model
 
     /**
      * バリデート処理(タグの名前更新のみの予定)
-     * @param $data
-     * @param $valid_data
+     * @param array $data
+     * @param array|null $valid_data
      * @param array $white_list
      * @return array
      */
@@ -102,7 +102,7 @@ class TagsModel extends Model
 
     /**
      * タグ名からタグ情報取得
-     * @param $blog_id
+     * @param string $blog_id
      * @param array $tags
      * @return array
      */
@@ -226,7 +226,7 @@ SQL;
 
     /**
      * 件数を増加させる処理
-     * @param $blog_id
+     * @param string $blog_id
      * @param array $ids
      * @return int|false
      */

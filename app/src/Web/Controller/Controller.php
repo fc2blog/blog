@@ -1,7 +1,5 @@
 <?php
-/**
- * Controllerの親クラス
- */
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller;
 
@@ -19,15 +17,14 @@ use Fc2blog\Web\Session;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use Twig\Error\Error;
 
 abstract class Controller
 {
-    protected $data = [
+    /** @var array<string, mixed> */
+    protected $data = [ // テンプレートへ渡す変数の保存領域
         'http_status_code' => 200
-    ];    // テンプレートへ渡す変数の保存領域
+    ];
     protected $layout = '';  // 表示ページのレイアウトテンプレート
     protected $output = '';  // 送信するデータ、HTML等
     private $resolvedMethod;
@@ -42,7 +39,7 @@ abstract class Controller
         $this->request = $request;
     }
 
-    public function execute($method)
+    public function execute($method): void
     {
         $template = $this->prepare($method);
         $this->render($template);
@@ -57,8 +54,9 @@ abstract class Controller
     {
         $this->beforeFilter($this->request);
 
-        // アクションの実行(返り値はテンプレートファイルパスまたは空文字、レンダリング用データは$this->data)
         $this->resolvedMethod = $method;
+
+        // アクションの実行(返り値はテンプレートファイルパスまたは空文字、レンダリング用データは$this->data)
         $template_path = $this->$method($this->request);
 
         // 空の場合は、規約に則ってテンプレートファイルを決定する
@@ -116,7 +114,7 @@ abstract class Controller
         # ORIGINを検証
         if (
             isset($request->server['HTTP_ORIGIN']) &&
-            $request->server['HTTP_ORIGIN'] !== AdminController::getHostUrl()
+            $request->server['HTTP_ORIGIN'] !== Controller::getHostUrl()
         ) {
             return true;
         }
@@ -144,7 +142,7 @@ abstract class Controller
      * @param string|null $blog_id
      * @throws RedirectExit
      */
-    protected function redirect(Request $request, $url, $hash = '', bool $full_url = false, string $blog_id = null)
+    protected function redirect(Request $request, $url, string $hash = '', bool $full_url = false, string $blog_id = null)
     {
         if (is_array($url)) {
             $url = Html::url($request, $url, false, $full_url);
@@ -189,7 +187,7 @@ abstract class Controller
      * @param $url
      * @param string $hash
      */
-    protected function redirectBack(Request $request, $url, $hash = '')
+    protected function redirectBack(Request $request, $url, string $hash = '')
     {
         // 元のURLに戻す
         if (!empty($request->server['HTTP_REFERER'])) {
@@ -267,11 +265,7 @@ abstract class Controller
 
         try {
             return $twig->render($twig_template_path, $data);
-        } catch (LoaderError $e) {
-            throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
-        } catch (RuntimeError $e) {
-            throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
-        } catch (SyntaxError $e) {
+        } catch (Error $e) {
             throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
         }
     }
@@ -340,6 +334,8 @@ abstract class Controller
                 $data['comments'][$key]['wayoubi'] = __($data['comments'][$key]['youbi']);
                 $data['comments'][$key]['body'] = $value['body']; // TODO nl2brされていないのは正しいのか？
 
+                $value['reply_updated_at'] = $value['reply_updated_at'] ?? ""; // reply_updated_at is nullable
+                $reply_updated_at = strtotime($value['reply_updated_at']) ?: 0;
                 [
                     $data['comments'][$key]['reply_year'],
                     $data['comments'][$key]['reply_month'],
@@ -348,9 +344,9 @@ abstract class Controller
                     $data['comments'][$key]['reply_minute'],
                     $data['comments'][$key]['reply_second'],
                     $data['comments'][$key]['reply_youbi']
-                ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['reply_updated_at'])));
+                ] = explode('/', date('Y/m/d/H/i/s/D', $reply_updated_at));
                 $data['comments'][$key]['reply_wayoubi'] = __($data['comments'][$key]['reply_youbi']);
-                $data['comments'][$key]['reply_body'] = nl2br($value['reply_body']);
+                $data['comments'][$key]['reply_body'] = nl2br((string)$value['reply_body']);
             }
         }
 
@@ -379,7 +375,7 @@ abstract class Controller
      * @return string
      * TODO User系のみで用いられるので、後日UserControllerへ移動
      */
-    private function renderByFc2Template(Request $request, string $template_file_path)
+    private function renderByFc2Template(Request $request, string $template_file_path): string
     {
         if (is_null($template_file_path)) {
             throw new InvalidArgumentException("undefined template");
@@ -400,34 +396,38 @@ abstract class Controller
         return ob_get_clean();
     }
 
-    // 存在しないアクションは404へ
-    // TODO 存在しないメソッドコールはエラーにしたほうがわかりやすい
-    public function __call($name, $arguments)
+    // 存在しないアクションはエラーとして404へ
+    // TODO 「アクションではない」メソッドがたたけないようにする。アクション以外を追い出すかシグネチャを見るか。
+    public function __call($name, $arguments): string
     {
         return $this->error404();
     }
 
     // 404 NotFound Action
-    public function error404()
+    public function error404(): string
     {
         $this->setStatusCode(404);
         return 'user/common/error404.twig';
     }
 
     // 403 Forbidden
-    public function error403()
+    public function error403(): string
     {
         $this->setStatusCode(403);
         return 'user/common/error403.twig';
     }
 
     // 400 BadRequest
-    public function error400()
+    public function error400(): string
     {
         $this->setStatusCode(400);
         return 'user/common/error400.twig';
     }
 
+    /**
+     * @param string $key
+     * @return mixed
+     */
     public function get(string $key)
     {
         return $this->data[$key];
@@ -483,7 +483,7 @@ abstract class Controller
     /**
      * blog_idからブログ情報を取得
      * @param $blog_id
-     * @return array|false|mixed
+     * @return array|false
      * @deprecated TODO Modelに移動するべき
      */
     public function getBlog($blog_id)
@@ -493,10 +493,10 @@ abstract class Controller
 
     /**
      * デバイスタイプを取得する
-     * @return string
+     * @return int
      * @deprecated TODO requestに置換できる
      */
-    protected function getDeviceType(): string
+    protected function getDeviceType(): int
     {
         return $this->request->deviceType;
     }
@@ -507,11 +507,11 @@ abstract class Controller
      * @param string $name
      * TODO captchaでしかつかっていないので、名前をかえるべき
      */
-    protected function setToken($key = null, $name = 'token'): void
+    protected function setToken($key = null, string $name = 'token'): void
     {
         if ($key === null) {
             // 適当な値をトークンに設定
-            $key = App::genRandomStringAlphaNum(32);
+            $key = App::genRandomStringAlphaNum();
         }
         Session::set($name, $key);
     }
@@ -523,11 +523,22 @@ abstract class Controller
      * @return string|null
      * TODO captchaでしかつかっていないので、名前をかえるべき
      */
-    protected function tokenValidate(Request $request, $name = 'token')
+    protected function tokenValidate(Request $request, string $name = 'token'): ?string
     {
         $value = $request->get($name, '');
         $value = mb_convert_kana($value, 'n');
         return Session::remove($name) == $value ? null : __('Token authentication is invalid');
     }
 
+    /**
+     * ブログの`http(s)://FQDN(:port)`を生成する
+     * @return string
+     */
+    static public function getHostUrl(): string
+    {
+        $schema = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") ? 'https:' : 'http:';
+        $domain = Config::get("DOMAIN");
+        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+        return $schema . "//" . $domain . $port;
+    }
 }

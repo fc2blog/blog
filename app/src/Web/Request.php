@@ -1,15 +1,11 @@
 <?php
-/**
- * リクエストクラス
- * POST,GETへのアクセスを便利にするクラス
- */
+declare(strict_types=1);
 
 namespace Fc2blog\Web;
 
 use Fc2blog\App;
 use Fc2blog\Util\I18n;
 use Fc2blog\Util\Log;
-use Fc2blog\Web\Controller\User\CommonController;
 use Fc2blog\Web\Router\Router;
 
 class Request
@@ -33,11 +29,11 @@ class Request
     public $env = [];
     public $cookie = [];
 
-    public $className = CommonController::class;
-    public $methodName = "index";
-    public $shortControllerName = "Common";
-    public $lang = "";
-    public $deviceType = "";
+    public $className;
+    public $methodName;
+    public $shortControllerName;
+    public $lang;
+    public $deviceType;
     public $urlRewrite = true;
     public $baseDirectory = "/";
 
@@ -104,10 +100,7 @@ class Request
      */
     public function getReferer(): string
     {
-        if (isset($this->server['HTTP_REFERER'])) {
-            return $this->server['HTTP_REFERER'];
-        }
-        return '';
+        return $this->server['HTTP_REFERER'] ?? '';
     }
 
     public function getPath()
@@ -125,7 +118,7 @@ class Request
         return $this->query;
     }
 
-    public function getGet()
+    public function getGet(): array
     {
         return $this->get;
     }
@@ -207,24 +200,22 @@ class Request
         return $data;
     }
 
-
     /**
      * intデータかチェック
      * @param $int
      * @return bool
      */
-    private function is_integer($int)
+    private function is_integer($int): bool
     {
         return ((string)intval($int) === (string)$int);
     }
-
 
     /**
      * 引数が存在するかチェック
      * @param $key
      * @return bool
      */
-    public function isArgs($key)
+    public function isArgs($key): bool
     {
         // .区切りのキーを解釈
         $data = $this->request;
@@ -294,7 +285,7 @@ class Request
      * キーの入れ替えを行う
      * @param array $comb
      */
-    public function combine($comb = array())
+    public function combine(array $comb = []): void
     {
         foreach ($comb as $key => $value) {
             $this->set($value, $this->get($key));
@@ -313,16 +304,6 @@ class Request
 
     /**
      * @param string $key
-     * @param string|array|null $default
-     * @return string|array|null
-     */
-    public function rawGet(string $key, $default = null)
-    {
-        return isset($this->get[$key]) ? $this->get[$key] : $default;
-    }
-
-    /**
-     * @param string $key
      * @return bool
      */
     public function rawHasGet(string $key): bool
@@ -335,37 +316,9 @@ class Request
      * @param string|array|null $default
      * @return string|array|null
      */
-    public function rawPost(string $key, $default = null)
-    {
-        return isset($this->post[$key]) ? $this->post[$key] : $default;
-    }
-
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function rawHasPost(string $key): bool
-    {
-        return isset($this->post[$key]);
-    }
-
-    /**
-     * @param string $key
-     * @param string|array|null $default
-     * @return string|array|null
-     */
     public function rawCookie(string $key, $default = null)
     {
-        return isset($this->cookie[$key]) ? $this->cookie[$key] : $default;
-    }
-
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function rawHasCookie(string $key): bool
-    {
-        return isset($this->cookie[$key]);
+        return $this->cookie[$key] ?? $default;
     }
 
     /**
@@ -405,8 +358,8 @@ class Request
             return false;
         }
         if (
-            !is_string($this->get('sig', null)) ||
-            strlen($this->get('sig', "") === 0)
+            !is_string($this->get('sig')) ||
+            strlen($this->get('sig', "")) === 0
         ) {
             error_log("request did not have sig.");
             return false;
@@ -423,7 +376,7 @@ class Request
     }
 
     /**
-     * BlogID「かもしれない」ものを取得する
+     * BlogID「かもしれない」ものをURLから取得する
      * @return string|null
      */
     public function getBlogId(): ?string

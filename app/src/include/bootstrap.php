@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpFullyQualifiedNameUsageInspection */
 
 define('REQUEST_MICROTIME', microtime(true)); // 開始タイムスタンプ(ミリ秒含む)
 define('APP_DIR', realpath(__DIR__ . '/../../') . '/'); // APPディレクトリのパス
