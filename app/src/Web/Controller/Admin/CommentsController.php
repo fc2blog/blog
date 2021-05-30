@@ -317,11 +317,16 @@ class CommentsController extends AdminController
     }
 
     /**
-     * 削除
+     * コメントを削除
      * @param Request $request
+     * @return string
      */
-    public function delete(Request $request)
+    public function delete(Request $request): string
     {
+        if (!$request->isValidSig()) {
+            return $this->error403();
+        }
+
         // 削除処理
         if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
             $this->setInfoMessage(__('I removed the comment'));
@@ -335,6 +340,38 @@ class CommentsController extends AdminController
             $this->redirect($request, $back_url);
         }
         $this->redirectBack($request, array('action' => 'index'));
+        return "";
+    }
+
+    /**
+     * Comment id配列指定で、一括で既読を設定する
+     * @param Request $request
+     * @return string
+     * @noinspection PhpUnused
+     */
+    public function set_read(Request $request): string
+    {
+        if (!$request->isValidSig()) {
+            return $this->error403();
+        }
+
+        $comment_id_list = $request->get('id');
+        $comments_model = new CommentsModel();
+
+        // 既読処理
+        if ($comments_model->setReadByIdsAndBlogId($comment_id_list, $this->getBlogId($request))) {
+            $this->setInfoMessage(__('I set already read the comment'));
+        } else {
+            $this->setErrorMessage(__('I failed to set read'));
+        }
+
+        // 元の画面へ戻る
+        $back_url = $request->get('back_url');
+        if (!empty($back_url)) {
+            $this->redirect($request, $back_url);
+        }
+        $this->redirectBack($request, ['action' => 'index']);
+        return "";
     }
 
 }

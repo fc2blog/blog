@@ -842,6 +842,18 @@ msgstr "編集"
 msgid "Remove what you have selected"
 msgstr "選択したものを全て削除する"
 
+msgid "Set already read what you have selected"
+msgstr "選択したものを全て既読にする"
+
+msgid "Are you sure you want to update?"
+msgstr "本当に更新してよろしいですか？"
+
+msgid "I set already read the comment"
+msgstr "既読に更新しました。"
+
+msgid "I failed to set read"
+msgstr "既読更新に失敗しました。"
+
 #: shell/../view/admin/blog_settings/tab_sp.html:6
 #: shell/../view/admin/blog_settings/entry_edit.html:1
 #: shell/../view/admin/blog_settings/entry_edit_sp.html:1

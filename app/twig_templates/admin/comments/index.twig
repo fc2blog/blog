@@ -110,9 +110,11 @@
             </tbody>
         </table>
 
+        <input type="hidden" name="sig" value="{{ sig }}">
         <input type="hidden" name="mode" value="comments"/>
-        <input type="hidden" name="process" value="delete"/>
-        <input type="button" id="sys-delete-button" value="{{ _('Remove what you have selected') }}" onclick="if(confirm('{{ _('Are you sure you want to delete?') }}')) $('#sys-list-form').submit();" disabled="disabled"/>
+        <input type="hidden" id="sys-list-form-input-process" name="process" value=""/>
+        <input type="button" id="sys-delete-button" value="{{ _('Remove what you have selected') }}" onclick="if(confirm('{{ _('Are you sure you want to delete?') }}')){$('#sys-list-form-input-process').val('delete'); $('#sys-list-form').submit();}" disabled="disabled"/>
+        <input type="button" id="sys-set-read-button" value="{{ _('Set already read what you have selected') }}" onclick="if(confirm('{{ _('Are you sure you want to update?') }}')){$('#sys-list-form-input-process').val('set_read'); $('#sys-list-form').submit();}" disabled="disabled"/>
     </form>
 
     {% include("admin/common/paging.twig") %}
@@ -221,6 +223,7 @@
             // 削除用のチェックボックスがチェックされている時だけ削除ボタンを有効化する
             $('input[type=checkbox][name="id[]"]').on('change', function () {
                 $('#sys-delete-button').prop('disabled', !$('input[type=checkbox][name="id[]"]:checked').length);
+                $('#sys-set-read-button').prop('disabled', !$('input[type=checkbox][name="id[]"]:checked').length);
             });
         });
     </script>
