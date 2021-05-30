@@ -340,6 +340,7 @@ class CommentsController extends AdminController
             $this->redirect($request, $back_url);
         }
         $this->redirectBack($request, array('action' => 'index'));
+        return "";
     }
 
 }
