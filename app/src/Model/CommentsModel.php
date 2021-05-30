@@ -6,6 +6,7 @@ use Fc2blog\Config;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
+use RuntimeException;
 
 class CommentsModel extends Model
 {
@@ -508,9 +509,22 @@ class CommentsModel extends Model
         }
         $comment['entry_title'] = $entry['title'];
 
+        return $this->setReadCommentStatus($blog_id, $comment);
+    }
+
+    /**
+     * 指定のコメントを未読の場合既読に更新する
+     * @param string $blog_id
+     * @param array $comment
+     * @return array Comment
+     */
+    public function setReadCommentStatus(string $blog_id, array $comment): array
+    {
         // 未読状態の場合既読に変更する
         if ($comment['reply_status'] == Config::get('COMMENT.REPLY_STATUS.UNREAD')) {
-            $this->updateReplyStatus($blog_id, $comment_id, Config::get('COMMENT.REPLY_STATUS.READ'));
+            if (false === $this->updateReplyStatus($blog_id, $comment['id'], Config::get('COMMENT.REPLY_STATUS.READ'))) {
+                throw new RuntimeException("update failed");
+            }
             $comment['reply_status'] = Config::get('COMMENT.REPLY_STATUS.READ');
         }
 
