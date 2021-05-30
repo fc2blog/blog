@@ -317,11 +317,16 @@ class CommentsController extends AdminController
     }
 
     /**
-     * 削除
+     * コメントを削除
      * @param Request $request
+     * @return string
      */
-    public function delete(Request $request)
+    public function delete(Request $request): string
     {
+        if (!$request->isValidSig()) {
+            return $this->error403();
+        }
+
         // 削除処理
         if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
             $this->setInfoMessage(__('I removed the comment'));

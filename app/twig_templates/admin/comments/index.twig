@@ -110,6 +110,7 @@
             </tbody>
         </table>
 
+        <input type="hidden" name="sig" value="{{ sig }}">
         <input type="hidden" name="mode" value="comments"/>
         <input type="hidden" name="process" value="delete"/>
         <input type="button" id="sys-delete-button" value="{{ _('Remove what you have selected') }}" onclick="if(confirm('{{ _('Are you sure you want to delete?') }}')) $('#sys-list-form').submit();" disabled="disabled"/>
