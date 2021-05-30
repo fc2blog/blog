@@ -527,8 +527,55 @@ class CommentsModel extends Model
             }
             $comment['reply_status'] = Config::get('COMMENT.REPLY_STATUS.READ');
         }
-
         return $comment;
+    }
+
+    /**
+     * テスト用、あるエントリの全コメントを取得
+     * @param $blog_id
+     * @param array $comment_id_list
+     * @return array
+     */
+    public function getCommentListByCommentIdList($blog_id, array $comment_id_list): array
+    {
+        $where = "blog_id=? AND id ";
+        $params = [$blog_id];
+
+        $where .= 'IN (';
+        foreach ($comment_id_list as $comment_id) {
+            $where .= '?,';
+            $params[] = (int)$comment_id;
+        }
+        $where = rtrim($where, ',');
+        $where .= ') ';
+
+        // 記事のコメント取得
+        return $this->find('all', [
+            'where' => $where,
+            'params' => $params,
+            'order' => 'id ',
+        ]);
+    }
+
+    /**
+     * comment idリスト指定のcomment群を既読にする
+     * @param array $comment_id_list
+     * @param string $blog_id
+     * @return bool
+     */
+    public function setReadByIdsAndBlogId(array $comment_id_list, string $blog_id): bool
+    {
+        // 数値型配列チェック
+        if (!$this->is_numeric_array($comment_id_list)) {
+            return false;
+        }
+
+        $comment_list = $this->getCommentListByCommentIdList($blog_id, $comment_id_list);
+        $flag = true;
+        foreach ($comment_list as $comment) {
+            $flag = $flag && $this->setReadCommentStatus($blog_id, $comment);
+        }
+        return $flag;
     }
 
     /**
