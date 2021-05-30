@@ -117,6 +117,10 @@ class FilesController extends AdminController
                     $this->redirect($request, array('action' => 'upload')); // アップロード成功
                 }
             }
+            // 拡張子チェックエラーはファイルが指定されていない時には表示不要と思われるので、unset
+            if (isset($errors['file']['file']) && isset($errors['file']['ext'])) {
+                unset($errors['file']['ext']);
+            }
 
             // エラー情報の設定
             $this->setErrorMessage(__('Input error exists'));
@@ -243,6 +247,10 @@ class FilesController extends AdminController
                 $this->redirect($request, ['action' => 'upload']);
             }
         }
+        // 拡張子チェックエラーはファイルが指定されていない時には表示不要と思われるので、unset
+        if (isset($errors['file']['file']) && isset($errors['file']['ext'])) {
+            unset($errors['file']['ext']);
+        }
 
         // エラー情報の設定
         $this->setErrorMessage(__('Input error exists'));
@@ -340,6 +348,10 @@ class FilesController extends AdminController
                     return "admin/common/json.twig";
                 }
             }
+        }
+        // 拡張子チェックエラーはファイルが指定されていない時には表示不要と思われるので、unset
+        if (isset($errors['file']['file']) && isset($errors['file']['ext'])) {
+            unset($errors['file']['ext']);
         }
 
         $this->setContentType("application/json; charset=utf-8");
