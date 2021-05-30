@@ -133,6 +133,7 @@ class EntriesController extends AdminController
         } else {
             $this->set('entry_tags', $request->get('entry_tags'));
         }
+        $this->set('well_use_entry_tags', $tags_model->getWellUsedTags($blog_id));
         $this->set('open_status_list', EntriesModel::getOpenStatusList());
         $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
         $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
@@ -210,7 +211,8 @@ class EntriesController extends AdminController
             $request->set('entry_categories', array('category_id' => $entry_categories_model->getCategoryIds($blog_id, $id)));
             $request->set('entry_tags', $tags_model->getEntryTagNames($blog_id, $id));   // タグの文字列をテーブルから取得
 
-            $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
+            $this->set('entry_tags', $tags_model->getEntryTagNames($blog_id, $id));
+            $this->set('well_use_entry_tags', $tags_model->getWellUsedTags($blog_id));
             $this->set('open_status_list', EntriesModel::getOpenStatusList());
             $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
             $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
@@ -262,6 +264,7 @@ class EntriesController extends AdminController
         $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
         $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
         $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+        $this->set('well_use_entry_tags', $tags_model->getWellUsedTags($blog_id));
         $this->set('entry_tags', $request->get('entry_tags'));
         $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
         $this->set('categories', $categories_model->getList($blog_id));
