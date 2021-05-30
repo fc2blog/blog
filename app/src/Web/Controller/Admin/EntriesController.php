@@ -128,7 +128,11 @@ class EntriesController extends AdminController
         $blog_id = $this->getBlogId($request);
 
         // data load
-        $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
+        if (is_null($request->get('entry_tags'))) {
+            $this->set('entry_tags', $tags_model->getWellUsedTags($blog_id));
+        } else {
+            $this->set('entry_tags', $request->get('entry_tags'));
+        }
         $this->set('open_status_list', EntriesModel::getOpenStatusList());
         $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
         $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
