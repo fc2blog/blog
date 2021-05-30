@@ -262,6 +262,7 @@ class EntriesController extends AdminController
         $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
         $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
         $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+        $this->set('entry_tags', $request->get('entry_tags'));
         $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
         $this->set('categories', $categories_model->getList($blog_id));
         // 以下はSPテンプレ用で追加
