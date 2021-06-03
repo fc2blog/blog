@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="<%css_link>" />
   <link rel="apple-touch-icon" href="https://static.fc2.com/image/iphone/apple-touch-icon.png" />
   <script type="text/javascript" src="https://static.fc2.com/js/lib/jquery.js"></script>
-  <script type="text/javascript" src="https://static.fc2.com/js/blog/iphone_resize.js"></script>
   <script type="text/javascript" src="https://static.fc2.com/js/blog/sp_acc_menu.js"></script>
   <script type="text/javascript" charset="utf-8">
     <!--android-->

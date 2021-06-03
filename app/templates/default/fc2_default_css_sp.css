@@ -409,8 +409,8 @@ input, textarea, select {
     word-wrap: break-word;
 }
 
-.entry_body img[src^="https://blog-imgs-"],
-.entry_more img[src^="https://blog-imgs-"] {
+.entry_body img,
+.entry_more img {
     max-width: 100%;
     height: auto;
 }
