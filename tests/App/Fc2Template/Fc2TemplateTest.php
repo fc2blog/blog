@@ -243,7 +243,7 @@ class Fc2TemplateTest extends TestCase
             []
         );
         $entry_controller = new EntriesController($request);
-        $entry_controller->prepare('archives');
+        $entry_controller->prepare('archive');
 
         ## 疑似実行
         $this->evalAll($request, $entry_controller->getData());
