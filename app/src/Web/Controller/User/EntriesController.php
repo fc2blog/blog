@@ -968,7 +968,7 @@ class EntriesController extends UserController
      * @return array
      * TODO: これはコントローラが持つべきなのか？Modelでは？
      */
-    public static function getEntriesQueryOptions(
+    private static function getEntriesQueryOptions(
         string $blog_id,
         array $override_options,
         int $page_num
@@ -1009,7 +1009,7 @@ class EntriesController extends UserController
      * @return array
      * TODO: これはコントローラが持つべきなのか？Modelでは？
      */
-    public static function getEntriesArray(string $blog_id, array $options): array
+    private static function getEntriesArray(string $blog_id, array $options): array
     {
         $entries_model = new EntriesModel();
         $entries = $entries_model->find('all', $options);
