@@ -20,7 +20,6 @@ use Fc2blog\Web\Fc2BlogTemplate;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 use InvalidArgumentException;
-use LogicException;
 use Tuupola\Base62Proxy;
 
 class EntriesController extends UserController
@@ -324,38 +323,6 @@ class EntriesController extends UserController
         }
 
         // FC2用のテンプレートで表示
-        return $this->getFc2TemplatePath($blog_id, $html, $css, true);
-    }
-
-    /**
-     * 一時的なテンプレートファイルの生成と実行（テスト用
-     * @param Request $request
-     * @param string $html テンプレートのString
-     * @param string $css テンプレートのCSS
-     * @return string temporary compiled template file path
-     */
-    public function test_template(Request $request, string $html, string $css): string
-    {
-        if (!defined("THIS_IS_TEST")) { // テスト以外ではブロックする
-            throw new LogicException("the method is allowed only in testing.");
-        }
-
-        $blog_id = $this->getBlogId($request);
-
-        // 記事一覧データ設定
-        $options = [
-            'where' => 'blog_id=?',
-            'params' => [$blog_id],
-        ];
-        $pages = $request->get('page') ? [] : ['index_area'];
-        $this->setEntriesData($request, $options, $pages);
-
-        // テンプレートのシンタックスチェック
-        $syntax = Fc2BlogTemplate::fc2TemplateSyntax($html);
-        if ($syntax !== true) {
-            throw new InvalidArgumentException("Syntax error in the generated template.");
-        }
-
         return $this->getFc2TemplatePath($blog_id, $html, $css, true);
     }
 
