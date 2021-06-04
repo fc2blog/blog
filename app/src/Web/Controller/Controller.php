@@ -492,16 +492,6 @@ abstract class Controller
     }
 
     /**
-     * デバイスタイプを取得する
-     * @return int
-     * @deprecated TODO requestに置換できる
-     */
-    protected function getDeviceType(): int
-    {
-        return $this->request->deviceType;
-    }
-
-    /**
      * token発行
      * @param null $key
      * @param string $name

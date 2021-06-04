@@ -461,7 +461,7 @@ class EntriesController extends UserController
         $this->setEntriesData($request, $options, $pages);
 
         // 通常のプラグインリストに追加する
-        $plugins = (new BlogPluginsModel())->findByDeviceTypeAndCategory($this->getDeviceType(), $category, $blog_id);
+        $plugins = (new BlogPluginsModel())->findByDeviceTypeAndCategory($this->request->deviceType, $category, $blog_id);
         $id = $request->get('id');
         if (empty($id)) {
             // 新規プラグインは最後尾に追加する
@@ -1097,7 +1097,7 @@ class EntriesController extends UserController
      */
     private function getFc2TemplatePath($blog_id, string $html = null, string $css = null, bool $is_preview = false): string
     {
-        $device_type = $this->getDeviceType();
+        $device_type = $this->request->deviceType;
 
         $templateFilePath = BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type, $is_preview);
 
