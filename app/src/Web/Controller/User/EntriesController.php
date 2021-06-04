@@ -941,7 +941,6 @@ class EntriesController extends UserController
      * @param Request $request
      * @param array $options
      * @param array $areas
-     * TODO: これはコントローラが持つべきなのか？Modelでは？
      */
     private function setEntriesData(Request $request, array $options = [], array $areas = []): void
     {
@@ -966,7 +965,6 @@ class EntriesController extends UserController
      * @param array $override_options
      * @param int $page_num
      * @return array
-     * TODO: これはコントローラが持つべきなのか？Modelでは？
      */
     private static function getEntriesQueryOptions(
         string $blog_id,
@@ -1007,7 +1005,6 @@ class EntriesController extends UserController
      * @param string $blog_id
      * @param array $options
      * @return array
-     * TODO: これはコントローラが持つべきなのか？Modelでは？
      */
     private static function getEntriesArray(string $blog_id, array $options): array
     {
