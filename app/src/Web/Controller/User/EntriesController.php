@@ -16,6 +16,7 @@ use Fc2blog\Model\Model;
 use Fc2blog\Model\TagsModel;
 use Fc2blog\Service\BlogService;
 use Fc2blog\Util\Log;
+use Fc2blog\Web\Fc2BlogTemplate;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 use InvalidArgumentException;
@@ -317,7 +318,7 @@ class EntriesController extends UserController
         $css = $template['css'];
 
         // テンプレートのシンタックスチェック
-        $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
+        $syntax = Fc2BlogTemplate::fc2TemplateSyntax($html);
         if ($syntax !== true) {
             return 'user/entries/syntax_error.twig';
         }
@@ -350,7 +351,7 @@ class EntriesController extends UserController
         $this->setEntriesData($request, $options, $pages);
 
         // テンプレートのシンタックスチェック
-        $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
+        $syntax = Fc2BlogTemplate::fc2TemplateSyntax($html);
         if ($syntax !== true) {
             throw new InvalidArgumentException("Syntax error in the generated template.");
         }
@@ -386,7 +387,7 @@ class EntriesController extends UserController
         }
 
         // テンプレートのシンタックスチェック
-        $syntax = BlogTemplatesModel::fc2TemplateSyntax($html);
+        $syntax = Fc2BlogTemplate::fc2TemplateSyntax($html);
         if ($syntax !== true) {
             return 'user/entries/syntax_error.twig';
         }

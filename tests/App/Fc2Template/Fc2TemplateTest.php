@@ -8,7 +8,6 @@ use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
-use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\CommentsModel;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\EntryCategoriesModel;
@@ -617,12 +616,11 @@ class Fc2TemplateTest extends TestCase
     public function getAllPrintableTagEval(Request $request, array $data): void
     {
         $printable_tags = Config::get('fc2_template_var_search');
-        $b = new BlogTemplatesModel();
         foreach ($printable_tags as $tag_str => $printable_tag) {
             // タグの含まれたHTML
             $input_html = "{$printable_tag}";
             // 変換されたPHP
-            $converted_php = $b->convertFC2Template($input_html);
+            $converted_php = Fc2BlogTemplate::convertToPhp($input_html);
             $this->fragmentRunner(Fc2BlogTemplate::preprocessingData($request, $data), $tag_str, $converted_php);
         }
     }
@@ -635,10 +633,9 @@ class Fc2TemplateTest extends TestCase
     public function getAllIfCondEval(Request $request, array $data): void
     {
         $fc2_template_if_list = Config::get('fc2_template_if');
-        $b = new BlogTemplatesModel();
         foreach ($fc2_template_if_list as $tag_str => $php_code) {
             $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
-            $converted_php = $b->convertFC2Template($input_html);
+            $converted_php = Fc2BlogTemplate::convertToPhp($input_html);
             $this->fragmentRunner(Fc2BlogTemplate::preprocessingData($request, $data), $tag_str, $converted_php);
         }
     }
@@ -651,10 +648,9 @@ class Fc2TemplateTest extends TestCase
     public function getAllForEachCondEval(Request $request, array $data): void
     {
         $fc2_template_if_list = Config::get('fc2_template_foreach');
-        $b = new BlogTemplatesModel();
         foreach ($fc2_template_if_list as $tag_str => $php_code) {
             $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
-            $converted_php = $b->convertFC2Template($input_html);
+            $converted_php = Fc2BlogTemplate::convertToPhp($input_html);
             $this->fragmentRunner(Fc2BlogTemplate::preprocessingData($request, $data), $tag_str, $converted_php);
         }
     }

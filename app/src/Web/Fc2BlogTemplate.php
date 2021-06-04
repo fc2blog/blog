@@ -5,6 +5,7 @@ namespace Fc2blog\Web;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Util\PhpCodeLinter;
 use Fc2blog\Web\Controller\User\UserController;
 
 class Fc2BlogTemplate
@@ -106,4 +107,111 @@ class Fc2BlogTemplate
         return $data;
     }
 
+    /**
+     * FC2テンプレートの構文チェック
+     * @param string $php_code
+     * @return bool|string
+     */
+    public static function fc2TemplateSyntax(string $php_code)
+    {
+        if (defined("THIS_IS_TEST")) {
+            // テンプレート検証用にテンポラリディレクトリが必要だが、テストやCLIでSessionを汚染したくないので
+            $blog_id = "unitTestOrCliExecute";
+        } else {
+            $blog_id = Session::get('blog_id');
+        }
+
+        // フォルダが存在しない場合作成
+        $templatePath = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/syntax.php';
+        $templateDir = dirname($templatePath);
+        if (!file_exists($templateDir)) {
+            mkdir($templateDir, 0777, true);
+        }
+
+        // HTMLをPHPテンプレートに変換してテンプレートファイルの作成
+        $html = self::convertToPhp($php_code);
+        file_put_contents($templatePath, $html);
+
+        chmod($templatePath, 0777);
+        // PHPのシンタックスチェック
+        if (PhpCodeLinter::isParsablePhpCode($html)) {
+            return true;
+        } else {
+            return __('There may be a problem with the template or plug-in, installed in the blog.');
+        }
+    }
+
+    /**
+     * HTMLを解読しPHPテンプレートに変換する
+     * @param string $fc2template_html 置換前HTML
+     * @return string 置換後PHPテンプレート
+     */
+    public static function convertToPhp(string $fc2template_html): string
+    {
+        // PHP文（PHP開始、終了タグ）のエスケープ `<?php〜？>` → `<?php echo '<?'; ？><?php echo 'php'; ？>〜<?php echo '？>' ？>`
+        $delimit = "\xFF";
+        $searches = ['<?', '?>'];
+        $replaces = [$delimit . 'START_TAG_ESCAPE', $delimit . 'END_TAG_ESCAPE'];
+        $fc2template_html = str_replace($searches, $replaces, $fc2template_html);
+
+        $fc2template_html = preg_replace('/(php)/i', "<?php echo '$1'; ?>", $fc2template_html);
+
+        $searches = $replaces;
+        $replaces = ['<?php echo \'<?\'; ?>', '<?php echo \'?>\'; ?>'];
+        $fc2template_html = str_replace($searches, $replaces, $fc2template_html);
+
+        // テンプレート置換用変数読み込み
+        Config::read('fc2_template.php');
+        $ambiguous = []; // 既存FC2テンプレートの曖昧置換用
+
+        // ループ文用の置き換え
+        $loop = Config::get('fc2_template_foreach');
+        foreach ($loop as $key => $value) {
+            $ambiguous[] = $key;
+            do {
+                $fc2template_html = preg_replace('/<!--' . $key . '-->(.*?)<!--\/' . $key . '-->/s', $value . '$1<?php } ?>', $fc2template_html, -1, $count);
+            } while ($count > 0);
+        }
+
+        // 条件判断文用の置き換え
+        $cond = Config::get('fc2_template_if');
+        foreach ($cond as $key => $value) {
+            $ambiguous[] = $key;
+            do {
+                $fc2template_html = preg_replace('/<!--' . $key . '-->(.*?)<!--\/' . $key . '-->/s', $value . '$1<?php } ?>', $fc2template_html, -1, $count);
+            } while ($count > 0);
+        }
+
+        // 既存FC2テンプレートの曖昧置換
+        // (置換しきれなかった(正しく記述されていない)テンプレートをできるだけ処理する)
+        $ambiguous = implode('|', $ambiguous);
+        // <!--topentry-->〜<!--/edit_area--> 左記を許容する
+        foreach ($loop as $key => $value) {
+            do {
+                $fc2template_html = preg_replace('/<!--' . $key . '-->(.*?)<!--\/(' . $ambiguous . ')-->/s', $value . '$1<?php } ?>', $fc2template_html, -1, $count);
+            } while ($count);
+        }
+        foreach ($cond as $key => $value) {
+            do {
+                $fc2template_html = preg_replace('/<!--' . $key . '-->(.*?)<!--\/(' . $ambiguous . ')-->/s', $value . '$1<?php } ?>', $fc2template_html, -1, $count);
+            } while ($count);
+        }
+        // <!--/topentry-->〜<!--topentry--> 左記を許容する(テンプレートによってシンタックスエラーが発生する可能性あり)
+        // 代わりに既存FC2で動作しているテンプレートでタグの相互がおかしいテンプレートも動作する
+        foreach ($loop as $key => $value) {
+            do {
+                $fc2template_html = preg_replace('/<!--\/(' . $ambiguous . ')-->(.*?)<!--' . $key . '-->/s', '<?php } ?>$2' . $value, $fc2template_html, -1, $count);
+            } while ($count);
+        }
+        foreach ($cond as $key => $value) {
+            do {
+                $fc2template_html = preg_replace('/<!--\/(' . $ambiguous . ')-->(.*?)<!--' . $key . '-->/s', '<?php } ?>$2' . $value, $fc2template_html, -1, $count);
+            } while ($count);
+        }
+
+        // 変数タグの置き換え
+        $fc2template_html = str_replace(Config::get('fc2_template_var_search'), Config::get('fc2_template_var_replace'), $fc2template_html);
+        // 処理されなかった（対応がなかった）変数タグの削除
+        return preg_replace('/<%[0-9a-zA-Z_]+?>/', '', $fc2template_html);
+    }
 }

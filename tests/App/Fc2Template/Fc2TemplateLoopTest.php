@@ -5,7 +5,7 @@ namespace Fc2blog\Tests\App\Fc2Template;
 
 use ErrorException;
 use Fc2blog\Config;
-use Fc2blog\Model\BlogTemplatesModel;
+use Fc2blog\Web\Fc2BlogTemplate;
 use ParseError;
 use PHPUnit\Framework\TestCase;
 use TypeError;
@@ -54,16 +54,10 @@ class Fc2TemplateLoopTest extends TestCase
     public function loopStateTester($tag, $expected, $env)
     {
         $input_template = "<!--{$tag}-->ok<!--/{$tag}-->";
-        $php_template = $this->convertFc2TemplateToPhpTemplate($input_template);
+        $php_template = Fc2BlogTemplate::convertToPhp($input_template);
         $res = $this->evalPhpTemplate($php_template, $env);
 //    var_dump($res);
         $this->assertEquals($expected, $res);
-    }
-
-    public function convertFc2TemplateToPhpTemplate(string $input_template): string
-    {
-        $b = new BlogTemplatesModel();
-        return $b->convertFC2Template($input_template);
     }
 
     /**
