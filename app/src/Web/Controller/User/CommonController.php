@@ -57,6 +57,7 @@ class CommonController extends UserController
         $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)));
     }
 
+    const CAPTCHA_TOKEN_KEY_NAME = 'token';
     /**
      * 画像認証
      * @param Request $request
@@ -75,7 +76,7 @@ class CommonController extends UserController
                 throw new RuntimeException("random_int thrown exception {$e->getMessage()}");
             }
         }
-        Session::set('token', $key); // トークン設定
+        Session::set(self::CAPTCHA_TOKEN_KEY_NAME, $key); // トークン設定
 
         // captchaの日本語モード判定
         // Cookieでlangがja以外は英語モード
@@ -94,6 +95,18 @@ class CommonController extends UserController
         } catch (Exception $e) {
             throw new RuntimeException("drawNumber failed. {$e->getMessage()} {$e->getFile()}:{$e->getLine()}");
         }
+    }
+
+    /**
+     * Captcha token有効性チェック
+     * @param Request $request
+     * @return bool
+     */
+    public static function isValidCaptcha(Request $request): bool
+    {
+        $value = $request->get(CommonController::CAPTCHA_TOKEN_KEY_NAME, '');
+        $value = mb_convert_kana($value, 'n');
+        return (string)Session::remove(CommonController::CAPTCHA_TOKEN_KEY_NAME) === $value;
     }
 
     /**
