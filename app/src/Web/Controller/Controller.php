@@ -492,21 +492,6 @@ abstract class Controller
     }
 
     /**
-     * token発行
-     * @param null $key
-     * @param string $name
-     * TODO captchaでしかつかっていないので、名前をかえるべき
-     */
-    protected function setToken($key = null, string $name = 'token'): void
-    {
-        if ($key === null) {
-            // 適当な値をトークンに設定
-            $key = App::genRandomStringAlphaNum();
-        }
-        Session::set($name, $key);
-    }
-
-    /**
      * tokenチェック
      * @param Request $request
      * @param string $name
