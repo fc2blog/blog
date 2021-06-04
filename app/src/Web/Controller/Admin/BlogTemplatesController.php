@@ -8,6 +8,7 @@ use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\Fc2TemplatesModel;
 use Fc2blog\Model\Model;
+use Fc2blog\Service\BlogService;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 
@@ -28,7 +29,7 @@ class BlogTemplatesController extends AdminController
             $device_type = $request->get('device_type', 1);
         }
 
-        $blog = $this->getBlog($blog_id);
+        $blog = BlogService::getById($blog_id);
         $blogs_model = new BlogsModel();
         $this->set('template_ids', $blogs_model->getTemplateIds($blog));
 
@@ -282,7 +283,7 @@ class BlogTemplatesController extends AdminController
         $blog_id = $this->getBlogId($request);
 
         // 使用中のテンプレート判定
-        $blog = $this->getBlog($blog_id);
+        $blog = BlogService::getById($blog_id);
         $template_ids = BlogsModel::getTemplateIds($blog);
         if (in_array($id, $template_ids)) {
             $this->setErrorMessage(__('You can not delete a template in use'));

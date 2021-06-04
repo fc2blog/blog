@@ -621,13 +621,13 @@ class BlogsModel extends Model
     /**
      * Blog 設定が今アクセスしているSchemaと一致しているか確認
      * @param Request $request
-     * @param array $blog blog array
+     * @param Blog $blog blog array
      * @return bool
      */
-    static public function isCorrectHttpSchemaByBlogArray(Request $request, array $blog): bool
+    static public function isCorrectHttpSchemaByBlog(Request $request, Blog $blog): bool
     {
         $is_https = (isset($request->server['HTTPS']) && $request->server['HTTPS'] == 'on');
-        return ($blog['ssl_enable'] === 1 && $is_https) || ($blog['ssl_enable'] === 0 && !$is_https);
+        return ($blog->ssl_enable === 1 && $is_https) || ($blog->ssl_enable === 0 && !$is_https);
     }
 
     /**

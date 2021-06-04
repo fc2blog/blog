@@ -7,6 +7,7 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Service\BlogService;
 use Fc2blog\Service\TwigService;
 use Fc2blog\Util\Log;
 use Fc2blog\Web\Controller\Admin\AdminController;
@@ -249,8 +250,8 @@ abstract class Controller
                 ]
             ];
             // リクエストからログインblogを特定し、保存
-            if ($this->getBlog($this->getBlogId($request)) !== false && is_string($this->getBlogId($request))) {
-                $data['blog'] = $this->getBlog($this->getBlogId($request));
+            if (BlogService::getById($this->getBlogId($request)) !== false && is_string($this->getBlogId($request))) {
+                $data['blog'] = BlogService::getById($this->getBlogId($request));
                 $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) . "/" . $this->getBlogId($request) . "/";
             }
         } else {
@@ -478,17 +479,6 @@ abstract class Controller
             throw new LogicException("the method is only for testing.");
         }
         return $this->data;
-    }
-
-    /**
-     * blog_idからブログ情報を取得
-     * @param $blog_id
-     * @return array|false
-     * @deprecated TODO Modelに移動するべき
-     */
-    public function getBlog($blog_id)
-    {
-        return (new BlogsModel())->findById($blog_id);
     }
 
     /**

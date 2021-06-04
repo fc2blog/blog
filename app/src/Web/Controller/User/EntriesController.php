@@ -4,6 +4,7 @@ namespace Fc2blog\Web\Controller\User;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\Blog;
 use Fc2blog\Model\BlogPluginsModel;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
@@ -40,14 +41,14 @@ class EntriesController extends UserController
         $this->set('blog_id', $blog_id);
 
         // 指定のブログが実在するかチェック
-        if (!($blog = $this->getBlog($blog_id)) || !is_array($blog)) {
+        if (!($blog = BlogService::getById($blog_id)) || !($blog instanceof Blog)) {
             Log::notice("not found blog, redirect to top. blog_id: {$blog_id}");
             $this->redirect($request, ['controller' => 'Blogs', 'action' => 'index']);
         }
 
         // BlogのSSL_Enableの設定と食い違うなら強制リダイレクトする
         // URL構造そのままでリダイレクトするためにRequestUriを用いているがもっとベターな方法があるかもしれない
-        if (!BlogsModel::isCorrectHttpSchemaByBlogArray($request, $blog)) {
+        if (!BlogsModel::isCorrectHttpSchemaByBlog($request, $blog)) {
             Log::debug("mismatch access schema and blog's schema. redirect to correct schema. blog_id:{$blog['id']}");
             $this->redirect($request, $request->uri, '', true, $blog['id']);
         }
@@ -1106,7 +1107,7 @@ class EntriesController extends UserController
         if (!is_file($templateFilePath) || $is_preview) {
             Log::debug_log(__FILE__ . ":" . __LINE__ . " generate Fc2Template. :{$templateFilePath}");
 
-            $blog = $this->getBlog($blog_id);
+            $blog = BlogService::getById($blog_id);
             $templateId = $blog[Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)];
 
             // HTMLとCSSの実行PHPを生成
