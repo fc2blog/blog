@@ -798,7 +798,7 @@ class EntriesController extends UserController
         $errors = array();
         $white_list = array('entry_id', 'name', 'title', 'mail', 'url', 'body', 'password', 'open_status');
         $errors['comment'] = $comments_model->registerValidate($request->get('comment'), $data, $white_list);
-        $errors['token'] = $is_captcha ? $this->tokenValidate($request) : array();   // Token用のバリデート
+        $errors['token'] = $is_captcha ? $this->captchaTokenValidate($request) : [];   // Token用のバリデート
         if (empty($errors['comment']) && empty($errors['token'])) {
             $data['blog_id'] = $blog_id;  // ブログIDの設定
             // trip_hashの生成
@@ -913,7 +913,7 @@ class EntriesController extends UserController
         $errors = [];
         $white_list = ['name', 'title', 'mail', 'url', 'body', 'password', 'open_status'];
         $errors['comment'] = $comments_model->editValidate($request->get('comment'), $data, $white_list, $comment);
-        $errors['token'] = $is_captcha ? $this->tokenValidate($request) : [];   // Token用のバリデート
+        $errors['token'] = $is_captcha ? $this->captchaTokenValidate($request) : [];   // Token用のバリデート
         if (empty($errors['comment']) && empty($errors['token'])) {
             if ($comments_model->updateByIdAndBlogIdAndBlogSetting($request, $data, $comment_id, $blog_id, $blog_setting)) {
                 $this->redirect($request, ['action' => 'view', 'blog_id' => $blog_id, 'id' => $entry_id], '#comment' . $comment_id);
@@ -932,6 +932,18 @@ class EntriesController extends UserController
         // FC2用のテンプレートで表示
         $this->setAreaData(['edit_area']);
         return $this->getFc2TemplatePath($blog_id);
+    }
+
+    /**
+     * Captcha tokenチェック
+     * @param Request $request
+     * @return string|null
+     */
+    private function captchaTokenValidate(Request $request): ?string
+    {
+        $value = $request->get('token', '');
+        $value = mb_convert_kana($value, 'n');
+        return Session::remove('token') == $value ? null : __('Token authentication is invalid');
     }
 
     /**

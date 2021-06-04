@@ -482,20 +482,6 @@ abstract class Controller
     }
 
     /**
-     * tokenチェック
-     * @param Request $request
-     * @param string $name
-     * @return string|null
-     * TODO captchaでしかつかっていないので、名前をかえるべき
-     */
-    protected function tokenValidate(Request $request, string $name = 'token'): ?string
-    {
-        $value = $request->get($name, '');
-        $value = mb_convert_kana($value, 'n');
-        return Session::remove($name) == $value ? null : __('Token authentication is invalid');
-    }
-
-    /**
      * ブログの`http(s)://FQDN(:port)`を生成する
      * @return string
      */
