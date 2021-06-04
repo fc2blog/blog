@@ -133,6 +133,30 @@ abstract class Controller
     }
 
     /**
+     * @param string $key
+     * @return mixed
+     */
+    public function get(string $key)
+    {
+        return $this->data[$key];
+    }
+
+    public function getStatusCode(): int
+    {
+        return (int)$this->data['http_status_code'];
+    }
+
+    public function setStatusCode(int $code = 200): void
+    {
+        $this->data['http_status_code'] = $code;
+    }
+
+    public function setContentType(string $mime_type = 'text/html; charset=UTF-8'): void
+    {
+        $this->responseHeaders['Content-Type'] = $mime_type;
+    }
+
+    /**
      * リダイレクト
      * MEMO: Blog idが特定できないときの強制的なSchemaがさだまらない
      * TODO: この時点でリダイレクトせず、 emit時にヘッダー送信する形にリファクタリングすべき
@@ -292,36 +316,12 @@ abstract class Controller
         return 'user/common/error400.twig';
     }
 
-    /**
-     * @param string $key
-     * @return mixed
-     */
-    public function get(string $key)
-    {
-        return $this->data[$key];
-    }
-
     public function getOutput(): string
     {
         if (!defined("THIS_IS_TEST")) {
             throw new LogicException("the method is only for testing.");
         }
         return $this->output;
-    }
-
-    public function getStatusCode(): int
-    {
-        return (int)$this->data['http_status_code'];
-    }
-
-    public function setStatusCode(int $code = 200): void
-    {
-        $this->data['http_status_code'] = $code;
-    }
-
-    public function setContentType(string $mime_type = 'text/html; charset=UTF-8'): void
-    {
-        $this->responseHeaders['Content-Type'] = $mime_type;
     }
 
     public function getResolvedMethod(): string
