@@ -115,7 +115,7 @@ abstract class Controller
         # ORIGINを検証
         if (
             isset($request->server['HTTP_ORIGIN']) &&
-            $request->server['HTTP_ORIGIN'] !== Controller::getHostUrl()
+            $request->server['HTTP_ORIGIN'] !== $request->getHostUrl()
         ) {
             return true;
         }
@@ -353,17 +353,5 @@ abstract class Controller
             throw new LogicException("the method is only for testing.");
         }
         return $this->data;
-    }
-
-    /**
-     * ブログの`http(s)://FQDN(:port)`を生成する
-     * @return string
-     */
-    static public function getHostUrl(): string
-    {
-        $schema = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") ? 'https:' : 'http:';
-        $domain = Config::get("DOMAIN");
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
-        return $schema . "//" . $domain . $port;
     }
 }

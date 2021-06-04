@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Web;
 
 use Fc2blog\App;
+use Fc2blog\Config;
 use Fc2blog\Util\I18n;
 use Fc2blog\Util\Log;
 use Fc2blog\Web\Router\Router;
@@ -400,5 +401,17 @@ class Request
     public function isHttps(): bool
     {
         return isset($this->server["HTTPS"]) && $this->server["HTTPS"] === "on";
+    }
+
+    /**
+     * 自身の`http(s)://FQDN(:port)`を設定から生成する
+     * @return string
+     */
+    public function getHostUrl(): string
+    {
+        $schema = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") ? 'https:' : 'http:';
+        $domain = Config::get("DOMAIN");
+        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+        return $schema . "//" . $domain . $port;
     }
 }
