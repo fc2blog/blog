@@ -221,12 +221,6 @@ abstract class AdminController extends Controller
         return $messages;
     }
 
-    // 存在しないアクションは404へ
-    public function __call($name, $arguments): string
-    {
-        return $this->error404();
-    }
-
     // 404 NotFound Action
     public function error404(): string
     {
