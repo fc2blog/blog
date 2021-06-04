@@ -27,4 +27,8 @@ class Blog implements ArrayAccess, IteratorAggregate, Countable
     public $last_posted_at;
     public $created_at;
     public $updated_at;
+
+    // === Not available in DB, Dynamic properties
+    /** @dynamic */
+    public $url;
 }
