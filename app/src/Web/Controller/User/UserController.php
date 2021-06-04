@@ -5,8 +5,10 @@ namespace Fc2blog\Web\Controller\User;
 
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Web\Controller\Controller;
+use Fc2blog\Web\Fc2BlogTemplate;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
+use InvalidArgumentException;
 
 abstract class UserController extends Controller
 {
@@ -78,5 +80,32 @@ abstract class UserController extends Controller
     {
         /** @noinspection PhpUnnecessaryStringCastInspection */
         return 'entry_password.' . $blog_id . '.' . (string)$entry_id;
+    }
+
+    /**
+     * FC2タグを用いたユーザーテンプレート（PHP）でHTMLをレンダリング
+     * @param Request $request
+     * @param string $template_file_path
+     * @return string
+     */
+    protected function renderByFc2Template(Request $request, string $template_file_path): string
+    {
+        if (is_null($template_file_path)) {
+            throw new InvalidArgumentException("undefined template");
+        }
+        if (!is_file($template_file_path)) {
+            throw new InvalidArgumentException("missing template");
+        }
+
+        $this->data = Fc2BlogTemplate::preprocessingData($request, $this->data);
+
+        // 設定されているdataをローカルスコープに展開
+        extract($this->data);
+
+        // テンプレートをレンダリングして返す
+        ob_start();
+        /** @noinspection PhpIncludeInspection */
+        include($template_file_path);
+        return ob_get_clean();
     }
 }

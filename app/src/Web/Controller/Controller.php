@@ -11,7 +11,7 @@ use Fc2blog\Service\BlogService;
 use Fc2blog\Service\TwigService;
 use Fc2blog\Util\Log;
 use Fc2blog\Web\Controller\Admin\AdminController;
-use Fc2blog\Web\Fc2BlogTemplate;
+use Fc2blog\Web\Controller\User\UserController;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
@@ -79,7 +79,7 @@ abstract class Controller
         // テンプレートファイル拡張子で、PHPテンプレートとTwigテンプレートを切り分ける
         if (preg_match("/\.twig\z/u", $template_path)) {
             $this->output = $this->renderByTwig($this->request, $template_path);
-        } elseif ($this->layout === 'fc2_template.php') {
+        } elseif ($this->layout === 'fc2_template.php' && $this instanceof UserController) {
             $this->output = $this->renderByFc2Template($this->request, $template_path);
         }
         // $this->layout === '' の場合は、空ボディか、$this->outputにすでになにか入れられているという想定
@@ -269,34 +269,6 @@ abstract class Controller
         } catch (Error $e) {
             throw new RuntimeException("Twig error: {$e->getMessage()} {$e->getFile()}:{$e->getTemplateLine()}");
         }
-    }
-
-    /**
-     * FC2タグを用いたユーザーテンプレート（PHP）でHTMLをレンダリング
-     * @param Request $request
-     * @param string $template_file_path
-     * @return string
-     * TODO User系のみで用いられるので、後日UserControllerへ移動
-     */
-    private function renderByFc2Template(Request $request, string $template_file_path): string
-    {
-        if (is_null($template_file_path)) {
-            throw new InvalidArgumentException("undefined template");
-        }
-        if (!is_file($template_file_path)) {
-            throw new InvalidArgumentException("missing template");
-        }
-
-        $this->data = Fc2BlogTemplate::preprocessingData($request, $this->data);
-
-        // 設定されているdataをローカルスコープに展開
-        extract($this->data);
-
-        // テンプレートをレンダリングして返す
-        ob_start();
-        /** @noinspection PhpIncludeInspection */
-        include($template_file_path);
-        return ob_get_clean();
     }
 
     // 存在しないアクションはエラーとして404へ
