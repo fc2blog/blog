@@ -14,15 +14,8 @@
   <script type="text/javascript" src="https://static.fc2.com/js/lib/jquery.js"></script>
   <script type="text/javascript" src="https://static.fc2.com/js/blog/sp_acc_menu.js"></script>
   <script type="text/javascript" charset="utf-8">
-    <!--android-->
-    window.onresize = function(){
-      setOrientation();
-    }
-    <!--/android-->
-
     window.onload = function() {
       setTimeout(function(){if(window.pageYOffset === 0){window.scrollTo(0, 1);}}, 100);
-      setTimeout(function(){setOrientation();},300);
     }
     function submit(){
       document.form1.submit();
