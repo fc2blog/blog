@@ -18,8 +18,8 @@ use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleCategory;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleComment;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleEntry;
 use Fc2blog\Tests\Helper\SampleDataGenerator\GenerateSampleTag;
-use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Controller\User\EntriesController;
+use Fc2blog\Web\Fc2BlogTemplate;
 use Fc2blog\Web\Request;
 use ParseError;
 use PHPUnit\Framework\TestCase;
@@ -623,7 +623,7 @@ class Fc2TemplateTest extends TestCase
             $input_html = "{$printable_tag}";
             // 変換されたPHP
             $converted_php = $b->convertFC2Template($input_html);
-            $this->fragmentRunner(Controller::preprocessingDataForFc2Template($request, $data), $tag_str, $converted_php);
+            $this->fragmentRunner(Fc2BlogTemplate::preprocessingData($request, $data), $tag_str, $converted_php);
         }
     }
 
@@ -639,7 +639,7 @@ class Fc2TemplateTest extends TestCase
         foreach ($fc2_template_if_list as $tag_str => $php_code) {
             $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
             $converted_php = $b->convertFC2Template($input_html);
-            $this->fragmentRunner(Controller::preprocessingDataForFc2Template($request, $data), $tag_str, $converted_php);
+            $this->fragmentRunner(Fc2BlogTemplate::preprocessingData($request, $data), $tag_str, $converted_php);
         }
     }
 
@@ -655,7 +655,7 @@ class Fc2TemplateTest extends TestCase
         foreach ($fc2_template_if_list as $tag_str => $php_code) {
             $input_html = "<!--{$tag_str}-->BODY<!--/{$tag_str}-->";
             $converted_php = $b->convertFC2Template($input_html);
-            $this->fragmentRunner(Controller::preprocessingDataForFc2Template($request, $data), $tag_str, $converted_php);
+            $this->fragmentRunner(Fc2BlogTemplate::preprocessingData($request, $data), $tag_str, $converted_php);
         }
     }
 

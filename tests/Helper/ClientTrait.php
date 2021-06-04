@@ -7,6 +7,7 @@ use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Controller\User\UserController;
+use Fc2blog\Web\Fc2BlogTemplate;
 use Fc2blog\Web\Request;
 use Fc2blog\Web\Session;
 use RuntimeException;
@@ -253,7 +254,7 @@ trait ClientTrait
         /** @var UserController $c */
         $c = new $request->className($request);
         $c->prepare($request->methodName);
-        $d = Controller::preprocessingDataForFc2Template($request, $c->getData());
+        $d = Fc2BlogTemplate::preprocessingData($request, $c->getData());
         // App::userURLのテストのため
         $em = new EntriesModel();
         $d['_calender_data'] = $em->getTemplateCalendar($request, $c->get('blog_id'), 2020, 7); // テストデータに依存しているので、壊れやすい
