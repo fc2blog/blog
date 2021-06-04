@@ -152,7 +152,6 @@ trait ClientTrait
 
         $c = new $request->className($request);
 
-        $exception = null;
         try {
             $c->execute($request->methodName);
             $c->emit();
