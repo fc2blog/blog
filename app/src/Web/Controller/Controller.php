@@ -271,13 +271,6 @@ abstract class Controller
         }
     }
 
-    // 存在しないアクションはエラーとして404へ
-    // TODO 「アクションではない」メソッドがたたけないようにする。アクション以外を追い出すかシグネチャを見るか。
-    public function __call($name, $arguments): string
-    {
-        return $this->error404();
-    }
-
     // 404 NotFound Action
     public function error404(): string
     {
