@@ -95,10 +95,9 @@ class CommonController extends AdminController
 
     /**
      * お知らせ一覧画面
-     * @param Request $request
      * @return string
      */
-    public function notice(Request $request): string
+    public function notice(/*Request $request*/): string
     {
         $blog_id = $this->getBlogIdFromSession();
 
@@ -131,7 +130,7 @@ class CommonController extends AdminController
                 $this->set('temp_dir', Config::get('TEMP_DIR'));
                 $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
                 $this->set('is_db_connect_lib', defined('DB_CONNECT_LIB'));
-            /** @noinspection PhpRedundantOptionalArgumentInspection */
+                /** @noinspection PhpRedundantOptionalArgumentInspection */
                 $this->set('random_string', App::genRandomStringAlphaNum(32));
 
                 $this->set('DB_HOST', DB_HOST);
