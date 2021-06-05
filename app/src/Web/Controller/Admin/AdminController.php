@@ -169,37 +169,37 @@ abstract class AdminController extends Controller
 
     /**
      * 情報用メッセージを設定する
-     * @param $message
+     * @param string $message
      */
-    protected function setInfoMessage($message): void
+    protected function setInfoMessage(string $message): void
     {
         $this->setMessage($message, 'flash-message-info');
     }
 
     /**
      * 警告用メッセージを設定する
-     * @param $message
+     * @param string $message
      */
-    protected function setWarnMessage($message): void
+    protected function setWarnMessage(string $message): void
     {
         $this->setMessage($message, 'flash-message-warn');
     }
 
     /**
      * エラー用メッセージを設定する
-     * @param $message
+     * @param string $message
      */
-    protected function setErrorMessage($message): void
+    protected function setErrorMessage(string $message): void
     {
         $this->setMessage($message, 'flash-message-error');
     }
 
     /**
      * メッセージを設定する
-     * @param $message
-     * @param $type
+     * @param string $message
+     * @param string $type
      */
-    protected function setMessage($message, $type): void
+    protected function setMessage(string $message, string $type): void
     {
         $messages = Session::get($type, array());
         $messages[] = $message;
@@ -208,6 +208,7 @@ abstract class AdminController extends Controller
 
     /**
      * メッセージ情報を削除し取得する
+     * @return array<string, string>
      */
     protected function removeMessage(): array
     {
