@@ -46,20 +46,20 @@ class Router
             $request->urlRewrite = true;
             $request->baseDirectory = '/admin/';
 
-            // default controller/method
-            $this->className = \Fc2blog\Web\Controller\Admin\CommonController::class;
-            $this->methodName = 'index';
-
             if ($request->isArgs($args_controller)) {
                 $this->className = "Fc2blog\\Web\\Controller\\Admin\\" . StringCaseConverter::pascalCase($request->get($args_controller)) . "Controller";
             } elseif (isset($paths[1])) {
                 $this->className = "Fc2blog\\Web\\Controller\\Admin\\" . StringCaseConverter::pascalCase($paths[1]) . "Controller";
+            } else {
+                $this->className = \Fc2blog\Web\Controller\Admin\CommonController::class;
             }
 
             if ($request->isArgs($args_action)) {
                 $this->methodName = $request->get($args_action);
             } elseif (isset($paths[2])) {
                 $this->methodName = $paths[2];
+            } else {
+                $this->methodName = 'index';
             }
 
         } else { // User 画面ルーティング
@@ -67,28 +67,24 @@ class Router
             $request->baseDirectory = '/';
 
             // 対象となるblogを決定する
-            if (!is_null($request->getBlogId())) {
+            if (!is_null($blog_id = $request->getBlogId())) {
                 // URLからDefault Blog IDが取得できる場合
-                $blog_id = $request->getBlogId();
-                $request->set('blog_id', $blog_id);
                 if (isset($paths[1])) {
                     $sub_path = $paths[1];
                 }
-            } else if (!is_null($request->get('blog_id'))) {
+            } else if (!is_null($blog_id = $request->get('blog_id'))) {
                 // パラメタからBlog idが取得できる場合
-                $blog_id = $request->get('blog_id');
-                $request->set('blog_id', $blog_id);
                 if (isset($paths[0])) {
                     $sub_path = $paths[0];
                 }
             } else {
                 // blog_idがリクエストから特定できない場合、デフォルトblog_idを利用する
                 $blog_id = BlogsModel::getDefaultBlogId();
-                $request->set('blog_id', $blog_id);
                 if (isset($paths[0])) {
                     $sub_path = $paths[0];
                 }
             }
+            $request->set('blog_id', $blog_id);
 
             if (isset($blog_id) && $request->isArgs('xml')) { // `/?xml`
                 // http://example.jp/blogid/*?xml が対応
