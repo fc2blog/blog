@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -19,7 +20,7 @@ class BlogPluginsController extends AdminController
     public function index(Request $request): string
     {
         $blog_id = $this->getBlogIdFromSession();
-        $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+        $device_type = $request->get('device_type', (string)Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
         $this->set('device_type', $device_type);
         $this->set('devices', Config::get('DEVICE_NAME'));
 
@@ -76,7 +77,7 @@ class BlogPluginsController extends AdminController
         $plugins_model = new PluginsModel();
 
         // デバイスタイプの取得
-        $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+        $device_type = $request->get('device_type', (string)Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
         $request->set('device_type', $device_type);
 
         // 検索条件作成
@@ -176,7 +177,7 @@ class BlogPluginsController extends AdminController
         $this->set('blog_plugin_attribute_color', BlogPluginsModel::getAttributeColor());
         $this->set('device_key_list', Config::get('DEVICE_FC2_KEY'));
         $this->set('device_type', $request->get('blog_plugin.device_type'));
-        $this->set('device_type_sp', Config::get('DEVICE_SP'));
+        $this->set('device_type_sp', (string)Config::get('DEVICE_SP'));
 
         // 編集対象のデータ取得
         if (!$blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id)) {

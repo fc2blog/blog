@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -55,7 +56,7 @@ class CommonController extends AdminController
                 $device_type = Config::get('DEVICE_SP');
                 break;
             default:
-                Cookie::set($request, 'device', null);
+                Cookie::set($request, 'device', Config::get('DEVICE_PC'));
                 $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index'));
         }
 

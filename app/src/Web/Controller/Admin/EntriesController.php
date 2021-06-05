@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -144,7 +145,7 @@ class EntriesController extends AdminController
         $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
         $this->set('categories', $categories_model->getList($blog_id));
         // 以下はSPテンプレ用で追加
-        $now = strtotime($request->get('entry.posted_at'));
+        $now = strtotime($request->get('entry.posted_at', ""));
         $now = $now === false ? time() : $now;
         $date_list = explode('/', date('Y/m/d/H/i/s', $now));
         $this->set('entry_date_list', $date_list);

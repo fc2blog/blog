@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -55,7 +56,7 @@ class BlogTemplatesController extends AdminController
     public function fc2_index(Request $request): string
     {
         // デバイスタイプの設定
-        $device_type = $request->get('device_type', Config::get('DEVICE_PC'));
+        $device_type = $request->get('device_type', (string)Config::get('DEVICE_PC'));
         $request->set('device_type', $device_type);
 
         // 条件設定
@@ -91,7 +92,7 @@ class BlogTemplatesController extends AdminController
         }
 
         // デバイスタイプの設定
-        $device_type = $request->get('device_type', Config::get('DEVICE_PC'));
+        $device_type = $request->get('device_type', (string)Config::get('DEVICE_PC'));
         $request->set('device_type', $device_type);
 
         // テンプレート取得

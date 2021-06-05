@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\User;
 
@@ -208,7 +209,7 @@ class EntriesController extends UserController
         // 開始日付と終了日付の計算
         preg_match('/^([0-9]{4})([0-9]{2})?([0-9]{2})?$/', $request->get('date'), $matches);
         $dates = $matches + array('', date('Y'), 0, 0);
-        list($start, $end) = App::calcStartAndEndDate($dates[1], $dates[2], $dates[3]);
+        list($start, $end) = App::calcStartAndEndDate((int)$dates[1], (int)$dates[2], (int)$dates[3]);
 
         // 記事一覧データ設定
         $where = 'blog_id=? AND ?<=posted_at AND posted_at<=?';
@@ -509,7 +510,7 @@ class EntriesController extends UserController
     public function view(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
-        $entry_id = $request->get('id');
+        $entry_id = (int)$request->get('id');
 
         // 記事詳細取得
         $entries_model = new EntriesModel();
@@ -691,17 +692,19 @@ class EntriesController extends UserController
     public function blog_password(Request $request): string
     {
         $blog_id = $this->getBlogId($request);
-        $blog = BlogService::getById($blog_id);
+        if (is_null($blog = BlogService::getById($blog_id))) {
+            return $this->error404();
+        }
 
         // プライベートブログではない、あるいは認証済み、ログイン済みならリダイレクト
-        if ($blog['open_status'] != Config::get('BLOG.OPEN_STATUS.PRIVATE') || Session::get($this->getBlogPasswordKey($blog['id'])) || $this->isLoginBlog($request)) {
+        if ($blog['open_status'] != Config::get('BLOG.OPEN_STATUS.PRIVATE') || Session::get($this->getBlogPasswordKey($blog->id)) || $this->isLoginBlog($request)) {
             $this->redirect($request, ['action' => 'index', 'blog_id' => $blog_id]);
         }
 
         // 認証処理
         if ($request->get('blog')) {
-            if (password_verify($request->get('blog.password'), $blog['blog_password'])) {
-                Session::set($this->getBlogPasswordKey($blog['id']), true);
+            if (password_verify($request->get('blog.password'), $blog->blog_password)) {
+                Session::set($this->getBlogPasswordKey($blog->id), true);
                 $this->set('auth_success', true); // for testing.
                 $this->redirect($request, ['action' => 'index', 'blog_id' => $blog_id]);
             }
@@ -771,7 +774,7 @@ class EntriesController extends UserController
         if (empty($errors['comment']) && empty($errors['token'])) {
             $data['blog_id'] = $blog_id;  // ブログIDの設定
             // trip_hashの生成
-            if (isset($data['password']) && strlen($data['password'] > 0)) {
+            if (isset($data['password']) && strlen($data['password']) > 0) {
                 $stretch_num = strlen($data['password']) % 10 + 1;
                 $trip_salt = $blog['trip_salt'];
                 $trip_hash = $trip_salt . $data['password'];

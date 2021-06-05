@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\User;
 
@@ -38,7 +39,7 @@ class CommonController extends UserController
      */
     public function device_change(Request $request)
     {
-        // 言語の設定
+        // デバイスの設定
         $device_type = 0;
         $device = $request->get('device');
         switch ($device) {
@@ -49,7 +50,7 @@ class CommonController extends UserController
                 $device_type = Config::get('DEVICE_SP');
                 break;
             default:
-                Cookie::set($request, 'device', null);
+                Cookie::set($request, 'device', Config::get('DEVICE_PC'));
                 $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)));
         }
 
