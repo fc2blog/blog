@@ -4,11 +4,9 @@ namespace Fc2blog\Web\Router;
 
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\StringCaseConverter;
-use Fc2blog\Web\Controller\Admin\AdminController;
 use Fc2blog\Web\Controller\User\BlogsController;
 use Fc2blog\Web\Controller\User\CommonController;
 use Fc2blog\Web\Controller\User\EntriesController;
-use Fc2blog\Web\Controller\User\UserController;
 use Fc2blog\Web\Request;
 
 class Router
@@ -20,7 +18,6 @@ class Router
     public function __construct(Request $request)
     {
         $this->request = $request;
-        // TODO if文ベースのルーターから、なんらかのルーターに切り替えたい
 
         // favicon.ico アクセス時に404をレスポンスし、ブラウザにリトライさせない。
         // しない場合、404扱いからのブログページへリダイレクトが発生し、無駄な資源を消費する。
@@ -44,12 +41,14 @@ class Router
         $args_controller = "mode";
         $args_action = "process";
 
-        if (preg_match('!\A(/admin\z|/admin/)!u', $request->uri)) { // Admin routing
-            // http://example.jp/admin/* が対応
+        // ルーティング処理、classとmethodを決める
+        if (preg_match('!\A(/admin\z|/admin/)!u', $request->uri)) { // Admin 画面ルーティング http://example.jp/admin/* が対応
             $request->urlRewrite = true;
             $request->baseDirectory = '/admin/';
-            $this->className = \Fc2blog\Web\Controller\Admin\CommonController::class; // default controller.
-            $this->methodName = 'index'; // default method.
+
+            // default controller/method
+            $this->className = \Fc2blog\Web\Controller\Admin\CommonController::class;
+            $this->methodName = 'index';
 
             if ($request->isArgs($args_controller)) {
                 $this->className = "Fc2blog\\Web\\Controller\\Admin\\" . StringCaseConverter::pascalCase($request->get($args_controller)) . "Controller";
@@ -63,7 +62,7 @@ class Router
                 $this->methodName = $paths[2];
             }
 
-        } else { // User Routing
+        } else { // User 画面ルーティング
             $request->urlRewrite = false;
             $request->baseDirectory = '/';
 
@@ -218,29 +217,9 @@ class Router
             }
         }
 
-        // アクセス拒否パターン（親クラス直呼び出し）
-        // TODO パターンで表現されているが、Denyは構造で実現出来ているべきかと思われる
-        if (
-            (
-                $this->className === UserController::class ||
-                $this->className === AdminController::class
-            ) ||
-            (
-                $this->methodName === 'process' ||
-                $this->methodName === 'display' ||
-                $this->methodName === 'fetch' ||
-                $this->methodName === 'set'
-            )
-        ) {
-            // 404に固定
-            $this->className = CommonController::class; // default controller.
-            $this->methodName = 'error404';
-        }
-
-        // 存在しないClassやMethodならFallbackさせる
+        // 存在しないClassやMethodなら404
         if (!class_exists($this->className) || !method_exists($this->className, $this->methodName)) {
-            // 404に固定
-            $this->className = CommonController::class; // default controller.
+            $this->className = CommonController::class;
             $this->methodName = 'error404';
         }
 
