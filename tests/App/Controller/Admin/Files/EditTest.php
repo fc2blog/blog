@@ -85,7 +85,7 @@ class EditTest extends TestCase
         ];
         $filename = "test" . microtime(true) . ".png";
         $request_data = [
-            'id' => $files[0]['id'],
+            'id' => (string)$files[0]['id'],
             'file' => [
                 "name" => $filename,
             ],
