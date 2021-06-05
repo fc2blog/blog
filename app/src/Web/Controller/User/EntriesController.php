@@ -34,7 +34,7 @@ class EntriesController extends UserController
         parent::beforeFilter($request);
 
         // ブログID指定があるかチェック
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         if (!$blog_id) {
             Log::notice("missing blog_id parameter. redirect to top.");
             $this->redirect($request, ['controller' => 'Blogs', 'action' => 'index']);
@@ -88,7 +88,7 @@ class EntriesController extends UserController
      */
     public function index(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         if (!$blog_id) {
             Log::notice("missing blog_id parameter. redirect to top. blog_id: {$blog_id}");
             $this->redirect($request, ['controller' => 'Blogs', 'action' => 'index']);
@@ -102,7 +102,7 @@ class EntriesController extends UserController
         $areas = $request->get('page') ? [] : ['index_area'];
         $this->setEntriesData($request, $options, $areas);
 
-        return $this->getFc2TemplatePath($this->getBlogId($request));
+        return $this->getFc2TemplatePath($request->getBlogId());
     }
 
     /**
@@ -113,7 +113,7 @@ class EntriesController extends UserController
     public function search(Request $request): string
     {
         $where = 'blog_id=?';
-        $params = array($this->getBlogId($request));
+        $params = array($request->getBlogId());
 
         // 検索ワード取得
         if ($keyword = $request->get('q')) {
@@ -129,7 +129,7 @@ class EntriesController extends UserController
             'params' => $params,
         );
         $this->setEntriesData($request, $options, array('search_area'));
-        return $this->getFc2TemplatePath($this->getBlogId($request));
+        return $this->getFc2TemplatePath($request->getBlogId());
     }
 
     /**
@@ -139,7 +139,7 @@ class EntriesController extends UserController
      */
     public function category(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         $category_id = $request->get('cat');
 
         // カテゴリー名取得
@@ -163,7 +163,7 @@ class EntriesController extends UserController
             'order' => 'entries.posted_at ' . $order . ', entries.id ' . $order,
         );
         $this->setEntriesData($request, $options, array('category_area'));
-        return $this->getFc2TemplatePath($this->getBlogId($request));
+        return $this->getFc2TemplatePath($request->getBlogId());
     }
 
     /**
@@ -174,7 +174,7 @@ class EntriesController extends UserController
     public function tag(Request $request): string
     {
         // タグ検索
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         $tag_name = $request->get('tag');
 
         $tag = Model::load('Tags')->findByNameAndBlogId($tag_name, $blog_id);
@@ -196,7 +196,7 @@ class EntriesController extends UserController
             'params' => $params,
         );
         $this->setEntriesData($request, $options, array('tag_area'));
-        return $this->getFc2TemplatePath($this->getBlogId($request));
+        return $this->getFc2TemplatePath($request->getBlogId());
     }
 
     /**
@@ -213,7 +213,7 @@ class EntriesController extends UserController
 
         // 記事一覧データ設定
         $where = 'blog_id=? AND ?<=posted_at AND posted_at<=?';
-        $params = array($this->getBlogId($request), $start, $end);
+        $params = array($request->getBlogId(), $start, $end);
 
         $options = array(
             'where' => $where,
@@ -221,7 +221,7 @@ class EntriesController extends UserController
         );
         $this->setEntriesData($request, $options, array('date_area'));
         $this->set('now_date', date('Y-m-d', strtotime($start)));
-        return $this->getFc2TemplatePath($this->getBlogId($request));
+        return $this->getFc2TemplatePath($request->getBlogId());
     }
 
     /**
@@ -239,11 +239,11 @@ class EntriesController extends UserController
                 'SUBSTRING(body, 1, 20) as body'
             ),
             'where' => 'blog_id=?',
-            'params' => array($this->getBlogId($request)),
+            'params' => array($request->getBlogId()),
         );
         $this->setEntriesData($request, $options, array('titlelist_area'));
         $this->set('sub_title', __("List of articles"));
-        return $this->getFc2TemplatePath($this->getBlogId($request));
+        return $this->getFc2TemplatePath($request->getBlogId());
     }
 
     /**
@@ -259,7 +259,7 @@ class EntriesController extends UserController
         }
 
         // preview処理用
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
 
         // 投稿者のブログIDチェック
         if ($blog_id != $this->getAdminBlogId() && !Model::load('Blogs')->isUserHaveBlogId($this->getAdminUserId(), $blog_id)) {
@@ -297,12 +297,12 @@ class EntriesController extends UserController
      */
     private function preview_fc2_template(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
 
         // 記事一覧データ設定
         $options = array(
             'where' => 'blog_id=?',
-            'params' => array($this->getBlogId($request)),
+            'params' => array($request->getBlogId()),
         );
         $pages = $request->get('page') ? array() : array('index_area');
         $this->setEntriesData($request, $options, $pages);
@@ -334,12 +334,12 @@ class EntriesController extends UserController
      */
     private function preview_template(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
 
         // 記事一覧データ設定
         $options = array(
             'where' => 'blog_id=?',
-            'params' => array($this->getBlogId($request)),
+            'params' => array($request->getBlogId()),
         );
         $pages = $request->get('page') ? array() : array('index_area');
         $this->setEntriesData($request, $options, $pages);
@@ -371,7 +371,7 @@ class EntriesController extends UserController
      */
     private function preview_plugin(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
 
         // プラグインのプレビュー情報取得
         if ($request->get('plugin_id')) {
@@ -425,7 +425,7 @@ class EntriesController extends UserController
         // 記事一覧データ設定(スマフォ版以外のプレビュー表示)
         $options = array(
             'where' => 'blog_id=?',
-            'params' => array($this->getBlogId($request)),
+            'params' => array($request->getBlogId()),
         );
         $pages = $request->get('page') ? array() : array('index_area');
         $this->setEntriesData($request, $options, $pages);
@@ -457,7 +457,7 @@ class EntriesController extends UserController
      */
     private function preview_entry(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
 
         // DBの代わりにリクエストから取得
         $entry = array(
@@ -509,7 +509,7 @@ class EntriesController extends UserController
      */
     public function view(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         $entry_id = (int)$request->get('id');
 
         // 記事詳細取得
@@ -641,7 +641,7 @@ class EntriesController extends UserController
      */
     public function plugin(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         $id = $request->get('id');
 
         // プラグイン取得
@@ -660,7 +660,7 @@ class EntriesController extends UserController
      */
     public function password(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         $id = $request->get('id');
 
         // 記事詳細取得
@@ -691,7 +691,7 @@ class EntriesController extends UserController
      */
     public function blog_password(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         if (is_null($blog = BlogService::getById($blog_id))) {
             return $this->error404();
         }
@@ -723,7 +723,7 @@ class EntriesController extends UserController
      */
     public function comment_regist(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
 
         // ブログの設定情報取得(captchaの使用可否で画面切り替え)
         $blog_setting = (new BlogSettingsModel())->findByBlogId($blog_id);
@@ -812,7 +812,7 @@ class EntriesController extends UserController
      */
     public function comment_edit(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
 
         // ブログの設定情報を取得
         $blog_setting = (new BlogSettingsModel())->findByBlogId($blog_id);
@@ -915,7 +915,7 @@ class EntriesController extends UserController
     {
         $comments_model = new CommentsModel();
 
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         $comment_id = $request->get('comment.id');
         $comment = "";
         if (!$comment_id || !($comment = $comments_model->findByIdAndBlogId($comment_id, $blog_id)) || empty($comment['password'])) {
@@ -948,7 +948,7 @@ class EntriesController extends UserController
      */
     private function setEntriesData(Request $request, array $options = [], array $areas = []): void
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         $page_num = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
 
         // 検索条件生成

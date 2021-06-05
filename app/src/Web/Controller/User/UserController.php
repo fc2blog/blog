@@ -13,16 +13,6 @@ use InvalidArgumentException;
 abstract class UserController extends Controller
 {
     /**
-     * ブログID取得
-     * @param Request $request
-     * @return string|null
-     */
-    public static function getBlogId(Request $request): ?string
-    {
-        return $request->getBlogId();
-    }
-
-    /**
      * 管理画面ログイン中のブログIDを取得する
      */
     protected static function getAdminBlogId(): ?string
@@ -51,7 +41,7 @@ abstract class UserController extends Controller
             return false;
         }
         // セッションに持っているログイン中のブログIDを取得
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $request->getBlogId();
         if ($admin_blog_id == $blog_id) {
             return true;
         }

@@ -6,7 +6,6 @@ namespace Fc2blog\Web;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Util\PhpCodeLinter;
-use Fc2blog\Web\Controller\User\UserController;
 
 class Fc2BlogTemplate
 {
@@ -90,7 +89,7 @@ class Fc2BlogTemplate
         }
 
         // FC2用のどこでも有効な単変数
-        $data['blog_id'] = UserController::getBlogId($request); // TODO User系でしかこのメソッドは呼ばれないはずなので
+        $data['blog_id'] = $request->getBlogId(); // TODO User系でしかこのメソッドは呼ばれないはずなので
         if ($data['blog_id'] !== Config::get('DEFAULT_BLOG_ID')) {
             $data['url'] = '/' . $data['blog']['id'] . '/';
         } else {

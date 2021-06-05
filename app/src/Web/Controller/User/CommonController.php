@@ -51,11 +51,11 @@ class CommonController extends UserController
                 break;
             default:
                 Cookie::set($request, 'device', Config::get('DEVICE_PC'));
-                $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)));
+                $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $request->getBlogId()));
         }
 
         Cookie::set($request, 'device', $device_type);
-        $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)));
+        $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $request->getBlogId()));
     }
 
     const CAPTCHA_TOKEN_KEY_NAME = 'token';
