@@ -99,6 +99,13 @@ abstract class Controller
             }
         }
 
+        if ( # show DEBUG MODE warnings.
+            strpos("text/html", $this->getContentType()) > 0 &&
+            defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY === "1"
+        ) {
+            echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><hr>";
+        }
+
         echo $this->output;
     }
 
@@ -154,6 +161,11 @@ abstract class Controller
     public function setContentType(string $mime_type = 'text/html; charset=UTF-8'): void
     {
         $this->responseHeaders['Content-Type'] = $mime_type;
+    }
+
+    public function getContentType(): string
+    {
+        return $this->responseHeaders['Content-Type'];
     }
 
     /**
