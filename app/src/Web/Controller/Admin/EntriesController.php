@@ -12,7 +12,6 @@ use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\TagsModel;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Session;
 
 class EntriesController extends AdminController
 {
@@ -291,7 +290,7 @@ class EntriesController extends AdminController
      */
     public function delete(Request $request)
     {
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // 削除処理
             if (Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession()))
                 $this->setInfoMessage(__('I removed the entry'));

@@ -6,7 +6,6 @@ use Fc2blog\Config;
 use Fc2blog\Model\CategoriesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Session;
 
 class CategoriesController extends AdminController
 {
@@ -82,7 +81,7 @@ class CategoriesController extends AdminController
         $this->set('categories_model_order_list', $categories_model::getOrderList());
 
         // 初期表示時に編集データの取得&設定
-        if (!$request->get('category') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+        if (!$request->get('category') || !$request->isValidSig()) {
             if (!$category = $categories_model->findByIdAndBlogId($id, $blog_id)) {
                 $this->redirect($request, ['action' => 'create']);
             }
@@ -119,7 +118,7 @@ class CategoriesController extends AdminController
         $id = $request->get('id');
         $blog_id = $this->getBlogIdFromSession();
 
-        if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+        if (!$request->isValidSig()) {
             $request = new Request();
             $this->redirect($request, array('action' => 'create'));
             return;

@@ -7,7 +7,6 @@ use Fc2blog\Config;
 use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Session;
 
 class FilesController extends AdminController
 {
@@ -269,7 +268,7 @@ class FilesController extends AdminController
      */
     public function delete(Request $request)
     {
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // 削除処理
             if (Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
                 $this->setInfoMessage(__('I removed the file'));

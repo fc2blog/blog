@@ -10,7 +10,6 @@ use Fc2blog\Model\Fc2TemplatesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Service\BlogService;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Session;
 
 class BlogTemplatesController extends AdminController
 {
@@ -214,7 +213,7 @@ class BlogTemplatesController extends AdminController
             $this->redirectBack($request, array('action' => 'index'));
         }
 
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // テンプレートの切り替え作業
             Model::load('Blogs')->switchTemplate($blog_template, $blog_id);
             $this->setInfoMessage(__('I switch the template'));
@@ -295,7 +294,7 @@ class BlogTemplatesController extends AdminController
             $this->redirect($request, array('action' => 'index'));
         }
 
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // 削除処理
             $blog_templates_model->deleteByIdAndBlogId($id, $blog_id);
             $this->setInfoMessage(__('I removed the template'));

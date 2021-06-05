@@ -8,7 +8,6 @@ use Fc2blog\Model\BlogPluginsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\PluginsModel;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Session;
 
 class BlogPluginsController extends AdminController
 {
@@ -61,7 +60,7 @@ class BlogPluginsController extends AdminController
      * @param Request $request
      * @return string
      */
-    public function share_search(Request $request)
+    public function share_search(Request $request): string
     {
         return $this->plugin_search($request, false);
     }
@@ -72,7 +71,7 @@ class BlogPluginsController extends AdminController
      * @param bool $is_official
      * @return string
      */
-    private function plugin_search(Request $request, $is_official = true): string
+    private function plugin_search(Request $request, bool $is_official = true): string
     {
         $plugins_model = new PluginsModel();
 
@@ -134,8 +133,7 @@ class BlogPluginsController extends AdminController
         $this->set('template_syntaxes', $template_syntaxes);
 
         // 初期表示時
-        if (!$request->get('blog_plugin') || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
-            Session::set('sig', App::genRandomString());
+        if (!$request->get('blog_plugin') || !$request->isValidSig()) {
             $request->set('blog_plugin', array(
                 'device_type' => $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES')),
                 'category' => $request->get('category', 1),
@@ -226,7 +224,7 @@ class BlogPluginsController extends AdminController
             $this->redirect($request, array('action' => 'index'));
         }
 
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // 削除処理
             $blog_plugins_model->deleteByIdAndBlogId($id, $blog_id);
             $this->setInfoMessage(__('I removed the plugin'));
@@ -305,7 +303,7 @@ class BlogPluginsController extends AdminController
             $this->redirect($request, array('action' => 'search'));
         }
 
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // 削除処理
             $plugins_model->deleteByIdAndUserId($id, $user_id);
             $this->setInfoMessage(__('I removed the plugin'));
@@ -326,7 +324,7 @@ class BlogPluginsController extends AdminController
             $this->redirectBack($request, array('controller' => 'blog_plugins', 'action' => 'index'));
         }
 
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // 追加用のデータを取得データから作成
             $blog_plugin_data = array(
                 'title' => $plugin['title'],
@@ -379,7 +377,7 @@ class BlogPluginsController extends AdminController
         $blog_id = $this->getBlogIdFromSession();
         $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
 
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // プラグインの表示可否の一括変更
             $blog_plugins_model->updateDisplay($request->get('blog_plugins'), $blog_id);
             $this->setInfoMessage(__('I changed the display settings'));
@@ -404,7 +402,7 @@ class BlogPluginsController extends AdminController
         $display = $request->get('display') ? Config::get('APP.DISPLAY.SHOW') : Config::get('APP.DISPLAY.HIDE');  // 表示可否
 
         // 編集対象のデータ取得
-        if (!$blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
+        if (!$blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !$request->isValidSig()) {
             $this->redirect($request, array('action' => 'index'));
         }
 
