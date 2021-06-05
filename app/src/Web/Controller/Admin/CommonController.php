@@ -70,7 +70,7 @@ class CommonController extends AdminController
     public function index(Request $request)
     {
         // 設定読み込みをしてリダイレクト
-        if (is_string($blog_id = $this->getBlogId($request))) {
+        if (is_string($blog_id = $this->getBlogIdFromSession())) {
             $blog_settings = new BlogSettingsModel();
             $setting = $blog_settings->findByBlogId($blog_id);
         } else {
@@ -99,7 +99,7 @@ class CommonController extends AdminController
      */
     public function notice(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $comments_model = new CommentsModel();
         $this->set('unread_count', $comments_model->getUnreadCount($blog_id));

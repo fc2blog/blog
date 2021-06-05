@@ -19,7 +19,7 @@ class BlogPluginsController extends AdminController
      */
     public function index(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
         $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
         $this->set('device_type', $device_type);
         $this->set('devices', Config::get('DEVICE_NAME'));
@@ -148,7 +148,7 @@ class BlogPluginsController extends AdminController
         $white_list = array('title', 'title_align', 'title_color', 'contents', 'contents_align', 'contents_color', 'device_type', 'category');
         $errors['blog_plugin'] = $blog_plugins_model->validate($request->get('blog_plugin'), $blog_plugin_data, $white_list);
         if (empty($errors['blog_plugin'])) {
-            $blog_plugin_data['blog_id'] = $this->getBlogId($request);
+            $blog_plugin_data['blog_id'] = $this->getBlogIdFromSession();
             if ($blog_plugins_model->insert($blog_plugin_data)) {
                 $this->setInfoMessage(__('I created a plugin'));
                 $this->redirect($request, array('action' => 'index', 'device_type' => $blog_plugin_data['device_type']));
@@ -172,7 +172,7 @@ class BlogPluginsController extends AdminController
         $blog_plugins_model = Model::load('BlogPlugins');
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $this->set('blog_plugin_attribute_align', BlogPluginsModel::getAttributeAlign());
         $this->set('blog_plugin_attribute_color', BlogPluginsModel::getAttributeColor());
@@ -218,7 +218,7 @@ class BlogPluginsController extends AdminController
         $blog_plugins_model = Model::load('BlogPlugins');
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 削除データの取得
         $blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id);
@@ -245,7 +245,7 @@ class BlogPluginsController extends AdminController
         $blog_plugins_model = new BlogPluginsModel();
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 登録データの取得
         $blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id);
@@ -336,7 +336,7 @@ class BlogPluginsController extends AdminController
             );
 
             // 新規登録処理
-            $blog_plugin_data['blog_id'] = $this->getBlogId($request);
+            $blog_plugin_data['blog_id'] = $this->getBlogIdFromSession();
             if (Model::load('BlogPlugins')->insert($blog_plugin_data)) {
                 $this->setInfoMessage(__('I created a plugin'));
                 $this->redirect($request, array('action' => 'index', 'device_type' => $plugin['device_type']));
@@ -355,7 +355,7 @@ class BlogPluginsController extends AdminController
     {
         $blog_plugins_model = Model::load('BlogPlugins');
 
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
         $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
 
         // 並べ替え処理
@@ -376,7 +376,7 @@ class BlogPluginsController extends AdminController
     {
         $blog_plugins_model = Model::load('BlogPlugins');
 
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
         $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
 
         if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
@@ -400,7 +400,7 @@ class BlogPluginsController extends AdminController
         $blog_plugins_model = Model::load('BlogPlugins');
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
         $display = $request->get('display') ? Config::get('APP.DISPLAY.SHOW') : Config::get('APP.DISPLAY.HIDE');  // 表示可否
 
         // 編集対象のデータ取得

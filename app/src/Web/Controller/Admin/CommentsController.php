@@ -20,7 +20,7 @@ class CommentsController extends AdminController
     public function index(Request $request): string
     {
         $comments_model = new CommentsModel();
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 検索条件
         $where = 'comments.blog_id=?';
@@ -137,7 +137,7 @@ class CommentsController extends AdminController
         $comments_model = Model::load('Comments');
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 承認データの取得
         if (!$comment = $comments_model->findByIdAndBlogId($id, $blog_id)) {
@@ -176,7 +176,7 @@ class CommentsController extends AdminController
         $comments_model = Model::load('Comments');
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 承認データの取得
         if (!$comment = $comments_model->findByIdAndBlogId($id, $blog_id)) {
@@ -211,7 +211,7 @@ class CommentsController extends AdminController
         $comments_model = new CommentsModel();
 
         $comment_id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
         $this->setStatusDataList();
 
         // 返信用のコメント取得
@@ -274,7 +274,7 @@ class CommentsController extends AdminController
         $comments_model = new CommentsModel();
 
         $comment_id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $this->setStatusDataList();
 
@@ -328,7 +328,7 @@ class CommentsController extends AdminController
         }
 
         // 削除処理
-        if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
+        if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
             $this->setInfoMessage(__('I removed the comment'));
         } else {
             $this->setErrorMessage(__('I failed to remove'));
@@ -359,7 +359,7 @@ class CommentsController extends AdminController
         $comments_model = new CommentsModel();
 
         // 既読処理
-        if ($comments_model->setReadByIdsAndBlogId($comment_id_list, $this->getBlogId($request))) {
+        if ($comments_model->setReadByIdsAndBlogId($comment_id_list, $this->getBlogIdFromSession())) {
             $this->setInfoMessage(__('I set already read the comment'));
         } else {
             $this->setErrorMessage(__('I failed to set read'));

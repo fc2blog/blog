@@ -22,7 +22,7 @@ class BlogTemplatesController extends AdminController
      */
     public function index(Request $request): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
         if (App::isPC($request)) {
             $device_type = $request->get('device_type', 0);
         } else {
@@ -146,7 +146,7 @@ class BlogTemplatesController extends AdminController
         $white_list = ['title', 'html', 'css', 'device_type'];
         $errors['blog_template'] = $blog_templates_model->validate($request->get('blog_template'), $blog_template_data, $white_list);
         if (empty($errors['blog_template'])) {
-            $blog_template_data['blog_id'] = $this->getBlogId($request);
+            $blog_template_data['blog_id'] = $this->getBlogIdFromSession();
             if ($blog_templates_model->insert($blog_template_data)) {
                 $this->setInfoMessage(__('I created a template'));
                 $this->redirect($request, ['action' => 'index']);
@@ -169,7 +169,7 @@ class BlogTemplatesController extends AdminController
         $blog_templates_model = new BlogTemplatesModel();
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 初期表示時に編集データの取得&設定
         if (!$request->get('blog_template') || !$request->isValidSig()) {
@@ -206,7 +206,7 @@ class BlogTemplatesController extends AdminController
         $blog_templates_model = Model::load('BlogTemplates');
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id);
         if (empty($blog_template)) {
@@ -258,7 +258,7 @@ class BlogTemplatesController extends AdminController
         $white_list = array('title', 'html', 'css', 'device_type');
         $errors['blog_template'] = $blog_templates_model->validate($blog_template, $blog_template_data, $white_list);
         if (empty($errors['blog_template'])) {
-            $blog_template_data['blog_id'] = $this->getBlogId($request);
+            $blog_template_data['blog_id'] = $this->getBlogIdFromSession();
             if ($blog_templates_model->insert($blog_template_data)) {
                 $this->setInfoMessage('「' . h($blog_template['title']) . '」' . __('I downloaded the template'));
                 $this->redirect($request, array('action' => 'index', 'device_type' => $device_type));
@@ -280,7 +280,7 @@ class BlogTemplatesController extends AdminController
         $blog_templates_model = Model::load('BlogTemplates');
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 使用中のテンプレート判定
         $blog = BlogService::getById($blog_id);

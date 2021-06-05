@@ -61,7 +61,7 @@ abstract class AdminController extends Controller
         }
 
         // ログイン中でかつブログ選択中の場合ブログ情報を取得し時間設定を行う
-        $blog = BlogService::getById($this->getBlogId($request));
+        $blog = BlogService::getById($this->getBlogIdFromSession());
         if (is_array($blog) && isset($blog['timezone'])) {
             date_default_timezone_set($blog['timezone']);
         }
@@ -144,13 +144,10 @@ abstract class AdminController extends Controller
     }
 
     /**
-     * ブログIDを取得する
-     * @param Request $request
-     * @return mixed|null
-     * // TODO 現在ではrequestが不要なので消し込み
-     * @noinspection PhpUnusedParameterInspection
+     * セッションに保持された現在のBlog IDを取得する、未設定の場合はNULL
+     * @return string|null
      */
-    protected function getBlogId(Request $request)
+    protected function getBlogIdFromSession(): ?string
     {
         return Session::get('blog_id');
     }

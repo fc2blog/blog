@@ -20,10 +20,10 @@ class CategoriesController extends AdminController
     {
         $categories_model = new CategoriesModel();
 
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $this->set('categories_model_order_list', $categories_model::getOrderList());
-        $this->set('categories', $categories_model->getList($this->getBlogId($request)));
+        $this->set('categories', $categories_model->getList($this->getBlogIdFromSession()));
 
         // 親カテゴリー一覧
         $options = $categories_model->getParentList($blog_id);
@@ -74,7 +74,7 @@ class CategoriesController extends AdminController
         $categories_model = new CategoriesModel();
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 親カテゴリー一覧
         $options = $categories_model->getParentList($blog_id, $id);
@@ -117,7 +117,7 @@ class CategoriesController extends AdminController
         $categories_model = Model::load('Categories');
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         if (!Session::get('sig') || Session::get('sig') !== $request->get('sig')) {
             $request = new Request();
@@ -151,7 +151,7 @@ class CategoriesController extends AdminController
         /** @var CategoriesModel $categories_model */
         $categories_model = Model::load('Categories');
 
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $json = array('status' => 0);
 
