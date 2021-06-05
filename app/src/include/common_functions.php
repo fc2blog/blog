@@ -73,11 +73,12 @@ function ue(?string $text): string
  * 日付のフォーマット変更
  * @param $date
  * @param string $format
- * @return false|string
+ * @return string
+ * TODO 使われていない？
  */
-function df($date, $format = 'Y/m/d H:i:s'): string
+function df($date, string $format = 'Y/m/d H:i:s'): string
 {
-    return date($format, strtotime($date));
+    return (string)date($format, strtotime($date));
 }
 
 /**

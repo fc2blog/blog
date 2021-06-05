@@ -716,7 +716,7 @@ class EntriesController extends UserController
      * コメント投稿
      * @param Request $request
      * @return string
-     * @noinspection SpellCheckingInspection regist -> registration しかし互換性が壊れる
+     * TODO regist -> registration しかし互換性が壊れる
      */
     public function comment_regist(Request $request): string
     {

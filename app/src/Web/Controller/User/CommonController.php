@@ -114,7 +114,7 @@ class CommonController extends UserController
      * @param Request $request
      * @return string
      */
-    public function thumbnail(Request $request)
+    public function thumbnail(Request $request): string
     {
         $blog_id = $request->get('blog_id');
         $id = $request->get('id');

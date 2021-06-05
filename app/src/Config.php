@@ -73,7 +73,7 @@ class Config
      * @param string $name
      * @param bool $force_reload UnitTest内などで再読み込みを強制したい場合に指定
      */
-    public static function read(string $name, $force_reload = false)
+    public static function read(string $name, bool $force_reload = false)
     {
         if (!$force_reload && !empty(self::$read_files[$name])) {
             // 既に読み込み済みのファイルは読み込まないが、強制的に再読み込みの指定があれば読み込みする。

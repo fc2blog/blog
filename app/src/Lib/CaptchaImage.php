@@ -20,7 +20,7 @@ class CaptchaImage
      * @param $src_img_size_y 1 以上が必要
      * @param bool $hirakana_mode
      */
-    public function __construct($src_img_size_x, $src_img_size_y, $hirakana_mode = true)
+    public function __construct($src_img_size_x, $src_img_size_y, bool $hirakana_mode = true)
     {
         $this->img_size_x = $src_img_size_x;
         $this->img_size_y = $src_img_size_y;
@@ -33,7 +33,7 @@ class CaptchaImage
      * @param bool $mini_mode
      * @throws Exception
      */
-    public function drawNumber($number, $mini_mode = false): void
+    public function drawNumber($number, bool $mini_mode = false): void
     {
         //memo. sjisの書体はサーバー環境によっては使えない
         $arr_fonts = array(
