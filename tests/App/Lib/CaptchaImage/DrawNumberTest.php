@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection GdImageはPHP>=8だが、このコードはテストコードなので */
+/** @noinspection PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 

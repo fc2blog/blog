@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -82,7 +83,7 @@ class BlogsController extends AdminController
     {
         $blogs_model = new BlogsModel();
 
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
         $this->set('open_status_list', BlogsModel::getOpenStatusList());
         $this->set('time_zone_list', BlogsModel::getTimezoneList());
         $this->set('ssl_enable_settings_list', BlogsModel::getSSLEnableSettingList());
@@ -156,7 +157,7 @@ class BlogsController extends AdminController
             return 'admin/blogs/delete.twig';
         }
 
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
         $user_id = $this->getUserId();
 
         // 削除するブログが存在するか？

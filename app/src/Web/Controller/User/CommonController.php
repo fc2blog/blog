@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\User;
 
@@ -10,6 +11,7 @@ use Fc2blog\Lib\ThumbnailImageMaker;
 use Fc2blog\Util\Log;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
+use Fc2blog\Web\Session;
 use RuntimeException;
 
 class CommonController extends UserController
@@ -37,7 +39,7 @@ class CommonController extends UserController
      */
     public function device_change(Request $request)
     {
-        // 言語の設定
+        // デバイスの設定
         $device_type = 0;
         $device = $request->get('device');
         switch ($device) {
@@ -48,14 +50,15 @@ class CommonController extends UserController
                 $device_type = Config::get('DEVICE_SP');
                 break;
             default:
-                Cookie::set($request, 'device', null);
-                $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)));
+                Cookie::set($request, 'device', Config::get('DEVICE_PC'));
+                $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $request->getBlogId()));
         }
 
         Cookie::set($request, 'device', $device_type);
-        $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)));
+        $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $request->getBlogId()));
     }
 
+    const CAPTCHA_TOKEN_KEY_NAME = 'token';
     /**
      * 画像認証
      * @param Request $request
@@ -74,7 +77,8 @@ class CommonController extends UserController
                 throw new RuntimeException("random_int thrown exception {$e->getMessage()}");
             }
         }
-        $this->setToken($key);    // トークン設定
+        Session::set(self::CAPTCHA_TOKEN_KEY_NAME, $key); // トークン設定
+
         // captchaの日本語モード判定
         // Cookieでlangがja以外は英語モード
         // Cookieに指定がなければ、Accept Languageヘッダーを参照し、一番がjaでなければ英語モード
@@ -95,11 +99,23 @@ class CommonController extends UserController
     }
 
     /**
+     * Captcha token有効性チェック
+     * @param Request $request
+     * @return bool
+     */
+    public static function isValidCaptcha(Request $request): bool
+    {
+        $value = $request->get(CommonController::CAPTCHA_TOKEN_KEY_NAME, '');
+        $value = mb_convert_kana($value, 'n');
+        return (string)Session::remove(CommonController::CAPTCHA_TOKEN_KEY_NAME) === $value;
+    }
+
+    /**
      * サムネイル処理
      * @param Request $request
      * @return string
      */
-    public function thumbnail(Request $request)
+    public function thumbnail(Request $request): string
     {
         $blog_id = $request->get('blog_id');
         $id = $request->get('id');

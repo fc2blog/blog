@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -6,7 +7,6 @@ use Fc2blog\Config;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\TagsModel;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Session;
 
 class TagsController extends AdminController
 {
@@ -19,7 +19,7 @@ class TagsController extends AdminController
     public function index(Request $request): string
     {
         $tags_model = new TagsModel();
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $this->set('tag_limit_list', Config::get('TAG.LIMIT_LIST'));
         $this->set('tag_default_limit', Config::get('TAG.DEFAULT_LIMIT'));
@@ -84,7 +84,7 @@ class TagsController extends AdminController
         $tags_model = new TagsModel();
 
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         if (!$tag = $tags_model->findByIdAndBlogId($id, $blog_id)) {
             $this->redirect($request, ['action' => 'index']);
@@ -132,9 +132,9 @@ class TagsController extends AdminController
      */
     public function delete(Request $request)
     {
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // 削除処理
-            if (Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
+            if (Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
                 $this->setInfoMessage(__('I removed the tag'));
             } else {
                 $this->setErrorMessage(__('I failed to remove'));

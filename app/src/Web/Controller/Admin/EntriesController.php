@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -12,7 +13,6 @@ use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\TagsModel;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Session;
 
 class EntriesController extends AdminController
 {
@@ -25,7 +25,7 @@ class EntriesController extends AdminController
     public function index(Request $request): string
     {
         $entries_model = new EntriesModel();
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 検索条件
         $where = 'entries.blog_id=?';
@@ -106,8 +106,8 @@ class EntriesController extends AdminController
         $categories_model = new CategoriesModel();
         $tags_model = new TagsModel();
         $entries_model = new EntriesModel();
-        $this->set('category_list_w', ['' => __('Category name')] + $categories_model->getSearchList($this->getBlogId($request)));
-        $this->set('tag_list_w', ['' => _('Tag name')] + $tags_model->getSearchList($this->getBlogId($request)));
+        $this->set('category_list_w', ['' => __('Category name')] + $categories_model->getSearchList($this->getBlogIdFromSession()));
+        $this->set('tag_list_w', ['' => _('Tag name')] + $tags_model->getSearchList($this->getBlogIdFromSession()));
         $this->set('open_status_list_w', ['' => __('Public state')] + $entries_model::getOpenStatusList());
         $this->set('open_status_list', $entries_model::getOpenStatusList());
         return "admin/entries/index.twig";
@@ -125,7 +125,7 @@ class EntriesController extends AdminController
         $entry_tags_model = new EntryTagsModel();
         $tags_model = new TagsModel();
         $categories_model = new CategoriesModel();
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // data load
         if (is_null($request->get('entry_tags'))) {
@@ -145,7 +145,7 @@ class EntriesController extends AdminController
         $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
         $this->set('categories', $categories_model->getList($blog_id));
         // 以下はSPテンプレ用で追加
-        $now = strtotime($request->get('entry.posted_at'));
+        $now = strtotime($request->get('entry.posted_at', ""));
         $now = $now === false ? time() : $now;
         $date_list = explode('/', date('Y/m/d/H/i/s', $now));
         $this->set('entry_date_list', $date_list);
@@ -153,7 +153,7 @@ class EntriesController extends AdminController
         $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
         $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
         $this->set('domain_user', Config::get('DOMAIN_USER'));
-        $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogId($request)], false, true));
+        $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogIdFromSession()], false, true));
 
         // 初期表示時
         if (!$request->get('entry') || !$request->isValidSig()) {
@@ -197,7 +197,7 @@ class EntriesController extends AdminController
         $tags_model = new TagsModel();
         $categories_model = new CategoriesModel();
 
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
         $id = $request->get('id');
 
         if (!$entry = $entries_model->findByIdAndBlogId($id, $blog_id)) {
@@ -233,7 +233,7 @@ class EntriesController extends AdminController
             $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
             $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
             $this->set('domain_user', Config::get('DOMAIN_USER'));
-            $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogId($request)], false, true));
+            $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogIdFromSession()], false, true));
 
             return "admin/entries/edit.twig";
         }
@@ -277,7 +277,7 @@ class EntriesController extends AdminController
         $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
         $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
         $this->set('domain_user', Config::get('DOMAIN_USER'));
-        $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogId($request)], false, true));
+        $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogIdFromSession()], false, true));
 
         // エラー情報の設定
         $this->setErrorMessage(__('Input error exists'));
@@ -291,9 +291,9 @@ class EntriesController extends AdminController
      */
     public function delete(Request $request)
     {
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // 削除処理
-            if (Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request)))
+            if (Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession()))
                 $this->setInfoMessage(__('I removed the entry'));
         }
         $this->redirect($request, array('action' => 'index'));
@@ -312,7 +312,7 @@ class EntriesController extends AdminController
         }
 
         $files_model = new FilesModel();
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 検索条件
         $where = 'blog_id=?';

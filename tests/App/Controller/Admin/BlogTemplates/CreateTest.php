@@ -28,7 +28,7 @@ class CreateTest extends TestCase
         $this->resetCookie();
         $this->mergeAdminSession();
 
-        $c = $this->reqGet("/admin/blog_templates/create", ['device_type' => 1]);
+        $c = $this->reqGet("/admin/blog_templates/create", ['device_type' => "1"]);
         $this->assertInstanceOf(BlogTemplatesController::class, $c);
         $this->assertEquals('create', $c->getResolvedMethod());
 

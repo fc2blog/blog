@@ -26,7 +26,6 @@ class SystemUpdateController extends AdminController
     {
         // TODO unit test
 
-        // check sig
         if (!$request->isValidSig()) {
             $this->setWarnMessage(__("Request failed: invalid sig, please retry."));
             $this->redirect($request, Html::url($request, ['controller' => 'system_update', 'action' => 'index']));

@@ -5,6 +5,7 @@ namespace Fc2blog\Model;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Util\PhpCodeLinter;
+use Fc2blog\Web\Fc2BlogTemplate;
 use Fc2blog\Web\Session;
 
 class BlogPluginsModel extends Model
@@ -161,7 +162,7 @@ class BlogPluginsModel extends Model
         }
 
         // HTMLをPHPテンプレートに変換してテンプレートファイルの作成
-        $html = BlogTemplatesModel::convertFC2Template($php_code);
+        $html = Fc2BlogTemplate::convertToPhp($php_code);
         file_put_contents($plugin_path, $html);
         chmod($plugin_path, 0777);
 
@@ -426,7 +427,7 @@ class BlogPluginsModel extends Model
         }
 
         // HTMLをPHPテンプレートに変換してテンプレートファイルの作成
-        $html = BlogTemplatesModel::convertFC2Template($html);
+        $html = Fc2BlogTemplate::convertToPhp($html);
         file_put_contents($plugin_path, $html);
         chmod($plugin_path, 0777);
     }

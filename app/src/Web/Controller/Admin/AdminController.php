@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -61,7 +62,7 @@ abstract class AdminController extends Controller
         }
 
         // ログイン中でかつブログ選択中の場合ブログ情報を取得し時間設定を行う
-        $blog = BlogService::getById($this->getBlogId($request));
+        $blog = BlogService::getById($this->getBlogIdFromSession());
         if (is_array($blog) && isset($blog['timezone'])) {
             date_default_timezone_set($blog['timezone']);
         }
@@ -144,13 +145,10 @@ abstract class AdminController extends Controller
     }
 
     /**
-     * ブログIDを取得する
-     * @param Request $request
-     * @return mixed|null
-     * // TODO 現在ではrequestが不要なので消し込み
-     * @noinspection PhpUnusedParameterInspection
+     * セッションに保持された現在のBlog IDを取得する、未設定の場合はNULL
+     * @return string|null
      */
-    protected function getBlogId(Request $request)
+    protected function getBlogIdFromSession(): ?string
     {
         return Session::get('blog_id');
     }
@@ -172,37 +170,37 @@ abstract class AdminController extends Controller
 
     /**
      * 情報用メッセージを設定する
-     * @param $message
+     * @param string $message
      */
-    protected function setInfoMessage($message): void
+    protected function setInfoMessage(string $message): void
     {
         $this->setMessage($message, 'flash-message-info');
     }
 
     /**
      * 警告用メッセージを設定する
-     * @param $message
+     * @param string $message
      */
-    protected function setWarnMessage($message): void
+    protected function setWarnMessage(string $message): void
     {
         $this->setMessage($message, 'flash-message-warn');
     }
 
     /**
      * エラー用メッセージを設定する
-     * @param $message
+     * @param string $message
      */
-    protected function setErrorMessage($message): void
+    protected function setErrorMessage(string $message): void
     {
         $this->setMessage($message, 'flash-message-error');
     }
 
     /**
      * メッセージを設定する
-     * @param $message
-     * @param $type
+     * @param string $message
+     * @param string $type
      */
-    protected function setMessage($message, $type): void
+    protected function setMessage(string $message, string $type): void
     {
         $messages = Session::get($type, array());
         $messages[] = $message;
@@ -211,6 +209,7 @@ abstract class AdminController extends Controller
 
     /**
      * メッセージ情報を削除し取得する
+     * @return array<string, string>
      */
     protected function removeMessage(): array
     {
@@ -221,14 +220,8 @@ abstract class AdminController extends Controller
         return $messages;
     }
 
-    // 存在しないアクションは404へ
-    public function __call($name, $arguments): string
-    {
-        return $this->error404();
-    }
-
     // 404 NotFound Action
-    public function error404(): string
+    protected function error404(): string
     {
         $this->setStatusCode(404);
         return 'admin/common/error404.twig';

@@ -7,6 +7,7 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Service\BlogService;
 use Fc2blog\Service\TwigService;
 use Fc2blog\Util\Log;
 use Fc2blog\Web\Controller\Admin\AdminController;
@@ -78,7 +79,7 @@ abstract class Controller
         // テンプレートファイル拡張子で、PHPテンプレートとTwigテンプレートを切り分ける
         if (preg_match("/\.twig\z/u", $template_path)) {
             $this->output = $this->renderByTwig($this->request, $template_path);
-        } elseif ($this->layout === 'fc2_template.php') {
+        } elseif ($this->layout === 'fc2_template.php' && $this instanceof UserController) {
             $this->output = $this->renderByFc2Template($this->request, $template_path);
         }
         // $this->layout === '' の場合は、空ボディか、$this->outputにすでになにか入れられているという想定
@@ -98,6 +99,13 @@ abstract class Controller
             }
         }
 
+        if ( # show DEBUG MODE warnings.
+            strpos("text/html", $this->getContentType()) > 0 &&
+            defined("ERROR_ON_DISPLAY") && ERROR_ON_DISPLAY === "1"
+        ) {
+            echo "<hr><span style='color:red'>THE BLOG CONFIGURATION IS DANGER. PLEASE REMOVE `ERROR_ON_DISPLAY` in production.</span><hr>";
+        }
+
         echo $this->output;
     }
 
@@ -114,7 +122,7 @@ abstract class Controller
         # ORIGINを検証
         if (
             isset($request->server['HTTP_ORIGIN']) &&
-            $request->server['HTTP_ORIGIN'] !== Controller::getHostUrl()
+            $request->server['HTTP_ORIGIN'] !== $request->getHostUrl()
         ) {
             return true;
         }
@@ -129,6 +137,35 @@ abstract class Controller
     public function set(string $key, $value)
     {
         $this->data[$key] = $value;
+    }
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    public function get(string $key)
+    {
+        return $this->data[$key];
+    }
+
+    public function getStatusCode(): int
+    {
+        return (int)$this->data['http_status_code'];
+    }
+
+    public function setStatusCode(int $code = 200): void
+    {
+        $this->data['http_status_code'] = $code;
+    }
+
+    public function setContentType(string $mime_type = 'text/html; charset=UTF-8'): void
+    {
+        $this->responseHeaders['Content-Type'] = $mime_type;
+    }
+
+    public function getContentType(): string
+    {
+        return $this->responseHeaders['Content-Type'];
     }
 
     /**
@@ -229,7 +266,7 @@ abstract class Controller
                 'sig' => Session::get('sig'),
                 'lang' => $request->lang,
                 'debug' => Config::get('APP_DEBUG') != 0,
-                'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)]), // 代用できそう
+                'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogIdFromSession()]), // 代用できそう
                 'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
                 'active_menu' => App::getActiveMenu($request),
                 'isLogin' => $this->isLogin(),
@@ -249,9 +286,9 @@ abstract class Controller
                 ]
             ];
             // リクエストからログインblogを特定し、保存
-            if ($this->getBlog($this->getBlogId($request)) !== false && is_string($this->getBlogId($request))) {
-                $data['blog'] = $this->getBlog($this->getBlogId($request));
-                $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) . "/" . $this->getBlogId($request) . "/";
+            if (BlogService::getById($this->getBlogIdFromSession()) !== false && is_string($this->getBlogIdFromSession())) {
+                $data['blog'] = BlogService::getById($this->getBlogIdFromSession());
+                $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogIdFromSession(), Config::get('DOMAIN_USER')) . "/" . $this->getBlogIdFromSession() . "/";
             }
         } else {
             // User系画面のデータ生成
@@ -270,167 +307,25 @@ abstract class Controller
         }
     }
 
-    /**
-     * fc2blog形式のPHP Viewテンプレート内で利用する各種データを生成・変換
-     * @param Request $request
-     * @param array $data
-     * @return array
-     * TODO アクションではないので、なんらか別クラスへ切り出すべき
-     */
-    static public function preprocessingDataForFc2Template(Request $request, array $data): array
-    {
-        $data['request'] = $request;
-
-        // FC2のテンプレート用にデータを置き換える
-        if (!empty($data['entry'])) {
-            $data['entries'] = [$data['entry']];
-        }
-        if (!empty($data['entries'])) {
-            foreach ($data['entries'] as $key => $value) {
-                // topentry系変数のデータ設定
-                $data['entries'][$key]['title_w_img'] = $value['title'];
-                $data['entries'][$key]['title'] = strip_tags($value['title']);
-                $data['entries'][$key]['link'] = App::userURL($request, ['controller' => 'Entries', 'action' => 'view', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
-
-                [
-                    $data['entries'][$key]['year'],
-                    $data['entries'][$key]['month'],
-                    $data['entries'][$key]['day'],
-                    $data['entries'][$key]['hour'],
-                    $data['entries'][$key]['minute'],
-                    $data['entries'][$key]['second'],
-                    $data['entries'][$key]['youbi'],
-                    $data['entries'][$key]['month_short']
-                ] = explode('/', date('Y/m/d/H/i/s/D/M', strtotime($value['posted_at'])));
-                $data['entries'][$key]['wayoubi'] = __($data['entries'][$key]['youbi']);
-
-                // 自動改行処理
-                if ($value['auto_linefeed'] == Config::get('ENTRY.AUTO_LINEFEED.USE')) {
-                    $data['entries'][$key]['body'] = nl2br($value['body']);
-                    $data['entries'][$key]['extend'] = nl2br($value['extend']);
-                }
-
-                // topentry_enc_* 系タグの生成
-                $data['entries'][$key]['enc_title'] = urlencode($data['entries'][$key]['title']);
-                $data['entries'][$key]['enc_utftitle'] = urlencode($data['entries'][$key]['title']);
-                $data['entries'][$key]['enc_link'] = urlencode($data['entries'][$key]['link']);
-            }
-        }
-
-        // コメント一覧の情報
-        if (!empty($data['comments'])) {
-            foreach ($data['comments'] as $key => $value) {
-                $data['comments'][$key]['edit_link'] = Html::url($request, ['controller' => 'Entries', 'action' => 'comment_edit', 'blog_id' => $value['blog_id'], 'id' => $value['id']]);
-
-                [
-                    $data['comments'][$key]['year'],
-                    $data['comments'][$key]['month'],
-                    $data['comments'][$key]['day'],
-                    $data['comments'][$key]['hour'],
-                    $data['comments'][$key]['minute'],
-                    $data['comments'][$key]['second'],
-                    $data['comments'][$key]['youbi']
-                ] = explode('/', date('Y/m/d/H/i/s/D', strtotime($value['updated_at'])));
-                $data['comments'][$key]['wayoubi'] = __($data['comments'][$key]['youbi']);
-                $data['comments'][$key]['body'] = $value['body']; // TODO nl2brされていないのは正しいのか？
-
-                $value['reply_updated_at'] = $value['reply_updated_at'] ?? ""; // reply_updated_at is nullable
-                $reply_updated_at = strtotime($value['reply_updated_at']) ?: 0;
-                [
-                    $data['comments'][$key]['reply_year'],
-                    $data['comments'][$key]['reply_month'],
-                    $data['comments'][$key]['reply_day'],
-                    $data['comments'][$key]['reply_hour'],
-                    $data['comments'][$key]['reply_minute'],
-                    $data['comments'][$key]['reply_second'],
-                    $data['comments'][$key]['reply_youbi']
-                ] = explode('/', date('Y/m/d/H/i/s/D', $reply_updated_at));
-                $data['comments'][$key]['reply_wayoubi'] = __($data['comments'][$key]['reply_youbi']);
-                $data['comments'][$key]['reply_body'] = nl2br((string)$value['reply_body']);
-            }
-        }
-
-        // FC2用のどこでも有効な単変数
-        $data['blog_id'] = UserController::getBlogId($request); // TODO User系でしかこのメソッドは呼ばれないはずなので
-        if ($data['blog_id'] !== Config::get('DEFAULT_BLOG_ID')) {
-            $data['url'] = '/' . $data['blog']['id'] . '/';
-        } else {
-            // シングルテナントモード、DEFAULT_BLOG_IDとBlogIdが一致するなら、Pathを省略する
-            $data['url'] = '/';
-        }
-
-        // 年月日系
-        $data['now_date'] = (isset($data['date_area']) && $data['date_area']) ? $data['now_date'] : date('Y-m-d');
-        $data['now_month_date'] = date('Y-m-1', strtotime($data['now_date']));
-        $data['prev_month_date'] = date('Y-m-1', strtotime($data['now_month_date'] . ' -1 month'));
-        $data['next_month_date'] = date('Y-m-1', strtotime($data['now_month_date'] . ' +1 month'));
-
-        return $data;
-    }
-
-    /**
-     * FC2タグを用いたユーザーテンプレート（PHP）でHTMLをレンダリング
-     * @param Request $request
-     * @param string $template_file_path
-     * @return string
-     * TODO User系のみで用いられるので、後日UserControllerへ移動
-     */
-    private function renderByFc2Template(Request $request, string $template_file_path): string
-    {
-        if (is_null($template_file_path)) {
-            throw new InvalidArgumentException("undefined template");
-        }
-        if (!is_file($template_file_path)) {
-            throw new InvalidArgumentException("missing template");
-        }
-
-        $this->data = static::preprocessingDataForFc2Template($request, $this->data);
-
-        // 設定されているdataを展開
-        extract($this->data);
-
-        // テンプレートをレンダリングして返す
-        ob_start();
-        /** @noinspection PhpIncludeInspection */
-        include($template_file_path);
-        return ob_get_clean();
-    }
-
-    // 存在しないアクションはエラーとして404へ
-    // TODO 「アクションではない」メソッドがたたけないようにする。アクション以外を追い出すかシグネチャを見るか。
-    public function __call($name, $arguments): string
-    {
-        return $this->error404();
-    }
-
     // 404 NotFound Action
-    public function error404(): string
+    protected function error404(): string
     {
         $this->setStatusCode(404);
         return 'user/common/error404.twig';
     }
 
     // 403 Forbidden
-    public function error403(): string
+    protected function error403(): string
     {
         $this->setStatusCode(403);
         return 'user/common/error403.twig';
     }
 
     // 400 BadRequest
-    public function error400(): string
+    protected function error400(): string
     {
         $this->setStatusCode(400);
         return 'user/common/error400.twig';
-    }
-
-    /**
-     * @param string $key
-     * @return mixed
-     */
-    public function get(string $key)
-    {
-        return $this->data[$key];
     }
 
     public function getOutput(): string
@@ -439,21 +334,6 @@ abstract class Controller
             throw new LogicException("the method is only for testing.");
         }
         return $this->output;
-    }
-
-    public function getStatusCode(): int
-    {
-        return (int)$this->data['http_status_code'];
-    }
-
-    public function setStatusCode(int $code = 200): void
-    {
-        $this->data['http_status_code'] = $code;
-    }
-
-    public function setContentType(string $mime_type = 'text/html; charset=UTF-8'): void
-    {
-        $this->responseHeaders['Content-Type'] = $mime_type;
     }
 
     public function getResolvedMethod(): string
@@ -478,67 +358,5 @@ abstract class Controller
             throw new LogicException("the method is only for testing.");
         }
         return $this->data;
-    }
-
-    /**
-     * blog_idからブログ情報を取得
-     * @param $blog_id
-     * @return array|false
-     * @deprecated TODO Modelに移動するべき
-     */
-    public function getBlog($blog_id)
-    {
-        return (new BlogsModel())->findById($blog_id);
-    }
-
-    /**
-     * デバイスタイプを取得する
-     * @return int
-     * @deprecated TODO requestに置換できる
-     */
-    protected function getDeviceType(): int
-    {
-        return $this->request->deviceType;
-    }
-
-    /**
-     * token発行
-     * @param null $key
-     * @param string $name
-     * TODO captchaでしかつかっていないので、名前をかえるべき
-     */
-    protected function setToken($key = null, string $name = 'token'): void
-    {
-        if ($key === null) {
-            // 適当な値をトークンに設定
-            $key = App::genRandomStringAlphaNum();
-        }
-        Session::set($name, $key);
-    }
-
-    /**
-     * tokenチェック
-     * @param Request $request
-     * @param string $name
-     * @return string|null
-     * TODO captchaでしかつかっていないので、名前をかえるべき
-     */
-    protected function tokenValidate(Request $request, string $name = 'token'): ?string
-    {
-        $value = $request->get($name, '');
-        $value = mb_convert_kana($value, 'n');
-        return Session::remove($name) == $value ? null : __('Token authentication is invalid');
-    }
-
-    /**
-     * ブログの`http(s)://FQDN(:port)`を生成する
-     * @return string
-     */
-    static public function getHostUrl(): string
-    {
-        $schema = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") ? 'https:' : 'http:';
-        $domain = Config::get("DOMAIN");
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
-        return $schema . "//" . $domain . $port;
     }
 }

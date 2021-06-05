@@ -14,7 +14,7 @@ class PhpCodeLinter
      * @param $string
      * @return bool
      */
-    public static function isParsablePhpCode($string)
+    public static function isParsablePhpCode($string): bool
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         try {

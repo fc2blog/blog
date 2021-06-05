@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -74,7 +75,7 @@ class BlogSettingsController extends AdminController
     private function settingEdit(Request $request, $white_list, $action): string
     {
         $blog_settings_model = new BlogSettingsModel();
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // 初期表示時に編集データの取得&設定
         if (!$request->get('blog_setting') || !$request->isValidSig()) {

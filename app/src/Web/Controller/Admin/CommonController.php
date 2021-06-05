@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -55,7 +56,7 @@ class CommonController extends AdminController
                 $device_type = Config::get('DEVICE_SP');
                 break;
             default:
-                Cookie::set($request, 'device', null);
+                Cookie::set($request, 'device', Config::get('DEVICE_PC'));
                 $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index'));
         }
 
@@ -70,7 +71,7 @@ class CommonController extends AdminController
     public function index(Request $request)
     {
         // 設定読み込みをしてリダイレクト
-        if (is_string($blog_id = $this->getBlogId($request))) {
+        if (is_string($blog_id = $this->getBlogIdFromSession())) {
             $blog_settings = new BlogSettingsModel();
             $setting = $blog_settings->findByBlogId($blog_id);
         } else {
@@ -94,12 +95,11 @@ class CommonController extends AdminController
 
     /**
      * お知らせ一覧画面
-     * @param Request $request
      * @return string
      */
-    public function notice(Request $request): string
+    public function notice(/*Request $request*/): string
     {
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $comments_model = new CommentsModel();
         $this->set('unread_count', $comments_model->getUnreadCount($blog_id));
@@ -130,7 +130,7 @@ class CommonController extends AdminController
                 $this->set('temp_dir', Config::get('TEMP_DIR'));
                 $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
                 $this->set('is_db_connect_lib', defined('DB_CONNECT_LIB'));
-            /** @noinspection PhpRedundantOptionalArgumentInspection */
+                /** @noinspection PhpRedundantOptionalArgumentInspection */
                 $this->set('random_string', App::genRandomStringAlphaNum(32));
 
                 $this->set('DB_HOST', DB_HOST);

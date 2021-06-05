@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
@@ -7,7 +8,6 @@ use Fc2blog\Config;
 use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
-use Fc2blog\Web\Session;
 
 class FilesController extends AdminController
 {
@@ -26,7 +26,7 @@ class FilesController extends AdminController
 
         $files_model = new FilesModel();
 
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $this->set('file_default_limit', Config::get('FILE.DEFAULT_LIMIT'));
         $this->set('page_list_file', App::getPageList($request, 'FILE'));
@@ -88,7 +88,7 @@ class FilesController extends AdminController
     public function upload(Request $request): string
     {
         $files_model = new FilesModel();
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $this->set('file_max_size', Config::get('FILE.MAX_SIZE'));
         $this->set('page_limit_file', App::getPageLimit($request, 'FILE'));
@@ -192,7 +192,7 @@ class FilesController extends AdminController
     {
         $files_model = new FilesModel();
         $id = $request->get('id');
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         $this->set('file_max_size', Config::get('FILE.MAX_SIZE'));
 
@@ -269,9 +269,9 @@ class FilesController extends AdminController
      */
     public function delete(Request $request)
     {
-        if (Session::get('sig') && Session::get('sig') === $request->get('sig')) {
+        if ($request->isValidSig()) {
             // 削除処理
-            if (Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
+            if (Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
                 $this->setInfoMessage(__('I removed the file'));
             } else {
                 $this->setErrorMessage(__('I failed to remove'));
@@ -300,7 +300,7 @@ class FilesController extends AdminController
 
         // 削除処理
         $json = array('status' => 0);
-        if (!Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogId($request))) {
+        if (!Model::load('Files')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
             $json = array('status' => 1);
         }
 
@@ -322,7 +322,7 @@ class FilesController extends AdminController
         }
 
         $files_model = new FilesModel();
-        $blog_id = $this->getBlogId($request);
+        $blog_id = $this->getBlogIdFromSession();
 
         // アップロード時処理
         if ($request->file('file')) {
