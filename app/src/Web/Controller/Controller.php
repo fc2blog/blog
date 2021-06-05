@@ -308,21 +308,21 @@ abstract class Controller
     }
 
     // 404 NotFound Action
-    public function error404(): string
+    protected function error404(): string
     {
         $this->setStatusCode(404);
         return 'user/common/error404.twig';
     }
 
     // 403 Forbidden
-    public function error403(): string
+    protected function error403(): string
     {
         $this->setStatusCode(403);
         return 'user/common/error403.twig';
     }
 
     // 400 BadRequest
-    public function error400(): string
+    protected function error400(): string
     {
         $this->setStatusCode(400);
         return 'user/common/error400.twig';
