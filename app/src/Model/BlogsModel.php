@@ -310,10 +310,10 @@ class BlogsModel extends Model
 
     /**
      * ユーザーIDをキーにブログのリストを取得
-     * @param string $user_id
+     * @param int $user_id
      * @return mixed
      */
-    public function getListByUserId(string $user_id)
+    public function getListByUserId(int $user_id)
     {
         return $this->find('list', array(
             'fields' => array('id', 'name'),
