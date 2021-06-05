@@ -716,6 +716,7 @@ class EntriesController extends UserController
      * コメント投稿
      * @param Request $request
      * @return string
+     * @noinspection SpellCheckingInspection regist -> registration しかし互換性が壊れる
      */
     public function comment_regist(Request $request): string
     {
@@ -1137,7 +1138,7 @@ class EntriesController extends UserController
               return ;
             }
             if (target.type==='checkbox') {
-              if (value===$open_status_private) {
+              if (value==={$open_status_private}) {
                 target.checked = 'checked';
               }
             } else {
