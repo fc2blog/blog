@@ -254,7 +254,7 @@ abstract class Controller
                 'sig' => Session::get('sig'),
                 'lang' => $request->lang,
                 'debug' => Config::get('APP_DEBUG') != 0,
-                'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogId($request)]), // 代用できそう
+                'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogIdFromSession()]), // 代用できそう
                 'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
                 'active_menu' => App::getActiveMenu($request),
                 'isLogin' => $this->isLogin(),
@@ -274,9 +274,9 @@ abstract class Controller
                 ]
             ];
             // リクエストからログインblogを特定し、保存
-            if (BlogService::getById($this->getBlogId($request)) !== false && is_string($this->getBlogId($request))) {
-                $data['blog'] = BlogService::getById($this->getBlogId($request));
-                $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogId($request), Config::get('DOMAIN_USER')) . "/" . $this->getBlogId($request) . "/";
+            if (BlogService::getById($this->getBlogIdFromSession()) !== false && is_string($this->getBlogIdFromSession())) {
+                $data['blog'] = BlogService::getById($this->getBlogIdFromSession());
+                $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogIdFromSession(), Config::get('DOMAIN_USER')) . "/" . $this->getBlogIdFromSession() . "/";
             }
         } else {
             // User系画面のデータ生成
