@@ -70,6 +70,7 @@
         var blog_plugins = {{ blog_plugin_json|json_encode()|raw }};
         $(function () {
             // 表示切り替え
+            {# TODO POST methodに変更 #}
             $('input[type=checkbox][name="blog_plugin[display]"]').on('click', function () {
                 $.ajax({
                     url: common.fwURL('blog_plugins', 'display_change', {
