@@ -63,7 +63,7 @@
                         <p>{{ release.body|nl2br }}</p>
                     </td>
                     <td class="op_col">
-                        <form action="{{ url(request, "SystemUpdate", "update", {sig:sig}) }}"
+                        <form action="{{ url(request, "SystemUpdate", "update", {sig:sig}) }}" method="post"
                               onsubmit="return confirm('{{ _('CAUTION: System will be update. Did you make backup?') }}')">
                             <input type="hidden" name="version" value="{{ release.tag_name }}">
                             <input type="hidden" name="sig" value="{{ sig }}">

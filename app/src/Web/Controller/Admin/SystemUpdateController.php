@@ -10,10 +10,10 @@ use LogicException;
 
 class SystemUpdateController extends AdminController
 {
-    /** @noinspection PhpUnusedParameterInspection */
     public function index(Request $request): string
     {
         // TODO unit test
+        if (!$request->isGet()) return $this->error400();
 
         $release_list = SystemUpdateModel::getReleaseInfo();
         $this->set('release_list', $release_list);
@@ -25,6 +25,7 @@ class SystemUpdateController extends AdminController
     public function update(Request $request): string
     {
         // TODO unit test
+        if (!$request->isPost()) return $this->error400();
 
         if (!$request->isValidSig()) {
             $this->setWarnMessage(__("Request failed: invalid sig, please retry."));
@@ -54,6 +55,4 @@ class SystemUpdateController extends AdminController
 
         throw new LogicException("must be redirect");
     }
-
 }
-
