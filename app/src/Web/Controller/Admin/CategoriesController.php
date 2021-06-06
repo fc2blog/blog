@@ -10,7 +10,6 @@ use Fc2blog\Web\Request;
 
 class CategoriesController extends AdminController
 {
-
     /**
      * カテゴリー一覧、新規作成
      * @param Request $request
@@ -46,6 +45,7 @@ class CategoriesController extends AdminController
         }
 
         // 新規登録処理
+        if (!$request->isPost()) return $this->error400();
         $category_request = $request->get('category');
         $category_request['blog_id'] = $blog_id;
         $errors = $categories_model->validate($category_request, $data, ['parent_id', 'name', 'category_order']);
@@ -91,6 +91,7 @@ class CategoriesController extends AdminController
         }
 
         // 更新処理
+        if (!$request->isPost()) return $this->error400();
         $category_request = $request->get('category');
         $category_request['id'] = $id;            // 入力チェック用
         $category_request['blog_id'] = $blog_id;  // 入力チェック用
@@ -111,29 +112,33 @@ class CategoriesController extends AdminController
     /**
      * 削除
      * @param Request $request
+     * @return string
      */
-    public function delete(Request $request)
+    public function delete(Request $request): string
     {
-        $categories_model = Model::load('Categories');
+        if (!$request->isValidPost()) {
+            return $this->error400();
+        }
 
         $id = $request->get('id');
         $blog_id = $this->getBlogIdFromSession();
 
-        if (!$request->isValidSig()) {
-            $request = new Request();
-            $this->redirect($request, array('action' => 'create'));
-            return;
+        // 未分類であるid=1は削除させない
+        if ($id === "1") {
+            return $this->error400();
         }
-
-        // 削除データの取得(未分類であるid=1は削除させない)
-        if ($id == 1 || !$categories_model->findByIdAndBlogId($id, $blog_id)) {
+        // 削除データの取得
+        $categories_model = Model::load('Categories');
+        if (!$categories_model->findByIdAndBlogId($id, $blog_id)) {
             $this->redirect($request, array('action' => 'create'));
+            return "";
         }
 
         // 削除処理
         $categories_model->deleteNodeByIdAndBlogId($id, $blog_id);
         $this->setInfoMessage(__('I removed the category'));
         $this->redirect($request, array('action' => 'create'));
+        return "";
     }
 
     /**
@@ -144,45 +149,40 @@ class CategoriesController extends AdminController
      */
     public function ajax_add(Request $request): string
     {
-        if ($this->isInvalidAjaxRequest($request)) {
-            return $this->error403();
-        }
-
-        /** @var CategoriesModel $categories_model */
-        $categories_model = Model::load('Categories');
-
-        $blog_id = $this->getBlogIdFromSession();
-
-        $json = array('status' => 0);
-
-        if (!$request->isValidSig()) {
+        if (!$request->isValidPost() || $this->isInvalidAjaxRequest($request)) {
             $this->setContentType("application/json; charset=utf-8");
-            $this->setStatusCode(404);
-            $this->set('json', ['error' => 'invalid sig']);
+            $this->setStatusCode(400);
+            $this->set('json', ['status' => 0, 'error' => 'invalid sig']);
             return "admin/common/json.twig";
         }
 
         $category_request = $request->get('category');
+        $blog_id = $this->getBlogIdFromSession();
         $category_request['blog_id'] = $blog_id;
+        /** @var CategoriesModel $categories_model */
+        $categories_model = Model::load('Categories');
         $errors = $categories_model->validate($category_request, $data, array('parent_id', 'name'));
         if (empty($errors)) {
             $data['blog_id'] = $blog_id;
             if ($id = $categories_model->addNode($data, 'blog_id=?', array($blog_id))) {
-                $json['status'] = 1;
-                $json['category'] = array(
-                    'id' => $id,
-                    'parent_id' => $data['parent_id'],
-                    'name' => $data['name'],
-                );
+                $json = [
+                    'status' => 1,
+                    'category' => [
+                        'id' => $id,
+                        'parent_id' => $data['parent_id'],
+                        'name' => $data['name'],
+                    ],
+                ];
+                $this->setContentType("application/json; charset=utf-8");
+                $this->set('json', $json);
+                return "admin/common/json.twig";
+            } else {
+                return $this->error500();
             }
         }
 
-        $json['error'] = $errors;
-
         $this->setContentType("application/json; charset=utf-8");
-        $this->set('json', $json);
+        $this->set('json', ['status' => 0, 'error' => $errors]);
         return "admin/common/json.twig";
     }
-
 }
-
