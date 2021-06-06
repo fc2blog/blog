@@ -35,7 +35,7 @@
                 {{ _('Published') }}
             {% endif %}
             {% if comment.open_status == comment_open_status_pending %}
-                {{ _('Approval pending') }} &raquo; <a href="{{ url(req, 'comments', 'approval', {id: comment.id}) }}" onclick="reply.approval({{ comment.id }}); return false;" id="sys-comment-approval">{{ _('Approval') }}</a>
+                {{ _('Approval pending') }} &raquo; <a {# TODO hrefの必要ないのでは？ #}href="{{ url(req, 'comments', 'approval', {id: comment.id}) }}" onclick="reply.approval({{ comment.id }}); return false;" id="sys-comment-approval">{{ _('Approval') }}</a>
             {% endif %}
             {% if comment.open_status == comment_open_status_private %}
                 {{ _('Only exposed administrator') }}

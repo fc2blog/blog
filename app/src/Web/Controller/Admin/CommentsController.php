@@ -12,7 +12,6 @@ use Fc2blog\Web\Request;
 
 class CommentsController extends AdminController
 {
-
     /**
      * 一覧表示
      * @param Request $request
@@ -20,6 +19,8 @@ class CommentsController extends AdminController
      */
     public function index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $comments_model = new CommentsModel();
         $blog_id = $this->getBlogIdFromSession();
 
@@ -135,6 +136,7 @@ class CommentsController extends AdminController
      */
     public function approval(Request $request)
     {
+        // TODO POST化、Sigチェック
         $comments_model = Model::load('Comments');
 
         $id = $request->get('id');

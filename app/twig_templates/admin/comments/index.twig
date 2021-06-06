@@ -77,7 +77,7 @@
                                 <span class="published">{{ _('Published') }}</span>
                             {% endif %}
                             {% if comment.open_status == comment_open_status_pending %}
-                                <span class="approval"><a href="{{ url(req, 'comments', 'approval', {id: comment.id}) }}" onclick="reply.approval({{ comment.id }}); return false;">{{ _('Approval') }}</a></span>
+                                <span class="approval"><a {# TODO hrefの必要ないのでは？ #}href="{{ url(req, 'comments', 'approval', {id: comment.id}) }}" onclick="reply.approval({{ comment.id }}); return false;">{{ _('Approval') }}</a></span>
                             {% endif %}
                             {% if comment.open_status == comment_open_status_private %}
                                 <span class="private">{{ _('Only exposed administrator') }}</span>
