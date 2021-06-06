@@ -12,7 +12,6 @@ use Tuupola\Base62Proxy;
 
 class BlogsController extends AdminController
 {
-
     /**
      * 一覧表示
      * @param Request $request
@@ -20,6 +19,8 @@ class BlogsController extends AdminController
      */
     public function index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // ブログの一覧取得
         $options = [
             'where' => 'user_id=?',
@@ -53,6 +54,8 @@ class BlogsController extends AdminController
         if (!$request->get('blog') || !$request->isValidSig()) {
             return 'admin/blogs/create.twig';
         }
+
+        if (!$request->isPost()) return $this->error400();
 
         $blogs_model = new BlogsModel();
 
@@ -91,7 +94,7 @@ class BlogsController extends AdminController
         $this->set('tab', 'blog_edit');
 
         // 初期表示時に編集データの設定
-        if (!$request->get('blog') || !$request->isValidSig()) {
+        if (!$request->get('blog') || !$request->isValidPost()) {
             if (!$blog = $blogs_model->findById($blog_id)) {
                 $this->redirect($request, ['action' => 'index']);
             }
@@ -100,6 +103,8 @@ class BlogsController extends AdminController
         }
 
         // 更新処理
+        if (!$request->isPost()) return $this->error400();
+
         $white_list = ['name', 'introduction', 'nickname', 'timezone', 'blog_password', 'open_status', 'ssl_enable', 'redirect_status_code'];
         $errors['blog'] = $blogs_model->validate(
         // バリデーションのために、blog_idを引き回している。バリデーションを作り変えたい
@@ -131,9 +136,12 @@ class BlogsController extends AdminController
     /**
      * ブログの切り替え
      * @param Request $request
+     * @return string
      */
-    public function choice(Request $request)
+    public function choice(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $request->get('blog_id');
 
         // 切り替え先のブログの存在チェック
@@ -142,6 +150,7 @@ class BlogsController extends AdminController
             $this->setBlog($blog);
         }
         $this->redirect($request, $request->baseDirectory);   // トップページへリダイレクト
+        return "";
     }
 
     /**
@@ -151,9 +160,10 @@ class BlogsController extends AdminController
      */
     public function delete(Request $request): string
     {
+
         $this->set('tab', 'blog_delete');
         // 退会チェック
-        if (!$request->get('blog.delete') || !$request->isValidSig()) {
+        if (!$request->get('blog.delete') || !$request->isValidPost()) {
             return 'admin/blogs/delete.twig';
         }
 
@@ -174,6 +184,4 @@ class BlogsController extends AdminController
         $this->redirect($request, ['action' => 'index']);
         return 'admin/blogs/delete.twig'; // 到達しないはずである
     }
-
 }
-
