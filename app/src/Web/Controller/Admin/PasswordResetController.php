@@ -61,6 +61,8 @@ class PasswordResetController extends AdminController
     /** @noinspection PhpUnused */
     public function resetForm(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $token_str = $request->get('token');
         $token = PasswordResetTokenService::getByToken($token_str);
 
