@@ -20,6 +20,8 @@ class SessionController extends AdminController
      */
     public function login(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         if ($this->isLogin()) {
             // ログイン済みならトップページへリダイレクト
             $this->redirect($request, $request->baseDirectory);
@@ -97,6 +99,8 @@ class SessionController extends AdminController
      */
     public function mailLogin(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // get&check login token
         $token_str = $request->get('token');
 
@@ -133,6 +137,8 @@ class SessionController extends AdminController
      */
     public function logout(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // TODO refactoring
         if ($this->isLogin()) {
             Session::destroy($request);
