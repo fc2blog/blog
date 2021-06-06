@@ -19,6 +19,8 @@ class BlogsController extends UserController
      */
     public function index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog = (new BlogsModel())->findByRandom();
         if (empty($blog)) {
             return $this->error404();
@@ -34,6 +36,8 @@ class BlogsController extends UserController
      */
     public function feed(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blogs_model = new BlogsModel();
         $blog = $blogs_model->findById($request->getBlogId());
         if (empty($blog)) {
