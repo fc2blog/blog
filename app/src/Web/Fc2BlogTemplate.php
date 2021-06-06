@@ -45,7 +45,7 @@ class Fc2BlogTemplate
                 // 自動改行処理
                 if ($value['auto_linefeed'] == Config::get('ENTRY.AUTO_LINEFEED.USE')) {
                     $data['entries'][$key]['body'] = nl2br($value['body']);
-                    $data['entries'][$key]['extend'] = nl2br($value['extend']);
+                    $data['entries'][$key]['extend'] = nl2br((string)$value['extend']);
                 }
 
                 // topentry_enc_* 系タグの生成
