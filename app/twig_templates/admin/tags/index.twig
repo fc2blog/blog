@@ -43,6 +43,7 @@
                     <td><a href="{{ blogUrl(req, blog.id) }}/?tag={{ tag.name }}" target="_blank">{{ tag.name }}</a></td>
                     <td>{{ tag.count }}</td>
                     <td class="center s_cell"><a href="{{ url(req, 'Tags', 'edit', {id: tag.id}) }}">{{ _('Edit') }}</a></td>
+                    {# TODO deleteをPOST化 #}
                     <td class="center s_cell"><a href="{{ url(req, 'Tags', 'delete', {id: tag.id, sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a></td>
                 </tr>
             {% endfor %}

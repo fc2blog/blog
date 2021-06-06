@@ -55,7 +55,7 @@ class EditTest extends TestCase
             'tag' => ['name' => "testtagname"]
         ];
 
-        $r = $this->reqGetBeRedirect("/admin/tags/edit", $request_data);
+        $r = $this->reqPostBeRedirect("/admin/tags/edit", $request_data);
         $this->assertEquals('/admin/tags/index', $r->redirectUrl);
 
         $c = $this->reqGet("/admin/tags/index");
