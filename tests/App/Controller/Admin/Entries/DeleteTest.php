@@ -32,7 +32,7 @@ class DeleteTest extends TestCase
 
         $sig = $this->getSig();
 
-        $r = $this->reqGetBeRedirect("/admin/entries/delete", ["id" => $some_entry['id'], "sig" => $sig]);
+        $r = $this->reqPostBeRedirect("/admin/entries/delete", ["id" => $some_entry['id'], "sig" => $sig]);
 
         $this->assertEquals("/admin/entries/index", $r->redirectUrl);
 
@@ -66,7 +66,7 @@ class DeleteTest extends TestCase
             'sig' => $sig
         ];
 
-        $r = $this->reqGetBeRedirect("/admin/entries/delete", $request_data);
+        $r = $this->reqPostBeRedirect("/admin/entries/delete", $request_data);
         $this->assertEquals("/admin/entries/index", $r->redirectUrl);
 
         $c = $this->reqGet("/admin/entries/index");

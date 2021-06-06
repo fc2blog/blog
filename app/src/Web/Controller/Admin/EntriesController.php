@@ -16,7 +16,6 @@ use Fc2blog\Web\Request;
 
 class EntriesController extends AdminController
 {
-
     /**
      * 一覧表示
      * @param Request $request
@@ -24,6 +23,8 @@ class EntriesController extends AdminController
      */
     public function index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $entries_model = new EntriesModel();
         $blog_id = $this->getBlogIdFromSession();
 
@@ -161,6 +162,7 @@ class EntriesController extends AdminController
         }
 
         // 新規登録処理
+        if (!$request->isPost()) return $this->error400();
         $errors = [];
         $whitelist_entry = ['title', 'body', 'extend', 'open_status', 'password', 'auto_linefeed', 'comment_accepted', 'posted_at'];
         $errors['entry'] = $entries_model->validate($request->get('entry'), $entry_data, $whitelist_entry);
@@ -239,6 +241,7 @@ class EntriesController extends AdminController
         }
 
         // 更新処理
+        if (!$request->isPost()) return $this->error400();
         $errors = [];
         $whitelist_entry = ['title', 'body', 'extend', 'open_status', 'password', 'auto_linefeed', 'comment_accepted', 'posted_at'];
         $errors['entry'] = $entries_model->validate($request->get('entry'), $entry_data, $whitelist_entry);
@@ -291,7 +294,7 @@ class EntriesController extends AdminController
      */
     public function delete(Request $request)
     {
-        if ($request->isValidSig()) {
+        if ($request->isValidPost()) {
             // 削除処理
             if (Model::load('Entries')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession()))
                 $this->setInfoMessage(__('I removed the entry'));
@@ -307,6 +310,8 @@ class EntriesController extends AdminController
      */
     public function ajax_media_load(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         if ($this->isInvalidAjaxRequest($request)) {
             return $this->error403();
         }
@@ -341,6 +346,4 @@ class EntriesController extends AdminController
 
         return 'admin/entries/ajax_media_load.twig';
     }
-
 }
-
