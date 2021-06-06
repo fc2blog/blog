@@ -304,6 +304,15 @@ class Request
     }
 
     /**
+     * リクエストメソッドがPOSTか判定を行う
+     * @return bool
+     */
+    public function isPost(): bool
+    {
+        return $this->method === 'POST';
+    }
+
+    /**
      * @param string $key
      * @return bool
      */
@@ -346,7 +355,7 @@ class Request
      */
     public function isValidPost(): bool
     {
-        return $this->method === "POST" && $this->isValidSig();
+        return $this->isPost() && $this->isValidSig();
     }
 
     public function isValidSig(): bool
