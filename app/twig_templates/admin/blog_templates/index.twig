@@ -32,6 +32,7 @@
                     {% endif %}
                     {% if not inArray(blog_template.id, template_ids) %}
                         <td class="center">
+                            {# TODO 適用処理のPOST化 #}
                             <a href="{{ url(req, 'BlogTemplates', 'apply', { 'id': blog_template.id, 'sig': sig}) }}" onclick="return confirm('{{ _('Are you sure you want to apply this template?') }}')">{{ _('Apply') }}</a>
                         </td>
                     {% endif %}
@@ -43,6 +44,7 @@
                             &nbsp;
                         {% endif %}
                         {% if not inArray(blog_template.id, template_ids) %}
+                            {# TODO 削除処理のPOST化 #}
                             <a href="{{ url(req, 'BlogTemplates', 'delete', { 'id': blog_template.id, 'sig': sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a>
                         {% endif %}
                     </td>
