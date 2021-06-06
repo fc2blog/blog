@@ -14,6 +14,8 @@ class PasswordResetController extends AdminController
     /** @noinspection PhpUnused */
     public function requestForm(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // 未ログインだとSigが生成されていないため、ここで生成する。
         // 複数個ウインドウを開くとsigがエラーになるが、ありえないかと思われる。
         $request->generateNewSig();
