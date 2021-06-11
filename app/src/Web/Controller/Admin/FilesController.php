@@ -11,7 +11,6 @@ use Fc2blog\Web\Request;
 
 class FilesController extends AdminController
 {
-
     /**
      * 一覧表示 /admin/files/upload からPartial読み込み
      * @param Request $request
@@ -87,6 +86,7 @@ class FilesController extends AdminController
      */
     public function upload(Request $request): string
     {
+        // TODO uploadと一覧の分離
         $files_model = new FilesModel();
         $blog_id = $this->getBlogIdFromSession();
 
@@ -95,6 +95,11 @@ class FilesController extends AdminController
 
         // アップロード時処理
         if ($request->file('file')) {
+            if (!$request->isValidSig()) {
+                $request = new Request();
+                $this->redirect($request, ['action' => 'upload']);
+            }
+
             // 新規登録処理
             $errors = [];
             $errors['file'] = $files_model->insertValidate($request->file('file'), $request->get('file'), $data_file);
@@ -115,6 +120,7 @@ class FilesController extends AdminController
 
                     $this->setInfoMessage(__('I have completed the upload of files'));
                     $this->redirect($request, array('action' => 'upload')); // アップロード成功
+                    return "";
                 }
             }
             // 拡張子チェックエラーはファイルが指定されていない時には表示不要と思われるので、unset
@@ -220,6 +226,7 @@ class FilesController extends AdminController
         }
 
         // 新規登録処理
+        // TODO 修正処理とHTMLレスポンスの分離
         $errors = [];
         $errors['file'] = $files_model->updateValidate($request->file('file'), $request->get('file'), $file, $data_file);
         if (empty($errors['file'])) {

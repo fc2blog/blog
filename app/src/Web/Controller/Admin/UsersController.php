@@ -19,6 +19,8 @@ class UsersController extends AdminController
      */
     public function index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         if (!$this->isAdmin()) {
             return $this->error404();
         }
@@ -63,6 +65,7 @@ class UsersController extends AdminController
         $blogs_model = Model::load('Blogs');
 
         // ユーザーとブログの新規登録処理
+        if (!$request->isPost()) return $this->error400();
         $errors = array();
         $errors['user'] = $users_model->registerValidate($request->get('user'), $user_data, array('login_id', 'password'));
         $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, array('id', 'name', 'nickname'));
@@ -106,6 +109,7 @@ class UsersController extends AdminController
         }
 
         // 更新処理
+        if (!$request->isPost()) return $this->error400();
         $errors = [];
         $white_list = ['password', 'login_blog_id'];
         $errors['user'] = $users_model->updateValidate($request->get('user'), $data_user, $white_list);
@@ -139,6 +143,7 @@ class UsersController extends AdminController
         }
 
         // 削除処理
+        if (!$request->isPost()) return $this->error400();
         Model::load('Users')->deleteById($this->getUserId());
         $this->setInfoMessage(__('Was completed withdrawal'));
         if ($this->isLogin()) {

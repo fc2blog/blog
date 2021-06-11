@@ -45,8 +45,8 @@
     <div class="btn_area">
         {% if comment.open_status == comment_open_status_pending %}
             <div class="btn">
-                <a href="{{ url(req, 'comments', 'approval', {id: comment.id, back_url: request.get('back_url')}) }}"
-                   onclick="return confirm('{{ _('Are you sure you want to be approved?') }}');" class="btn_contents positive touch"><i class="check_icon btn_icon"></i>{{ _('I moderate comments') }}</a>
+                <a {# TODO POST化 #} href="{{ url(req, 'comments', 'approval', {id: comment.id, back_url: request.get('back_url')}) }}"
+                                    onclick="return confirm('{{ _('Are you sure you want to be approved?') }}');" class="btn_contents positive touch"><i class="check_icon btn_icon"></i>{{ _('I moderate comments') }}</a>
             </div>
         {% endif %}
         <ul class="btn_area_inner">

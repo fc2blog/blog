@@ -10,7 +10,6 @@ use Fc2blog\Web\Request;
 
 class BlogSettingsController extends AdminController
 {
-
     /**
      * コメント編集
      * @param Request $request
@@ -78,7 +77,7 @@ class BlogSettingsController extends AdminController
         $blog_id = $this->getBlogIdFromSession();
 
         // 初期表示時に編集データの取得&設定
-        if (!$request->get('blog_setting') || !$request->isValidSig()) {
+        if (!$request->get('blog_setting') || !$request->isValidPost()) {
             $blog_setting = $blog_settings_model->findByBlogId($blog_id);
             $request->set('blog_setting', $blog_setting);
             return $this->get('template_path');
@@ -112,6 +111,4 @@ class BlogSettingsController extends AdminController
 
         return $this->get('template_path');
     }
-
 }
-

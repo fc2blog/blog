@@ -10,7 +10,6 @@ use Fc2blog\Web\Request;
 
 class TagsController extends AdminController
 {
-
     /**
      * 一覧表示
      * @param Request $request
@@ -18,6 +17,8 @@ class TagsController extends AdminController
      */
     public function index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $tags_model = new TagsModel();
         $blog_id = $this->getBlogIdFromSession();
 
@@ -102,6 +103,7 @@ class TagsController extends AdminController
         }
 
         // 更新処理
+        if (!$request->isPost()) return $this->error400();
         $tag_request = $request->get('tag');
         $tag_request['id'] = $id;
         $tag_request['blog_id'] = $blog_id;
@@ -132,6 +134,7 @@ class TagsController extends AdminController
      */
     public function delete(Request $request)
     {
+        // TODO POST化
         if ($request->isValidSig()) {
             // 削除処理
             if (Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
@@ -148,6 +151,4 @@ class TagsController extends AdminController
         }
         $this->redirectBack($request, array('action' => 'index'));
     }
-
 }
-

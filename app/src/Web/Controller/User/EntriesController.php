@@ -88,6 +88,8 @@ class EntriesController extends UserController
      */
     public function index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $request->getBlogId();
         if (!$blog_id) {
             Log::notice("missing blog_id parameter. redirect to top. blog_id: {$blog_id}");
@@ -112,6 +114,8 @@ class EntriesController extends UserController
      */
     public function search(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $where = 'blog_id=?';
         $params = array($request->getBlogId());
 
@@ -139,6 +143,8 @@ class EntriesController extends UserController
      */
     public function category(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $request->getBlogId();
         $category_id = $request->get('cat');
 
@@ -173,6 +179,8 @@ class EntriesController extends UserController
      */
     public function tag(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // タグ検索
         $blog_id = $request->getBlogId();
         $tag_name = $request->get('tag');
@@ -206,6 +214,8 @@ class EntriesController extends UserController
      */
     public function date(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // 開始日付と終了日付の計算
         preg_match('/^([0-9]{4})([0-9]{2})?([0-9]{2})?$/', $request->get('date'), $matches);
         $dates = $matches + array('', date('Y'), 0, 0);
@@ -231,6 +241,8 @@ class EntriesController extends UserController
      */
     public function archive(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // 記事一覧データ設定
         $options = array(
             'fields' => array(
@@ -266,7 +278,7 @@ class EntriesController extends UserController
             return $this->error404();
         }
 
-        // 記事のプレビュー
+        // 記事のプレビュー(POST)
         if ($request->get('entry')) {
             return $this->preview_entry($request);
         }
@@ -297,6 +309,8 @@ class EntriesController extends UserController
      */
     private function preview_fc2_template(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $request->getBlogId();
 
         // 記事一覧データ設定
@@ -334,6 +348,8 @@ class EntriesController extends UserController
      */
     private function preview_template(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $request->getBlogId();
 
         // 記事一覧データ設定
@@ -371,6 +387,8 @@ class EntriesController extends UserController
      */
     private function preview_plugin(Request $request): string
     {
+        if (!$request->isPost()) return $this->error400();
+
         $blog_id = $request->getBlogId();
 
         // プラグインのプレビュー情報取得
@@ -457,6 +475,8 @@ class EntriesController extends UserController
      */
     private function preview_entry(Request $request): string
     {
+        if (!$request->isPost()) return $this->error400();
+
         $blog_id = $request->getBlogId();
 
         // DBの代わりにリクエストから取得
@@ -509,6 +529,8 @@ class EntriesController extends UserController
      */
     public function view(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $request->getBlogId();
         $entry_id = (int)$request->get('id');
 
@@ -641,6 +663,8 @@ class EntriesController extends UserController
      */
     public function plugin(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $request->getBlogId();
         $id = $request->get('id');
 
@@ -657,6 +681,7 @@ class EntriesController extends UserController
      * 記事のパスワード認証
      * @param Request $request
      * @return string
+     * TODO POST化
      */
     public function password(Request $request): string
     {
@@ -702,7 +727,8 @@ class EntriesController extends UserController
         }
 
         // 認証処理
-        if ($request->get('blog')) {
+        // TODO Sigがない
+        if ($request->get('blog') && $request->isPost()) {
             if (password_verify($request->get('blog.password'), $blog->blog_password)) {
                 Session::set($this->getBlogPasswordKey($blog->id), true);
                 $this->set('auth_success', true); // for testing.
@@ -723,6 +749,8 @@ class EntriesController extends UserController
      */
     public function comment_regist(Request $request): string
     {
+        if (!$request->isPost()) return $this->error400();
+
         $blog_id = $request->getBlogId();
 
         // ブログの設定情報取得(captchaの使用可否で画面切り替え)
@@ -854,7 +882,7 @@ class EntriesController extends UserController
         $this->set('edit_entry', $entry);
 
         // 初期表示処理
-        if (!$request->get('comment.id')) {
+        if (!$request->get('comment.id') && $request->isGet()) {
             $this->set('edit_comment', $comment);
 
             // FC2用のテンプレートで表示
@@ -863,7 +891,11 @@ class EntriesController extends UserController
             return $this->getFc2TemplatePath($blog_id);
         }
 
+        // これ以後はPOSTでのみ処理を許可する
+        if (!$request->isPost()) return $this->error400();
+
         // 削除ボタンを押された場合の処理(comment_deleteに処理を移譲)
+        // TODO sig
         if ($request->get('comment.delete')) {
             return $this->comment_delete($request);
         }
@@ -913,6 +945,8 @@ class EntriesController extends UserController
      */
     public function comment_delete(Request $request): string
     {
+        if (!$request->isPost()) return $this->error400();
+
         $comments_model = new CommentsModel();
 
         $blog_id = $request->getBlogId();

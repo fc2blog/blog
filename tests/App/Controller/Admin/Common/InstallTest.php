@@ -104,7 +104,7 @@ class InstallTest extends TestCase
         $this->resetSession();
         $this->resetCookie();
 
-        $r = $this->reqPostBeRedirect("/admin/common/install", ['state' => 1]);
+        $r = $this->reqGetBeRedirect("/admin/common/install", ['state' => 1]);
         $this->assertEquals('/admin/common/install?state=2', $r->redirectUrl);
     }
 

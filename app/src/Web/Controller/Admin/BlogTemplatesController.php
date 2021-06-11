@@ -22,6 +22,8 @@ class BlogTemplatesController extends AdminController
      */
     public function index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $this->getBlogIdFromSession();
         if (App::isPC($request)) {
             $device_type = $request->get('device_type', 0);
@@ -55,6 +57,8 @@ class BlogTemplatesController extends AdminController
      */
     public function fc2_index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // デバイスタイプの設定
         $device_type = $request->get('device_type', (string)Config::get('DEVICE_PC'));
         $request->set('device_type', $device_type);
@@ -85,6 +89,8 @@ class BlogTemplatesController extends AdminController
      */
     public function fc2_view(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // 戻る用URLの設定
         $back_url = $request->getReferer();
         if (!empty($back_url)) {
@@ -120,7 +126,7 @@ class BlogTemplatesController extends AdminController
         $this->set('template_syntaxes', array_merge(array_keys(Config::get('fc2_template_foreach')), array_keys(Config::get('fc2_template_if'))));
 
         // 初期表示時
-        if (!$request->get('blog_template') || !$request->isValidSig()) {
+        if (!$request->get('blog_template') || !$request->isValidPost()) {
             // FC2テンプレートダウンロード
             if ($request->get('fc2_id')) {
                 $device_type = $request->get('device_type');
@@ -142,6 +148,7 @@ class BlogTemplatesController extends AdminController
         }
 
         // 新規登録処理
+        if (!$request->isPost()) return $this->error400();
         $errors = [];
         $white_list = ['title', 'html', 'css', 'device_type'];
         $errors['blog_template'] = $blog_templates_model->validate($request->get('blog_template'), $blog_template_data, $white_list);
@@ -172,7 +179,7 @@ class BlogTemplatesController extends AdminController
         $blog_id = $this->getBlogIdFromSession();
 
         // 初期表示時に編集データの取得&設定
-        if (!$request->get('blog_template') || !$request->isValidSig()) {
+        if (!$request->get('blog_template') || !$request->isValidPost()) {
             if (!$blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
                 $this->redirect($request, ['action' => 'index']);
             }
@@ -181,6 +188,7 @@ class BlogTemplatesController extends AdminController
         }
 
         // 更新処理
+        if (!$request->isPost()) return $this->error400();
         $errors = [];
         $white_list = ['title', 'html', 'css'];
         $errors['blog_template'] = $blog_templates_model->validate($request->get('blog_template'), $blog_template_data, $white_list);
@@ -203,6 +211,9 @@ class BlogTemplatesController extends AdminController
      */
     public function apply(Request $request)
     {
+        // TODO post化
+        // if(!$request->isPost()) return $this->error400();
+
         $blog_templates_model = Model::load('BlogTemplates');
 
         $id = $request->get('id');
@@ -223,12 +234,14 @@ class BlogTemplatesController extends AdminController
     }
 
     /**
-     * テンプレートダウンロード
+     * テンプレートダウンロード(SP用)
      * @param Request $request
      * @return string
      */
     public function download(Request $request): string
     {
+        // TODO POST化
+
         /** @var BlogTemplatesModel $blog_templates_model */
         $blog_templates_model = Model::load('BlogTemplates');
 
@@ -282,7 +295,7 @@ class BlogTemplatesController extends AdminController
         $id = $request->get('id');
         $blog_id = $this->getBlogIdFromSession();
 
-        // 使用中のテンプレート判定
+        // 使用中のテンプレートであれば削除させない
         $blog = BlogService::getById($blog_id);
         $template_ids = BlogsModel::getTemplateIds($blog);
         if (in_array($id, $template_ids)) {
@@ -295,6 +308,7 @@ class BlogTemplatesController extends AdminController
             $this->redirect($request, array('action' => 'index'));
         }
 
+        // TODO 削除処理のPOST必須化
         if ($request->isValidSig()) {
             // 削除処理
             $blog_templates_model->deleteByIdAndBlogId($id, $blog_id);

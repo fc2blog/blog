@@ -62,6 +62,7 @@
                     return;
                 }
                 if (confirm('{{ _('Are you sure you want to delete?') }}')) {
+                    {# TODO 削除処理のPOST化 #}
                     location.href = common.fwURL('blog_templates', 'delete', {id: id, sig: "{{ sig }}"});
                 }
             });

@@ -20,9 +20,12 @@ class CommonController extends AdminController
     /**
      * 言語設定変更
      * @param Request $request
+     * @return string
      */
-    public function lang(Request $request)
+    public function lang(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // 言語の設定
         $lang = $request->get('lang');
         if (Config::get('LANGUAGES.' . $lang)) {
@@ -36,15 +39,19 @@ class CommonController extends AdminController
             $url .= '?' . $device_name;
         }
         $this->redirectBack($request, $url);
+        return "";
     }
 
     /**
      * デバイス変更
      * @param Request $request
+     * @return string
      * @noinspection PhpUnused
      */
-    public function device_change(Request $request)
+    public function device_change(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // デバイスの設定
         $device_type = 0;
         $device = $request->get('device');
@@ -62,14 +69,18 @@ class CommonController extends AdminController
 
         Cookie::set($request, 'device', $device_type);
         $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index'));
+        return "";
     }
 
     /**
      * /admin/ ブログの設定より初期表示ページを決定し、リダイレクト
      * @param Request $request
+     * @return string
      */
-    public function index(Request $request)
+    public function index(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // 設定読み込みをしてリダイレクト
         if (is_string($blog_id = $this->getBlogIdFromSession())) {
             $blog_settings = new BlogSettingsModel();
@@ -81,24 +92,29 @@ class CommonController extends AdminController
             switch ($setting['start_page']) {
                 case Config::get('BLOG.START_PAGE.ENTRY'):
                     $this->redirect($request, ['controller' => 'Entries', 'action' => 'create']);
-                    break;
+                    return ""; // break;
 
                 case Config::get('BLOG.START_PAGE.NOTICE'):
                 default:
                     $this->redirect($request, ['controller' => 'Common', 'action' => 'notice']);
-                    break;
+                    return ""; // break;
             }
         } else { // 設定なし
             $this->redirect($request, ['controller' => 'Common', 'action' => 'notice']);
+            return "";
         }
+
     }
 
     /**
      * お知らせ一覧画面
+     * @param Request $request
      * @return string
      */
-    public function notice(/*Request $request*/): string
+    public function notice(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $this->getBlogIdFromSession();
 
         $comments_model = new CommentsModel();
@@ -126,6 +142,7 @@ class CommonController extends AdminController
         switch ($state) {
             default:
             case 0:
+                if (!$request->isGet()) return $this->error400();
                 // 環境チェック確認
                 $this->set('temp_dir', Config::get('TEMP_DIR'));
                 $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
@@ -180,6 +197,7 @@ class CommonController extends AdminController
                 return 'admin/common/install.twig';
 
             case 1:
+                if (!$request->isGet()) return $this->error400();
                 // 各種初期設定、DB テーブル作成、ディレクトリ作成
 
                 // フォルダの作成
@@ -264,6 +282,7 @@ class CommonController extends AdminController
                 }
 
                 // 以下はユーザー登録実行
+                if (!$request->isPost()) return $this->error400();
                 $users_model = new UsersModel();
                 $blogs_model = new BlogsModel();
 
@@ -301,6 +320,7 @@ class CommonController extends AdminController
 
             case 3:
                 // 完了画面
+                if (!$request->isGet()) return $this->error400();
 
                 // 完了画面表示と同時に、インストール済みロックファイルの生成
                 file_put_contents($this->getInstalledLockFilePath(), "This is installed check lockfile.\nThe blog already installed. if you want re-enable installer, please delete this file.");

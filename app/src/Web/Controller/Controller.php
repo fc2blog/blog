@@ -328,6 +328,13 @@ abstract class Controller
         return 'user/common/error400.twig';
     }
 
+    // 500 BadRequest
+    protected function error500(): string
+    {
+        $this->setStatusCode(500);
+        return 'user/common/error500.twig';
+    }
+
     public function getOutput(): string
     {
         if (!defined("THIS_IS_TEST")) {

@@ -20,9 +20,12 @@ class CommonController extends UserController
     /**
      * 言語設定変更
      * @param Request $request
+     * @return string
      */
-    public function lang(Request $request)
+    public function lang(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // 言語の設定
         $lang = $request->get('lang');
         if (Config::get('LANGUAGES.' . $lang)) {
@@ -31,14 +34,18 @@ class CommonController extends UserController
 
         // 元のURLに戻す
         $this->redirectBack($request, '/');
+        return "";
     }
 
     /**
      * デバイス変更
      * @param Request $request
+     * @return string
      */
-    public function device_change(Request $request)
+    public function device_change(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         // デバイスの設定
         $device_type = 0;
         $device = $request->get('device');
@@ -56,15 +63,20 @@ class CommonController extends UserController
 
         Cookie::set($request, 'device', $device_type);
         $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $request->getBlogId()));
+        return "";
     }
 
     const CAPTCHA_TOKEN_KEY_NAME = 'token';
+
     /**
      * 画像認証
      * @param Request $request
+     * @return string
      */
-    public function captcha(Request $request)
+    public function captcha(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $size_x = 200;
         $size_y = 40;
         // 自動テスト用に"DEBUG_FORCE_CAPTCHA_KEY"環境変数で、Captchaキーの固定機能
@@ -96,6 +108,7 @@ class CommonController extends UserController
         } catch (Exception $e) {
             throw new RuntimeException("drawNumber failed. {$e->getMessage()} {$e->getFile()}:{$e->getLine()}");
         }
+        return "";
     }
 
     /**
@@ -117,6 +130,8 @@ class CommonController extends UserController
      */
     public function thumbnail(Request $request): string
     {
+        if (!$request->isGet()) return $this->error400();
+
         $blog_id = $request->get('blog_id');
         $id = $request->get('id');
         $ext = $request->get('ext');
