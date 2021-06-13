@@ -170,7 +170,7 @@ class CommonController extends AdminController
                 $is_connect = true;
                 $connect_message = '';
                 try {
-                    PDOWrap::getInstance()->connect();
+                    PDOWrap::createNewConnection();
                 } catch (Exception $e) {
                     $is_connect = false;
                     $connect_message = $e->getMessage();
@@ -207,10 +207,9 @@ class CommonController extends AdminController
                 }
 
                 // DB接続確認
-                $msdb = PDOWrap::getInstance(true);
                 try {
                     // DB接続確認(DATABASEの存在判定含む)
-                    $msdb->connect();
+                    PDOWrap::createNewConnection();
                 } catch (Exception $e) {
                     $this->setErrorMessage(__('Please set correct the DB connection settings.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=db_create');
