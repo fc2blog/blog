@@ -9,7 +9,7 @@ use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\CommentsModel;
-use Fc2blog\Model\MSDB;
+use Fc2blog\Model\PDOWrap;
 use Fc2blog\Model\PluginsModel;
 use Fc2blog\Model\UsersModel;
 use Fc2blog\Web\Cookie;
@@ -170,7 +170,7 @@ class CommonController extends AdminController
                 $is_connect = true;
                 $connect_message = '';
                 try {
-                    MSDB::getInstance()->connect();
+                    PDOWrap::getInstance()->connect();
                 } catch (Exception $e) {
                     $is_connect = false;
                     $connect_message = $e->getMessage();
@@ -207,7 +207,7 @@ class CommonController extends AdminController
                 }
 
                 // DB接続確認
-                $msdb = MSDB::getInstance(true);
+                $msdb = PDOWrap::getInstance(true);
                 try {
                     // DB接続確認(DATABASEの存在判定含む)
                     $msdb->connect();
@@ -218,7 +218,7 @@ class CommonController extends AdminController
 
                 // テーブルの存在チェック
                 $sql = "SHOW TABLES LIKE 'users'";
-                $table = MSDB::getInstance()->find($sql);
+                $table = PDOWrap::getInstance()->find($sql);
 
                 if (is_countable($table) && count($table)) {
                     // 既にDB登録完了
@@ -231,7 +231,7 @@ class CommonController extends AdminController
                 if (DB_CHARSET != 'UTF8MB4') {
                     $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
                 }
-                $res = MSDB::getInstance()->multiExecute($sql);
+                $res = PDOWrap::getInstance()->multiExecute($sql);
                 if ($res === false) {
                     $this->setErrorMessage(__('Create' . ' table failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');
@@ -239,7 +239,7 @@ class CommonController extends AdminController
 
                 // DBセットアップ成功チェック
                 $sql = "SHOW TABLES LIKE 'users'";
-                $table = MSDB::getInstance()->find($sql);
+                $table = PDOWrap::getInstance()->find($sql);
                 if (!is_countable($table)) {
                     $this->setErrorMessage(__('Create' . ' table failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');

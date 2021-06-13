@@ -136,7 +136,7 @@ class EntriesModel extends Model
       ORDER BY concat(year, month) DESC;
     SQL;
         $params = array($blog_id);
-        $options = array('result' => DBInterface::RESULT_ALL);
+        $options = array('result' => PDOWrap::RESULT_ALL);
         return $this->findSql($sql, $params, $options);
     }
 
@@ -387,7 +387,7 @@ class EntriesModel extends Model
     {
         $sql = 'UPDATE ' . $this->getTableName() . ' SET comment_count=comment_count+1 WHERE blog_id=? AND id=?';
         $params = array($blog_id, $entry_id);
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOWrap::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
 
@@ -401,7 +401,7 @@ class EntriesModel extends Model
     {
         $sql = 'UPDATE ' . $this->getTableName() . ' SET comment_count=comment_count-1 WHERE blog_id=? AND id=? AND comment_count>0';
         $params = array($blog_id, $entry_id);
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOWrap::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
 

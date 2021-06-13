@@ -594,7 +594,7 @@ class CommentsModel extends Model
             $params[] = $comment_id;
         }
         $sql .= ' AND open_status=' . Config::get('COMMENT.OPEN_STATUS.PENDING');
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOWrap::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
 

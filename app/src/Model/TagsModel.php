@@ -184,7 +184,7 @@ WHERE entry_tags.blog_id=?
 SQL;
         $params = array($blog_id, $entry_id, $blog_id);
         $options = array();
-        $options['result'] = DBInterface::RESULT_ALL;
+        $options['result'] = PDOWrap::RESULT_ALL;
         return $this->findSql($sql, $params, $options);
     }
 
@@ -211,7 +211,7 @@ WHERE entry_tags.blog_id=?
 SQL;
         $params = array_merge(array($blog_id), $entry_ids, array($blog_id));
         $options = array();
-        $options['result'] = DBInterface::RESULT_ALL;
+        $options['result'] = PDOWrap::RESULT_ALL;
         $tags = $this->findSql($sql, $params, $options);
 
         $entries_tags = array();
@@ -237,7 +237,7 @@ SQL;
         }
         $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count+1 WHERE blog_id=? AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
         $params = array_merge(array($blog_id), $ids);
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOWrap::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
 
@@ -256,7 +256,7 @@ SQL;
             ' SET count=count-1 WHERE blog_id=? AND count>0 AND id ' .
             ' IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
         $params = array_merge([$blog_id], $ids);
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOWrap::RESULT_SUCCESS;
         return
             # 有効タグ数の数え直し
             $this->executeSql($sql, $params, $options) &&
