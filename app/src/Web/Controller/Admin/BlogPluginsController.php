@@ -36,7 +36,7 @@ class BlogPluginsController extends AdminController
         $blog_plugin_json = [];
         foreach ($category_blog_plugins as $blog_plugins) {
             foreach ($blog_plugins as $blog_plugin) {
-                $json[] = array(
+                $blog_plugin_json[] = array(
                     'id' => $blog_plugin['id'],
                     'category' => $blog_plugin['category'],
                     'title' => $blog_plugin['title'],
