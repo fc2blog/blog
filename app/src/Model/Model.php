@@ -19,7 +19,7 @@ abstract class Model
     /**
      * @return static
      */
-    public static function getInstance()
+    public static function getInstance(): Model
     {
         if (!isset(static::$instance)) {
             static::$instance = new static();
@@ -312,7 +312,7 @@ abstract class Model
         unset($options['offset']);
         /** @var PDOStatement $stmt */
         $stmt = $this->find('statement', $options);
-        return (int)$stmt->rowCount();
+        return $stmt->rowCount();
     }
 
     /**
