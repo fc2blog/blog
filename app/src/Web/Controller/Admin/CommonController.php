@@ -170,17 +170,13 @@ class CommonController extends AdminController
                 $is_connect = true;
                 $connect_message = '';
                 try {
-                    MSDB::getInstance()->connect(false, false);
+                    MSDB::getInstance()->connect();
                 } catch (Exception $e) {
                     $is_connect = false;
                     $connect_message = $e->getMessage();
                 }
                 $this->set('is_connect', $is_connect);
                 $this->set('connect_message', $connect_message);
-
-                // DB設定確認
-                $is_character = version_compare(MSDB::getInstance()->getVersion(), '5.5.0') >= 0 || DB_CHARSET != 'UTF8MB4';
-                $this->set('is_character', $is_character);
 
                 // ドメイン確認
                 $is_domain = DOMAIN != 'domain';
@@ -191,8 +187,8 @@ class CommonController extends AdminController
                 $is_gd = function_exists('gd_info');
                 $this->set('is_gd', $is_gd);
 
-                $is_all_ok = $is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_character && $is_domain;
-                $this->set('is_all_ok', $is_all_ok);
+            $is_all_ok = $is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_domain;
+            $this->set('is_all_ok', $is_all_ok);
 
                 return 'admin/common/install.twig';
 
@@ -216,19 +212,8 @@ class CommonController extends AdminController
                     // DB接続確認(DATABASEの存在判定含む)
                     $msdb->connect();
                 } catch (Exception $e) {
-                    // データベースの作成
-                    $msdb->close();
-                    $msdb->connect(false, false);
-                    $sql = 'CREATE DATABASE IF NOT EXISTS ' . DB_DATABASE . ' CHARACTER SET ' . DB_CHARSET;
-                    $msdb->execute($sql);
-                    $msdb->close();
-                    try {
-                        // 作成できたか確認
-                        $msdb->connect();
-                    } catch (Exception $e) {
-                        $this->setErrorMessage(__('Execute `Create database` failed. Please `Create database` your self.'));
-                        $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=db_create');
-                    }
+                    $this->setErrorMessage(__('Please set correct the DB connection settings.'));
+                    $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=db_create');
                 }
 
                 // テーブルの存在チェック
