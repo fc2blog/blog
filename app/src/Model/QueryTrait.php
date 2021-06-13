@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedMethodInspection */
 declare(strict_types=1);
 
 namespace Fc2blog\Model;
@@ -133,7 +133,7 @@ trait QueryTrait
      * 主キーをキーにしてデータを取得
      * @param int|string|null $id
      * @param array $options
-     * @return array|false
+     * @return array
      */
     public function findById($id, array $options = [])
     {
@@ -150,7 +150,7 @@ trait QueryTrait
      * @param int|string|null $id
      * @param string|null $blog_id
      * @param array $options
-     * @return array|false
+     * @return array
      */
     public function findByIdAndBlogId($id, ?string $blog_id, array $options = [])
     {
@@ -193,7 +193,7 @@ trait QueryTrait
     /**
      * @param array $values
      * @param array $options
-     * @return string|int|false 失敗時:false, 成功時 last insert id
+     * @return array|int 失敗時:false, 成功時 last insert id
      */
     public function insert(array $values, array $options = [])
     {
@@ -250,7 +250,7 @@ trait QueryTrait
      * @param array $values
      * @param $id
      * @param array $options
-     * @return false|int 失敗時:false, 成功時:1
+     * @return array|int 失敗時:false, 成功時:1
      */
     public function updateById(array $values, $id, array $options = [])
     {
@@ -263,7 +263,7 @@ trait QueryTrait
      * @param $id
      * @param string $blog_id
      * @param array $options
-     * @return false|int 失敗時 False 、成功時1
+     * @return array|int 失敗時 False 、成功時1
      */
     public function updateByIdAndBlogId(array $values, $id, string $blog_id, array $options = [])
     {
@@ -287,7 +287,7 @@ trait QueryTrait
      * idをキーとした削除
      * @param $id
      * @param array $options
-     * @return false|int 失敗時:false, 成功時:1
+     * @return array|int 失敗時:false, 成功時:1
      */
     public function deleteById($id, array $options = [])
     {
@@ -299,7 +299,7 @@ trait QueryTrait
      * @param $id
      * @param string $blog_id
      * @param array $options
-     * @return false|int 失敗時:false, 成功時:1
+     * @return array|int 失敗時:false, 成功時:1
      */
     public function deleteByIdAndBlogId($id, string $blog_id, array $options = [])
     {
@@ -311,7 +311,7 @@ trait QueryTrait
      * @param $id
      * @param int $user_id
      * @param array $options
-     * @return false|int 失敗時:false, 成功時:1
+     * @return array|int 失敗時:false, 成功時:1
      */
     public function deleteByIdAndUserId($id, int $user_id, array $options = [])
     {
@@ -390,7 +390,7 @@ trait QueryTrait
      * @param string $where 親ノード検索時のwhere句
      * @param array $params 親ノード検索時のバインドデータ
      * @param array $options
-     * @return string|int|false falseか、Last insert id
+     * @return array|false|int falseか、Last insert id
      */
     public function addNode(array $data = [], string $where = '', array $params = [], array $options = [])
     {

@@ -62,6 +62,7 @@ class TagsModel extends Model
      * @param $model
      * @return bool|string
      * @noinspection PhpUnusedParameterInspection
+     * @noinspection PhpUnused
      */
     public static function uniqueName($value, $option, $key, $data, $model)
     {
@@ -268,26 +269,27 @@ SQL;
 
     /**
      * idとblog_idをキーとした削除 + 付随情報も削除
-     * @param $tag_id
+     * @param $id
      * @param $blog_id
      * @param array $options
-     * @return array|false|int
+     * @return array|int
      */
-    public function deleteByIdAndBlogId($tag_id, $blog_id, array $options = array())
+    public function deleteByIdAndBlogId($id, $blog_id, array $options = array())
     {
         // タグの紐付け情報削除
-        Model::load('EntryTags')->delete('blog_id=? AND tag_id=?', array($blog_id, $tag_id));
+        (new EntryTagsModel())->delete('blog_id=? AND tag_id=?', array($blog_id, $id));
 
         // 記事本体削除
-        return parent::deleteByIdAndBlogId($tag_id, $blog_id, $options);
+        return parent::deleteByIdAndBlogId($id, $blog_id, $options);
     }
 
     /**
      * idとblog_idをキーとした削除 + 付随情報も削除
-     * @param array $ids
+     * @param array|int $ids
      * @param $blog_id
      * @param array $options
      * @return bool
+     * @noinspection PhpUnused
      */
     public function deleteByIdsAndBlogId($ids, $blog_id, array $options = array())
     {
