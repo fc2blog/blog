@@ -16,6 +16,9 @@ abstract class Model
     /** @var static */
     public static $instance;
 
+    /**
+     * @return static
+     */
     public static function getInstance()
     {
         if (!isset(static::$instance)) {
@@ -38,11 +41,6 @@ abstract class Model
     public function getDB(): PDOWrap
     {
         return PDOWrap::getInstance();
-    }
-
-    public function close(): void
-    {
-        $this->getDB()->close();
     }
 
     /**
@@ -139,7 +137,8 @@ abstract class Model
     /**
      * @param string $type
      * @param array $options
-     * @return array|false
+     * @return array
+     * @throw PDOException
      */
     public function find(string $type, array $options = [])
     {
@@ -247,7 +246,7 @@ abstract class Model
      * @param $id
      * @param int $user_id
      * @param array $options
-     * @return array|false
+     * @return array
      */
     public function findByIdAndUserId($id, int $user_id, array $options = [])
     {
@@ -331,7 +330,8 @@ abstract class Model
      * @param string $sql
      * @param array $params
      * @param array $options
-     * @return array|false
+     * @return array
+     * @throw PDOException
      */
     public function findSql(string $sql, array $params = [], array $options = [])
     {
@@ -376,7 +376,7 @@ abstract class Model
      * @param string $where
      * @param array $params
      * @param array $options
-     * @return false|int 失敗時:false, 成功時:1
+     * @return array|int 失敗時:false, 成功時:1
      */
     public function update(array $values, string $where, array $params = [], array $options = [])
     {
@@ -425,7 +425,7 @@ abstract class Model
      * @param string $where
      * @param array $params
      * @param array $options
-     * @return int|false 失敗時:false, 成功時:1
+     * @return array|int 失敗時:false, 成功時:1
      */
     public function delete(string $where, array $params = [], array $options = [])
     {
@@ -474,7 +474,7 @@ abstract class Model
      * @param array $columns
      * @param array $params
      * @param array $options
-     * @return string|int|false false時失敗, 成功時はlast insert idだが、複数INSERTなので活用は難しい
+     * @return array|int false時失敗, 成功時はlast insert idだが、複数INSERTなので活用は難しい
      */
     public function multipleInsert(array $columns = [], array $params = [], array $options = [])
     {
@@ -493,7 +493,7 @@ abstract class Model
      * @param string $sql
      * @param array $params
      * @param array $options
-     * @return array|false|int 失敗時False、成功時はOptionにより不定
+     * @return array|int 失敗時False、成功時はOptionにより不定
      */
     public function executeSql(string $sql, array $params = [], array $options = [])
     {
@@ -503,7 +503,7 @@ abstract class Model
     /**
      * 階層構造の一覧取得
      * @param array $options
-     * @return array|false
+     * @return array
      */
     public function findNode(array $options)
     {
@@ -705,7 +705,7 @@ abstract class Model
      * @param string $where
      * @param array $params
      * @param array $options
-     * @return array|false|int|mixed
+     * @return array|false|int
      */
     public function deleteNodeById($id, string $where = '', array $params = [], array $options = [])
     {

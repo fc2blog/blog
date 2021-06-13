@@ -1,16 +1,17 @@
-<?php /** @noinspection ALL 当面エラーチェックしない */
-
-/**
- * DB接続クラス
- */
+<?php
+declare(strict_types=1);
 
 namespace Fc2blog\Model;
 
-use Exception;
+use Fc2blog\Config;
+use Fc2blog\Util\Log;
+use PDO;
+use PDOException;
 use PDOStatement;
 
 class PDOWrap
 {
+    // find等の挙動選択肢 TODO 削除し、別々のメソッドへ
     const RESULT_ONE = 'one';                // １カラムのみ取得
     const RESULT_ROW = 'row';                // １行のみ取得
     const RESULT_LIST = 'list';              // リスト形式で取得
@@ -20,42 +21,38 @@ class PDOWrap
     const RESULT_AFFECTED = 'affected';      // 変更のあった行数を返却
     const RESULT_SUCCESS = 'success';        // SQLの実行結果が成功かどうかを返却
 
-    // DB情報
-    private $host = null;
-    private $port = null;
-    private $user = null;
-    private $password = null;
-    private $database = null;
-    private $charset = null;
-
-    // DBオブジェクト
-    private $db = null;
-
-    function __construct($host, $port, $user, $password, $database, $charset)
-    {
-        $this->host = $host;
-        $this->port = $port;
-        $this->user = $user;
-        $this->password = $password;
-        $this->database = $database;
-        $this->charset = $charset;
-    }
+    /** @var PDO */
+    private $pdo;
 
     private static $instance;
 
     public static function getInstance(bool $rebuild = false): self
     {
         if (!isset(self::$instance) || $rebuild) {
-            self::$instance = new self(
-                DB_HOST,
-                DB_PORT,
-                DB_USER,
-                DB_PASSWORD,
-                DB_DATABASE,
-                DB_CHARSET,
-            );
+            self::$instance = new self();
         }
         return self::$instance;
+    }
+
+    public static function createNewConnection(): PDO
+    {
+        $host = DB_HOST;
+        $port = DB_PORT;
+        $user = DB_USER;
+        $password = DB_PASSWORD;
+        $database = DB_DATABASE;
+        $charset = DB_CHARSET;
+
+        return new PDO(
+            "mysql:host={$host};port={$port};dbname={$database};charset={$charset};",
+            $user,
+            $password,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ]
+        );
     }
 
     /**
@@ -63,22 +60,17 @@ class PDOWrap
      * @param string $sql
      * @param array $params
      * @param array $options
-     * @return mixed
+     * @return array|int
+     * @throw PDOException
      */
     public function find(string $sql, array $params = [], array $options = [])
     {
-        $_options = array(
-            'types' => '',                  // paramsの型設定(sdi)
-            'result' => \Fc2blog\Model\PDOWrap::RESULT_ALL,    // 戻り値 one/row/all/statement...
-        );
-        $options = array_merge($_options, $options);
+        $options = array_merge(['result' => static::RESULT_ALL], $options);
         try {
-            $stmt = $this->query($sql, $params, $options['types']);
-        } catch (Exception $e) {
-            if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
-                \Fc2blog\Util\Log::old_log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
-            }
-            return false;
+            $stmt = $this->query($sql, $params);
+        } catch (PDOException $e) {
+            Log::error("DB find error " . $e->getMessage() . " {$sql}", [$params]);
+            throw $e;
         }
         return $this->result($stmt, $options['result']);
     }
@@ -89,22 +81,16 @@ class PDOWrap
      * @param string $sql
      * @param array $params
      * @param array $options
-     * @return array|false|int
+     * @return array|int
      */
     public function execute(string $sql, array $params = [], array $options = [])
     {
-        $_options = array(
-            'types' => '',                      // paramsの型設定(sdi)
-            'result' => \Fc2blog\Model\PDOWrap::RESULT_SUCCESS,    // 戻り値 one/row/all/statement...
-        );
-        $options = array_merge($_options, $options);
+        $options = array_merge(['result' => static::RESULT_SUCCESS], $options);
         try {
-            $stmt = $this->query($sql, $params, $options['types']);
-        } catch (Exception $e) {
-            if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
-                \Fc2blog\Util\Log::old_log($e->getMessage(), $params, 'error', __FILE__, __LINE__);
-            }
-            return false;
+            $stmt = $this->query($sql, $params);
+        } catch (PDOException $e) {
+            Log::error("DB execute error " . $e->getMessage() . " {$sql}", [$params]);
+            throw $e;
         }
         return $this->result($stmt, $options['result']);
     }
@@ -112,22 +98,14 @@ class PDOWrap
     /**
      * 複数の更新系SQL
      */
-    public function multiExecute($sql)
+    public function multiExecute($sql): bool
     {
         $sql = preg_replace('/^--.*?\n/m', '', $sql);
         $sql = preg_replace('/\/\*.*?\*\//s', '', $sql);
-        $sqls = explode(';', $sql);
-        $execute_sqls = array();
-        foreach ($sqls as $sql) {
-            if (trim($sql) !== '') {
-                $execute_sqls[] = $sql;
-            }
-        }
-
-        foreach ($execute_sqls as $sql) {
-            if ($this->execute($sql) === false) {
-                return false;
-            }
+        $sql_list = explode(';', $sql);
+        foreach ($sql_list as $sql) {
+            if (trim($sql) === '') continue; // 空クエリならスキップ
+            $this->execute($sql);
         }
         return true;
     }
@@ -136,63 +114,36 @@ class PDOWrap
      * SQLの実行
      * @param $sql
      * @param array $params
-     * @param string $types
-     * @return PDOStatement|mixed 成功時PDOStatement
-     * @throws Exception
+     * @return false|PDOStatement 成功時PDOStatement
      */
-    private function query($sql, $params = array(), $types = '')
+    private function query($sql, array $params = [])
     {
-        $mtime = 0;    // SQL実行結果時間取得用
-        if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
+        if (Config::get('SQL_DEBUG', 0)) {
             $mtime = microtime(true);
         }
 
-        $this->connect();
+        $pdo = $this->getPdo();
 
         if (!count($params)) {
-            // SQL文をそのまま実行
-            $stmt = $this->db->query($sql);
-            if (getType($stmt) == 'boolean' && !$stmt) {
-                throw new Exception('[query Error]' . print_r($this->db->errorInfo(), true) . $sql);
-            }
-            if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
-                $mtime = sprintf('%0.2fms', (microtime(true) - $mtime) * 1000);
-                \Fc2blog\Util\Log::old_log('実行時間：' . $mtime . ' ' . $sql, $params, 'sql', __FILE__, __LINE__);
-            }
-            return $stmt;
+            $stmt = $pdo->query($sql);
+        } else {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
         }
 
-        // プリペアドステートメント
-        $stmt = $this->db->prepare($sql);
-        if (!$stmt) {
-            throw new Exception('[prepare Error]' . $sql);
-        }
-        $stmt->execute($params);
-        if (\Fc2blog\Config::get('SQL_DEBUG', 0)) {
+        if (isset($mtime) && Config::get('SQL_DEBUG', 0)) {
             $mtime = sprintf('%0.2fms', (microtime(true) - $mtime) * 1000);
-            \Fc2blog\Util\Log::old_log('実行時間：' . $mtime . ' ' . $sql, $params, 'sql', __FILE__, __LINE__);
+            Log::debug_log("SQL {$mtime} {$sql}", ['params' => $params]);
         }
         return $stmt;
     }
 
-    public function connect()
+    public function getPdo(bool $forceNew = false): PDO
     {
-        if ($this->db == null) {
-            $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->database};charset={$this->charset};";
-            $options = array(
-                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                \PDO::ATTR_EMULATE_PREPARES => false,
-            );
-            $this->db = new \PDO($dsn, $this->user, $this->password, $options);
+        if ($forceNew || !isset($this->pdo)) {
+            $this->pdo = static::createNewConnection();
         }
-    }
-
-    public function close()
-    {
-        if ($this->db != null) {
-            $this->db = null;
-        }
+        return $this->pdo;
     }
 
     /**
@@ -203,44 +154,44 @@ class PDOWrap
     public function result($stmt, $type)
     {
         if ($stmt === false) {
-            return array();
+            return [];
         }
 
         switch ($type) {
             // １カラムのみ取得
-            case \Fc2blog\Model\PDOWrap::RESULT_ONE :
+            case static::RESULT_ONE :
                 return $stmt->fetchColumn();
 
             // １行のみ取得
-            case \Fc2blog\Model\PDOWrap::RESULT_ROW :
+            case static::RESULT_ROW :
                 return $stmt->fetch();
 
             // リスト形式で取得
-            case \Fc2blog\Model\PDOWrap::RESULT_LIST :
-                $rows = array();
-                $stmt->setFetchMode(\PDO::FETCH_NUM);
+            case static::RESULT_LIST :
+                $rows = [];
+                $stmt->setFetchMode(PDO::FETCH_NUM);
                 foreach ($stmt as $value) {
                     $rows[$value[0]] = $value[1];
                 }
                 return $rows;
 
             // 全て取得
-            case \Fc2blog\Model\PDOWrap::RESULT_ALL :
+            case static::RESULT_ALL :
                 return $stmt->fetchAll();
 
             // InsertIDを返却
-            case \Fc2blog\Model\PDOWrap::RESULT_INSERT_ID :
-                return $this->db->lastInsertId();
+            case static::RESULT_INSERT_ID :
+                return $this->pdo->lastInsertId();
 
             // 影響のあった行数を返却
-            case \Fc2blog\Model\PDOWrap::RESULT_AFFECTED :
+            case static::RESULT_AFFECTED :
                 return $stmt->rowCount();
 
             // 成功したかどうかを返却
-            case \Fc2blog\Model\PDOWrap::RESULT_SUCCESS :
+            case static::RESULT_SUCCESS :
                 return 1;
 
-            case \Fc2blog\Model\PDOWrap::RESULT_STAT:
+            case static::RESULT_STAT:
             default:
                 return $stmt;
         }
