@@ -9,7 +9,8 @@ use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\CommentsModel;
-use Fc2blog\Model\MSDB;
+use Fc2blog\Model\PDOConnection;
+use Fc2blog\Model\PDOQuery;
 use Fc2blog\Model\PluginsModel;
 use Fc2blog\Model\UsersModel;
 use Fc2blog\Web\Cookie;
@@ -170,17 +171,13 @@ class CommonController extends AdminController
                 $is_connect = true;
                 $connect_message = '';
                 try {
-                    MSDB::getInstance()->connect(false, false);
+                    PDOConnection::createConnection();
                 } catch (Exception $e) {
                     $is_connect = false;
                     $connect_message = $e->getMessage();
                 }
                 $this->set('is_connect', $is_connect);
                 $this->set('connect_message', $connect_message);
-
-                // DB設定確認
-                $is_character = version_compare(MSDB::getInstance()->getVersion(), '5.5.0') >= 0 || DB_CHARSET != 'UTF8MB4';
-                $this->set('is_character', $is_character);
 
                 // ドメイン確認
                 $is_domain = DOMAIN != 'domain';
@@ -191,8 +188,8 @@ class CommonController extends AdminController
                 $is_gd = function_exists('gd_info');
                 $this->set('is_gd', $is_gd);
 
-                $is_all_ok = $is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_character && $is_domain;
-                $this->set('is_all_ok', $is_all_ok);
+            $is_all_ok = $is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_domain;
+            $this->set('is_all_ok', $is_all_ok);
 
                 return 'admin/common/install.twig';
 
@@ -211,29 +208,18 @@ class CommonController extends AdminController
                 }
 
                 // DB接続確認
-                $msdb = MSDB::getInstance(true);
                 try {
                     // DB接続確認(DATABASEの存在判定含む)
-                    $msdb->connect();
+                    $pdo = PDOConnection::createConnection();
                 } catch (Exception $e) {
-                    // データベースの作成
-                    $msdb->close();
-                    $msdb->connect(false, false);
-                    $sql = 'CREATE DATABASE IF NOT EXISTS ' . DB_DATABASE . ' CHARACTER SET ' . DB_CHARSET;
-                    $msdb->execute($sql);
-                    $msdb->close();
-                    try {
-                        // 作成できたか確認
-                        $msdb->connect();
-                    } catch (Exception $e) {
-                        $this->setErrorMessage(__('Execute `Create database` failed. Please `Create database` your self.'));
-                        $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=db_create');
-                    }
+                    $this->setErrorMessage(__('Please set correct the DB connection settings.'));
+                    $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=db_create');
+                    return "";
                 }
 
                 // テーブルの存在チェック
                 $sql = "SHOW TABLES LIKE 'users'";
-                $table = MSDB::getInstance()->find($sql);
+                $table = PDOQuery::find($pdo, $sql);
 
                 if (is_countable($table) && count($table)) {
                     // 既にDB登録完了
@@ -246,7 +232,7 @@ class CommonController extends AdminController
                 if (DB_CHARSET != 'UTF8MB4') {
                     $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
                 }
-                $res = MSDB::getInstance()->multiExecute($sql);
+                $res = PDOQuery::multiExecute($pdo, $sql);
                 if ($res === false) {
                     $this->setErrorMessage(__('Create' . ' table failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');
@@ -254,7 +240,7 @@ class CommonController extends AdminController
 
                 // DBセットアップ成功チェック
                 $sql = "SHOW TABLES LIKE 'users'";
-                $table = MSDB::getInstance()->find($sql);
+                $table = PDOQuery::find($pdo, $sql);
                 if (!is_countable($table)) {
                     $this->setErrorMessage(__('Create' . ' table failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');

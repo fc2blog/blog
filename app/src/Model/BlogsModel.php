@@ -8,6 +8,7 @@ use Fc2blog\Config;
 use Fc2blog\Web\Request;
 use InvalidArgumentException;
 use OutOfBoundsException;
+use PDOException;
 
 class BlogsModel extends Model
 {
@@ -71,6 +72,7 @@ class BlogsModel extends Model
      * ディレクトリとして使用済みかどうか
      * @param string $value
      * @return bool|string
+     * @noinspection PhpUnused
      */
     public static function usableDirectory(string $value)
     {
@@ -233,29 +235,34 @@ class BlogsModel extends Model
     /**
      * ブログの一覧(SelectBox用)
      * @param $user_id
-     * @return mixed
+     * @return array
      */
-    public function getSelectList($user_id)
+    public function getSelectList($user_id): array
     {
-        return $this->find('list', array(
-            'fields' => array('id', 'name'),
-            'where' => 'user_id=?',
-            'params' => array($user_id),
-            'order' => 'created_at DESC',
-        ));
+        try {
+            return $this->find('list', array(
+                'fields' => array('id', 'name'),
+                'where' => 'user_id=?',
+                'params' => array($user_id),
+                'order' => 'created_at DESC',
+            ));
+        } catch (PDOException $e) {
+            // インストール前や初期化前など、クエリが出来ないケースがある
+            return [];
+        }
     }
 
     /**
      * ブログIDをキーにユーザーIDを条件としてブログを取得
-     * @param $blog_id
+     * @param $id
      * @param $user_id
      * @param array $options
      * @return mixed
      */
-    public function findByIdAndUserId($blog_id, $user_id, array $options = []): array
+    public function findByIdAndUserId($id, $user_id, array $options = []): array
     {
         $options['where'] = isset($options['where']) ? 'id=? AND user_id=? AND ' . $options['where'] : 'id=? AND user_id=?';
-        $options['params'] = isset($options['params']) ? array_merge(array($blog_id, $user_id), $options['params']) : array($blog_id, $user_id);
+        $options['params'] = isset($options['params']) ? array_merge(array($id, $user_id), $options['params']) : array($id, $user_id);
         return $this->find('row', $options);
     }
 
@@ -263,9 +270,9 @@ class BlogsModel extends Model
      * ユーザーIDをキーにしてブログを取得
      * @param $user_id
      * @param array $options
-     * @return mixed
+     * @return array
      */
-    public function findByUserId($user_id, $options = array())
+    public function findByUserId($user_id, array $options = array())
     {
         $options['where'] = isset($options['where']) ? 'user_id=? AND ' . $options['where'] : 'user_id=?';
         $options['params'] = isset($options['params']) ? array_merge(array($user_id), $options['params']) : array($user_id);
@@ -286,7 +293,7 @@ class BlogsModel extends Model
     /**
      * ログイン後最初に表示するブログを取得する
      * @param $user
-     * @return mixed
+     * @return array
      */
     public function getLoginBlog($user)
     {
@@ -311,7 +318,7 @@ class BlogsModel extends Model
     /**
      * ユーザーIDをキーにブログのリストを取得
      * @param int $user_id
-     * @return mixed
+     * @return array
      */
     public function getListByUserId(int $user_id)
     {
@@ -349,7 +356,7 @@ class BlogsModel extends Model
     {
         // 主キーがauto_incrementじゃないのでreturn値の受け取り方を変更
         $data['created_at'] = $data['updated_at'] = date('Y-m-d H:i:s');
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOQuery::RESULT_SUCCESS;
         if (!parent::insert($data, $options)) {
             return false;
         }
@@ -496,7 +503,7 @@ class BlogsModel extends Model
      * @param array $values
      * @param $id
      * @param array $options
-     * @return array|false|int|mixed
+     * @return array|int
      */
     public function updateById(array $values, $id, array $options = [])
     {
@@ -507,7 +514,8 @@ class BlogsModel extends Model
     /**
      * 最終投稿日時更新
      * @param $id
-     * @return array|false|int|mixed
+     * @return array|int
+     * @noinspection PhpUnused
      */
     public function updateLastPostedAt($id)
     {
@@ -519,7 +527,7 @@ class BlogsModel extends Model
      * テンプレートの切り替え
      * @param array $blog_template
      * @param string $blog_id
-     * @return array|false|int|mixed
+     * @return array|int
      */
     public function switchTemplate(array $blog_template, string $blog_id)
     {
@@ -533,13 +541,12 @@ class BlogsModel extends Model
         $reply_type = strstr($blog_template['html'], '<%comment_reply_body>') ?
             Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
         // コメントの表示タイプを更新
-        Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
+        (new BlogSettingsModel())->updateReplyType($device_type, $reply_type, $blog_id);
 
         $ret = $this->updateById($data, $blog_id);
 
         if ($ret) {
             // 更新に成功した場合 現在のテンプレートを削除
-            Model::load('BlogTemplates');
             $template_path = BlogTemplatesModel::getTemplateFilePath($blog_id, $device_type);
             is_file($template_path) && unlink($template_path);
             $css_path = BlogTemplatesModel::getCssFilePath($blog_id, $device_type);
@@ -556,7 +563,7 @@ class BlogsModel extends Model
      * @param array $options
      * @return bool|int
      */
-    public function deleteByIdAndUserId($blog_id, int $user_id, $options = array())
+    public function deleteByIdAndUserId($blog_id, int $user_id, array $options = array())
     {
         if (!parent::deleteById($blog_id, array('where' => 'user_id=?', 'params' => array($user_id)))) {
             return 0;
@@ -635,6 +642,7 @@ class BlogsModel extends Model
      * @param Request $request
      * @param string $blog_id
      * @return bool
+     * @noinspection PhpUnused
      */
     static public function isCorrectHttpSchemaByBlogId(Request $request, string $blog_id): bool
     {
@@ -762,6 +770,7 @@ class BlogsModel extends Model
     /**
      * @param Request $request
      * @return string|null
+     * @noinspection PhpUnused
      */
     static public function getBlogIdByRequestOrDefault(Request $request): ?string
     {

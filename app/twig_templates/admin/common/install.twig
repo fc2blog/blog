@@ -78,7 +78,7 @@
             {% if not is_db_connect_lib %}
                 <span style="color: red;">NG!</span>
                 <hr/>
-                <p class="ng">{{ _('Please enable pdo or mysqli') }}</p>
+                <p class="ng">{{ _('Please enable pdo') }}</p>
             {% endif %}
         </li>
 
@@ -120,24 +120,6 @@
                 </tr>
             </table>
         </li>
-
-        {% if is_connect %}
-            <li class="{% if is_character %}ok{% endif %}{% if not is_character %}ng{% endif %}">
-                {{ _('Character code check of MySQL') }} . . .
-                {% if is_character %}
-                    OK
-                {% endif %}
-                {% if not is_character %}
-                    <span style="color: red;">NG!</span>
-                    <hr/>
-                    <p class="ng">
-                        {{ _('You can not use the character code of UTF8MB4 because the version of MySQL is older') }}<br/>
-                        {{ _('Please change to UTF8 DB_CHARSET') }}<br/>
-                        {{ _('Example') }}) define('DB_CHARSET', 'UTF8');
-                    </p>
-                {% endif %}
-            </li>
-        {% endif %}
 
         <li class="{% if is_domain %}ok{% endif %}{% if not is_domain %}ng{% endif %}">
             {{ _('Check the configuration of the domain') }} . . .

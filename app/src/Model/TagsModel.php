@@ -61,6 +61,8 @@ class TagsModel extends Model
      * @param $data
      * @param $model
      * @return bool|string
+     * @noinspection PhpUnusedParameterInspection
+     * @noinspection PhpUnused
      */
     public static function uniqueName($value, $option, $key, $data, $model)
     {
@@ -125,9 +127,10 @@ class TagsModel extends Model
      * @param $name
      * @param $blog_id
      * @param array $options
-     * @return mixed
+     * @return array
+     * @noinspection PhpUnused
      */
-    public function findByNameAndBlogId($name, $blog_id, $options = array())
+    public function findByNameAndBlogId($name, $blog_id, array $options = array())
     {
         $options['where'] = isset($options['where']) ? 'name=? AND blog_id=? AND ' . $options['where'] : 'name=? AND blog_id=?';
         $options['params'] = isset($options['params']) ? array_merge(array($name, $blog_id), $options['params']) : array($name, $blog_id);
@@ -138,9 +141,9 @@ class TagsModel extends Model
      * 良く使用するタグ一覧を取得する
      * @param $blog_id
      * @param array $options
-     * @return mixed
+     * @return array
      */
-    public function getWellUsedTags($blog_id, $options = array())
+    public function getWellUsedTags($blog_id, array $options = array())
     {
         $options['fields'] = 'id, name';
         $options['where'] = (isset($options['where']) && $options['where'] != "") ? 'blog_id=? AND ' . $options['where'] : 'blog_id=?';
@@ -170,7 +173,7 @@ class TagsModel extends Model
      * 記事のタグを取得する
      * @param $blog_id
      * @param $entry_id
-     * @return mixed
+     * @return array
      */
     public function getEntryTags($blog_id, $entry_id)
     {
@@ -184,7 +187,7 @@ WHERE entry_tags.blog_id=?
 SQL;
         $params = array($blog_id, $entry_id, $blog_id);
         $options = array();
-        $options['result'] = DBInterface::RESULT_ALL;
+        $options['result'] = PDOQuery::RESULT_ALL;
         return $this->findSql($sql, $params, $options);
     }
 
@@ -211,7 +214,7 @@ WHERE entry_tags.blog_id=?
 SQL;
         $params = array_merge(array($blog_id), $entry_ids, array($blog_id));
         $options = array();
-        $options['result'] = DBInterface::RESULT_ALL;
+        $options['result'] = PDOQuery::RESULT_ALL;
         $tags = $this->findSql($sql, $params, $options);
 
         $entries_tags = array();
@@ -228,7 +231,7 @@ SQL;
      * 件数を増加させる処理
      * @param string $blog_id
      * @param array $ids
-     * @return int|false
+     * @return array|int
      */
     public function increaseCount(string $blog_id, array $ids = array())
     {
@@ -237,7 +240,7 @@ SQL;
         }
         $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count+1 WHERE blog_id=? AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
         $params = array_merge(array($blog_id), $ids);
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOQuery::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
 
@@ -256,7 +259,7 @@ SQL;
             ' SET count=count-1 WHERE blog_id=? AND count>0 AND id ' .
             ' IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
         $params = array_merge([$blog_id], $ids);
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOQuery::RESULT_SUCCESS;
         return
             # 有効タグ数の数え直し
             $this->executeSql($sql, $params, $options) &&
@@ -266,28 +269,29 @@ SQL;
 
     /**
      * idとblog_idをキーとした削除 + 付随情報も削除
-     * @param $tag_id
+     * @param $id
      * @param $blog_id
      * @param array $options
-     * @return array|false|int|mixed
+     * @return array|int
      */
-    public function deleteByIdAndBlogId($tag_id, $blog_id, $options = array())
+    public function deleteByIdAndBlogId($id, $blog_id, array $options = array())
     {
         // タグの紐付け情報削除
-        Model::load('EntryTags')->delete('blog_id=? AND tag_id=?', array($blog_id, $tag_id));
+        (new EntryTagsModel())->delete('blog_id=? AND tag_id=?', array($blog_id, $id));
 
         // 記事本体削除
-        return parent::deleteByIdAndBlogId($tag_id, $blog_id, $options);
+        return parent::deleteByIdAndBlogId($id, $blog_id, $options);
     }
 
     /**
      * idとblog_idをキーとした削除 + 付随情報も削除
-     * @param array $ids
+     * @param array|int $ids
      * @param $blog_id
      * @param array $options
      * @return bool
+     * @noinspection PhpUnused
      */
-    public function deleteByIdsAndBlogId($ids, $blog_id, $options = array())
+    public function deleteByIdsAndBlogId($ids, $blog_id, array $options = array())
     {
         // 単体ID対応
         if (is_numeric($ids)) {

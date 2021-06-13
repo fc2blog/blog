@@ -15,7 +15,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
-          extensions: mbstring, gd, gettext, fileinfo, pdo, pdo_mysql, mysqli, zip
+          extensions: mbstring, gd, gettext, fileinfo, pdo, pdo_mysql, zip
 
       - uses: actions/checkout@v2
 

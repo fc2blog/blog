@@ -1119,7 +1119,7 @@ msgid "Check connection library with MySQL"
 msgstr ""
 
 #: shell/../view/admin/common/install.html:78
-msgid "Please enable pdo or mysqli"
+msgid "Please enable pdo"
 msgstr ""
 
 #: shell/../view/admin/common/install.html:94
@@ -2498,8 +2498,8 @@ msgstr ""
 msgid "The page you are looking for does not exist."
 msgstr ""
 
-msgid "Execute `Create database` failed. Please `Create database` your self."
-msgstr ""
+msgid "Please set correct the DB connection settings."
+msgstr "DBの接続設定をご確認ください。"
 
 msgid "(If not exists, will be try create)"
 msgstr ""

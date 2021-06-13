@@ -1109,8 +1109,8 @@ msgid "Check connection library with MySQL"
 msgstr "MySQLとの接続ライブラリチェック"
 
 #: shell/../view/admin/common/install.html:78
-msgid "Please enable pdo or mysqli"
-msgstr "mysqli または pdoを有効にしてください"
+msgid "Please enable pdo"
+msgstr "pdoを有効にしてください"
 
 #: shell/../view/admin/common/install.html:94
 msgid "Check connection to the MySQL"
@@ -2545,8 +2545,8 @@ msgstr "ブログに設置されたプラグイン、またはテンプレート
 msgid "The page you are looking for does not exist."
 msgstr "お探しのページは存在しません"
 
-msgid "Execute `Create database` failed. Please `Create database` your self."
-msgstr "`CREATE DATABASE`のsql実行に失敗しました、事前に`CREATE DATABASE`を実行してください。"
+msgid "Please set correct the DB connection settings."
+msgstr "DBの接続設定をご確認ください。"
 
 msgid "(If not exists, will be try create)"
 msgstr "(未作成の場合、作成を試行します)"
