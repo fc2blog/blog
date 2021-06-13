@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Model;
 
 use Fc2blog\Util\Log;
+use PDOStatement;
 
 abstract class Model
 {
@@ -278,6 +279,8 @@ abstract class Model
      */
     public function getPaging(array $options = []): array
     {
+        $count = $this->getFoundRows($options);
+
         if (!isset($options['page']) || !isset($options['limit'])) {
             Log::error('getPaging options["page"] or options["limit"]が設定されておりません');
             return [];
@@ -285,8 +288,6 @@ abstract class Model
 
         $page = $options['page'];
         $limit = $options['limit'];
-
-        $count = $this->getFoundRows();
 
         $pages = [];
         $pages['count'] = $count;
@@ -301,13 +302,17 @@ abstract class Model
     }
 
     /**
-     * SQL_CALC_FOUND_ROWSで見つかった件数を返却する
-     * @return array|false
+     * 指定のOptionでSELECTされる件数を取得
+     * @param array $options
+     * @return int
      */
-    public function getFoundRows()
+    public function getFoundRows(array $options = []): int
     {
-        $sql = 'SELECT FOUND_ROWS()';
-        return $this->findSql($sql, [], array('result' => DBInterface::RESULT_ONE));
+        unset($options['limit']);
+        unset($options['offset']);
+        /** @var PDOStatement $stmt */
+        $stmt = $this->find('statement', $options);
+        return (int)$stmt->rowCount();
     }
 
     /**
