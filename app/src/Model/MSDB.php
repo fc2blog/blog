@@ -1,9 +1,4 @@
-<?php /** @noinspection ALL 当面エラーチェックしない */
-
-/**
- * Master/Slaveの切り替え用
- * 基本的にMySqliWrapと同じ機能を有する
- */
+<?php
 
 namespace Fc2blog\Model;
 
@@ -11,10 +6,7 @@ use Fc2blog\Config;
 
 class MSDB implements DBInterface
 {
-
-    // master/slave
     private $master = null;
-    private $slave = null;
 
     // singleton pattern
     private static $instance = null;
@@ -32,83 +24,24 @@ class MSDB implements DBInterface
     }
 
     /**
-     * @return MySqliWrap|PDOWrap
+     * @return PDOWrap
      */
-    private function getMasterDB()
+    private function getMasterDB(): PDOWrap
     {
-        if (!$this->master) {
-            if (DB_CONNECT_LIB === 'PDO') {
-                $this->master = new PDOWrap(
-                    Config::get('MASTER_DB.HOST'),
-                    Config::get('MASTER_DB.PORT'),
-                    Config::get('MASTER_DB.USER'),
-                    Config::get('MASTER_DB.PASSWORD'),
-                    Config::get('MASTER_DB.DATABASE'),
-                    Config::get('DB_CHARSET')
-                );
-            }
-            if (DB_CONNECT_LIB === 'mysqli') {
-                $this->master = new MySqliWrap(
-                    Config::get('MASTER_DB.HOST'),
-                    Config::get('MASTER_DB.PORT'),
-                    Config::get('MASTER_DB.USER'),
-                    Config::get('MASTER_DB.PASSWORD'),
-                    Config::get('MASTER_DB.DATABASE'),
-                    Config::get('DB_CHARSET')
-                );
-            }
-        }
-        return $this->master;
-    }
-
-    private function getSlaveDB()
-    {
-        if (!$this->slave) {
-            if (DB_CONNECT_LIB === 'PDO') {
-                $this->slave = new PDOWrap(
-                    Config::get('SLAVE_DB.HOST'),
-                    Config::get('SLAVE_DB.USER'),
-                    Config::get('SLAVE_DB.PASSWORD'),
-                    Config::get('SLAVE_DB.DATABASE'),
-                    Config::get('DB_CHARSET')
-                );
-            }
-            if (DB_CONNECT_LIB === 'mysqli') {
-                $this->slave = new MySqliWrap(
-                    Config::get('SLAVE_DB.HOST'),
-                    Config::get('SLAVE_DB.USER'),
-                    Config::get('SLAVE_DB.PASSWORD'),
-                    Config::get('SLAVE_DB.DATABASE'),
-                    Config::get('DB_CHARSET')
-                );
-            }
-        }
-        return $this->slave;
-    }
-
-    /**
-     * @param bool $isMaster
-     * @return MySqliWrap|PDOWrap
-     */
-    public function getDB($isMaster = false)
-    {
-        // Master/Slave機能のON/OFF
-        if (!Config::get('IS_MASTER_SLAVE', true)) {
-            return $this->getMasterDB();
-        }
-        return $isMaster ? $this->getMasterDB() : $this->getSlaveDB();
+        return $this->master = new PDOWrap(
+            Config::get('MASTER_DB.HOST'),
+            Config::get('MASTER_DB.PORT'),
+            Config::get('MASTER_DB.USER'),
+            Config::get('MASTER_DB.PASSWORD'),
+            Config::get('MASTER_DB.DATABASE'),
+            Config::get('DB_CHARSET')
+        );
     }
 
     public function close()
     {
-        if ($this->master) {
-            $this->master->close();
-            $this->master = null;
-        }
-        if ($this->slave) {
-            $this->slave->close();
-            $this->slave = null;
-        }
+        $this->master->close();
+        $this->master = null;
     }
 
     /**
@@ -126,7 +59,7 @@ class MSDB implements DBInterface
             'result' => DBInterface::RESULT_ALL,  // 戻り値 one/row/all/statement...
         );
         $options = array_merge($_options, $options);
-        $db = $this->getDB($options['master']);
+        $db = $this->getMasterDB();
         return $db->find($sql, $params, $options);
     }
 
@@ -155,26 +88,15 @@ class MSDB implements DBInterface
      */
     public function multiExecute($sql)
     {
-        return $this->getDB()->multiExecute($sql);
+        return $this->getMasterDB()->multiExecute($sql);
     }
 
     /**
      * 接続処理
-     * @param bool $is_charset
-     * @param bool $is_database
      */
-    public function connect($is_charset = true, $is_database = true)
+    public function connect()
     {
-        $this->getDB()->connect($is_charset, $is_database);
+        $this->getMasterDB()->connect();
     }
-
-    /**
-     * MySQLのバージョンを取得する
-     */
-    public function getVersion()
-    {
-        return $this->getDB()->getVersion();
-    }
-
 }
 
