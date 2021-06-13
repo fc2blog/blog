@@ -9,7 +9,7 @@ use PDO;
 use PDOException;
 use PDOStatement;
 
-class PDOWrap
+class PDOQuery
 {
     // find等の挙動選択肢 TODO 削除し、別々のメソッドへ
     const RESULT_ONE = 'one';                // １カラムのみ取得
@@ -21,108 +21,77 @@ class PDOWrap
     const RESULT_AFFECTED = 'affected';      // 変更のあった行数を返却
     const RESULT_SUCCESS = 'success';        // SQLの実行結果が成功かどうかを返却
 
-    /** @var PDO */
-    private $pdo;
-
-    private static $instance;
-
-    public static function getInstance(bool $rebuild = false): self
-    {
-        if (!isset(self::$instance) || $rebuild) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
-    public static function createNewConnection(): PDO
-    {
-        $host = DB_HOST;
-        $port = DB_PORT;
-        $user = DB_USER;
-        $password = DB_PASSWORD;
-        $database = DB_DATABASE;
-        $charset = DB_CHARSET;
-
-        return new PDO(
-            "mysql:host={$host};port={$port};dbname={$database};charset={$charset};",
-            $user,
-            $password,
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-            ]
-        );
-    }
-
     /**
-     * 参照系SQL
+     * 参照系SQLの実行
+     * @param PDO $pdo
      * @param string $sql
      * @param array $params
      * @param array $options
      * @return array|int
      * @throw PDOException
      */
-    public function find(string $sql, array $params = [], array $options = [])
+    public static function find(PDO $pdo, string $sql, array $params = [], array $options = [])
     {
         $options = array_merge(['result' => static::RESULT_ALL], $options);
         try {
-            $stmt = $this->query($sql, $params);
+            $stmt = static::query($pdo, $sql, $params);
         } catch (PDOException $e) {
             Log::error("DB find error " . $e->getMessage() . " {$sql}", [$params]);
             throw $e;
         }
-        return $this->result($stmt, $options['result']);
+        return static::result($pdo, $stmt, $options['result']);
     }
 
-
     /**
-     * 更新系SQL
+     * 更新系SQLの実行
+     * @param PDO $pdo
      * @param string $sql
      * @param array $params
      * @param array $options
      * @return array|int
      */
-    public function execute(string $sql, array $params = [], array $options = [])
+    public static function execute(PDO $pdo, string $sql, array $params = [], array $options = [])
     {
         $options = array_merge(['result' => static::RESULT_SUCCESS], $options);
         try {
-            $stmt = $this->query($sql, $params);
+            $stmt = static::query($pdo, $sql, $params);
         } catch (PDOException $e) {
             Log::error("DB execute error " . $e->getMessage() . " {$sql}", [$params]);
             throw $e;
         }
-        return $this->result($stmt, $options['result']);
+        return static::result($pdo, $stmt, $options['result']);
     }
 
     /**
-     * 複数の更新系SQL
+     * 複数行となるSQLの実行
+     * @param PDO $pdo
+     * @param $sql
+     * @return bool
      */
-    public function multiExecute($sql): bool
+    public static function multiExecute(PDO $pdo, $sql): bool
     {
         $sql = preg_replace('/^--.*?\n/m', '', $sql);
         $sql = preg_replace('/\/\*.*?\*\//s', '', $sql);
         $sql_list = explode(';', $sql);
         foreach ($sql_list as $sql) {
             if (trim($sql) === '') continue; // 空クエリならスキップ
-            $this->execute($sql);
+            static::execute($pdo, $sql);
         }
         return true;
     }
 
     /**
-     * SQLの実行
+     * PDOでSQLの実行
+     * @param PDO $pdo
      * @param $sql
      * @param array $params
      * @return false|PDOStatement 成功時PDOStatement
      */
-    private function query($sql, array $params = [])
+    private static function query(PDO $pdo, $sql, array $params = [])
     {
         if (Config::get('SQL_DEBUG', 0)) {
             $mtime = microtime(true);
         }
-
-        $pdo = $this->getPdo();
 
         if (!count($params)) {
             $stmt = $pdo->query($sql);
@@ -138,20 +107,14 @@ class PDOWrap
         return $stmt;
     }
 
-    public function getPdo(bool $forceNew = false): PDO
-    {
-        if ($forceNew || !isset($this->pdo)) {
-            $this->pdo = static::createNewConnection();
-        }
-        return $this->pdo;
-    }
-
     /**
+     * 結果内容の変換 TODO いつか削除する
+     * @param PDO $pdo
      * @param $stmt
      * @param $type
      * @return array|int $typeによって様々な意味の返り値となる
      */
-    public function result($stmt, $type)
+    public static function result(PDO $pdo, $stmt, $type)
     {
         if ($stmt === false) {
             return [];
@@ -181,7 +144,7 @@ class PDOWrap
 
             // InsertIDを返却
             case static::RESULT_INSERT_ID :
-                return $this->pdo->lastInsertId();
+                return $pdo->lastInsertId();
 
             // 影響のあった行数を返却
             case static::RESULT_AFFECTED :
