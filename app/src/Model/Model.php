@@ -16,10 +16,7 @@ abstract class Model
     /** @var static */
     public static $instance;
 
-    /**
-     * @return static
-     */
-    public static function getInstance(): Model
+    public static function getInstance()
     {
         if (!isset(static::$instance)) {
             static::$instance = new static();
@@ -36,11 +33,11 @@ abstract class Model
     }
 
     /**
-     * @return MSDB|null
+     * @return PDOWrap
      */
-    public function getDB(): ?MSDB
+    public function getDB(): PDOWrap
     {
-        return MSDB::getInstance();
+        return PDOWrap::getInstance();
     }
 
     public function close(): void
@@ -156,25 +153,25 @@ abstract class Model
             case 'count':
                 $options['fields'] = 'COUNT(*)';
                 $options['limit'] = 1;
-                $options['options']['result'] = DBInterface::RESULT_ONE;
+                $options['options']['result'] = PDOWrap::RESULT_ONE;
                 break;
             case 'one':
                 $options['limit'] = 1;
-                $options['options']['result'] = DBInterface::RESULT_ONE;
+                $options['options']['result'] = PDOWrap::RESULT_ONE;
                 break;
             case 'row':
                 $options['limit'] = 1;
-                $options['options']['result'] = DBInterface::RESULT_ROW;
+                $options['options']['result'] = PDOWrap::RESULT_ROW;
                 break;
             case 'list':
-                $options['options']['result'] = DBInterface::RESULT_LIST;
+                $options['options']['result'] = PDOWrap::RESULT_LIST;
                 break;
             case 'all':
-                $options['options']['result'] = DBInterface::RESULT_ALL;
+                $options['options']['result'] = PDOWrap::RESULT_ALL;
                 break;
             case 'statement':
             default:
-                $options['options']['result'] = DBInterface::RESULT_STAT;
+            $options['options']['result'] = PDOWrap::RESULT_STAT;
                 break;
         }
         $fields = '*';
@@ -369,7 +366,7 @@ abstract class Model
             $values = array_values($values);
         }
         if (!isset($options['result'])) {
-            $options['result'] = DBInterface::RESULT_INSERT_ID;
+            $options['result'] = PDOWrap::RESULT_INSERT_ID;
         }
         return $this->executeSql($sql, $values, $options);
     }
@@ -392,7 +389,7 @@ abstract class Model
         }
         $sql = 'UPDATE ' . $this->getTableName() . ' SET ' . implode(',', $sets) . ' WHERE ' . $where;
         $params = array_merge(array_values($values), $params);
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOWrap::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
 
@@ -433,7 +430,7 @@ abstract class Model
     public function delete(string $where, array $params = [], array $options = [])
     {
         $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE ' . $where;
-        $options['result'] = DBInterface::RESULT_SUCCESS;
+        $options['result'] = PDOWrap::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
 
@@ -488,7 +485,7 @@ abstract class Model
             $sql_array[] = '(' . implode(',', array_fill(0, count($columns), '?')) . ')';
         }
         $sql .= implode(',', $sql_array);
-        $options['result'] = DBInterface::RESULT_INSERT_ID;
+        $options['result'] = PDOWrap::RESULT_INSERT_ID;
         return $this->executeSql($sql, $params, $options);
     }
 
@@ -496,7 +493,7 @@ abstract class Model
      * @param string $sql
      * @param array $params
      * @param array $options
-     * @return mixed|false 失敗時False、成功時はOptionにより不定
+     * @return array|false|int 失敗時False、成功時はOptionにより不定
      */
     public function executeSql(string $sql, array $params = [], array $options = [])
     {

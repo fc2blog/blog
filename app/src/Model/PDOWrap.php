@@ -9,8 +9,16 @@ namespace Fc2blog\Model;
 use Exception;
 use PDOStatement;
 
-class PDOWrap implements DBInterface
+class PDOWrap
 {
+    const RESULT_ONE = 'one';                // １カラムのみ取得
+    const RESULT_ROW = 'row';                // １行のみ取得
+    const RESULT_LIST = 'list';              // リスト形式で取得
+    const RESULT_ALL = 'all';                // 全て取得
+    const RESULT_STAT = 'statement';          // 結果ステートメントを返却する
+    const RESULT_INSERT_ID = 'insert_id';    // AUTO_INCREMENTの値を返却
+    const RESULT_AFFECTED = 'affected';      // 変更のあった行数を返却
+    const RESULT_SUCCESS = 'success';        // SQLの実行結果が成功かどうかを返却
 
     // DB情報
     private $host = null;
@@ -33,6 +41,23 @@ class PDOWrap implements DBInterface
         $this->charset = $charset;
     }
 
+    private static $instance;
+
+    public static function getInstance(bool $rebuild = false): self
+    {
+        if (!isset(self::$instance) || $rebuild) {
+            self::$instance = new self(
+                DB_HOST,
+                DB_PORT,
+                DB_USER,
+                DB_PASSWORD,
+                DB_DATABASE,
+                DB_CHARSET,
+            );
+        }
+        return self::$instance;
+    }
+
     /**
      * 参照系SQL
      * @param string $sql
@@ -44,7 +69,7 @@ class PDOWrap implements DBInterface
     {
         $_options = array(
             'types' => '',                  // paramsの型設定(sdi)
-            'result' => \Fc2blog\Model\DBInterface::RESULT_ALL,    // 戻り値 one/row/all/statement...
+            'result' => \Fc2blog\Model\PDOWrap::RESULT_ALL,    // 戻り値 one/row/all/statement...
         );
         $options = array_merge($_options, $options);
         try {
@@ -70,7 +95,7 @@ class PDOWrap implements DBInterface
     {
         $_options = array(
             'types' => '',                      // paramsの型設定(sdi)
-            'result' => \Fc2blog\Model\DBInterface::RESULT_SUCCESS,    // 戻り値 one/row/all/statement...
+            'result' => \Fc2blog\Model\PDOWrap::RESULT_SUCCESS,    // 戻り値 one/row/all/statement...
         );
         $options = array_merge($_options, $options);
         try {
@@ -183,15 +208,15 @@ class PDOWrap implements DBInterface
 
         switch ($type) {
             // １カラムのみ取得
-            case \Fc2blog\Model\DBInterface::RESULT_ONE :
+            case \Fc2blog\Model\PDOWrap::RESULT_ONE :
                 return $stmt->fetchColumn();
 
             // １行のみ取得
-            case \Fc2blog\Model\DBInterface::RESULT_ROW :
+            case \Fc2blog\Model\PDOWrap::RESULT_ROW :
                 return $stmt->fetch();
 
             // リスト形式で取得
-            case \Fc2blog\Model\DBInterface::RESULT_LIST :
+            case \Fc2blog\Model\PDOWrap::RESULT_LIST :
                 $rows = array();
                 $stmt->setFetchMode(\PDO::FETCH_NUM);
                 foreach ($stmt as $value) {
@@ -200,22 +225,22 @@ class PDOWrap implements DBInterface
                 return $rows;
 
             // 全て取得
-            case \Fc2blog\Model\DBInterface::RESULT_ALL :
+            case \Fc2blog\Model\PDOWrap::RESULT_ALL :
                 return $stmt->fetchAll();
 
             // InsertIDを返却
-            case \Fc2blog\Model\DBInterface::RESULT_INSERT_ID :
+            case \Fc2blog\Model\PDOWrap::RESULT_INSERT_ID :
                 return $this->db->lastInsertId();
 
             // 影響のあった行数を返却
-            case \Fc2blog\Model\DBInterface::RESULT_AFFECTED :
+            case \Fc2blog\Model\PDOWrap::RESULT_AFFECTED :
                 return $stmt->rowCount();
 
             // 成功したかどうかを返却
-            case \Fc2blog\Model\DBInterface::RESULT_SUCCESS :
+            case \Fc2blog\Model\PDOWrap::RESULT_SUCCESS :
                 return 1;
 
-            case \Fc2blog\Model\DBInterface::RESULT_STAT:
+            case \Fc2blog\Model\PDOWrap::RESULT_STAT:
             default:
                 return $stmt;
         }
