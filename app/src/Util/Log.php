@@ -33,20 +33,6 @@ class Log
     }
 
     /**
-     * 過去のDebug::logと互換性を持ったメソッド
-     * @param string $message
-     * @param mixed $context
-     * @param string $class
-     * @param string $filename
-     * @param int $line
-     */
-    public static function old_log(string $message, $context, string $class = 'log', string $filename = "-", int $line = 0): void
-    {
-        $logger = static::getLogger();
-        $logger->debug("[{$class}]{$filename}:{$line} {$message}", [$context]);
-    }
-
-    /**
      * @param string $message
      * @param array $context
      */
