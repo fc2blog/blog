@@ -71,6 +71,7 @@ class CategoriesModel extends Model
      * @param $data
      * @param $model
      * @return bool|string
+     * @noinspection PhpUnusedParameterInspection
      */
     public static function uniqueName($value, $option, $key, $data, $model)
     {
@@ -183,7 +184,7 @@ WHERE entry_categories.blog_id=?
 SQL;
         $params = array($blog_id, $entry_id, $blog_id);
         $options = array();
-        $options['result'] = PDOWrap::RESULT_ALL;
+        $options['result'] = PDOQuery::RESULT_ALL;
         return $this->findSql($sql, $params, $options);
     }
 
@@ -210,7 +211,7 @@ WHERE entry_categories.blog_id=?
 SQL;
         $params = array_merge(array($blog_id), $entry_ids, array($blog_id));
         $options = array();
-        $options['result'] = PDOWrap::RESULT_ALL;
+        $options['result'] = PDOQuery::RESULT_ALL;
         $categories = $this->findSql($sql, $params, $options);
 
         $entries_categories = array();
@@ -253,7 +254,7 @@ SQL;
         }
         $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count+1 WHERE blog_id=? AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
         $params = array_merge(array($blog_id), $ids);
-        $options['result'] = PDOWrap::RESULT_SUCCESS;
+        $options['result'] = PDOQuery::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
 
@@ -270,7 +271,7 @@ SQL;
         }
         $sql = 'UPDATE ' . $this->getTableName() . ' SET count=count-1 WHERE blog_id=? AND count>0 AND id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')';
         $params = array_merge(array($blog_id), $ids);
-        $options['result'] = PDOWrap::RESULT_SUCCESS;
+        $options['result'] = PDOQuery::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
 

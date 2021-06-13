@@ -9,7 +9,8 @@ use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\CommentsModel;
-use Fc2blog\Model\PDOWrap;
+use Fc2blog\Model\PDOConnection;
+use Fc2blog\Model\PDOQuery;
 use Fc2blog\Model\PluginsModel;
 use Fc2blog\Model\UsersModel;
 use Fc2blog\Web\Cookie;
@@ -170,7 +171,7 @@ class CommonController extends AdminController
                 $is_connect = true;
                 $connect_message = '';
                 try {
-                    PDOWrap::createNewConnection();
+                    PDOConnection::createConnection();
                 } catch (Exception $e) {
                     $is_connect = false;
                     $connect_message = $e->getMessage();
@@ -209,15 +210,16 @@ class CommonController extends AdminController
                 // DB接続確認
                 try {
                     // DB接続確認(DATABASEの存在判定含む)
-                    PDOWrap::createNewConnection();
+                    $pdo = PDOConnection::createConnection();
                 } catch (Exception $e) {
                     $this->setErrorMessage(__('Please set correct the DB connection settings.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=db_create');
+                    return "";
                 }
 
                 // テーブルの存在チェック
                 $sql = "SHOW TABLES LIKE 'users'";
-                $table = PDOWrap::getInstance()->find($sql);
+                $table = PDOQuery::find($pdo, $sql);
 
                 if (is_countable($table) && count($table)) {
                     // 既にDB登録完了
@@ -230,7 +232,7 @@ class CommonController extends AdminController
                 if (DB_CHARSET != 'UTF8MB4') {
                     $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
                 }
-                $res = PDOWrap::getInstance()->multiExecute($sql);
+                $res = PDOQuery::multiExecute($pdo, $sql);
                 if ($res === false) {
                     $this->setErrorMessage(__('Create' . ' table failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');
@@ -238,7 +240,7 @@ class CommonController extends AdminController
 
                 // DBセットアップ成功チェック
                 $sql = "SHOW TABLES LIKE 'users'";
-                $table = PDOWrap::getInstance()->find($sql);
+                $table = PDOQuery::find($pdo, $sql);
                 if (!is_countable($table)) {
                     $this->setErrorMessage(__('Create' . ' table failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=table_insert');

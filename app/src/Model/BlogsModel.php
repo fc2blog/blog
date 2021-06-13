@@ -355,7 +355,7 @@ class BlogsModel extends Model
     {
         // 主キーがauto_incrementじゃないのでreturn値の受け取り方を変更
         $data['created_at'] = $data['updated_at'] = date('Y-m-d H:i:s');
-        $options['result'] = PDOWrap::RESULT_SUCCESS;
+        $options['result'] = PDOQuery::RESULT_SUCCESS;
         if (!parent::insert($data, $options)) {
             return false;
         }
