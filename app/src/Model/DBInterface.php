@@ -27,6 +27,4 @@ interface DBInterface
 
     public function close();
 
-    public function getVersion();
-
 }
