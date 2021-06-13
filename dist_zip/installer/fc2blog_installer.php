@@ -67,9 +67,6 @@ ob_start(); // for redirect.
             if (!extension_loaded('PDO')) {
                 $list[] = "PDO notfound. ";
             }
-            if (!extension_loaded('mysqli')) {
-                $list[] = "mysqli notfound. ";
-            }
             if (!extension_loaded('mbstring')) {
                 $list[] = "mbstring notfound. ";
             }
