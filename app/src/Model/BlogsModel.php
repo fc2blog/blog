@@ -8,6 +8,7 @@ use Fc2blog\Config;
 use Fc2blog\Web\Request;
 use InvalidArgumentException;
 use OutOfBoundsException;
+use PDOException;
 
 class BlogsModel extends Model
 {
@@ -233,16 +234,21 @@ class BlogsModel extends Model
     /**
      * ブログの一覧(SelectBox用)
      * @param $user_id
-     * @return mixed
+     * @return array
      */
-    public function getSelectList($user_id)
+    public function getSelectList($user_id): array
     {
-        return $this->find('list', array(
-            'fields' => array('id', 'name'),
-            'where' => 'user_id=?',
-            'params' => array($user_id),
-            'order' => 'created_at DESC',
-        ));
+        try {
+            return $this->find('list', array(
+                'fields' => array('id', 'name'),
+                'where' => 'user_id=?',
+                'params' => array($user_id),
+                'order' => 'created_at DESC',
+            ));
+        } catch (PDOException $e) {
+            // インストール前や初期化前など、クエリが出来ないケースがある
+            return [];
+        }
     }
 
     /**
