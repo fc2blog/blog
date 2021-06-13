@@ -45,7 +45,6 @@ class InstallTest extends TestCase
         $this->assertTrue($d['is_db_connect_lib']);
         $this->assertTrue($d['is_connect']);
         $this->assertEquals(0, strlen($d['connect_message']));
-        $this->assertTrue($d['is_character']);
         $this->assertTrue($d['is_domain']);
         $this->assertTrue($d['is_gd']);
         $this->assertTrue($d['is_all_ok']);
@@ -81,8 +80,6 @@ class InstallTest extends TestCase
             $this->assertTrue($d['is_connect']);
             // 確認がむずかしい
             $this->assertEquals(0, strlen($d['connect_message']));
-            // 確認がむずかしい
-            $this->assertTrue($d['is_character']);
             // 確認がむずかしい
             $this->assertTrue($d['is_domain']);
             // 確認がむずかしい
