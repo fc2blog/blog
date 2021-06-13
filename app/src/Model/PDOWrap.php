@@ -2,7 +2,6 @@
 
 /**
  * DB接続クラス
- * mysqliのラッピング
  */
 
 namespace Fc2blog\Model;
@@ -151,24 +150,15 @@ class PDOWrap implements DBInterface
         return $stmt;
     }
 
-    public function connect($is_charset = true, $is_database = true)
+    public function connect()
     {
         if ($this->db == null) {
-            $dsn = "mysql:host={$this->host};port={$this->port}";
-            if ($is_database) {
-                $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->database};";
-            }
+            $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->database};charset={$this->charset};";
             $options = array(
+                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 \PDO::ATTR_EMULATE_PREPARES => false,
             );
-            if ($is_charset) {
-                if (version_compare(PHP_VERSION, '5.3.6') < 0) {
-                    $options[\PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES '" . $this->charset . "';";
-                } else {
-                    $dsn .= "charset={$this->charset};";
-                }
-            }
             $this->db = new \PDO($dsn, $this->user, $this->password, $options);
         }
     }
@@ -229,15 +219,5 @@ class PDOWrap implements DBInterface
             default:
                 return $stmt;
         }
-    }
-
-    /**
-     * MySQLのバージョンを取得する
-     */
-    public function getVersion()
-    {
-        $this->connect(false, false);
-        $version = explode('-', $this->db->getAttribute(\PDO::ATTR_SERVER_VERSION));
-        return $version[0];
     }
 }
