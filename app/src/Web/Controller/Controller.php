@@ -282,7 +282,6 @@ abstract class Controller
                 ],
                 'cookie_common' => [
                     'expire' => Config::get('COOKIE_EXPIRE'),
-                    'domain' => Config::get('COOKIE_DEFAULT_DOMAIN')
                 ]
             ];
             // リクエストからログインblogを特定し、保存
