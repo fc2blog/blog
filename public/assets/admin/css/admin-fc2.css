@@ -804,7 +804,7 @@ div.flash-message-error {
     text-align: center;
 }
 
-.templates .btn a {
+.templates .btn a, .templates .btn button {
     padding: 5px 10px;
     margin: 0 10px;
 }

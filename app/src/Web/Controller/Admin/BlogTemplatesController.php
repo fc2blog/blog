@@ -262,16 +262,15 @@ class BlogTemplatesController extends AdminController
     }
 
     /**
-     * テンプレートダウンロード(SP用)
+     * テンプレートダウンロード
      * @param Request $request
      * @return string
      */
     public function download(Request $request): string
     {
-        // TODO POST化
+        if (!$request->isPost()) return $this->error400();
 
-        /** @var BlogTemplatesModel $blog_templates_model */
-        $blog_templates_model = Model::load('BlogTemplates');
+        $blog_templates_model = new BlogTemplatesModel();
 
         $id = $request->get('fc2_id');
         $device_type = $request->get('device_type');
