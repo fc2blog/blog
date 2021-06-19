@@ -134,10 +134,9 @@ class TagsController extends AdminController
      */
     public function delete(Request $request)
     {
-        // TODO POST化
-        if ($request->isValidSig()) {
+        if ($this->isInvalidAjaxRequest($request)) {
             // 削除処理
-            if (Model::load('Tags')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
+            if ((new TagsModel())->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
                 $this->setInfoMessage(__('I removed the tag'));
             } else {
                 $this->setErrorMessage(__('I failed to remove'));
@@ -150,5 +149,26 @@ class TagsController extends AdminController
             $this->redirect($request, $back_url);
         }
         $this->redirectBack($request, array('action' => 'index'));
+    }
+
+    /**
+     * 削除
+     * @param Request $request
+     * @return string
+     * @noinspection PhpUnused
+     */
+    public function ajax_delete(Request $request): string
+    {
+        if ($this->isInvalidAjaxRequest($request) || !$request->isValidPost()) {
+            return $this->error403();
+        }
+
+        // 削除処理
+        if ((new TagsModel())->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
+            $this->setInfoMessage(__('I removed the tag'));
+        } else {
+            $this->setErrorMessage(__('I failed to remove'));
+        }
+        return "";
     }
 }

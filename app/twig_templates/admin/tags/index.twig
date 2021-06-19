@@ -43,8 +43,9 @@
                     <td><a href="{{ blogUrl(req, blog.id) }}/?tag={{ tag.name }}" target="_blank">{{ tag.name }}</a></td>
                     <td>{{ tag.count }}</td>
                     <td class="center s_cell"><a href="{{ url(req, 'Tags', 'edit', {id: tag.id}) }}">{{ _('Edit') }}</a></td>
-                    {# TODO deleteをPOST化 #}
-                    <td class="center s_cell"><a href="{{ url(req, 'Tags', 'delete', {id: tag.id, sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a></td>
+                    <td class="center s_cell">
+                        <button type="button" onclick="tags.delete({{ tag.id }})">{{ _('Delete') }}</button>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -65,6 +66,26 @@
                 $('#sys-delete-button').prop('disabled', !$('input[type=checkbox][name="id[]"]:checked').length);
             });
         });
+
+        const tags = {};
+        // タグの削除処理(ajax)
+        tags.delete = function (id) {
+            if (!confirm('{{ _('Are you sure you want to delete?') }}')) {
+                return;
+            }
+            $.ajax({
+                type: 'POST',
+                url: common.fwURL('tags', 'ajax_delete'),
+                data: {id: id, sig: '{{ sig }}'},
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    alert("エラーが発生しました、ページをリロードしてやり直してください。\n" +
+                        "An error occurred, please reload page and try again.");
+                }
+            });
+        };
     </script>
 
 {% endblock %}
