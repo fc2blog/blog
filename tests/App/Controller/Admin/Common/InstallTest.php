@@ -42,7 +42,6 @@ class InstallTest extends TestCase
         // すべて成功する前提のテスト
         $this->assertTrue($d['is_write_temp']);
         $this->assertTrue($d['is_write_upload']);
-        $this->assertTrue($d['is_db_connect_lib']);
         $this->assertTrue($d['is_connect']);
         $this->assertEquals(0, strlen($d['connect_message']));
         $this->assertTrue($d['is_domain']);
@@ -74,8 +73,6 @@ class InstallTest extends TestCase
             $this->assertFalse($d['is_write_temp']);
             $this->assertFalse($d['is_write_upload']);
 
-            // 確認がむずかしい
-            $this->assertTrue($d['is_db_connect_lib']);
             // 確認がむずかしい
             $this->assertTrue($d['is_connect']);
             // 確認がむずかしい
