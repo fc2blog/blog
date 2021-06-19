@@ -95,7 +95,7 @@ class IndexTest extends TestCase
 
         $sig = $this->getSig();
 
-        $r = $this->reqGetBeRedirect('/admin/tags/delete', ['id' => $delete_tag_id, 'sig' => $sig]);
+        $r = $this->reqPostBeRedirect('/admin/tags/delete', ['id' => $delete_tag_id, 'sig' => $sig]);
         $this->assertEquals('/admin/tags/index', $r->redirectUrl);
 
         $c = $this->reqGet("/admin/tags/index");
