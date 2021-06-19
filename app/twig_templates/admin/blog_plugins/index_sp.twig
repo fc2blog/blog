@@ -9,8 +9,8 @@
     <div class="form_area">
         <div class="form_contents">
             <select onchange="location.href=$(this).val();">
-                {% for type, name in devices %}
-                    <option value="{{ url(req, 'BlogPlugins', 'index', {device_type: type}) }}" {% if device_type==type %}selected="selected"{% endif %}>{{ name }}</option>
+                {% for type, device_en in devices %}
+                    <option value="{{ url(req, 'BlogPlugins', 'index', {device_type: type}) }}" {% if device_type==type %}selected="selected"{% endif %}>{{ _(device_en) }}</option>
                 {% endfor %}
             </select>
         </div>

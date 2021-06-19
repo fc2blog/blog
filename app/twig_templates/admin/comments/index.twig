@@ -14,7 +14,7 @@
 
     <h3 id="entry_count">
         {{ _('Comment search') }}[{{ _('Hits') }}&nbsp;{{ paging.count }}{{ _(' results') }}]
-        {{ input(req, 'limit', 'select', {'options': entry_limit_list, 'default': entry_default_limit}) }}
+        {{ input(req, 'limit', 'select', {'options': entry_limit_list, 'default': entry_default_limit, 'suffix': _(' results')}) }}
         {{ input(req, 'page', 'select', {'options': page_list, 'default': 0}) }}
     </h3>
     <p>{{ _('You can search in accordance with the conditions of the past comments.') }}</p>
