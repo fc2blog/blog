@@ -113,7 +113,7 @@ class BlogPluginsController extends AdminController
         $this->set('paging', $paging);
         $this->set('user_id', $this->getUserId());
         $this->set('devices', Config::get('DEVICE_NAME'));
-        $this->set('req_device_name', Config::get('DEVICE_NAME')[$request->get('device_type')]);
+        $this->set('req_device_name', __(Config::get('DEVICE_NAME')[$request->get('device_type')]));
         $this->set('device_key', Config::get('DEVICE_FC2_KEY.' . $request->get('device_type')));
 
         return 'admin/blog_plugins/plugin_search.twig';

@@ -138,9 +138,11 @@ class Html
     /** @noinspection XmlInvalidId HTML組み立てが複雑で、Linterが解析しきれないため */
     public static function input(Request $request, $name, $type, $attrs = array(), $option_attrs = array()): string
     {
-        $default = $attrs['default'] ?? null;    // デフォルト文字列
+        $default = $attrs['default'] ?? null; // デフォルト文字列
         $options = $attrs['options'] ?? array(); // オプション
-        $label = $attrs['label'] ?? '';          // ラベル
+        $label = $attrs['label'] ?? ''; // ラベル
+        $suffix = $attrs['suffix'] ?? ''; // 〜「件」 などのSuffix
+
         unset($attrs['default'], $attrs['options'], $attrs['label']);
 
         // Requestの親キー(default判定)
@@ -218,7 +220,7 @@ class Html
                         if (!isset($option['value'])) {
                             $html .= '<optgroup label="' . $key . '">';
                             foreach ($option as $k => $v) {
-                                $html .= '<option value="' . $k . '" ' . ($rvalue !== null && $k == $rvalue ? 'selected="selected"' : '') . '>' . h((string)$v) . '</option>';
+                                $html .= '<option value="' . $k . '" ' . ($rvalue !== null && $k == $rvalue ? 'selected="selected"' : '') . '>' . h($v . $suffix) . '</option>';
                             }
                             $html .= '</optgroup>';
                             continue;
@@ -228,10 +230,10 @@ class Html
                         if (!empty($option['disabled'])) {
                             $optionAttr .= ' disabled="disabled" ';
                         }
-                        $html .= '<option value="' . $key . '" ' . $optionAttr . '>' . str_repeat('&nbsp;&nbsp;&nbsp;', $option['level'] - 1) . h((string)$option['value']) . '</option>';
+                        $html .= '<option value="' . $key . '" ' . $optionAttr . '>' . str_repeat('&nbsp;&nbsp;&nbsp;', $option['level'] - 1) . h($option['value'] . $suffix) . '</option>';
                     } else {
                         // 通常のオプション
-                        $html .= '<option value="' . $key . '" ' . ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '') . '>' . h((string)$option) . '</option>';
+                        $html .= '<option value="' . $key . '" ' . ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '') . '>' . h($option . $suffix) . '</option>';
                     }
                 }
                 $html .= '</select>';

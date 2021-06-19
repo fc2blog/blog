@@ -7,8 +7,8 @@
     <div class="form_area">
         <div class="form_contents">
             <select onchange="location.href=$(this).val();">
-                {% for key, device in devices %}
-                    <option value="{{ url(req, 'BlogTemplates', 'index', {device_type:key}) }}" {% if req.get('device_type') == key %}selected="selected"{% endif %}>{{ device }}</option>
+                {% for key, device_en in devices %}
+                    <option value="{{ url(req, 'BlogTemplates', 'index', {device_type:key}) }}" {% if req.get('device_type') == key %}selected="selected"{% endif %}>{{ _(device_en) }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -23,7 +23,7 @@
                 </li>
             </ul>
         </div>
-        <h2><span class="h2_inner">{{ attribute(devices, device_type) }}</span></h2>
+        <h2><span class="h2_inner">{{ _(attribute(devices, device_type)) }}</span></h2>
         <ul class="list_radio">
             {% for blog_template in blog_templates %}
                 <li class="list_radio_item">
