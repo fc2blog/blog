@@ -21,10 +21,6 @@ class Session
             // NOTE: 要件としてhttpサポートがあるため secure属性は指定ができない
         ];
 
-        if (strlen(Config::get('SESSION_DEFAULT_DOMAIN')) > 0) {
-            $session_cookie_options['domain'] = Config::get('SESSION_DEFAULT_DOMAIN');
-        }
-
         session_set_cookie_params($session_cookie_options);
         session_name(Config::get('SESSION_NAME'));
         session_start();
