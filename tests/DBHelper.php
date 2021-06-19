@@ -18,6 +18,9 @@ class DBHelper extends TestCase
 
         $pdo = static::getPdo();
 
+        // コメントを含むようなダンプSQLを流し込み実行する場合、EMULATE_PREPARESの有効化が必要となる。
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+
         // DB接続確認(DATABASEの存在判定含む)
         $sql = file_get_contents(Config::get('APP_DIR') . 'db/0_initialize.sql');
         if (DB_CHARSET != 'UTF8MB4') {
@@ -29,6 +32,9 @@ class DBHelper extends TestCase
         $sql = file_get_contents(__DIR__ . "/test_fixture.sql");
         $pdo->query($sql);
 
+        // EMULATE_PREPARESを戻す
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
         // copy test files
         static::copyTestImages();
     }
@@ -36,7 +42,10 @@ class DBHelper extends TestCase
     public static function clearDb()
     {
         $pdo = static::getPdo();
+        // コメントを含むようなダンプSQLを流し込み実行する場合、EMULATE_PREPARESの有効化が必要となる。
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
         $pdo->query(file_get_contents(__DIR__ . "/test_drop_all_table.sql"));
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     }
 
     public static function getPdo(): PDO
