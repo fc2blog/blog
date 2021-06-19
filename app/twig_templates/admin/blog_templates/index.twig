@@ -32,20 +32,26 @@
                     {% endif %}
                     {% if not inArray(blog_template.id, template_ids) %}
                         <td class="center">
-                            {# TODO 適用処理のPOST化 #}
-                            <a href="{{ url(req, 'BlogTemplates', 'apply', { 'id': blog_template.id, 'sig': sig}) }}" onclick="return confirm('{{ _('Are you sure you want to apply this template?') }}')">{{ _('Apply') }}</a>
+                            <form action="{{ url(req, 'BlogTemplates', 'apply') }}" method="post" onsubmit="return confirm('{{ _('Are you sure you want to apply this template?') }}')">
+                                <input type="hidden" name="id" value="{{ blog_template.id }}">
+                                <input type="hidden" name="sig" value="{{ sig }}">
+                                <button type="submit">{{ _('Apply') }}</button>
+                            </form>
                         </td>
                     {% endif %}
                     <td class="center">
                         <a href="{{ userPreviewUrl(req, blog.id, blog_template.id, blog_template.device_key) }}" target="_blank">{{ _('Preview') }}</a>
                     </td>
                     <td class="center">
-                        {% if inArray(blog_template.id, template_ids) %}
+                        {% if inArray(blog_template.id, template_ids) %}{# TODO この箇所削除してよいのでは？ #}
                             &nbsp;
                         {% endif %}
                         {% if not inArray(blog_template.id, template_ids) %}
-                            {# TODO 削除処理のPOST化 #}
-                            <a href="{{ url(req, 'BlogTemplates', 'delete', { 'id': blog_template.id, 'sig': sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a>
+                            <form action="{{ url(req, 'BlogTemplates', 'delete') }}" method="post" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}')">
+                                <input type="hidden" name="id" value="{{ blog_template.id }}">
+                                <input type="hidden" name="sig" value="{{ sig }}">
+                                <button type="submit">{{ _('Delete') }}</button>
+                            </form>
                         {% endif %}
                     </td>
                 </tr>

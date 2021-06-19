@@ -133,11 +133,15 @@ class CommentsController extends AdminController
     /**
      * コメントの承認
      * @param Request $request
+     * @return string
      */
-    public function approval(Request $request)
+    public function approval(Request $request): string
     {
-        // TODO POST化、Sigチェック
-        $comments_model = Model::load('Comments');
+        if (!$request->isValidPost()) {
+            return $this->error400();
+        }
+
+        $comments_model = new CommentsModel();
 
         $id = $request->get('id');
         $blog_id = $this->getBlogIdFromSession();
@@ -150,6 +154,7 @@ class CommentsController extends AdminController
         if ($comment['open_status'] != Config::get('COMMENT.OPEN_STATUS.PENDING')) {
             // 承認待ち以外はリダイレクト
             $this->redirect($request, array('action' => 'index'));
+            return "";
         }
 
         // 承認処理
@@ -162,6 +167,7 @@ class CommentsController extends AdminController
             $this->redirect($request, $back_url);
         }
         $this->redirect($request, array('action' => 'index'));
+        return "";
     }
 
     /**
@@ -240,6 +246,9 @@ class CommentsController extends AdminController
         }
 
         // コメント投稿処理
+        if (!$request->isValidPost()) {
+            return $this->error403();
+        }
         $errors = [];
         $errors['comment'] = $comments_model->replyValidate($request->get('comment'), $data, array('reply_body'));
         if (empty($errors['comment'])) {
@@ -314,6 +323,7 @@ class CommentsController extends AdminController
         }
 
         // error だが、JS側でsuccessプロパティ存在をみて判定しているので、 status codeは200を返す
+        // TODO ステータスコードで判定させるように寄せていきたい。
         $this->setContentType("application/json; charset=utf-8");
         $this->set('json', ['error' => $errors['reply_body']]);
         return "admin/common/json.twig";
@@ -326,7 +336,7 @@ class CommentsController extends AdminController
      */
     public function delete(Request $request): string
     {
-        if (!$request->isValidSig()) {
+        if (!$request->isValidPost()) {
             return $this->error403();
         }
 
@@ -344,6 +354,28 @@ class CommentsController extends AdminController
         }
         $this->redirectBack($request, array('action' => 'index'));
         return "";
+    }
+
+    /**
+     * コメントを削除
+     * @param Request $request
+     * @return string
+     * @noinspection PhpUnused
+     */
+    public function ajax_delete(Request $request): string
+    {
+        if ($this->isInvalidAjaxRequest($request) || !$request->isValidPost()) {
+            return $this->error403();
+        }
+
+        // 削除処理
+        if (Model::load('Comments')->deleteByIdsAndBlogId($request->get('id'), $this->getBlogIdFromSession())) {
+            $this->setInfoMessage(__('I removed the comment'));
+            return "";
+        } else {
+            $this->setErrorMessage(__('I failed to remove'));
+            return $this->error500();
+        }
     }
 
     /**

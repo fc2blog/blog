@@ -62,8 +62,17 @@
                     return;
                 }
                 if (confirm('{{ _('Are you sure you want to delete?') }}')) {
-                    {# TODO 削除処理のPOST化 #}
-                    location.href = common.fwURL('blog_templates', 'delete', {id: id, sig: "{{ sig }}"});
+                    $.ajax(common.fwURL('blog_templates', 'ajax_delete'), {
+                        'method': 'POST',
+                        'data': {
+                            id: id,
+                            sig: "{{ sig }}"
+                        },
+                    }).done(() => {
+                        location.reload();
+                    }).fail(() => {
+                        alert("{{ _('Request failed: Please page reload and retry.') }}")
+                    });
                 }
             });
             // テンプレートの適応
@@ -74,7 +83,17 @@
                     return;
                 }
                 if (confirm('{{ _('Are you sure you want to apply this template?') }}')) {
-                    location.href = common.fwURL('blog_templates', 'apply', {id: id, sig: '{{ sig }}'});
+                    $.ajax(common.fwURL('blog_templates', 'ajax_apply'), {
+                        'method': 'POST',
+                        'data': {
+                            id: id,
+                            sig: "{{ sig }}"
+                        },
+                    }).done(() => {
+                        location.reload();
+                    }).fail(() => {
+                        alert("{{ _('Request failed: Please page reload and retry.') }}")
+                    });
                 }
             });
         });

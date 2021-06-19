@@ -35,7 +35,7 @@
                 {{ _('Published') }}
             {% endif %}
             {% if comment.open_status == comment_open_status_pending %}
-                {{ _('Approval pending') }} &raquo; <a {# TODO hrefの必要ないのでは？ #}href="{{ url(req, 'comments', 'approval', {id: comment.id}) }}" onclick="reply.approval({{ comment.id }}); return false;" id="sys-comment-approval">{{ _('Approval') }}</a>
+                {{ _('Approval pending') }} &raquo; <a onclick="reply.approval({{ comment.id }}); return false;" id="sys-comment-approval" class="admin_common_btn">{{ _('Approval') }}</a>
             {% endif %}
             {% if comment.open_status == comment_open_status_private %}
                 {{ _('Only exposed administrator') }}
@@ -56,7 +56,6 @@
 </table>
 
 <form method="POST" id="sys-comment-form" class="admin-form">
-
     {% if comment.open_status != comment_open_status_private %}
         {{ input(req, 'comment[reply_body]', 'textarea', {'style': 'width: 95%; height: 200px;'}) }}
         <p class="error" style="display: none;" id="sys-reply-error"></p>
@@ -74,12 +73,15 @@
             <span id="sys-reply-message" style="display: none;">{{ _('Is communicating ...') }}</span>
         </p>
     {% endif %}
+</form>
 
+<form method="POST" action="{{ url(req, 'comments', 'delete') }}" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
+    <input type="hidden" name="sig" value="{{ sig }}">
+    <input type="hidden" name="id" value="{{ comment.id }}">
     <h3>{{ _('Delete Comment') }}</h3>
     <div id="comment_dell" class="mb20">
         <p class="mb10">{{ _('You can delete a comment by pressing the button below.') }}</p>
-        <a class="admin_common_btn dell_btn" href="{{ url(req, 'comments', 'delete', {id: comment.id}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a>
+        <button class="admin_common_btn dell_btn">{{ _('Delete') }}</button>
     </div>
-
 </form>
 

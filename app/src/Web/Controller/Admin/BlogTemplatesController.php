@@ -208,11 +208,11 @@ class BlogTemplatesController extends AdminController
     /**
      * 対象のテンプレートをブログのテンプレートとして設定する
      * @param Request $request
+     * @return string
      */
-    public function apply(Request $request)
+    public function apply(Request $request): string
     {
-        // TODO post化
-        // if(!$request->isPost()) return $this->error400();
+        if (!$request->isPost()) return $this->error400();
 
         $blog_templates_model = Model::load('BlogTemplates');
 
@@ -231,19 +231,46 @@ class BlogTemplatesController extends AdminController
             $this->setInfoMessage(__('I switch the template'));
         }
         $this->redirectBack($request, array('action' => 'index'));
+        return "";
     }
 
     /**
-     * テンプレートダウンロード(SP用)
+     * 対象のテンプレートをブログのテンプレートとして設定する
+     * @param Request $request
+     * @return string
+     */
+    public function ajax_apply(Request $request): string
+    {
+        if ($this->isInvalidAjaxRequest($request) || !$request->isValidPost()) {
+            return $this->error400();
+        }
+
+        $blog_templates_model = new BlogTemplatesModel();
+        $id = $request->get('id');
+        $blog_id = $this->getBlogIdFromSession();
+
+        $blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id);
+        if (empty($blog_template)) {
+            $this->setErrorMessage(__('Template to be used can not be found'));
+            return "";
+        }
+
+        // テンプレートの切り替え作業
+        Model::load('Blogs')->switchTemplate($blog_template, $blog_id);
+        $this->setInfoMessage(__('I switch the template'));
+        return "";
+    }
+
+    /**
+     * テンプレートダウンロード
      * @param Request $request
      * @return string
      */
     public function download(Request $request): string
     {
-        // TODO POST化
+        if (!$request->isPost()) return $this->error400();
 
-        /** @var BlogTemplatesModel $blog_templates_model */
-        $blog_templates_model = Model::load('BlogTemplates');
+        $blog_templates_model = new BlogTemplatesModel();
 
         $id = $request->get('fc2_id');
         $device_type = $request->get('device_type');
@@ -287,9 +314,12 @@ class BlogTemplatesController extends AdminController
     /**
      * 削除
      * @param Request $request
+     * @return string
      */
-    public function delete(Request $request)
+    public function delete(Request $request): string
     {
+        if (!$request->isPost()) return $this->error400();
+
         $blog_templates_model = Model::load('BlogTemplates');
 
         $id = $request->get('id');
@@ -315,7 +345,37 @@ class BlogTemplatesController extends AdminController
             $this->setInfoMessage(__('I removed the template'));
         }
         $this->redirectBack($request, array('action' => 'index'));
+        return "";
     }
 
+    /**
+     * 削除
+     * @param Request $request
+     * @return string
+     */
+    public function ajax_delete(Request $request): string
+    {
+        if ($this->isInvalidAjaxRequest($request) || !$request->isValidPost()) {
+            return $this->error400();
+        }
+
+        $blog_templates_model = new BlogTemplatesModel();
+
+        $id = $request->get('id');
+        $blog_id = $this->getBlogIdFromSession();
+
+        // 使用中のテンプレートであれば削除させない
+        $blog = BlogService::getById($blog_id);
+        $template_ids = BlogsModel::getTemplateIds($blog);
+        if (in_array($id, $template_ids)) {
+            $this->setErrorMessage(__('You can not delete a template in use'));
+            return "";
+        }
+
+        // 削除処理
+        $blog_templates_model->deleteByIdAndBlogId($id, $blog_id);
+        $this->setInfoMessage(__('I removed the template'));
+        return "";
+    }
 }
 

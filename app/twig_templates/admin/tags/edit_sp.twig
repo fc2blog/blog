@@ -32,7 +32,12 @@
     <div class="btn_area">
         <ul class="btn_area_inner">
             <li>
-                <a href="{{ url(req, 'Tags', 'delete', {id: req.get('id'), back_url: req.get('back_url'), sig: sig }) }}" class="btn_contents touch" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</a>
+                <form action="{{ url(req, 'Tags', 'delete') }}" method="post" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
+                    <input type="hidden" name="sig" value="{{ sig }}">
+                    <input type="hidden" name="id" value="{{ tag.id }}">
+                    <input type="hidden" name="back_url" value="{{ req.get('back_url') }}">
+                    <button class="btn_contents touch"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</button>
+                </form>
             </li>
         </ul>
     </div>

@@ -19,8 +19,13 @@
                 <tr>
                     <td class="btn">
                         <a class="admin_common_btn create_btn" href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, fc2_id:template.id, device_type: req.get('device_type')}, false, true) }}" target="_blank">{{ _('Preview') }}</a>
-                        {# TODO  blog_templates createのPOST化 #}
-                        <a class="admin_common_btn create_btn" href="{{ url(req, 'blog_templates', 'create', {fc2_id: template.id, device_type:req.get('device_type'), sig: sig}) }}">{{ _('Download') }}</a>
+                        <form action="{{ url(req, 'blog_templates', 'download') }}" method="post" style="display: inline">
+                            <input type="hidden" name="sig" value="{{ sig }}">
+                            <input type="hidden" name="fc2_id" value="{{ template.id }}">
+                            <input type="hidden" name="device_type" value="{{ req.get('device_type') }}">
+                            <button type="submit" class="admin_common_btn create_btn">{{ _('Download') }}</button>
+                        </form>
+
                     </td>
                 </tr>
                 </tbody>

@@ -436,8 +436,7 @@ class BlogPluginsController extends AdminController
      */
     public function display_change(Request $request): string
     {
-        // TODO クライアント側の修正も行う
-        // if(!$request->isPost()) return $this->error400();
+        if (!$request->isPost()) return $this->error400();
 
         $blog_plugins_model = Model::load('BlogPlugins');
 
@@ -452,7 +451,6 @@ class BlogPluginsController extends AdminController
 
         // 表示・非表示設定
         $blog_plugins_model->updateByIdAndBlogId(array('display' => $display), $id, $blog_id);
-//    $blog_plugins_model->updateDisplay(array($id=>$request->get('display')), $blog_id);   // TODO:後でこちらに置き換え
         return "";
     }
 }

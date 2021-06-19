@@ -68,7 +68,7 @@ class ApplyTest extends TestCase
         $this->assertNotEquals($before_pc_template_id, $new_pc_template['id']);
         $this->assertNotEquals($before_sp_template_id, $new_sp_template['id']);
 
-        $r = $this->reqGetBeRedirect("/admin/blog_templates/apply", [
+        $r = $this->reqPostBeRedirect("/admin/blog_templates/apply", [
             'id' => $new_pc_template['id'],
             'sig' => $sig
         ]);
@@ -79,7 +79,7 @@ class ApplyTest extends TestCase
         $this->assertFalse($fm['is_warn']);
         $this->assertTrue($fm['is_info']);
 
-        $r = $this->reqGetBeRedirect("/admin/blog_templates/apply", [
+        $r = $this->reqPostBeRedirect("/admin/blog_templates/apply", [
             'id' => $new_sp_template['id'],
             'sig' => $sig
         ]);
