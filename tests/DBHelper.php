@@ -5,6 +5,7 @@ namespace Fc2blog\Tests;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\PDOConnection;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -40,16 +41,7 @@ class DBHelper extends TestCase
 
     public static function getPdo(): PDO
     {
-        $pdo = new PDO(
-            "mysql:host=" . Config::get('MASTER_DB.HOST') .
-            ";port=" . Config::get('MASTER_DB.PORT') .
-            ";dbname=" . Config::get('MASTER_DB.DATABASE') .
-            ";charset=" . strtolower(Config::get('DB_CHARSET')),
-            Config::get('MASTER_DB.USER'),
-            Config::get('MASTER_DB.PASSWORD')
-        );
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $pdo;
+        return PDOConnection::createConnection();
     }
 
     public static function copyTestImages()
