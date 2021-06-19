@@ -145,54 +145,54 @@ class CommonController extends AdminController
             default:
             case 0:
                 if (!$request->isGet()) return $this->error400();
-            // 環境チェック確認
-            $this->set('temp_dir', Config::get('TEMP_DIR'));
-            $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
-            /** @noinspection PhpRedundantOptionalArgumentInspection */
-            $this->set('random_string', App::genRandomStringAlphaNum(32));
+                // 環境チェック確認
+                $this->set('temp_dir', Config::get('TEMP_DIR'));
+                $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
+                /** @noinspection PhpRedundantOptionalArgumentInspection */
+                $this->set('random_string', App::genRandomStringAlphaNum(32));
 
-            $this->set('DB_HOST', DB_HOST);
-            $this->set('DB_PORT', DB_PORT);
-            $this->set('DB_USER', DB_USER);
-            $this->set('DB_PASSWORD', DB_PASSWORD);
-            $this->set('DB_DATABASE', DB_DATABASE);
+                $this->set('DB_HOST', DB_HOST);
+                $this->set('DB_PORT', DB_PORT);
+                $this->set('DB_USER', DB_USER);
+                $this->set('DB_PASSWORD', DB_PASSWORD);
+                $this->set('DB_DATABASE', DB_DATABASE);
 
-            // ディレクトリ書き込みパーミッション確認
-            $is_write_temp = is_writable(Config::get('TEMP_DIR') . '.');
-            $this->set('is_write_temp', $is_write_temp);
-            $is_write_upload = is_writable(Config::get('WWW_UPLOAD_DIR') . '.');
-            $this->set('is_write_upload', $is_write_upload);
+                // ディレクトリ書き込みパーミッション確認
+                $is_write_temp = is_writable(Config::get('TEMP_DIR') . '.');
+                $this->set('is_write_temp', $is_write_temp);
+                $is_write_upload = is_writable(Config::get('WWW_UPLOAD_DIR') . '.');
+                $this->set('is_write_upload', $is_write_upload);
 
-            // DB疎通確認
-            if (class_exists(PDO::class)) {
-                $is_connect = true;
-                $connect_message = '';
-                try {
-                    PDOConnection::createConnection();
-                } catch (Exception $e) {
+                // DB疎通確認
+                if (class_exists(PDO::class)) {
+                    $is_connect = true;
+                    $connect_message = '';
+                    try {
+                        PDOConnection::createConnection();
+                    } catch (Exception $e) {
+                        $is_connect = false;
+                        $connect_message = $e->getMessage();
+                    }
+                } else {
                     $is_connect = false;
-                    $connect_message = $e->getMessage();
+                    $connect_message = __("Please enable PDO");
                 }
-            } else {
-                $is_connect = false;
-                $connect_message = __("Please enable PDO");
-            }
-            $this->set('is_connect', $is_connect);
-            $this->set('connect_message', $connect_message);
+                $this->set('is_connect', $is_connect);
+                $this->set('connect_message', $connect_message);
 
-            // ドメイン確認
-            $is_domain = DOMAIN != 'domain';
-            $this->set('is_domain', $is_domain);
-            $this->set('example_server_name', $request->server['SERVER_NAME'] ?? 'example.jp');
+                // ドメイン確認
+                $is_domain = DOMAIN != 'domain';
+                $this->set('is_domain', $is_domain);
+                $this->set('example_server_name', $request->server['SERVER_NAME'] ?? 'example.jp');
 
-            // GDインストール済み確認
-            $is_gd = function_exists('gd_info');
-            $this->set('is_gd', $is_gd);
+                // GDインストール済み確認
+                $is_gd = function_exists('gd_info');
+                $this->set('is_gd', $is_gd);
 
-            $is_all_ok = $is_write_temp && $is_write_upload && $is_connect && $is_domain;
-            $this->set('is_all_ok', $is_all_ok);
+                $is_all_ok = $is_write_temp && $is_write_upload && $is_connect && $is_domain;
+                $this->set('is_all_ok', $is_all_ok);
 
-            return 'admin/common/install.twig';
+                return 'admin/common/install.twig';
 
             case 1:
                 if (!$request->isGet()) return $this->error400();
