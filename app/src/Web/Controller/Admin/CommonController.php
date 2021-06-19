@@ -145,15 +145,15 @@ class CommonController extends AdminController
             default:
             case 0:
                 if (!$request->isGet()) return $this->error400();
-                // 環境チェック確認
-                $this->set('temp_dir', Config::get('TEMP_DIR'));
-                $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
-                /** @noinspection PhpRedundantOptionalArgumentInspection */
-                $this->set('random_string', App::genRandomStringAlphaNum(32));
+            // 環境チェック確認
+            $this->set('temp_dir', Config::get('TEMP_DIR'));
+            $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
+            /** @noinspection PhpRedundantOptionalArgumentInspection */
+            $this->set('random_string', App::genRandomStringAlphaNum(32));
 
-                $this->set('DB_HOST', DB_HOST);
-                $this->set('DB_PORT', DB_PORT);
-                $this->set('DB_USER', DB_USER);
+            $this->set('DB_HOST', DB_HOST);
+            $this->set('DB_PORT', DB_PORT);
+            $this->set('DB_USER', DB_USER);
             $this->set('DB_PASSWORD', DB_PASSWORD);
             $this->set('DB_DATABASE', DB_DATABASE);
 
