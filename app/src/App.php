@@ -313,8 +313,8 @@ class App
         // 現在のURLの引数を引き継ぐ
         if ($reused == true) {
             $gets = $request->getGet();
-            unset($gets[Config::get('ARGS_CONTROLLER')]);
-            unset($gets[Config::get('ARGS_ACTION')]);
+            unset($gets['mode']);
+            unset($gets['process']);
             $args = array_merge($gets, $args);
         }
 
@@ -388,8 +388,8 @@ class App
         }
 
         $params = [];
-        $params[] = Config::get('ARGS_CONTROLLER') . '=' . lcfirst($controller);
-        $params[] = Config::get('ARGS_ACTION') . '=' . $action;
+        $params[] = 'mode=' . lcfirst($controller);
+        $params[] = 'process=' . $action;
         foreach ($args as $key => $value) {
             $params[] = $key . '=' . $value;
         }
@@ -397,7 +397,7 @@ class App
             $params[] = $device_name;
         }
 
-        $url = '/' . Config::get('DIRECTORY_INDEX');
+        $url = '/index.php';
         if (count($params)) {
             $url .= '?' . implode('&', $params);
         }

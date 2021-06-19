@@ -50,8 +50,8 @@ class Html
         // 現在のURLの引数を引き継ぐ
         if ($reused == true) {
             $gets = $request->getGet();
-            unset($gets[Config::get('ARGS_CONTROLLER')]);
-            unset($gets[Config::get('ARGS_ACTION')]);
+            unset($gets['mode']);
+            unset($gets['process']);
             $args = array_merge($gets, $args);
         }
 
@@ -99,8 +99,8 @@ class Html
         }
 
         $params = array();
-        $params[] = Config::get('ARGS_CONTROLLER') . '=' . $controller;
-        $params[] = Config::get('ARGS_ACTION') . '=' . $action;
+        $params[] = 'mode=' . $controller;
+        $params[] = 'process=' . $action;
         foreach ($args as $key => $value) {
             $params[] = $key . '=' . rawurlencode((string)$value);
         }
@@ -109,9 +109,9 @@ class Html
         }
 
         if ($use_base_dir) {
-            $url = $request->baseDirectory . Config::get('DIRECTORY_INDEX');
+            $url = $request->baseDirectory . 'index.php';
         } else {
-            $url = "/" . Config::get('DIRECTORY_INDEX');
+            $url = "/index.php";
         }
         if (count($params)) {
             $url .= '?' . implode('&', $params);
