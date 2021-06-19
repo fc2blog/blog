@@ -2670,3 +2670,6 @@ msgstr "ログインURLは無効です"
 
 msgid "Login request was expired. Please try again login form."
 msgstr "このログインURLは無効です、再度ログインフォームから要求してください。"
+
+msgid "Request failed: Please page reload and retry."
+msgstr "失敗しました、画面をリロードして再度お試しください。"
