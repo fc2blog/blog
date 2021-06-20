@@ -1,388 +1,238 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-msgid ""
-msgstr ""
-"Project-Id-Version: 1.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-13 05:45+0000\n"
-"PO-Revision-Date: 2020-07-30 17:24+0900\n"
-"Last-Translator:  <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
-
-#: shell/../model/tags_model.php:62
 msgid "Tag with the same name already exists"
 msgstr ""
 
-#: shell/../model/blog_templates_model.php:80
-#: shell/../model/blog_plugins_model.php:158
 msgid ""
 "There may be a problem with the template or plug-in, installed in the blog."
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:97
 msgid "Displayed as it is"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:98
 msgid "I check the comments"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:104
 msgid "View \"This comment is awaiting moderation\" and"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:105
-#: shell/../model/blog_settings_model.php:112
 msgid "Do not show"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:111
-#: shell/../view/admin/blog_plugins/index.html:25
 msgid "Display"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:118
 msgid "Not save"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:119
 msgid "Record"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:125
 msgid "Do not use"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:126
 msgid "CAPTCHA to Use"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:132
-#: shell/../model/blog_settings_model.php:147
-#: shell/../model/categories_model.php:88
 msgid "Oldest First"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:133
-#: shell/../model/blog_settings_model.php:146
-#: shell/../model/categories_model.php:87
 msgid "Latest order"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:139
 msgid "Quote"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:140
 msgid "Do not quote"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:153
-#: shell/../view/admin/layouts/default_sp.html:113
-#: shell/../view/admin/layouts/default.html:92
-#: shell/../view/admin/common/notice_sp.html:11
-#: shell/../view/admin/common/notice.html:1
 msgid "Notice"
 msgstr ""
 
-#: shell/../model/blog_settings_model.php:154
-#: shell/../view/admin/layouts/default_sp.html:115
-#: shell/../view/admin/layouts/default.html:94
-#: shell/../view/admin/common/notice_sp.html:5
 msgid "New article"
 msgstr ""
 
-#: shell/../model/categories_model.php:77
 msgid "Same name exists in the same hierarchy"
 msgstr ""
 
-#: shell/../model/blogs_model.php:30
 msgid "Please Be sure to set the password if you want to private"
 msgstr ""
 
-#: shell/../model/blogs_model.php:42 shell/../model/validate.php:146
 msgid "Is already in use"
 msgstr ""
 
-#: shell/../model/blogs_model.php:99
 msgid "Public"
 msgstr ""
 
-#: shell/../model/blogs_model.php:100
 msgid "Private"
 msgstr ""
 
-#: shell/../model/blogs_model.php:245
 msgid "Unclassified"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:97
 msgid "Flush left"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:98
 msgid "Center justification"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:99
 msgid "Right justification"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:110
-#: shell/../model/blog_plugins_model.php:122
 msgid "Nothing"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:111
 msgid "Red"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:112
 msgid "Green"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:113
 msgid "Blue"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:114
 msgid "Purple"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:115
 msgid "Pink"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:116
 msgid "Orange"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:117
 msgid "Navy"
 msgstr ""
 
-#: shell/../model/blog_plugins_model.php:118
 msgid "Gray"
 msgstr ""
 
-#: shell/../model/entries_model.php:76
 msgid "Publication"
 msgstr ""
 
-#: shell/../model/entries_model.php:77
 msgid "Draft"
 msgstr ""
 
-#: shell/../model/entries_model.php:78
 msgid "Password Protection"
 msgstr ""
 
-#: shell/../model/entries_model.php:79
 msgid "Limited time offer"
 msgstr ""
 
-#: shell/../model/entries_model.php:80
 msgid "Reservations Posts"
 msgstr ""
 
-#: shell/../model/entries_model.php:87
 msgid "Be accepted"
 msgstr ""
 
-#: shell/../model/entries_model.php:88
 msgid "Reject"
 msgstr ""
 
-#: shell/../model/entries_model.php:95
 msgid "I do automatic line feed"
 msgstr ""
 
-#: shell/../model/entries_model.php:96
 msgid "HTML tags only a new line"
 msgstr ""
 
-#: shell/../model/model.php:277 shell/../model/model.php:279
 msgid " page"
 msgstr ""
 
-#: shell/../model/validate.php:19
 msgid "Please be sure to input"
 msgstr ""
 
-#: shell/../model/validate.php:34
 msgid "Please enter a number"
 msgstr ""
 
-#: shell/../model/validate.php:45
 msgid "Please enter alphanumeric"
 msgstr ""
 
-#: shell/../model/validate.php:58
-#, php-format
 msgid "Please enter at %d characters or less"
 msgstr ""
 
-#: shell/../model/validate.php:72
-#, php-format
 msgid "Please enter at %d characters or more"
 msgstr ""
 
-#: shell/../model/validate.php:86
-#, php-format
 msgid "Please enter a value of %d or less"
 msgstr ""
 
-#: shell/../model/validate.php:100
-#, php-format
 msgid "Please enter a value of %d or more"
 msgstr ""
 
-#: shell/../model/validate.php:111
 msgid "Please enter the date and time"
 msgstr ""
 
-#: shell/../model/validate.php:124
 msgid "Please enter your e-mail address"
 msgstr ""
 
-#: shell/../model/validate.php:135
 msgid "Please enter the URL"
 msgstr ""
 
-#: shell/../model/validate.php:161
 msgid "Value that does not exist has been entered"
 msgstr ""
 
-#: shell/../model/validate.php:177
 msgid "Please upload a file"
 msgstr ""
 
-#: shell/../model/validate.php:181 shell/../model/validate.php:208
 msgid "File size is too large"
 msgstr ""
 
-#: shell/../model/validate.php:184
 msgid "I failed to file upload"
 msgstr ""
 
-#: shell/../model/validate.php:199
 msgid "It was not possible to determine the mime type of the file"
 msgstr ""
 
-#: shell/../model/validate.php:202
 msgid "File format is different"
 msgstr ""
 
-#: shell/../model/comments_model.php:31
-#: shell/../view/admin/comments/ajax_reply.html:34
-#: shell/../view/admin/comments/index.html:65
-#: shell/../view/admin/comments/index.html:148
-#: shell/../view/admin/comments/index.html:173
-#: shell/../view/admin/comments/index.html:174
-#: shell/../view/admin/comments/reply_sp.html:13
-#: shell/../view/admin/comments/reply.html:36
 msgid "Published"
 msgstr ""
 
-#: shell/../model/comments_model.php:32
-#: shell/../view/admin/comments/ajax_reply.html:36
-#: shell/../view/admin/comments/reply_sp.html:15
-#: shell/../view/admin/comments/reply.html:38
 msgid "Approval pending"
 msgstr ""
 
-#: shell/../model/comments_model.php:33
-#: shell/../view/admin/comments/ajax_reply.html:38
-#: shell/../view/admin/comments/index.html:69
-#: shell/../view/admin/comments/reply_sp.html:17
-#: shell/../view/admin/comments/reply.html:40
 msgid "Only exposed administrator"
 msgstr ""
 
-#: shell/../model/comments_model.php:40
 msgid "Public comment"
 msgstr ""
 
-#: shell/../model/comments_model.php:41
 msgid "Secret comments to the management people"
 msgstr ""
 
-#: shell/../model/comments_model.php:48
-#: shell/../view/admin/comments/index.html:74
-#: shell/../view/admin/comments/index_sp.html:37
 msgid "Not yet read"
 msgstr ""
 
-#: shell/../model/comments_model.php:49
 msgid "Already read"
 msgstr ""
 
-#: shell/../model/comments_model.php:50
-#: shell/../view/admin/comments/index.html:80
-#: shell/../view/admin/comments/index.html:116
-#: shell/../view/admin/comments/index_sp.html:43
 msgid "Answered"
 msgstr ""
 
-#: shell/../model/comments_model.php:158
 msgid "No password is registered"
 msgstr ""
 
-#: shell/../model/comments_model.php:163
-#: shell/../controller/user/entries_controller.php:601
 msgid "The password is incorrect!"
 msgstr ""
 
-#: shell/../model/files_model.php:60 shell/../model/files_model.php:88
 msgid "Please upload an image file"
 msgstr ""
 
-#: shell/../model/files_model.php:102
 msgid "Extension and the original file is different"
 msgstr ""
 
-#: shell/../config/app.php:37
 msgid "PC"
 msgstr ""
 
-#: shell/../config/app.php:38
 msgid "Mobile phone"
 msgstr ""
 
-#: shell/../config/app.php:39
 msgid "Smartphone"
 msgstr ""
 
-#: shell/../config/app.php:40
 msgid "Tablet"
 msgstr ""
 
-#: shell/../config/app.php:148 shell/../config/app.php:149
-#: shell/../config/app.php:150 shell/../config/app.php:151
-#: shell/../config/app.php:152 shell/../config/app.php:153
-#: shell/../config/app.php:217 shell/../config/app.php:218
-#: shell/../config/app.php:219 shell/../config/app.php:220
-#: shell/../config/app.php:221 shell/../config/app.php:222
-#: shell/../config/app.php:240 shell/../config/app.php:241
-#: shell/../config/app.php:242 shell/../config/app.php:243
-#: shell/../config/app.php:244 shell/../config/app.php:245
-#: shell/../config/app.php:246 shell/../config/app.php:252
-#: shell/../view/admin/files/ajax_index.html:3
-#: shell/../view/admin/entries/index.html:4
-#: shell/../view/admin/comments/index.html:4
-#: shell/../view/admin/tags/index.html:4
 msgid " results"
 msgstr ""
 
-#: shell/../view/user/common/error404_sp.html:1
-#: shell/../view/admin/common/error404_sp.html:1
 msgid "404 Not Found."
 msgstr ""
 
@@ -392,458 +242,168 @@ msgstr ""
 msgid "400 BadRequest."
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:2
-#: shell/../view/user/entries/comment_edit.html:1
 msgid "I edit a comment"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:13
-#: shell/../view/user/entries/comment_edit.html:11
-#: shell/../view/user/entries/comment_regist_sp.html:13
-#: shell/../view/user/entries/comment_regist.html:11
-#: shell/../view/admin/files/ajax_index.html:28
-#: shell/../view/admin/blog_templates/fc2_index.html:8
-#: shell/../view/admin/blog_templates/fc2_view_sp.html:18
-#: shell/../locale/define.php:28
 msgid "Name"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:20
-#: shell/../view/user/entries/comment_edit.html:16
-#: shell/../view/user/entries/comment_regist_sp.html:20
-#: shell/../view/user/entries/comment_regist.html:16
-#: shell/../view/admin/entries/index.html:34
-#: shell/../view/admin/entries/form.html:5
-#: shell/../view/admin/entries/form_sp.html:70
-#: shell/../view/admin/comments/ajax_reply.html:11
-#: shell/../view/admin/comments/reply.html:13 shell/../locale/define.php:27
 msgid "Title"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:27
-#: shell/../view/user/entries/comment_edit.html:21
-#: shell/../view/user/entries/comment_regist_sp.html:27
-#: shell/../view/user/entries/comment_regist.html:21
 msgid "E-mail"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:41
-#: shell/../view/user/entries/comment_edit.html:31
-#: shell/../view/user/entries/comment_regist_sp.html:41
-#: shell/../view/user/entries/comment_regist.html:31
-#: shell/../view/admin/entries/index.html:38
-#: shell/../view/admin/comments/reply_sp.html:1
 msgid "Comment"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:48
-#: shell/../view/user/entries/comment_edit.html:36
-#: shell/../view/user/entries/comment_regist_sp.html:48
-#: shell/../view/user/entries/comment_regist.html:36
-#: shell/../view/admin/users/login.html:15
-#: shell/../view/admin/users/register.html:15
-#: shell/../view/admin/users/login_sp.html:11
-#: shell/../view/admin/users/register_sp.html:12
-#: shell/../view/admin/common/install_user.html:16
-#: shell/../view/admin/common/install.html:117
 msgid "Password"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:55
-#: shell/../view/user/entries/comment_edit.html:41
-#: shell/../view/user/entries/comment_regist_sp.html:55
-#: shell/../view/user/entries/comment_regist.html:41
 msgid "Secret"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:63
-#: shell/../view/user/entries/comment_edit.html:47
-#: shell/../view/user/entries/comment_regist_sp.html:63
-#: shell/../view/user/entries/comment_regist.html:47
 msgid "Authentication keyword"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:66
-#: shell/../view/user/entries/comment_edit.html:50
-#: shell/../view/user/entries/comment_regist_sp.html:66
-#: shell/../view/user/entries/comment_regist.html:50
 msgid "Update authentication image"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:67
-#: shell/../view/user/entries/comment_edit.html:52
-#: shell/../view/user/entries/comment_regist_sp.html:67
-#: shell/../view/user/entries/comment_regist.html:52
 msgid "Please enter the numbers written on the image"
 msgstr ""
 
-#: shell/../view/user/entries/comment_edit_sp.html:74
-#: shell/../view/user/entries/comment_edit.html:58
-#: shell/../view/admin/files/edit_sp.html:32
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:50
-#: shell/../view/admin/blog_settings/etc_edit.html:18
-#: shell/../view/admin/blog_settings/entry_edit.html:37
-#: shell/../view/admin/blog_settings/entry_edit_sp.html:30
-#: shell/../view/admin/blog_settings/etc_edit_sp.html:15
-#: shell/../view/admin/blog_settings/comment_edit.html:68
-#: shell/../view/admin/users/edit_sp.html:20
-#: shell/../view/admin/users/edit.html:25
-#: shell/../view/admin/categories/edit_sp.html:25
-#: shell/../view/admin/categories/edit.html:33
-#: shell/../view/admin/blog_plugins/register.html:29
-#: shell/../view/admin/blog_plugins/index.html:40
-#: shell/../view/admin/blog_plugins/edit_sp.html:50
-#: shell/../view/admin/blog_plugins/edit.html:51
-#: shell/../view/admin/blog_templates/edit.html:25
-#: shell/../view/admin/comments/ajax_reply.html:62
-#: shell/../view/admin/comments/reply_sp.html:61
-#: shell/../view/admin/comments/reply.html:70
-#: shell/../view/admin/tags/edit_sp.html:14
-#: shell/../view/admin/tags/edit.html:19
-#: shell/../view/admin/blogs/edit_sp.html:40
-#: shell/../view/admin/blogs/edit.html:53
 msgid "Update"
 msgstr ""
 
-#: shell/../view/user/entries/blog_password_sp.html:2
-#: shell/../view/user/entries/blog_password.html:5
 msgid "Password authentication"
 msgstr ""
 
-#: shell/../view/user/entries/blog_password_sp.html:8
-#: shell/../view/user/entries/blog_password.html:7
 msgid "Enter the password manager has set is required to view"
 msgstr ""
 
-#: shell/../view/user/entries/blog_password_sp.html:12
-#: shell/../view/user/entries/blog_password.html:15
 msgid "View password"
 msgstr ""
 
-#: shell/../view/user/entries/blog_password_sp.html:20
-#: shell/../view/user/entries/blog_password.html:18
 msgid "I see the blog"
 msgstr ""
 
-#: shell/../view/user/entries/comment_regist_sp.html:2
-#: shell/../view/user/entries/comment_regist.html:1
 msgid "I will post a comment"
 msgstr ""
 
-#: shell/../view/user/entries/comment_regist_sp.html:74
-#: shell/../view/user/entries/comment_regist.html:58
 msgid "Post"
 msgstr ""
 
-#: shell/../view/user/blogs/index.html:1
-#: shell/../view/admin/layouts/default_sp.html:145
-#: shell/../view/admin/layouts/default.html:116
-#: shell/../view/admin/blogs/index.html:1
-#: shell/../view/admin/blogs/index_sp.html:1
 msgid "List of blogs"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:114
-#: shell/../view/admin/layouts/default.html:93
-#: shell/../view/admin/users/index.html:20
-#: shell/../view/admin/common/notice_sp.html:7
-#: shell/../view/admin/blogs/index.html:18
 msgid "Checking the blog"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:116
-#: shell/../view/admin/layouts/default.html:95
-#: shell/../view/admin/common/notice_sp.html:6
-#: shell/../view/admin/entries/index.html:1
-#: shell/../view/admin/entries/index_sp.html:1
 msgid "List of articles"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:117
-#: shell/../view/admin/layouts/default.html:96
-#: shell/../view/admin/comments/index.html:1
-#: shell/../view/admin/comments/index_sp.html:1
 msgid "List of comments"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:118
-#: shell/../view/admin/layouts/default.html:97
-#: shell/../view/admin/files/upload.html:16
-#: shell/../view/admin/files/edit.html:19
 msgid "Upload file"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:121
-#: shell/../view/admin/layouts/default.html:102
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:5
-#: shell/../view/admin/blog_settings/entry_edit_sp.html:5
-#: shell/../view/admin/blog_settings/etc_edit_sp.html:5
-#: shell/../view/admin/users/edit_sp.html:5
-#: shell/../view/admin/blog_plugins/index_sp.html:56
-#: shell/../view/admin/blog_plugins/index_sp.html:61
-#: shell/../view/admin/blogs/edit_sp.html:5
-#, fuzzy
 msgid "Setting"
 msgstr "Absolute link"
 
-#: shell/../view/admin/layouts/default_sp.html:122
-#: shell/../view/admin/layouts/default.html:104
-#: shell/../view/admin/blog_templates/index.html:1
-#: shell/../view/admin/blog_templates/index_sp.html:1
 msgid "Template management"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:123
-#: shell/../view/admin/layouts/default.html:105
-#: shell/../view/admin/blog_plugins/create.html:3
-#: shell/../view/admin/blog_plugins/register.html:3
-#: shell/../view/admin/blog_plugins/index.html:1
-#: shell/../view/admin/blog_plugins/plugin_search.html:8
-#: shell/../view/admin/blog_plugins/index_sp.html:3
 msgid "Plugin management"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:124
-#: shell/../view/admin/layouts/default.html:106
-#: shell/../view/admin/categories/create.html:1
-#: shell/../view/admin/categories/create_sp.html:3
 msgid "Category management"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:125
-#: shell/../view/admin/layouts/default.html:107
-#: shell/../view/admin/tags/index.html:1
-#: shell/../view/admin/tags/index_sp.html:1
 msgid "List of tags"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:126
-#: shell/../view/admin/layouts/default.html:108
-#: shell/../view/admin/blog_settings/tab_sp.html:3
-#: shell/../view/admin/blog_settings/tab.html:3
-#: shell/../view/admin/blogs/edit_sp.html:1
-#: shell/../view/admin/blogs/edit.html:1
-#, fuzzy
 msgid "Blog setting"
 msgstr "Absolute link"
 
-#: shell/../view/admin/layouts/default_sp.html:134
-#: shell/../view/admin/layouts/default.html:137
-#: shell/../view/admin/users/register.html:1
-#: shell/../view/admin/users/register_sp.html:1
-#, fuzzy
 msgid "User registration"
 msgstr "Absolute link"
 
-#: shell/../view/admin/layouts/default_sp.html:136
-#: shell/../view/admin/layouts/default.html:139
-#: shell/../view/admin/users/login.html:1
-#: shell/../view/admin/users/login.html:23
-#: shell/../view/admin/users/login_sp.html:1
-#: shell/../view/admin/users/login_sp.html:17
-#: shell/../view/admin/common/installed.html:5
 msgid "Login"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:144
-#: shell/../view/admin/layouts/default.html:114
-#: shell/../view/admin/layouts/default.html:134
-#, fuzzy
 msgid "User Menu"
 msgstr "Absolute link"
 
-#: shell/../view/admin/layouts/default_sp.html:146
-#: shell/../view/admin/layouts/default.html:117
-#: shell/../view/admin/users/tab_sp.html:3
-#: shell/../view/admin/users/edit_sp.html:1
-#: shell/../view/admin/users/tab.html:3 shell/../view/admin/users/edit.html:1
-#, fuzzy
 msgid "User setting"
 msgstr "Absolute link"
 
-#: shell/../view/admin/layouts/default_sp.html:147
-#: shell/../view/admin/layouts/default.html:118
 msgid "Logout"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:152
-#: shell/../view/admin/layouts/default.html:49
-#: shell/../view/admin/users/register.html:29
-#: shell/../view/admin/users/index.html:11
-#: shell/../view/admin/users/register_sp.html:22
-#: shell/../view/admin/common/install_user.html:30
-#: shell/../view/admin/blogs/create.html:15
-#: shell/../view/admin/blogs/edit_sp.html:9
-#: shell/../view/admin/blogs/create_sp.html:11
-#: shell/../view/admin/blogs/edit.html:10
 msgid "Blog name"
 msgstr ""
 
-#: shell/../view/admin/layouts/default_sp.html:157
-#: shell/../view/admin/layouts/default.html:56
-#: shell/../view/admin/blogs/index.html:3
-#: shell/../view/admin/blogs/index_sp.html:4
 msgid "Create a new blog"
 msgstr ""
 
-#: shell/../view/admin/layouts/default.html:90 shell/../locale/define.php:39
 msgid "Home"
 msgstr ""
 
-#: shell/../view/admin/files/upload_sp.html:1
-#: shell/../view/admin/files/upload.html:1
 msgid "File upload"
 msgstr ""
 
-#: shell/../view/admin/files/upload_sp.html:11
-#: shell/../view/admin/files/ajax_index.html:16
-#: shell/../view/admin/entries/editor_js.html:24
-#: shell/../view/admin/entries/index.html:20
-#: shell/../view/admin/entries/editor_js_sp.html:17
-#: shell/../view/admin/entries/index_sp.html:8
-#: shell/../view/admin/comments/index.html:20
-#: shell/../view/admin/comments/index_sp.html:9
-#: shell/../view/admin/tags/index.html:17
-#: shell/../view/admin/tags/index_sp.html:11
 msgid "Search"
 msgstr ""
 
-#: shell/../view/admin/files/upload_sp.html:23
-#: shell/../view/admin/files/edit_sp.html:22
-#: shell/../view/admin/files/upload.html:20
-#: shell/../view/admin/files/edit.html:23
-#, fuzzy
 msgid "File selection"
 msgstr "Absolute link"
 
-#: shell/../view/admin/files/upload_sp.html:33
-#: shell/../view/admin/files/upload.html:25
-#: shell/../view/admin/files/edit.html:28
 msgid "Upload"
 msgstr ""
 
-#: shell/../view/admin/files/upload_sp.html:38
 msgid "File List"
 msgstr ""
 
-#: shell/../view/admin/files/upload_sp.html:53
-#: shell/../view/admin/files/ajax_index.html:50
 msgid "The target file does not exist"
 msgstr ""
 
-#: shell/../view/admin/files/edit_sp.html:1
 msgid "Details of file"
 msgstr ""
 
-#: shell/../view/admin/files/edit_sp.html:2
 msgid "Checking file "
 msgstr ""
 
-#: shell/../view/admin/files/edit_sp.html:7
 msgid "Information in the file"
 msgstr ""
 
-#: shell/../view/admin/files/edit_sp.html:13
-#: shell/../view/admin/files/edit.html:1
-#, fuzzy
 msgid "Edit File"
 msgstr "Absolute link"
 
-#: shell/../view/admin/files/edit_sp.html:39
-#: shell/../view/admin/categories/edit_sp.html:34
-#: shell/../view/admin/blog_plugins/edit_sp.html:55
-#: shell/../view/admin/blog_templates/fc2_view_sp.html:25
-#: shell/../view/admin/comments/reply_sp.html:46
-#: shell/../view/admin/tags/edit_sp.html:22
 msgid "I Back to List"
 msgstr ""
 
-#: shell/../view/admin/files/edit_sp.html:40
-#: shell/../view/admin/files/ajax_index.html:46
-#: shell/../view/admin/files/ajax_index.html:82
-#: shell/../view/admin/blog_plugins/index.html:43
-#: shell/../view/admin/blog_plugins/edit_sp.html:64
-#: shell/../view/admin/blog_plugins/plugin_search.html:40
-#: shell/../view/admin/entries/index.html:62
-#: shell/../view/admin/entries/index.html:71
-#: shell/../view/admin/entries/edit_sp.html:15
-#: shell/../view/admin/blog_templates/index.html:42
-#: shell/../view/admin/blog_templates/index_sp.html:52
-#: shell/../view/admin/comments/ajax_reply.html:76
-#: shell/../view/admin/comments/index.html:84
-#: shell/../view/admin/comments/index.html:92
-#: shell/../view/admin/comments/reply_sp.html:47
-#: shell/../view/admin/comments/reply.html:84
-#: shell/../view/admin/tags/index.html:41
-#: shell/../view/admin/tags/index.html:50
-#: shell/../view/admin/tags/edit_sp.html:32
 msgid "Are you sure you want to delete?"
 msgstr ""
 
-#: shell/../view/admin/files/edit_sp.html:40
-#: shell/../view/admin/files/ajax_index.html:30
-#: shell/../view/admin/files/ajax_index.html:46
-#: shell/../view/admin/categories/create.html:65
-#: shell/../view/admin/categories/edit_sp.html:39
-#: shell/../view/admin/blog_plugins/index.html:27
-#: shell/../view/admin/blog_plugins/index.html:43
-#: shell/../view/admin/blog_plugins/index.html:105
-#: shell/../view/admin/blog_plugins/edit_sp.html:64
-#: shell/../view/admin/blog_plugins/plugin_search.html:20
-#: shell/../view/admin/blog_plugins/plugin_search.html:40
-#: shell/../view/admin/entries/index.html:39
-#: shell/../view/admin/entries/index.html:62
-#: shell/../view/admin/entries/edit_sp.html:15
-#: shell/../view/admin/blog_templates/index.html:17
-#: shell/../view/admin/blog_templates/index.html:42
-#: shell/../view/admin/blog_templates/index_sp.html:38
-#: shell/../view/admin/comments/ajax_reply.html:76
-#: shell/../view/admin/comments/index.html:38
-#: shell/../view/admin/comments/index.html:84
-#: shell/../view/admin/comments/reply_sp.html:47
-#: shell/../view/admin/comments/reply.html:84
-#: shell/../view/admin/tags/index.html:31
-#: shell/../view/admin/tags/index.html:41
-#: shell/../view/admin/tags/edit_sp.html:32
-#: shell/../view/admin/blogs/delete_sp.html:22
-#: shell/../view/admin/blogs/delete.html:17 shell/../locale/define.php:36
 msgid "Delete"
 msgstr ""
 
-#: shell/../view/admin/files/ajax_index.html:3
 msgid "File search"
 msgstr ""
 
-#: shell/../view/admin/files/ajax_index.html:3
-#: shell/../view/admin/entries/index.html:4
-#: shell/../view/admin/comments/index.html:4
-#: shell/../view/admin/tags/index.html:4
 msgid "Hits"
 msgstr ""
 
-#: shell/../view/admin/files/ajax_index.html:7
 msgid "You can search to match the conditions file."
 msgstr ""
 
-#: shell/../view/admin/files/ajax_index.html:27
-#: shell/../view/admin/entries/index.html:33
-#: shell/../view/admin/comments/index.html:34
 msgid "Date"
 msgstr ""
 
-#: shell/../view/admin/files/ajax_index.html:29
-#: shell/../view/admin/files/ajax_index.html:45
-#: shell/../view/admin/entries/index.html:36
-#: shell/../view/admin/entries/index.html:53
-#: shell/../view/admin/tags/index.html:30
-#: shell/../view/admin/tags/index.html:40 shell/../locale/define.php:26
 msgid "Edit"
 msgstr ""
 
-#: shell/../view/admin/files/ajax_index.html:55
-#: shell/../view/admin/entries/index.html:71
-#: shell/../view/admin/comments/index.html:92
-#: shell/../view/admin/tags/index.html:50
 msgid "Remove what you have selected"
 msgstr ""
 
@@ -859,1460 +419,875 @@ msgstr ""
 msgid "I failed to set read"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/tab_sp.html:6
-#: shell/../view/admin/blog_settings/entry_edit.html:1
-#: shell/../view/admin/blog_settings/entry_edit_sp.html:1
-#: shell/../view/admin/blog_settings/tab.html:6
-#, fuzzy
 msgid "Article setting"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_settings/tab_sp.html:9
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:1
-#: shell/../view/admin/blog_settings/comment_edit.html:1
-#: shell/../view/admin/blog_settings/tab.html:9
-#, fuzzy
 msgid "Comments Settings"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_settings/tab_sp.html:12
-#: shell/../view/admin/blog_settings/etc_edit.html:1
-#: shell/../view/admin/blog_settings/etc_edit_sp.html:1
-#: shell/../view/admin/blog_settings/tab.html:12
-#, fuzzy
 msgid "Other Settings"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_settings/tab_sp.html:15
-#: shell/../view/admin/blog_settings/tab.html:15
-#: shell/../view/admin/blogs/delete_sp.html:1
-#: shell/../view/admin/blogs/delete.html:1
-#, fuzzy
 msgid "Blog Delete"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:9
-#: shell/../view/admin/blog_settings/comment_edit.html:10
-#, fuzzy
 msgid "Approval settings"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:14
-#: shell/../view/admin/blog_settings/comment_edit.html:17
 msgid "Display awaiting message"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:19
-#: shell/../view/admin/blog_settings/comment_edit.html:24
 msgid "Display private comment"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:24
-#: shell/../view/admin/blog_settings/comment_edit.html:31
 msgid "Sender information"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:29
-#: shell/../view/admin/blog_settings/comment_edit.html:39
-#, fuzzy
 msgid "Comment confirmation setting"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:34
-#: shell/../view/admin/blog_settings/comment_edit.html:46
 msgid "Display the latest comments"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:39
-#: shell/../view/admin/blog_settings/comment_edit.html:53
 msgid "Display order of comments"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/comment_edit_sp.html:44
-#: shell/../view/admin/blog_settings/comment_edit.html:60
 msgid "Quotes Comments"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/etc_edit.html:10
-#: shell/../view/admin/blog_settings/etc_edit_sp.html:9
 msgid "Initial display page"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/entry_edit.html:10
-#: shell/../view/admin/blog_settings/entry_edit_sp.html:9
 msgid "Display the latest entries"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/entry_edit.html:17
-#: shell/../view/admin/blog_settings/entry_edit_sp.html:14
 msgid "Display the number of articles, display order"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/entry_edit.html:27
-#: shell/../view/admin/blog_settings/entry_edit_sp.html:22
 msgid "Password of the article view"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/entry_edit.html:28
-#: shell/../view/admin/blog_settings/entry_edit_sp.html:23
 msgid "It is adapted to the password is not set at the time of the article"
 msgstr ""
 
-#: shell/../view/admin/blog_settings/comment_edit.html:33
 msgid "Save sender's information into Cookie?"
 msgstr ""
 
-#: shell/../view/admin/users/tab_sp.html:6
-#: shell/../view/admin/users/withdrawal.html:1
-#: shell/../view/admin/users/withdrawal_sp.html:1
-#: shell/../view/admin/users/tab.html:6
 msgid "Withdrawal process"
 msgstr ""
 
-#: shell/../view/admin/users/withdrawal.html:10
-#: shell/../view/admin/users/withdrawal_sp.html:5
-#: shell/../view/admin/users/withdrawal_sp.html:15
 msgid "Unsubscribe confirmation"
 msgstr ""
 
-#: shell/../view/admin/users/withdrawal.html:13
 msgid "Unsubscribe"
 msgstr ""
 
-#: shell/../view/admin/users/withdrawal.html:18
-#: shell/../view/admin/users/withdrawal_sp.html:22
 msgid "Withdrawal"
 msgstr ""
 
-#: shell/../view/admin/users/withdrawal.html:30
 msgid "Please check the box \"unsubscribe\""
 msgstr ""
 
-#: shell/../view/admin/users/withdrawal.html:33
-#: shell/../view/admin/users/withdrawal_sp.html:35
 msgid ""
 "Can not be undone if you unsubscribe. Are you sure you want to unsubscribe "
 "really?"
 msgstr ""
 
-#: shell/../view/admin/users/login.html:8
-#: shell/../view/admin/users/register.html:8
-#: shell/../view/admin/users/login_sp.html:6
-#: shell/../view/admin/users/register_sp.html:7
-#: shell/../view/admin/common/install_user.html:9
 msgid "Login ID"
 msgstr ""
 
-#: shell/../view/admin/users/register.html:22
-#: shell/../view/admin/users/index.html:10
-#: shell/../view/admin/users/register_sp.html:17
-#: shell/../view/admin/common/install_user.html:23
-#: shell/../view/admin/blogs/create.html:8
-#: shell/../view/admin/blogs/index.html:8
-#: shell/../view/admin/blogs/create_sp.html:6
-#: shell/../view/admin/blogs/index_sp.html:7
 msgid "Blog ID"
 msgstr ""
 
-#: shell/../view/admin/users/register.html:36
-#: shell/../view/admin/users/index.html:12
-#: shell/../view/admin/users/register_sp.html:27
-#: shell/../view/admin/common/install_user.html:37
-#: shell/../view/admin/blogs/create.html:22
-#: shell/../view/admin/blogs/edit_sp.html:19
-#: shell/../view/admin/blogs/create_sp.html:16
-#: shell/../view/admin/blogs/edit.html:24
 msgid "Nickname"
 msgstr ""
 
-#: shell/../view/admin/users/register.html:44
-#: shell/../view/admin/users/register_sp.html:33
-#: shell/../view/admin/common/install_user.html:45
-#: shell/../view/admin/blog_plugins/register.html:29
-#: shell/../view/admin/blog_plugins/index.html:40
-#: shell/../view/admin/blogs/create.html:30
-#: shell/../view/admin/blogs/create_sp.html:22
 msgid "Register"
 msgstr ""
 
-#: shell/../view/admin/users/index.html:1
 msgid "List of users"
 msgstr ""
 
-#: shell/../view/admin/users/withdrawal_sp.html:8
 msgid ""
 "If you want to unsubscribe, please tap the \"Withdrawal\" button and check "
 "the \"Unsubscribe confirmation\"."
 msgstr ""
 
-#: shell/../view/admin/users/withdrawal_sp.html:32
 msgid "Please check the box \"Unsubscribe confirmation\""
 msgstr ""
 
-#: shell/../view/admin/users/edit_sp.html:9
-#: shell/../view/admin/users/edit.html:10
 msgid "Change Password"
 msgstr ""
 
-#: shell/../view/admin/users/edit_sp.html:14
-#: shell/../view/admin/users/edit.html:17
 msgid "Blog ID at login"
 msgstr ""
 
-#: shell/../view/admin/common/install_user.html:1
-#, fuzzy
 msgid "Administrator registration"
 msgstr "Absolute link"
 
-#: shell/../view/admin/common/notice_sp.html:22
-#: shell/../view/admin/common/notice.html:12
-#, php-format
 msgid "There %d reviews unread comments"
 msgstr ""
 
-#: shell/../view/admin/common/notice_sp.html:33
-#: shell/../view/admin/common/notice.html:23
-#, php-format
 msgid "There %d reviews unapproved comment"
 msgstr ""
 
-#: shell/../view/admin/common/notice_sp.html:38
-#: shell/../view/admin/common/notice.html:28
 msgid "There is no notice"
 msgstr ""
 
-#: shell/../view/admin/common/paging_sp.html:22
-#: shell/../view/admin/common/paging_sp.html:24
-#: shell/../view/admin/entries/ajax_media_load_sp.html:32
-#: shell/../view/admin/entries/ajax_media_load_sp.html:34
-#: shell/../locale/define.php:43
 msgid "Previous page"
 msgstr ""
 
-#: shell/../view/admin/common/paging_sp.html:28
-#: shell/../view/admin/common/paging_sp.html:30
-#: shell/../view/admin/entries/ajax_media_load_sp.html:37
-#: shell/../view/admin/entries/ajax_media_load_sp.html:39
-#: shell/../locale/define.php:44
 msgid "Next page"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:1
 msgid "Environment Check"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:48
 msgid "Write access to the temporary directory"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:54
-#: shell/../view/admin/common/install.html:66
 msgid "Please perform a writable set for the above folder"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:60
 msgid "Write access to the upload directory"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:72
 msgid "Check connection library with MySQL"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:78
 msgid "Please enable pdo"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:94
 msgid "Check connection to the MySQL"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:101
 msgid "Can not connect to DB"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:102
 msgid "Please check and there is no problem in the following setting"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:103
 msgid "Please change each item of config.php If you are different"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:109
 msgid "Host name"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:113
-#, fuzzy
 msgid "User name"
 msgstr "Absolute link"
 
-#: shell/../view/admin/common/install.html:121
 msgid "Database name"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:130
 msgid "Character code check of MySQL"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:137
 msgid ""
 "You can not use the character code of UTF8MB4 because the version of MySQL "
 "is older"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:138
 msgid "Please change to UTF8 DB_CHARSET"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:139
-#: shell/../view/admin/common/install.html:156
-#: shell/../view/admin/common/install.html:172
 msgid "Example"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:147
 msgid "Check the configuration of the domain"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:154
 msgid "Domain is set to the current domain"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:155
 msgid "Please change to the appropriate domain"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:171
 msgid "Please change to a string of alphanumeric which is not easily predicted"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:179
 msgid "Check the configuration of the GD library"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:186
 msgid "GD library does not have installed"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:187
 msgid "Though it is possible to proceed with the installation of the blog"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:188
 msgid "Until you install the GD library"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:189
 msgid "You can not use the ability to create a thumbnail image"
 msgstr ""
 
-#: shell/../view/admin/common/install.html:199
 msgid "Install"
 msgstr ""
 
-#: shell/../view/admin/common/installed.html:1
-#, fuzzy
 msgid "Installation complete"
 msgstr "Absolute link"
 
-#: shell/../view/admin/common/installed.html:3
-#, fuzzy
 msgid "The installation was completed"
 msgstr "Absolute link"
 
-#: shell/../view/admin/common/installed.html:4
 msgid "Please log from the following"
 msgstr ""
 
-#: shell/../view/admin/categories/create.html:4
-#: shell/../view/admin/categories/create_sp.html:5
 msgid "Add category"
 msgstr ""
 
-#: shell/../view/admin/categories/create.html:10
-#: shell/../view/admin/categories/edit_sp.html:9
-#: shell/../view/admin/categories/ajax_add.html:52
-#: shell/../view/admin/categories/ajax_add_sp.html:52
-#: shell/../view/admin/categories/create_sp.html:9
-#: shell/../view/admin/categories/edit.html:11
 msgid "Parent category"
 msgstr ""
 
-#: shell/../view/admin/categories/create.html:17
-#: shell/../view/admin/categories/edit_sp.html:14
-#: shell/../view/admin/categories/ajax_add.html:61
-#: shell/../view/admin/categories/ajax_add.html:63
-#: shell/../view/admin/categories/ajax_add_sp.html:61
-#: shell/../view/admin/categories/ajax_add_sp.html:62
-#: shell/../view/admin/categories/create_sp.html:14
-#: shell/../view/admin/categories/edit.html:18
-#: shell/../view/admin/entries/index.html:13
-#: shell/../view/admin/entries/index_sp.html:11
 msgid "Category name"
 msgstr ""
 
-#: shell/../view/admin/categories/create.html:24
-#: shell/../view/admin/categories/edit_sp.html:19
-#: shell/../view/admin/categories/create_sp.html:19
-#: shell/../view/admin/categories/edit.html:25
-#, fuzzy
 msgid "Sort by category"
 msgstr "Absolute link"
 
-#: shell/../view/admin/categories/create.html:32
-#: shell/../view/admin/categories/ajax_add.html:64
-#: shell/../view/admin/categories/ajax_add.html:184
-#: shell/../view/admin/categories/ajax_add_sp.html:64
-#: shell/../view/admin/categories/ajax_add_sp.html:181
-#: shell/../view/admin/categories/create_sp.html:25
-#: shell/../view/admin/blog_plugins/create.html:52
-#: shell/../view/admin/blog_plugins/plugin_search_sp.html:11
-#: shell/../view/admin/blog_plugins/plugin_search_sp.html:17
-#: shell/../view/admin/entries/editor_js.html:211
-#: shell/../view/admin/entries/ajax_media_load_sp.html:5
-#: shell/../view/admin/entries/form.html:37
-#: shell/../view/admin/entries/editor_js_sp.html:164
-#: shell/../view/admin/entries/form_sp.html:181
-#: shell/../view/admin/blog_templates/create.html:26
 msgid "Add"
 msgstr ""
 
-#: shell/../view/admin/categories/create.html:43
-#: shell/../view/admin/categories/ajax_add.html:12
-#: shell/../view/admin/categories/ajax_add_sp.html:11
-#: shell/../view/admin/categories/create_sp.html:33
 msgid "Categories"
 msgstr ""
 
-#: shell/../view/admin/categories/create.html:65
-#: shell/../view/admin/categories/edit_sp.html:39
 msgid ""
 "If the child category exists\\nRemove all along with the child category, but "
 "do you really want?"
 msgstr ""
 
-#: shell/../view/admin/categories/edit_sp.html:1
-#: shell/../view/admin/categories/edit.html:1
 msgid "I edit a category"
 msgstr ""
 
-#: shell/../view/admin/categories/edit_sp.html:3
 msgid "Edit category"
 msgstr ""
 
-#: shell/../view/admin/categories/ajax_add.html:49
-#: shell/../view/admin/categories/ajax_add_sp.html:50
 msgid "Category add"
 msgstr ""
 
-#: shell/../view/admin/categories/ajax_add.html:55
-#: shell/../view/admin/categories/ajax_add_sp.html:54
 msgid "Not selected"
 msgstr ""
 
-#: shell/../view/admin/categories/ajax_add.html:159
-#: shell/../view/admin/categories/ajax_add_sp.html:156
 msgid "Please enter the category name"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/create.html:1
 msgid "I want to create a plugin"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/create.html:17
-#: shell/../view/admin/blog_plugins/register.html:13
-#: shell/../view/admin/blog_plugins/index.html:24
-#: shell/../view/admin/blog_plugins/edit_sp.html:13
-#: shell/../view/admin/blog_plugins/plugin_search.html:16
-#: shell/../view/admin/blog_plugins/edit.html:14
 msgid "Plugin name"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/create.html:24
-#: shell/../view/admin/blog_plugins/edit_sp.html:20
-#: shell/../view/admin/blog_plugins/edit.html:21
 msgid "Character color setting of title statement"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/create.html:33
-#: shell/../view/admin/blog_plugins/edit_sp.html:29
-#: shell/../view/admin/blog_plugins/edit.html:30
 msgid "Character color setting of content statement"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/create.html:53
-#: shell/../view/admin/blog_plugins/plugin_search_sp.html:18
-#: shell/../view/admin/blog_plugins/edit_sp.html:51
-#: shell/../view/admin/blog_plugins/plugin_search.html:19
-#: shell/../view/admin/blog_plugins/plugin_search.html:36
-#: shell/../view/admin/blog_plugins/edit.html:52
-#: shell/../view/admin/entries/form.html:101
-#: shell/../view/admin/entries/form_sp.html:196
-#: shell/../view/admin/blog_templates/fc2_index.html:12
-#: shell/../view/admin/blog_templates/fc2_view_sp.html:12
-#: shell/../view/admin/blog_templates/create.html:27
-#: shell/../view/admin/blog_templates/index.html:16
-#: shell/../view/admin/blog_templates/index.html:36
-#: shell/../view/admin/blog_templates/fc2_index_sp.html:13
-#: shell/../view/admin/blog_templates/edit.html:26
 msgid "Preview"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/register.html:1
 msgid "Registration of plug-in"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/register.html:20
-#: shell/../view/admin/blog_plugins/plugin_search.html:17
 msgid "Description"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/plugin_search_sp.html:1
-#: shell/../view/admin/blog_plugins/plugin_search.html:1
-#, fuzzy
 msgid "Plugin search"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_plugins/index.html:15
-#: shell/../view/admin/blog_plugins/index.html:58
-#: shell/../view/admin/blog_plugins/index_sp.html:29
-#: shell/../view/admin/entries/form_sp.html:170
 msgid "Category"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index.html:17
-#: shell/../view/admin/blog_plugins/index_sp.html:48
-#, fuzzy
 msgid "Official Plugin Search"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_plugins/index.html:18
-#: shell/../view/admin/blog_plugins/index_sp.html:49
-#, fuzzy
 msgid "Share Plugin Search"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_plugins/index.html:19
 msgid "Plugin Creation"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index.html:26
-#, fuzzy
 msgid "Share plugin"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_plugins/index.html:51
 msgid "Sort"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index.html:71
 msgid "Cancel"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index.html:72
 msgid "Completion"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index.html:125
-#: shell/../view/admin/blog_plugins/index_sp.html:255
-#: shell/../view/admin/blog_plugins/index_sp.html:272
-#: shell/../view/admin/comments/ajax_reply.html:69
 msgid "Is communicating ..."
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/edit_sp.html:1
-#: shell/../view/admin/blog_plugins/edit.html:1
 msgid "I want to edit the plugin"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/edit_sp.html:38
-#: shell/../view/admin/blog_plugins/edit.html:39
 msgid "Remodeling of the plug-in"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/edit_sp.html:40
-#: shell/../view/admin/blog_plugins/edit.html:41
 msgid "I will do the editing of [HTML]. (For advanced users)"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/edit_sp.html:61
-#, fuzzy
 msgid "Delete plugin"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_plugins/plugin_search.html:18
-#: shell/../view/admin/blog_plugins/plugin_search.html:33
-#: shell/../view/admin/blog_templates/fc2_index.html:13
-#: shell/../view/admin/blog_templates/fc2_view_sp.html:15
-#: shell/../view/admin/blog_templates/fc2_view_sp.html:28
-#: shell/../view/admin/blog_templates/fc2_index_sp.html:14
 msgid "Download"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index_sp.html:18
 msgid "Settings of the plug-in"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index_sp.html:22
-#, fuzzy
 msgid "Advanced setting"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_plugins/index_sp.html:23
-#, fuzzy
 msgid "Display Settings"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_plugins/index_sp.html:24
-#, fuzzy
 msgid "Sorting"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blog_plugins/index_sp.html:35
-#: shell/../view/admin/blog_plugins/index_sp.html:237
 msgid "Show"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index_sp.html:35
-#: shell/../view/admin/blog_plugins/index_sp.html:237
 msgid "Hide"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index_sp.html:44
 msgid "Plug-in is not set"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index_sp.html:152
 msgid ""
 "Display settings you have changed will return to the original Are you sure?"
 msgstr ""
 
-#: shell/../view/admin/blog_plugins/index_sp.html:163
 msgid ""
 "The sort order that you have changed will return to the original Are you "
 "sure?"
 msgstr ""
 
-#: shell/../view/admin/entries/create.html:1
-#: shell/../view/admin/entries/create_sp.html:1
 msgid "Write a new entry"
 msgstr ""
 
-#: shell/../view/admin/entries/editor_js.html:20
-#: shell/../view/admin/entries/editor_js.html:204
-#: shell/../view/admin/entries/editor_js_sp.html:11
-#: shell/../view/admin/entries/editor_js_sp.html:157
 msgid "Add Media"
 msgstr ""
 
-#: shell/../view/admin/entries/index.html:4
-#, fuzzy
 msgid "Entry search"
 msgstr "Absolute link"
 
-#: shell/../view/admin/entries/index.html:8
 msgid "You can search in accordance with the conditions of past articles."
 msgstr ""
 
-#: shell/../view/admin/entries/index.html:14
-#: shell/../view/admin/entries/index_sp.html:12
-#: shell/../view/admin/tags/index.html:16
-#: shell/../view/admin/tags/index.html:28
-#: shell/../view/admin/tags/edit_sp.html:10
-#: shell/../view/admin/tags/index_sp.html:10
-#: shell/../view/admin/tags/edit.html:11
 msgid "Tag name"
 msgstr ""
 
-#: shell/../view/admin/entries/index.html:15
-#: shell/../view/admin/entries/index_sp.html:13
-#: shell/../view/admin/comments/ajax_reply.html:31
-#: shell/../view/admin/comments/index.html:14
-#: shell/../view/admin/comments/reply_sp.html:10
-#: shell/../view/admin/comments/index_sp.html:13
-#: shell/../view/admin/comments/reply.html:33
 msgid "Public state"
 msgstr ""
 
-#: shell/../view/admin/entries/index.html:35
-#: shell/../view/admin/entries/form.html:14
-#: shell/../view/admin/entries/form_sp.html:78
-#: shell/../view/admin/entries/form_sp.html:85
-#: shell/../view/admin/comments/ajax_reply.html:15
-#: shell/../view/admin/comments/index.html:36
-#: shell/../view/admin/comments/reply.html:17 shell/../locale/define.php:30
 msgid "Body"
 msgstr ""
 
-#: shell/../view/admin/entries/index.html:37
-#: shell/../view/admin/comments/index.html:37
 msgid "State"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:20
-#: shell/../view/admin/entries/form_sp.html:81
-#: shell/../view/admin/entries/form_sp.html:90
 msgid "Edit a postscript"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:20
-#: shell/../view/admin/entries/form.html:26
 msgid "Click to open/close"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:26
-#: shell/../view/admin/entries/form_sp.html:95
-#, fuzzy
 msgid "Entry settings"
 msgstr "Absolute link"
 
-#: shell/../view/admin/entries/form.html:34
-#: shell/../view/admin/entries/form_sp.html:176
 msgid "User tags"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:51
-#: shell/../view/admin/entries/form_sp.html:116
 msgid "Date and time"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:54
 msgid "Date and time of submission will be set when it is not input"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:59
-#: shell/../view/admin/entries/form_sp.html:98
 msgid "Post type"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:66
-#: shell/../view/admin/entries/form_sp.html:105
 msgid "Set Password"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:71
-#: shell/../view/admin/entries/form_sp.html:108
 msgid "They are authenticated with a password of the entire If empty"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:72
-#: shell/../view/admin/entries/form_sp.html:109
 msgid "Passwords in the whole place"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:82
-#: shell/../view/admin/entries/form_sp.html:161
 msgid "New paragraph"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:89
-#: shell/../view/admin/entries/form_sp.html:152
 msgid "Accept comments"
 msgstr ""
 
-#: shell/../view/admin/entries/form.html:100
-#: shell/../view/admin/entries/form_sp.html:195
 msgid "Save this entry"
 msgstr ""
 
-#: shell/../view/admin/entries/edit_sp.html:1
-#: shell/../view/admin/entries/edit.html:1
 msgid "Edit this entry."
 msgstr ""
 
-#: shell/../view/admin/entries/edit_sp.html:12
-#, fuzzy
 msgid "Delete entry"
 msgstr "Absolute link"
 
-#: shell/../view/admin/entries/form_sp.html:71
-#, fuzzy
 msgid "Article Title"
 msgstr "Absolute link"
 
-#: shell/../view/admin/entries/form_sp.html:122
 msgid "Date and time when saving"
 msgstr ""
 
-#: shell/../view/admin/entries/form_sp.html:126
 msgid "Specify the date and time"
 msgstr ""
 
-#: shell/../view/admin/entries/form_sp.html:136
 msgid "Year"
 msgstr ""
 
-#: shell/../view/admin/entries/form_sp.html:137
 msgid "Month"
 msgstr ""
 
-#: shell/../view/admin/entries/form_sp.html:138
 msgid "Day"
 msgstr ""
 
-#: shell/../view/admin/entries/form_sp.html:141
 msgid "Hour"
 msgstr ""
 
-#: shell/../view/admin/entries/form_sp.html:142
 msgid "Minute"
 msgstr ""
 
-#: shell/../view/admin/entries/form_sp.html:143
 msgid "Second"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/fc2_index.html:1
-#: shell/../view/admin/blog_templates/fc2_index_sp.html:1
 msgid "FC2 Template list"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/fc2_index.html:10
-#: shell/../view/admin/blog_templates/fc2_view_sp.html:20
-#: shell/../view/admin/blog_templates/fc2_index_sp.html:12
-#: shell/../view/admin/comments/reply_sp.html:8
 msgid "Summary"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/fc2_index.html:18
-#: shell/../view/admin/blog_templates/fc2_index_sp.html:18
 msgid "FC2 template can not be found"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/fc2_view_sp.html:1
 msgid "FC2 Template detail"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/create.html:1
 msgid "I want to create a template"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/create.html:9
-#: shell/../view/admin/blog_templates/index.html:14
-#: shell/../view/admin/blog_templates/edit.html:8
 msgid "Template name"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/index.html:8
-#: shell/../view/admin/blog_templates/index_sp.html:18
 msgid "Template Search"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/index.html:9
 msgid "Template Creation"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/index.html:15
 msgid "Usage state"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/index.html:28
-#: shell/../view/admin/blog_templates/index_sp.html:29
 msgid "Applying"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/index.html:32
-#: shell/../view/admin/blog_templates/index_sp.html:63
 msgid "Are you sure you want to apply this template?"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/index.html:32
-#: shell/../view/admin/blog_templates/index_sp.html:39
 msgid "Apply"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/index_sp.html:49
 msgid "Please select the template you want to delete"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/index_sp.html:60
 msgid "Please select the template to apply"
 msgstr ""
 
-#: shell/../view/admin/blog_templates/edit.html:1
 msgid "I want to edit the template"
 msgstr ""
 
-#: shell/../view/admin/comments/ajax_reply.html:3
-#: shell/../view/admin/comments/reply_sp.html:34
-#: shell/../view/admin/comments/reply.html:5
-#, fuzzy
 msgid "Article name"
 msgstr "Absolute link"
 
-#: shell/../view/admin/comments/ajax_reply.html:7
-#: shell/../view/admin/comments/index.html:35
-#: shell/../view/admin/comments/reply_sp.html:24
-#: shell/../view/admin/comments/reply.html:9
 msgid "Contributor"
 msgstr ""
 
-#: shell/../view/admin/comments/ajax_reply.html:20
-#: shell/../view/admin/comments/reply_sp.html:27
-#: shell/../view/admin/comments/reply.html:22 shell/../locale/define.php:29
 msgid "E-mail address"
 msgstr ""
 
-#: shell/../view/admin/comments/ajax_reply.html:36
-#: shell/../view/admin/comments/index.html:67
-#: shell/../view/admin/comments/reply.html:59
 msgid "Approval"
 msgstr ""
 
-#: shell/../view/admin/comments/ajax_reply.html:43
-#: shell/../view/admin/comments/reply.html:45
 msgid "Updated date"
 msgstr ""
 
-#: shell/../view/admin/comments/ajax_reply.html:48
-#: shell/../view/admin/comments/reply_sp.html:21
-#: shell/../view/admin/comments/reply.html:50
 msgid "Response time"
 msgstr ""
 
-#: shell/../view/admin/comments/ajax_reply.html:64
-#: shell/../view/admin/comments/reply_sp.html:1
-#: shell/../view/admin/comments/reply_sp.html:63
-#: shell/../view/admin/comments/reply.html:72
 msgid "Reply"
 msgstr ""
 
-#: shell/../view/admin/comments/ajax_reply.html:66
-#: shell/../view/admin/comments/reply_sp.html:65
-#: shell/../view/admin/comments/reply.html:74
 msgid "When you press the reply button, the message will be approved"
 msgstr ""
 
-#: shell/../view/admin/comments/ajax_reply.html:73
-#: shell/../view/admin/comments/reply.html:81
 msgid "Delete Comment"
 msgstr ""
 
-#: shell/../view/admin/comments/ajax_reply.html:75
-#: shell/../view/admin/comments/reply.html:83
 msgid "You can delete a comment by pressing the button below."
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:4
 msgid "Comment search"
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:8
 msgid "You can search in accordance with the conditions of the past comments."
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:15
-#: shell/../view/admin/comments/index_sp.html:14
 msgid "Reply state"
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:33
-#: shell/../view/admin/comments/index.html:50
-#, fuzzy
 msgid "Article"
 msgstr "Absolute link"
 
-#: shell/../view/admin/comments/index.html:51
 msgid "Narrowing"
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:59
 msgid "New"
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:60
 msgid "I see the comment"
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:77
-#: shell/../view/admin/comments/index.html:111
-#: shell/../view/admin/comments/index_sp.html:40
 msgid "Reply not"
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:77
-#: shell/../view/admin/comments/index.html:111
-#: shell/../view/admin/comments/index_sp.html:40
 msgid "Unanswered"
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:98
 msgid "Reply Comments"
 msgstr ""
 
-#: shell/../view/admin/comments/index.html:162
-#: shell/../view/admin/comments/reply_sp.html:42
-#: shell/../view/admin/comments/reply.html:59
 msgid "Are you sure you want to be approved?"
 msgstr ""
 
-#: shell/../view/admin/comments/reply_sp.html:3
-#: shell/../view/admin/comments/reply.html:1
 msgid "Details of comment"
 msgstr ""
 
-#: shell/../view/admin/comments/reply_sp.html:42
-#: shell/../view/admin/comments/reply.html:57
 msgid "I moderate comments"
 msgstr ""
 
-#: shell/../view/admin/comments/reply_sp.html:53
-#: shell/../view/admin/comments/reply.html:63
 msgid "I will reply to comments"
 msgstr ""
 
-#: shell/../view/admin/comments/index_sp.html:29
 msgid "No title"
 msgstr ""
 
-#: shell/../view/admin/comments/index_sp.html:32
 msgid "Unknown"
 msgstr ""
 
-#: shell/../view/admin/tags/index.html:4
 msgid "Tag search"
 msgstr ""
 
-#: shell/../view/admin/tags/index.html:8
 msgid "I can search by tag name"
 msgstr ""
 
-#: shell/../view/admin/tags/index.html:29
-#, fuzzy
 msgid "Entry count"
 msgstr "Absolute link"
 
-#: shell/../view/admin/tags/edit_sp.html:1
-#: shell/../view/admin/tags/edit.html:1
 msgid "I want to edit tags"
 msgstr ""
 
-#: shell/../view/admin/tags/edit_sp.html:3
 msgid "Edit tag"
 msgstr ""
 
-#: shell/../view/admin/tags/edit_sp.html:25
 msgid "Check the article"
 msgstr ""
 
-#: shell/../view/admin/tags/edit_sp.html:29
-#, fuzzy
 msgid "Delete tag"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blogs/create.html:1
-#: shell/../view/admin/blogs/create_sp.html:1
 msgid "New registration of the blog"
 msgstr ""
 
-#: shell/../view/admin/blogs/index.html:9
 msgid "I choose the blog"
 msgstr ""
 
-#: shell/../view/admin/blogs/edit_sp.html:14
-#: shell/../view/admin/blogs/edit.html:17
 msgid "Blog Description"
 msgstr ""
 
-#: shell/../view/admin/blogs/edit_sp.html:24
-#: shell/../view/admin/blogs/edit.html:31
 msgid "Visibility Blog"
 msgstr ""
 
-#: shell/../view/admin/blogs/edit_sp.html:29
-#: shell/../view/admin/blogs/edit.html:38
 msgid "View password blog"
 msgstr ""
 
-#: shell/../view/admin/blogs/edit_sp.html:34
-#: shell/../view/admin/blogs/edit.html:45
 msgid "Time zone"
 msgstr ""
 
-#: shell/..//view/admin/blogs/edit.html:52
 msgid "SSL Enable Mode"
 msgstr ""
 
-#: shell/../model/blogs_model.php:135 shell/../model/blogs_model.php:139
 msgid "Enable"
 msgstr ""
 
-#: shell/../model/blogs_model.php:136 shell/../model/blogs_model.php:138
 msgid "Disable"
 msgstr ""
 
-#: shell/..//view/admin/blogs/edit.html:59
 msgid "Redirect status code"
 msgstr ""
 
-#: shell/..//model/blogs_model.php:164
 msgid "Moved Permanently"
 msgstr ""
 
-#: shell/..//model/blogs_model.php:165
 msgid "Found"
 msgstr ""
 
-#: shell/../view/admin/blogs/delete_sp.html:5
-#: shell/../view/admin/blogs/delete_sp.html:15
-#: shell/../view/admin/blogs/delete.html:9
-#, fuzzy
 msgid "Delete confirmation"
 msgstr "Absolute link"
 
-#: shell/../view/admin/blogs/delete_sp.html:8
 msgid ""
 "If you want to delete the blog, please tap the \"Delete\" button Check the "
 "\"Delete confirmation\"."
 msgstr ""
 
-#: shell/../view/admin/blogs/delete_sp.html:33
-#, fuzzy
 msgid "Please check the box \"Delete confirmation\""
 msgstr "Absolute link"
 
-#: shell/../view/admin/blogs/delete_sp.html:36
-#: shell/../view/admin/blogs/delete.html:32
 msgid ""
 "Can not be undone if you remove, but Are you sure you want to delete really?"
 msgstr ""
 
-#: shell/../view/admin/blogs/delete.html:12
 msgid "Remove"
 msgstr ""
 
-#: shell/../view/admin/blogs/delete.html:29
 msgid "Please check the box \"Remove\""
 msgstr ""
 
-#: shell/../controller/admin/files_controller.php:83
 msgid "I have completed the upload of files"
 msgstr ""
 
-#: shell/../controller/admin/files_controller.php:89
-#: shell/../controller/admin/files_controller.php:191
-#: shell/../controller/admin/blogs_controller.php:63
-#: shell/../controller/admin/blogs_controller.php:99
-#: shell/../controller/admin/blog_templates_controller.php:120
-#: shell/../controller/admin/blog_templates_controller.php:160
-#: shell/../controller/admin/common_controller.php:185
-#: shell/../controller/admin/users_controller.php:69
-#: shell/../controller/admin/users_controller.php:103
-#: shell/../controller/admin/users_controller.php:159
-#: shell/../controller/admin/comments_controller.php:193
-#: shell/../controller/admin/entries_controller.php:117
-#: shell/../controller/admin/entries_controller.php:172
-#: shell/../controller/admin/blog_plugins_controller.php:114
-#: shell/../controller/admin/blog_plugins_controller.php:153
-#: shell/../controller/admin/blog_plugins_controller.php:230
-#: shell/../controller/admin/blog_settings_controller.php:78
-#: shell/../controller/admin/categories_controller.php:52
-#: shell/../controller/admin/categories_controller.php:93
-#: shell/../controller/admin/tags_controller.php:104
 msgid "Input error exists"
 msgstr ""
 
-#: shell/../controller/admin/files_controller.php:181
 msgid "I have updated the file"
 msgstr ""
 
-#: shell/../controller/admin/files_controller.php:210
 msgid "I removed the file"
 msgstr ""
 
-#: shell/../controller/admin/files_controller.php:212
-#: shell/../controller/admin/comments_controller.php:254
-#: shell/../controller/admin/tags_controller.php:120
 msgid "I failed to remove"
 msgstr ""
 
-#: shell/../controller/admin/blogs_controller.php:57
 msgid "I created a blog"
 msgstr ""
 
-#: shell/../controller/admin/blogs_controller.php:93
 msgid "I updated a blog"
 msgstr ""
 
-#: shell/../controller/admin/blogs_controller.php:145
 msgid "I removed the blog"
 msgstr ""
 
-#: shell/../controller/admin/admin_controller.php:42
 msgid "Please select a blog"
 msgstr ""
 
-#: shell/../controller/admin/blog_templates_controller.php:114
 msgid "I created a template"
 msgstr ""
 
-#: shell/../controller/admin/blog_templates_controller.php:154
 msgid "I have updated the template"
 msgstr ""
 
-#: shell/../controller/admin/blog_templates_controller.php:177
 msgid "Template to be used can not be found"
 msgstr ""
 
-#: shell/../controller/admin/blog_templates_controller.php:184
 msgid "I switch the template"
 msgstr ""
 
-#: shell/../controller/admin/blog_templates_controller.php:206
 msgid "Template does not exist"
 msgstr ""
 
-#: shell/../controller/admin/blog_templates_controller.php:225
 msgid "I downloaded the template"
 msgstr ""
 
-#: shell/../controller/admin/blog_templates_controller.php:231
 msgid "There is a flaw in the template to be downloaded"
 msgstr ""
 
-#: shell/../controller/admin/blog_templates_controller.php:250
 msgid "You can not delete a template in use"
 msgstr ""
 
-#: shell/../controller/admin/blog_templates_controller.php:262
 msgid "I removed the template"
 msgstr ""
 
-#: shell/../controller/admin/common_controller.php:174
-#: shell/../controller/admin/users_controller.php:58
-#, fuzzy
 msgid "User registration is completed"
 msgstr "Absolute link"
 
-#: shell/../controller/admin/common_controller.php:180
-#: shell/../controller/admin/users_controller.php:64
 msgid "I failed to register"
 msgstr ""
 
-#: shell/../controller/admin/users_controller.php:97
 msgid "Update User Information"
 msgstr ""
 
-#: shell/../controller/admin/users_controller.php:121
 msgid "Was completed withdrawal"
 msgstr ""
 
-#: shell/../controller/admin/users_controller.php:157
 msgid "Login ID or password is incorrect"
 msgstr ""
 
-#: shell/../controller/admin/comments_controller.php:105
 msgid "I approved a comment"
 msgstr ""
 
-#: shell/../controller/admin/comments_controller.php:130
 msgid "Comments subject to approval does not exist"
 msgstr ""
 
-#: shell/../controller/admin/comments_controller.php:181
 msgid "I did reply to comment "
 msgstr ""
 
-#: shell/../controller/admin/comments_controller.php:252
 msgid "I removed the comment"
 msgstr ""
 
-#: shell/../controller/admin/entries_controller.php:111
 msgid "I created a entry"
 msgstr ""
 
-#: shell/../controller/admin/entries_controller.php:166
 msgid "I have updated the entry"
 msgstr ""
 
-#: shell/../controller/admin/entries_controller.php:185
 msgid "I removed the entry"
 msgstr ""
 
-#: shell/../controller/admin/blog_plugins_controller.php:108
-#: shell/../controller/admin/blog_plugins_controller.php:285
 msgid "I created a plugin"
 msgstr ""
 
-#: shell/../controller/admin/blog_plugins_controller.php:147
 msgid "I have updated the plugin"
 msgstr ""
 
-#: shell/../controller/admin/blog_plugins_controller.php:177
-#: shell/../controller/admin/blog_plugins_controller.php:253
 msgid "I removed the plugin"
 msgstr ""
 
-#: shell/../controller/admin/blog_plugins_controller.php:222
 msgid "I have registered the plug-in"
 msgstr ""
 
-#: shell/../controller/admin/blog_plugins_controller.php:224
 msgid "I failed to register the plug-in"
 msgstr ""
 
-#: shell/../controller/admin/blog_plugins_controller.php:269
 msgid "Plugin does not exist"
 msgstr ""
 
-#: shell/../controller/admin/blog_plugins_controller.php:289
 msgid "I failed to download the plug-in"
 msgstr ""
 
-#: shell/../controller/admin/blog_plugins_controller.php:308
 msgid "I have completed the sorting"
 msgstr ""
 
-#: shell/../controller/admin/blog_plugins_controller.php:329
 msgid "I changed the display settings"
 msgstr ""
 
-#: shell/../controller/admin/blog_settings_controller.php:72
 msgid "I have updated the configuration information of the blog"
 msgstr ""
 
-#: shell/../controller/admin/categories_controller.php:28
 msgid "Exceeded the maximum number of registered category"
 msgstr ""
 
-#: shell/../controller/admin/categories_controller.php:46
 msgid "I added a category"
 msgstr ""
 
-#: shell/../controller/admin/categories_controller.php:87
 msgid "I have updated the category"
 msgstr ""
 
-#: shell/../controller/admin/categories_controller.php:121
 msgid "I removed the category"
 msgstr ""
 
-#: shell/../controller/admin/tags_controller.php:92
 msgid "I have updated the tag"
 msgstr ""
 
-#: shell/../controller/admin/tags_controller.php:118
 msgid "I removed the tag"
 msgstr ""
 
-#: shell/../controller/app_controller.php:81
 msgid "Token authentication is invalid"
 msgstr ""
 
-#: shell/../locale/define.php:8
 msgid "Sun"
 msgstr ""
 
-#: shell/../locale/define.php:9
 msgid "Mon"
 msgstr ""
 
-#: shell/../locale/define.php:10
 msgid "Tue"
 msgstr ""
 
-#: shell/../locale/define.php:11
 msgid "Wed"
 msgstr ""
 
-#: shell/../locale/define.php:12
 msgid "Thu"
 msgstr ""
 
-#: shell/../locale/define.php:13
 msgid "Fri"
 msgstr ""
 
-#: shell/../locale/define.php:14
 msgid "Sat"
 msgstr ""
 
-#: shell/../locale/define.php:17
 msgid "FC2 BLOG"
 msgstr ""
 
-#: shell/../locale/define.php:18
 msgid "Read more"
 msgstr ""
 
-#: shell/../locale/define.php:19
 msgid "Theme"
 msgstr ""
 
-#: shell/../locale/define.php:20
 msgid "Genre"
 msgstr ""
 
-#: shell/../locale/define.php:21
 msgid "Trackbacks"
 msgstr ""
 
-#: shell/../locale/define.php:22
 msgid "Comments"
 msgstr ""
 
-#: shell/../locale/define.php:23
 msgid "Entry Absolute link"
 msgstr "Absolute link"
 
-#: shell/../locale/define.php:24
 msgid "Entry category"
 msgstr ""
 
-#: shell/../locale/define.php:25
 msgid "View category list"
 msgstr ""
 
-#: shell/../locale/define.php:31
 msgid "Post a comment"
 msgstr ""
 
-#: shell/../locale/define.php:32
 msgid "Private message"
 msgstr ""
 
-#: shell/../locale/define.php:33
 msgid "Only the blog author may view the message."
 msgstr ""
 
-#: shell/../locale/define.php:34
 msgid "Edit password"
 msgstr ""
 
-#: shell/../locale/define.php:35
 msgid "Send"
 msgstr ""
 
-#: shell/../locale/define.php:37
 msgid "Edit a comment"
 msgstr ""
 
-#: shell/../locale/define.php:38
 msgid "Use trackback for this entry."
 msgstr ""
 
-#: shell/../locale/define.php:40
 msgid "Index"
 msgstr ""
 
-#: shell/../locale/define.php:41
 msgid "First entry"
 msgstr ""
 
-#: shell/../locale/define.php:42
 msgid "Search entries"
 msgstr ""
 
-#: shell/../locale/define.php:45
 msgid "Previous entry"
 msgstr ""
 
-#: shell/../locale/define.php:46
 msgid "Next entry"
 msgstr ""
 
-#: shell/../locale/define.php:47
 msgid "Top of page"
 msgstr ""
 
@@ -2456,17 +1431,6 @@ msgstr "{%displayNone}"
 
 msgid "End Of Name"
 msgstr "{%displayNone}"
-
-#, fuzzy
-#~ msgid "Edit plugin"
-#~ msgstr "Absolute link"
-
-#, fuzzy
-#~ msgid "Delete category"
-#~ msgstr "Absolute link"
-
-#~ msgid "system-date-format"
-#~ msgstr "dd/mm/yy"
 
 msgid "Login to Administration page"
 msgstr ""
