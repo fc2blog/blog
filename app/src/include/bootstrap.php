@@ -8,6 +8,3 @@ define('APP_DIR', realpath(__DIR__ . '/../../') . '/'); // APPディレクトリ
 
 // タイムゾーン設定 TODO php.ini移譲でよいのではないか？
 date_default_timezone_set(\Fc2blog\Config::get('TIMEZONE'));
-
-// 内部文字コードを設定 TODO 非推奨なので消し込む
-mb_internal_encoding('UTF-8');

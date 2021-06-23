@@ -12,7 +12,7 @@
  */
 function h(?string $text): string
 {
-    return htmlentities($text, ENT_QUOTES, \Fc2blog\Config::get('INTERNAL_ENCODING'));
+    return htmlentities($text, ENT_QUOTES, 'UTF-8');
 }
 
 /**
@@ -27,8 +27,8 @@ function t(?string $text, int $length = 10, string $etc = '...'): string
     if (!$length) {
         return '';
     }
-    if (mb_strlen($text, \Fc2blog\Config::get('INTERNAL_ENCODING')) > $length) {
-        return mb_substr($text, 0, $length, \Fc2blog\Config::get('INTERNAL_ENCODING')) . $etc;
+    if (mb_strlen($text, 'UTF-8') > $length) {
+        return mb_substr($text, 0, $length, 'UTF-8') . $etc;
     }
     return $text;
 }

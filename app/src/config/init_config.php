@@ -40,8 +40,6 @@ $config['LANG_ELRTE'] = array(
 # APPへ
 // タイムゾーン
 $config['TIMEZONE'] = 'Asia/Tokyo';
-// 内部エンコード
-$config['INTERNAL_ENCODING'] = 'UTF-8';
 
 // ドメイン
 $config['DOMAIN'] = DOMAIN;

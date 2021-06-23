@@ -13,6 +13,9 @@ use RuntimeException;
 
 class App
 {
+
+
+
     /**
      * ブログIDから階層別フォルダ作成
      * @param string $blog_id
@@ -482,7 +485,7 @@ class App
     public static function genRandomString(int $length = 16, string $charList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345679_-'): string
     {
         if ($length < 0) throw new InvalidArgumentException('must be $length 0 or more');
-        if (mb_strlen($charList) <= 0) throw new InvalidArgumentException('must be $charList length more than 0');
+        if (mb_strlen($charList, 'UTF-8') <= 0) throw new InvalidArgumentException('must be $charList length more than 0');
 
         $charList = preg_split("//u", $charList, 0, PREG_SPLIT_NO_EMPTY);
         $charListLen = count($charList);

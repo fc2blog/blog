@@ -61,7 +61,7 @@ class Validate
      */
     public static function maxlength(?string $value, array $options)
     {
-        if (mb_strlen((string)$value) <= $options['max']) {
+        if (mb_strlen((string)$value, 'UTF-8') <= $options['max']) {
             return true;
         }
         $message = $options['message'] ?? __('Please enter at %d characters or less');
@@ -76,7 +76,7 @@ class Validate
      */
     public static function minlength(?string $value, array $options)
     {
-        if (mb_strlen((string)$value) >= $options['min']) {
+        if (mb_strlen((string)$value, 'UTF-8') >= $options['min']) {
             return true;
         }
         $message = $options['message'] ?? __('Please enter at %d characters or more');
