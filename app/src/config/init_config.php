@@ -5,7 +5,7 @@
 $config = [];
 
 // -------------------- ディレクトリ構造関連 --------------------//
-
+# APPへ
 $config['WWW_DIR'] = WWW_DIR;
 $config['WWW_UPLOAD_DIR'] = $config['WWW_DIR'] . 'uploads/';
 
@@ -22,6 +22,7 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 
 // -------------------- 色々 --------------------//
 // 言語設定
+# APPへ
 $config['LANG'] = 'ja';
 // 国際化対応用
 $config['LANGUAGE'] = 'ja_JP.UTF-8';
@@ -36,6 +37,7 @@ $config['LANG_ELRTE'] = array(
     'en' => 'en',
 );
 
+# APPへ
 // タイムゾーン
 $config['TIMEZONE'] = 'Asia/Tokyo';
 // 内部エンコード
@@ -47,9 +49,11 @@ $config['DOMAIN_USER'] = $config['DOMAIN'];
 $config['DOMAIN_ADMIN'] = $config['DOMAIN'];
 
 // ポート
+# Requestへ？
 $config['HTTP_PORT_STR'] = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
 $config['HTTPS_PORT_STR'] = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
 
+# Controllerへ？
 // SESSIONのID名
 $config['SESSION_NAME'] = 'dojima';
 
@@ -57,7 +61,7 @@ $config['SESSION_NAME'] = 'dojima';
 $config['COOKIE_EXPIRE'] = 180;
 
 // -------------------- アプリの定数系設定ファイル --------------------//
-
+# APPへ
 // デバイスタイプ
 $config['DEVICE_PC'] = 1; // PC
 $config['DEVICE_SP'] = 4; // スマフォ
@@ -311,7 +315,7 @@ $config['PAGE'] = array(
     ),
 );
 
-
+# APPへ
 // テスト用のUserAgentではデフォルトブログ機能を強制オフにする
 // TODO E2E testでシングルテナントモード対応ができたら外す
 if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/THIS_IS_TEST/u", $_SERVER['HTTP_USER_AGENT'])) {
