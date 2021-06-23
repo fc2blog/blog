@@ -81,7 +81,7 @@ class BlogsModel extends Model
             return __('Name that cannot be specified');
         }
 
-        if (is_dir(Config::get('WWW_DIR') . $value)) {
+        if (is_dir(App::WWW_DIR . $value)) {
             return __('Is already in use');
         }
 

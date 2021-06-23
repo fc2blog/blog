@@ -121,7 +121,7 @@ class Fc2BlogTemplate
         }
 
         // フォルダが存在しない場合作成
-        $templatePath = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/syntax.php';
+        $templatePath = App::BLOG_TEMPLATE_DIR . App::getBlogLayer($blog_id) . '/syntax.php';
         $templateDir = dirname($templatePath);
         if (!file_exists($templateDir)) {
             mkdir($templateDir, 0777, true);

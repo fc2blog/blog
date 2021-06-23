@@ -145,33 +145,33 @@ class CommonController extends AdminController
             default:
             case 0:
                 if (!$request->isGet()) return $this->error400();
-                // 環境チェック確認
-                $this->set('temp_dir', Config::get('TEMP_DIR'));
-                $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
-                /** @noinspection PhpRedundantOptionalArgumentInspection */
-                $this->set('random_string', App::genRandomStringAlphaNum(32));
+            // 環境チェック確認
+            $this->set('temp_dir', App::TEMP_DIR);
+            $this->set('www_upload_dir', App::WWW_UPLOAD_DIR);
+            /** @noinspection PhpRedundantOptionalArgumentInspection */
+            $this->set('random_string', App::genRandomStringAlphaNum(32));
 
-                $this->set('DB_HOST', DB_HOST);
-                $this->set('DB_PORT', DB_PORT);
-                $this->set('DB_USER', DB_USER);
-                $this->set('DB_PASSWORD', DB_PASSWORD);
-                $this->set('DB_DATABASE', DB_DATABASE);
+            $this->set('DB_HOST', DB_HOST);
+            $this->set('DB_PORT', DB_PORT);
+            $this->set('DB_USER', DB_USER);
+            $this->set('DB_PASSWORD', DB_PASSWORD);
+            $this->set('DB_DATABASE', DB_DATABASE);
 
-                // ディレクトリ書き込みパーミッション確認
-                $is_write_temp = is_writable(Config::get('TEMP_DIR') . '.');
-                $this->set('is_write_temp', $is_write_temp);
-                $is_write_upload = is_writable(Config::get('WWW_UPLOAD_DIR') . '.');
-                $this->set('is_write_upload', $is_write_upload);
+            // ディレクトリ書き込みパーミッション確認
+            $is_write_temp = is_writable(App::TEMP_DIR);
+            $this->set('is_write_temp', $is_write_temp);
+            $is_write_upload = is_writable(App::WWW_UPLOAD_DIR);
+            $this->set('is_write_upload', $is_write_upload);
 
-                // DB疎通確認
-                if (class_exists(PDO::class)) {
-                    $is_connect = true;
-                    $connect_message = '';
-                    try {
-                        PDOConnection::createConnection();
-                    } catch (Exception $e) {
-                        $is_connect = false;
-                        $connect_message = $e->getMessage();
+            // DB疎通確認
+            if (class_exists(PDO::class)) {
+                $is_connect = true;
+                $connect_message = '';
+                try {
+                    PDOConnection::createConnection();
+                } catch (Exception $e) {
+                    $is_connect = false;
+                    $connect_message = $e->getMessage();
                     }
                 } else {
                     $is_connect = false;
@@ -199,11 +199,11 @@ class CommonController extends AdminController
                 // 各種初期設定、DB テーブル作成、ディレクトリ作成
 
                 // フォルダの作成
-                !file_exists(Config::get('TEMP_DIR') . 'blog_template') && mkdir(Config::get('TEMP_DIR') . 'blog_template', 0777, true);
-                !file_exists(Config::get('TEMP_DIR') . 'log') && mkdir(Config::get('TEMP_DIR') . 'log', 0777, true);
+                !file_exists(App::TEMP_DIR . 'blog_template') && mkdir(App::TEMP_DIR . 'blog_template', 0777, true);
+                !file_exists(App::TEMP_DIR . 'log') && mkdir(App::TEMP_DIR . 'log', 0777, true);
 
                 // ディレクトリ製作成功チェック
-                if (!file_exists(Config::get('TEMP_DIR') . 'log') || !file_exists(Config::get('TEMP_DIR') . 'blog_template')) {
+                if (!file_exists(App::TEMP_DIR . 'log') || !file_exists(App::TEMP_DIR . 'blog_template')) {
                     $this->setErrorMessage(__('Create /app/temp/blog_template and log directory failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=mkdir');
                 }
@@ -228,7 +228,7 @@ class CommonController extends AdminController
                 }
 
                 // DBセットアップ
-                $sql_path = Config::get('APP_DIR') . 'db/0_initialize.sql';
+                $sql_path = App::APP_DIR . 'db/0_initialize.sql';
                 $sql = file_get_contents($sql_path);
                 if (DB_CHARSET != 'UTF8MB4') {
                     $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);

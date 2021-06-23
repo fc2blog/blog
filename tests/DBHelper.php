@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Tests;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\PDOConnection;
 use PDO;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +21,7 @@ class DBHelper extends TestCase
         $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
 
         // DB接続確認(DATABASEの存在判定含む)
-        $sql = file_get_contents(Config::get('APP_DIR') . 'db/0_initialize.sql');
+        $sql = file_get_contents(App::APP_DIR . 'db/0_initialize.sql');
         if (DB_CHARSET != 'UTF8MB4') {
             $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
         }

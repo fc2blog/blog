@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web;
 
-use Fc2blog\Config;
+use Fc2blog\App;
 
 class Session
 {
@@ -22,7 +22,7 @@ class Session
         ];
 
         session_set_cookie_params($session_cookie_options);
-        session_name(Config::get('SESSION_NAME'));
+        session_name(App::SESSION_NAME);
         session_start();
     }
 
@@ -82,8 +82,8 @@ class Session
     {
         $_SESSION = [];
         $request->session = [];
-        if (isset($request->cookie[Config::get('SESSION_NAME')])) {
-            Cookie::remove($request, Config::get('SESSION_NAME'));
+        if (isset($request->cookie[App::SESSION_NAME])) {
+            Cookie::remove($request, App::SESSION_NAME);
         }
         if (session_status() === PHP_SESSION_ACTIVE) {
             session_destroy();

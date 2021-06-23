@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Util;
 
+use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
@@ -59,7 +60,7 @@ class I18n
         putenv('LANG=' . $language);
         putenv('LANGUAGE=' . $language);
         setlocale(LC_ALL, $language);
-        bindtextdomain('messages', Config::get('LOCALE_DIR'));
+        bindtextdomain('messages', App::LOCALE_DIR);
         textdomain('messages');
         return $lang;
     }

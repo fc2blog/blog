@@ -85,7 +85,7 @@ class BlogTemplatesModel extends Model
      */
     public static function getTemplateFilePath(string $blog_id, int $device_type = 0, bool $isPreview = false)
     {
-        return Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
+        return App::BLOG_TEMPLATE_DIR . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
     }
 
     /**
@@ -97,7 +97,7 @@ class BlogTemplatesModel extends Model
      */
     public static function getCssFilePath($blog_id, $device_type, $isPreview = false)
     {
-        return Config::get('WWW_UPLOAD_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
+        return App::WWW_UPLOAD_DIR . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
     }
 
     /**
@@ -259,12 +259,12 @@ class BlogTemplatesModel extends Model
 
     static public function getPathDefaultTemplateWithDevice(string $device): string
     {
-        return Config::get('APP_DIR') . 'templates/default/fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+        return App::APP_DIR . 'templates/default/fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
     }
 
     static public function getPathDefaultCssWithDevice(string $device): string
     {
-        return Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.css';
+        return App::APP_DIR . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.css';
     }
 
     static public function getBodyDefaultTemplateHtmlWithDevice(string $device): string

@@ -4,7 +4,7 @@ define('REQUEST_MICROTIME', microtime(true)); // 開始タイムスタンプ(ミ
 define('APP_DIR', realpath(__DIR__ . '/../../') . '/'); // APPディレクトリのパス
 
 // 環境設定読み込み
-\Fc2blog\Config::read(__DIR__ . '/../config/init_config.php');
+\Fc2blog\Config::read('init_config.php');
 
 // タイムゾーン設定 TODO php.ini移譲でよいのではないか？
 date_default_timezone_set(\Fc2blog\Config::get('TIMEZONE'));

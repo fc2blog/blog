@@ -155,7 +155,7 @@ class BlogPluginsModel extends Model
     public static function fc2PluginSyntax(string $php_code)
     {
         // フォルダが存在しない場合作成
-        $plugin_path = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer(Session::get('blog_id')) . '/plugins/syntax.php';
+        $plugin_path = App::BLOG_TEMPLATE_DIR . App::getBlogLayer(Session::get('blog_id')) . '/plugins/syntax.php';
         $plugin_dir = dirname($plugin_path);
         if (!file_exists($plugin_dir)) {
             mkdir($plugin_dir, 0777, true);

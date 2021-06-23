@@ -13,8 +13,16 @@ use RuntimeException;
 
 class App
 {
+    const WWW_DIR = WWW_DIR;
+    const APP_DIR = APP_DIR;
+    const WWW_UPLOAD_DIR = self::WWW_DIR . 'uploads/';
+    const CONFIG_DIR = self::APP_DIR . 'src/config/';
+    const LOCALE_DIR = self::APP_DIR . 'locale/';
+    const TEMP_DIR = self::APP_DIR . 'temp/';
+    const BLOG_TEMPLATE_DIR = self::TEMP_DIR . 'blog_template/';
 
-
+    const SESSION_NAME = 'dojima';
+    const SESSION_COOKIE_EXPIRE_DAY = 180;
 
     /**
      * ブログIDから階層別フォルダ作成
@@ -36,7 +44,7 @@ class App
     public static function getUserFilePath(array $file, bool $abs = false, bool $timestamp = false): string
     {
         $file_path = static::getBlogLayer($file['blog_id']) . '/file/' . $file['id'] . '.' . $file['ext'];
-        return ($abs ? Config::get('WWW_UPLOAD_DIR') : '/uploads/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
+        return ($abs ? App::WWW_UPLOAD_DIR : '/uploads/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
     }
 
     /**
@@ -85,7 +93,7 @@ class App
      */
     public static function deleteFile(string $blog_id, string $id): void
     {
-        $dir_path = Config::get('WWW_UPLOAD_DIR') . static::getBlogLayer($blog_id) . '/file/';
+        $dir_path = App::WWW_UPLOAD_DIR . static::getBlogLayer($blog_id) . '/file/';
         $files = scandir($dir_path);
         foreach ($files as $file_name) {
             if (strpos($file_name, $id . '_') === 0) {
@@ -107,7 +115,7 @@ class App
      */
     public static function getPluginFilePath(string $blog_id, string $id): string
     {
-        return Config::get('BLOG_TEMPLATE_DIR') . static::getBlogLayer($blog_id) . '/plugins/' . $id . '.php';
+        return App::BLOG_TEMPLATE_DIR . static::getBlogLayer($blog_id) . '/plugins/' . $id . '.php';
     }
 
     /**
@@ -130,10 +138,10 @@ class App
     {
         $fs = new Local("/");
 
-        $upload_path = Config::get('WWW_UPLOAD_DIR') . '/' . static::getBlogLayer($blog_id);
+        $upload_path = App::WWW_UPLOAD_DIR . '/' . static::getBlogLayer($blog_id);
         $fs->deleteDir($upload_path);
 
-        $template_path = Config::get('BLOG_TEMPLATE_DIR') . static::getBlogLayer($blog_id);
+        $template_path = App::BLOG_TEMPLATE_DIR . static::getBlogLayer($blog_id);
         $fs->deleteDir($template_path);
     }
 

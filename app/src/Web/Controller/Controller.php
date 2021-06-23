@@ -281,7 +281,7 @@ abstract class Controller
                     'deviceArgs' => App::getArgsDevice($request)
                 ],
                 'cookie_common' => [
-                    'expire' => Config::get('COOKIE_EXPIRE'),
+                    'expire' => App::SESSION_COOKIE_EXPIRE_DAY,
                 ]
             ];
             // リクエストからログインblogを特定し、保存
