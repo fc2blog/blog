@@ -4,18 +4,6 @@
 
 $config = [];
 
-// -------------------- ディレクトリ構造関連 --------------------//
-# APPへ
-$config['WWW_DIR'] = WWW_DIR;
-$config['WWW_UPLOAD_DIR'] = $config['WWW_DIR'] . 'uploads/';
-
-$config['APP_DIR'] = APP_DIR;
-$config['CONFIG_DIR'] = $config['APP_DIR'] . 'src/config/';
-$config['LOCALE_DIR'] = $config['APP_DIR'] . 'locale/';
-$config['VIEW_DIR'] = $config['APP_DIR'] . 'view/';
-$config['TEMP_DIR'] = $config['APP_DIR'] . 'temp/';
-$config['BLOG_TEMPLATE_DIR'] = $config['TEMP_DIR'] . 'blog_template/';
-
 // Enable DEBUG log.
 $config['APP_DEBUG'] = defined("APP_DEBUG") ? APP_DEBUG : 0;
 $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
@@ -23,8 +11,6 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 // -------------------- 色々 --------------------//
 // 言語設定
 # APPへ
-$config['LANG'] = 'ja';
-// 国際化対応用
 $config['LANGUAGE'] = 'ja_JP.UTF-8';
 // 国際化対応用の対応言語一覧
 $config['LANGUAGES'] = array(
@@ -37,8 +23,8 @@ $config['LANG_ELRTE'] = array(
     'en' => 'en',
 );
 
-# APPへ
-// タイムゾーン
+// 国際化対応用
+$config['LANG'] = 'ja';
 $config['TIMEZONE'] = 'Asia/Tokyo';
 
 // ドメイン
@@ -47,16 +33,16 @@ $config['DOMAIN_USER'] = $config['DOMAIN'];
 $config['DOMAIN_ADMIN'] = $config['DOMAIN'];
 
 // ポート
-# Requestへ？
+# Htmlへ？
 $config['HTTP_PORT_STR'] = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
 $config['HTTPS_PORT_STR'] = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
 
 # Controllerへ？
 // SESSIONのID名
-$config['SESSION_NAME'] = 'dojima';
+//$config['SESSION_NAME'] = 'dojima';
 
 // Cookieの有効期限、N日
-$config['COOKIE_EXPIRE'] = 180;
+//$config['COOKIE_EXPIRE'] = 180;
 
 // -------------------- アプリの定数系設定ファイル --------------------//
 # APPへ
