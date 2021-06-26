@@ -10,32 +10,35 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 
 // -------------------- 色々 --------------------//
 // 言語設定
-# APPへ
-$config['LANGUAGE'] = 'ja_JP.UTF-8';
-// 国際化対応用の対応言語一覧
-$config['LANGUAGES'] = array(
-    'ja' => 'ja_JP.UTF-8',
-    'en' => 'en_US.UTF-8',
-);
+# CommonかAppへ
+//$config['LANGUAGE'] = 'ja_JP.UTF-8';
+//// 国際化対応用の対応言語一覧
+//$config['LANGUAGES'] = array(
+//    'ja' => 'ja_JP.UTF-8',
+//    'en' => 'en_US.UTF-8',
+//);
 // エディタの言語切り替え互換用
-$config['LANG_ELRTE'] = array(
-    'ja' => 'jp',
-    'en' => 'en',
-);
+# Admin\EntriesControllerへ（そこでしかつかわれていないので
+//$config['LANG_ELRTE'] = array(
+//    'ja' => 'jp',
+//    'en' => 'en',
+//);
 
 // 国際化対応用
-$config['LANG'] = 'ja';
-$config['TIMEZONE'] = 'Asia/Tokyo';
+# CommonかAppへ
+//$config['LANG'] = 'ja';
+# php.iniとConfig指定があるかの判定でよさそう
+//$config['TIMEZONE'] = 'Asia/Tokyo';
 
 // ドメイン
-$config['DOMAIN'] = DOMAIN;
-$config['DOMAIN_USER'] = $config['DOMAIN'];
-$config['DOMAIN_ADMIN'] = $config['DOMAIN'];
+# Config指定でよさそう
+//$config['DOMAIN'] = DOMAIN;
+//$config['DOMAIN_USER'] = $config['DOMAIN'];
 
 // ポート
 # Htmlへ？
-$config['HTTP_PORT_STR'] = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
-$config['HTTPS_PORT_STR'] = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
+//$config['HTTP_PORT_STR'] = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
+//$config['HTTPS_PORT_STR'] = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
 
 # Controllerへ？
 // SESSIONのID名

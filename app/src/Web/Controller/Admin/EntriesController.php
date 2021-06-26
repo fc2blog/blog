@@ -16,6 +16,11 @@ use Fc2blog\Web\Request;
 
 class EntriesController extends AdminController
 {
+    const LANG_ELRTE = [
+        'ja' => 'jp',
+        'en' => 'en',
+    ];
+
     /**
      * 一覧表示
      * @param Request $request
@@ -142,7 +147,7 @@ class EntriesController extends AdminController
         $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
         $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
         $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
-        $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+        $this->set('lang_elrte', self::LANG_ELRTE[App::$lang]);
         $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
         $this->set('categories', $categories_model->getList($blog_id));
         // 以下はSPテンプレ用で追加
@@ -153,7 +158,7 @@ class EntriesController extends AdminController
         $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
         $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
         $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
-        $this->set('domain_user', Config::get('DOMAIN_USER'));
+        $this->set('domain_user', App::DOMAIN_USER);
         $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogIdFromSession()], false, true));
 
         // 初期表示時
@@ -222,7 +227,7 @@ class EntriesController extends AdminController
             $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
             $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
             $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
-            $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+            $this->set('lang_elrte', self::LANG_ELRTE[App::$lang]);
             $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
             $this->set('categories', $categories_model->getList($blog_id));
             // 以下はSPテンプレ用で追加
@@ -234,7 +239,7 @@ class EntriesController extends AdminController
             $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
             $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
             $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
-            $this->set('domain_user', Config::get('DOMAIN_USER'));
+            $this->set('domain_user', App::DOMAIN_USER);
             $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogIdFromSession()], false, true));
 
             return "admin/entries/edit.twig";
@@ -266,7 +271,7 @@ class EntriesController extends AdminController
         $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
         $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
         $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
-        $this->set('lang_elrte', Config::get('LANG_ELRTE.' . Config::get('LANG')));
+        $this->set('lang_elrte', self::LANG_ELRTE[App::$lang]);
         $this->set('well_use_entry_tags', $tags_model->getWellUsedTags($blog_id));
         $this->set('entry_tags', $request->get('entry_tags'));
         $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
@@ -279,7 +284,7 @@ class EntriesController extends AdminController
         $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
         $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
         $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
-        $this->set('domain_user', Config::get('DOMAIN_USER'));
+        $this->set('domain_user', App::DOMAIN_USER);
         $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogIdFromSession()], false, true));
 
         // エラー情報の設定

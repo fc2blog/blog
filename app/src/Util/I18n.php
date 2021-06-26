@@ -40,20 +40,20 @@ class I18n
         }
 
         // 利用できる言語かチェックを兼ねている
-        $request_language = Config::get('LANGUAGES.' . $request_lang); // <== ex: ja_JP.UTF-8
+        $request_language = App::$languages[$request_lang] ?? null ; // <== ex: ja_JP.UTF-8
 
         if (!is_null($request_lang) && !is_null($request_language)) {
             $lang = $request_lang;
             $language = $request_language;
-        } else if (!is_null(Config::get('LANGUAGES.en'))) {
+        } else if (isset(App::$languages['en'])) {
             // languageが確定できないとき、enを優先する
             // https://github.com/fc2blog/blog/issues/162#issuecomment-733474145
             $lang = "en";
-            $language = Config::get('LANGUAGES.' . $lang);
+            $language = App::$languages[$lang];
         } else {
             // fallback to default language.
-            $lang = Config::get('LANG');
-            $language = Config::get('LANGUAGE');
+            $lang = App::$lang;
+            $language = App::$language;
         }
 
         // 多言語化対応

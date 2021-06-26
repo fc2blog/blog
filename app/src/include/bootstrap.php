@@ -7,4 +7,4 @@ define('APP_DIR', realpath(__DIR__ . '/../../') . '/'); // APPディレクトリ
 \Fc2blog\Config::read('init_config.php');
 
 // タイムゾーン設定 TODO php.ini移譲でよいのではないか？
-date_default_timezone_set(\Fc2blog\Config::get('TIMEZONE'));
+date_default_timezone_set(\Fc2blog\App::$timesZone);

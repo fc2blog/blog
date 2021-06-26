@@ -287,7 +287,7 @@ abstract class Controller
             // リクエストからログインblogを特定し、保存
             if (BlogService::getById($this->getBlogIdFromSession()) !== false && is_string($this->getBlogIdFromSession())) {
                 $data['blog'] = BlogService::getById($this->getBlogIdFromSession());
-                $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogIdFromSession(), Config::get('DOMAIN_USER')) . "/" . $this->getBlogIdFromSession() . "/";
+                $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogIdFromSession(), App::DOMAIN_USER) . "/" . $this->getBlogIdFromSession() . "/";
             }
         } else {
             // User系画面のデータ生成

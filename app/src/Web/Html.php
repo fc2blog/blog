@@ -279,8 +279,8 @@ class Html
     {
         /** @noinspection HttpUrlsUsage */
         $url = $request->isHttps() ? 'https://' : 'http://';
-        $url .= Config::get('DOMAIN');
-        $url .= $request->isHttps() ? Config::get('HTTPS_PORT_STR') : Config::get('HTTP_PORT_STR');
+        $url .= App::DOMAIN;
+        $url .= $request->isHttps() ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         return $url;
     }
 }

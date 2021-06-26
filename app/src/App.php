@@ -23,6 +23,19 @@ class App
 
     const SESSION_NAME = 'dojima';
     const SESSION_COOKIE_EXPIRE_DAY = 180;
+    const DOMAIN = DOMAIN;
+    const DOMAIN_USER = self::DOMAIN;
+
+    const HTTP_PORT_STR = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
+    const HTTPS_PORT_STR = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
+
+    public static $lang = "ja";
+    public static $language = "ja_JP.UTF-8";
+    public static $languages = [
+        'ja' => 'ja_JP.UTF-8',
+        'en' => 'en_US.UTF-8',
+    ];
+    public static $timesZone = 'Asia/Tokyo';
 
     /**
      * ブログIDから階層別フォルダ作成

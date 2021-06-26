@@ -181,7 +181,7 @@ class CommonController extends AdminController
                 $this->set('connect_message', $connect_message);
 
                 // ドメイン確認
-                $is_domain = DOMAIN != 'domain';
+                $is_domain = App::DOMAIN != 'domain'; // 今のサンプルデフォルト値と比較
                 $this->set('is_domain', $is_domain);
                 $this->set('example_server_name', $request->server['SERVER_NAME'] ?? 'example.jp');
 
