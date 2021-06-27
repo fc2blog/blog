@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Fc2blog\Util;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
 

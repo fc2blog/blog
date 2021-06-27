@@ -322,7 +322,7 @@ class EntriesController extends UserController
         $this->setEntriesData($request, $options, $pages);
 
         // テンプレートのプレビュー
-        $device_key = Config::get('DEVICE_FC2_KEY.' . $request->get('device_type'));
+        $device_key = App::getDeviceFc2Key($request->get('device_type'));
         $template = Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
         if (empty($template)) {
             return $this->error404();
@@ -434,7 +434,7 @@ class EntriesController extends UserController
         );
 
         // スマフォ版のプラグインのプレビュー表示
-        if ($device_type == Config::get('DEVICE_SP')) {
+        if ($device_type == App::DEVICE_SP) {
             $this->set('s_plugin', $plugin);
             $this->setAreaData(array('spplugin_area'));
             return $this->getFc2TemplatePath($blog_id);

@@ -3,7 +3,6 @@
 namespace Fc2blog\Model;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Util\PhpCodeLinter;
 use Fc2blog\Web\Fc2BlogTemplate;
 use Fc2blog\Web\Session;
@@ -72,8 +71,8 @@ class BlogPluginsModel extends Model
                 'in_array' => array('values' => array_keys(self::getAttributeColor())),
             ),
             'device_type' => array(
-                'default_value' => Config::get('DEVICE_PC'),
-                'in_array' => array('values' => array_keys(Config::get('DEVICE_NAME'))),
+                'default_value' => App::DEVICE_PC,
+                'in_array' => array('values' => array_keys(BlogTemplatesModel::DEVICE_NAME)),
             ),
             'category' => array(
                 'default_value' => 1,
@@ -190,7 +189,7 @@ class BlogPluginsModel extends Model
         $blog_plugins = $this->find('all', $options);
 
         $category_blog_plugins = array(1 => array());
-        if ($device_type == Config::get('DEVICE_PC')) {
+        if ($device_type == App::DEVICE_PC) {
             // PC版のみ3つまでカテゴリーが存在する
             $category_blog_plugins = array(1 => array(), 2 => array(), 3 => array());
         }
@@ -238,7 +237,7 @@ class BlogPluginsModel extends Model
     public function findByDeviceTypeAndCategory($device_type, $category, $blog_id)
     {
         $options = array(
-            'where' => 'blog_id=? AND device_type=? AND category=? AND display=' . Config::get('APP.DISPLAY.SHOW'),
+            'where' => 'blog_id=? AND device_type=? AND category=? AND display=' . App::APP_DISPLAY_SHOW,
             'params' => array($blog_id, $device_type, $category),
             'order' => 'plugin_order ASC',
         );
@@ -339,8 +338,8 @@ class BlogPluginsModel extends Model
         }
 
         $displays = array();
-        $displays[Config::get('APP.DISPLAY.SHOW')] = array();
-        $displays[Config::get('APP.DISPLAY.HIDE')] = array();
+        $displays[App::APP_DISPLAY_SHOW] = array();
+        $displays[App::APP_DISPLAY_HIDE] = array();
         foreach ($params as $id => $display) {
             // show,hide以外のdisplayは更新対象としない
             if (isset($displays[$display])) {

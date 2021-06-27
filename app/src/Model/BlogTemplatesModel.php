@@ -5,6 +5,7 @@ namespace Fc2blog\Model;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Web\Fc2BlogTemplate;
+use InvalidArgumentException;
 
 class BlogTemplatesModel extends Model
 {
@@ -58,8 +59,8 @@ class BlogTemplatesModel extends Model
                 'maxlength' => array('max' => 100000),
             ),
             'device_type' => array(
-                'default_value' => Config::get('DEVICE_PC'),
-                'in_array' => array('values' => array_keys(Config::get('DEVICE_NAME'))),
+                'default_value' => App::DEVICE_PC,
+                'in_array' => array('values' => array_keys(BlogTemplatesModel::DEVICE_NAME)),
             ),
         );
 
@@ -177,7 +178,7 @@ class BlogTemplatesModel extends Model
             $options['where'] .= ' AND device_type=?';
             $options['params'][] = $device_type;
         } else {
-            $options['where'] .= ' AND device_type IN (' . implode(',', Config::get('ALLOW_DEVICES')) . ')';
+            $options['where'] .= ' AND device_type IN (' . implode(',', App::ALLOW_DEVICES) . ')';
         }
         $blog_templates = $this->find('all', $options);
 
@@ -249,22 +250,43 @@ class BlogTemplatesModel extends Model
 
     static public function getPathDefaultTemplate(): string
     {
-        return static::getPathDefaultTemplateWithDevice(Config::get('DEVICE_PC'));
+        return static::getPathDefaultTemplateWithDevice(App::DEVICE_PC);
     }
 
     static public function getPathDefaultCss(): string
     {
-        return static::getPathDefaultCssWithDevice(Config::get('DEVICE_PC'));
+        return static::getPathDefaultCssWithDevice(App::DEVICE_PC);
+    }
+
+    const DEVICE_PREFIX = [
+        1 => '_pc',   // PC
+        4 => '_sp',   // スマフォ
+    ];
+
+    static private function getDevicePrefix(string $prefix): string
+    {
+        return self::DEVICE_PREFIX[$prefix] ?? "";
+    }
+
+    const DEVICE_NAME = [
+        1 => 'PC',
+        4 => 'Smartphone',
+    ];
+
+    static public function getDeviceName(int $id): string
+    {
+        if (!isset(self::DEVICE_NAME[$id])) throw new InvalidArgumentException("missing device id in DEVICE_NAME");
+        return self::DEVICE_NAME[$id];
     }
 
     static public function getPathDefaultTemplateWithDevice(string $device): string
     {
-        return App::APP_DIR . 'templates/default/fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+        return App::APP_DIR . 'templates/default/fc2_default_template' . self::getDevicePrefix($device) . '.php';
     }
 
     static public function getPathDefaultCssWithDevice(string $device): string
     {
-        return App::APP_DIR . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.css';
+        return App::APP_DIR . 'templates/default/fc2_default_css' . self::getDevicePrefix($device) . '.css';
     }
 
     static public function getBodyDefaultTemplateHtmlWithDevice(string $device): string

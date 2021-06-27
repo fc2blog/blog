@@ -375,8 +375,8 @@ class BlogsModel extends Model
         $blog_data = [];
 
         $devices = [
-            'template_pc_id' => Config::get('DEVICE_PC'),
-            'template_sp_id' => Config::get('DEVICE_SP'),
+            'template_pc_id' => App::DEVICE_PC,
+            'template_sp_id' => App::DEVICE_SP,
         ];
 
         $blog_templates_data_common = [
@@ -428,8 +428,8 @@ class BlogsModel extends Model
         ];
 
         $devices_flipped = array_flip([
-            'template_pc_id' => Config::get('DEVICE_PC'),
-            'template_sp_id' => Config::get('DEVICE_SP'),
+            'template_pc_id' => App::DEVICE_PC,
+            'template_sp_id' => App::DEVICE_SP,
         ]);
 
         $blog_templates = $blog_templates_model->getTemplatesOfDevice($blog_id);
@@ -480,7 +480,7 @@ class BlogsModel extends Model
     {
         // pluginのPHPコードを再生成する(PC)
         $blog_plugins_model = new BlogPluginsModel();
-        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_PC"));
+        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, App::DEVICE_PC);
 
         foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
             foreach ($plugins as $plugin) { // プラグイン毎
@@ -489,7 +489,7 @@ class BlogsModel extends Model
         }
 
         // pluginのPHPコードを再生成する(SP)
-        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_SP"));
+        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, App::DEVICE_SP);
 
         foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
             foreach ($plugins as $plugin) { // プラグイン毎

@@ -50,32 +50,40 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 // -------------------- アプリの定数系設定ファイル --------------------//
 # APPへ
 // デバイスタイプ
-$config['DEVICE_PC'] = 1; // PC
-$config['DEVICE_SP'] = 4; // スマフォ
+//$config['DEVICE_PC'] = 1; // PC
+//$config['DEVICE_SP'] = 4; // スマフォ
+//
+//// デバイスの値一覧
+//$config['DEVICES'] = array(
+//    $config['DEVICE_PC'],
+//    $config['DEVICE_SP'],
+//);
 
-// デバイスの値一覧
-$config['DEVICES'] = array(
-    $config['DEVICE_PC'],
-    $config['DEVICE_SP'],
-);
-
-// デバイス毎のファイル修飾子
-$config['DEVICE_PREFIX'] = array(
-    1 => '_pc',   // PC
-    4 => '_sp',   // スマフォ
-);
+// デバイス毎のファイル修飾子 => BlogTemplatesModel
+//$config['DEVICE_PREFIX'] = array(
+//    1 => '_pc',   // PC
+//    4 => '_sp',   // スマフォ
+//);
 
 // デバイス毎のFC2APIキー
-$config['DEVICE_FC2_KEY'] = array(
-    1 => 'pc',   // PC
-    4 => 'sp',   // スマフォ
-);
+//$config['DEVICE_FC2_KEY'] = array(
+//    1 => 'pc',   // PC
+//    4 => 'sp',   // スマフォ
+//);
 
-// デバイス毎の名称(英名)
-$config['DEVICE_NAME'] = array(
-    1 => 'PC',
-    4 => 'Smartphone',
-);
+// デバイス毎の名称(英名) => BlogTemplatesModel
+//$config['DEVICE_NAME'] = array(
+//    1 => 'PC',
+//    4 => 'Smartphone',
+//);
+//
+
+// 許可デバイス一覧 => Fc2Blog\App
+//$config['ALLOW_DEVICES'] = array(
+//    \Fc2blog\App::DEVICE_PC,
+//    \Fc2blog\App::DEVICE_SP,
+//);
+
 
 // ブログテンプレートのデバイス毎のカラム名
 $config['BLOG_TEMPLATE_COLUMN'] = array(
@@ -89,19 +97,13 @@ $config['BLOG_TEMPLATE_REPLY_TYPE_COLUMN'] = array(
     4 => 'template_sp_reply_type',
 );
 
-// 許可デバイス一覧
-$config['ALLOW_DEVICES'] = array(
-    $config['DEVICE_PC'],
-    $config['DEVICE_SP'],
-);
-
-// アプリ用定数 // TODO 存在意義がよくわからない…
-$config['APP'] = array(
-    'DISPLAY' => array(
-        'SHOW' => 0,    // 表示
-        'HIDE' => 1,    // 非表示
-    ),
-);
+// アプリ用定数 // TODO 存在意義がよくわからない… => Fc2Blog\App
+//$config['APP'] = array(
+//    'DISPLAY' => array(
+//        'SHOW' => 0,    // 表示
+//        'HIDE' => 1,    // 非表示
+//    ),
+//);
 
 // ユーザー系
 $config['USER'] = array(

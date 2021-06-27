@@ -51,17 +51,17 @@ class CommonController extends UserController
         $device = $request->get('device');
         switch ($device) {
             case 'pc':
-                $device_type = Config::get('DEVICE_PC');
+                $device_type = App::DEVICE_PC;
                 break;
             case 'sp':
-                $device_type = Config::get('DEVICE_SP');
+                $device_type = App::DEVICE_SP;
                 break;
             default:
-                Cookie::set($request, 'device', Config::get('DEVICE_PC'));
+                Cookie::set($request, 'device', (string)App::DEVICE_PC);
                 $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $request->getBlogId()));
         }
 
-        Cookie::set($request, 'device', $device_type);
+        Cookie::set($request, 'device', (string)$device_type);
         $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index', 'blog_id' => $request->getBlogId()));
         return "";
     }

@@ -29,6 +29,32 @@ class App
     const HTTP_PORT_STR = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
     const HTTPS_PORT_STR = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
 
+    const DEVICE_PC = 1;
+    const DEVICE_SP = 4;
+    const DEVICES = [
+        self::DEVICE_PC,
+        self::DEVICE_SP,
+    ];
+
+    const DEVICE_FC2_KEY = [
+        1 => 'pc',   // PC
+        4 => 'sp',   // スマフォ
+    ];
+
+    static public function getDeviceFc2Key($device_id): string
+    {
+        if (!isset(self::DEVICE_FC2_KEY[(int)$device_id])) throw new InvalidArgumentException("missing device id in DEVICE_FC2_KEY");
+        return self::DEVICE_FC2_KEY[(int)$device_id];
+    }
+
+    const ALLOW_DEVICES = [
+        self::DEVICE_PC,
+        self::DEVICE_SP,
+    ];
+
+    const APP_DISPLAY_SHOW = 0; // 非表示
+    const APP_DISPLAY_HIDE = 1; // 非表示
+
     public static $lang = "ja";
     public static $language = "ja_JP.UTF-8";
     public static $languages = [
@@ -206,17 +232,17 @@ class App
     {
         // パラメータによりデバイスタイプを変更(FC2の引数順守)
         if ($request->isArgs('pc')) {
-            return Config::get('DEVICE_PC');
+            return App::DEVICE_PC;
         }
         if ($request->isArgs('sp')) {
-            return Config::get('DEVICE_SP');
+            return App::DEVICE_SP;
         }
 
         // Cookieからデバイスタイプを取得
         $device_type = $request->rawCookie('device');
         $devices = [
-            Config::get('DEVICE_PC'),
-            Config::get('DEVICE_SP'),
+            App::DEVICE_PC,
+            App::DEVICE_SP,
         ];
         if (!empty($device_type) && in_array($device_type, $devices)) {
             return (int)$device_type;
@@ -228,10 +254,10 @@ class App
         $devices = array('iPhone', 'iPod', 'Android');
         foreach ($devices as $device) {
             if (strpos($ua, $device) !== false) {
-                return Config::get('DEVICE_SP');
+                return App::DEVICE_SP;
             }
         }
-        return Config::get('DEVICE_PC');
+        return App::DEVICE_PC;
     }
 
     /**
@@ -242,7 +268,7 @@ class App
     public static function getDeviceTypeStr(Request $request): string
     {
         $device_id = static::getDeviceType($request);
-        $device_table = Config::get("DEVICE_FC2_KEY");
+        $device_table = App::DEVICE_FC2_KEY;
         return $device_table[$device_id];
     }
 
@@ -311,7 +337,7 @@ class App
      */
     public static function isPC(Request $request): bool
     {
-        return $request->deviceType == Config::get('DEVICE_PC');
+        return $request->deviceType == App::DEVICE_PC;
     }
 
     /**
@@ -321,7 +347,7 @@ class App
      */
     public static function isSP(Request $request): bool
     {
-        return $request->deviceType == Config::get('DEVICE_SP');
+        return $request->deviceType == App::DEVICE_SP;
     }
 
     /**
