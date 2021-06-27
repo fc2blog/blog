@@ -84,6 +84,13 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //    \Fc2blog\App::DEVICE_SP,
 //);
 
+// アプリ用定数 // TODO 存在意義がよくわからない… => Fc2Blog\App
+//$config['APP'] = array(
+//    'DISPLAY' => array(
+//        'SHOW' => 0,    // 表示
+//        'HIDE' => 1,    // 非表示
+//    ),
+//);
 
 // ブログテンプレートのデバイス毎のカラム名
 $config['BLOG_TEMPLATE_COLUMN'] = array(
@@ -96,14 +103,6 @@ $config['BLOG_TEMPLATE_REPLY_TYPE_COLUMN'] = array(
     1 => 'template_pc_reply_type',
     4 => 'template_sp_reply_type',
 );
-
-// アプリ用定数 // TODO 存在意義がよくわからない… => Fc2Blog\App
-//$config['APP'] = array(
-//    'DISPLAY' => array(
-//        'SHOW' => 0,    // 表示
-//        'HIDE' => 1,    // 非表示
-//    ),
-//);
 
 // ユーザー系
 $config['USER'] = array(
