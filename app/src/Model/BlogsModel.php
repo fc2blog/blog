@@ -81,7 +81,7 @@ class BlogsModel extends Model
             return __('Name that cannot be specified');
         }
 
-        if (is_dir(Config::get('WWW_DIR') . $value)) {
+        if (is_dir(App::WWW_DIR . $value)) {
             return __('Is already in use');
         }
 
@@ -375,8 +375,8 @@ class BlogsModel extends Model
         $blog_data = [];
 
         $devices = [
-            'template_pc_id' => Config::get('DEVICE_PC'),
-            'template_sp_id' => Config::get('DEVICE_SP'),
+            'template_pc_id' => App::DEVICE_PC,
+            'template_sp_id' => App::DEVICE_SP,
         ];
 
         $blog_templates_data_common = [
@@ -428,8 +428,8 @@ class BlogsModel extends Model
         ];
 
         $devices_flipped = array_flip([
-            'template_pc_id' => Config::get('DEVICE_PC'),
-            'template_sp_id' => Config::get('DEVICE_SP'),
+            'template_pc_id' => App::DEVICE_PC,
+            'template_sp_id' => App::DEVICE_SP,
         ]);
 
         $blog_templates = $blog_templates_model->getTemplatesOfDevice($blog_id);
@@ -480,7 +480,7 @@ class BlogsModel extends Model
     {
         // pluginのPHPコードを再生成する(PC)
         $blog_plugins_model = new BlogPluginsModel();
-        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_PC"));
+        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, App::DEVICE_PC);
 
         foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
             foreach ($plugins as $plugin) { // プラグイン毎
@@ -489,7 +489,7 @@ class BlogsModel extends Model
         }
 
         // pluginのPHPコードを再生成する(SP)
-        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_SP"));
+        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, App::DEVICE_SP);
 
         foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
             foreach ($plugins as $plugin) { // プラグイン毎
@@ -661,7 +661,7 @@ class BlogsModel extends Model
     {
         $schema = static::getSchemaByBlogId($blog_id);
         $domain = Config::get("DOMAIN");
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+        $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         // default blog ならば blog_idは省略する
         if ($blog_id !== Config::get('DEFAULT_BLOG_ID')) {
             $blog_id_path = '/' . $blog_id;
@@ -689,7 +689,7 @@ class BlogsModel extends Model
         } else {
             $blog_id_path = "";
         }
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+        $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         return $schema . "//" . $domain . $port . $blog_id_path . "/";
     }
 
@@ -705,7 +705,7 @@ class BlogsModel extends Model
         if (is_null($domain)) {
             $domain = Config::get("DOMAIN");
         }
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+        $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         return $schema . "//" . $domain . $port;
     }
 

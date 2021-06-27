@@ -6,6 +6,7 @@ namespace Fc2blog\Web\Controller\Admin;
 use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogPluginsModel;
+use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\PluginsModel;
 use Fc2blog\Web\Request;
@@ -22,16 +23,16 @@ class BlogPluginsController extends AdminController
         if (!$request->isGet()) return $this->error400();
 
         $blog_id = $this->getBlogIdFromSession();
-        $device_type = $request->get('device_type', (string)Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+        $device_type = $request->get('device_type', (string)App::DEVICE_PC, Request::VALID_IN_ARRAY, App::ALLOW_DEVICES);
         $this->set('device_type', $device_type);
-        $this->set('devices', Config::get('DEVICE_NAME'));
+        $this->set('devices', BlogTemplatesModel::DEVICE_NAME);
 
         // デバイス毎に分けられたテンプレート一覧を取得
         $blog_plugins_model = new BlogPluginsModel();
         $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, $device_type);
         $this->set('category_blog_plugins', $category_blog_plugins);
-        $this->set('app_display_show', Config::get('APP.DISPLAY.SHOW'));
-        $this->set('app_display_hide', Config::get('APP.DISPLAY.HIDE'));
+        $this->set('app_display_show', App::APP_DISPLAY_SHOW);
+        $this->set('app_display_hide', App::APP_DISPLAY_HIDE);
 
         $blog_plugin_json = [];
         foreach ($category_blog_plugins as $blog_plugins) {
@@ -83,7 +84,7 @@ class BlogPluginsController extends AdminController
         $plugins_model = new PluginsModel();
 
         // デバイスタイプの取得
-        $device_type = $request->get('device_type', (string)Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+        $device_type = $request->get('device_type', (string)App::DEVICE_PC, Request::VALID_IN_ARRAY, App::ALLOW_DEVICES);
         $request->set('device_type', $device_type);
 
         // 検索条件作成
@@ -112,9 +113,9 @@ class BlogPluginsController extends AdminController
         $this->set('plugins', $plugins);
         $this->set('paging', $paging);
         $this->set('user_id', $this->getUserId());
-        $this->set('devices', Config::get('DEVICE_NAME'));
-        $this->set('req_device_name', __(Config::get('DEVICE_NAME')[$request->get('device_type')]));
-        $this->set('device_key', Config::get('DEVICE_FC2_KEY.' . $request->get('device_type')));
+        $this->set('devices', BlogTemplatesModel::DEVICE_NAME);
+        $this->set('req_device_name', __(BlogTemplatesModel::getDeviceName((int)$request->get('device_type'))));
+        $this->set('device_key', App::getDeviceFc2Key($request->get('device_type')));
 
         return 'admin/blog_plugins/plugin_search.twig';
     }
@@ -131,7 +132,7 @@ class BlogPluginsController extends AdminController
 
         $this->set('blog_plugin_attribute_align', BlogPluginsModel::getAttributeAlign());
         $this->set('blog_plugin_attribute_color', BlogPluginsModel::getAttributeColor());
-        $this->set('device_key_list', Config::get('DEVICE_FC2_KEY'));
+        $this->set('device_key_list', App::DEVICE_FC2_KEY);
         $this->set('device_type', $request->get('blog_plugin.device_type'));
 
         // テンプレート置換用変数読み込み
@@ -142,7 +143,7 @@ class BlogPluginsController extends AdminController
         // 初期表示時
         if (!$request->get('blog_plugin') || !$request->isValidSig()) {
             $request->set('blog_plugin', array(
-                'device_type' => $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES')),
+                'device_type' => $request->get('device_type', App::DEVICE_PC, Request::VALID_IN_ARRAY, App::ALLOW_DEVICES),
                 'category' => $request->get('category', 1),
             ));
             return "admin/blog_plugins/create.twig";
@@ -184,9 +185,9 @@ class BlogPluginsController extends AdminController
 
         $this->set('blog_plugin_attribute_align', BlogPluginsModel::getAttributeAlign());
         $this->set('blog_plugin_attribute_color', BlogPluginsModel::getAttributeColor());
-        $this->set('device_key_list', Config::get('DEVICE_FC2_KEY'));
+        $this->set('device_key_list', App::DEVICE_FC2_KEY);
         $this->set('device_type', $request->get('blog_plugin.device_type'));
-        $this->set('device_type_sp', (string)Config::get('DEVICE_SP'));
+        $this->set('device_type_sp', (string)App::DEVICE_SP);
 
         // 編集対象のデータ取得、なければリダイレクト
         if (!$blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id)) {
@@ -388,7 +389,7 @@ class BlogPluginsController extends AdminController
         $blog_plugins_model = Model::load('BlogPlugins');
 
         $blog_id = $this->getBlogIdFromSession();
-        $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+        $device_type = $request->get('device_type', App::DEVICE_PC, Request::VALID_IN_ARRAY, App::ALLOW_DEVICES);
 
         // 並べ替え処理
         // TODO Sigチェック不足
@@ -414,7 +415,7 @@ class BlogPluginsController extends AdminController
         $blog_plugins_model = Model::load('BlogPlugins');
 
         $blog_id = $this->getBlogIdFromSession();
-        $device_type = $request->get('device_type', Config::get('DEVICE_PC'), Request::VALID_IN_ARRAY, Config::get('ALLOW_DEVICES'));
+        $device_type = $request->get('device_type', App::DEVICE_PC, Request::VALID_IN_ARRAY, App::ALLOW_DEVICES);
 
         if ($request->isValidSig()) {
             // プラグインの表示可否の一括変更
@@ -442,7 +443,7 @@ class BlogPluginsController extends AdminController
 
         $id = $request->get('id');
         $blog_id = $this->getBlogIdFromSession();
-        $display = $request->get('display') ? Config::get('APP.DISPLAY.SHOW') : Config::get('APP.DISPLAY.HIDE');  // 表示可否
+        $display = $request->get('display') ? App::APP_DISPLAY_SHOW : App::APP_DISPLAY_HIDE;  // 表示可否
 
         // 編集対象のデータ取得
         if (!$blog_plugins_model->findByIdAndBlogId($id, $blog_id) || !$request->isValidSig()) {

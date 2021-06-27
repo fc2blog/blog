@@ -81,7 +81,7 @@ class Config
         }
         self::$read_files[$name] = true;
         /** @noinspection PhpIncludeInspection */
-        $configs = include(static::get('CONFIG_DIR') . $name);
+        $configs = include(App::CONFIG_DIR . $name);
         foreach ($configs as $key => $value) {
             self::$config[$key] = $value;
         }

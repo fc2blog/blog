@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Tests;
 
 use Fc2blog\App;
-use Fc2blog\Config;
+use Fc2blog\Model\PDOConnection;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -17,8 +17,11 @@ class DBHelper extends TestCase
 
         $pdo = static::getPdo();
 
+        // コメントを含むようなダンプSQLを流し込み実行する場合、EMULATE_PREPARESの有効化が必要となる。
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+
         // DB接続確認(DATABASEの存在判定含む)
-        $sql = file_get_contents(Config::get('APP_DIR') . 'db/0_initialize.sql');
+        $sql = file_get_contents(App::APP_DIR . 'db/0_initialize.sql');
         if (DB_CHARSET != 'UTF8MB4') {
             $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
         }
@@ -28,6 +31,9 @@ class DBHelper extends TestCase
         $sql = file_get_contents(__DIR__ . "/test_fixture.sql");
         $pdo->query($sql);
 
+        // EMULATE_PREPARESを戻す
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
         // copy test files
         static::copyTestImages();
     }
@@ -35,21 +41,15 @@ class DBHelper extends TestCase
     public static function clearDb()
     {
         $pdo = static::getPdo();
+        // コメントを含むようなダンプSQLを流し込み実行する場合、EMULATE_PREPARESの有効化が必要となる。
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
         $pdo->query(file_get_contents(__DIR__ . "/test_drop_all_table.sql"));
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     }
 
     public static function getPdo(): PDO
     {
-        $pdo = new PDO(
-            "mysql:host=" . Config::get('MASTER_DB.HOST') .
-            ";port=" . Config::get('MASTER_DB.PORT') .
-            ";dbname=" . Config::get('MASTER_DB.DATABASE') .
-            ";charset=" . strtolower(Config::get('DB_CHARSET')),
-            Config::get('MASTER_DB.USER'),
-            Config::get('MASTER_DB.PASSWORD')
-        );
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $pdo;
+        return PDOConnection::createConnection();
     }
 
     public static function copyTestImages()

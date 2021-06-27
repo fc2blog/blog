@@ -1,39 +1,8 @@
 <?php
+// TODO クラスのConstであるべきものと設定が混在しているので分割する
+// TODO bootstrap.phpと統合できると思われる
 
 $config = [];
-
-// -------------------- ディレクトリ構造関連 --------------------//
-
-$config['WWW_DIR'] = WWW_DIR;
-$config['WWW_UPLOAD_DIR'] = $config['WWW_DIR'] . 'uploads/';
-
-$config['APP_DIR'] = APP_DIR;
-$config['CONFIG_DIR'] = $config['APP_DIR'] . 'src/config/';
-$config['LOCALE_DIR'] = $config['APP_DIR'] . 'locale/';
-$config['VIEW_DIR'] = $config['APP_DIR'] . 'view/';
-$config['TEMP_DIR'] = $config['APP_DIR'] . 'temp/';
-$config['BLOG_TEMPLATE_DIR'] = $config['TEMP_DIR'] . 'blog_template/';
-
-// -------------------- DB関連 --------------------//
-// Master/Slave機能のON/OFF
-$config['IS_MASTER_SLAVE'] = false;
-$config['DB_CHARSET'] = DB_CHARSET;
-
-// DBの接続情報
-$config['MASTER_DB'] = array(
-    'HOST' => DB_HOST,
-    'PORT' => DB_PORT,
-    'USER' => DB_USER,
-    'PASSWORD' => DB_PASSWORD,
-    'DATABASE' => DB_DATABASE,
-);
-
-$config['SLAVE_DB'] = array(
-    'HOST' => 'localhost',
-    'USER' => 'root',
-    'PASSWORD' => '',
-    'DATABASE' => 'blog_slave',
-);
 
 // Enable DEBUG log.
 $config['APP_DEBUG'] = defined("APP_DEBUG") ? APP_DEBUG : 0;
@@ -41,89 +10,87 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 
 // -------------------- 色々 --------------------//
 // 言語設定
-$config['LANG'] = 'ja';
+# CommonかAppへ
+//$config['LANGUAGE'] = 'ja_JP.UTF-8';
+//// 国際化対応用の対応言語一覧
+//$config['LANGUAGES'] = array(
+//    'ja' => 'ja_JP.UTF-8',
+//    'en' => 'en_US.UTF-8',
+//);
+// エディタの言語切り替え互換用
+# Admin\EntriesControllerへ（そこでしかつかわれていないので
+//$config['LANG_ELRTE'] = array(
+//    'ja' => 'jp',
+//    'en' => 'en',
+//);
 
 // 国際化対応用
-$config['LANGUAGE'] = 'ja_JP.UTF-8';
-
-// 国際化対応用の対応言語一覧
-$config['LANGUAGES'] = array(
-    'ja' => 'ja_JP.UTF-8',
-    'en' => 'en_US.UTF-8',
-);
-
-// エディタの言語切り替え互換用
-$config['LANG_ELRTE'] = array(
-    'ja' => 'jp',
-    'en' => 'en',
-);
-
-// タイムゾーン
-$config['TIMEZONE'] = 'Asia/Tokyo';
-
-// 内部エンコード
-$config['INTERNAL_ENCODING'] = 'UTF-8';
-
-// cron実行
-$config['CRON'] = false;
+# CommonかAppへ
+//$config['LANG'] = 'ja';
+# php.iniとConfig指定があるかの判定でよさそう
+//$config['TIMEZONE'] = 'Asia/Tokyo';
 
 // ドメイン
-$config['DOMAIN'] = DOMAIN;
-$config['DOMAIN_USER'] = $config['DOMAIN'];
-$config['DOMAIN_ADMIN'] = $config['DOMAIN'];
+# Config指定でよさそう
+//$config['DOMAIN'] = DOMAIN;
+//$config['DOMAIN_USER'] = $config['DOMAIN'];
 
 // ポート
-$config['HTTP_PORT_STR'] = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
-$config['HTTPS_PORT_STR'] = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
+# Htmlへ？
+//$config['HTTP_PORT_STR'] = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
+//$config['HTTPS_PORT_STR'] = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
 
-// Sessionのデフォルト有効ドメイン
-$config['SESSION_DEFAULT_DOMAIN'] = ""; // 省略時、アクセスドメインとなります
-
+# Controllerへ？
 // SESSIONのID名
-$config['SESSION_NAME'] = 'dojima';
+//$config['SESSION_NAME'] = 'dojima';
 
-// Cookieのデフォルト有効ドメイン
-$config['COOKIE_DEFAULT_DOMAIN'] = ""; // JS用Cookie名 省略時、アクセスドメインとなります
-$config['COOKIE_EXPIRE'] = 180; // 有効期限 180日
-
-// directory indexファイル名
-$config['DIRECTORY_INDEX'] = 'index.php';
-
-// Controller引数
-$config['ARGS_CONTROLLER'] = 'mode'; // TODO mode以外の状態が存在しない
-
-// Action引数
-$config['ARGS_ACTION'] = 'process'; // TODO process以外の状態が存在しない
+// Cookieの有効期限、N日
+//$config['COOKIE_EXPIRE'] = 180;
 
 // -------------------- アプリの定数系設定ファイル --------------------//
-
+# APPへ
 // デバイスタイプ
-$config['DEVICE_PC'] = 1;   // PC
-$config['DEVICE_SP'] = 4;   // スマフォ
+//$config['DEVICE_PC'] = 1; // PC
+//$config['DEVICE_SP'] = 4; // スマフォ
+//
+//// デバイスの値一覧
+//$config['DEVICES'] = array(
+//    $config['DEVICE_PC'],
+//    $config['DEVICE_SP'],
+//);
 
-// デバイスの値一覧
-$config['DEVICES'] = array(
-    $config['DEVICE_PC'],
-    $config['DEVICE_SP'],
-);
-
-// デバイス毎のファイル修飾子
-$config['DEVICE_PREFIX'] = array(
-    1 => '_pc',   // PC
-    4 => '_sp',   // スマフォ
-);
+// デバイス毎のファイル修飾子 => BlogTemplatesModel
+//$config['DEVICE_PREFIX'] = array(
+//    1 => '_pc',   // PC
+//    4 => '_sp',   // スマフォ
+//);
 
 // デバイス毎のFC2APIキー
-$config['DEVICE_FC2_KEY'] = array(
-    1 => 'pc',   // PC
-    4 => 'sp',   // スマフォ
-);
+//$config['DEVICE_FC2_KEY'] = array(
+//    1 => 'pc',   // PC
+//    4 => 'sp',   // スマフォ
+//);
 
-// デバイス毎の名称
-$config['DEVICE_NAME'] = array(
-    1 => 'PC',
-    4 => 'Smartphone',
-);
+// デバイス毎の名称(英名) => BlogTemplatesModel
+//$config['DEVICE_NAME'] = array(
+//    1 => 'PC',
+//    4 => 'Smartphone',
+//);
+//
+
+// 許可デバイス一覧 => Fc2Blog\App
+//$config['ALLOW_DEVICES'] = array(
+//    \Fc2blog\App::DEVICE_PC,
+//    \Fc2blog\App::DEVICE_SP,
+//);
+
+// アプリ用定数 // TODO 存在意義がよくわからない… => Fc2Blog\App
+//$config['APP'] = array(
+//    'DISPLAY' => array(
+//        'SHOW' => 0,    // 表示
+//        'HIDE' => 1,    // 非表示
+//    ),
+//);
 
 // ブログテンプレートのデバイス毎のカラム名
 $config['BLOG_TEMPLATE_COLUMN'] = array(
@@ -135,20 +102,6 @@ $config['BLOG_TEMPLATE_COLUMN'] = array(
 $config['BLOG_TEMPLATE_REPLY_TYPE_COLUMN'] = array(
     1 => 'template_pc_reply_type',
     4 => 'template_sp_reply_type',
-);
-
-// 許可デバイス一覧
-$config['ALLOW_DEVICES'] = array(
-    $config['DEVICE_PC'],
-    $config['DEVICE_SP'],
-);
-
-// アプリ用定数
-$config['APP'] = array(
-    'DISPLAY' => array(
-        'SHOW' => 0,    // 表示
-        'HIDE' => 1,    // 非表示
-    ),
 );
 
 // ユーザー系
@@ -350,15 +303,16 @@ $config['PAGE'] = array(
     ),
 );
 
-$config['DEFAULT_BLOG_ID'] = defined("DEFAULT_BLOG_ID") ? DEFAULT_BLOG_ID : null;
+# APPへ
+// テスト用のUserAgentではデフォルトブログ機能を強制オフにする
 // TODO E2E testでシングルテナントモード対応ができたら外す
-// UserAgentでDefault Blog Id設定を強制オフにする
 if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/THIS_IS_TEST/u", $_SERVER['HTTP_USER_AGENT'])) {
     $config['DEFAULT_BLOG_ID'] = null;
+} else {
+    $config['DEFAULT_BLOG_ID'] = defined("DEFAULT_BLOG_ID") ? DEFAULT_BLOG_ID : null;
 }
 
 $config['ADMIN_MAIL_ADDRESS'] = defined("ADMIN_MAIL_ADDRESS") ? ADMIN_MAIL_ADDRESS : "noreply@example.jp";
-
 $config['MFA_EMAIL'] = defined("MFA_EMAIL") ? MFA_EMAIL : null;
 
 return $config;

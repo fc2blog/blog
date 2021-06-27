@@ -102,7 +102,7 @@ class CaptchaImage
             $code = $arr_fonts[$fid]["code"];
 
             //フォントサイズ
-            if (mb_strlen($char) > 2) {
+            if (mb_strlen($char, 'UTF-8') > 2) {
                 $font_size = $arr_fonts[$fid]["min"];
             } else {
                 $font_size = random_int($arr_fonts[$fid]["min"] * 10, $arr_fonts[$fid]["max"] * 10) / 6;

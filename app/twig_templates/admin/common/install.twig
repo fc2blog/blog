@@ -70,18 +70,6 @@
             {% endif %}
         </li>
 
-        <li class="{% if is_db_connect_lib %}ok{% endif %}{% if not is_db_connect_lib %}ng{% endif %}">
-            {{ _('Check connection library with MySQL') }} . . .
-            {% if is_db_connect_lib %}
-                OK
-            {% endif %}
-            {% if not is_db_connect_lib %}
-                <span style="color: red;">NG!</span>
-                <hr/>
-                <p class="ng">{{ _('Please enable pdo') }}</p>
-            {% endif %}
-        </li>
-
         <li class="{% if is_connect %}ok{% endif %}{% if not is_connect %}ng{% endif %}">
             {{ _('Check connection to the MySQL') }} . . .
             {% if is_connect %}

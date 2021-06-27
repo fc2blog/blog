@@ -190,7 +190,7 @@ class IndexTest extends TestCase
         $this->assertEquals(5, $c->get('paging')['count']);
         $first_comment_body = $c->get('entries')[0]['body'];
 
-        $c = $this->reqGet("/admin/entries/index", ['keyword' => mb_substr($first_comment_body, 10, 10)]);
+        $c = $this->reqGet("/admin/entries/index", ['keyword' => mb_substr($first_comment_body, 10, 10, 'UTF-8')]);
         // 1件以上あればOKとする（重複の可能性があるので）
         $this->assertGreaterThanOrEqual(1, $c->get('paging')['count']);
     }

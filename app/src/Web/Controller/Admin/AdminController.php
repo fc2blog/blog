@@ -103,7 +103,7 @@ abstract class AdminController extends Controller
 
     protected function getInstalledLockFilePath(): string
     {
-        return Config::get('TEMP_DIR') . "installed.lock";
+        return App::TEMP_DIR . "installed.lock";
     }
 
     protected function isInstalled(): bool

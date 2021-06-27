@@ -113,7 +113,9 @@ reload-test-data:
 	$(dexec) cp -a tests/test_images/2.png public/uploads/t/e/s/testblog2/file/2.png
 	$(dexec) touch app/temp/installed.lock
 	$(dexec) tests/cli_load_fixture.php
+	$(dexec) tests/cli_update_template.php testblog1
 	$(dexec) tests/cli_update_template.php testblog2
+	$(dexec) tests/cli_update_template.php testblog3
 
 .PHONY: fix-permission
 fix-permission:

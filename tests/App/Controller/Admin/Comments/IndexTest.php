@@ -252,7 +252,7 @@ class IndexTest extends TestCase
 
         $c = $this->reqGet(
             "/admin/comments/index",
-            ["reply_status" => "1", 'keyword' => mb_substr($first_comment_body, 10, 10)]
+            ["reply_status" => "1", 'keyword' => mb_substr($first_comment_body, 10, 10, 'UTF-8')]
         );
         $this->assertGreaterThanOrEqual(1, $c->get('paging')['count']);
         if ($c->get('paging')['count'] == 5 || $c->get('paging')['count'] == 4) { // 確立で失敗する調査用

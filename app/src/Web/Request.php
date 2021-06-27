@@ -420,7 +420,7 @@ class Request
     {
         $schema = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") ? 'https:' : 'http:';
         $domain = Config::get("DOMAIN");
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+        $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         return $schema . "//" . $domain . $port;
     }
 }
