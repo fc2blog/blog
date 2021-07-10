@@ -36,14 +36,14 @@ class GenerateSampleComment
             if ($use_uuid_name) {
                 $_name = (Uuid::uuid4())->toString();
             } else {
-                $_name = $faker->name;;
+                $_name = $faker->name();
             }
             $request_comment = [
                 'entry_id' => $entry_id,
                 'name' => $_name,
                 'title' => $faker->sentence(3),
-                'mail' => $faker->email,
-                'url' => $faker->url,
+                'mail' => $faker->email(),
+                'url' => $faker->url(),
                 'body' => $faker->text(500),
                 'password' => "password",
                 'open_status' => static::getRandomValue($open_status_list)
