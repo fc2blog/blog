@@ -309,7 +309,7 @@ msgid "Upload file"
 msgstr ""
 
 msgid "Setting"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Template management"
 msgstr ""
@@ -324,19 +324,19 @@ msgid "List of tags"
 msgstr ""
 
 msgid "Blog setting"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "User registration"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Login"
 msgstr ""
 
 msgid "User Menu"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "User setting"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Logout"
 msgstr ""
@@ -357,7 +357,7 @@ msgid "Search"
 msgstr ""
 
 msgid "File selection"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Upload"
 msgstr ""
@@ -378,7 +378,7 @@ msgid "Information in the file"
 msgstr ""
 
 msgid "Edit File"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "I Back to List"
 msgstr ""
@@ -420,19 +420,19 @@ msgid "I failed to set read"
 msgstr ""
 
 msgid "Article setting"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Comments Settings"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Other Settings"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Blog Delete"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Approval settings"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Display awaiting message"
 msgstr ""
@@ -444,7 +444,7 @@ msgid "Sender information"
 msgstr ""
 
 msgid "Comment confirmation setting"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Display the latest comments"
 msgstr ""
@@ -523,7 +523,7 @@ msgid "Blog ID at login"
 msgstr ""
 
 msgid "Administrator registration"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "There %d reviews unread comments"
 msgstr ""
@@ -574,7 +574,7 @@ msgid "Host name"
 msgstr ""
 
 msgid "User name"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Database name"
 msgstr ""
@@ -624,10 +624,10 @@ msgid "Install"
 msgstr ""
 
 msgid "Installation complete"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "The installation was completed"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Please log from the following"
 msgstr ""
@@ -642,7 +642,7 @@ msgid "Category name"
 msgstr ""
 
 msgid "Sort by category"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Add"
 msgstr ""
@@ -692,22 +692,22 @@ msgid "Description"
 msgstr ""
 
 msgid "Plugin search"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Category"
 msgstr ""
 
 msgid "Official Plugin Search"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Share Plugin Search"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Plugin Creation"
 msgstr ""
 
 msgid "Share plugin"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Sort"
 msgstr ""
@@ -731,7 +731,7 @@ msgid "I will do the editing of [HTML]. (For advanced users)"
 msgstr ""
 
 msgid "Delete plugin"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Download"
 msgstr ""
@@ -740,13 +740,13 @@ msgid "Settings of the plug-in"
 msgstr ""
 
 msgid "Advanced setting"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Display Settings"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Sorting"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Show"
 msgstr ""
@@ -773,7 +773,7 @@ msgid "Add Media"
 msgstr ""
 
 msgid "Entry search"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "You can search in accordance with the conditions of past articles."
 msgstr ""
@@ -797,7 +797,7 @@ msgid "Click to open/close"
 msgstr ""
 
 msgid "Entry settings"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "User tags"
 msgstr ""
@@ -833,10 +833,10 @@ msgid "Edit this entry."
 msgstr ""
 
 msgid "Delete entry"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Article Title"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Date and time when saving"
 msgstr ""
@@ -908,7 +908,7 @@ msgid "I want to edit the template"
 msgstr ""
 
 msgid "Article name"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Contributor"
 msgstr ""
@@ -947,7 +947,7 @@ msgid "Reply state"
 msgstr ""
 
 msgid "Article"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Narrowing"
 msgstr ""
@@ -992,7 +992,7 @@ msgid "I can search by tag name"
 msgstr ""
 
 msgid "Entry count"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "I want to edit tags"
 msgstr ""
@@ -1004,7 +1004,7 @@ msgid "Check the article"
 msgstr ""
 
 msgid "Delete tag"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "New registration of the blog"
 msgstr ""
@@ -1043,7 +1043,7 @@ msgid "Found"
 msgstr ""
 
 msgid "Delete confirmation"
-msgstr "Absolute link"
+msgstr ""
 
 msgid ""
 "If you want to delete the blog, please tap the \"Delete\" button Check the "
@@ -1051,7 +1051,7 @@ msgid ""
 msgstr ""
 
 msgid "Please check the box \"Delete confirmation\""
-msgstr "Absolute link"
+msgstr ""
 
 msgid ""
 "Can not be undone if you remove, but Are you sure you want to delete really?"
@@ -1118,7 +1118,7 @@ msgid "I removed the template"
 msgstr ""
 
 msgid "User registration is completed"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "I failed to register"
 msgstr ""
@@ -1244,7 +1244,7 @@ msgid "Comments"
 msgstr ""
 
 msgid "Entry Absolute link"
-msgstr "Absolute link"
+msgstr ""
 
 msgid "Entry category"
 msgstr ""
