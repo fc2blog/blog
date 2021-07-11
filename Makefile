@@ -105,7 +105,7 @@ tests/test_images/0.png:
 	$(dexec) bash -c "cd tests/test_images && ./download_samples.sh"
 
 .PHONY: reload-test-data
-reload-test-data:
+reload-test-data: tests/test_images/0.png app/vendor
 	-$(dexec_root) chown -R www-data:www-data app/temp
 	-$(dexec_root) chown -R www-data:www-data public/uploads
 	-$(dexec) mkdir -p public/uploads/t/e/s/testblog2/file/
