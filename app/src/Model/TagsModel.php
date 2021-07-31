@@ -7,6 +7,19 @@ class TagsModel extends Model
 
     public static $instance = null;
 
+    const TAG = array(
+        // 記事一覧の表示件数リスト
+        'LIMIT_LIST' => array(
+            10 => '10',
+            20 => '20',
+            40 => '40',
+            60 => '60',
+            80 => '80',
+            100 => '100',
+        ),
+        'DEFAULT_LIMIT' => 20,
+    );
+
     public function __construct()
     {
     }
