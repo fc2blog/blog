@@ -27,8 +27,8 @@ class LoaderHelper extends TestCase
             putenv('FC2_ERROR_LOG_PATH=php://stderr');
             putenv('FC2_APP_LOG_PATH=php://stderr');
             putenv('FC2_APP_LOG_LEVEL=' . Logger::WARNING);
-            putenv('FC2_SQL_DEBUG=php://stderr');
-            putenv('FC2_APP_DEBUG=php://stderr');
+            putenv('FC2_SQL_DEBUG=1');
+            putenv('FC2_APP_DEBUG=1');
             putenv('FC2_ERROR_ON_DISPLAY=0');
             putenv('FC2_DOCUMENT_ROOT_PATH=' . __DIR__ . "/../public/");
         } else {
@@ -37,8 +37,8 @@ class LoaderHelper extends TestCase
             putenv('FC2_ERROR_LOG_PATH=php://stderr');
             putenv('FC2_APP_LOG_PATH=php://stderr');
             putenv('FC2_APP_LOG_LEVEL=' . Logger::WARNING);
-            putenv('FC2_SQL_DEBUG=php://stderr');
-            putenv('FC2_APP_DEBUG=php://stderr');
+            putenv('FC2_SQL_DEBUG=1');
+            putenv('FC2_APP_DEBUG=1');
             putenv('FC2_ERROR_ON_DISPLAY=0');
             putenv('FC2_DB_HOST=db');
             putenv('FC2_DB_USER=docker');
