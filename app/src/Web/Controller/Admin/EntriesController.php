@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\CategoriesModel;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\EntryCategoriesModel;
@@ -335,7 +334,7 @@ class EntriesController extends AdminController
         $options = [
             'where' => $where,
             'params' => $params,
-            'limit' => Config::get('PAGE.FILE.LIMIT', App::getPageLimit($request, 'FILE_AJAX')),
+            'limit' => App::getPageLimit($request, 'FILE_AJAX'),
             'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
             'order' => 'id DESC',
         ];

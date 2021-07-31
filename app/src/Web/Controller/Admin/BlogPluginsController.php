@@ -103,7 +103,7 @@ class BlogPluginsController extends AdminController
         $options = array(
             'where' => $where,
             'params' => $params,
-            'limit' => $request->get('limit', Config::get('PAGE.PLUGIN.DEFAULT.LIMIT'), Request::VALID_POSITIVE_INT),
+            'limit' => $request->get('limit', BlogPluginsModel::BLOG_PLUGIN['DEFAULT_PAGE_LIMIT'], Request::VALID_POSITIVE_INT),
             'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
             'order' => $order,
         );

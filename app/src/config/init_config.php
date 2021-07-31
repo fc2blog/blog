@@ -267,41 +267,41 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //    'MAX_SIZE' => 5242880,  // 5MB
 //);
 
-// ページ毎の制限設定(上にあるLIMIT_LIST系は下記の配列に順次書き換えていく)
-$config['PAGE'] = array(
-    // ファイルの一覧表示系
-    'FILE' => array(
-        'DEFAULT' => array(
-            'LIMIT' => 5,
-            'LIST' => array(
-                5 => '5',
-                10 => '10',
-                20 => '20',
-                40 => '40',
-                60 => '60',
-                80 => '80',
-                100 => '100',
-            ),
-        ),
-        'SP' => array(
-            'LIMIT' => 15,
-            'LIST' => array(
-                15 => '15',
-            ),
-        ),
-    ),
-    // メディアロード用
-    'FILE_AJAX' => array(
-        'DEFAULT' => array('LIMIT' => 18),
-        'SP' => array('LIMIT' => 15),
-    ),
-    // プラグイン検索一覧
-    'PLUGIN' => array(
-        'DEFAULT' => array(
-            'LIMIT' => 20,
-        ),
-    ),
-);
+//// ページ毎の制限設定(上にあるLIMIT_LIST系は下記の配列に順次書き換えていく)
+//$config['PAGE'] = array(
+//    // ファイルの一覧表示系
+//    'FILE' => array(
+//        'DEFAULT' => array(
+//            'LIMIT' => 5,
+//            'LIST' => array(
+//                5 => '5',
+//                10 => '10',
+//                20 => '20',
+//                40 => '40',
+//                60 => '60',
+//                80 => '80',
+//                100 => '100',
+//            ),
+//        ),
+//        'SP' => array(
+//            'LIMIT' => 15,
+//            'LIST' => array(
+//                15 => '15',
+//            ),
+//        ),
+//    ),
+//    // メディアロード用
+//    'FILE_AJAX' => array(
+//        'DEFAULT' => array('LIMIT' => 18),
+//        'SP' => array('LIMIT' => 15),
+//    ),
+//    // プラグイン検索一覧
+//    'PLUGIN' => array( // move to BlogPluginModel
+//        'DEFAULT' => array(
+//            'LIMIT' => 20,
+//        ),
+//    ),
+//);
 
 # APPへ
 // テスト用のUserAgentではデフォルトブログ機能を強制オフにする

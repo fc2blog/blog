@@ -457,6 +457,35 @@ class App
         return ($abs ? $full_domain : '') . $url;
     }
 
+    const PAGE = array(
+        // ファイルの一覧表示系
+        'FILE' => array(
+            'PC' => array(
+                'LIMIT' => 5,
+                'LIST' => array(
+                    5 => '5',
+                    10 => '10',
+                    20 => '20',
+                    40 => '40',
+                    60 => '60',
+                    80 => '80',
+                    100 => '100',
+                ),
+            ),
+            'SP' => array(
+                'LIMIT' => 15,
+                'LIST' => array(
+                    15 => '15',
+                ),
+            ),
+        ),
+        // メディアロード用
+        'FILE_AJAX' => array(
+            'DEFAULT' => array('LIMIT' => 18),
+            'SP' => array('LIMIT' => 15),
+        ),
+    );
+
     /**
      * ページ毎、デバイス毎の初期制限件数
      * @param Request $request
@@ -465,7 +494,7 @@ class App
      */
     public static function getPageLimit(Request $request, string $key): int
     {
-        return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIMIT', Config::get('PAGE.' . $key . '.DEFAULT.LIMIT', 10));
+        return self::PAGE[$key][self::getDeviceKey($request)]['LIMIT'];
     }
 
     /**
@@ -476,7 +505,7 @@ class App
      */
     public static function getPageList(Request $request, string $key): array
     {
-        return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIST', Config::get('PAGE.' . $key . '.DEFAULT.LIST', []));
+        return self::PAGE[$key][self::getDeviceKey($request)]['LIST'];
     }
 
     /**

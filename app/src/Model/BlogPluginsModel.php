@@ -18,6 +18,7 @@ class BlogPluginsModel extends Model
             'SECOND' => 2,     // 2番目
             'THIRD' => 3,     // 3番目
         ),
+        'DEFAULT_PAGE_LIMIT' => 20,
     );
 
     public function __construct()
