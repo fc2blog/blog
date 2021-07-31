@@ -238,14 +238,14 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //);
 
 // カテゴリー系
-$config['CATEGORY'] = array(
-    // カテゴリーの表示順
-    'ORDER' => array(
-        'ASC' => 1,
-        'DESC' => 0,
-    ),
-    'CREATE_LIMIT' => 100,
-);
+//$config['CATEGORY'] = array(
+//    // カテゴリーの表示順
+//    'ORDER' => array(
+//        'ASC' => 1,
+//        'DESC' => 0,
+//    ),
+//    'CREATE_LIMIT' => 100,
+//);
 
 // タグ系
 $config['TAG'] = array(

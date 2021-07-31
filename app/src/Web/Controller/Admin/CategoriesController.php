@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\Config;
 use Fc2blog\Model\CategoriesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
@@ -29,7 +28,7 @@ class CategoriesController extends AdminController
         $this->set('category_parents', [0 => ''] + $options);
 
         // カテゴリ登録数
-        $create_limit = Config::get('CATEGORY.CREATE_LIMIT');
+        $create_limit = CategoriesModel::CATEGORY['CREATE_LIMIT'];
         $is_limit_create_category = $create_limit > 0 && $create_limit <= count($options);
         $this->set('is_limit_create_category', $is_limit_create_category);
 

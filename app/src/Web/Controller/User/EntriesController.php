@@ -159,7 +159,7 @@ class EntriesController extends UserController
         $where .= ' AND entries.id=entry_categories.entry_id';
         $params = array($blog_id, $blog_id, $category_id);
 
-        $order = $category['category_order'] == Config::get('CATEGORY.ORDER.ASC') ? 'ASC' : 'DESC';
+        $order = $category['category_order'] == CategoriesModel::CATEGORY['ORDER']['ASC'] ? 'ASC' : 'DESC';
 
         $options = array(
             'fields' => 'entries.*',

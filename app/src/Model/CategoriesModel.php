@@ -2,12 +2,19 @@
 
 namespace Fc2blog\Model;
 
-use Fc2blog\Config;
-
 class CategoriesModel extends Model
 {
 
     public static $instance = null;
+
+    const CATEGORY = array(
+        // カテゴリーの表示順
+        'ORDER' => array(
+            'ASC' => 1,
+            'DESC' => 0,
+        ),
+        'CREATE_LIMIT' => 100,
+    );
 
     public function __construct()
     {
@@ -54,7 +61,7 @@ class CategoriesModel extends Model
                 'own' => array('method' => 'uniqueName')
             ),
             'category_order' => array(
-                'default_value' => Config::get('CATEGORY.ORDER.ASC'),
+                'default_value' => CategoriesModel::CATEGORY['ORDER']['ASC'],
                 'in_array' => array('values' => array_keys($this->getOrderList())),
             ),
         );
@@ -103,8 +110,8 @@ class CategoriesModel extends Model
     public static function getOrderList(): array
     {
         return [
-            Config::get('CATEGORY.ORDER.DESC') => __('Latest order'),
-            Config::get('CATEGORY.ORDER.ASC') => __('Oldest First'),
+            CategoriesModel::CATEGORY['ORDER']['DESC'] => __('Latest order'),
+            CategoriesModel::CATEGORY['ORDER']['ASC'] => __('Oldest First'),
         ];
     }
 
