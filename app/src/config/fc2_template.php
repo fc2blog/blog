@@ -27,10 +27,10 @@ $config['fc2_template_foreach'] = [
     // タグループ(ctag_existsと組み合わせると指定ブログの全タグ)
     'ctag' => '<?php if (!empty($t_tags)) foreach($t_tags as $t_tag) { ?>',
     // プラグイン系
-    'plugin_first' => '<?php if(!isset($t_plugins_1)) $t_plugins_1=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory(\Fc2blog\App::getDeviceType($request), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
-    'plugin_second' => '<?php if(!isset($t_plugins_2)) $t_plugins_2=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory(\Fc2blog\App::getDeviceType($request), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.SECOND\'), $blog_id); ?><?php if (!empty($t_plugins_2)) foreach($t_plugins_2 as $t_plugin) { ?>',
-    'plugin_third' => '<?php if(!isset($t_plugins_3)) $t_plugins_3=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory(\Fc2blog\App::getDeviceType($request), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.THIRD\'), $blog_id); ?><?php if (!empty($t_plugins_3)) foreach($t_plugins_3 as $t_plugin) { ?>',
-    'spplugin_first' => '<?php if(!isset($t_plugins_1)) $t_plugins_1=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory(\Fc2blog\App::getDeviceType($request), \Fc2blog\Config::get(\'BLOG_PLUGIN.CATEGORY.FIRST\'), $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
+    'plugin_first' => '<?php if(!isset($t_plugins_1)) $t_plugins_1=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory(\Fc2blog\App::getDeviceType($request), \Fc2blog\Model\BlogPluginsModel::BLOG_PLUGIN[\'CATEGORY\'][\'FIRST\'], $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
+    'plugin_second' => '<?php if(!isset($t_plugins_2)) $t_plugins_2=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory(\Fc2blog\App::getDeviceType($request), \Fc2blog\Model\BlogPluginsModel::BLOG_PLUGIN[\'CATEGORY\'][\'SECOND\'], $blog_id); ?><?php if (!empty($t_plugins_2)) foreach($t_plugins_2 as $t_plugin) { ?>',
+    'plugin_third' => '<?php if(!isset($t_plugins_3)) $t_plugins_3=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory(\Fc2blog\App::getDeviceType($request), \Fc2blog\Model\BlogPluginsModel::BLOG_PLUGIN[\'CATEGORY\'][\'THIRD\'], $blog_id); ?><?php if (!empty($t_plugins_3)) foreach($t_plugins_3 as $t_plugin) { ?>',
+    'spplugin_first' => '<?php if(!isset($t_plugins_1)) $t_plugins_1=\Fc2blog\Model\Model::load(\'BlogPlugins\')->findByDeviceTypeAndCategory(\Fc2blog\App::getDeviceType($request), \Fc2blog\Model\BlogPluginsModel::BLOG_PLUGIN[\'CATEGORY\'][\'FIRST\'], $blog_id); ?><?php if (!empty($t_plugins_1)) foreach($t_plugins_1 as $t_plugin) { ?>',
 ];
 
 // if文の置き換え用

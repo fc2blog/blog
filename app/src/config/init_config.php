@@ -147,13 +147,13 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //);
 
 // ブログプラグイン
-$config['BLOG_PLUGIN'] = array(
-    'CATEGORY' => array(
-        'FIRST' => 1,     // 1番目
-        'SECOND' => 2,     // 2番目
-        'THIRD' => 3,     // 3番目
-    ),
-);
+//$config['BLOG_PLUGIN'] = array(
+//    'CATEGORY' => array(
+//        'FIRST' => 1,     // 1番目
+//        'SECOND' => 2,     // 2番目
+//        'THIRD' => 3,     // 3番目
+//    ),
+//);
 
 // 記事系
 $config['ENTRY'] = array(

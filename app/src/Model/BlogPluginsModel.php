@@ -12,6 +12,14 @@ class BlogPluginsModel extends Model
 
     public static $instance = null;
 
+    const BLOG_PLUGIN = array(
+        'CATEGORY' => array(
+            'FIRST' => 1,     // 1番目
+            'SECOND' => 2,     // 2番目
+            'THIRD' => 3,     // 3番目
+        ),
+    );
+
     public function __construct()
     {
     }
