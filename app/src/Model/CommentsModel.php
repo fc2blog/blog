@@ -415,7 +415,7 @@ class CommentsModel extends Model
         $blog = Model::load('Blogs')->findById($blog_setting['blog_id']);
 
         // コメントを追加で表示するかどうか
-        $is_add_comment = $blog_setting[self::BLOG_TEMPLATE_REPLY_TYPE_COLUMN[$request->deviceType]] == Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+        $is_add_comment = $blog_setting[self::BLOG_TEMPLATE_REPLY_TYPE_COLUMN[$request->deviceType]] == BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['AFTER'];
 
         $comments = array();
         foreach ($tmp_comments as $comment) {

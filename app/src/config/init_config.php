@@ -139,12 +139,12 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //);
 
 // ブログテンプレート
-$config['BLOG_TEMPLATE'] = array(
-    'COMMENT_TYPE' => array(
-        'AFTER' => 1,      // 一つ下にコメントを差し込むタイプ
-        'REPLY' => 2,      // １対１でコメントを返信するタイプ
-    ),
-);
+//$config['BLOG_TEMPLATE'] = array(
+//    'COMMENT_TYPE' => array(
+//        'AFTER' => 1,      // 一つ下にコメントを差し込むタイプ
+//        'REPLY' => 2,      // １対１でコメントを返信するタイプ
+//    ),
+//);
 
 // ブログプラグイン
 $config['BLOG_PLUGIN'] = array(

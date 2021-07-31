@@ -564,7 +564,8 @@ class BlogsModel extends Model
 
         // コメントの表示タイプをテンプレートから判断
         $reply_type = strstr($blog_template['html'], '<%comment_reply_body>') ?
-            Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+            BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['REPLY'] :
+            BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['AFTER'];
         // コメントの表示タイプを更新
         (new BlogSettingsModel())->updateReplyType($device_type, $reply_type, $blog_id);
 

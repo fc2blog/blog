@@ -3,7 +3,6 @@
 namespace Fc2blog\Model;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Web\Fc2BlogTemplate;
 use InvalidArgumentException;
 
@@ -11,6 +10,13 @@ class BlogTemplatesModel extends Model
 {
 
     public static $instance = null;
+
+    const BLOG_TEMPLATE = array(
+        'COMMENT_TYPE' => array(
+            'AFTER' => 1,      // 一つ下にコメントを差し込むタイプ
+            'REPLY' => 2,      // １対１でコメントを返信するタイプ
+        ),
+    );
 
     public function __construct()
     {
@@ -240,7 +246,8 @@ class BlogTemplatesModel extends Model
         if (Model::load('Blogs')->isAppliedTemplate($id, $blog_id, $device_type)) {
             // コメントの表示タイプをテンプレートから判断
             $reply_type = strstr($values['html'], '<%comment_reply_body>') ?
-                Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+                BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['REPLY'] :
+                BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['AFTER'];
             // コメントの表示タイプを更新
             Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
         }
