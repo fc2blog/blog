@@ -585,4 +585,14 @@ class App
     {
         return static::genRandomString($length, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345679');
     }
+
+    public static function isAppDebugMode(): bool
+    {
+        return defined("APP_DEBUG") && "1" === (string)APP_DEBUG;
+    }
+
+    public static function isSqlDebugMode(): bool
+    {
+        return defined("SQL_DEBUG") && "1" === (string)SQL_DEBUG;
+    }
 }

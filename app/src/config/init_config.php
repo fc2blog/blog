@@ -4,10 +4,6 @@
 
 $config = [];
 
-// Enable DEBUG log.
-$config['APP_DEBUG'] = defined("APP_DEBUG") ? APP_DEBUG : 0;
-$config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
-
 # APPへ
 // テスト用のUserAgentではデフォルトブログ機能を強制オフにする
 // TODO E2E testでシングルテナントモード対応ができたら外す

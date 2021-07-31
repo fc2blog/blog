@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Web\Controller;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\UsersModel;
@@ -266,7 +265,7 @@ abstract class Controller
                 'req' => $request,
                 'sig' => Session::get('sig'),
                 'lang' => $request->lang,
-                'debug' => Config::get('APP_DEBUG') != 0,
+                'debug' => App::isAppDebugMode(),
                 'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogIdFromSession()]), // 代用できそう
                 'is_register_able' => (UsersModel::USER["REGIST_SETTING"]["FREE"] == UsersModel::USER["REGIST_STATUS"]), // TODO 意図する解釈確認
                 'active_menu' => App::getActiveMenu($request),
