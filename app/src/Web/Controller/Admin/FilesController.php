@@ -27,7 +27,6 @@ class FilesController extends AdminController
 
         $blog_id = $this->getBlogIdFromSession();
 
-        $this->set('file_default_limit', Config::get('FILE.DEFAULT_LIMIT'));
         $this->set('page_list_file', App::getPageList($request, 'FILE'));
         $this->set('page_limit_file', App::getPageLimit($request, 'FILE'));
         // 検索条件
