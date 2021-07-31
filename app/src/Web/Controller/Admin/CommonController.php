@@ -122,8 +122,8 @@ class CommonController extends AdminController
         $comments_model = new CommentsModel();
         $this->set('unread_count', $comments_model->getUnreadCount($blog_id));
         $this->set('unapproved_count', $comments_model->getUnapprovedCount($blog_id));
-        $this->set('reply_status_unread', Config::get('COMMENT.REPLY_STATUS.UNREAD'));
-        $this->set('open_status_pending', Config::get('COMMENT.OPEN_STATUS.PENDING'));
+        $this->set('reply_status_unread', CommentsModel::COMMENT['REPLY_STATUS']['UNREAD']);
+        $this->set('open_status_pending', CommentsModel::COMMENT['OPEN_STATUS']['PENDING']);
         return "admin/common/notice.twig";
     }
 

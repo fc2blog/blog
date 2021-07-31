@@ -193,49 +193,49 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //);
 
 // コメント系
-$config['COMMENT'] = array(
-    'OPEN_STATUS' => array(
-        'PUBLIC' => 0,  // 全体公開
-        'PENDING' => 2,  // 承認待ち
-        'PRIVATE' => 1,  // 管理者のみ公開
-    ),
-    // コメントの確認設定
-    'COMMENT_CONFIRM' => array(
-        'THROUGH' => 0,  // 確認せずにそのまま表示
-        'CONFIRM' => 1,  // コメントを確認する
-    ),
-    // 承認中、非公開コメントの代替コメント表示可否
-    'COMMENT_DISPLAY' => array(
-        'SHOW' => 0,    // 表示
-        'HIDE' => 1,    // 非表示
-    ),
-    // コメント投稿時の名前、メールアドレス、URLを保存するかどうか
-    'COMMENT_COOKIE_SAVE' => array(
-        'NOT_SAVE' => 0,
-        'SAVE' => 1,
-    ),
-    // コメント投稿時のCAPTCHA有無
-    'COMMENT_CAPTCHA' => array(
-        'NOT_USE' => 0,
-        'USE' => 1,
-    ),
-    // コメントの表示順
-    'ORDER' => array(
-        'ASC' => 0,
-        'DESC' => 1,
-    ),
-    // コメントの返信状態
-    'REPLY_STATUS' => array(
-        'UNREAD' => 1,  // 未読
-        'READ' => 2,  // 既読
-        'REPLY' => 3,  // 返信済み
-    ),
-    // コメントの引用を行うかどうか
-    'QUOTE' => array(
-        'USE' => 0,  // 引用を行う
-        'NONE' => 1,  // 行わない
-    ),
-);
+//$config['COMMENT'] = array(
+//    'OPEN_STATUS' => array(
+//        'PUBLIC' => 0,  // 全体公開
+//        'PENDING' => 2,  // 承認待ち
+//        'PRIVATE' => 1,  // 管理者のみ公開
+//    ),
+//    // コメントの確認設定
+//    'COMMENT_CONFIRM' => array(
+//        'THROUGH' => 0,  // 確認せずにそのまま表示
+//        'CONFIRM' => 1,  // コメントを確認する
+//    ),
+//    // 承認中、非公開コメントの代替コメント表示可否
+//    'COMMENT_DISPLAY' => array(
+//        'SHOW' => 0,    // 表示
+//        'HIDE' => 1,    // 非表示
+//    ),
+//    // コメント投稿時の名前、メールアドレス、URLを保存するかどうか
+//    'COMMENT_COOKIE_SAVE' => array(
+//        'NOT_SAVE' => 0,
+//        'SAVE' => 1,
+//    ),
+//    // コメント投稿時のCAPTCHA有無
+//    'COMMENT_CAPTCHA' => array(
+//        'NOT_USE' => 0,
+//        'USE' => 1,
+//    ),
+//    // コメントの表示順
+//    'ORDER' => array(
+//        'ASC' => 0,
+//        'DESC' => 1,
+//    ),
+//    // コメントの返信状態
+//    'REPLY_STATUS' => array(
+//        'UNREAD' => 1,  // 未読
+//        'READ' => 2,  // 既読
+//        'REPLY' => 3,  // 返信済み
+//    ),
+//    // コメントの引用を行うかどうか
+//    'QUOTE' => array(
+//        'USE' => 0,  // 引用を行う
+//        'NONE' => 1,  // 行わない
+//    ),
+//);
 
 // カテゴリー系
 $config['CATEGORY'] = array(

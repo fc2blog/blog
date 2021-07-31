@@ -455,7 +455,7 @@ class Fc2TemplateTest extends TestCase
         $comment_generator->removeAllComments($blog_id, $entry['id']);
         $some_comments = $comment_generator->generateSampleComment($blog_id, $entry['id'], 1);
         $some_comment = $some_comments[0];
-        $some_comment['open_status'] = Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+        $some_comment['open_status'] = CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'];
         $comments_model->updateByIdAndBlogId($some_comment, $some_comment['id'], $blog_id);
 //    var_dump($some_comment);
 

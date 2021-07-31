@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\CommentsModel;
 use Fc2blog\Web\Request;
@@ -89,9 +88,9 @@ class BlogSettingsController extends AdminController
         if (empty($errors['blog_setting'])) {
             // コメント確認からコメントを確認せずそのまま表示に変更した場合既存の承認待ちを全て承認済みに変更する
             $blog_setting = $blog_settings_model->findByBlogId($blog_id);
-            if ($blog_setting['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')
+            if ($blog_setting['comment_confirm'] == CommentsModel::COMMENT['COMMENT_CONFIRM']['CONFIRM']
                 && isset($blog_setting_data['comment_confirm'])
-                && $blog_setting_data['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.THROUGH')
+                && $blog_setting_data['comment_confirm'] == CommentsModel::COMMENT['COMMENT_CONFIRM']['THROUGH']
             ) {
                 $comments = new CommentsModel();
                 $comments->updateApproval($blog_id);

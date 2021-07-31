@@ -756,7 +756,7 @@ class EntriesController extends UserController
         // ブログの設定情報取得(captchaの使用可否で画面切り替え)
         $blog_setting = (new BlogSettingsModel())->findByBlogId($blog_id);
         $blog = (new BlogsModel())->findById($blog_id);
-        $is_captcha = $blog_setting['comment_captcha'] == Config::get('COMMENT.COMMENT_CAPTCHA.USE');
+        $is_captcha = $blog_setting['comment_captcha'] == CommentsModel::COMMENT['COMMENT_CAPTCHA']['USE'];
 
         // FC2テンプレートにリクエスト情報を合わせる
         if (!$is_captcha || !$request->isArgs('token')) {
@@ -767,7 +767,7 @@ class EntriesController extends UserController
             ];
             $request->combine($pattern); // 引数のキーを入れ替える
             if ($request->get('comment.open_status') == 'on') {
-                $request->set('comment.open_status', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
+                $request->set('comment.open_status', CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE']);
             }
         }
 
@@ -844,7 +844,7 @@ class EntriesController extends UserController
 
         // ブログの設定情報を取得
         $blog_setting = (new BlogSettingsModel())->findByBlogId($blog_id);
-        $is_captcha = $blog_setting['comment_captcha'] == Config::get('COMMENT.COMMENT_CAPTCHA.USE');
+        $is_captcha = $blog_setting['comment_captcha'] == CommentsModel::COMMENT['COMMENT_CAPTCHA']['USE'];
 
         // FC2テンプレートの引数を受け側で合わせる
         if (!$is_captcha || !$request->isArgs('token')) {
@@ -861,7 +861,7 @@ class EntriesController extends UserController
             ];
             $request->combine($pattern);
             if ($request->get('comment.open_status') == 'on') {
-                $request->set('comment.open_status', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
+                $request->set('comment.open_status', CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE']);
             }
         }
 
@@ -1155,7 +1155,7 @@ class EntriesController extends UserController
         foreach ($errors as $key => $value) {
             $js .= 'insertCommentErrorMessage("' . $name . '[' . $key . ']", "' . $value . '");' . "\n";
         }
-        $open_status_private = Config::get('COMMENT.OPEN_STATUS.PRIVATE');
+        $open_status_private = CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE'];
         $comment_error = <<<HTML
           <script>
           function insertCommentErrorMessage(name, message){
