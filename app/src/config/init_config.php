@@ -262,10 +262,10 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //);
 
 // ファイル系
-$config['FILE'] = array(
-    // ファイルの最大サイズ
-    'MAX_SIZE' => 5242880,  // 5MB
-);
+//$config['FILE'] = array(
+//    // ファイルの最大サイズ
+//    'MAX_SIZE' => 5242880,  // 5MB
+//);
 
 // ページ毎の制限設定(上にあるLIMIT_LIST系は下記の配列に順次書き換えていく)
 $config['PAGE'] = array(

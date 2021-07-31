@@ -3,12 +3,16 @@
 namespace Fc2blog\Model;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 
 class FilesModel extends Model
 {
 
     public static $instance = null;
+
+    const FILE = array(
+        // ファイルの最大サイズ
+        'MAX_SIZE' => 5242880, // 5MB
+    );
 
     public function __construct()
     {
@@ -76,7 +80,7 @@ class FilesModel extends Model
                 'file' => array(
                     'required' => true,
                     'mime_type' => array('image/jpeg', 'image/png', 'image/gif'),
-                    'size' => Config::get('FILE.MAX_SIZE'),
+                    'size' => FilesModel::FILE['MAX_SIZE'],
                 ),
             ),
         );
@@ -108,7 +112,7 @@ class FilesModel extends Model
             'file' => array(
                 'file' => array(
                     'mime_type' => array('image/jpeg', 'image/png', 'image/gif'),
-                    'size' => Config::get('FILE.MAX_SIZE'),
+                    'size' => FilesModel::FILE['MAX_SIZE'],
                 ),
             ),
         );
