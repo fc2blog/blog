@@ -20,6 +20,26 @@ class BlogsModel extends Model
         4 => 'template_sp_id',
     );
 
+    const BLOG = array(
+        'START_PAGE' => array(
+            'NOTICE' => 0,  // お知らせページ
+            'ENTRY' => 1,  // 記事投稿ページ
+        ),
+        'OPEN_STATUS' => array(
+            'PUBLIC' => 0,  // 公開
+            'PRIVATE' => 1,  // プライベートモード(パスワード保護)
+        ),
+        'DEFAULT_LIMIT' => 10,
+        'SSL_ENABLE' => array(
+            'DISABLE' => 0,  // 無効
+            'ENABLE' => 1,  // 有効
+        ),
+        'REDIRECT_STATUS_CODE' => array(
+            'MOVED_PERMANENTLY' => 301,
+            'FOUND' => 302,
+        ),
+    );
+
     public function __construct()
     {
     }
@@ -49,7 +69,7 @@ class BlogsModel extends Model
     public static function privateCheck($value, $option, $key, $data)
     {
         if (
-            $data['open_status'] == Config::get('BLOG.OPEN_STATUS.PRIVATE') &&
+            $data['open_status'] == BlogsModel::BLOG['OPEN_STATUS']['PRIVATE'] &&
             (
                 // パスワードを入力したか、あるいはすでにパスワード設定済みか
                 strlen((string)$value) === 0 &&
@@ -170,8 +190,8 @@ class BlogsModel extends Model
     public static function getOpenStatusList(): array
     {
         return array(
-            Config::get('BLOG.OPEN_STATUS.PUBLIC') => __('Public'),
-            Config::get('BLOG.OPEN_STATUS.PRIVATE') => __('Private'),
+            BlogsModel::BLOG['OPEN_STATUS']['PUBLIC'] => __('Public'),
+            BlogsModel::BLOG['OPEN_STATUS']['PRIVATE'] => __('Private'),
         );
     }
 
@@ -206,8 +226,8 @@ class BlogsModel extends Model
     public static function getSSLEnableSettingList(): array
     {
         return array(
-            Config::get('BLOG.SSL_ENABLE.DISABLE') => __("Disable"),
-            Config::get('BLOG.SSL_ENABLE.ENABLE') => __("Enable"),
+            BlogsModel::BLOG['SSL_ENABLE']['DISABLE'] => __("Disable"),
+            BlogsModel::BLOG['SSL_ENABLE']['ENABLE'] => __("Enable"),
         );
     }
 
@@ -218,8 +238,8 @@ class BlogsModel extends Model
     public static function getRedirectStatusCodeSettingList(): array
     {
         return array(
-            Config::get('BLOG.REDIRECT_STATUS_CODE.MOVED_PERMANENTLY') => __("Moved Permanently"),
-            Config::get('BLOG.REDIRECT_STATUS_CODE.FOUND') => __("Found"),
+            BlogsModel::BLOG['REDIRECT_STATUS_CODE']['MOVED_PERMANENTLY'] => __("Moved Permanently"),
+            BlogsModel::BLOG['REDIRECT_STATUS_CODE']['FOUND'] => __("Found"),
         );
     }
 
@@ -739,7 +759,7 @@ class BlogsModel extends Model
      */
     static public function getSchemaBySslEnableValue(int $value): string
     {
-        return ($value === Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http:' : 'https:';
+        return ($value === BlogsModel::BLOG['SSL_ENABLE']['DISABLE']) ? 'http:' : 'https:';
     }
 
     /**

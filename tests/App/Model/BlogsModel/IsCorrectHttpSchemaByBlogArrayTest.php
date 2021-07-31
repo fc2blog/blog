@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\App\Model\BlogsModel;
 
-use Fc2blog\Config;
 use Fc2blog\Model\Blog;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Web\Request;
@@ -21,7 +20,7 @@ class IsCorrectHttpSchemaByBlogArrayTest extends TestCase
             ]
         );
         $blog = new Blog();
-        $blog->ssl_enable = Config::get('BLOG.SSL_ENABLE.DISABLE');
+        $blog->ssl_enable = BlogsModel::BLOG['SSL_ENABLE']['DISABLE'];
         $this->assertFalse(BlogsModel::isCorrectHttpSchemaByBlog($request, $blog));
         $request = new Request(
             'GET', '/', null, null, null, null,
@@ -29,7 +28,7 @@ class IsCorrectHttpSchemaByBlogArrayTest extends TestCase
                 'HTTP_USER_AGENT' => 'phpunit',
             ]
         );
-        $blog->ssl_enable = Config::get('BLOG.SSL_ENABLE.DISABLE');
+        $blog->ssl_enable = BlogsModel::BLOG['SSL_ENABLE']['DISABLE'];
         $this->assertTrue(BlogsModel::isCorrectHttpSchemaByBlog($request, $blog));
 
         $request = new Request(
@@ -39,7 +38,7 @@ class IsCorrectHttpSchemaByBlogArrayTest extends TestCase
                 'HTTPS' => "on"
             ]
         );
-        $blog->ssl_enable = Config::get('BLOG.SSL_ENABLE.ENABLE');
+        $blog->ssl_enable = BlogsModel::BLOG['SSL_ENABLE']['ENABLE'];
         $this->assertTrue(BlogsModel::isCorrectHttpSchemaByBlog($request, $blog));
         $request = new Request(
             'GET', '/', null, null, null, null,
@@ -47,7 +46,7 @@ class IsCorrectHttpSchemaByBlogArrayTest extends TestCase
                 'HTTP_USER_AGENT' => 'phpunit',
             ]
         );
-        $blog->ssl_enable = Config::get('BLOG.SSL_ENABLE.ENABLE');
+        $blog->ssl_enable = BlogsModel::BLOG['SSL_ENABLE']['ENABLE'];
         $this->assertFalse(BlogsModel::isCorrectHttpSchemaByBlog($request, $blog));
     }
 }

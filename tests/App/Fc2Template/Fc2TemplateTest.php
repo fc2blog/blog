@@ -263,7 +263,7 @@ class Fc2TemplateTest extends TestCase
         $blogs_model = new BlogsModel();
         $blog = $blogs_model->findById($blog_id);
 //    var_dump($blog);
-        $blog['open_status'] = Config::get('BLOG.OPEN_STATUS.PRIVATE');
+        $blog['open_status'] = BlogsModel::BLOG['OPEN_STATUS']['PRIVATE'];
         $blog['blog_password'] = '$2y$10$XiZ6dO8AIFpjP0t0ekAzV.8ZFK40JUgVHt70KjJLQZr7HS9vqmPGy'; // hashed "password"
         $blogs_model->updateById($blog, $blog['id']);
 

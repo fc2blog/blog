@@ -167,8 +167,8 @@ class BlogSettingsModel extends Model
     public static function getStartPageList(): array
     {
         return array(
-            Config::get('BLOG.START_PAGE.NOTICE') => __('Notice'),
-            Config::get('BLOG.START_PAGE.ENTRY') => __('New article'),
+            BlogsModel::BLOG['START_PAGE']['NOTICE'] => __('Notice'),
+            BlogsModel::BLOG['START_PAGE']['ENTRY'] => __('New article'),
         );
     }
 

@@ -118,25 +118,25 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //);
 
 // ブログ系
-$config['BLOG'] = array(
-    'START_PAGE' => array(
-        'NOTICE' => 0,  // お知らせページ
-        'ENTRY' => 1,  // 記事投稿ページ
-    ),
-    'OPEN_STATUS' => array(
-        'PUBLIC' => 0,  // 公開
-        'PRIVATE' => 1,  // プライベートモード(パスワード保護)
-    ),
-    'DEFAULT_LIMIT' => 10,
-    'SSL_ENABLE' => array(
-        'DISABLE' => 0,  // 無効
-        'ENABLE' => 1,  // 有効
-    ),
-    'REDIRECT_STATUS_CODE' => array(
-        'MOVED_PERMANENTLY' => 301,
-        'FOUND' => 302,
-    ),
-);
+//$config['BLOG'] = array(
+//    'START_PAGE' => array(
+//        'NOTICE' => 0,  // お知らせページ
+//        'ENTRY' => 1,  // 記事投稿ページ
+//    ),
+//    'OPEN_STATUS' => array(
+//        'PUBLIC' => 0,  // 公開
+//        'PRIVATE' => 1,  // プライベートモード(パスワード保護)
+//    ),
+//    'DEFAULT_LIMIT' => 10,
+//    'SSL_ENABLE' => array(
+//        'DISABLE' => 0,  // 無効
+//        'ENABLE' => 1,  // 有効
+//    ),
+//    'REDIRECT_STATUS_CODE' => array(
+//        'MOVED_PERMANENTLY' => 301,
+//        'FOUND' => 302,
+//    ),
+//);
 
 // ブログテンプレート
 $config['BLOG_TEMPLATE'] = array(

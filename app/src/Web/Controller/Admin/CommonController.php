@@ -92,11 +92,11 @@ class CommonController extends AdminController
         }
         if (is_array($setting) && isset($setting['start_page'])) { // 設定あり
             switch ($setting['start_page']) {
-                case Config::get('BLOG.START_PAGE.ENTRY'):
+                case BlogsModel::BLOG['START_PAGE']['ENTRY']:
                     $this->redirect($request, ['controller' => 'Entries', 'action' => 'create']);
                     return ""; // break;
 
-                case Config::get('BLOG.START_PAGE.NOTICE'):
+                case BlogsModel::BLOG['START_PAGE']['NOTICE']:
                 default:
                     $this->redirect($request, ['controller' => 'Common', 'action' => 'notice']);
                     return ""; // break;

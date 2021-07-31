@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\User;
 
-use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\EntriesModel;
 use Fc2blog\Web\Request;
@@ -54,7 +53,7 @@ class BlogsController extends UserController
         ]);
 
         // 非公開ブログはRSS拒否
-        if ($blog['open_status'] === Config::get('BLOG.OPEN_STATUS.PRIVATE')) {
+        if ($blog['open_status'] === BlogsModel::BLOG['OPEN_STATUS']['PRIVATE']) {
             return $this->error403();
         }
 

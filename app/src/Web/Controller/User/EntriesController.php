@@ -63,7 +63,7 @@ class EntriesController extends UserController
         $this->set('self_blog', $self_blog);
 
         // 非公開モードの場合はパスワード認証画面へ遷移
-        if ($blog['open_status'] == Config::get('BLOG.OPEN_STATUS.PRIVATE')
+        if ($blog['open_status'] == BlogsModel::BLOG['OPEN_STATUS']['PRIVATE']
             && !Session::get($this->getBlogPasswordKey($blog['id']))
             && $request->methodName != 'blog_password'
             && !$self_blog
@@ -722,7 +722,7 @@ class EntriesController extends UserController
         }
 
         // プライベートブログではない、あるいは認証済み、ログイン済みならリダイレクト
-        if ($blog['open_status'] != Config::get('BLOG.OPEN_STATUS.PRIVATE') || Session::get($this->getBlogPasswordKey($blog->id)) || $this->isLoginBlog($request)) {
+        if ($blog['open_status'] != BlogsModel::BLOG['OPEN_STATUS']['PRIVATE'] || Session::get($this->getBlogPasswordKey($blog->id)) || $this->isLoginBlog($request)) {
             $this->redirect($request, ['action' => 'index', 'blog_id' => $blog_id]);
         }
 
