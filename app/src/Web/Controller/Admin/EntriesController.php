@@ -95,7 +95,7 @@ class EntriesController extends AdminController
             'where' => $where,
             'params' => $params,
             'from' => $from,
-            'limit' => $request->get('limit', Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+            'limit' => $request->get('limit', EntriesModel::ENTRY['DEFAULT_LIMIT'], Request::VALID_POSITIVE_INT),
             'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
             'order' => $order,
         ];
@@ -105,8 +105,8 @@ class EntriesController extends AdminController
         $this->set('entries', $entries);
         $this->set('paging', $paging);
 
-        $this->set('entry_limit_list', Config::get('ENTRY.LIMIT_LIST'));
-        $this->set('entry_default_limit', Config::get('ENTRY.DEFAULT_LIMIT'));
+        $this->set('entry_limit_list', EntriesModel::ENTRY['LIMIT_LIST']);
+        $this->set('entry_default_limit', EntriesModel::ENTRY['DEFAULT_LIMIT']);
         $this->set('page_list', Model::getPageList($paging));
 
         $categories_model = new CategoriesModel();
@@ -141,12 +141,12 @@ class EntriesController extends AdminController
         }
         $this->set('well_use_entry_tags', $tags_model->getWellUsedTags($blog_id));
         $this->set('open_status_list', EntriesModel::getOpenStatusList());
-        $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
+        $this->set('open_status_open', EntriesModel::ENTRY['OPEN_STATUS']['OPEN']);
         $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
-        $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
+        $this->set('auto_line_feed_use', EntriesModel::ENTRY['AUTO_LINEFEED']['USE']);
         $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
-        $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
-        $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
+        $this->set('comment_accepted_accepted', EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED']);
+        $this->set('open_status_password', EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD']);
         $this->set('lang_elrte', self::LANG_ELRTE[App::$lang]);
         $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
         $this->set('categories', $categories_model->getList($blog_id));
@@ -155,9 +155,9 @@ class EntriesController extends AdminController
         $now = $now === false ? time() : $now;
         $date_list = explode('/', date('Y/m/d/H/i/s', $now));
         $this->set('entry_date_list', $date_list);
-        $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
-        $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
-        $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
+        $this->set('entry_open_status_draft', EntriesModel::ENTRY['OPEN_STATUS']['DRAFT']);
+        $this->set('entry_open_status_limit', EntriesModel::ENTRY['OPEN_STATUS']['LIMIT']);
+        $this->set('entry_open_status_reservation', EntriesModel::ENTRY['OPEN_STATUS']['RESERVATION']);
         $this->set('domain_user', App::DOMAIN_USER);
         $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogIdFromSession()], false, true));
 
@@ -221,12 +221,12 @@ class EntriesController extends AdminController
             $this->set('entry_tags', $tags_model->getEntryTagNames($blog_id, $id));
             $this->set('well_use_entry_tags', $tags_model->getWellUsedTags($blog_id));
             $this->set('open_status_list', EntriesModel::getOpenStatusList());
-            $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
+            $this->set('open_status_open', EntriesModel::ENTRY['OPEN_STATUS']['OPEN']);
             $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
-            $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
+            $this->set('auto_line_feed_use', EntriesModel::ENTRY['AUTO_LINEFEED']['USE']);
             $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
-            $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
-            $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
+            $this->set('comment_accepted_accepted', EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED']);
+            $this->set('open_status_password', EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD']);
             $this->set('lang_elrte', self::LANG_ELRTE[App::$lang]);
             $this->set('entry_categories', $request->get('entry_categories', array('category_id' => array())));
             $this->set('categories', $categories_model->getList($blog_id));
@@ -236,9 +236,9 @@ class EntriesController extends AdminController
             $now = $now === false ? time() : $now;
             $date_list = explode('/', date('Y/m/d/H/i/s', $now));
             $this->set('entry_date_list', $date_list);
-            $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
-            $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
-            $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
+            $this->set('entry_open_status_draft', EntriesModel::ENTRY['OPEN_STATUS']['DRAFT']);
+            $this->set('entry_open_status_limit', EntriesModel::ENTRY['OPEN_STATUS']['LIMIT']);
+            $this->set('entry_open_status_reservation', EntriesModel::ENTRY['OPEN_STATUS']['RESERVATION']);
             $this->set('domain_user', App::DOMAIN_USER);
             $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogIdFromSession()], false, true));
 
@@ -265,12 +265,12 @@ class EntriesController extends AdminController
 
         // フォームレンダリング用のデータロード
         $this->set('open_status_list', EntriesModel::getOpenStatusList());
-        $this->set('open_status_open', Config::get('ENTRY.OPEN_STATUS.OPEN'));
+        $this->set('open_status_open', EntriesModel::ENTRY['OPEN_STATUS']['OPEN']);
         $this->set('auto_line_feed_list', EntriesModel::getAutoLinefeedList());
-        $this->set('auto_line_feed_use', Config::get('ENTRY.AUTO_LINEFEED.USE'));
+        $this->set('auto_line_feed_use', EntriesModel::ENTRY['AUTO_LINEFEED']['USE']);
         $this->set('comment_accepted_list', EntriesModel::getCommentAcceptedList());
-        $this->set('comment_accepted_accepted', Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'));
-        $this->set('open_status_password', Config::get('ENTRY.OPEN_STATUS.PASSWORD'));
+        $this->set('comment_accepted_accepted', EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED']);
+        $this->set('open_status_password', EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD']);
         $this->set('lang_elrte', self::LANG_ELRTE[App::$lang]);
         $this->set('well_use_entry_tags', $tags_model->getWellUsedTags($blog_id));
         $this->set('entry_tags', $request->get('entry_tags'));
@@ -281,9 +281,9 @@ class EntriesController extends AdminController
         $now = $now === false ? time() : $now;
         $date_list = explode('/', date('Y/m/d/H/i/s', $now));
         $this->set('entry_date_list', $date_list);
-        $this->set('entry_open_status_draft', Config::get('ENTRY.OPEN_STATUS.DRAFT'));
-        $this->set('entry_open_status_limit', Config::get('ENTRY.OPEN_STATUS.LIMIT'));
-        $this->set('entry_open_status_reservation', Config::get('ENTRY.OPEN_STATUS.RESERVATION'));
+        $this->set('entry_open_status_draft', EntriesModel::ENTRY['OPEN_STATUS']['DRAFT']);
+        $this->set('entry_open_status_limit', EntriesModel::ENTRY['OPEN_STATUS']['LIMIT']);
+        $this->set('entry_open_status_reservation', EntriesModel::ENTRY['OPEN_STATUS']['RESERVATION']);
         $this->set('domain_user', App::DOMAIN_USER);
         $this->set('user_url', App::userURL($request, ['controller' => 'Entries', 'action' => 'preview', 'blog_id' => $this->getBlogIdFromSession()], false, true));
 

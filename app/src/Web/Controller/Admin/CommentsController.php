@@ -7,6 +7,7 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\CommentsModel;
+use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 
@@ -85,13 +86,13 @@ class CommentsController extends AdminController
             'from' => 'entries',
             'where' => $where,
             'params' => $params,
-            'limit' => $request->get('limit', Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+            'limit' => $request->get('limit', EntriesModel::ENTRY['DEFAULT_LIMIT'], Request::VALID_POSITIVE_INT),
             'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
             'order' => $order,
         );
 
-        if ($options['limit'] > max(array_keys(Config::get('ENTRY.LIMIT_LIST')))) {
-            $options['limit'] = Config::get('ENTRY.DEFAULT_LIMIT');
+        if ($options['limit'] > max(array_keys(EntriesModel::ENTRY['LIMIT_LIST']))) {
+            $options['limit'] = EntriesModel::ENTRY['DEFAULT_LIMIT'];
         }
         if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
             $options['page'] = 0;
@@ -108,11 +109,11 @@ class CommentsController extends AdminController
         $this->set('paging', $paging);
 
         $this->set('open_status_w', ['' => __('Public state')] + CommentsModel::getOpenStatusList());
-        $this->set('entry_limit_list', Config::get('ENTRY.LIMIT_LIST'));
-        $this->set('entry_default_limit', Config::get('ENTRY.DEFAULT_LIMIT'));
+        $this->set('entry_limit_list', EntriesModel::ENTRY['LIMIT_LIST']);
+        $this->set('entry_default_limit', EntriesModel::ENTRY['DEFAULT_LIMIT']);
         $this->set('page_list', Model::getPageList($paging));
         $this->set('reply_status_w', ['' => __('Reply state')] + CommentsModel::getReplyStatusList());
-        $this->set('limit', Config::get('ENTRY.DEFAULT_LIMIT'));
+        $this->set('limit', EntriesModel::ENTRY['DEFAULT_LIMIT']);
         $this->set('reply_status_list', CommentsModel::getReplyStatusList());
 
         $this->setStatusDataList();

@@ -5,6 +5,7 @@ namespace Fc2blog\Web;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\EntriesModel;
 use Fc2blog\Util\PhpCodeLinter;
 
 class Fc2BlogTemplate
@@ -43,7 +44,7 @@ class Fc2BlogTemplate
                 $data['entries'][$key]['wayoubi'] = __($data['entries'][$key]['youbi']);
 
                 // 自動改行処理
-                if ($value['auto_linefeed'] == Config::get('ENTRY.AUTO_LINEFEED.USE')) {
+                if ($value['auto_linefeed'] == EntriesModel::ENTRY['AUTO_LINEFEED']['USE']) {
                     $data['entries'][$key]['body'] = nl2br($value['body']);
                     $data['entries'][$key]['extend'] = nl2br((string)$value['extend']);
                 }

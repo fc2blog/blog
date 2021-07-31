@@ -247,7 +247,7 @@ class EntriesController extends UserController
         $options = array(
             'fields' => array(
                 'id', 'blog_id', 'title', 'posted_at', 'comment_count',
-                Config::get('ENTRY.AUTO_LINEFEED.NONE') . ' as auto_linefeed',
+                EntriesModel::ENTRY['AUTO_LINEFEED']['NONE'] . ' as auto_linefeed',
                 'SUBSTRING(body, 1, 20) as body'
             ),
             'where' => 'blog_id=?',
@@ -488,7 +488,7 @@ class EntriesController extends UserController
             'extend' => $request->get('entry.extend'),
             'posted_at' => $request->get('entry.posted_at', date('Y-m-d H:i:s')),
             'auto_linefeed' => $request->get('entry.auto_linefeed'),
-            'open_status' => Config::get('ENTRY.OPEN_STATUS.OPEN'),
+            'open_status' => EntriesModel::ENTRY['OPEN_STATUS']['OPEN'],
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         );
@@ -589,7 +589,7 @@ class EntriesController extends UserController
         $blog_setting = $blog_settings_model->findByBlogId($blog_id);
 
         // 前後の記事取得
-        $is_asc = $blog_setting['entry_order'] == Config::get('ENTRY.ORDER.ASC');
+        $is_asc = $blog_setting['entry_order'] == EntriesModel::ENTRY['ORDER']['ASC'];
         $this->set('next_entry', $is_asc ? $entries_model->nextEntry($entry) : $entries_model->prevEntry($entry));
         $this->set('prev_entry', $is_asc ? $entries_model->prevEntry($entry) : $entries_model->nextEntry($entry));
     }
@@ -653,7 +653,7 @@ class EntriesController extends UserController
         if (!isset($entry['open_status'])) {
             throw new InvalidArgumentException('missing open_status');
         }
-        return $entry['open_status'] == Config::get('ENTRY.OPEN_STATUS.PASSWORD');
+        return $entry['open_status'] == EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD'];
     }
 
     /**
@@ -1018,7 +1018,7 @@ class EntriesController extends UserController
         }
 
         // ブログのデフォルト設定を取得
-        $order = $blog_setting['entry_order'] == Config::get('ENTRY.ORDER.ASC') ? 'ASC' : 'DESC';
+        $order = $blog_setting['entry_order'] == EntriesModel::ENTRY['ORDER']['ASC'] ? 'ASC' : 'DESC';
         $display_count = $blog_setting['entry_display_count'];
 
         // ブログデフォルト設定を上書きオプションで上書き
@@ -1030,9 +1030,9 @@ class EntriesController extends UserController
 
         // 表示項目リスト
         $open_status_list = [
-            Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-            Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-            Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+            EntriesModel::ENTRY['OPEN_STATUS']['OPEN'],      // 公開
+            EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD'],  // パスワード保護
+            EntriesModel::ENTRY['OPEN_STATUS']['LIMIT'],     // 期間限定
         ];
         $options['where'] .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
 

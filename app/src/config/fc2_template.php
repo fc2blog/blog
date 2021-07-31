@@ -49,9 +49,9 @@ $config['fc2_template_if'] = [
     'ctag_exists' => '<?php if(!isset($t_tags)) $t_tags = \Fc2blog\Model\Model::load(\'Tags\')->getTemplateTags($blog_id); ?><?php if(!empty($t_tags)) { ?>', // タグ一覧が空でな
     'search_area' => '<?php if(!empty($search_area)) { ?>', // search アクション
     'not_search_area' => '<?php if(empty($search_area)) { ?>',
-    'comment_area' => '<?php if(!empty($comment_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // preview_entry, pc view, sp view/?m2=res, pc comment_regist
+    'comment_area' => '<?php if(!empty($comment_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Model\EntriesModel::ENTRY[\'COMMENT_ACCEPTED\'][\'ACCEPTED\']) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // preview_entry, pc view, sp view/?m2=res, pc comment_regist
     'not_comment_area' => '<?php if(empty($comment_area)) { ?>',
-    'form_area' => '<?php if(!empty($form_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // view?m2=form, sp comment_regist,
+    'form_area' => '<?php if(!empty($form_area) && isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Model\EntriesModel::ENTRY[\'COMMENT_ACCEPTED\'][\'ACCEPTED\']) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // view?m2=form, sp comment_regist,
     'not_form_area' => '<?php if(empty($form_area)) { ?>',
     'edit_area' => '<?php if(!empty($edit_area)) { ?><?php if (!empty($comment_error)) echo $comment_error; ?>', // comment_edit, comment_delete アクション
     'not_edit_area' => '<?php if(empty($edit_area)) { ?>',
@@ -69,8 +69,8 @@ $config['fc2_template_if'] = [
     'more_link' => '<?php if(empty($comment_area) && !empty($entry[\'extend\'])) { ?>', // view, sp view?m2=res, pc comment_regist
     'more' => '<?php if(!empty($comment_area) && !empty($entry[\'extend\'])) { ?>',
     // コメントの受付可否
-    'allow_comment' => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.ACCEPTED\')) { ?>',
-    'deny_comment' => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Config::get(\'ENTRY.COMMENT_ACCEPTED.REJECT\')) { ?>',
+    'allow_comment' => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Model\EntriesModel::ENTRY[\'COMMENT_ACCEPTED\'][\'ACCEPTED\']) { ?>',
+    'deny_comment' => '<?php if(isset($entry[\'comment_accepted\']) && $entry[\'comment_accepted\']==\Fc2blog\Model\EntriesModel::ENTRY[\'COMMENT_ACCEPTED\'][\'REJECT\']) { ?>',
     // 記事のスレッドテーマも無し判定
     'community' => '<?php if(false) { ?>', // 互換性用タグ、communityは無効化されている
     // トラックバックは無し判定
@@ -145,7 +145,7 @@ $template_vars = [
     '<%topentry_body>' => <<<PHP
                                       <?php
                                         if (isset(\$entry['body'])) {
-                                          if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+                                          if (!\$self_blog && \$entry['open_status']==\Fc2blog\Model\EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD'] && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
                                             \$__str__1 = __("This contents is password protected.<br>You need a input password to view this.");
                                             \$__str__2 = __("Password");
                                             \$__str__3 = __("Submit");
@@ -532,7 +532,7 @@ function getTopentryDiscription(): string
     return <<<PHP
   <?php
     if (isset(\$entry['body'])) {
-      if (!\$self_blog && \$entry['open_status']==\Fc2blog\Config::get('ENTRY.OPEN_STATUS.PASSWORD') && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
+      if (!\$self_blog && \$entry['open_status']==\Fc2blog\Model\EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD'] && !\Fc2blog\Web\Session::get('entry_password.' . \$entry['blog_id'] . '.' . \$entry['id'])) {
         \$__str__1 = __("This contents is password protected.<br>You need a input password to view this.");
         \$__str__2 = __("Password");
         \$__str__3 = __("Submit");

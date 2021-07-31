@@ -3,13 +3,48 @@
 namespace Fc2blog\Model;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Web\Request;
 
 class EntriesModel extends Model
 {
 
     public static $instance = null;
+
+    const ENTRY = array(
+        // 公開設定
+        'OPEN_STATUS' => array(
+            'OPEN' => 1,  // 公開
+            'PASSWORD' => 2,  // パスワード保護
+            'DRAFT' => 3,  // 下書き
+            'LIMIT' => 4,  // 期間限定
+            'RESERVATION' => 5,  // 予約投稿
+        ),
+        // コメント受付
+        'COMMENT_ACCEPTED' => array(
+            'ACCEPTED' => 1,  // 受け付ける
+            'REJECT' => 0,  // 受け付けない
+        ),
+        // 自動改行
+        'AUTO_LINEFEED' => array(
+            'USE' => 1,  // 自動改行を行う
+            'NONE' => 0,  // 行わない
+        ),
+        // 記事の表示順
+        'ORDER' => array(
+            'ASC' => 0,
+            'DESC' => 1,
+        ),
+        // 記事一覧の表示件数リスト
+        'LIMIT_LIST' => array(
+            10 => '10',
+            20 => '20',
+            40 => '40',
+            60 => '60',
+            80 => '80',
+            100 => '100',
+        ),
+        'DEFAULT_LIMIT' => 20,
+    );
 
     public function __construct()
     {
@@ -59,18 +94,18 @@ class EntriesModel extends Model
                 'maxlength' => array('max' => 255),
             ),
             'open_status' => array(
-                'default_value' => Config::get('ENTRY.OPEN_STATUS.OPEN'),
+                'default_value' => EntriesModel::ENTRY['OPEN_STATUS']['OPEN'],
                 'in_array' => array('values' => array_keys(self::getOpenStatusList())),
             ),
             'password' => array(
                 'maxlength' => array('max' => 50),
             ),
             'auto_linefeed' => array(
-                'default_value' => Config::get('ENTRY.AUTO_LINEFEED.USE'),
+                'default_value' => EntriesModel::ENTRY['AUTO_LINEFEED']['USE'],
                 'in_array' => array('values' => array_keys(self::getAutoLinefeedList())),
             ),
             'comment_accepted' => array(
-                'default_value' => Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED'),
+                'default_value' => EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED'],
                 'in_array' => array('values' => array_keys(self::getCommentAcceptedList())),
             ),
             'posted_at' => array(
@@ -85,27 +120,27 @@ class EntriesModel extends Model
     public static function getOpenStatusList()
     {
         return array(
-            Config::get('ENTRY.OPEN_STATUS.OPEN') => __('Publication'),
-            Config::get('ENTRY.OPEN_STATUS.DRAFT') => __('Draft'),
-            Config::get('ENTRY.OPEN_STATUS.PASSWORD') => __('Password Protection'),
-            Config::get('ENTRY.OPEN_STATUS.LIMIT') => __('Limited time offer'),
-            Config::get('ENTRY.OPEN_STATUS.RESERVATION') => __('Reservations Posts'),
+            EntriesModel::ENTRY['OPEN_STATUS']['OPEN'] => __('Publication'),
+            EntriesModel::ENTRY['OPEN_STATUS']['DRAFT'] => __('Draft'),
+            EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD'] => __('Password Protection'),
+            EntriesModel::ENTRY['OPEN_STATUS']['LIMIT'] => __('Limited time offer'),
+            EntriesModel::ENTRY['OPEN_STATUS']['RESERVATION'] => __('Reservations Posts'),
         );
     }
 
     public static function getCommentAcceptedList()
     {
         return array(
-            Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED') => __('Be accepted'),
-            Config::get('ENTRY.COMMENT_ACCEPTED.REJECT') => __('Reject'),
+            EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED'] => __('Be accepted'),
+            EntriesModel::ENTRY['COMMENT_ACCEPTED']['REJECT'] => __('Reject'),
         );
     }
 
     public static function getAutoLinefeedList()
     {
         return array(
-            Config::get('ENTRY.AUTO_LINEFEED.USE') => __('I do automatic line feed'),
-            Config::get('ENTRY.AUTO_LINEFEED.NONE') => __('HTML tags only a new line'),
+            EntriesModel::ENTRY['AUTO_LINEFEED']['USE'] => __('I do automatic line feed'),
+            EntriesModel::ENTRY['AUTO_LINEFEED']['NONE'] => __('HTML tags only a new line'),
         );
     }
 
@@ -119,9 +154,9 @@ class EntriesModel extends Model
     {
         // 表示項目リスト
         $open_status_list = array(
-            Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-            Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-            Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+            EntriesModel::ENTRY['OPEN_STATUS']['OPEN'],      // 公開
+            EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD'],  // パスワード保護
+            EntriesModel::ENTRY['OPEN_STATUS']['LIMIT'],     // 期間限定
         );
         $add_where = ' AND open_status IN (' . implode(',', $open_status_list) . ')';
 
@@ -154,8 +189,8 @@ class EntriesModel extends Model
             return array();
         }
 
-        if ($entry['open_status'] == Config::get('ENTRY.OPEN_STATUS.DRAFT')
-            || $entry['open_status'] == Config::get('ENTRY.OPEN_STATUS.RESERVATION')
+        if ($entry['open_status'] == EntriesModel::ENTRY['OPEN_STATUS']['DRAFT']
+            || $entry['open_status'] == EntriesModel::ENTRY['OPEN_STATUS']['RESERVATION']
         ) {
             return array();
         }
@@ -185,9 +220,9 @@ class EntriesModel extends Model
 
         // 表示項目リスト
         $open_status_list = array(
-            Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-            Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-            Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+            EntriesModel::ENTRY['OPEN_STATUS']['OPEN'],      // 公開
+            EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD'],  // パスワード保護
+            EntriesModel::ENTRY['OPEN_STATUS']['LIMIT'],     // 期間限定
         );
         $options['where'] .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
 
@@ -212,9 +247,9 @@ class EntriesModel extends Model
 
         // 表示項目リスト
         $open_status_list = array(
-            Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-            Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-            Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+            EntriesModel::ENTRY['OPEN_STATUS']['OPEN'],      // 公開
+            EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD'],  // パスワード保護
+            EntriesModel::ENTRY['OPEN_STATUS']['LIMIT'],     // 期間限定
         );
         $options['where'] .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
 
@@ -230,7 +265,7 @@ class EntriesModel extends Model
     public function getCommentAcceptedEntry($entry_id, $blog_id)
     {
         return $this->findByIdAndBlogId($entry_id, $blog_id,
-            array('where' => 'comment_accepted=' . Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED')));
+            array('where' => 'comment_accepted=' . EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED']));
     }
 
     public function insert($data, $options = array())
@@ -335,7 +370,7 @@ class EntriesModel extends Model
             $where .= 'blog_id=? AND ';
             $params[] = $blog_id;
         }
-        $where .= ' open_status=' . Config::get('ENTRY.OPEN_STATUS.RESERVATION') . ' ';
+        $where .= ' open_status=' . EntriesModel::ENTRY['OPEN_STATUS']['RESERVATION'] . ' ';
         $where .= " AND posted_at <= '" . date('Y-m-d H:i:s') . "'";
 
         $options = array('where' => $where, 'params' => $params);
@@ -346,7 +381,7 @@ class EntriesModel extends Model
         }
 
         // 予約投稿のエントリーを公開に変更
-        $data = array('open_status' => Config::get('ENTRY.OPEN_STATUS.OPEN'));
+        $data = array('open_status' => EntriesModel::ENTRY['OPEN_STATUS']['OPEN']);
         $this->update($data, $where, $params);
     }
 
@@ -362,7 +397,7 @@ class EntriesModel extends Model
             $where .= 'blog_id=? AND ';
             $params[] = $blog_id;
         }
-        $where .= ' open_status=' . Config::get('ENTRY.OPEN_STATUS.LIMIT') . ' ';
+        $where .= ' open_status=' . EntriesModel::ENTRY['OPEN_STATUS']['LIMIT'] . ' ';
         $where .= " AND posted_at <= '" . date('Y-m-d H:i:s') . "'";
 
         $options = array('where' => $where, 'params' => $params);
@@ -373,7 +408,7 @@ class EntriesModel extends Model
         }
 
         // 期間限定投稿のエントリーを下書きに変更
-        $data = array('open_status' => Config::get('ENTRY.OPEN_STATUS.DRAFT'));
+        $data = array('open_status' => EntriesModel::ENTRY['OPEN_STATUS']['DRAFT']);
         $this->update($data, $where, $params);
     }
 
@@ -424,9 +459,9 @@ class EntriesModel extends Model
 
         // 表示項目リスト
         $open_status_list = array(
-            Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-            Config::get('ENTRY.OPEN_STATUS.PASSWORD'),  // パスワード保護
-            Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+            EntriesModel::ENTRY['OPEN_STATUS']['OPEN'],      // 公開
+            EntriesModel::ENTRY['OPEN_STATUS']['PASSWORD'],  // パスワード保護
+            EntriesModel::ENTRY['OPEN_STATUS']['LIMIT'],     // 期間限定
         );
         $options['where'] .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
         $entries = $this->find('all', $options);

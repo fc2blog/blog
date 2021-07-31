@@ -159,8 +159,8 @@ class BlogSettingsModel extends Model
     public static function getEntryOrderList(): array
     {
         return array(
-            Config::get('ENTRY.ORDER.DESC') => __('Latest order'),
-            Config::get('ENTRY.ORDER.ASC') => __('Oldest First'),
+            EntriesModel::ENTRY['ORDER']['DESC'] => __('Latest order'),
+            EntriesModel::ENTRY['ORDER']['ASC'] => __('Oldest First'),
         );
     }
 

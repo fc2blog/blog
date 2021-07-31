@@ -79,6 +79,7 @@ class CommentTest extends TestCase
 
         // Tripがテンプレートにまで表示されているかチェック
         $c = $this->reqGet("/testblog2/index.php?mode=entries&process=view&id=1");
+        var_dump($c);
         $this->assertStringContainsString("s0jeH8Lw", $c->getOutput());
     }
 }

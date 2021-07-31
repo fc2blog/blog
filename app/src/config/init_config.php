@@ -156,41 +156,41 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //);
 
 // 記事系
-$config['ENTRY'] = array(
-    // 公開設定
-    'OPEN_STATUS' => array(
-        'OPEN' => 1,  // 公開
-        'PASSWORD' => 2,  // パスワード保護
-        'DRAFT' => 3,  // 下書き
-        'LIMIT' => 4,  // 期間限定
-        'RESERVATION' => 5,  // 予約投稿
-    ),
-    // コメント受付
-    'COMMENT_ACCEPTED' => array(
-        'ACCEPTED' => 1,  // 受け付ける
-        'REJECT' => 0,  // 受け付けない
-    ),
-    // 自動改行
-    'AUTO_LINEFEED' => array(
-        'USE' => 1,  // 自動改行を行う
-        'NONE' => 0,  // 行わない
-    ),
-    // 記事の表示順
-    'ORDER' => array(
-        'ASC' => 0,
-        'DESC' => 1,
-    ),
-    // 記事一覧の表示件数リスト
-    'LIMIT_LIST' => array(
-        10 => '10',
-        20 => '20',
-        40 => '40',
-        60 => '60',
-        80 => '80',
-        100 => '100',
-    ),
-    'DEFAULT_LIMIT' => 20,
-);
+//$config['ENTRY'] = array(
+//    // 公開設定
+//    'OPEN_STATUS' => array(
+//        'OPEN' => 1,  // 公開
+//        'PASSWORD' => 2,  // パスワード保護
+//        'DRAFT' => 3,  // 下書き
+//        'LIMIT' => 4,  // 期間限定
+//        'RESERVATION' => 5,  // 予約投稿
+//    ),
+//    // コメント受付
+//    'COMMENT_ACCEPTED' => array(
+//        'ACCEPTED' => 1,  // 受け付ける
+//        'REJECT' => 0,  // 受け付けない
+//    ),
+//    // 自動改行
+//    'AUTO_LINEFEED' => array(
+//        'USE' => 1,  // 自動改行を行う
+//        'NONE' => 0,  // 行わない
+//    ),
+//    // 記事の表示順
+//    'ORDER' => array(
+//        'ASC' => 0,
+//        'DESC' => 1,
+//    ),
+//    // 記事一覧の表示件数リスト
+//    'LIMIT_LIST' => array(
+//        10 => '10',
+//        20 => '20',
+//        40 => '40',
+//        60 => '60',
+//        80 => '80',
+//        100 => '100',
+//    ),
+//    'DEFAULT_LIMIT' => 20,
+//);
 
 // コメント系
 $config['COMMENT'] = array(

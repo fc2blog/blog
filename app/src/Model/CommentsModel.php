@@ -649,8 +649,8 @@ class CommentsModel extends Model
 
         // 記事の表示項目リスト
         $open_status_list = array(
-            Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-            Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+            EntriesModel::ENTRY['OPEN_STATUS']['OPEN'], // 公開
+            EntriesModel::ENTRY['OPEN_STATUS']['LIMIT'], // 期間限定
         );
 
         $where = 'comments.blog_id=?';
