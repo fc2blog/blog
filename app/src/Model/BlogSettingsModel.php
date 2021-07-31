@@ -208,7 +208,7 @@ class BlogSettingsModel extends Model
     public function updateReplyType(string $device_type, string $reply_type, string $blog_id)
     {
         $values = [];
-        $values[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $device_type)] = $reply_type;
+        $values[CommentsModel::BLOG_TEMPLATE_REPLY_TYPE_COLUMN[$device_type]] = $reply_type;
         return $this->updateByBlogId($values, $blog_id);
     }
 }

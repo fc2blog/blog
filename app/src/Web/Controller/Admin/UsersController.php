@@ -50,7 +50,7 @@ class UsersController extends AdminController
      */
     public function register(Request $request)
     {
-        if (Config::get('USER.REGIST_SETTING.FREE') != Config::get('USER.REGIST_STATUS')) {
+        if (UsersModel::USER["REGIST_SETTING"]["FREE"] != UsersModel::USER["REGIST_STATUS"]) {
             return $this->error404();
         }
 

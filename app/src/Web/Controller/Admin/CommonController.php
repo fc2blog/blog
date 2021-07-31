@@ -278,7 +278,7 @@ class CommonController extends AdminController
                 $errors['user'] = $users_model->registerValidate($request->get('user'), $user_data, array('login_id', 'password'));
                 $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, array('id', 'name', 'nickname'));
                 if (empty($errors['user']) && empty($errors['blog'])) {
-                    $user_data['type'] = Config::get('USER.TYPE.ADMIN');
+                    $user_data['type'] = UsersModel::USER["TYPE"]["ADMIN"];
                     $user_id = $users_model->insert($user_data);
                     $blog_data['user_id'] = $user_id;
                     if ($blog_data['user_id'] && $blog_id = $blogs_model->insert($blog_data)) {

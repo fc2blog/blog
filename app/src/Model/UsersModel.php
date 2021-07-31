@@ -2,13 +2,24 @@
 
 namespace Fc2blog\Model;
 
-use Fc2blog\Config;
 use Fc2blog\Web\Session;
 
 class UsersModel extends Model
 {
 
     public static $instance = null;
+
+    const USER = array(
+        'TYPE' => array(
+            'NORMAL' => 0,
+            'ADMIN' => 1,
+        ),
+        'REGIST_SETTING' => array(
+            'NONE' => 0,  // 登録は受け付けない
+            'FREE' => 1,  // 誰でも登録可能
+        ),
+        'REGIST_STATUS' => 0,   // ユーザーの登録受付状態
+    );
 
     public function __construct()
     {
@@ -184,7 +195,7 @@ class UsersModel extends Model
     public function isExistAdmin()
     {
         return $this->isExist(array(
-            'where' => 'type=' . Config::get('USER.TYPE.ADMIN'),
+            'where' => 'type=' . UsersModel::USER['TYPE']['ADMIN'],
         ));
     }
 

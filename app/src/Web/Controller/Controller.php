@@ -7,6 +7,7 @@ use Fc2blog\App;
 use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\UsersModel;
 use Fc2blog\Service\BlogService;
 use Fc2blog\Service\TwigService;
 use Fc2blog\Util\Log;
@@ -267,7 +268,7 @@ abstract class Controller
                 'lang' => $request->lang,
                 'debug' => Config::get('APP_DEBUG') != 0,
                 'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogIdFromSession()]), // 代用できそう
-                'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
+                'is_register_able' => (UsersModel::USER["REGIST_SETTING"]["FREE"] == UsersModel::USER["REGIST_STATUS"]), // TODO 意図する解釈確認
                 'active_menu' => App::getActiveMenu($request),
                 'isLogin' => $this->isLogin(),
                 'nick_name' => $this->getNickName(),

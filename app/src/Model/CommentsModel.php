@@ -394,6 +394,11 @@ class CommentsModel extends Model
         ];
     }
 
+    const BLOG_TEMPLATE_REPLY_TYPE_COLUMN = array(
+        1 => 'template_pc_reply_type',
+        4 => 'template_sp_reply_type',
+    );
+
     /**
      * コメント一覧の情報にブログの設定情報で装飾する
      * @param Request $request
@@ -410,7 +415,7 @@ class CommentsModel extends Model
         $blog = Model::load('Blogs')->findById($blog_setting['blog_id']);
 
         // コメントを追加で表示するかどうか
-        $is_add_comment = $blog_setting[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $request->deviceType)] == Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+        $is_add_comment = $blog_setting[self::BLOG_TEMPLATE_REPLY_TYPE_COLUMN[$request->deviceType]] == Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
 
         $comments = array();
         foreach ($tmp_comments as $comment) {

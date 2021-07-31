@@ -15,6 +15,11 @@ class BlogsModel extends Model
 
     public static $instance = null;
 
+    const BLOG_TEMPLATE_COLUMN = array(
+        1 => 'template_pc_id',
+        4 => 'template_sp_id',
+    );
+
     public function __construct()
     {
     }
@@ -225,7 +230,7 @@ class BlogsModel extends Model
      */
     public static function getTemplateIds($blog): array
     {
-        $columns = Config::get('BLOG_TEMPLATE_COLUMN');
+        $columns = self::BLOG_TEMPLATE_COLUMN;
         return [
             $blog[$columns[1]],
             $blog[$columns[4]],
@@ -535,7 +540,7 @@ class BlogsModel extends Model
 
         // 使用テンプレートを更新
         $data = array();
-        $data[Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)] = $blog_template['id'];
+        $data[self::BLOG_TEMPLATE_COLUMN[$device_type]] = $blog_template['id'];
 
         // コメントの表示タイプをテンプレートから判断
         $reply_type = strstr($blog_template['html'], '<%comment_reply_body>') ?
@@ -617,7 +622,7 @@ class BlogsModel extends Model
      */
     public function getAppliedTemplateId(string $blog_id, int $device_type): int
     {
-        $blog_template_column = Config::get("BLOG_TEMPLATE_COLUMN.{$device_type}");
+        $blog_template_column = self::BLOG_TEMPLATE_COLUMN[$device_type];
         $blogs = $this->findById($blog_id);
 
         if (!isset($blogs[$blog_template_column])) throw new OutOfBoundsException("any applied template found");

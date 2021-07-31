@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\UsersModel;
 use Fc2blog\Service\BlogService;
@@ -141,7 +140,7 @@ abstract class AdminController extends Controller
      */
     protected function isAdmin(): bool
     {
-        return Session::get('user_type') === Config::get('USER.TYPE.ADMIN');
+        return Session::get('user_type') === UsersModel::USER["TYPE"]["ADMIN"];
     }
 
     /**

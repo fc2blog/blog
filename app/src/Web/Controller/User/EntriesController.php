@@ -1111,7 +1111,7 @@ class EntriesController extends UserController
             Log::debug_log(__FILE__ . ":" . __LINE__ . " generate Fc2Template. :{$templateFilePath}");
 
             $blog = BlogService::getById($blog_id);
-            $templateId = $blog[Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)];
+            $templateId = $blog[BlogsModel::BLOG_TEMPLATE_COLUMN[$device_type]];
 
             // HTMLとCSSの実行PHPを生成
             BlogTemplatesModel::createTemplate($templateId, $blog_id, $device_type, $html, $css);

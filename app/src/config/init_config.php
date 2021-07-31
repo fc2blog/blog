@@ -92,30 +92,30 @@ $config['SQL_DEBUG'] = defined("SQL_DEBUG") ? SQL_DEBUG : 0;
 //    ),
 //);
 
-// ブログテンプレートのデバイス毎のカラム名
-$config['BLOG_TEMPLATE_COLUMN'] = array(
-    1 => 'template_pc_id',
-    4 => 'template_sp_id',
-);
+//// ブログテンプレートのデバイス毎のカラム名 BlogModel::BLOG_TEMPLATE_COLUMNに移動
+//$config['BLOG_TEMPLATE_COLUMN'] = array(
+//    1 => 'template_pc_id',
+//    4 => 'template_sp_id',
+//);
 
-// ブログテンプレートのデバイス毎のリプライタイプカラム名
-$config['BLOG_TEMPLATE_REPLY_TYPE_COLUMN'] = array(
-    1 => 'template_pc_reply_type',
-    4 => 'template_sp_reply_type',
-);
+// ブログテンプレートのデバイス毎のリプライタイプカラム名 CommentModelに移動
+//$config['BLOG_TEMPLATE_REPLY_TYPE_COLUMN'] = array(
+//    1 => 'template_pc_reply_type',
+//    4 => 'template_sp_reply_type',
+//);
 
 // ユーザー系
-$config['USER'] = array(
-    'TYPE' => array(
-        'NORMAL' => 0,
-        'ADMIN' => 1,
-    ),
-    'REGIST_SETTING' => array(
-        'NONE' => 0,  // 登録は受け付けない
-        'FREE' => 1,  // 誰でも登録可能
-    ),
-    'REGIST_STATUS' => 0,   // ユーザーの登録受付状態
-);
+//$config['USER'] = array(
+//    'TYPE' => array(
+//        'NORMAL' => 0,
+//        'ADMIN' => 1,
+//    ),
+//    'REGIST_SETTING' => array(
+//        'NONE' => 0,  // 登録は受け付けない
+//        'FREE' => 1,  // 誰でも登録可能
+//    ),
+//    'REGIST_STATUS' => 0,   // ユーザーの登録受付状態
+//);
 
 // ブログ系
 $config['BLOG'] = array(
