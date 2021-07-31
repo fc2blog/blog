@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Web;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Util\I18n;
 use Fc2blog\Util\Log;
 use Fc2blog\Web\Router\Router;
@@ -419,7 +418,7 @@ class Request
     public function getHostUrl(): string
     {
         $schema = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") ? 'https:' : 'http:';
-        $domain = Config::get("DOMAIN");
+        $domain = DOMAIN;
         $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         return $schema . "//" . $domain . $port;
     }

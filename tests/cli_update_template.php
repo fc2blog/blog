@@ -12,7 +12,7 @@ use Fc2blog\Tests\LoaderHelper;
 require_once __DIR__ . "/../app/vendor/autoload.php";
 
 /** @noinspection PhpUnhandledExceptionInspection */
-LoaderHelper::requireBootStrap();
+LoaderHelper::bootStrap();
 
 // CLI param check
 if ($argc !== 2) {

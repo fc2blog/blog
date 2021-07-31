@@ -12,6 +12,6 @@ define("TEST_APP_DIR", __DIR__ . "/../app");
 define("THIS_IS_TEST", true);
 
 /** @noinspection PhpUnhandledExceptionInspection */
-LoaderHelper::requireBootStrap();
+LoaderHelper::bootStrap();
 
 DBHelper::clearDb();

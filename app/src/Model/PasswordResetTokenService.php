@@ -52,9 +52,7 @@ class PasswordResetTokenService
 
         $email = new Email();
         $email->setFrom(
-            defined('ADMIN_MAIL_ADDRESS') && strlen(ADMIN_MAIL_ADDRESS) > 0 ?
-                ADMIN_MAIL_ADDRESS :
-                "noreply@example.jp",
+            ADMIN_MAIL_ADDRESS,
             "Fc2blog OSS"
         );
         $email->setTo($user->login_id);

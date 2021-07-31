@@ -5,7 +5,6 @@ namespace Fc2blog\Web\Controller\User;
 
 use Exception;
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Lib\CaptchaImage;
 use Fc2blog\Lib\ThumbnailImageMaker;
 use Fc2blog\Util\Log;
@@ -28,7 +27,7 @@ class CommonController extends UserController
 
         // 言語の設定
         $lang = $request->get('lang');
-        if (Config::get('LANGUAGES.' . $lang)) {
+        if (isset(App::$languages[$lang])) {
             Cookie::set($request, 'lang', $lang);
         }
 
@@ -100,7 +99,7 @@ class CommonController extends UserController
         } elseif (isset($request->server['HTTP_ACCEPT_LANGUAGE']) && preg_match('/\Aja/ui', $request->server['HTTP_ACCEPT_LANGUAGE'])) {
             $isJa = false;
         } else {
-            $isJa = Config::get('LANG') == 'ja'; // 日本語以外は数字のみを表示
+            $isJa = App::$lang == 'ja'; // 日本語以外は数字のみを表示
         }
         $captcha = new CaptchaImage($size_x, $size_y, $isJa);
         try {

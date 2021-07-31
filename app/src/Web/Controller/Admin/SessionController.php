@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\Config;
 use Fc2blog\Model\EmailLoginTokenService;
 use Fc2blog\Model\UsersModel;
 use Fc2blog\Service\UserService;
@@ -68,7 +67,7 @@ class SessionController extends AdminController
         }
 
         // MFA処理
-        if (Config::get('MFA_EMAIL') === "1") {
+        if (MFA_EMAIL === "1") {
             // create and send login mail
             try {
                 if (false === EmailLoginTokenService::createAndSendToken($request, $user)) {

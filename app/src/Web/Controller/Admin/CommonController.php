@@ -5,7 +5,6 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Exception;
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\CommentsModel;
@@ -30,7 +29,7 @@ class CommonController extends AdminController
 
         // 言語の設定
         $lang = $request->get('lang');
-        if (Config::get('LANGUAGES.' . $lang)) {
+        if (isset(App::$languages[$lang])) {
             Cookie::set($request, 'lang', $lang);
         }
 
@@ -144,7 +143,7 @@ class CommonController extends AdminController
         switch ($state) {
             default:
             case 0:
-                if (!$request->isGet()) return $this->error400();
+            if (!$request->isGet()) return $this->error400();
             // 環境チェック確認
             $this->set('temp_dir', App::TEMP_DIR);
             $this->set('www_upload_dir', App::WWW_UPLOAD_DIR);
@@ -172,27 +171,27 @@ class CommonController extends AdminController
                 } catch (Exception $e) {
                     $is_connect = false;
                     $connect_message = $e->getMessage();
-                    }
-                } else {
-                    $is_connect = false;
-                    $connect_message = __("Please enable PDO");
                 }
-                $this->set('is_connect', $is_connect);
-                $this->set('connect_message', $connect_message);
+            } else {
+                $is_connect = false;
+                $connect_message = __("Please enable PDO");
+            }
+            $this->set('is_connect', $is_connect);
+            $this->set('connect_message', $connect_message);
 
-                // ドメイン確認
-                $is_domain = App::DOMAIN != 'domain'; // 今のサンプルデフォルト値と比較
-                $this->set('is_domain', $is_domain);
-                $this->set('example_server_name', $request->server['SERVER_NAME'] ?? 'example.jp');
+            // ドメイン確認
+            $is_domain = App::DOMAIN != 'domain'; // 今のサンプルデフォルト値と比較
+            $this->set('is_domain', $is_domain);
+            $this->set('example_server_name', $request->server['SERVER_NAME'] ?? 'example.jp');
 
-                // GDインストール済み確認
-                $is_gd = function_exists('gd_info');
-                $this->set('is_gd', $is_gd);
+            // GDインストール済み確認
+            $is_gd = function_exists('gd_info');
+            $this->set('is_gd', $is_gd);
 
-                $is_all_ok = $is_write_temp && $is_write_upload && $is_connect && $is_domain;
-                $this->set('is_all_ok', $is_all_ok);
+            $is_all_ok = $is_write_temp && $is_write_upload && $is_connect && $is_domain;
+            $this->set('is_all_ok', $is_all_ok);
 
-                return 'admin/common/install.twig';
+            return 'admin/common/install.twig';
 
             case 1:
                 if (!$request->isGet()) return $this->error400();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Web;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Util\StringCaseConverter;
 
@@ -120,9 +119,9 @@ class Html
         if (
             $blog_id && (
                 // Default Blog IDが未指定か
-                strlen(Config::get('DEFAULT_BLOG_ID', "")) === 0 ||
+                is_null(App::getDefaultBlogId()) ||
                 // 指定されたblog_idがDefault blog idと異なる場合
-                $blog_id !== Config::get('DEFAULT_BLOG_ID')
+                $blog_id !== App::getDefaultBlogId()
             )
         ) {
             $url = '/' . $blog_id . $url;

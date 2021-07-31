@@ -97,7 +97,12 @@ try {
         /** @noinspection PhpIncludeInspection */
         require(__DIR__ . '/../../config.php');
     }
-    require(__DIR__ . '/bootstrap.php');
+
+    // APPディレクトリのパス
+    define('APP_DIR', realpath(__DIR__ . '/../../') . '/');
+
+    // タイムゾーン設定 TODO php.ini移譲でよいのではないか？
+    date_default_timezone_set(\Fc2blog\App::$timesZone);
 
     // アプリケーション実行
     $request = new \Fc2blog\Web\Request();

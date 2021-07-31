@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Web\Controller\User;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\Blog;
 use Fc2blog\Model\BlogPluginsModel;
 use Fc2blog\Model\BlogSettingsModel;
@@ -74,11 +73,9 @@ class EntriesController extends UserController
 
         // 予約投稿と期間投稿エントリーの更新処理
         // TODO: ここにあるのがふさわしいのか？
-        if (Config::get('CRON') === false) {
-            $entries_model = new EntriesModel();
-            $entries_model->updateReservation($blog_id);
-            $entries_model->updateLimited($blog_id);
-        }
+        $entries_model = new EntriesModel();
+        $entries_model->updateReservation($blog_id);
+        $entries_model->updateLimited($blog_id);
     }
 
     /**

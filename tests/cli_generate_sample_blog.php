@@ -10,7 +10,7 @@ define("TEST_APP_DIR", __DIR__ . "/../app");
 require_once __DIR__ . "/../app/vendor/autoload.php";
 
 /** @noinspection PhpUnhandledExceptionInspection */
-LoaderHelper::requireBootStrap();
+LoaderHelper::bootStrap();
 
 $generator = new GenerateSampleBlog();
 

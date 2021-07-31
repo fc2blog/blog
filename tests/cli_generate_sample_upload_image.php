@@ -11,7 +11,7 @@ define("THIS_IS_TEST", true);
 require_once __DIR__ . "/../app/vendor/autoload.php";
 
 /** @noinspection PhpUnhandledExceptionInspection */
-LoaderHelper::requireBootStrap();
+LoaderHelper::bootStrap();
 
 $generator = new GenerateSampleUploadFile();
 

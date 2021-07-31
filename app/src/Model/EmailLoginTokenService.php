@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Model;
 
-use Fc2blog\Config;
 use Fc2blog\Service\MailService;
 use Fc2blog\Service\TwigService;
 use Fc2blog\Web\Request;
@@ -53,7 +52,7 @@ class EmailLoginTokenService
 
         $email = new Email();
         $email->setFrom(
-            Config::get("ADMIN_MAIL_ADDRESS"),
+            ADMIN_MAIL_ADDRESS,
             "Fc2blog OSS"
         );
         $email->setTo($user->login_id);

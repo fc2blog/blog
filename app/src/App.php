@@ -9,6 +9,7 @@ use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Request;
 use InvalidArgumentException;
 use League\Flysystem\Adapter\Local;
+use LogicException;
 use RuntimeException;
 
 class App
@@ -410,7 +411,7 @@ class App
             if (count($params)) {
                 $url .= '?' . implode('&', $params);
             }
-            if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+            if ($blog_id && $blog_id !== App::getDefaultBlogId()) {
                 $url = '/' . $blog_id . $url;
             }
             return ($abs ? $full_domain : '') . $url;
@@ -431,7 +432,7 @@ class App
             if (count($params) > 0) {
                 $url .= '?' . implode('&', $params);
             }
-            if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+            if ($blog_id && $blog_id !== App::getDefaultBlogId()) {
                 $url = '/' . $blog_id . $url;
             }
             return ($abs ? $full_domain : '') . $url;
@@ -451,7 +452,7 @@ class App
         if (count($params)) {
             $url .= '?' . implode('&', $params);
         }
-        if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+        if ($blog_id && $blog_id !== App::getDefaultBlogId()) {
             $url = '/' . $blog_id . $url;
         }
         return ($abs ? $full_domain : '') . $url;
@@ -602,5 +603,37 @@ class App
     public static function isSqlDebugMode(): bool
     {
         return defined("SQL_DEBUG") && "1" === (string)SQL_DEBUG;
+    }
+
+    static private $overRideDefaultBlogId = "";
+
+    /**
+     * テスト用にデフォルトブログIDを設定する、テストでのみ利用可能
+     * @param string $blog_id
+     */
+    public static function setOverRideDefaultBlogIdForTest(string $blog_id)
+    {
+        if (!defined("THIS_IS_TEST")) {
+            throw new LogicException("The method not allowed out of test.");
+        }
+        static::$overRideDefaultBlogId = $blog_id;
+    }
+
+    /**
+     * 設定されたデフォルトブログIDを取得する
+     */
+    public static function getDefaultBlogId(): ?string
+    {
+        if (defined("THIS_IS_TEST") && strlen(static::$overRideDefaultBlogId) > 0) {
+            return static::$overRideDefaultBlogId;
+        }
+
+        // テスト用のUserAgentではデフォルトブログ機能を強制オフにする
+        // TODO E2E testでシングルテナントモード対応ができたら外す
+        if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/THIS_IS_TEST/u", $_SERVER['HTTP_USER_AGENT'])) {
+            return null;
+        } else {
+            return defined("DEFAULT_BLOG_ID") && strlen(DEFAULT_BLOG_ID) > 0 ? DEFAULT_BLOG_ID : null;
+        }
     }
 }

@@ -91,10 +91,10 @@ class Fc2BlogTemplate
 
         // FC2用のどこでも有効な単変数
         $data['blog_id'] = $request->getBlogId(); // TODO User系でしかこのメソッドは呼ばれないはずなので
-        if ($data['blog_id'] !== Config::get('DEFAULT_BLOG_ID')) {
+        if ($data['blog_id'] !== App::getDefaultBlogId()) {
             $data['url'] = '/' . $data['blog']['id'] . '/';
         } else {
-            // シングルテナントモード、DEFAULT_BLOG_IDとBlogIdが一致するなら、Pathを省略する
+            // シングルテナントモード、デフォルトブログIDとBlogIdが一致するなら、Pathを省略する
             $data['url'] = '/';
         }
 

@@ -4,7 +4,6 @@ namespace Fc2blog\Model;
 
 use DateTimeZone;
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Web\Request;
 use InvalidArgumentException;
 use OutOfBoundsException;
@@ -686,10 +685,10 @@ class BlogsModel extends Model
     static public function getEntryFullUrlByBlogIdAndEntryId(string $blog_id, int $entry_id): string
     {
         $schema = static::getSchemaByBlogId($blog_id);
-        $domain = Config::get("DOMAIN");
+        $domain = DOMAIN;
         $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         // default blog ならば blog_idは省略する
-        if ($blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+        if ($blog_id !== App::getDefaultBlogId()) {
             $blog_id_path = '/' . $blog_id;
         } else {
             $blog_id_path = "";
@@ -700,17 +699,17 @@ class BlogsModel extends Model
     /**
      * Blog Idをキーとして、そのブログの`http(s)?://FQDN(:port)/(blog_id)?/`を生成する
      * @param string $blog_id
-     * @param ?string $domain 省略時、\Fc2blog\Config::get("DOMAIN")
+     * @param ?string $domain 省略時、 DOMAIN 定数
      * @return string
      */
     static public function getFullUrlByBlogId(string $blog_id, ?string $domain = null): string
     {
         $schema = static::getSchemaByBlogId($blog_id);
         if (is_null($domain)) {
-            $domain = Config::get("DOMAIN");
+            $domain = DOMAIN;
         }
         // default blog ならば blog_idは省略する
-        if ($blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+        if ($blog_id !== App::getDefaultBlogId()) {
             $blog_id_path = '/' . $blog_id;
         } else {
             $blog_id_path = "";
@@ -722,14 +721,14 @@ class BlogsModel extends Model
     /**
      * Blog Idをキーとして、そのブログの`http(s)://FQDN(:port)`を生成する
      * @param string $blog_id
-     * @param ?string $domain 省略時、\Fc2blog\Config::get("DOMAIN")
+     * @param ?string $domain 省略時、 DOMAIN定数
      * @return string
      */
     static public function getFullHostUrlByBlogId(string $blog_id, ?string $domain = null): string
     {
         $schema = static::getSchemaByBlogId($blog_id);
         if (is_null($domain)) {
-            $domain = Config::get("DOMAIN");
+            $domain = DOMAIN;
         }
         $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         return $schema . "//" . $domain . $port;
@@ -782,18 +781,6 @@ class BlogsModel extends Model
     }
 
     /**
-     * @return string|null
-     */
-    static public function getDefaultBlogId(): ?string
-    {
-        if (strlen(Config::get("DEFAULT_BLOG_ID", "")) > 0) {
-            return Config::get("DEFAULT_BLOG_ID");
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * @param Request $request
      * @return string|null
      * @noinspection PhpUnused
@@ -803,8 +790,8 @@ class BlogsModel extends Model
         if ($request->getBlogId()) {
             return $request->getBlogId();
 
-        } else if (Config::get("DEFAULT_BLOG_ID", "") && !is_null(BlogsModel::getDefaultBlogId())) {
-            return BlogsModel::getDefaultBlogId();
+        } else if (!is_null(App::getDefaultBlogId())) {
+            return App::getDefaultBlogId();
 
         } else {
             return null;
