@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpFullyQualifiedNameUsageInspection */
+<?php
 // the file will be load by composer autoloader.
 
 /**
