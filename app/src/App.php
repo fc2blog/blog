@@ -586,11 +586,19 @@ class App
         return static::genRandomString($length, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345679');
     }
 
+    /**
+     * デバッグモードか判定する
+     * @return bool
+     */
     public static function isAppDebugMode(): bool
     {
         return defined("APP_DEBUG") && "1" === (string)APP_DEBUG;
     }
 
+    /**
+     * SQLデバッグモードか判定する
+     * @return bool
+     */
     public static function isSqlDebugMode(): bool
     {
         return defined("SQL_DEBUG") && "1" === (string)SQL_DEBUG;
