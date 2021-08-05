@@ -3,13 +3,20 @@
 namespace Fc2blog\Model;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Web\Fc2BlogTemplate;
+use InvalidArgumentException;
 
 class BlogTemplatesModel extends Model
 {
 
     public static $instance = null;
+
+    const BLOG_TEMPLATE = array(
+        'COMMENT_TYPE' => array(
+            'AFTER' => 1,      // 一つ下にコメントを差し込むタイプ
+            'REPLY' => 2,      // １対１でコメントを返信するタイプ
+        ),
+    );
 
     public function __construct()
     {
@@ -58,8 +65,8 @@ class BlogTemplatesModel extends Model
                 'maxlength' => array('max' => 100000),
             ),
             'device_type' => array(
-                'default_value' => Config::get('DEVICE_PC'),
-                'in_array' => array('values' => array_keys(Config::get('DEVICE_NAME'))),
+                'default_value' => App::DEVICE_PC,
+                'in_array' => array('values' => array_keys(BlogTemplatesModel::DEVICE_NAME)),
             ),
         );
 
@@ -85,7 +92,7 @@ class BlogTemplatesModel extends Model
      */
     public static function getTemplateFilePath(string $blog_id, int $device_type = 0, bool $isPreview = false)
     {
-        return Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
+        return App::BLOG_TEMPLATE_DIR . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.php';
     }
 
     /**
@@ -97,7 +104,7 @@ class BlogTemplatesModel extends Model
      */
     public static function getCssFilePath($blog_id, $device_type, $isPreview = false)
     {
-        return Config::get('WWW_UPLOAD_DIR') . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
+        return App::WWW_UPLOAD_DIR . App::getBlogLayer($blog_id) . '/' . $device_type . '/' . ($isPreview ? 'preview' : 'index') . '.css';
     }
 
     /**
@@ -177,7 +184,7 @@ class BlogTemplatesModel extends Model
             $options['where'] .= ' AND device_type=?';
             $options['params'][] = $device_type;
         } else {
-            $options['where'] .= ' AND device_type IN (' . implode(',', Config::get('ALLOW_DEVICES')) . ')';
+            $options['where'] .= ' AND device_type IN (' . implode(',', App::ALLOW_DEVICES) . ')';
         }
         $blog_templates = $this->find('all', $options);
 
@@ -239,7 +246,8 @@ class BlogTemplatesModel extends Model
         if (Model::load('Blogs')->isAppliedTemplate($id, $blog_id, $device_type)) {
             // コメントの表示タイプをテンプレートから判断
             $reply_type = strstr($values['html'], '<%comment_reply_body>') ?
-                Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+                BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['REPLY'] :
+                BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['AFTER'];
             // コメントの表示タイプを更新
             Model::load('BlogSettings')->updateReplyType($device_type, $reply_type, $blog_id);
         }
@@ -249,22 +257,43 @@ class BlogTemplatesModel extends Model
 
     static public function getPathDefaultTemplate(): string
     {
-        return static::getPathDefaultTemplateWithDevice(Config::get('DEVICE_PC'));
+        return static::getPathDefaultTemplateWithDevice(App::DEVICE_PC);
     }
 
     static public function getPathDefaultCss(): string
     {
-        return static::getPathDefaultCssWithDevice(Config::get('DEVICE_PC'));
+        return static::getPathDefaultCssWithDevice(App::DEVICE_PC);
+    }
+
+    const DEVICE_PREFIX = [
+        1 => '_pc',   // PC
+        4 => '_sp',   // スマフォ
+    ];
+
+    static private function getDevicePrefix(string $prefix): string
+    {
+        return self::DEVICE_PREFIX[$prefix] ?? "";
+    }
+
+    const DEVICE_NAME = [
+        1 => 'PC',
+        4 => 'Smartphone',
+    ];
+
+    static public function getDeviceName(int $id): string
+    {
+        if (!isset(self::DEVICE_NAME[$id])) throw new InvalidArgumentException("missing device id in DEVICE_NAME");
+        return self::DEVICE_NAME[$id];
     }
 
     static public function getPathDefaultTemplateWithDevice(string $device): string
     {
-        return Config::get('APP_DIR') . 'templates/default/fc2_default_template' . Config::get('DEVICE_PREFIX.' . $device) . '.php';
+        return App::APP_DIR . 'templates/default/fc2_default_template' . self::getDevicePrefix($device) . '.php';
     }
 
     static public function getPathDefaultCssWithDevice(string $device): string
     {
-        return Config::get('APP_DIR') . 'templates/default/fc2_default_css' . Config::get('DEVICE_PREFIX.' . $device) . '.css';
+        return App::APP_DIR . 'templates/default/fc2_default_css' . self::getDevicePrefix($device) . '.css';
     }
 
     static public function getBodyDefaultTemplateHtmlWithDevice(string $device): string

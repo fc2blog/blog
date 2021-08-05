@@ -9,10 +9,61 @@ use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Request;
 use InvalidArgumentException;
 use League\Flysystem\Adapter\Local;
+use LogicException;
 use RuntimeException;
 
 class App
 {
+    const WWW_DIR = WWW_DIR;
+    const APP_DIR = APP_DIR;
+    const WWW_UPLOAD_DIR = self::WWW_DIR . 'uploads/';
+    const CONFIG_DIR = self::APP_DIR . 'src/config/';
+    const LOCALE_DIR = self::APP_DIR . 'locale/';
+    const TEMP_DIR = self::APP_DIR . 'temp/';
+    const BLOG_TEMPLATE_DIR = self::TEMP_DIR . 'blog_template/';
+
+    const SESSION_NAME = 'dojima';
+    const SESSION_COOKIE_EXPIRE_DAY = 180;
+    const DOMAIN = DOMAIN;
+    const DOMAIN_USER = self::DOMAIN;
+
+    const HTTP_PORT_STR = (HTTP_PORT === "80") ? '' : ":" . HTTP_PORT; // http時、80は省略できる
+    const HTTPS_PORT_STR = (HTTP_PORT === "443") ? '' : ":" . HTTPS_PORT; // https時、443は省略できる
+
+    const DEVICE_PC = 1;
+    const DEVICE_SP = 4;
+    const DEVICES = [
+        self::DEVICE_PC,
+        self::DEVICE_SP,
+    ];
+
+    const DEVICE_FC2_KEY = [
+        1 => 'pc',   // PC
+        4 => 'sp',   // スマフォ
+    ];
+
+    static public function getDeviceFc2Key($device_id): string
+    {
+        if (!isset(self::DEVICE_FC2_KEY[(int)$device_id])) throw new InvalidArgumentException("missing device id in DEVICE_FC2_KEY");
+        return self::DEVICE_FC2_KEY[(int)$device_id];
+    }
+
+    const ALLOW_DEVICES = [
+        self::DEVICE_PC,
+        self::DEVICE_SP,
+    ];
+
+    const APP_DISPLAY_SHOW = 0; // 非表示
+    const APP_DISPLAY_HIDE = 1; // 非表示
+
+    public static $lang = "ja";
+    public static $language = "ja_JP.UTF-8";
+    public static $languages = [
+        'ja' => 'ja_JP.UTF-8',
+        'en' => 'en_US.UTF-8',
+    ];
+    public static $timesZone = 'Asia/Tokyo';
+
     /**
      * ブログIDから階層別フォルダ作成
      * @param string $blog_id
@@ -33,7 +84,7 @@ class App
     public static function getUserFilePath(array $file, bool $abs = false, bool $timestamp = false): string
     {
         $file_path = static::getBlogLayer($file['blog_id']) . '/file/' . $file['id'] . '.' . $file['ext'];
-        return ($abs ? Config::get('WWW_UPLOAD_DIR') : '/uploads/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
+        return ($abs ? App::WWW_UPLOAD_DIR : '/uploads/') . $file_path . ($timestamp ? '?t=' . strtotime($file['updated_at']) : '');
     }
 
     /**
@@ -82,7 +133,7 @@ class App
      */
     public static function deleteFile(string $blog_id, string $id): void
     {
-        $dir_path = Config::get('WWW_UPLOAD_DIR') . static::getBlogLayer($blog_id) . '/file/';
+        $dir_path = App::WWW_UPLOAD_DIR . static::getBlogLayer($blog_id) . '/file/';
         $files = scandir($dir_path);
         foreach ($files as $file_name) {
             if (strpos($file_name, $id . '_') === 0) {
@@ -104,7 +155,7 @@ class App
      */
     public static function getPluginFilePath(string $blog_id, string $id): string
     {
-        return Config::get('BLOG_TEMPLATE_DIR') . static::getBlogLayer($blog_id) . '/plugins/' . $id . '.php';
+        return App::BLOG_TEMPLATE_DIR . static::getBlogLayer($blog_id) . '/plugins/' . $id . '.php';
     }
 
     /**
@@ -127,10 +178,10 @@ class App
     {
         $fs = new Local("/");
 
-        $upload_path = Config::get('WWW_UPLOAD_DIR') . '/' . static::getBlogLayer($blog_id);
+        $upload_path = App::WWW_UPLOAD_DIR . '/' . static::getBlogLayer($blog_id);
         $fs->deleteDir($upload_path);
 
-        $template_path = Config::get('BLOG_TEMPLATE_DIR') . static::getBlogLayer($blog_id);
+        $template_path = App::BLOG_TEMPLATE_DIR . static::getBlogLayer($blog_id);
         $fs->deleteDir($template_path);
     }
 
@@ -182,17 +233,17 @@ class App
     {
         // パラメータによりデバイスタイプを変更(FC2の引数順守)
         if ($request->isArgs('pc')) {
-            return Config::get('DEVICE_PC');
+            return App::DEVICE_PC;
         }
         if ($request->isArgs('sp')) {
-            return Config::get('DEVICE_SP');
+            return App::DEVICE_SP;
         }
 
         // Cookieからデバイスタイプを取得
         $device_type = $request->rawCookie('device');
         $devices = [
-            Config::get('DEVICE_PC'),
-            Config::get('DEVICE_SP'),
+            App::DEVICE_PC,
+            App::DEVICE_SP,
         ];
         if (!empty($device_type) && in_array($device_type, $devices)) {
             return (int)$device_type;
@@ -204,10 +255,10 @@ class App
         $devices = array('iPhone', 'iPod', 'Android');
         foreach ($devices as $device) {
             if (strpos($ua, $device) !== false) {
-                return Config::get('DEVICE_SP');
+                return App::DEVICE_SP;
             }
         }
-        return Config::get('DEVICE_PC');
+        return App::DEVICE_PC;
     }
 
     /**
@@ -218,7 +269,7 @@ class App
     public static function getDeviceTypeStr(Request $request): string
     {
         $device_id = static::getDeviceType($request);
-        $device_table = Config::get("DEVICE_FC2_KEY");
+        $device_table = App::DEVICE_FC2_KEY;
         return $device_table[$device_id];
     }
 
@@ -287,7 +338,7 @@ class App
      */
     public static function isPC(Request $request): bool
     {
-        return $request->deviceType == Config::get('DEVICE_PC');
+        return $request->deviceType == App::DEVICE_PC;
     }
 
     /**
@@ -297,7 +348,7 @@ class App
      */
     public static function isSP(Request $request): bool
     {
-        return $request->deviceType == Config::get('DEVICE_SP');
+        return $request->deviceType == App::DEVICE_SP;
     }
 
     /**
@@ -313,8 +364,8 @@ class App
         // 現在のURLの引数を引き継ぐ
         if ($reused == true) {
             $gets = $request->getGet();
-            unset($gets[Config::get('ARGS_CONTROLLER')]);
-            unset($gets[Config::get('ARGS_ACTION')]);
+            unset($gets['mode']);
+            unset($gets['process']);
             $args = array_merge($gets, $args);
         }
 
@@ -360,7 +411,7 @@ class App
             if (count($params)) {
                 $url .= '?' . implode('&', $params);
             }
-            if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+            if ($blog_id && $blog_id !== App::getDefaultBlogId()) {
                 $url = '/' . $blog_id . $url;
             }
             return ($abs ? $full_domain : '') . $url;
@@ -381,15 +432,15 @@ class App
             if (count($params) > 0) {
                 $url .= '?' . implode('&', $params);
             }
-            if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+            if ($blog_id && $blog_id !== App::getDefaultBlogId()) {
                 $url = '/' . $blog_id . $url;
             }
             return ($abs ? $full_domain : '') . $url;
         }
 
         $params = [];
-        $params[] = Config::get('ARGS_CONTROLLER') . '=' . lcfirst($controller);
-        $params[] = Config::get('ARGS_ACTION') . '=' . $action;
+        $params[] = 'mode=' . lcfirst($controller);
+        $params[] = 'process=' . $action;
         foreach ($args as $key => $value) {
             $params[] = $key . '=' . $value;
         }
@@ -397,15 +448,44 @@ class App
             $params[] = $device_name;
         }
 
-        $url = '/' . Config::get('DIRECTORY_INDEX');
+        $url = '/index.php';
         if (count($params)) {
             $url .= '?' . implode('&', $params);
         }
-        if ($blog_id && $blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+        if ($blog_id && $blog_id !== App::getDefaultBlogId()) {
             $url = '/' . $blog_id . $url;
         }
         return ($abs ? $full_domain : '') . $url;
     }
+
+    const PAGE = array(
+        // ファイルの一覧表示系
+        'FILE' => array(
+            'PC' => array(
+                'LIMIT' => 5,
+                'LIST' => array(
+                    5 => '5',
+                    10 => '10',
+                    20 => '20',
+                    40 => '40',
+                    60 => '60',
+                    80 => '80',
+                    100 => '100',
+                ),
+            ),
+            'SP' => array(
+                'LIMIT' => 15,
+                'LIST' => array(
+                    15 => '15',
+                ),
+            ),
+        ),
+        // メディアロード用
+        'FILE_AJAX' => array(
+            'DEFAULT' => array('LIMIT' => 18),
+            'SP' => array('LIMIT' => 15),
+        ),
+    );
 
     /**
      * ページ毎、デバイス毎の初期制限件数
@@ -415,7 +495,7 @@ class App
      */
     public static function getPageLimit(Request $request, string $key): int
     {
-        return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIMIT', Config::get('PAGE.' . $key . '.DEFAULT.LIMIT', 10));
+        return self::PAGE[$key][self::getDeviceKey($request)]['LIMIT'];
     }
 
     /**
@@ -426,7 +506,7 @@ class App
      */
     public static function getPageList(Request $request, string $key): array
     {
-        return Config::get('PAGE.' . $key . '.' . self::getDeviceKey($request) . '.LIST', Config::get('PAGE.' . $key . '.DEFAULT.LIST', []));
+        return self::PAGE[$key][self::getDeviceKey($request)]['LIST'];
     }
 
     /**
@@ -482,7 +562,7 @@ class App
     public static function genRandomString(int $length = 16, string $charList = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345679_-'): string
     {
         if ($length < 0) throw new InvalidArgumentException('must be $length 0 or more');
-        if (mb_strlen($charList) <= 0) throw new InvalidArgumentException('must be $charList length more than 0');
+        if (mb_strlen($charList, 'UTF-8') <= 0) throw new InvalidArgumentException('must be $charList length more than 0');
 
         $charList = preg_split("//u", $charList, 0, PREG_SPLIT_NO_EMPTY);
         $charListLen = count($charList);
@@ -505,5 +585,55 @@ class App
     public static function genRandomStringAlphaNum(int $length = 32): string
     {
         return static::genRandomString($length, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345679');
+    }
+
+    /**
+     * デバッグモードか判定する
+     * @return bool
+     */
+    public static function isAppDebugMode(): bool
+    {
+        return defined("APP_DEBUG") && "1" === (string)APP_DEBUG;
+    }
+
+    /**
+     * SQLデバッグモードか判定する
+     * @return bool
+     */
+    public static function isSqlDebugMode(): bool
+    {
+        return defined("SQL_DEBUG") && "1" === (string)SQL_DEBUG;
+    }
+
+    static private $overRideDefaultBlogId = "";
+
+    /**
+     * テスト用にデフォルトブログIDを設定する、テストでのみ利用可能
+     * @param string $blog_id
+     */
+    public static function setOverRideDefaultBlogIdForTest(string $blog_id)
+    {
+        if (!defined("THIS_IS_TEST")) {
+            throw new LogicException("The method not allowed out of test.");
+        }
+        static::$overRideDefaultBlogId = $blog_id;
+    }
+
+    /**
+     * 設定されたデフォルトブログIDを取得する
+     */
+    public static function getDefaultBlogId(): ?string
+    {
+        if (defined("THIS_IS_TEST") && strlen(static::$overRideDefaultBlogId) > 0) {
+            return static::$overRideDefaultBlogId;
+        }
+
+        // テスト用のUserAgentではデフォルトブログ機能を強制オフにする
+        // TODO E2E testでシングルテナントモード対応ができたら外す
+        if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match("/THIS_IS_TEST/u", $_SERVER['HTTP_USER_AGENT'])) {
+            return null;
+        } else {
+            return defined("DEFAULT_BLOG_ID") && strlen(DEFAULT_BLOG_ID) > 0 ? DEFAULT_BLOG_ID : null;
+        }
     }
 }

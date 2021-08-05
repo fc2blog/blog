@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\UsersModel;
@@ -26,7 +25,7 @@ class UsersController extends AdminController
         }
 
         $options = array(
-            'limit' => Config::get('PAGE.USER.LIMIT', 10),
+            'limit' => 10,
             'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
             'order' => 'id DESC',
         );
@@ -50,7 +49,7 @@ class UsersController extends AdminController
      */
     public function register(Request $request)
     {
-        if (Config::get('USER.REGIST_SETTING.FREE') != Config::get('USER.REGIST_STATUS')) {
+        if (UsersModel::USER["REGIST_SETTING"]["FREE"] != UsersModel::USER["REGIST_STATUS"]) {
             return $this->error404();
         }
 

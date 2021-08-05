@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Fc2blog\Web\Controller;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Exception\RedirectExit;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Model\UsersModel;
 use Fc2blog\Service\BlogService;
 use Fc2blog\Service\TwigService;
 use Fc2blog\Util\Log;
@@ -265,9 +265,9 @@ abstract class Controller
                 'req' => $request,
                 'sig' => Session::get('sig'),
                 'lang' => $request->lang,
-                'debug' => Config::get('APP_DEBUG') != 0,
+                'debug' => App::isAppDebugMode(),
                 'preview_active_blog_url' => App::userURL($request, ['controller' => 'entries', 'action' => 'index', 'blog_id' => $this->getBlogIdFromSession()]), // 代用できそう
-                'is_register_able' => (Config::get('USER.REGIST_SETTING.FREE') == Config::get('USER.REGIST_STATUS')), // TODO 意図する解釈確認
+                'is_register_able' => (UsersModel::USER["REGIST_SETTING"]["FREE"] == UsersModel::USER["REGIST_STATUS"]), // TODO 意図する解釈確認
                 'active_menu' => App::getActiveMenu($request),
                 'isLogin' => $this->isLogin(),
                 'nick_name' => $this->getNickName(),
@@ -281,14 +281,13 @@ abstract class Controller
                     'deviceArgs' => App::getArgsDevice($request)
                 ],
                 'cookie_common' => [
-                    'expire' => Config::get('COOKIE_EXPIRE'),
-                    'domain' => Config::get('COOKIE_DEFAULT_DOMAIN')
+                    'expire' => App::SESSION_COOKIE_EXPIRE_DAY,
                 ]
             ];
             // リクエストからログインblogを特定し、保存
             if (BlogService::getById($this->getBlogIdFromSession()) !== false && is_string($this->getBlogIdFromSession())) {
                 $data['blog'] = BlogService::getById($this->getBlogIdFromSession());
-                $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogIdFromSession(), Config::get('DOMAIN_USER')) . "/" . $this->getBlogIdFromSession() . "/";
+                $data['blog']['url'] = BlogsModel::getFullHostUrlByBlogId($this->getBlogIdFromSession(), App::DOMAIN_USER) . "/" . $this->getBlogIdFromSession() . "/";
             }
         } else {
             // User系画面のデータ生成

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\Helper\SampleDataGenerator;
 
-use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\CommentsModel;
 use InvalidArgumentException;
@@ -28,8 +27,8 @@ class GenerateSampleComment
         $comment_list = [];
 
         $open_status_list = [
-            Config::get('COMMENT.OPEN_STATUS.PUBLIC'),
-            Config::get('COMMENT.OPEN_STATUS.PRIVATE')
+            CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'],
+            CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE']
         ];
 
         while ($num-- > 0) {

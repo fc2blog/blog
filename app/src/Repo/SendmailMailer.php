@@ -29,7 +29,7 @@ class SendmailMailer implements MailerInterface
                 ->setTo([$email->to => $email->toName])
                 ->setBody($email->body);
         } /** @noinspection PhpRedundantCatchClauseInspection */ catch (Swift_RfcComplianceException $e) {
-            error_log("mail address is invalid. please check login_id or FC2_ADMIN_MAIL_ADDRESS configuration " . $e->getMessage() . " " . print_r($email, true));
+            error_log("mail address is invalid. please check login_id or ADMIN_MAIL_ADDRESS configuration " . $e->getMessage() . " " . print_r($email, true));
             return false;
         }
 

@@ -4,7 +4,6 @@ namespace Fc2blog\Model;
 
 use DateTimeZone;
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Web\Request;
 use InvalidArgumentException;
 use OutOfBoundsException;
@@ -14,6 +13,31 @@ class BlogsModel extends Model
 {
 
     public static $instance = null;
+
+    const BLOG_TEMPLATE_COLUMN = array(
+        1 => 'template_pc_id',
+        4 => 'template_sp_id',
+    );
+
+    const BLOG = array(
+        'START_PAGE' => array(
+            'NOTICE' => 0,  // お知らせページ
+            'ENTRY' => 1,  // 記事投稿ページ
+        ),
+        'OPEN_STATUS' => array(
+            'PUBLIC' => 0,  // 公開
+            'PRIVATE' => 1,  // プライベートモード(パスワード保護)
+        ),
+        'DEFAULT_LIMIT' => 10,
+        'SSL_ENABLE' => array(
+            'DISABLE' => 0,  // 無効
+            'ENABLE' => 1,  // 有効
+        ),
+        'REDIRECT_STATUS_CODE' => array(
+            'MOVED_PERMANENTLY' => 301,
+            'FOUND' => 302,
+        ),
+    );
 
     public function __construct()
     {
@@ -44,7 +68,7 @@ class BlogsModel extends Model
     public static function privateCheck($value, $option, $key, $data)
     {
         if (
-            $data['open_status'] == Config::get('BLOG.OPEN_STATUS.PRIVATE') &&
+            $data['open_status'] == BlogsModel::BLOG['OPEN_STATUS']['PRIVATE'] &&
             (
                 // パスワードを入力したか、あるいはすでにパスワード設定済みか
                 strlen((string)$value) === 0 &&
@@ -81,7 +105,7 @@ class BlogsModel extends Model
             return __('Name that cannot be specified');
         }
 
-        if (is_dir(Config::get('WWW_DIR') . $value)) {
+        if (is_dir(App::WWW_DIR . $value)) {
             return __('Is already in use');
         }
 
@@ -165,8 +189,8 @@ class BlogsModel extends Model
     public static function getOpenStatusList(): array
     {
         return array(
-            Config::get('BLOG.OPEN_STATUS.PUBLIC') => __('Public'),
-            Config::get('BLOG.OPEN_STATUS.PRIVATE') => __('Private'),
+            BlogsModel::BLOG['OPEN_STATUS']['PUBLIC'] => __('Public'),
+            BlogsModel::BLOG['OPEN_STATUS']['PRIVATE'] => __('Private'),
         );
     }
 
@@ -201,8 +225,8 @@ class BlogsModel extends Model
     public static function getSSLEnableSettingList(): array
     {
         return array(
-            Config::get('BLOG.SSL_ENABLE.DISABLE') => __("Disable"),
-            Config::get('BLOG.SSL_ENABLE.ENABLE') => __("Enable"),
+            BlogsModel::BLOG['SSL_ENABLE']['DISABLE'] => __("Disable"),
+            BlogsModel::BLOG['SSL_ENABLE']['ENABLE'] => __("Enable"),
         );
     }
 
@@ -213,8 +237,8 @@ class BlogsModel extends Model
     public static function getRedirectStatusCodeSettingList(): array
     {
         return array(
-            Config::get('BLOG.REDIRECT_STATUS_CODE.MOVED_PERMANENTLY') => __("Moved Permanently"),
-            Config::get('BLOG.REDIRECT_STATUS_CODE.FOUND') => __("Found"),
+            BlogsModel::BLOG['REDIRECT_STATUS_CODE']['MOVED_PERMANENTLY'] => __("Moved Permanently"),
+            BlogsModel::BLOG['REDIRECT_STATUS_CODE']['FOUND'] => __("Found"),
         );
     }
 
@@ -225,7 +249,7 @@ class BlogsModel extends Model
      */
     public static function getTemplateIds($blog): array
     {
-        $columns = Config::get('BLOG_TEMPLATE_COLUMN');
+        $columns = self::BLOG_TEMPLATE_COLUMN;
         return [
             $blog[$columns[1]],
             $blog[$columns[4]],
@@ -375,8 +399,8 @@ class BlogsModel extends Model
         $blog_data = [];
 
         $devices = [
-            'template_pc_id' => Config::get('DEVICE_PC'),
-            'template_sp_id' => Config::get('DEVICE_SP'),
+            'template_pc_id' => App::DEVICE_PC,
+            'template_sp_id' => App::DEVICE_SP,
         ];
 
         $blog_templates_data_common = [
@@ -428,8 +452,8 @@ class BlogsModel extends Model
         ];
 
         $devices_flipped = array_flip([
-            'template_pc_id' => Config::get('DEVICE_PC'),
-            'template_sp_id' => Config::get('DEVICE_SP'),
+            'template_pc_id' => App::DEVICE_PC,
+            'template_sp_id' => App::DEVICE_SP,
         ]);
 
         $blog_templates = $blog_templates_model->getTemplatesOfDevice($blog_id);
@@ -480,7 +504,7 @@ class BlogsModel extends Model
     {
         // pluginのPHPコードを再生成する(PC)
         $blog_plugins_model = new BlogPluginsModel();
-        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_PC"));
+        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, App::DEVICE_PC);
 
         foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
             foreach ($plugins as $plugin) { // プラグイン毎
@@ -489,7 +513,7 @@ class BlogsModel extends Model
         }
 
         // pluginのPHPコードを再生成する(SP)
-        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, Config::get("DEVICE_SP"));
+        $category_blog_plugins = $blog_plugins_model->getCategoryPlugins($blog_id, App::DEVICE_SP);
 
         foreach ($category_blog_plugins as $plugins) { // カテゴリ毎
             foreach ($plugins as $plugin) { // プラグイン毎
@@ -535,11 +559,12 @@ class BlogsModel extends Model
 
         // 使用テンプレートを更新
         $data = array();
-        $data[Config::get('BLOG_TEMPLATE_COLUMN.' . $device_type)] = $blog_template['id'];
+        $data[self::BLOG_TEMPLATE_COLUMN[$device_type]] = $blog_template['id'];
 
         // コメントの表示タイプをテンプレートから判断
         $reply_type = strstr($blog_template['html'], '<%comment_reply_body>') ?
-            Config::get('BLOG_TEMPLATE.COMMENT_TYPE.REPLY') : Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+            BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['REPLY'] :
+            BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['AFTER'];
         // コメントの表示タイプを更新
         (new BlogSettingsModel())->updateReplyType($device_type, $reply_type, $blog_id);
 
@@ -617,7 +642,7 @@ class BlogsModel extends Model
      */
     public function getAppliedTemplateId(string $blog_id, int $device_type): int
     {
-        $blog_template_column = Config::get("BLOG_TEMPLATE_COLUMN.{$device_type}");
+        $blog_template_column = self::BLOG_TEMPLATE_COLUMN[$device_type];
         $blogs = $this->findById($blog_id);
 
         if (!isset($blogs[$blog_template_column])) throw new OutOfBoundsException("any applied template found");
@@ -660,10 +685,10 @@ class BlogsModel extends Model
     static public function getEntryFullUrlByBlogIdAndEntryId(string $blog_id, int $entry_id): string
     {
         $schema = static::getSchemaByBlogId($blog_id);
-        $domain = Config::get("DOMAIN");
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+        $domain = DOMAIN;
+        $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         // default blog ならば blog_idは省略する
-        if ($blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+        if ($blog_id !== App::getDefaultBlogId()) {
             $blog_id_path = '/' . $blog_id;
         } else {
             $blog_id_path = "";
@@ -674,38 +699,38 @@ class BlogsModel extends Model
     /**
      * Blog Idをキーとして、そのブログの`http(s)?://FQDN(:port)/(blog_id)?/`を生成する
      * @param string $blog_id
-     * @param ?string $domain 省略時、\Fc2blog\Config::get("DOMAIN")
+     * @param ?string $domain 省略時、 DOMAIN 定数
      * @return string
      */
     static public function getFullUrlByBlogId(string $blog_id, ?string $domain = null): string
     {
         $schema = static::getSchemaByBlogId($blog_id);
         if (is_null($domain)) {
-            $domain = Config::get("DOMAIN");
+            $domain = DOMAIN;
         }
         // default blog ならば blog_idは省略する
-        if ($blog_id !== Config::get('DEFAULT_BLOG_ID')) {
+        if ($blog_id !== App::getDefaultBlogId()) {
             $blog_id_path = '/' . $blog_id;
         } else {
             $blog_id_path = "";
         }
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+        $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         return $schema . "//" . $domain . $port . $blog_id_path . "/";
     }
 
     /**
      * Blog Idをキーとして、そのブログの`http(s)://FQDN(:port)`を生成する
      * @param string $blog_id
-     * @param ?string $domain 省略時、\Fc2blog\Config::get("DOMAIN")
+     * @param ?string $domain 省略時、 DOMAIN定数
      * @return string
      */
     static public function getFullHostUrlByBlogId(string $blog_id, ?string $domain = null): string
     {
         $schema = static::getSchemaByBlogId($blog_id);
         if (is_null($domain)) {
-            $domain = Config::get("DOMAIN");
+            $domain = DOMAIN;
         }
-        $port = ($schema === "https:") ? Config::get("HTTPS_PORT_STR") : Config::get("HTTP_PORT_STR");
+        $port = ($schema === "https:") ? App::HTTPS_PORT_STR : App::HTTP_PORT_STR;
         return $schema . "//" . $domain . $port;
     }
 
@@ -734,7 +759,7 @@ class BlogsModel extends Model
      */
     static public function getSchemaBySslEnableValue(int $value): string
     {
-        return ($value === Config::get("BLOG.SSL_ENABLE.DISABLE")) ? 'http:' : 'https:';
+        return ($value === BlogsModel::BLOG['SSL_ENABLE']['DISABLE']) ? 'http:' : 'https:';
     }
 
     /**
@@ -756,18 +781,6 @@ class BlogsModel extends Model
     }
 
     /**
-     * @return string|null
-     */
-    static public function getDefaultBlogId(): ?string
-    {
-        if (strlen(Config::get("DEFAULT_BLOG_ID", "")) > 0) {
-            return Config::get("DEFAULT_BLOG_ID");
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * @param Request $request
      * @return string|null
      * @noinspection PhpUnused
@@ -777,8 +790,8 @@ class BlogsModel extends Model
         if ($request->getBlogId()) {
             return $request->getBlogId();
 
-        } else if (Config::get("DEFAULT_BLOG_ID", "") && !is_null(BlogsModel::getDefaultBlogId())) {
-            return BlogsModel::getDefaultBlogId();
+        } else if (!is_null(App::getDefaultBlogId())) {
+            return App::getDefaultBlogId();
 
         } else {
             return null;

@@ -5,6 +5,7 @@ namespace Fc2blog\Web;
 
 use Fc2blog\App;
 use Fc2blog\Config;
+use Fc2blog\Model\EntriesModel;
 use Fc2blog\Util\PhpCodeLinter;
 
 class Fc2BlogTemplate
@@ -43,7 +44,7 @@ class Fc2BlogTemplate
                 $data['entries'][$key]['wayoubi'] = __($data['entries'][$key]['youbi']);
 
                 // 自動改行処理
-                if ($value['auto_linefeed'] == Config::get('ENTRY.AUTO_LINEFEED.USE')) {
+                if ($value['auto_linefeed'] == EntriesModel::ENTRY['AUTO_LINEFEED']['USE']) {
                     $data['entries'][$key]['body'] = nl2br($value['body']);
                     $data['entries'][$key]['extend'] = nl2br((string)$value['extend']);
                 }
@@ -90,10 +91,10 @@ class Fc2BlogTemplate
 
         // FC2用のどこでも有効な単変数
         $data['blog_id'] = $request->getBlogId(); // TODO User系でしかこのメソッドは呼ばれないはずなので
-        if ($data['blog_id'] !== Config::get('DEFAULT_BLOG_ID')) {
+        if ($data['blog_id'] !== App::getDefaultBlogId()) {
             $data['url'] = '/' . $data['blog']['id'] . '/';
         } else {
-            // シングルテナントモード、DEFAULT_BLOG_IDとBlogIdが一致するなら、Pathを省略する
+            // シングルテナントモード、デフォルトブログIDとBlogIdが一致するなら、Pathを省略する
             $data['url'] = '/';
         }
 
@@ -121,7 +122,7 @@ class Fc2BlogTemplate
         }
 
         // フォルダが存在しない場合作成
-        $templatePath = Config::get('BLOG_TEMPLATE_DIR') . App::getBlogLayer($blog_id) . '/syntax.php';
+        $templatePath = App::BLOG_TEMPLATE_DIR . App::getBlogLayer($blog_id) . '/syntax.php';
         $templateDir = dirname($templatePath);
         if (!file_exists($templateDir)) {
             mkdir($templateDir, 0777, true);

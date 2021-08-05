@@ -2,8 +2,6 @@
 
 namespace Fc2blog\Model;
 
-use Fc2blog\Config;
-
 class BlogSettingsModel extends Model
 {
 
@@ -17,38 +15,38 @@ class BlogSettingsModel extends Model
         $this->validates = array(
             // コメントの確認設定
             'comment_confirm' => array(
-                'default_value' => Config::get('COMMENT.COMMENT_CONFIRM.THROUGH'),
+                'default_value' => CommentsModel::COMMENT['COMMENT_CONFIRM']['THROUGH'],
                 'in_array' => array('values' => array(
-                    Config::get('COMMENT.COMMENT_CONFIRM.THROUGH'),
-                    Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM'),
+                    CommentsModel::COMMENT['COMMENT_CONFIRM']['THROUGH'],
+                    CommentsModel::COMMENT['COMMENT_CONFIRM']['CONFIRM'],
                 )),
             ),
             'comment_display_approval' => array(
-                'default_value' => Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
+                'default_value' => CommentsModel::COMMENT['COMMENT_DISPLAY']['SHOW'],
                 'in_array' => array('values' => array(
-                    Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
-                    Config::get('COMMENT.COMMENT_DISPLAY.HIDE'),
+                    CommentsModel::COMMENT['COMMENT_DISPLAY']['SHOW'],
+                    CommentsModel::COMMENT['COMMENT_DISPLAY']['HIDE'],
                 )),
             ),
             'comment_display_private' => array(
-                'default_value' => Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
+                'default_value' => CommentsModel::COMMENT['COMMENT_DISPLAY']['SHOW'],
                 'in_array' => array('values' => array(
-                    Config::get('COMMENT.COMMENT_DISPLAY.SHOW'),
-                    Config::get('COMMENT.COMMENT_DISPLAY.HIDE'),
+                    CommentsModel::COMMENT['COMMENT_DISPLAY']['SHOW'],
+                    CommentsModel::COMMENT['COMMENT_DISPLAY']['HIDE'],
                 )),
             ),
             'comment_cookie_save' => array(
-                'default_value' => Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE'),
+                'default_value' => CommentsModel::COMMENT['COMMENT_COOKIE_SAVE']['SAVE'],
                 'in_array' => array('values' => array(
-                    Config::get('COMMENT.COMMENT_COOKIE_SAVE.NOT_SAVE'),
-                    Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE'),
+                    CommentsModel::COMMENT['COMMENT_COOKIE_SAVE']['NOT_SAVE'],
+                    CommentsModel::COMMENT['COMMENT_COOKIE_SAVE']['SAVE'],
                 )),
             ),
             'comment_captcha' => array(
-                'default_value' => Config::get('COMMENT.COMMENT_CAPTCHA.USE'),
+                'default_value' => CommentsModel::COMMENT['COMMENT_CAPTCHA']['USE'],
                 'in_array' => array('values' => array(
-                    Config::get('COMMENT.COMMENT_CAPTCHA.NOT_USE'),
-                    Config::get('COMMENT.COMMENT_CAPTCHA.USE'),
+                    CommentsModel::COMMENT['COMMENT_CAPTCHA']['NOT_USE'],
+                    CommentsModel::COMMENT['COMMENT_CAPTCHA']['USE'],
                 )),
             ),
             'comment_display_count' => array(
@@ -103,72 +101,72 @@ class BlogSettingsModel extends Model
     public static function getCommentConfirmList(): array
     {
         return array(
-            Config::get('COMMENT.COMMENT_CONFIRM.THROUGH') => __('Displayed as it is'),
-            Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM') => __('I check the comments'),
+            CommentsModel::COMMENT['COMMENT_CONFIRM']['THROUGH'] => __('Displayed as it is'),
+            CommentsModel::COMMENT['COMMENT_CONFIRM']['CONFIRM'] => __('I check the comments'),
         );
     }
 
     public static function getCommentDisplayApprovalList(): array
     {
         return array(
-            Config::get('COMMENT.COMMENT_DISPLAY.SHOW') => __('View "This comment is awaiting moderation" and'),
-            Config::get('COMMENT.COMMENT_DISPLAY.HIDE') => __('Do not show'),
+            CommentsModel::COMMENT['COMMENT_DISPLAY']['SHOW'] => __('View "This comment is awaiting moderation" and'),
+            CommentsModel::COMMENT['COMMENT_DISPLAY']['HIDE'] => __('Do not show'),
         );
     }
 
     public static function getCommentDisplayPrivateList(): array
     {
         return array(
-            Config::get('COMMENT.COMMENT_DISPLAY.SHOW') => __('Display'),
-            Config::get('COMMENT.COMMENT_DISPLAY.HIDE') => __('Do not show'),
+            CommentsModel::COMMENT['COMMENT_DISPLAY']['SHOW'] => __('Display'),
+            CommentsModel::COMMENT['COMMENT_DISPLAY']['HIDE'] => __('Do not show'),
         );
     }
 
     public static function getCommentCookieSaveList(): array
     {
         return array(
-            Config::get('COMMENT.COMMENT_COOKIE_SAVE.NOT_SAVE') => __('Not save'),
-            Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE') => __('Record'),
+            CommentsModel::COMMENT['COMMENT_COOKIE_SAVE']['NOT_SAVE'] => __('Not save'),
+            CommentsModel::COMMENT['COMMENT_COOKIE_SAVE']['SAVE'] => __('Record'),
         );
     }
 
     public static function getCommentCaptchaList(): array
     {
         return array(
-            Config::get('COMMENT.COMMENT_CAPTCHA.NOT_USE') => __('Do not use'),
-            Config::get('COMMENT.COMMENT_CAPTCHA.USE') => __('CAPTCHA to Use'),
+            CommentsModel::COMMENT['COMMENT_CAPTCHA']['NOT_USE'] => __('Do not use'),
+            CommentsModel::COMMENT['COMMENT_CAPTCHA']['USE'] => __('CAPTCHA to Use'),
         );
     }
 
     public static function getCommentOrderList(): array
     {
         return array(
-            Config::get('COMMENT.ORDER.ASC') => __('Oldest First'),
-            Config::get('COMMENT.ORDER.DESC') => __('Latest order'),
+            CommentsModel::COMMENT['ORDER']['ASC'] => __('Oldest First'),
+            CommentsModel::COMMENT['ORDER']['DESC'] => __('Latest order'),
         );
     }
 
     public static function getCommentQuoteList(): array
     {
         return array(
-            Config::get('COMMENT.QUOTE.USE') => __('Quote'),
-            Config::get('COMMENT.QUOTE.NONE') => __('Do not quote'),
+            CommentsModel::COMMENT['QUOTE']['USE'] => __('Quote'),
+            CommentsModel::COMMENT['QUOTE']['NONE'] => __('Do not quote'),
         );
     }
 
     public static function getEntryOrderList(): array
     {
         return array(
-            Config::get('ENTRY.ORDER.DESC') => __('Latest order'),
-            Config::get('ENTRY.ORDER.ASC') => __('Oldest First'),
+            EntriesModel::ENTRY['ORDER']['DESC'] => __('Latest order'),
+            EntriesModel::ENTRY['ORDER']['ASC'] => __('Oldest First'),
         );
     }
 
     public static function getStartPageList(): array
     {
         return array(
-            Config::get('BLOG.START_PAGE.NOTICE') => __('Notice'),
-            Config::get('BLOG.START_PAGE.ENTRY') => __('New article'),
+            BlogsModel::BLOG['START_PAGE']['NOTICE'] => __('Notice'),
+            BlogsModel::BLOG['START_PAGE']['ENTRY'] => __('New article'),
         );
     }
 
@@ -208,7 +206,7 @@ class BlogSettingsModel extends Model
     public function updateReplyType(string $device_type, string $reply_type, string $blog_id)
     {
         $values = [];
-        $values[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $device_type)] = $reply_type;
+        $values[CommentsModel::BLOG_TEMPLATE_REPLY_TYPE_COLUMN[$device_type]] = $reply_type;
         return $this->updateByBlogId($values, $blog_id);
     }
 }

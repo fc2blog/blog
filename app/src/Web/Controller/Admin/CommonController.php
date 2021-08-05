@@ -5,7 +5,6 @@ namespace Fc2blog\Web\Controller\Admin;
 
 use Exception;
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\CommentsModel;
@@ -15,6 +14,7 @@ use Fc2blog\Model\PluginsModel;
 use Fc2blog\Model\UsersModel;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Request;
+use PDO;
 
 class CommonController extends AdminController
 {
@@ -29,7 +29,7 @@ class CommonController extends AdminController
 
         // 言語の設定
         $lang = $request->get('lang');
-        if (Config::get('LANGUAGES.' . $lang)) {
+        if (isset(App::$languages[$lang])) {
             Cookie::set($request, 'lang', $lang);
         }
 
@@ -58,17 +58,17 @@ class CommonController extends AdminController
         $device = $request->get('device');
         switch ($device) {
             case 'pc':
-                $device_type = Config::get('DEVICE_PC');
+                $device_type = App::DEVICE_PC;
                 break;
             case 'sp':
-                $device_type = Config::get('DEVICE_SP');
+                $device_type = App::DEVICE_SP;
                 break;
             default:
-                Cookie::set($request, 'device', Config::get('DEVICE_PC'));
+                Cookie::set($request, 'device', (string)App::DEVICE_PC);
                 $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index'));
         }
 
-        Cookie::set($request, 'device', $device_type);
+        Cookie::set($request, 'device', (string)$device_type);
         $this->redirectBack($request, array('controller' => 'entries', 'action' => 'index'));
         return "";
     }
@@ -91,11 +91,11 @@ class CommonController extends AdminController
         }
         if (is_array($setting) && isset($setting['start_page'])) { // 設定あり
             switch ($setting['start_page']) {
-                case Config::get('BLOG.START_PAGE.ENTRY'):
+                case BlogsModel::BLOG['START_PAGE']['ENTRY']:
                     $this->redirect($request, ['controller' => 'Entries', 'action' => 'create']);
                     return ""; // break;
 
-                case Config::get('BLOG.START_PAGE.NOTICE'):
+                case BlogsModel::BLOG['START_PAGE']['NOTICE']:
                 default:
                     $this->redirect($request, ['controller' => 'Common', 'action' => 'notice']);
                     return ""; // break;
@@ -121,8 +121,8 @@ class CommonController extends AdminController
         $comments_model = new CommentsModel();
         $this->set('unread_count', $comments_model->getUnreadCount($blog_id));
         $this->set('unapproved_count', $comments_model->getUnapprovedCount($blog_id));
-        $this->set('reply_status_unread', Config::get('COMMENT.REPLY_STATUS.UNREAD'));
-        $this->set('open_status_pending', Config::get('COMMENT.OPEN_STATUS.PENDING'));
+        $this->set('reply_status_unread', CommentsModel::COMMENT['REPLY_STATUS']['UNREAD']);
+        $this->set('open_status_pending', CommentsModel::COMMENT['OPEN_STATUS']['PENDING']);
         return "admin/common/notice.twig";
     }
 
@@ -143,31 +143,27 @@ class CommonController extends AdminController
         switch ($state) {
             default:
             case 0:
-                if (!$request->isGet()) return $this->error400();
-                // 環境チェック確認
-                $this->set('temp_dir', Config::get('TEMP_DIR'));
-                $this->set('www_upload_dir', Config::get('WWW_UPLOAD_DIR'));
-                $this->set('is_db_connect_lib', defined('DB_CONNECT_LIB'));
-                /** @noinspection PhpRedundantOptionalArgumentInspection */
-                $this->set('random_string', App::genRandomStringAlphaNum(32));
+            if (!$request->isGet()) return $this->error400();
+            // 環境チェック確認
+            $this->set('temp_dir', App::TEMP_DIR);
+            $this->set('www_upload_dir', App::WWW_UPLOAD_DIR);
+            /** @noinspection PhpRedundantOptionalArgumentInspection */
+            $this->set('random_string', App::genRandomStringAlphaNum(32));
 
-                $this->set('DB_HOST', DB_HOST);
-                $this->set('DB_PORT', DB_PORT);
-                $this->set('DB_USER', DB_USER);
-                $this->set('DB_PASSWORD', DB_PASSWORD);
-                $this->set('DB_DATABASE', DB_DATABASE);
+            $this->set('DB_HOST', DB_HOST);
+            $this->set('DB_PORT', DB_PORT);
+            $this->set('DB_USER', DB_USER);
+            $this->set('DB_PASSWORD', DB_PASSWORD);
+            $this->set('DB_DATABASE', DB_DATABASE);
 
-                // ディレクトリ書き込みパーミッション確認
-                $is_write_temp = is_writable(Config::get('TEMP_DIR') . '.');
-                $this->set('is_write_temp', $is_write_temp);
-                $is_write_upload = is_writable(Config::get('WWW_UPLOAD_DIR') . '.');
-                $this->set('is_write_upload', $is_write_upload);
+            // ディレクトリ書き込みパーミッション確認
+            $is_write_temp = is_writable(App::TEMP_DIR);
+            $this->set('is_write_temp', $is_write_temp);
+            $is_write_upload = is_writable(App::WWW_UPLOAD_DIR);
+            $this->set('is_write_upload', $is_write_upload);
 
-                // DBライブラリ確認
-                $is_db_connect_lib = defined('DB_CONNECT_LIB');
-                $this->set('is_db_connect_lib', $is_db_connect_lib);
-
-                // DB疎通確認
+            // DB疎通確認
+            if (class_exists(PDO::class)) {
                 $is_connect = true;
                 $connect_message = '';
                 try {
@@ -176,33 +172,37 @@ class CommonController extends AdminController
                     $is_connect = false;
                     $connect_message = $e->getMessage();
                 }
-                $this->set('is_connect', $is_connect);
-                $this->set('connect_message', $connect_message);
+            } else {
+                $is_connect = false;
+                $connect_message = __("Please enable PDO");
+            }
+            $this->set('is_connect', $is_connect);
+            $this->set('connect_message', $connect_message);
 
-                // ドメイン確認
-                $is_domain = DOMAIN != 'domain';
-                $this->set('is_domain', $is_domain);
-                $this->set('example_server_name', $request->server['SERVER_NAME'] ?? 'example.jp');
+            // ドメイン確認
+            $is_domain = App::DOMAIN != 'domain'; // 今のサンプルデフォルト値と比較
+            $this->set('is_domain', $is_domain);
+            $this->set('example_server_name', $request->server['SERVER_NAME'] ?? 'example.jp');
 
-                // GDインストール済み確認
-                $is_gd = function_exists('gd_info');
-                $this->set('is_gd', $is_gd);
+            // GDインストール済み確認
+            $is_gd = function_exists('gd_info');
+            $this->set('is_gd', $is_gd);
 
-            $is_all_ok = $is_write_temp && $is_write_upload && $is_db_connect_lib && $is_connect && $is_domain;
+            $is_all_ok = $is_write_temp && $is_write_upload && $is_connect && $is_domain;
             $this->set('is_all_ok', $is_all_ok);
 
-                return 'admin/common/install.twig';
+            return 'admin/common/install.twig';
 
             case 1:
                 if (!$request->isGet()) return $this->error400();
                 // 各種初期設定、DB テーブル作成、ディレクトリ作成
 
                 // フォルダの作成
-                !file_exists(Config::get('TEMP_DIR') . 'blog_template') && mkdir(Config::get('TEMP_DIR') . 'blog_template', 0777, true);
-                !file_exists(Config::get('TEMP_DIR') . 'log') && mkdir(Config::get('TEMP_DIR') . 'log', 0777, true);
+                !file_exists(App::TEMP_DIR . 'blog_template') && mkdir(App::TEMP_DIR . 'blog_template', 0777, true);
+                !file_exists(App::TEMP_DIR . 'log') && mkdir(App::TEMP_DIR . 'log', 0777, true);
 
                 // ディレクトリ製作成功チェック
-                if (!file_exists(Config::get('TEMP_DIR') . 'log') || !file_exists(Config::get('TEMP_DIR') . 'blog_template')) {
+                if (!file_exists(App::TEMP_DIR . 'log') || !file_exists(App::TEMP_DIR . 'blog_template')) {
                     $this->setErrorMessage(__('Create /app/temp/blog_template and log directory failed.'));
                     $this->redirect($request, $request->baseDirectory . 'common/install?state=0&error=mkdir');
                 }
@@ -227,7 +227,7 @@ class CommonController extends AdminController
                 }
 
                 // DBセットアップ
-                $sql_path = Config::get('APP_DIR') . 'db/0_initialize.sql';
+                $sql_path = App::APP_DIR . 'db/0_initialize.sql';
                 $sql = file_get_contents($sql_path);
                 if (DB_CHARSET != 'UTF8MB4') {
                     $sql = str_replace('utf8mb4', strtolower(DB_CHARSET), $sql);
@@ -277,7 +277,7 @@ class CommonController extends AdminController
                 $errors['user'] = $users_model->registerValidate($request->get('user'), $user_data, array('login_id', 'password'));
                 $errors['blog'] = $blogs_model->validate($request->get('blog'), $blog_data, array('id', 'name', 'nickname'));
                 if (empty($errors['user']) && empty($errors['blog'])) {
-                    $user_data['type'] = Config::get('USER.TYPE.ADMIN');
+                    $user_data['type'] = UsersModel::USER["TYPE"]["ADMIN"];
                     $user_id = $users_model->insert($user_data);
                     $blog_data['user_id'] = $user_id;
                     if ($blog_data['user_id'] && $blog_id = $blogs_model->insert($blog_data)) {

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web\Controller\Admin;
 
-use Fc2blog\Config;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\TagsModel;
 use Fc2blog\Web\Request;
@@ -22,8 +21,8 @@ class TagsController extends AdminController
         $tags_model = new TagsModel();
         $blog_id = $this->getBlogIdFromSession();
 
-        $this->set('tag_limit_list', Config::get('TAG.LIMIT_LIST'));
-        $this->set('tag_default_limit', Config::get('TAG.DEFAULT_LIMIT'));
+        $this->set('tag_limit_list', TagsModel::TAG['LIMIT_LIST']);
+        $this->set('tag_default_limit', TagsModel::TAG['DEFAULT_LIMIT']);
 
         // 検索条件作成
         $where = 'blog_id=?';
@@ -55,12 +54,12 @@ class TagsController extends AdminController
         $options = [
             'where' => $where,
             'params' => $params,
-            'limit' => $request->get('limit', Config::get('TAG.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+            'limit' => $request->get('limit', TagsModel::TAG['DEFAULT_LIMIT'], Request::VALID_POSITIVE_INT),
             'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
             'order' => $order,
         ];
-        if ($options['limit'] > max(array_keys(Config::get('TAG.LIMIT_LIST')))) {
-            $options['limit'] = Config::get('TAG.DEFAULT_LIMIT');
+        if ($options['limit'] > max(array_keys(TagsModel::TAG['LIMIT_LIST']))) {
+            $options['limit'] = TagsModel::TAG['DEFAULT_LIMIT'];
         }
         if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
             $options['page'] = 0;

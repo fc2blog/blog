@@ -5,6 +5,7 @@ namespace Fc2blog\Tests\App\Fc2Template;
 
 use ErrorException;
 use Fc2blog\Config;
+use Fc2blog\Model\EntriesModel;
 use Fc2blog\Web\Fc2BlogTemplate;
 use Fc2blog\Web\Request;
 use ParseError;
@@ -77,7 +78,7 @@ class Fc2TemplateIfTest extends TestCase
 
     public function test_comment_area()
     {
-        $this->ifStateTester('comment_area', 'ok', ['comment_area' => true, 'entry' => ['comment_accepted' => Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED')]]);
+        $this->ifStateTester('comment_area', 'ok', ['comment_area' => true, 'entry' => ['comment_accepted' => EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED']]]);
         $this->ifStateTester('comment_area', '', []);
         $this->ifStateTester('not_comment_area', 'ok', []);
         $this->ifStateTester('not_comment_area', '', ['comment_area' => true]);
@@ -85,7 +86,7 @@ class Fc2TemplateIfTest extends TestCase
 
     public function test_form_area()
     {
-        $this->ifStateTester('form_area', 'ok', ['form_area' => true, 'entry' => ['comment_accepted' => Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED')]]);
+        $this->ifStateTester('form_area', 'ok', ['form_area' => true, 'entry' => ['comment_accepted' => EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED']]]);
         $this->ifStateTester('form_area', '', []);
         $this->ifStateTester('not_form_area', 'ok', []);
         $this->ifStateTester('not_form_area', '', ['form_area' => true]);
@@ -158,14 +159,14 @@ class Fc2TemplateIfTest extends TestCase
 
     public function test_allow_comment()
     {
-        $this->ifStateTester('allow_comment', 'ok', ['entry' => ['comment_accepted' => Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED')]]);
-        $this->ifStateTester('allow_comment', '', ['entry' => ['comment_accepted' => Config::get('ENTRY.COMMENT_ACCEPTED.REJECT')]]);
+        $this->ifStateTester('allow_comment', 'ok', ['entry' => ['comment_accepted' => EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED']]]);
+        $this->ifStateTester('allow_comment', '', ['entry' => ['comment_accepted' => EntriesModel::ENTRY['COMMENT_ACCEPTED']['REJECT']]]);
     }
 
     public function test_deny_comment()
     {
-        $this->ifStateTester('deny_comment', 'ok', ['entry' => ['comment_accepted' => Config::get('ENTRY.COMMENT_ACCEPTED.REJECT')]]);
-        $this->ifStateTester('deny_comment', '', ['entry' => ['comment_accepted' => Config::get('ENTRY.COMMENT_ACCEPTED.ACCEPTED')]]);
+        $this->ifStateTester('deny_comment', 'ok', ['entry' => ['comment_accepted' => EntriesModel::ENTRY['COMMENT_ACCEPTED']['REJECT']]]);
+        $this->ifStateTester('deny_comment', '', ['entry' => ['comment_accepted' => EntriesModel::ENTRY['COMMENT_ACCEPTED']['ACCEPTED']]]);
 
     }
 

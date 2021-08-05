@@ -2,7 +2,7 @@
 
 namespace Fc2blog\Web\Router;
 
-use Fc2blog\Model\BlogsModel;
+use Fc2blog\App;
 use Fc2blog\Util\StringCaseConverter;
 use Fc2blog\Web\Controller\User\BlogsController;
 use Fc2blog\Web\Controller\User\CommonController;
@@ -79,7 +79,7 @@ class Router
                 }
             } else {
                 // blog_idがリクエストから特定できない場合、デフォルトblog_idを利用する
-                $blog_id = BlogsModel::getDefaultBlogId();
+                $blog_id = App::getDefaultBlogId();
                 if (isset($paths[0])) {
                     $sub_path = $paths[0];
                 }

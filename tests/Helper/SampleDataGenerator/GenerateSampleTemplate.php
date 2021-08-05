@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Tests\Helper\SampleDataGenerator;
 
-use Fc2blog\Config;
+use Fc2blog\App;
 use Fc2blog\Model\BlogTemplatesModel;
 use InvalidArgumentException;
 use RuntimeException;
@@ -21,7 +21,7 @@ class GenerateSampleTemplate
         $blog_templates_model = new BlogTemplatesModel();
 
         while ($num-- > 0) {
-            $device_list = Config::get("DEVICES");
+            $device_list = App::DEVICES;
 
             $template_request = [
                 "device_type" => $device_type ?? static::getRandomValue($device_list),

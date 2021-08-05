@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\FilesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
@@ -27,7 +26,6 @@ class FilesController extends AdminController
 
         $blog_id = $this->getBlogIdFromSession();
 
-        $this->set('file_default_limit', Config::get('FILE.DEFAULT_LIMIT'));
         $this->set('page_list_file', App::getPageList($request, 'FILE'));
         $this->set('page_limit_file', App::getPageLimit($request, 'FILE'));
         // 検索条件
@@ -90,7 +88,7 @@ class FilesController extends AdminController
         $files_model = new FilesModel();
         $blog_id = $this->getBlogIdFromSession();
 
-        $this->set('file_max_size', Config::get('FILE.MAX_SIZE'));
+        $this->set('file_max_size', FilesModel::FILE['MAX_SIZE']);
         $this->set('page_limit_file', App::getPageLimit($request, 'FILE'));
 
         // アップロード時処理
@@ -200,7 +198,7 @@ class FilesController extends AdminController
         $id = $request->get('id');
         $blog_id = $this->getBlogIdFromSession();
 
-        $this->set('file_max_size', Config::get('FILE.MAX_SIZE'));
+        $this->set('file_max_size', FilesModel::FILE['MAX_SIZE']);
 
         // 詳細データの取得
         if (!$file = $files_model->findByIdAndBlogId($id, $blog_id)) {

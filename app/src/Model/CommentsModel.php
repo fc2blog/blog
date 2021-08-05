@@ -2,7 +2,6 @@
 
 namespace Fc2blog\Model;
 
-use Fc2blog\Config;
 use Fc2blog\Web\Cookie;
 use Fc2blog\Web\Html;
 use Fc2blog\Web\Request;
@@ -12,6 +11,50 @@ class CommentsModel extends Model
 {
 
     public static $instance = null;
+
+    const COMMENT = array(
+        'OPEN_STATUS' => array(
+            'PUBLIC' => 0,  // 全体公開
+            'PENDING' => 2,  // 承認待ち
+            'PRIVATE' => 1,  // 管理者のみ公開
+        ),
+        // コメントの確認設定
+        'COMMENT_CONFIRM' => array(
+            'THROUGH' => 0,  // 確認せずにそのまま表示
+            'CONFIRM' => 1,  // コメントを確認する
+        ),
+        // 承認中、非公開コメントの代替コメント表示可否
+        'COMMENT_DISPLAY' => array(
+            'SHOW' => 0,    // 表示
+            'HIDE' => 1,    // 非表示
+        ),
+        // コメント投稿時の名前、メールアドレス、URLを保存するかどうか
+        'COMMENT_COOKIE_SAVE' => array(
+            'NOT_SAVE' => 0,
+            'SAVE' => 1,
+        ),
+        // コメント投稿時のCAPTCHA有無
+        'COMMENT_CAPTCHA' => array(
+            'NOT_USE' => 0,
+            'USE' => 1,
+        ),
+        // コメントの表示順
+        'ORDER' => array(
+            'ASC' => 0,
+            'DESC' => 1,
+        ),
+        // コメントの返信状態
+        'REPLY_STATUS' => array(
+            'UNREAD' => 1,  // 未読
+            'READ' => 2,  // 既読
+            'REPLY' => 3,  // 返信済み
+        ),
+        // コメントの引用を行うかどうか
+        'QUOTE' => array(
+            'USE' => 0,  // 引用を行う
+            'NONE' => 1,  // 行わない
+        ),
+    );
 
     public function __construct()
     {
@@ -38,26 +81,26 @@ class CommentsModel extends Model
     public static function getOpenStatusList()
     {
         return array(
-            Config::get('COMMENT.OPEN_STATUS.PUBLIC') => __('Published'),
-            Config::get('COMMENT.OPEN_STATUS.PENDING') => __('Approval pending'),
-            Config::get('COMMENT.OPEN_STATUS.PRIVATE') => __('Only exposed administrator'),
+            CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'] => __('Published'),
+            CommentsModel::COMMENT['OPEN_STATUS']['PENDING'] => __('Approval pending'),
+            CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE'] => __('Only exposed administrator'),
         );
     }
 
     public static function getOpenStatusUserList()
     {
         return array(
-            Config::get('COMMENT.OPEN_STATUS.PUBLIC') => __('Public comment'),
-            Config::get('COMMENT.OPEN_STATUS.PRIVATE') => __('Secret comments to the management people'),
+            CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'] => __('Public comment'),
+            CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE'] => __('Secret comments to the management people'),
         );
     }
 
     public static function getReplyStatusList()
     {
         return array(
-            Config::get('COMMENT.REPLY_STATUS.UNREAD') => __('Not yet read'),
-            Config::get('COMMENT.REPLY_STATUS.READ') => __('Already read'),
-            Config::get('COMMENT.REPLY_STATUS.REPLY') => __('Answered'),
+            CommentsModel::COMMENT['REPLY_STATUS']['UNREAD'] => __('Not yet read'),
+            CommentsModel::COMMENT['REPLY_STATUS']['READ'] => __('Already read'),
+            CommentsModel::COMMENT['REPLY_STATUS']['REPLY'] => __('Answered'),
         );
     }
 
@@ -99,11 +142,11 @@ class CommentsModel extends Model
                 'maxlength' => array('max' => 100),
             ),
             'open_status' => array(
-                'default_value' => Config::get('COMMENT.OPEN_STATUS.PUBLIC'),
+                'default_value' => CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'],
                 'replace' => array(
-                    'on' => Config::get('COMMENT.OPEN_STATUS.PRIVATE'),
+                    'on' => CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE'],
                 ), // データを置き換える
-                'in_array' => array('values' => array(Config::get('COMMENT.OPEN_STATUS.PUBLIC'), Config::get('COMMENT.OPEN_STATUS.PRIVATE'))),
+                'in_array' => array('values' => array(CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'], CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE'])),
             ),
         );
     }
@@ -170,7 +213,7 @@ class CommentsModel extends Model
         if (
             empty($comment) ||
             empty($comment['password']) ||
-            $comment['open_status'] == Config::get('COMMENT.OPEN_STATUS.PRIVATE')
+            $comment['open_status'] == CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE']
         ) {
             return array();
         }
@@ -228,7 +271,7 @@ class CommentsModel extends Model
         $id = $this->insertByBlogSettingWithOutCookie($data, $blog_setting);
 
         // 入力した名前,email,urlをCookieに登録
-        if ($id && $blog_setting['comment_cookie_save'] == Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
+        if ($id && $blog_setting['comment_cookie_save'] == CommentsModel::COMMENT['COMMENT_COOKIE_SAVE']['SAVE']) {
             if (isset($data['name'])) Cookie::set($request, 'comment_name', $data['name']);
             if (isset($data['mail'])) Cookie::set($request, 'comment_mail', $data['mail']);
             if (isset($data['url'])) Cookie::set($request, 'comment_url', $data['url']);
@@ -253,9 +296,9 @@ class CommentsModel extends Model
             $data['password'] = $this->passwordHash($data['password']);
         }
         // 全体公開の場合 コメントの承認が必要な場合は承認待ちに変更
-        if ($data['open_status'] == Config::get('COMMENT.OPEN_STATUS.PUBLIC')) {
-            if ($blog_setting['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')) {
-                $data['open_status'] = Config::get('COMMENT.OPEN_STATUS.PENDING');
+        if ($data['open_status'] == CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC']) {
+            if ($blog_setting['comment_confirm'] == CommentsModel::COMMENT['COMMENT_CONFIRM']['CONFIRM']) {
+                $data['open_status'] = CommentsModel::COMMENT['OPEN_STATUS']['PENDING'];
             }
         }
         // 登録日時を設定
@@ -271,9 +314,9 @@ class CommentsModel extends Model
         unset($data['password']);
 
         // 全体公開の場合 コメントの承認が必要な場合は承認待ちに変更
-        if ($data['open_status'] == Config::get('COMMENT.OPEN_STATUS.PUBLIC')) {
-            if ($blog_setting['comment_confirm'] == Config::get('COMMENT.COMMENT_CONFIRM.CONFIRM')) {
-                $data['open_status'] = Config::get('COMMENT.OPEN_STATUS.PENDING');
+        if ($data['open_status'] == CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC']) {
+            if ($blog_setting['comment_confirm'] == CommentsModel::COMMENT['COMMENT_CONFIRM']['CONFIRM']) {
+                $data['open_status'] = CommentsModel::COMMENT['OPEN_STATUS']['PENDING'];
             }
         }
 
@@ -284,7 +327,7 @@ class CommentsModel extends Model
         $ret = $this->updateByIdAndBlogId($data, $comment_id, $blog_id);
 
         // 入力した名前,email,urlをCookieに登録
-        if ($ret && $blog_setting['comment_cookie_save'] == Config::get('COMMENT.COMMENT_COOKIE_SAVE.SAVE')) {
+        if ($ret && $blog_setting['comment_cookie_save'] == CommentsModel::COMMENT['COMMENT_COOKIE_SAVE']['SAVE']) {
             if (isset($data['name'])) Cookie::set($request, 'comment_name', $data['name']);
             if (isset($data['mail'])) Cookie::set($request, 'comment_mail', $data['mail']);
             if (isset($data['url'])) Cookie::set($request, 'comment_url', $data['url']);
@@ -348,8 +391,8 @@ class CommentsModel extends Model
      */
     public function getCommentListOptionsByBlogSetting($blog_id, $entry_id, $blog_setting)
     {
-        $isDisplayApprovalComment = $blog_setting['comment_display_approval'] == Config::get('COMMENT.COMMENT_DISPLAY.SHOW');
-        $isDisplayPrivateComment = $blog_setting['comment_display_private'] == Config::get('COMMENT.COMMENT_DISPLAY.SHOW');
+        $isDisplayApprovalComment = $blog_setting['comment_display_approval'] == CommentsModel::COMMENT['COMMENT_DISPLAY']['SHOW'];
+        $isDisplayPrivateComment = $blog_setting['comment_display_private'] == CommentsModel::COMMENT['COMMENT_DISPLAY']['SHOW'];
 
         $where = 'blog_id=? AND entry_id=?';
         $params = array($blog_id, $entry_id);
@@ -358,20 +401,20 @@ class CommentsModel extends Model
             // 全て表示する場合はwhere条件追加無し
         } elseif ($isDisplayApprovalComment) {
             // 承認中コメントを表示
-            $where .= ' AND open_status IN (' . Config::get('COMMENT.OPEN_STATUS.PUBLIC') . ',' . Config::get('COMMENT.OPEN_STATUS.PENDING') . ')';
+            $where .= ' AND open_status IN (' . CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'] . ',' . CommentsModel::COMMENT['OPEN_STATUS']['PENDING'] . ')';
         } elseif ($isDisplayPrivateComment) {
             // 非公開コメントを表示
-            $where .= ' AND open_status IN (' . Config::get('COMMENT.OPEN_STATUS.PUBLIC') . ',' . Config::get('COMMENT.OPEN_STATUS.PRIVATE') . ')';
+            $where .= ' AND open_status IN (' . CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'] . ',' . CommentsModel::COMMENT['OPEN_STATUS']['PENDING'] . ')';
         } else {
             // 承認済みコメントを表示
-            $where .= ' AND open_status = ' . Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+            $where .= ' AND open_status = ' . CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'];
         }
 
         // 記事のコメント取得
         return [
             'where' => $where,
             'params' => $params,
-            'order' => 'id ' . ($blog_setting['comment_order'] == Config::get('COMMENT.ORDER.ASC') ? 'ASC' : 'DESC'),
+            'order' => 'id ' . ($blog_setting['comment_order'] == CommentsModel::COMMENT['ORDER']['ASC'] ? 'ASC' : 'DESC'),
         ];
     }
 
@@ -394,6 +437,11 @@ class CommentsModel extends Model
         ];
     }
 
+    const BLOG_TEMPLATE_REPLY_TYPE_COLUMN = array(
+        1 => 'template_pc_reply_type',
+        4 => 'template_sp_reply_type',
+    );
+
     /**
      * コメント一覧の情報にブログの設定情報で装飾する
      * @param Request $request
@@ -404,13 +452,13 @@ class CommentsModel extends Model
      */
     public function decorateByBlogSetting(Request $request, $tmp_comments, $blog_setting, $self_blog = false)
     {
-        $flag_pending = Config::get('COMMENT.OPEN_STATUS.PENDING');
-        $flag_private = Config::get('COMMENT.OPEN_STATUS.PRIVATE');
+        $flag_pending = CommentsModel::COMMENT['OPEN_STATUS']['PENDING'];
+        $flag_private = CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE'];
 
         $blog = Model::load('Blogs')->findById($blog_setting['blog_id']);
 
         // コメントを追加で表示するかどうか
-        $is_add_comment = $blog_setting[Config::get('BLOG_TEMPLATE_REPLY_TYPE_COLUMN.' . $request->deviceType)] == Config::get('BLOG_TEMPLATE.COMMENT_TYPE.AFTER');
+        $is_add_comment = $blog_setting[self::BLOG_TEMPLATE_REPLY_TYPE_COLUMN[$request->deviceType]] == BlogTemplatesModel::BLOG_TEMPLATE['COMMENT_TYPE']['AFTER'];
 
         $comments = array();
         foreach ($tmp_comments as $comment) {
@@ -434,7 +482,7 @@ class CommentsModel extends Model
             $comments[] = $comment;
 
             // コメント返信の分(テンプレに返信タグがついている場合 下にコメントを追記する形で出力する
-            if ($is_add_comment && $comment['reply_status'] == Config::get('COMMENT.REPLY_STATUS.REPLY')) {
+            if ($is_add_comment && $comment['reply_status'] == CommentsModel::COMMENT['REPLY_STATUS']['REPLY']) {
                 $comment['title'] = 'Re: ' . $comment['title'];
                 $comment['body'] = $comment['reply_body'];
                 $comment['name'] = $blog['nickname'];
@@ -472,7 +520,7 @@ class CommentsModel extends Model
     {
         return $this->find('count', [
             'where' => 'blog_id=? AND reply_status=?',
-            'params' => [$blog_id, Config::get('COMMENT.REPLY_STATUS.UNREAD')],
+            'params' => [$blog_id, CommentsModel::COMMENT['REPLY_STATUS']['UNREAD']],
         ]);
     }
 
@@ -485,7 +533,7 @@ class CommentsModel extends Model
     {
         return $this->find('count', [
             'where' => 'blog_id=? AND open_status=?',
-            'params' => [$blog_id, Config::get('COMMENT.OPEN_STATUS.PENDING')],
+            'params' => [$blog_id, CommentsModel::COMMENT['OPEN_STATUS']['PENDING']],
         ]);
     }
 
@@ -521,11 +569,11 @@ class CommentsModel extends Model
     public function setReadCommentStatus(string $blog_id, array $comment): array
     {
         // 未読状態の場合既読に変更する
-        if ($comment['reply_status'] == Config::get('COMMENT.REPLY_STATUS.UNREAD')) {
-            if (false === $this->updateReplyStatus($blog_id, $comment['id'], Config::get('COMMENT.REPLY_STATUS.READ'))) {
+        if ($comment['reply_status'] == CommentsModel::COMMENT['REPLY_STATUS']['UNREAD']) {
+            if (false === $this->updateReplyStatus($blog_id, $comment['id'], CommentsModel::COMMENT['REPLY_STATUS']['READ'])) {
                 throw new RuntimeException("update failed");
             }
-            $comment['reply_status'] = Config::get('COMMENT.REPLY_STATUS.READ');
+            $comment['reply_status'] = CommentsModel::COMMENT['REPLY_STATUS']['READ'];
         }
         return $comment;
     }
@@ -587,13 +635,13 @@ class CommentsModel extends Model
     public function updateApproval($blog_id, $comment_id = null)
     {
         $params = array($blog_id);
-        $sql = 'UPDATE ' . $this->getTableName() . ' SET open_status=' . Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+        $sql = 'UPDATE ' . $this->getTableName() . ' SET open_status=' . CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'];
         $sql .= ' WHERE blog_id=?';
         if ($comment_id) {
             $sql .= ' AND id=?';
             $params[] = $comment_id;
         }
-        $sql .= ' AND open_status=' . Config::get('COMMENT.OPEN_STATUS.PENDING');
+        $sql .= ' AND open_status=' . CommentsModel::COMMENT['OPEN_STATUS']['PENDING'];
         $options['result'] = PDOQuery::RESULT_SUCCESS;
         return $this->executeSql($sql, $params, $options);
     }
@@ -620,10 +668,10 @@ class CommentsModel extends Model
     public function updateReply($data, $comment)
     {
         // 承認待ちの場合 全体公開への変更も行う
-        if ($comment['open_status'] == Config::get('COMMENT.OPEN_STATUS.PENDING')) {
-            $data['open_status'] = Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+        if ($comment['open_status'] == CommentsModel::COMMENT['OPEN_STATUS']['PENDING']) {
+            $data['open_status'] = CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'];
         }
-        $data['reply_status'] = Config::get('COMMENT.REPLY_STATUS.REPLY');  // 返信済みに変更
+        $data['reply_status'] = CommentsModel::COMMENT['REPLY_STATUS']['REPLY'];  // 返信済みに変更
         $data['reply_updated_at'] = date('Y-m-d H:i:s');                    // 返信更新日を更新
         return parent::updateByIdAndBlogId($data, $comment['id'], $comment['blog_id']);
     }
@@ -644,12 +692,12 @@ class CommentsModel extends Model
 
         // 記事の表示項目リスト
         $open_status_list = array(
-            Config::get('ENTRY.OPEN_STATUS.OPEN'),      // 公開
-            Config::get('ENTRY.OPEN_STATUS.LIMIT'),     // 期間限定
+            EntriesModel::ENTRY['OPEN_STATUS']['OPEN'], // 公開
+            EntriesModel::ENTRY['OPEN_STATUS']['LIMIT'], // 期間限定
         );
 
         $where = 'comments.blog_id=?';
-        $where .= ' AND comments.open_status=' . Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+        $where .= ' AND comments.open_status=' . CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'];
         $where .= ' AND entries.blog_id=?';
         $where .= ' AND entries.open_status IN (' . implode(',', $open_status_list) . ')';
         $where .= ' AND comments.entry_id=entries.id';

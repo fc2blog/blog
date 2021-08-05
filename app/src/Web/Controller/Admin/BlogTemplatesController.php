@@ -40,11 +40,11 @@ class BlogTemplatesController extends AdminController
         $device_blog_templates = $blog_template->getTemplatesOfDevice($blog_id, $device_type);
         foreach ($device_blog_templates as $_device_type => &$blog_templates) {
             foreach ($blog_templates as &$blog_template) {
-                $blog_template['device_key'] = Config::get('DEVICE_FC2_KEY.' . $_device_type);
+                $blog_template['device_key'] = App::getDeviceFc2Key($_device_type);
             }
         }
         $this->set('device_blog_templates', $device_blog_templates);
-        $this->set('devices', Config::get('DEVICE_NAME'));
+        $this->set('devices', BlogTemplatesModel::DEVICE_NAME);
 
         return "admin/blog_templates/index.twig";
     }
@@ -60,13 +60,13 @@ class BlogTemplatesController extends AdminController
         if (!$request->isGet()) return $this->error400();
 
         // デバイスタイプの設定
-        $device_type = $request->get('device_type', (string)Config::get('DEVICE_PC'));
+        $device_type = $request->get('device_type', (string)App::DEVICE_PC);
         $request->set('device_type', $device_type);
 
         // 条件設定
         $condition = array();
         $condition['page'] = $request->get('page', 0, Request::VALID_UNSIGNED_INT);
-        $condition['device'] = Config::get('DEVICE_FC2_KEY.' . $device_type);
+        $condition['device'] = App::getDeviceFc2Key($device_type);
 
         // テンプレート一覧取得
         $fc2_templates_model = new Fc2TemplatesModel();
@@ -76,7 +76,7 @@ class BlogTemplatesController extends AdminController
 
         $this->set('templates', $templates);
         $this->set('paging', $paging);
-        $this->set('devices', Config::get('DEVICE_NAME'));
+        $this->set('devices', BlogTemplatesModel::DEVICE_NAME);
 
         return "admin/blog_templates/fc2_index.twig";
     }
@@ -98,11 +98,11 @@ class BlogTemplatesController extends AdminController
         }
 
         // デバイスタイプの設定
-        $device_type = $request->get('device_type', (string)Config::get('DEVICE_PC'));
+        $device_type = $request->get('device_type', (string)App::DEVICE_PC);
         $request->set('device_type', $device_type);
 
         // テンプレート取得
-        $device_key = Config::get('DEVICE_FC2_KEY.' . $device_type);
+        $device_key = App::getDeviceFc2Key($device_type);
         $template = Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
         if (empty($template)) {
             return $this->error404();
@@ -130,7 +130,7 @@ class BlogTemplatesController extends AdminController
             // FC2テンプレートダウンロード
             if ($request->get('fc2_id')) {
                 $device_type = $request->get('device_type');
-                $device_key = Config::get('DEVICE_FC2_KEY.' . $device_type);
+                $device_key = App::getDeviceFc2Key($device_type);
                 $template = Model::load('Fc2Templates')->findByIdAndDevice($request->get('fc2_id'), $device_key);
                 $request->set('blog_template', [
                     'title' => $template['name'],
@@ -278,7 +278,7 @@ class BlogTemplatesController extends AdminController
             return $this->error404();
         }
 
-        $device_key = Config::get('DEVICE_FC2_KEY.' . $device_type);
+        $device_key = App::getDeviceFc2Key($device_type);
         $template = Model::load('Fc2Templates')->findByIdAndDevice($id, $device_key);
         if (empty($template)) {
             $this->setErrorMessage(__('Template does not exist'));

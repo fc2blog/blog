@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Fc2blog\Tests;
 
 use ErrorException;
-use Fc2blog\Config;
+use Fc2blog\App;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
 class LoaderHelper extends TestCase
 {
-    public static function requireBootStrap()
+    public static function bootStrap()
     {
         # 細かなエラーを見逃さないために、Noticeを含むすべてのエラーをキャッチしてErrorExceptionに変換する
         # TODO もっとふさわしい場所に移動
@@ -27,8 +27,8 @@ class LoaderHelper extends TestCase
             putenv('FC2_ERROR_LOG_PATH=php://stderr');
             putenv('FC2_APP_LOG_PATH=php://stderr');
             putenv('FC2_APP_LOG_LEVEL=' . Logger::WARNING);
-            putenv('FC2_SQL_DEBUG=php://stderr');
-            putenv('FC2_APP_DEBUG=php://stderr');
+            putenv('FC2_SQL_DEBUG=1');
+            putenv('FC2_APP_DEBUG=1');
             putenv('FC2_ERROR_ON_DISPLAY=0');
             putenv('FC2_DOCUMENT_ROOT_PATH=' . __DIR__ . "/../public/");
         } else {
@@ -37,8 +37,8 @@ class LoaderHelper extends TestCase
             putenv('FC2_ERROR_LOG_PATH=php://stderr');
             putenv('FC2_APP_LOG_PATH=php://stderr');
             putenv('FC2_APP_LOG_LEVEL=' . Logger::WARNING);
-            putenv('FC2_SQL_DEBUG=php://stderr');
-            putenv('FC2_APP_DEBUG=php://stderr');
+            putenv('FC2_SQL_DEBUG=1');
+            putenv('FC2_APP_DEBUG=1');
             putenv('FC2_ERROR_ON_DISPLAY=0');
             putenv('FC2_DB_HOST=db');
             putenv('FC2_DB_USER=docker');
@@ -57,9 +57,14 @@ class LoaderHelper extends TestCase
             /** @noinspection PhpIncludeInspection このファイルはないことがあるので */
             require(TEST_APP_DIR . '/config.php');
         }
-        require(__DIR__ . '/../app/src/include/bootstrap.php');
+
+        // APPディレクトリのパス
+        define('APP_DIR', TEST_APP_DIR . '/');
+
+        // タイムゾーン設定 TODO php.ini移譲でよいのではないか？
+        date_default_timezone_set(App::$timesZone);
 
         // テストではシングルテナントモードは初期オフにする、必要なテストで都度Onにする
-        Config::set('DEFAULT_BLOG_ID', null);
+        App::setOverRideDefaultBlogIdForTest("");
     }
 }

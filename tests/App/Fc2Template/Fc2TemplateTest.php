@@ -74,7 +74,7 @@ class Fc2TemplateTest extends TestCase
         $entries = $entry_generator->generateSampleEntry($blog_id, 1);
         $entry = $entries[0];
         // テストの都合上コメント許可エントリに固定する
-        $entry['comment_accepted'] = Config::get("ENTRY.COMMENT_ACCEPTED.ACCEPTED");
+        $entry['comment_accepted'] = EntriesModel::ENTRY["COMMENT_ACCEPTED"]["ACCEPTED"];
         $entries_model = new EntriesModel();
         $entries_model->updateByIdAndBlogId($entry, $entry['id'], $blog_id);
 
@@ -263,7 +263,7 @@ class Fc2TemplateTest extends TestCase
         $blogs_model = new BlogsModel();
         $blog = $blogs_model->findById($blog_id);
 //    var_dump($blog);
-        $blog['open_status'] = Config::get('BLOG.OPEN_STATUS.PRIVATE');
+        $blog['open_status'] = BlogsModel::BLOG['OPEN_STATUS']['PRIVATE'];
         $blog['blog_password'] = '$2y$10$XiZ6dO8AIFpjP0t0ekAzV.8ZFK40JUgVHt70KjJLQZr7HS9vqmPGy'; // hashed "password"
         $blogs_model->updateById($blog, $blog['id']);
 
@@ -455,7 +455,7 @@ class Fc2TemplateTest extends TestCase
         $comment_generator->removeAllComments($blog_id, $entry['id']);
         $some_comments = $comment_generator->generateSampleComment($blog_id, $entry['id'], 1);
         $some_comment = $some_comments[0];
-        $some_comment['open_status'] = Config::get('COMMENT.OPEN_STATUS.PUBLIC');
+        $some_comment['open_status'] = CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC'];
         $comments_model->updateByIdAndBlogId($some_comment, $some_comment['id'], $blog_id);
 //    var_dump($some_comment);
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Fc2blog\Web\Controller\Admin;
 
 use Fc2blog\App;
-use Fc2blog\Config;
 use Fc2blog\Model\BlogSettingsModel;
 use Fc2blog\Model\CommentsModel;
+use Fc2blog\Model\EntriesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
 
@@ -85,13 +85,13 @@ class CommentsController extends AdminController
             'from' => 'entries',
             'where' => $where,
             'params' => $params,
-            'limit' => $request->get('limit', Config::get('ENTRY.DEFAULT_LIMIT'), Request::VALID_POSITIVE_INT),
+            'limit' => $request->get('limit', EntriesModel::ENTRY['DEFAULT_LIMIT'], Request::VALID_POSITIVE_INT),
             'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
             'order' => $order,
         );
 
-        if ($options['limit'] > max(array_keys(Config::get('ENTRY.LIMIT_LIST')))) {
-            $options['limit'] = Config::get('ENTRY.DEFAULT_LIMIT');
+        if ($options['limit'] > max(array_keys(EntriesModel::ENTRY['LIMIT_LIST']))) {
+            $options['limit'] = EntriesModel::ENTRY['DEFAULT_LIMIT'];
         }
         if (ceil(PHP_INT_MAX / $options['limit']) <= $options['page']) {
             $options['page'] = 0;
@@ -108,11 +108,11 @@ class CommentsController extends AdminController
         $this->set('paging', $paging);
 
         $this->set('open_status_w', ['' => __('Public state')] + CommentsModel::getOpenStatusList());
-        $this->set('entry_limit_list', Config::get('ENTRY.LIMIT_LIST'));
-        $this->set('entry_default_limit', Config::get('ENTRY.DEFAULT_LIMIT'));
+        $this->set('entry_limit_list', EntriesModel::ENTRY['LIMIT_LIST']);
+        $this->set('entry_default_limit', EntriesModel::ENTRY['DEFAULT_LIMIT']);
         $this->set('page_list', Model::getPageList($paging));
         $this->set('reply_status_w', ['' => __('Reply state')] + CommentsModel::getReplyStatusList());
-        $this->set('limit', Config::get('ENTRY.DEFAULT_LIMIT'));
+        $this->set('limit', EntriesModel::ENTRY['DEFAULT_LIMIT']);
         $this->set('reply_status_list', CommentsModel::getReplyStatusList());
 
         $this->setStatusDataList();
@@ -122,12 +122,12 @@ class CommentsController extends AdminController
 
     public function setStatusDataList(): void
     {
-        $this->set('comment_open_status_public', Config::get('COMMENT.OPEN_STATUS.PUBLIC'));
-        $this->set('comment_open_status_pending', Config::get('COMMENT.OPEN_STATUS.PENDING'));
-        $this->set('comment_open_status_private', Config::get('COMMENT.OPEN_STATUS.PRIVATE'));
-        $this->set('comment_reply_status_unread', Config::get('COMMENT.REPLY_STATUS.UNREAD'));
-        $this->set('comment_reply_status_read', Config::get('COMMENT.REPLY_STATUS.READ'));
-        $this->set('comment_reply_status_reply', Config::get('COMMENT.REPLY_STATUS.REPLY'));
+        $this->set('comment_open_status_public', CommentsModel::COMMENT['OPEN_STATUS']['PUBLIC']);
+        $this->set('comment_open_status_pending', CommentsModel::COMMENT['OPEN_STATUS']['PENDING']);
+        $this->set('comment_open_status_private', CommentsModel::COMMENT['OPEN_STATUS']['PRIVATE']);
+        $this->set('comment_reply_status_unread', CommentsModel::COMMENT['REPLY_STATUS']['UNREAD']);
+        $this->set('comment_reply_status_read', CommentsModel::COMMENT['REPLY_STATUS']['READ']);
+        $this->set('comment_reply_status_reply', CommentsModel::COMMENT['REPLY_STATUS']['REPLY']);
     }
 
     /**
@@ -151,7 +151,7 @@ class CommentsController extends AdminController
             $this->redirect($request, array('action' => 'index'));
         }
 
-        if ($comment['open_status'] != Config::get('COMMENT.OPEN_STATUS.PENDING')) {
+        if ($comment['open_status'] != CommentsModel::COMMENT['OPEN_STATUS']['PENDING']) {
             // 承認待ち以外はリダイレクト
             $this->redirect($request, array('action' => 'index'));
             return "";
@@ -196,7 +196,7 @@ class CommentsController extends AdminController
         }
 
         // すでに許可済み
-        if ($comment['open_status'] != Config::get('COMMENT.OPEN_STATUS.PENDING')) {
+        if ($comment['open_status'] != CommentsModel::COMMENT['OPEN_STATUS']['PENDING']) {
             $this->set('json', ['success' => 1]);
             $this->setContentType("application/json; charset=utf-8");
             return "admin/common/json.twig";
@@ -234,7 +234,7 @@ class CommentsController extends AdminController
         if (!$request->get('comment')) {
             $blog_setting_model = new BlogSettingsModel();
             $blog_setting = $blog_setting_model->findByBlogId($blog_id);
-            if ($comment['reply_status'] != Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote'] == Config::get('COMMENT.QUOTE.USE')) {
+            if ($comment['reply_status'] != CommentsModel::COMMENT['REPLY_STATUS']['REPLY'] && $blog_setting['comment_quote'] == CommentsModel::COMMENT['QUOTE']['USE']) {
                 $comment['reply_body'] = '> ' . str_replace("\n", "\n> ", $comment['body']) . "\n";
             }
             $request->set('comment', $comment);
@@ -300,7 +300,7 @@ class CommentsController extends AdminController
         // コメントの初期表示時入力データ設定
         if (!$request->get('comment')) {
             $blog_setting = Model::load('BlogSettings')->findByBlogId($blog_id);
-            if ($comment['reply_status'] != Config::get('COMMENT.REPLY_STATUS.REPLY') && $blog_setting['comment_quote'] == Config::get('COMMENT.QUOTE.USE')) {
+            if ($comment['reply_status'] != CommentsModel::COMMENT['REPLY_STATUS']['REPLY'] && $blog_setting['comment_quote'] == CommentsModel::COMMENT['QUOTE']['USE']) {
                 $comment['reply_body'] = '> ' . str_replace("\n", "\n> ", $comment['body']) . "\n";
             }
             $request->set('comment', $comment);

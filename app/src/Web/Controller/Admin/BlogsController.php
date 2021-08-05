@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fc2blog\Web\Controller\Admin;
 
 use Exception;
-use Fc2blog\Config;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Web\Request;
@@ -25,7 +24,7 @@ class BlogsController extends AdminController
         $options = [
             'where' => 'user_id=?',
             'params' => [$this->getUserId()],
-            'limit' => Config::get('BLOG.DEFAULT_LIMIT', 10),
+            'limit' => BlogsModel::BLOG['DEFAULT_LIMIT'],
             'page' => $request->get('page', 0, Request::VALID_UNSIGNED_INT),
             'order' => 'created_at DESC',
         ];

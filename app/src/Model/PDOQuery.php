@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Fc2blog\Model;
 
-use Fc2blog\Config;
+use Fc2blog\App;
 use Fc2blog\Util\Log;
 use PDO;
 use PDOException;
@@ -89,7 +89,7 @@ class PDOQuery
      */
     private static function query(PDO $pdo, $sql, array $params = [])
     {
-        if (Config::get('SQL_DEBUG', 0)) {
+        if (App::isSqlDebugMode()) {
             $mtime = microtime(true);
         }
 
@@ -100,7 +100,7 @@ class PDOQuery
             $stmt->execute($params);
         }
 
-        if (isset($mtime) && Config::get('SQL_DEBUG', 0)) {
+        if (isset($mtime) && App::isSqlDebugMode()) {
             $mtime = sprintf('%0.2fms', (microtime(true) - $mtime) * 1000);
             Log::debug_log("SQL {$mtime} {$sql}", ['params' => $params]);
         }

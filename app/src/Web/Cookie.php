@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Fc2blog\Web;
 
-use Fc2blog\Config;
 use InvalidArgumentException;
 
 class Cookie
@@ -79,11 +78,9 @@ class Cookie
         }
         $params['samesite'] = $samesite;
 
-        // domainは特別にコンフィグで設定されないかぎり空で、アクセスドメインに発行
+        // domainは特別に設定されないかぎり空
         if (strlen($domain) > 0) {
             $params['domain'] = $domain;
-        } else if (strlen(Config::get('COOKIE_DEFAULT_DOMAIN')) > 0) {
-            $params['domain'] = Config::get('COOKIE_DEFAULT_DOMAIN');
         }
 
         // 不可能な組み合わせを拒否

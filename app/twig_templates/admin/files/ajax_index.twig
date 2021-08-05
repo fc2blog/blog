@@ -1,7 +1,7 @@
 {# /admin/files/upload からPartial読み込み #}
 <h3 id="entry_count">
     {{ _('File search') }}[{{ _('Hits') }}&nbsp;{{ paging.count }}{{ _(' results') }}]
-    {{ input(req, 'limit', 'select', {'options': page_list_file, 'default': file_default_limit, 'suffix': _(' results')}) }}
+    {{ input(req, 'limit', 'select', {'options': page_list_file, 'suffix': _(' results')}) }}
     {{ input(req, 'page', 'select', {'options': page_list_paging, 'default': 0}) }}
 </h3>
 <p>{{ _('You can search to match the conditions file.') }}</p>
