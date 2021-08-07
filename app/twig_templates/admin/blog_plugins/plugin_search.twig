@@ -18,7 +18,9 @@
             <th>{{ _('Description') }}</th>
             <th>{{ _('Download') }}</th>
             <th>{{ _('Preview') }}</th>
-            <th>{{ _('Delete') }}</th>
+            {% if not is_official %}
+                <th>{{ _('Delete') }}</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -32,11 +34,13 @@
                 <td class="center">
                     <a href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, plugin_id: plugin.id, category: req.get('category'), device_key: 1}, false, true, false) }}" target="_blank">{{ _('Preview') }}</a>
                 </td>
-                <td class="center">
-                    {% if user_id == plugin.user_id %}
-                        <a href="{{ url(req, 'blog_plugins', 'plugin_delete', {id: plugin.id, sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a>
-                    {% endif %}
-                </td>
+                {% if not is_official %}
+                    <td class="center">
+                        {% if user_id == plugin.user_id %}
+                            <a href="{{ url(req, 'blog_plugins', 'plugin_delete', {id: plugin.id, sig: sig}) }}" onclick="return confirm('{{ _('Are you sure you want to delete?') }}');">{{ _('Delete') }}</a>
+                        {% endif %}
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
