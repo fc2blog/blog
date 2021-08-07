@@ -17,7 +17,7 @@
     {% for device_type, blog_templates in device_blog_templates %}{# 機種毎のループ #}
 
         <div class="btn_area sp_no_template">
-            <ul class="btn_area_inner">
+            <ul class="btn_area_inner full_width">
                 <li>
                     <button class="btn_contents touch" onclick="location.href='{{ url(req, 'BlogTemplates', 'fc2_index', {device_type: device_type}) }}'"><i class="btn_icon"></i>{{ _('Template Search') }}</button>
                 </li>
