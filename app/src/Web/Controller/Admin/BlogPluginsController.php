@@ -116,6 +116,7 @@ class BlogPluginsController extends AdminController
         $this->set('devices', BlogTemplatesModel::DEVICE_NAME);
         $this->set('req_device_name', __(BlogTemplatesModel::getDeviceName((int)$request->get('device_type'))));
         $this->set('device_key', App::getDeviceFc2Key($request->get('device_type')));
+        $this->set('is_official', $is_official);
 
         return 'admin/blog_plugins/plugin_search.twig';
     }
