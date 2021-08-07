@@ -55,7 +55,7 @@
     </tbody>
 </table>
 
-<form method="POST" id="sys-comment-form" class="admin-form">
+<form method="post" id="sys-comment-form" class="admin-form">
     {% if comment.open_status != comment_open_status_private %}
         {{ input(req, 'comment[reply_body]', 'textarea', {'style': 'width: 95%; height: 200px;'}) }}
         <p class="error" style="display: none;" id="sys-reply-error"></p>
@@ -75,7 +75,7 @@
     {% endif %}
 </form>
 
-<form method="POST" action="{{ url(req, 'comments', 'delete') }}" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
+<form method="post" action="{{ url(req, 'comments', 'delete') }}" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
     <input type="hidden" name="sig" value="{{ sig }}">
     <input type="hidden" name="id" value="{{ comment.id }}">
     <h3>{{ _('Delete Comment') }}</h3>

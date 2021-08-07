@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <form action="{{ url(req, 'BlogPlugins', 'sort') }}" method="POST" id="sys-order" style="display: none;">
+    <form action="{{ url(req, 'BlogPlugins', 'sort') }}" method="post" id="sys-order" style="display: none;">
         {% for category, blog_plugins in category_blog_plugins %}
             <h3>{{ _('Category') }}{{ category }}</h3>
             <ul id="sys-category-{{ category }}" class="jquery-ui-sortable mb20"></ul>

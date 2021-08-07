@@ -7,7 +7,7 @@
         <a class="admin_common_btn create_btn" href="{{ url(req, 'BlogPlugin', 'index') }}">{{ _('Plugin management') }}</a>
     </p>
 
-    <form method="POST" id="sys-blog-plugin-form" class="admin-form">
+    <form method="post" id="sys-blog-plugin-form" class="admin-form">
 
         {{ input(req, 'blog_plugin[device_type]', 'hidden') }}
         {{ input(req, 'blog_plugin[category]', 'hidden') }}

@@ -4,7 +4,7 @@
 {% block content %}
     <header><h2>{{ _('I want to edit tags') }}</h2></header>
 
-    <form method="POST" id="sys-tag-form" class="admin-form">
+    <form method="post" id="sys-tag-form" class="admin-form">
 
         <input type="hidden" name="id" value="{{ req.get('id') }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>

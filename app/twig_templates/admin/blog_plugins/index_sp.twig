@@ -72,11 +72,11 @@
             </ul>
         </div>
 
-        <form action="{{ url(req, 'BlogPlugins', 'display_changes') }}" method="POST" id="sys-display">
+        <form action="{{ url(req, 'BlogPlugins', 'display_changes') }}" method="post" id="sys-display">
             <input type="hidden" name="device_type" value="{{ device_type }}"/>
             <input type="hidden" name="sig" value="{{ sig }}"/>
         </form>
-        <form action="{{ url(req, 'BlogPlugins', 'sort') }}" method="POST" id="sys-order">
+        <form action="{{ url(req, 'BlogPlugins', 'sort') }}" method="post" id="sys-order">
             <input type="hidden" name="device_type" value="{{ device_type }}"/>
             <input type="hidden" name="sig" value="{{ sig }}"/>
         </form>

@@ -4,7 +4,7 @@
 {% block content %}
     <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('File upload') }}</span><span class="accordion_btn"><i class="search_icon btn_icon"></i></span></h1></header>
     <div id="entry_search" class="accordion_contents" style="display:none;">
-        <form method="GET" id="sys-search-form">
+        <form method="get" id="sys-search-form">
             <input type="hidden" name="mode" value="Files"/>
             <input type="hidden" name="process" value="upload"/>
             {{ input(req, 'limit', 'hidden', {'default': page_limit_file }) }}
@@ -19,7 +19,7 @@
         </form>
     </div>
 
-    <form method="POST" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
+    <form method="post" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
         <input type="hidden" name="MAX_FILE_SIZE" value="{{ file_max_size }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>
         <div class="btn_area">

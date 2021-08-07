@@ -4,7 +4,7 @@
 {% block content %}
     <header><h2>{{ _('I edit a category') }}</h2></header>
 
-    <form method="POST" class="admin-form">
+    <form method="post" class="admin-form">
 
         <input type="hidden" name="id" value="{{ req.get('id') }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>

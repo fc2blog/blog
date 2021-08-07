@@ -4,7 +4,7 @@
 
 {% block content %}
     <header><h1 class="sh_heading_main_b editor_title">{{ _('Edit this entry.') }}</h1></header>
-    <form method="POST" id="sys-entry-form" class="admin-form">
+    <form method="post" id="sys-entry-form" class="admin-form">
         <input type="hidden" name="id" value="{{ entry.id }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>
         {% include('admin/entries/form_sp.twig') %}
@@ -21,7 +21,7 @@
         </ul>
     </div>
 
-    <form method="POST" id="entry-delete-form">
+    <form method="post" id="entry-delete-form">
         <input type="hidden" name="mode" value="entries"/>
         <input type="hidden" name="process" value="delete"/>
         <input type="hidden" name="id" value=""/>

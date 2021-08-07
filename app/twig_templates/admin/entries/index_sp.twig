@@ -5,7 +5,7 @@
 {% block content %}
     <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('List of articles') }}</span><span class="accordion_btn"><i class="search_icon btn_icon"></i></span></h1></header>
     <div id="entry_search" class="accordion_contents" style="display:none;">
-        <form method="GET" id="sys-search-form">
+        <form method="get" id="sys-search-form">
             <input type="hidden" name="mode" value="Entries"/>
             <input type="hidden" name="process" value="index"/>
             <dl class="input_search">
@@ -26,7 +26,7 @@
     </div>
     <script src="/assets/admin/js/search_form.js" type="text/javascript" charset="utf-8"></script>
 
-    <form method="POST" id="sys-list-form">
+    <form method="post" id="sys-list-form">
         <ul class="link_list">
             {% for entry in entries %}
                 <li class="link_list_item">

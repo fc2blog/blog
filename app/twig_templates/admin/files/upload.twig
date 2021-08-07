@@ -4,7 +4,7 @@
 {% block content %}
     <header><h2>{{ _('File upload') }}</h2></header>
 
-    <form method="POST" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
+    <form method="post" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
 
         <input type="hidden" name="MAX_FILE_SIZE" value="{{ file_max_size }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>
