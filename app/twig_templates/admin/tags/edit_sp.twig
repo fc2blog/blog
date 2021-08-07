@@ -30,7 +30,7 @@
 
     <h2><span class="h2_inner">{{ _('Delete tag') }}</span></h2>
     <div class="btn_area">
-        <ul class="btn_area_inner">
+        <ul class="btn_area_inner full_width">
             <li>
                 <form action="{{ url(req, 'Tags', 'delete') }}" method="post" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
                     <input type="hidden" name="sig" value="{{ sig }}">
