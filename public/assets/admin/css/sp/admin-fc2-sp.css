@@ -1624,6 +1624,10 @@ div.bg_white {
     width: 300px;
 }
 
+.btn_area_inner.full_width li {
+    width: 100%;
+}
+
 .btn_area_inner li:last-child {
     margin-right: 0;
 }
