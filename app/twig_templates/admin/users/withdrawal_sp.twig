@@ -7,7 +7,7 @@
     {% include('admin/users/tab_sp.twig') %}
 
     <h2 id="blog_settings"><span class="h2_inner">{{ _('Unsubscribe confirmation') }}</span></h2>
-    <form method="POST" id="sys-users-form" class="admin-form">
+    <form action="withdrawal" method="post" id="sys-users-form" class="admin-form">
         <div class="form_area">
             <div class="form_contents">{{ _('If you want to unsubscribe, please tap the "Withdrawal" button and check the "Unsubscribe confirmation".') }}</div>
             <div class="form_contents">

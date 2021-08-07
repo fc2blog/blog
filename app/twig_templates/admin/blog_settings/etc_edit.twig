@@ -6,7 +6,7 @@
 
     {% include('admin/blog_settings/tab.twig') %}
 
-    <form method="POST" id="sys-blog-template-form" class="admin-form">
+    <forma action="etc_edit" method="post" id="sys-blog-template-form" class="admin-form">
 
         <table>
             <tbody>
@@ -26,5 +26,5 @@
         </table>
         <input type="hidden" name="sig" value="{{ sig }}">
 
-    </form>
+    </forma>
 {% endblock %}

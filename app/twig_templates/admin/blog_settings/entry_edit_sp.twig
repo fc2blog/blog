@@ -7,7 +7,7 @@
     {% include('admin/blog_settings/tab_sp.twig') %}
 
     <h2 id="blog_settings"><span class="h2_inner">{{ _('Setting') }}</span></h2>
-    <form method="POST" id="sys-blog-template-form" class="admin-form">
+    <form action="entry_edit" method="post" id="sys-blog-template-form" class="admin-form">
         <div class="form_area">
             <div class="form_contents">
                 <h4>{{ _('Display the latest entries') }}</h4>

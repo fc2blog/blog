@@ -11,7 +11,7 @@
     </h3>
     <p>{{ _('You can search in accordance with the conditions of past articles.') }}</p>
     <div id="entry_search">
-        <form method="GET" id="sys-search-form">
+        <form action="index" method="get" id="sys-search-form">
             <input type="hidden" name="mode" value="Entries"/>
             <input type="hidden" name="process" value="index"/>
             {{ input(req, 'category_id', 'select', {'options' : category_list_w}) }}
@@ -29,7 +29,7 @@
 
     {% include('admin/common/paging.twig') %}
 
-    <form method="POST" id="sys-list-form">
+    <form action="index" method="post" id="sys-list-form">
         <table>
             <thead>
             <tr>
@@ -79,7 +79,7 @@
         <input type="button" id="sys-entries-delete-button" value="{{ _('Remove what you have selected') }}" onclick="if(confirm('{{ _('Are you sure you want to delete?') }}')) $('#sys-list-form').submit();" disabled="disabled"/>
     </form>
 
-    <form method="POST" id="entry-delete-form">
+    <form action="index" method="post" id="entry-delete-form">
         <input type="hidden" name="mode" value="entries"/>
         <input type="hidden" name="process" value="delete"/>
         <input type="hidden" name="id" value=""/>

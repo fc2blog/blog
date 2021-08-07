@@ -135,87 +135,89 @@
         <!--/allow_comment-->
         <!--deny_comment-->
           <li>
-            <span><%template_cm_close></span>
+              <span><%template_cm_close></span>
           </li>
-        <!--/deny_comment-->
+            <!--/deny_comment-->
         </ul>
       </div>
       <div class="pager">
-        <!--preventry--><a href="<%preventry_url><%tail_url>" class="prevpage"><%template_goto_preventry></a><!--/preventry-->
-        <!--nextentry--><a href="<%nextentry_url><%tail_url>" class="nextpage"><%template_goto_nextentry></a><!--/nextentry-->
+          <!--preventry--><a href="<%preventry_url><%tail_url>" class="prevpage"><%template_goto_preventry></a>
+          <!--/preventry-->
+          <!--nextentry--><a href="<%nextentry_url><%tail_url>" class="nextpage"><%template_goto_nextentry></a>
+          <!--/nextentry-->
       </div>
       <!--/topentry-->
-    <!--/permanent_area-->
+      <!--/permanent_area-->
 
-    <!--form_area-->
-    <!--コメント投稿ページ-->
+      <!--form_area-->
+      <!--コメント投稿ページ-->
       <div id="comment_post" class="section">
-        <div class="page_title">
-          <h2><%template_post_comment></h2>
-        </div>
-        <form method="post" name="form1" action="./">
-          <dl class="form">
-            <dt><%template_name></dt>
-            <dd><input type="text" name="comment[name]" /></dd>
-            <dt><%template_title></dt>
-            <dd><input type="text" name="comment[title]" /></dd>
-            <dt><%template_address></dt>
-            <dd><input type="email" name="comment[mail]" /></dd>
-            <dt>URL</dt>
-            <dd><input type="url" name="comment[url]" /></dd>
-            <dt><%template_body></dt>
-            <dd><textarea name="comment[body]"></textarea></dd>
-            <dt><%template_password></dt>
-            <dd><input type="password" name="comment[pass]" /></dd>
-            <dt><%template_privacy_set></dt>
-            <dd>
-              <select name="comment[himitu]">
-                <option value ="0"><%template_privacy_public></option>
-                <option value ="1"><%template_privacy_secret></option>
-              </select>
-            </dd>
+          <div class="page_title">
+              <h2><%template_post_comment></h2>
+          </div>
+          <form action="./" method="post" name="form1">
+              <dl class="form">
+                  <dt><%template_name></dt>
+                  <dd><input type="text" name="comment[name]"/></dd>
+                  <dt><%template_title></dt>
+                  <dd><input type="text" name="comment[title]"/></dd>
+                  <dt><%template_address></dt>
+                  <dd><input type="email" name="comment[mail]"/></dd>
+                  <dt>URL</dt>
+                  <dd><input type="url" name="comment[url]"/></dd>
+                  <dt><%template_body></dt>
+                  <dd><textarea name="comment[body]"></textarea></dd>
+                  <dt><%template_password></dt>
+                  <dd><input type="password" name="comment[pass]"/></dd>
+                  <dt><%template_privacy_set></dt>
+                  <dd>
+                      <select name="comment[himitu]">
+                          <option value="0"><%template_privacy_public></option>
+                          <option value="1"><%template_privacy_secret></option>
+                      </select>
+                  </dd>
           </dl>
           <input type="hidden" name="mode" value="regist" />
           <input type="hidden" name="comment[no]" value="<%pno>" />
-          <input type="hidden" name="mobile" value="1" />
-          <!--private_area--><input type="hidden" name="spass" value="<%spass>" /><!--/private_area-->
-          <div class="submit_btn">
-            <a href="#" onclick="submit();return false;"><%template_send></a>
-          </div>
-        </form>
-        <ul class="contents_footer">
-          <li><a href="<%url>?no=<%pno><%tail_url>"><%template_return_post></a></li>
-        </ul>
+              <input type="hidden" name="mobile" value="1"/>
+              <!--private_area--><input type="hidden" name="spass" value="<%spass>"/><!--/private_area-->
+              <div class="submit_btn">
+                  <a href="#" onclick="submit();return false;"><%template_send></a>
+              </div>
+          </form>
+          <ul class="contents_footer">
+              <li><a href="<%url>?no=<%pno><%tail_url>"><%template_return_post></a></li>
+          </ul>
       </div>
-    <!--/form_area-->
+      <!--/form_area-->
 
-    <!--edit_area-->
-    <!--ｺﾒﾝﾄｴﾃﾞｨｯﾄｴﾘｱ開始-->
-             <div id="comment_post" class="section">
-                 <div class="page_title">
-                     <h2><%template_edit_comment></h2>
-                 </div>
-                <form method="post" name="form1" action="./">
-                     <dl class="form">
-                        <dt><%template_name></dt>
-                         <dd><input type="text" name="edit[name]" value="<%edit_name>" /></dd>
-                         <dt><%template_title></dt>
-                         <dd><input type="text" name="edit[title]" value="<%edit_title>" /></dd>
-                         <dt><%template_address></dt>
-                         <dd><input type="email" name="edit[mail]" value="<%edit_mail>" ></dd>
-                         <dt>URL</dt>
-                         <dd><input type="url" name="edit[url]" value="<%edit_url>" /></dd>
-                         <dt><%template_body></dt>
-                         <dd><textarea name="edit[body]"><%edit_body></textarea></dd>
-                         <dt><%template_password></dt>
-                         <dd><input type="password" name="edit[pass]" /></dd>
-                         <dt><%template_privacy_set></dt>
-                         <dd>
-                             <select name="edit[himitu]">
-                                 <option value ="0"><%template_privacy_public></option>
-                                 <option value ="1"><%template_privacy_secret></option>
-                             </select>
-                         </dd>
+      <!--edit_area-->
+      <!--ｺﾒﾝﾄｴﾃﾞｨｯﾄｴﾘｱ開始-->
+      <div id="comment_post" class="section">
+          <div class="page_title">
+              <h2><%template_edit_comment></h2>
+          </div>
+          <form action="./" method="post" name="form1">
+              <dl class="form">
+                  <dt><%template_name></dt>
+                  <dd><input type="text" name="edit[name]" value="<%edit_name>"/></dd>
+                  <dt><%template_title></dt>
+                  <dd><input type="text" name="edit[title]" value="<%edit_title>"/></dd>
+                  <dt><%template_address></dt>
+                  <dd><input type="email" name="edit[mail]" value="<%edit_mail>"></dd>
+                  <dt>URL</dt>
+                  <dd><input type="url" name="edit[url]" value="<%edit_url>"/></dd>
+                  <dt><%template_body></dt>
+                  <dd><textarea name="edit[body]"><%edit_body></textarea></dd>
+                  <dt><%template_password></dt>
+                  <dd><input type="password" name="edit[pass]"/></dd>
+                  <dt><%template_privacy_set></dt>
+                  <dd>
+                      <select name="edit[himitu]">
+                          <option value="0"><%template_privacy_public></option>
+                          <option value="1"><%template_privacy_secret></option>
+                      </select>
+                  </dd>
                      </dl>
                      <div class="submit_btn">
                          <input type="submit" value="<%template_update>">

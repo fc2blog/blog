@@ -7,7 +7,7 @@
     {% include('admin/blog_settings/tab_sp.twig') %}
 
     <h2 id="blog_settings"><span class="h2_inner">{{ _('Delete confirmation') }}</span></h2>
-    <form method="POST" id="sys-blogs-form" class="admin-form">
+    <form action="delete" method="post" id="sys-blogs-form" class="admin-form">
         <div class="form_area">
             <div class="form_contents">{{ _('If you want to delete the blog, please tap the "Delete" button Check the "Delete confirmation".') }}</div>
             <div class="form_contents">
@@ -22,7 +22,7 @@
         </div>
         <div class="form_area">
             <div class="form_contents">
-                <div clas="btn">
+                <div class="btn">
                     <button type="button" class="btn_contents touch" id="sys-withdrawal">{{ _('Delete') }}<i class="delete_icon btn_icon"></i></button>
                 </div>
             </div>

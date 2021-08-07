@@ -58,7 +58,7 @@
         <ul class="btn_area_inner">
             <li><a class="btn_contents touch" href="{% if req.isArgs('back_url') %}{{ req.get('back_url') }}{% endif %}{% if not req.isArgs('back_url') %}{{ url(req, 'comments', 'index') }}{% endif %}"><i class="return_icon btn_icon"></i>{{ _('I Back to List') }}</a></li>
             <li>
-                <form method="POST" action="{{ url(req, 'comments', 'delete') }}" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
+                <form action="{{ url(req, 'comments', 'delete') }}" method="post" onsubmit="return confirm('{{ _('Are you sure you want to delete?') }}');">
                     <input type="hidden" name="sig" value="{{ sig }}">
                     <input type="hidden" name="id" value="{{ comment.id }}">
                     <input type="hidden" name="back_url" value="{{ request.get('back_url') }}">
@@ -69,7 +69,7 @@
     </div>
 
     {% if comment.open_status != comment_open_status_private %}
-        <form method="POST" id="sys-comment-form" class="admin-form" action="{{ url(req, 'comments', 'reply') }}">
+        <form action="{{ url(req, 'comments', 'reply') }}" method="post" id="sys-comment-form" class="admin-form">
             <input type="hidden" name="sig" value="{{ sig }}">
             <input type="hidden" name="id" value="{{ comment.id }}">
             <h2 id="jump1"><span class="h2_inner">{{ _('I will reply to comments') }}</span></h2>

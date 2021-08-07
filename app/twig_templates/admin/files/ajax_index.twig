@@ -6,7 +6,7 @@
 </h3>
 <p>{{ _('You can search to match the conditions file.') }}</p>
 <div id="entry_search">
-    <form method="GET" id="sys-search-form" onsubmit="return false;">
+    <form action="upload" method="get" id="sys-search-form" onsubmit="return false;">
         <input type="hidden" name="mode" value="Files"/>
         <input type="hidden" name="process" value="ajax_index"/>
         {{ input(req, 'limit', 'hidden', {'default': page_limit_file}) }}
