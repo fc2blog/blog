@@ -2434,6 +2434,22 @@ div.flash-message-error {
     background: #ededed;
 }
 
+.template_list_item img {
+    width: 100%;
+}
+
+.template_list_item {
+    text-align: center;
+}
+
+li.template_list_item {
+    padding: 15px 10px;
+}
+
+.template_detail .template_img img {
+    width: 100%;
+}
+
 /*============================================================
 	#Site Footer
 ============================================================*/

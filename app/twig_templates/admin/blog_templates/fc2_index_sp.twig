@@ -3,14 +3,14 @@
 
 {% block content %}
 
-    <header><h1 class="sh_heading_main_b">{{ _('FC2 Template list') }}[{{ _(attribute(devices, req.get('device_type'))) }}]</h1></header>
+    <header><h1 class="sh_heading_main_b">{{ _('FC2 Template list') }}[{{ _(attribute(constant('Fc2blog\\App::DEVICE_FC2_KEY'), req.get('device_type'))) }}]</h1></header>
 
     {% if templates %}
         <ul class="template_list">
             {% for template in templates %}
                 <li class="template_list_item">
                     <a href="{{ url(req, 'blog_templates', 'fc2_view', {fc2_id: template.id, device_type: req.get('device_type')}) }}">
-                        <img class="template_img" src="{{ template.image }}" width="135" height="90" alt="{{ template.name }}"/>
+                        <img class="template_img" src="{{ template.image }}" alt="{{ template.name }}">
                         <p class="template_name">{{ template.name }}</p>
                     </a>
                 </li>

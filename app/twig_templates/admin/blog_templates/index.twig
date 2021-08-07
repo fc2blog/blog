@@ -5,7 +5,7 @@
     <header><h2>{{ _('Template management') }}</h2></header>
 
     {% for device_type, blog_templates in device_blog_templates %}{# 機種毎のループ #}
-        <h3>{{ _(attribute(devices, device_type)) }}</h3>
+        <h3>{{ _(attribute(constant('Fc2blog\\App::DEVICE_FC2_KEY'), device_type)) }}</h3>
         <p class="header_btn">
             <a class="admin_common_btn create_btn" href="{{ url(req, 'BlogTemplates', 'fc2_index', { 'device_type': device_type}) }}">{{ _('Template Search') }}</a>
             <a class="admin_common_btn create_btn" href="{{ url(req, 'BlogTemplates', 'create', { 'device_type': device_type}) }}">{{ _('Template Creation') }}</a>
