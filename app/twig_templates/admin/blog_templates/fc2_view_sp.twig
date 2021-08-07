@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <header><h1 class="sh_heading_main_b">{{ _('FC2 Template detail') }}[{{ _(attribute(devices, req.get('device_type'))) }}]</h1></header>
+    <header><h1 class="sh_heading_main_b">{{ _('FC2 Template detail') }}[{{ _(attribute(constant('Fc2blog\\App::DEVICE_FC2_KEY'), req.get('device_type'))) }}]</h1></header>
     <h2><span class="h2_inner">テンプレートの詳細</span></h2>
 
     <div class="template_detail ">

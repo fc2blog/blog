@@ -23,7 +23,7 @@
                 </li>
             </ul>
         </div>
-        <h2><span class="h2_inner">{{ _(attribute(devices, device_type)) }}</span></h2>
+        <h2><span class="h2_inner">{{ _(attribute(constant('Fc2blog\\App::DEVICE_FC2_KEY'), device_type)) }}</span></h2>
         <ul class="list_radio">
             {% for blog_template in blog_templates %}
                 <li class="list_radio_item">
