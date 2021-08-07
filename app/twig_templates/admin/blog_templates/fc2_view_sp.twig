@@ -6,7 +6,7 @@
     <header><h1 class="sh_heading_main_b">{{ _('FC2 Template detail') }}[{{ _(attribute(constant('Fc2blog\\App::DEVICE_FC2_KEY'), req.get('device_type'))) }}]</h1></header>
     <h2><span class="h2_inner">テンプレートの詳細</span></h2>
 
-    <div class="template_detail ">
+    <div class="template_detail">
         <form action="{{ url(req, 'blog_templates', 'download') }}" method="post" id="template_download_form">
             <input type="hidden" name="sig" value="{{ sig }}">
             <input type="hidden" name="fc2_id" value="{{ template.id }}">
@@ -14,7 +14,7 @@
         </form>
         <div class="left_column">
             <p class="template_img">
-                <img class="template_img" src="{{ template.image }}" width="135" height="90" alt="{{ template.name }}"/>
+                <img class="template_img" src="{{ template.image }}" alt="{{ template.name }}"/>
             </p>
         </div>
         <div class="right_column">
