@@ -11,7 +11,7 @@
     </h3>
     <p>{{ _('I can search by tag name') }}</p>
     <div id="entry_search">
-        <form method="get" id="sys-search-form">
+        <form action="index" method="get" id="sys-search-form">
             <input type="hidden" name="mode" value="Tags"/>
             <input type="hidden" name="process" value="index"/>
             {{ input(req, 'limit', 'hidden', {'default': tag_default_limit}) }}
@@ -25,7 +25,7 @@
 
     {% include('admin/common/paging.twig') %}
 
-    <form method="post" id="sys-list-form">
+    <form action="index" method="post" id="sys-list-form">
         <table>
             <thead>
             <tr>

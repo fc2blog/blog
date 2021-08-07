@@ -178,7 +178,7 @@
         <div class="page_title">
             <h2>コメントを書く</h2>
         </div>
-        <form method="post" name="form1" action="./">
+        <form action="./" method="post" name="form1">
             <dl class="form">
                 <dt>名前</dt>
                 <dd><input type="text" name="comment[name]"/></dd>
@@ -220,7 +220,7 @@
         <div class="page_title">
             <h2>コメントを編集する</h2>
         </div>
-        <form method="post" name="form1" action="../../config">
+        <form action="../../config" method="post" name="form1">
             <dl class="form">
                 <dt>名前</dt>
                 <dd><input type="text" name="edit[name]" value="<%edit_name>"/></dd>

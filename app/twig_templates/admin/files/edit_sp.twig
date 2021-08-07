@@ -15,7 +15,7 @@
     </ul>
 
     <h2><span class="h2_inner">{{ _('Edit File') }}</span></h2>
-    <form method="post" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
+    <form action="edit" method="post" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
         <input type="hidden" name="MAX_FILE_SIZE" value="{{ max_file_size }}"/>
         <input type="hidden" name="id" value="{{ req.get('id') }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>

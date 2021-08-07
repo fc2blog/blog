@@ -6,7 +6,7 @@
 
     {% include('admin/users/tab.twig') %}
 
-    <form method="post" id="sys-users-form" class="admin-form">
+    <form action="withdrawal" method="post" id="sys-users-form" class="admin-form">
         <input type="hidden" name="sig" value="{{ sig }}"/>
 
         <table>

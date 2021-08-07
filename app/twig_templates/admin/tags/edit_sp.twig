@@ -5,7 +5,7 @@
     <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('I want to edit tags') }}</span></h1></header>
 
     <h2><span class="h2_inner">{{ _('Edit tag') }}</span></h2>
-    <form method="post" id="sys-tag-form" class="admin-form">
+    <form action="edit" method="post" id="sys-tag-form" class="admin-form">
         <input type="hidden" name="id" value="{{ req.get('id') }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>
         {{ input(req, 'back_url', 'hidden', {'default': req.get('back_url')}) }}

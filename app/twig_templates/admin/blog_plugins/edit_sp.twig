@@ -4,7 +4,7 @@
 {% block content %}
     <header><h1 class="in_menu sh_heading_main_b"><span class="h1_title">{{ _('I want to edit the plugin') }}</span></h1></header>
 
-    <form method="post" id="sys-blog-plugin-form" class="admin-form">
+    <form action="edit" method="post" id="sys-blog-plugin-form" class="admin-form">
 
         <input type="hidden" name="id" value="{{ req.get('id') }}"/>
         {{ input(req, 'blog_plugin[device_type]', 'hidden') }}

@@ -5,7 +5,7 @@
 
     <header><h2>{{ _('I want to edit the template') }}</h2></header>
 
-    <form method="post" id="sys-blog-template-form" class="admin-form">
+    <form action="edit" method="post" id="sys-blog-template-form" class="admin-form">
 
         <input type="hidden" name="id" value="{{ req.get('id') }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>

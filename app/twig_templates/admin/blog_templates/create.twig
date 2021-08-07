@@ -5,7 +5,7 @@
 
     <header><h2>{{ _('I want to create a template') }}</h2></header>
 
-    <form method="post" id="sys-blog-template-form" class="admin-form">
+    <form action="create" method="post" id="sys-blog-template-form" class="admin-form">
 
         {{ input(req, 'blog_template[device_type]', 'hidden') }}
         {{ input(req, 'sig', 'hidden', {'value': sig} ) }}

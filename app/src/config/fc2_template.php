@@ -150,7 +150,7 @@ $template_vars = [
                                             \$__str__2 = __("Password");
                                             \$__str__3 = __("Submit");
                                             echo <<<HTML
-                                            <form method="post">
+                                            <form action="index.php" method="post">
                                               <input type="hidden" name="mode" value="Entries" />
                                               <input type="hidden" name="process" value="password" />
                                               <input type="hidden" name="id" value="{\$entry['id']}" />
@@ -537,7 +537,7 @@ function getTopentryDiscription(): string
         \$__str__2 = __("Password");
         \$__str__3 = __("Submit");
         echo <<<HTML
-        <form method="post">
+        <form action="" method="post">
           <input type="hidden" name="mode" value="Entries" />
           <input type="hidden" name="process" value="password" />
           <input type="hidden" name="id" value="{\$entry['id']}" />

@@ -19,7 +19,7 @@
     </h3>
     <p>{{ _('You can search in accordance with the conditions of the past comments.') }}</p>
     <div id="entry_search">
-        <form method="get" id="sys-search-form">
+        <form action="index" method="get" id="sys-search-form">
             <input type="hidden" name="mode" value="Comments"/>
             <input type="hidden" name="process" value="index"/>
             {{ input(req, 'entry_id', 'hidden') }}
@@ -36,7 +36,7 @@
 
     {% include('admin/common/paging.twig') %}
 
-    <form method="post" id="sys-list-form">
+    <form action="index" method="post" id="sys-list-form">
         <table>
             <thead>
             <tr>
