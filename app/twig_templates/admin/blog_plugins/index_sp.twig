@@ -288,15 +288,13 @@
             });
 
             // 初期表示
-            {% if req.get('state') == 'display' %}
+            {% if state == 'display' %}
             $('#plugin_radio_display').prop('checked', true);
             pluginSwitch('display');
-            {% endif %}
-            {% if req.get('state') == 'sort' %}
+            {% elseif state == 'sort' %}
             $('#plugin_radio_sort').prop('checked', true);
             pluginSwitch('sort');
-            {% endif %}
-            {% if req.get('state') != 'display' and req.get('state') == 'sort' %}
+            {% else %}
             pluginSwitch('detail');
             {% endif %}
         });

@@ -46,6 +46,7 @@ class BlogPluginsController extends AdminController
             }
         }
         $this->set('blog_plugin_json', $blog_plugin_json);
+        $this->set('state', $request->get('state'));
 
         return "admin/blog_plugins/index.twig";
     }
