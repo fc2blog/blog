@@ -29,10 +29,10 @@
                 <td>{{ t(plugin.title, 20) }}</td>
                 <td>{{ plugin.body|nl2br }}</td>
                 <td class="center">
-                    <a href="{{ url(req, 'blog_plugins', 'download', {id: plugin.id, category: req.get('category'), sig: sig}) }}">{{ _('Download') }}</a>
+                    <a href="{{ url(req, 'blog_plugins', 'download', {id: plugin.id, category: plugin_category_type_id, sig: sig}) }}">{{ _('Download') }}</a>
                 </td>
                 <td class="center">
-                    <a href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, plugin_id: plugin.id, category: req.get('category'), device_key: 1}, false, true, false) }}" target="_blank">{{ _('Preview') }}</a>
+                    <a href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, plugin_id: plugin.id, category: plugin_category_type_id, device_key: 1}, false, true, false) }}" target="_blank">{{ _('Preview') }}</a>
                 </td>
                 {% if not is_official %}
                     <td class="center">

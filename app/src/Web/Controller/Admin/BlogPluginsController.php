@@ -9,6 +9,7 @@ use Fc2blog\Model\BlogPluginsModel;
 use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\PluginsModel;
+use Fc2blog\Util\Log;
 use Fc2blog\Web\Request;
 
 class BlogPluginsController extends AdminController
@@ -73,6 +74,8 @@ class BlogPluginsController extends AdminController
         return $this->plugin_search($request, false);
     }
 
+    const ALLOWED_PLUGIN_CATEGORY_TYPE_RANGE = "1-3";
+
     /**
      * プラグイン検索 （内部呼び出し）
      * @param Request $request
@@ -117,6 +120,11 @@ class BlogPluginsController extends AdminController
         $this->set('req_device_name', __(BlogTemplatesModel::getDeviceName((int)$request->get('device_type'))));
         $this->set('device_key', App::getDeviceFc2Key($request->get('device_type')));
         $this->set('is_official', $is_official);
+        if (!preg_match('/\A[' . self::ALLOWED_PLUGIN_CATEGORY_TYPE_RANGE . ']\z/u', $request->get('category'))) {
+            Log::notice("Request invalid plugin category type " . $request->get('category'));
+            return $this->error400();
+        }
+        $this->set('plugin_category_type_id', $request->get('category'));
 
         return 'admin/blog_plugins/plugin_search.twig';
     }
