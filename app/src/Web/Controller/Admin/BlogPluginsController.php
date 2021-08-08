@@ -191,13 +191,15 @@ class BlogPluginsController extends AdminController
         $this->set('device_type_sp', (string)App::DEVICE_SP);
 
         // 編集対象のデータ取得、なければリダイレクト
-        if (!$blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id)) {
+        $blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id);
+        if ($blog_plugin === false) {
             $this->redirect($request, array('action' => 'index'));
         }
 
         // 初期表示時に編集データの設定
         if (!$request->get('blog_plugin') || !$request->isValidSig()) {
             $request->set('blog_plugin', $blog_plugin);
+            $this->set('blog_plugin', $blog_plugin);
             return "admin/blog_plugins/edit.twig";
         }
 
