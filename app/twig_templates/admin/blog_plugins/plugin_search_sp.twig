@@ -13,8 +13,19 @@
                 <h4>{{ t(plugin.title, 20) }}</h4>
                 <p>{{ t(plugin.body, 20) }}</p>
                 <div class="parallel_btn">
-                    <a class="btn_contents touch" href="{{ url(req, 'blog_plugins', 'download', {id: plugin.id, category: plugin_category_type_id, sig: sig}) }}">{{ _('Add') }}</a>
-                    <a class="btn_contents touch" href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, plugin_id: plugin.id, category: plugin_category_type_id, device_key: 1}, false, true) }}" target="_blank">{{ _('Preview') }}</a>
+                    <form action="{{ url(req, 'blog_plugins', 'download') }}" method="post" style="display: inline">
+                        <input type="hidden" name="id" value="{{ plugin.id }}">
+                        <input type="hidden" name="category" value="{{ plugin_category_type_id }}">
+                        <input type="hidden" name="sig" value="{{ sig }}">
+                        <button class="btn_contents touch">{{ _('Add') }}</button>
+                    </form>
+                    <form action="{{ url(req, 'Entries', 'preview', {}, false, true, false) }}" method="post" target="_blank" style="display: inline">
+                        <input type="hidden" name="blog_id" value="{{ blog.id }}">
+                        <input type="hidden" name="plugin_id" value="{{ plugin.id }}">
+                        <input type="hidden" name="category" value="{{ plugin_category_type_id }}">
+                        <input type="hidden" name="device_key" value="1">
+                        <button class="btn_contents touch">{{ _('Preview') }}</button>
+                    </form>
                 </div>
             </li>
         {% endfor %}
