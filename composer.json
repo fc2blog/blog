@@ -16,7 +16,8 @@
       "nikic/php-parser": "^4.10",
       "tuupola/base62": "^2.1",
       "mibe/feedwriter": "^1.1",
-      "swiftmailer/swiftmailer": "^6.0"
+      "swiftmailer/swiftmailer": "^6.0",
+      "maxmind-db/reader": "~1.0"
     },
     "config": {
         "vendor-dir": "app/vendor"

@@ -1,20 +1,20 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "7092a6218e8fae2d6b62166c9b79c9ee",
-    "packages": [
-        {
-            "name": "doctrine/lexer",
-            "version": "1.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/lexer.git",
-                "reference": "e864bbf5904cb8f5bb334f99209b48018522f042"
-            },
-            "dist": {
+  "_readme": [
+    "This file locks the dependencies of your project to a known state",
+    "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+    "This file is @generated automatically"
+  ],
+  "content-hash": "86bb9f7b06596fa4f257587efda5223e",
+  "packages": [
+    {
+      "name": "doctrine/lexer",
+      "version": "1.2.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/doctrine/lexer.git",
+        "reference": "e864bbf5904cb8f5bb334f99209b48018522f042"
+      },
+      "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/e864bbf5904cb8f5bb334f99209b48018522f042",
                 "reference": "e864bbf5904cb8f5bb334f99209b48018522f042",
@@ -295,26 +295,91 @@
             "funding": [
                 {
                     "url": "https://github.com/frankdejonge",
-                    "type": "github"
+                  "type": "github"
                 },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/league/flysystem",
-                    "type": "tidelift"
-                }
+              {
+                "url": "https://tidelift.com/funding/github/packagist/league/flysystem",
+                "type": "tidelift"
+              }
             ],
-            "time": "2021-01-18T20:58:21+00:00"
+          "time": "2021-01-18T20:58:21+00:00"
         },
+    {
+      "name": "maxmind-db/reader",
+      "version": "v1.10.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/maxmind/MaxMind-DB-Reader-php.git",
+        "reference": "569bd44d97d30a4ec12c7793a33004a76d4caf18"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/maxmind/MaxMind-DB-Reader-php/zipball/569bd44d97d30a4ec12c7793a33004a76d4caf18",
+        "reference": "569bd44d97d30a4ec12c7793a33004a76d4caf18",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=7.2"
+      },
+      "conflict": {
+        "ext-maxminddb": "<1.10.1,>=2.0.0"
+      },
+      "require-dev": {
+        "friendsofphp/php-cs-fixer": "*",
+        "php-coveralls/php-coveralls": "^2.1",
+        "phpstan/phpstan": "*",
+        "phpunit/phpcov": ">=6.0.0",
+        "phpunit/phpunit": ">=8.0.0,<10.0.0",
+        "squizlabs/php_codesniffer": "3.*"
+      },
+      "suggest": {
+        "ext-bcmath": "bcmath or gmp is required for decoding larger integers with the pure PHP decoder",
+        "ext-gmp": "bcmath or gmp is required for decoding larger integers with the pure PHP decoder",
+        "ext-maxminddb": "A C-based database decoder that provides significantly faster lookups"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "MaxMind\\Db\\": "src/MaxMind/Db"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "Apache-2.0"
+      ],
+      "authors": [
         {
-            "name": "mibe/feedwriter",
-            "version": "v1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mibe/FeedWriter.git",
-                "reference": "f4cc748ad8700e36663f08cfeebe7fd39b00eea2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mibe/FeedWriter/zipball/f4cc748ad8700e36663f08cfeebe7fd39b00eea2",
+          "name": "Gregory J. Oschwald",
+          "email": "goschwald@maxmind.com",
+          "homepage": "https://www.maxmind.com/"
+        }
+      ],
+      "description": "MaxMind DB Reader API",
+      "homepage": "https://github.com/maxmind/MaxMind-DB-Reader-php",
+      "keywords": [
+        "database",
+        "geoip",
+        "geoip2",
+        "geolocation",
+        "maxmind"
+      ],
+      "support": {
+        "issues": "https://github.com/maxmind/MaxMind-DB-Reader-php/issues",
+        "source": "https://github.com/maxmind/MaxMind-DB-Reader-php/tree/v1.10.1"
+      },
+      "time": "2021-04-14T17:49:35+00:00"
+    },
+    {
+      "name": "mibe/feedwriter",
+      "version": "v1.1.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/mibe/FeedWriter.git",
+        "reference": "f4cc748ad8700e36663f08cfeebe7fd39b00eea2"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/mibe/FeedWriter/zipball/f4cc748ad8700e36663f08cfeebe7fd39b00eea2",
                 "reference": "f4cc748ad8700e36663f08cfeebe7fd39b00eea2",
                 "shasum": ""
             },
