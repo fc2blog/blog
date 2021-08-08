@@ -6,7 +6,7 @@
 
     <h2><span class="h2_inner">{{ _('Edit category') }}</span></h2>
     <form action="edit" method="post" class="admin-form">
-        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="id" value="{{ category.id }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>
         <div class="form_area">
             <div class="form_contents">
