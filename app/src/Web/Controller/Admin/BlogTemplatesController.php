@@ -10,6 +10,7 @@ use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\Fc2TemplatesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Service\BlogService;
+use Fc2blog\Util\Log;
 use Fc2blog\Web\Request;
 
 class BlogTemplatesController extends AdminController
@@ -45,6 +46,11 @@ class BlogTemplatesController extends AdminController
         }
         $this->set('device_blog_templates', $device_blog_templates);
         $this->set('devices', BlogTemplatesModel::DEVICE_NAME);
+        if (!App::isExistsDeviceId($request->get("device_type", (string)App::DEVICE_PC))) {
+            Log::notice("invalid device_type params :" . $request->get("device_type"));
+            return $this->error400();
+        }
+        $this->set('req_device_type', $request->get("device_type"));
 
         return "admin/blog_templates/index.twig";
     }
@@ -77,6 +83,11 @@ class BlogTemplatesController extends AdminController
         $this->set('templates', $templates);
         $this->set('paging', $paging);
         $this->set('devices', BlogTemplatesModel::DEVICE_NAME);
+        if (!App::isExistsDeviceId($request->get("device_type", (string)App::DEVICE_PC))) {
+            Log::notice("invalid device_type params :" . $request->get("device_type"));
+            return $this->error400();
+        }
+        $this->set('req_device_type', $request->get("device_type"));
 
         return "admin/blog_templates/fc2_index.twig";
     }
@@ -100,6 +111,12 @@ class BlogTemplatesController extends AdminController
         // デバイスタイプの設定
         $device_type = $request->get('device_type', (string)App::DEVICE_PC);
         $request->set('device_type', $device_type);
+
+        if (!App::isExistsDeviceId($request->get("device_type", (string)App::DEVICE_PC))) {
+            Log::notice("invalid device_type params :" . $request->get("device_type"));
+            return $this->error400();
+        }
+        $this->set('req_device_type', $request->get("device_type"));
 
         // テンプレート取得
         $device_key = App::getDeviceFc2Key($device_type);

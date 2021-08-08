@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <header><h2>{{ _('FC2 Template list') }}[{{ _(attribute(constant('Fc2blog\\App::DEVICE_FC2_KEY'), req.get('device_type'))) }}]</h2></header>
+    <header><h2>{{ _('FC2 Template list') }}[{{ _(attribute(constant('Fc2blog\\App::DEVICE_FC2_KEY'), req_device_type)) }}]</h2></header>
 
     {% if templates %}
         {% for template in templates %}
@@ -18,11 +18,11 @@
                 </tr>
                 <tr>
                     <td class="btn">
-                        <a class="admin_common_btn create_btn" href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, fc2_id:template.id, device_type: req.get('device_type')}, false, true) }}" target="_blank">{{ _('Preview') }}</a>
+                        <a class="admin_common_btn create_btn" href="{{ url(req, 'Entries', 'preview', {blog_id: blog.id, fc2_id:template.id, device_type: req_device_type}, false, true) }}" target="_blank">{{ _('Preview') }}</a>
                         <form action="{{ url(req, 'blog_templates', 'download') }}" method="post" style="display: inline">
                             <input type="hidden" name="sig" value="{{ sig }}">
                             <input type="hidden" name="fc2_id" value="{{ template.id }}">
-                            <input type="hidden" name="device_type" value="{{ req.get('device_type') }}">
+                            <input type="hidden" name="device_type" value="{{ req_device_type }}">
                             <button type="submit" class="admin_common_btn create_btn">{{ _('Download') }}</button>
                         </form>
 

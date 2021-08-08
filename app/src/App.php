@@ -241,11 +241,7 @@ class App
 
         // Cookieからデバイスタイプを取得
         $device_type = $request->rawCookie('device');
-        $devices = [
-            App::DEVICE_PC,
-            App::DEVICE_SP,
-        ];
-        if (!empty($device_type) && in_array($device_type, $devices)) {
+        if (!empty($device_type) && static::isExistsDeviceId($device_type)) {
             return (int)$device_type;
         }
 
@@ -262,6 +258,16 @@ class App
     }
 
     /**
+     * デバイスタイプが既知のものか？（許可されているか？）
+     * @param string $id
+     * @return bool
+     */
+    public static function isExistsDeviceId(string $id): bool
+    {
+        return in_array($id, self::ALLOW_DEVICES);
+    }
+
+    /**
      * デバイスタイプを取得する
      * @param Request $request
      * @return string|null
@@ -269,8 +275,7 @@ class App
     public static function getDeviceTypeStr(Request $request): string
     {
         $device_id = static::getDeviceType($request);
-        $device_table = App::DEVICE_FC2_KEY;
-        return $device_table[$device_id];
+        return App::DEVICE_FC2_KEY[$device_id] ?? App::DEVICE_FC2_KEY[App::DEVICE_PC];
     }
 
     /**
