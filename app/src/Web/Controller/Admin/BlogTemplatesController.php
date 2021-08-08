@@ -177,13 +177,15 @@ class BlogTemplatesController extends AdminController
 
         $id = $request->get('id');
         $blog_id = $this->getBlogIdFromSession();
+        $blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id);
 
         // 初期表示時に編集データの取得&設定
         if (!$request->get('blog_template') || !$request->isValidPost()) {
-            if (!$blog_template = $blog_templates_model->findByIdAndBlogId($id, $blog_id)) {
+            if (!$blog_template) {
                 $this->redirect($request, ['action' => 'index']);
             }
             $request->set('blog_template', $blog_template);
+            $this->set('blog_template', $blog_template);
             return "admin/blog_templates/edit.twig";
         }
 
