@@ -33,8 +33,7 @@
         {{ input(req, 'sig', 'hidden', {'value': sig}) }}
     </form>
 
-    {% if not req.get('category') %}
-
+    {% if show_category_list %}
         <h2><span class="h2_inner">{{ _('Categories') }}</span></h2>
         <div class="category_list">
             <ul id="sys-category-list">

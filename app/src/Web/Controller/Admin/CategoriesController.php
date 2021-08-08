@@ -40,6 +40,7 @@ class CategoriesController extends AdminController
 
         // 初期表示時
         if (!$request->get('category') || !$request->isValidSig()) {
+            $this->set('show_category_list', true);
             return "admin/categories/create.twig";
         }
 
