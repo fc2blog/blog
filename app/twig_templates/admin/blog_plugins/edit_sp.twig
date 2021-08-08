@@ -71,7 +71,7 @@
     <div class="btn_area">
         <ul class="btn_area_inner">
             <li>
-                <a href="{{ url(req, 'blog_plugins', 'delete', {id: req.get('id'), sig: sig}) }}" class="btn_contents touch"
+                <a href="{{ url(req, 'blog_plugins', 'delete', {id: blog_plugin.id, sig: sig}) }}" class="btn_contents touch"
                    onclick="return confirm('{{ _('Are you sure you want to delete?') }}');"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</a>
             </li>
         </ul>

@@ -39,7 +39,7 @@
             </li>
             {% if category.id != 1 %}
                 <li>
-                    <a href="{{ url(req, 'Categories', 'delete', {id: req.get('id'), sig: sig}) }}" class="btn_contents touch"
+                    <a href="{{ url(req, 'Categories', 'delete', {id: category.id, sig: sig}) }}" class="btn_contents touch"
                        onclick="return confirm('{{ _('If the child category exists\nRemove all along with the child category, but do you really want?') }}');"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</a>
                 </li>
             {% endif %}
