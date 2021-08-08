@@ -83,7 +83,7 @@ class BlogTemplatesController extends AdminController
         $this->set('templates', $templates);
         $this->set('paging', $paging);
         $this->set('devices', BlogTemplatesModel::DEVICE_NAME);
-        if (!App::isExistsDeviceId($request->get("device_type", (string)App::DEVICE_PC))) {
+        if (!App::isExistsDeviceId((string)$request->get("device_type", (string)App::DEVICE_PC))) {
             Log::notice("invalid device_type params :" . $request->get("device_type"));
             return $this->error400();
         }
