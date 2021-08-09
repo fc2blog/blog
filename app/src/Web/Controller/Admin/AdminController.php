@@ -6,6 +6,7 @@ namespace Fc2blog\Web\Controller\Admin;
 use Fc2blog\App;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Model\UsersModel;
+use Fc2blog\Service\AccessBlock;
 use Fc2blog\Service\BlogService;
 use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Request;
@@ -13,10 +14,13 @@ use Fc2blog\Web\Session;
 
 abstract class AdminController extends Controller
 {
-    protected function beforeFilter(Request $request)
+    protected function beforeFilter(Request $request): string
     {
         // 親のフィルター呼び出し
-        parent::beforeFilter($request);
+        $template_path = parent::beforeFilter($request);
+        if (strlen($template_path) > 0) {
+            return $template_path;
+        }
 
         // install.lockファイルがなければインストーラーへ
         if (!$this->isInstalled() && (
@@ -24,6 +28,11 @@ abstract class AdminController extends Controller
                 $request->methodName !== 'install'
             )) {
             $this->redirect($request, ['controller' => 'Common', 'action' => 'install']);
+        }
+
+        // IPアドレスからアクセス元の国を推定してのブロック
+        if ((new AccessBlock())->isAdminBlockIp($request)) {
+            return $this->error403();
         }
 
         if (!$this->isLogin()) {
@@ -40,7 +49,7 @@ abstract class AdminController extends Controller
             if (!isset($allows[$controller_name]) || !in_array($action_name, $allows[$controller_name])) {
                 $this->redirect($request, array('controller' => 'Session', 'action' => 'login'));
             }
-            return;
+            return "";
         }
 
         if (!$this->isSelectedBlog()) {
@@ -57,7 +66,7 @@ abstract class AdminController extends Controller
                 $this->setWarnMessage(__('Please select a blog'));
                 $this->redirect($request, ['controller' => 'Blogs', 'action' => 'index']);
             }
-            return;
+            return "";
         }
 
         // ログイン中でかつブログ選択中の場合ブログ情報を取得し時間設定を行う
@@ -65,6 +74,8 @@ abstract class AdminController extends Controller
         if (is_array($blog) && isset($blog['timezone'])) {
             date_default_timezone_set($blog['timezone']);
         }
+
+        return "";
     }
 
     /**

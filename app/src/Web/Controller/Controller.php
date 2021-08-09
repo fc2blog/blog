@@ -53,7 +53,10 @@ abstract class Controller
      */
     public function prepare(string $method): string
     {
-        $this->beforeFilter($this->request);
+        $template_path = $this->beforeFilter($this->request);
+        if (strlen($template_path) > 0) {
+            return $template_path;
+        }
 
         $this->resolvedMethod = $method;
 
@@ -130,8 +133,9 @@ abstract class Controller
         return false;
     }
 
-    protected function beforeFilter(Request $request)
+    protected function beforeFilter(Request $request): string
     {
+        return "";
     }
 
     public function set(string $key, $value)
