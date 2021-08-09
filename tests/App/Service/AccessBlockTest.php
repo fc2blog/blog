@@ -11,6 +11,11 @@ class AccessBlockTest extends TestCase
 {
     public function testAccessBlock(): void
     {
+        if (!file_exists(AccessBlock::MMDB_FILE_PATH)) {
+            $this->markTestSkipped();
+            return;
+        }
+
         $jp_ip_address = "133.0.0.1"; // Some JP address https://www.nic.ad.jp/ja/dns/jp-addr-block.html
         $r = new Request(null, null, null, null, null, null, [
             'REMOTE_ADDR' => $jp_ip_address
