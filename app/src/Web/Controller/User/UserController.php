@@ -80,9 +80,6 @@ abstract class UserController extends Controller
      */
     protected function renderByFc2Template(Request $request, string $template_file_path): string
     {
-        if (is_null($template_file_path)) {
-            throw new InvalidArgumentException("undefined template");
-        }
         if (!is_file($template_file_path)) {
             throw new InvalidArgumentException("missing template");
         }
@@ -94,7 +91,6 @@ abstract class UserController extends Controller
 
         // テンプレートをレンダリングして返す
         ob_start();
-        /** @noinspection PhpIncludeInspection */
         include($template_file_path);
         return ob_get_clean();
     }
