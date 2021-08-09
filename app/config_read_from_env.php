@@ -53,6 +53,10 @@ define("SENDMAIL_PATH", (string)getenv("FC2_SENDMAIL_PATH"));
 define("EMERGENCY_PASSWORD_RESET_ENABLE", (string)getenv("FC2_EMERGENCY_PASSWORD_RESET_ENABLE"));
 define("MFA_EMAIL", (string)getenv("FC2_MFA_EMAIL"));
 
+// 国コード(ISO Code)指定でアクセスブロック
+define("USER_BLOCK_COUNTRY_ISO_CODE_CSV", (string)getenv("FC2_USER_BLOCK_COUNTRY_ISO_CODE_CSV"));
+define("ADMIN_BLOCK_COUNTRY_ISO_CODE_CSV", (string)getenv("FC2_ADMIN_BLOCK_COUNTRY_ISO_CODE_CSV"));
+
 if (strlen((string)getenv("FC2_GITHUB_REPO")) > 0) {
     define("GITHUB_REPO", (string)getenv("FC2_GITHUB_REPO"));
 }

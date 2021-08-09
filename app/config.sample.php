@@ -31,6 +31,10 @@ define("EMERGENCY_PASSWORD_RESET_ENABLE", "0");
 // ログイン時にメール認証を有効化するか
 define("MFA_EMAIL", "0");
 
+// 国コード(ISO Code)指定でアクセスブロック
+//define("USER_BLOCK_COUNTRY_ISO_CODE_CSV", "JP");
+//define("ADMIN_BLOCK_COUNTRY_ISO_CODE_CSV", "JP,US");
+
 // If you want get error log on display.
 // define('ERROR_ON_DISPLAY', "1");
 // ini_set('display_errors', '1');

@@ -2,6 +2,7 @@
 /app/temp/debug_html/*
 /app/temp/log/*
 /app/temp/installed.lock
+/app/temp/GeoLite2-Country.mmdb
 /app/temp/github_release_cache.json
 /app/version
 /app/vendor/
