@@ -103,6 +103,17 @@ class Request
         return $this->server['HTTP_REFERER'] ?? '';
     }
 
+    /**
+     * アクセスIPアドレスを返却 取得できなかった場合は空文字を返却
+     * @return string
+     */
+    public function getClientIpAddress(): string
+    {
+        // TODO support X_FORWARDED_FOR and other.
+        // TODO どの環境変数を「信用するか」を設定する項目が必要
+        return $this->server['REMOTE_ADDR'] ?? '';
+    }
+
     public function getPath()
     {
         return $this->path;

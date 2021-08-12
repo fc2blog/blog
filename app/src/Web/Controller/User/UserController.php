@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fc2blog\Web\Controller\User;
 
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Service\AccessBlock;
 use Fc2blog\Web\Controller\Controller;
 use Fc2blog\Web\Fc2BlogTemplate;
 use Fc2blog\Web\Request;
@@ -12,6 +13,22 @@ use InvalidArgumentException;
 
 abstract class UserController extends Controller
 {
+    protected function beforeFilter(Request $request): string
+    {
+        // 親のフィルター呼び出し
+        $template_path = parent::beforeFilter($request);
+        if (strlen($template_path) > 0) {
+            return $template_path;
+        }
+
+        // IPアドレスからアクセス元の国を推定してのブロック
+        if ((new AccessBlock())->isUserBlockIp($request)) {
+            return $this->error403();
+        }
+
+        return "";
+    }
+
     /**
      * 管理画面ログイン中のブログIDを取得する
      */
@@ -80,9 +97,6 @@ abstract class UserController extends Controller
      */
     protected function renderByFc2Template(Request $request, string $template_file_path): string
     {
-        if (is_null($template_file_path)) {
-            throw new InvalidArgumentException("undefined template");
-        }
         if (!is_file($template_file_path)) {
             throw new InvalidArgumentException("missing template");
         }
@@ -94,7 +108,6 @@ abstract class UserController extends Controller
 
         // テンプレートをレンダリングして返す
         ob_start();
-        /** @noinspection PhpIncludeInspection */
         include($template_file_path);
         return ob_get_clean();
     }

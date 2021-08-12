@@ -27,10 +27,14 @@ class EntriesController extends UserController
     /**
      * 記事系統の前処理
      * @param Request $request
+     * @return string
      */
-    protected function beforeFilter(Request $request): void
+    protected function beforeFilter(Request $request): string
     {
-        parent::beforeFilter($request);
+        $template_path = parent::beforeFilter($request);
+        if (strlen($template_path) > 0) {
+            return $template_path;
+        }
 
         // ブログID指定があるかチェック
         $blog_id = $request->getBlogId();
@@ -76,6 +80,8 @@ class EntriesController extends UserController
         $entries_model = new EntriesModel();
         $entries_model->updateReservation($blog_id);
         $entries_model->updateLimited($blog_id);
+
+        return "";
     }
 
     /**
