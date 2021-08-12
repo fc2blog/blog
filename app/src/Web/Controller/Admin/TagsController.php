@@ -83,10 +83,10 @@ class TagsController extends AdminController
     {
         $tags_model = new TagsModel();
 
-        $id = $request->get('id');
+        $tag_id = $request->get('id');
         $blog_id = $this->getBlogIdFromSession();
 
-        if (!$tag = $tags_model->findByIdAndBlogId($id, $blog_id)) {
+        if (!$tag = $tags_model->findByIdAndBlogId($tag_id, $blog_id)) {
             $this->redirect($request, ['action' => 'index']);
         }
         $this->set('tag', $tag);
@@ -104,11 +104,11 @@ class TagsController extends AdminController
         // 更新処理
         if (!$request->isPost()) return $this->error400();
         $tag_request = $request->get('tag');
-        $tag_request['id'] = $id;
+        $tag_request['id'] = $tag_id;
         $tag_request['blog_id'] = $blog_id;
         $errors['tag'] = $tags_model->validate($tag_request, $data, ['name']);
         if (empty($errors['tag'])) {
-            if ($tags_model->updateByIdAndBlogId($data, $id, $blog_id)) {
+            if ($tags_model->updateByIdAndBlogId($data, $tag_id, $blog_id)) {
                 $this->setInfoMessage(__('I have updated the tag'));
 
                 // 元の画面へ戻る

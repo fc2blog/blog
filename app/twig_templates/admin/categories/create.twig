@@ -43,7 +43,7 @@
         </form>
     {% endif %}
 
-    {% if not req.get('category') %}
+    {% if show_category_list %}
         <h3>{{ _('Categories') }}</h3>
         <ul id="sys-category-list">
             {{ renderCategoriesTree2(req, categories) }}

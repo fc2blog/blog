@@ -6,7 +6,7 @@
 
     <h2><span class="h2_inner">{{ _('Edit tag') }}</span></h2>
     <form action="edit" method="post" id="sys-tag-form" class="admin-form">
-        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="id" value="{{ tag.id }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>
         {{ input(req, 'back_url', 'hidden', {'default': req.get('back_url')}) }}
         <div class="form_area">

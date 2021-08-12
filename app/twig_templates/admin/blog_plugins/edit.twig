@@ -6,7 +6,7 @@
 
     <form action="edit" method="post" id="sys-blog-plugin-form" class="admin-form">
 
-        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="id" value="{{ blog_plugin.id }}"/>
         {{ input(req, 'blog_plugin[device_type]', 'hidden') }}
         {{ input(req, 'blog_plugin[category]', 'hidden') }}
         <input type="hidden" name="sig" value="{{ sig }}"/>

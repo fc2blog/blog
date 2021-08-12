@@ -7,7 +7,7 @@
 
     <form action="edit" method="post" id="sys-blog-template-form" class="admin-form">
 
-        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="id" value="{{ blog_template.id }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>
 
         <h3>{{ _('Template name') }}</h3>

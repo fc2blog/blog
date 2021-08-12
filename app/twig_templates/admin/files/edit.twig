@@ -7,10 +7,10 @@
     <form action="edit" method="post" id="sys-file-form" class="admin-form" enctype="multipart/form-data">
 
         <input type="hidden" name="MAX_FILE_SIZE" value="{{ file_max_size }}"/>
-        <input type="hidden" name="id" value="{{ req.get('id') }}"/>
+        <input type="hidden" name="id" value="{{ file.id }}"/>
         <input type="hidden" name="sig" value="{{ sig }}"/>
 
-        <a href="{{ file['path'] }}" target="_blank"><img src="{{ file['thumbnail_path'] }}" alt="{{ file.name }}"/></a>
+        <a href="{{ file['path'] }}" target="_blank"><img src="{{ file.thumbnail_path }}" alt="{{ file.name }}"/></a>
 
         {% if errors.file.ext %}
             <p class="error">{{ errors.file.ext }}</p>

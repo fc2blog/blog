@@ -40,6 +40,7 @@ class CategoriesController extends AdminController
 
         // 初期表示時
         if (!$request->get('category') || !$request->isValidSig()) {
+            $this->set('show_category_list', true);
             return "admin/categories/create.twig";
         }
 
@@ -79,12 +80,16 @@ class CategoriesController extends AdminController
         $options = $categories_model->getParentList($blog_id, $id);
         $this->set('category_parents', [0 => ''] + $options);
         $this->set('categories_model_order_list', $categories_model::getOrderList());
+        $category = $categories_model->findByIdAndBlogId($id, $blog_id);
+        $this->set('category', $category);
+
+        // 編集対象がみつからないので、新規作成にリダイレクト
+        if ($category === false) {
+            $this->redirect($request, ['action' => 'create']);
+        }
 
         // 初期表示時に編集データの取得&設定
         if (!$request->get('category') || !$request->isValidSig()) {
-            if (!$category = $categories_model->findByIdAndBlogId($id, $blog_id)) {
-                $this->redirect($request, ['action' => 'create']);
-            }
             $request->set('category', $category);
             return "admin/categories/edit.twig";
         }

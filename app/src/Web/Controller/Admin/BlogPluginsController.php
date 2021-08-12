@@ -9,6 +9,7 @@ use Fc2blog\Model\BlogPluginsModel;
 use Fc2blog\Model\BlogTemplatesModel;
 use Fc2blog\Model\Model;
 use Fc2blog\Model\PluginsModel;
+use Fc2blog\Util\Log;
 use Fc2blog\Web\Request;
 
 class BlogPluginsController extends AdminController
@@ -45,6 +46,7 @@ class BlogPluginsController extends AdminController
             }
         }
         $this->set('blog_plugin_json', $blog_plugin_json);
+        $this->set('state', $request->get('state'));
 
         return "admin/blog_plugins/index.twig";
     }
@@ -72,6 +74,8 @@ class BlogPluginsController extends AdminController
 
         return $this->plugin_search($request, false);
     }
+
+    const ALLOWED_PLUGIN_CATEGORY_TYPE_RANGE = "1-3";
 
     /**
      * プラグイン検索 （内部呼び出し）
@@ -117,6 +121,11 @@ class BlogPluginsController extends AdminController
         $this->set('req_device_name', __(BlogTemplatesModel::getDeviceName((int)$request->get('device_type'))));
         $this->set('device_key', App::getDeviceFc2Key($request->get('device_type')));
         $this->set('is_official', $is_official);
+        if (!preg_match('/\A[' . self::ALLOWED_PLUGIN_CATEGORY_TYPE_RANGE . ']\z/u', $request->get('category'))) {
+            Log::notice("Request invalid plugin category type " . $request->get('category'));
+            return $this->error400();
+        }
+        $this->set('plugin_category_type_id', $request->get('category'));
 
         return 'admin/blog_plugins/plugin_search.twig';
     }
@@ -191,13 +200,15 @@ class BlogPluginsController extends AdminController
         $this->set('device_type_sp', (string)App::DEVICE_SP);
 
         // 編集対象のデータ取得、なければリダイレクト
-        if (!$blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id)) {
+        $blog_plugin = $blog_plugins_model->findByIdAndBlogId($id, $blog_id);
+        if ($blog_plugin === false) {
             $this->redirect($request, array('action' => 'index'));
         }
 
         // 初期表示時に編集データの設定
         if (!$request->get('blog_plugin') || !$request->isValidSig()) {
             $request->set('blog_plugin', $blog_plugin);
+            $this->set('blog_plugin', $blog_plugin);
             return "admin/blog_plugins/edit.twig";
         }
 
