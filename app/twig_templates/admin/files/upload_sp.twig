@@ -52,10 +52,10 @@
                     <a href="{{ url(req, 'Files', 'edit', {id: file.id}) }}">
                         <div class="file_table_cell">
                             {% if inArray(file.ext, ['jpeg', 'jpg', 'png', 'gif']) %}
-                                <img src="{{ file.path }}"/>
+                                <img src="{{ file.path }}"/><br>
                             {% endif %}
                             <span class="img_name">{{ t(file.name, 30) }}</span>
-                        </div><!--/file_table_cell-->
+                        </div>
                     </a>
                 {% endfor %}
             {% endif %}
