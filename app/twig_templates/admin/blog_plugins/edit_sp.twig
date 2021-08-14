@@ -59,7 +59,7 @@
                     <button type="button" id="sys-blog-plugin-form-preview" class="btn_contents touch"><i class="preview_icon btn_icon"></i>{{ _('Preview') }}</button>
                 </li>
             </ul>
-            <ul class="btn_area_inner">
+            <ul class="btn_area_inner full_width">
                 <li>
                     <a class="btn_contents touch" href="{{ url(req, 'blog_plugins', 'index', {'device_type': device_type_sp}) }}"><i class="return_icon btn_icon"></i>{{ _('I Back to List') }}</a>
                 </li>
@@ -69,7 +69,7 @@
 
     <h2><span class="h2_inner">{{ _('Delete plugin') }}</span></h2>
     <div class="btn_area">
-        <ul class="btn_area_inner">
+        <ul class="btn_area_inner full_width">
             <li>
                 <a href="{{ url(req, 'blog_plugins', 'delete', {id: blog_plugin.id, sig: sig}) }}" class="btn_contents touch"
                    onclick="return confirm('{{ _('Are you sure you want to delete?') }}');"><i class="delete_icon btn_icon"></i>{{ _('Delete') }}</a>
