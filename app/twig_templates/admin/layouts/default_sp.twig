@@ -96,6 +96,7 @@
     {% if isLogin %}
         <div id="left_menu" class="sidemenu">
             <ul>
+                <li><a class="touch slide_menu_close" href="#"><span><i class="sidemenu_back"></i></span><span>{{ _("Close the menu") }}</span></a></li>
                 {% if is_selected_blog %}
                     <li {% if active_menu == 'common/notice' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Common', 'notice') }}"><span><i class="sidemenu_home"></i></span><span>{{ _('Notice') }}</span></a></li>
                     <li><a class="touch" href="{{ blogUrl(req, blog.id, true) }}" target="_blank"><span><i class="sidemenu_myblog"></i></span><span>{{ _('Checking the blog') }}</span></a></li>
@@ -117,6 +118,7 @@
 
         <div id="right_menu" class="sidemenu">
             <ul>
+                <li><a class="touch slide_menu_close" href="#"><span><i class="sidemenu_back"></i></span><span>{{ _("Close the menu") }}</span></a></li>
                 <li class="list_titie">{{ _('User Menu') }}</li>
                 <li {% if active_menu == 'blogs/index' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Blogs', 'index') }}"><span><i class="sidemenu_myblog"></i></span><span>{{ _('List of blogs') }}</span></a></li>
                 <li {% if active_menu == 'users/edit' or active_menu == 'users/withdrawal' %}class="selected"{% endif %}><a class="touch" href="{{ url(req, 'Users', 'edit') }}"><span><i class="sidemenu_setting"></i></span><span>{{ _('User setting') }}</span></a></li>
