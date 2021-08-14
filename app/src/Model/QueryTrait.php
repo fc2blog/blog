@@ -22,7 +22,7 @@ trait QueryTrait
      * @param string $sql
      * @param array $params
      * @param array $options
-     * @return array|int 失敗時False、成功時はOptionにより不定
+     * @return array|int|false 失敗時False、成功時はOptionにより不定
      */
     public function executeSql(string $sql, array $params = [], array $options = [])
     {
@@ -193,7 +193,7 @@ trait QueryTrait
     /**
      * @param array $values
      * @param array $options
-     * @return array|int 失敗時:false, 成功時 last insert id
+     * @return array|int|false 失敗時:false, 成功時 last insert id
      */
     public function insert(array $values, array $options = [])
     {
