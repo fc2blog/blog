@@ -38,7 +38,7 @@ class GenerateSampleUploadFile
             ];
 
             $request_upload_file = [
-                'name' => $faker->colorName,
+                'name' => $faker->colorName(),
             ];
 
             $error_upload_image = $files_model->insertValidate($file, $request_upload_file, $data_file);

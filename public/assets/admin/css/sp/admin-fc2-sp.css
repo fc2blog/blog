@@ -2997,3 +2997,26 @@ i.sidemenu_logout {
     text-align: center;
     color: #333;
 }
+
+/* admin/files */
+div.file_table {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+div.file_table div.file_table_cell {
+    width: 160px;
+    text-align: center;
+    padding: 10px;
+
+}
+
+div.file_table div.file_table_cell img {
+    max-height: 100%;
+    width: 100%;
+}
+
+div.file_table div.file_table_cell .img_name {
+    word-break: break-all;
+}

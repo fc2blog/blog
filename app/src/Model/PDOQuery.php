@@ -48,7 +48,7 @@ class PDOQuery
      * @param string $sql
      * @param array $params
      * @param array $options
-     * @return array|int
+     * @return array|int|false
      */
     public static function execute(PDO $pdo, string $sql, array $params = [], array $options = [])
     {
@@ -112,7 +112,7 @@ class PDOQuery
      * @param PDO $pdo
      * @param $stmt
      * @param $type
-     * @return array|int $typeによって様々な意味の返り値となる
+     * @return array|int|false $typeによって様々な意味の返り値となる
      */
     public static function result(PDO $pdo, $stmt, $type)
     {
