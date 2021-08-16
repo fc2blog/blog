@@ -1598,3 +1598,6 @@ msgstr "このログインURLは無効です、再度ログインフォームか
 
 msgid "Request failed: Please page reload and retry."
 msgstr "失敗しました、画面をリロードして再度お試しください。"
+
+msgid "Close the menu"
+msgstr "閉じる"

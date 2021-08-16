@@ -1590,3 +1590,6 @@ msgstr ""
 
 msgid "Request failed: Please page reload and retry."
 msgstr ""
+
+msgid "Close the menu"
+msgstr ""

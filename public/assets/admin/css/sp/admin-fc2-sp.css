@@ -2733,6 +2733,10 @@ body > .sidemenu {
 
 /* Left menu
 ----------------------------------------------*/
+i.sidemenu_back {
+    background-position: center -50px;
+}
+
 i.sidemenu_home {
     background-position: center -76px;
 }

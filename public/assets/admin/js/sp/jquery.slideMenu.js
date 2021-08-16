@@ -48,11 +48,30 @@
 	$.extend({
 		slideMenu: function(_opt){
 			options = $.extend({}, defaults, _opt);
-			$(options.left_menu).after($('<div>', {id: options.overlay.slice(1)}));
-			$(document).off('.'+options.name)
-			           .on('click.'+options.name, options.left_menu_btn, {'class': options.left_slide_class, obj: options.left_menu}, options.open)
-			           .on('click.'+options.name, options.right_menu_btn, {'class': options.right_slide_class, obj: options.right_menu}, options.open)
-			           .on('click.'+options.name, options.overlay, options.close);
+			$(options.left_menu).after($("<div>", { id: options.overlay.slice(1) }));
+      $(document)
+        .off("." + options.name)
+        .on(
+          "click." + options.name,
+          options.left_menu_btn,
+          {
+            class: options.left_slide_class,
+            obj: options.left_menu,
+          },
+          options.open
+        )
+        .on(
+          "click." + options.name,
+          options.right_menu_btn,
+          {
+            class: options.right_slide_class,
+            obj: options.right_menu,
+          },
+          options.open
+        )
+        .on("click." + options.name, options.overlay, options.close)
+        .on("click." + options.name, ".slide_menu_close", options.close)
+        .on("click." + options.name, ".slide_menu_close", options.close);
 
 			return this;
 		}
