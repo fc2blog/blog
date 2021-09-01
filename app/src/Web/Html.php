@@ -5,6 +5,7 @@ namespace Fc2blog\Web;
 
 use Fc2blog\App;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Service\TwigService;
 use Fc2blog\Util\StringCaseConverter;
 
 class Html
@@ -173,42 +174,46 @@ class Html
 
         // HTMLを作成
         $html = '';
+
+        // TODO singleton化
+        $twig = TwigService::getTwigInstance();
+
         switch ($type) {
             default:
-                $html = '<span>[' . $type . ']は未実装です</span>';
+                $html = $twig->render('fragment/undefined.twig', ['type' => $type]);
                 break;
 
             case 'text':
-                $html = '<input type="text" ' . $attr . ' value="' . h((string)$rvalue) . '" />';
+                $html = $twig->render('fragment/text.twig', ['attr' => $attr, 'rvalue' => $rvalue]);
                 break;
 
             case 'password':
-                $html = '<input type="password" ' . $attr . ' value="' . h((string)$rvalue) . '" />';
+                $html = $twig->render('fragment/password.twig', ['attr' => $attr, 'rvalue' => $rvalue]);
                 break;
 
             case 'blank_password':
                 // 一方向に設定するので、表示しない
-                $html = '<input type="password" ' . $attr . ' />';
+                $html = $twig->render('fragment/blank_password.twig', ['attr' => $attr]);
                 break;
 
             case 'file':
-                $html = '<input type="file" ' . $attr . ' />';
+                $html = $twig->render('fragment/blank_password.twig', ['attr' => $attr]);
                 break;
 
             case 'hidden':
-                $html = '<input type="hidden" ' . $attr . ' value="' . h((string)$rvalue) . '" />';
+                $html = $twig->render('fragment/hidden.twig', ['attr' => $attr, 'rvalue' => $rvalue]);
                 break;
 
             case 'token':
-                $html = '<input type="hidden" ' . $attr . ' value="' . h(Session::get($name)) . '" />';
+                $html = $twig->render('fragment/hidden.twig', ['attr' => $attr, 'rvalue' => Session::get($name)]);
                 break;
 
             case 'captcha':
-                $html = '<input type="text" ' . $attr . ' value="" />';
+                $html = $twig->render('fragment/text.twig', ['attr' => $attr, 'rvalue' => ""]);
                 break;
 
             case 'textarea':
-                $html = '<textarea ' . $attr . '>' . h((string)$rvalue) . '</textarea>';
+                $html = $twig->render('fragment/textarea.twig', ['attr' => $attr, 'rvalue' => $rvalue]);
                 break;
 
             case 'select':
