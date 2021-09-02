@@ -246,16 +246,9 @@ class Html
 
             case 'radio':
                 $labelKey = 'sys-radio-' . str_replace(array('[', ']'), array('-', ''), $name) . '-';
-                $html .= '<ul class="form-radio-list">';
                 $li_attr = isset($option_attrs['li']) ? ' ' . $option_attrs['li'] : '';
                 $label_attr = isset($option_attrs['label']) ? ' ' . $option_attrs['label'] : '';
-                foreach ($options as $key => $option) {
-                    $html .= '<li' . $li_attr . '>';
-                    $html .= '  <input type="radio" value="' . $key . '" ' . ($key == $rvalue ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
-                    $html .= '  <label for="' . $labelKey . $key . '" ' . $label_attr . '>' . $option . '</label>';
-                    $html .= '</li>';
-                }
-                $html .= '</ul>';
+                $html .= $twig->render('fragment/ul.twig', ['attr' => $attr, 'rvalue' => $rvalue, 'option_list' => $options, 'label_key' => $labelKey, 'li_attr' => $li_attr, 'label_attr' => $label_attr]);
                 break;
 
             case 'checkbox':
