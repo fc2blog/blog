@@ -245,9 +245,9 @@ class Html
                 break;
 
             case 'radio':
-                $labelKey = 'sys-radio-' . str_replace(array('[', ']'), array('-', ''), $name) . '-';
-                $li_attr = isset($option_attrs['li']) ? ' ' . $option_attrs['li'] : '';
-                $label_attr = isset($option_attrs['label']) ? ' ' . $option_attrs['label'] : '';
+                $labelKey = 'sys-radio-' . str_replace(['[', ']'], ['-', ''], $name) . '-';
+                $li_attr = $option_attrs['li'] ?? '';
+                $label_attr = $option_attrs['label'] ?? '';
                 $html .= $twig->render('fragment/ul.twig', ['attr' => $attr, 'rvalue' => $rvalue, 'option_list' => $options, 'label_key' => $labelKey, 'li_attr' => $li_attr, 'label_attr' => $label_attr]);
                 break;
 
