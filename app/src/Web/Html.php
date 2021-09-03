@@ -157,7 +157,7 @@ class Html
         $rvalue = $request->get($r_name, $default);
 
         // 属性作成
-        $attrs['name'] = ($type == 'checkbox' && count($options)) ? $name . '[]' : $name;
+        $attrs['name'] = ($type == 'checkbox' && count($options) > 0) ? $name . '[]' : $name;
         $attr = array();
         foreach ($attrs as $key => $value) {
             $attr[] = $key . '="' . $value . '"';
@@ -252,21 +252,15 @@ class Html
                 break;
 
             case 'checkbox':
-                if (count($options)) {
-                    $labelKey = 'sys-checkbox-' . str_replace(array('[', ']'), array('-', ''), $name) . '-';
-                    $rvalue = is_array($rvalue) ? $rvalue : array();
-                    foreach ($options as $key => $option) {
-                        $html .= '<input type="checkbox" value="' . $key . '" ' . (in_array($key, $rvalue) ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
-                        $html .= '<label for="' . $labelKey . $key . '">' . $option . '</label>';
-                    }
-                } else {
-                    $labelKey = 'sys-checkbox-' . str_replace(array('[', ']'), array('-', ''), $name);
-                    $is_checked = $rvalue !== null && isset($attrs['value']) && $attrs['value'] == $rvalue;
-                    $html .= '<input type="checkbox" ' . ($is_checked ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . '" />';
-                    if ($label) {
-                        $html .= '<label for="' . $labelKey . '">' . $label . '</label>';
+                $labelKey = 'sys-checkbox-' . str_replace(['[', ']'], ['-', ''], $name) . '-';
+                $rvalue = is_array($rvalue) ? $rvalue : [$rvalue];
+                $is_checked_key_list = [];
+                foreach ($options as $key => $option) {
+                    if (in_array($key, $rvalue)) {
+                        $is_checked_key_list[] = $key;
                     }
                 }
+                $html = $twig->render('fragment/checkbox.twig', ['attr' => $attr, 'rvalue' => $rvalue, 'option_list' => $options, 'label_key' => $labelKey, 'is_checked_key_list' => $is_checked_key_list]);
                 break;
         }
 
