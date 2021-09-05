@@ -28,9 +28,64 @@ class HtmlText extends TestCase
     {
         $req = new Request("POST", "/", null, ['test' => ['name' => "B"]]);
         $html = Html::input($req, 'test[name]', 'select', ['options' => ["A" => 'a', "B" => 'b', "C" => 'c']]);
-        $this->assertEquals(
-            '<select name="test[name]"><option value="A" >a</option><option value="B" selected="selected">b</option><option value="C" >c</option></select>',
-            $html
+        $this->assertTrue(
+            $this->isEqualStringsIgnoringVariousOfWhiteSpaces(
+                '<select name="test[name]"><option value="A" >a</option><option value="B" selected="selected">b</option><option value="C" >c</option></select>',
+                $html
+            )
+        );
+
+        $req = new Request("POST", "/", null, ['test' => ['name' => "B"]]);
+        $html = Html::input($req, 'test[name]', 'select', [
+            'options' => array(
+                0 => '',
+                1 => array(
+                    'value' => '未分類',
+                    'level' => 1,
+                    'disabled' => true,
+                ),
+                2 => array(
+                    'value' => 'テストカテゴリ',
+                    'level' => 1,
+                ),
+                3 => array(
+                    'value' => 'テストカテゴリ-2',
+                    'level' => 2,
+                ),
+                4 => array(
+                    'value' => 'テストカテゴリ-3',
+                    'level' => 3,
+                ),
+                6 => array(
+                    'value' => 'テストカテゴリ-4',
+                    'level' => 3,
+                ),
+                5 => array(
+                    'value' => 'テストカテゴリ-5',
+                    'level' => 1,
+                ),
+            )
+        ]);
+        $this->assertTrue(
+            $this->isEqualStringsIgnoringVariousOfWhiteSpaces(
+                '<select name="test[name]"><option value="0" ></option><option value="1"  disabled="disabled" >未分類</option><option value="2" >テストカテゴリ</option><option value="3" >&nbsp;&nbsp;&nbsp;テストカテゴリ-2</option><option value="4" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;テストカテゴリ-3</option><option value="6" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;テストカテゴリ-4</option><option value="5" >テストカテゴリ-5</option></select>',
+                $html
+            )
+        );
+    }
+
+    public function isEqualStringsIgnoringVariousOfWhiteSpaces($str1, $str2): bool
+    {
+//        echo PHP_EOL;
+//        echo preg_replace("/[ ]+/u", "", preg_replace("/[ \t\r\n]+/u", " ", $str1));
+//        echo PHP_EOL;
+//        echo preg_replace("/[ ]+/u", "", preg_replace("/[ \t\r\n]+/u", " ", $str2));
+//        echo PHP_EOL;
+
+        return (
+            preg_replace("/[ ]+/u", "", preg_replace("/[ \t\r\n]+/u", " ", $str1))
+            ==
+            preg_replace("/[ ]+/u", "", preg_replace("/[ \t\r\n]+/u", " ", $str2))
         );
     }
 
@@ -50,4 +105,5 @@ class HtmlText extends TestCase
             $html
         );
     }
+
 }

@@ -1,0 +1,24 @@
+<select {{ attr|raw }}>
+    {% for key, option in option_list %}
+        {% if option is iterable %}
+            {% if value in option %}
+                <optgroup label="{{ key }}">
+                    {% for k, v in option %}
+                        <option value="{{ k }}" {% if k == rvalue %}selected="selected"{% endif %}>{{ v }}{{ suffix }}</option>;
+                    {% endfor %}
+                </optgroup>
+            {% else %}
+                <option value="{{ key }}"
+                        {% if rvalue == key %}selected="selected"{% endif %}
+                        {% if option.disabled %}disabled="disabled"{% endif %}>
+                    {% if option.level>1 %}
+                        {% for i in range(1, option.level-1) %}&nbsp;&nbsp;&nbsp;{% endfor %}{# 字下げ #}
+                    {% endif %}
+                    {{ option.value }}{{ suffix }}
+                </option>
+            {% endif %}
+        {% else %}
+            <option value="{{ key }}" {% if rvalue == key %}selected="selected"{% endif %}>{{ option }}{{ suffix }}</option>
+        {% endif %}
+    {% endfor %}
+</select>

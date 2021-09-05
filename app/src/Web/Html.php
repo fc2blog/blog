@@ -218,30 +218,12 @@ class Html
                 break;
 
             case 'select':
-                $html = '<select ' . $attr . '>';
-                foreach ($options as $key => $option) {
-                    if (is_array($option)) {
-                        // オプショングループ付きSelect
-                        if (!isset($option['value'])) {
-                            $html .= '<optgroup label="' . $key . '">';
-                            foreach ($option as $k => $v) {
-                                $html .= '<option value="' . $k . '" ' . ($rvalue !== null && $k == $rvalue ? 'selected="selected"' : '') . '>' . h($v . $suffix) . '</option>';
-                            }
-                            $html .= '</optgroup>';
-                            continue;
-                        }
-                        // 属性付きオプション
-                        $optionAttr = ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '');
-                        if (!empty($option['disabled'])) {
-                            $optionAttr .= ' disabled="disabled" ';
-                        }
-                        $html .= '<option value="' . $key . '" ' . $optionAttr . '>' . str_repeat('&nbsp;&nbsp;&nbsp;', $option['level'] - 1) . h($option['value'] . $suffix) . '</option>';
-                    } else {
-                        // 通常のオプション
-                        $html .= '<option value="' . $key . '" ' . ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '') . '>' . h($option . $suffix) . '</option>';
-                    }
-                }
-                $html .= '</select>';
+                $html = $twig->render('fragment/select.twig', [
+                    'attr' => $attr,
+                    'rvalue' => $rvalue,
+                    'suffix' => $suffix,
+                    'option_list' => $options,
+                ]);
                 break;
 
             case 'radio':
