@@ -83,9 +83,9 @@ class HtmlText extends TestCase
 //        echo PHP_EOL;
 
         return (
-            preg_replace("/[ ]+/u", "", preg_replace("/[ \t\r\n]+/u", " ", $str1))
+            preg_replace("/[ \t\r\n]+/u", "", $str1)
             ==
-            preg_replace("/[ ]+/u", "", preg_replace("/[ \t\r\n]+/u", " ", $str2))
+            preg_replace("/[ \t\r\n]+/u", "", $str2)
         );
     }
 
