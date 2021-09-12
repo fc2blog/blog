@@ -10,6 +10,13 @@ use PHPUnit\Framework\TestCase;
 
 class HtmlText extends TestCase
 {
+    public function testUndefined(): void
+    {
+        $req = new Request("POST", "/", [], ['test' => ['some' => "value"]]);
+        $html = Html::input($req, 'test[some]', 'UNDEFINED');
+        $this->assertEquals('<span>UNDEFINEDは未実装です</span>', $html);
+    }
+
     public function testText(): void
     {
         $req = new Request("POST", "/", [], ['blog_plugin' => ['device_type' => "sp"]]);
