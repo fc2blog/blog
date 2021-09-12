@@ -7,6 +7,7 @@ use Fc2blog\App;
 use Fc2blog\Model\BlogsModel;
 use Fc2blog\Service\TwigService;
 use Fc2blog\Util\StringCaseConverter;
+use Twig\Environment;
 
 class Html
 {
@@ -175,7 +176,6 @@ class Html
         // HTMLを作成
         $html = '';
 
-        // TODO singleton化
         $twig = TwigService::getTwigInstance();
 
         switch ($type) {
