@@ -66,6 +66,13 @@ class HtmlText extends TestCase
         $this->assertEquals('<input type="text" name="test[captcha]" value=""/>', $html);
     }
 
+    public function testTextArea(): void
+    {
+        $req = new Request("POST", "/", [], ['test' => ['name' => "value"]]);
+        $html = Html::input($req, 'test[name]', 'textarea');
+        $this->assertEquals('<textarea name="test[name]">value</textarea>', $html);
+    }
+
     public function testSelect(): void
     {
         $req = new Request("POST", "/", null, ['test' => ['name' => "B"]]);
