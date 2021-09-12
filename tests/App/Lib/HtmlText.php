@@ -31,13 +31,6 @@ class HtmlText extends TestCase
         $this->assertEquals('<input type="password" name="test[pass]" value="PASS"/>', $html);
     }
 
-    public function testFile(): void
-    {
-        $req = new Request("POST", "/");
-        $html = Html::input($req, 'test[some]', 'file');
-        $this->assertEquals('<input type="file" name="test[some]" />', $html);
-    }
-
     public function testBlankPassowrd(): void
     {
         $req = new Request("POST", "/", [], ['test' => ['pass' => "WILL_BE_IGNORE"]]);
@@ -45,11 +38,32 @@ class HtmlText extends TestCase
         $this->assertEquals('<input type="password" name="test[pass]" value=""/>', $html);
     }
 
+    public function testFile(): void
+    {
+        $req = new Request("POST", "/");
+        $html = Html::input($req, 'test[some]', 'file');
+        $this->assertEquals('<input type="file" name="test[some]" />', $html);
+    }
+
     public function testHidden(): void
     {
         $req = new Request("POST", "/", [], ['blog_plugin' => ['device_type' => "sp"]]);
         $html = Html::input($req, 'blog_plugin[device_type]', 'hidden');
         $this->assertEquals('<input type="hidden" name="blog_plugin[device_type]" value="sp"/>', $html);
+    }
+
+    public function testToken(): void
+    {
+        $req = new Request("POST", "/");
+        $html = Html::input($req, 'test[pass]', 'token');
+        $this->assertEquals('<input type="hidden" name="test[pass]" value=""/>', $html);
+    }
+
+    public function testCaptcha(): void
+    {
+        $req = new Request("POST", "/");
+        $html = Html::input($req, 'test[captcha]', 'captcha');
+        $this->assertEquals('<input type="text" name="test[captcha]" value=""/>', $html);
     }
 
     public function testSelect(): void

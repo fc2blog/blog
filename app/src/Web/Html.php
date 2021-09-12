@@ -203,7 +203,7 @@ class Html
                 $html = $twig->render('fragment/hidden.twig', ['attr' => $attr, 'rvalue' => $rvalue]);
                 break;
 
-            case 'token':
+            case 'token': // TODO すでに使われていないのではないか？
                 $html = $twig->render('fragment/hidden.twig', ['attr' => $attr, 'rvalue' => Session::get($name)]);
                 break;
 
