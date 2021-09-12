@@ -31,6 +31,13 @@ class HtmlText extends TestCase
         $this->assertEquals('<input type="password" name="test[pass]" value="PASS"/>', $html);
     }
 
+    public function testFile(): void
+    {
+        $req = new Request("POST", "/");
+        $html = Html::input($req, 'test[some]', 'file');
+        $this->assertEquals('<input type="file" name="test[some]" />', $html);
+    }
+
     public function testBlankPassowrd(): void
     {
         $req = new Request("POST", "/", [], ['test' => ['pass' => "WILL_BE_IGNORE"]]);
