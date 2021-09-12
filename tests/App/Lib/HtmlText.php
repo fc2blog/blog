@@ -17,6 +17,20 @@ class HtmlText extends TestCase
         $this->assertEquals('<input type="text" name="blog_plugin[device_type]" value="sp"/>', $html);
     }
 
+    public function testPassowrd(): void
+    {
+        $req = new Request("POST", "/", [], ['test' => ['pass' => "PASS"]]);
+        $html = Html::input($req, 'test[pass]', 'password');
+        $this->assertEquals('<input type="password" name="test[pass]" value="PASS"/>', $html);
+    }
+
+    public function testBlankPassowrd(): void
+    {
+        $req = new Request("POST", "/", [], ['test' => ['pass' => "WILL_BE_IGNORE"]]);
+        $html = Html::input($req, 'test[pass]', 'blank_password');
+        $this->assertEquals('<input type="password" name="test[pass]" value=""/>', $html);
+    }
+
     public function testHidden(): void
     {
         $req = new Request("POST", "/", [], ['blog_plugin' => ['device_type' => "sp"]]);
