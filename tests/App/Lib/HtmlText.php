@@ -125,17 +125,36 @@ class HtmlText extends TestCase
 
     public function isEqualStringsIgnoringVariousOfWhiteSpaces($str1, $str2): bool
     {
-//        echo PHP_EOL;
-//        echo preg_replace("/[ ]+/u", "", preg_replace("/[ \t\r\n]+/u", " ", $str1));
-//        echo PHP_EOL;
-//        echo preg_replace("/[ ]+/u", "", preg_replace("/[ \t\r\n]+/u", " ", $str2));
-//        echo PHP_EOL;
-
         return (
             preg_replace("/[ \t\r\n]+/u", "", $str1)
             ==
             preg_replace("/[ \t\r\n]+/u", "", $str2)
         );
+    }
+
+    public function testRadio(): void
+    {
+        $req = new Request("POST", "/", null, []);
+        $html = Html::input($req, 'test[name]', 'radio', ['options' => ["A" => 'a', "B" => 'b', "C" => 'c']]);
+        $this->assertTrue($this->isEqualStringsIgnoringVariousOfWhiteSpaces(
+            '<ul class="form-radio-list">
+            <li ><input type="radio" value="A" name="test[name]" id="sys-radio-test-name-A"/>    <label for="sys-radio-test-name-A" >a</label></li>
+            <li ><input type="radio" value="B" name="test[name]" id="sys-radio-test-name-B"/>    <label for="sys-radio-test-name-B" >b</label></li>
+            <li ><input type="radio" value="C" name="test[name]" id="sys-radio-test-name-C"/>    <label for="sys-radio-test-name-C" >c</label></li>    
+            </ul>',
+            $html
+        ));
+
+        $req = new Request("POST", "/", null, ['test' => ['name' => ["A", "B"]]]);
+        $html = Html::input($req, 'test[name]', 'radio', ['options' => ["A" => 'a', "B" => 'b', "C" => 'c']]);
+        $this->assertTrue($this->isEqualStringsIgnoringVariousOfWhiteSpaces(
+            '<ul class="form-radio-list">
+            <li ><input type="radio" value="A" checked="checked" name="test[name]" id="sys-radio-test-name-A"/>    <label for="sys-radio-test-name-A" >a</label></li>
+            <li ><input type="radio" value="B" checked="checked" name="test[name]" id="sys-radio-test-name-B"/>    <label for="sys-radio-test-name-B" >b</label></li>
+            <li ><input type="radio" value="C"  name="test[name]" id="sys-radio-test-name-C"/>    <label for="sys-radio-test-name-C" >c</label></li>    
+            </ul>',
+            $html
+        ));
     }
 
     public function testCheckbox(): void

@@ -228,16 +228,26 @@ class Html
                 $labelKey = 'sys-radio-' . str_replace(['[', ']'], ['-', ''], $name) . '-';
                 $li_attr = $option_attrs['li'] ?? '';
                 $label_attr = $option_attrs['label'] ?? '';
-                $html .= $twig->render('fragment/ul.twig', ['attr' => $attr, 'rvalue' => $rvalue, 'option_list' => $options, 'label_key' => $labelKey, 'li_attr' => $li_attr, 'label_attr' => $label_attr]);
+                $is_checked_key_list = [];
+                if (is_array($rvalue)) {
+                    foreach ($options as $key => $option) {
+                        if (in_array($key, $rvalue)) {
+                            $is_checked_key_list[] = $key;
+                        }
+                    }
+                }
+                $html .= $twig->render('fragment/ul.twig', ['attr' => $attr, 'rvalue' => $rvalue, 'option_list' => $options, 'label_key' => $labelKey, 'li_attr' => $li_attr, 'label_attr' => $label_attr, 'is_checked_key_list' => $is_checked_key_list]);
                 break;
 
             case 'checkbox':
                 $labelKey = 'sys-checkbox-' . str_replace(['[', ']'], ['-', ''], $name) . '-';
                 $rvalue = is_array($rvalue) ? $rvalue : [$rvalue];
                 $is_checked_key_list = [];
-                foreach ($options as $key => $option) {
-                    if (in_array($key, $rvalue)) {
-                        $is_checked_key_list[] = $key;
+                if (is_array($rvalue)) {
+                    foreach ($options as $key => $option) {
+                        if (in_array($key, $rvalue)) {
+                            $is_checked_key_list[] = $key;
+                        }
                     }
                 }
                 $html = $twig->render('fragment/checkbox.twig', ['attr' => $attr, 'rvalue' => $rvalue, 'option_list' => $options, 'label_key' => $labelKey, 'is_checked_key_list' => $is_checked_key_list]);
