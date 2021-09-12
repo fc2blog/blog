@@ -192,9 +192,7 @@ class Html
                 break;
 
             case 'blank_password':
-                // 一方向に設定するので、表示しない
-                // TODO password.twig 流用でよいのでは？
-                $html = $twig->render('fragment/blank_password.twig', ['attr' => $attr]);
+                $html = $twig->render('fragment/password.twig', ['attr' => $attr, 'rvalue' => '']);
                 break;
 
             case 'file':
