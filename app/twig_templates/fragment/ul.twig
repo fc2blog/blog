@@ -1,0 +1,5 @@
+<ul class="form-radio-list">
+    {% for key, option in  option_list %}
+        {% include "fragment/li.twig" with {key: key} %}
+    {% endfor %}
+</ul>

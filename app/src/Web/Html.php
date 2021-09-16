@@ -5,6 +5,7 @@ namespace Fc2blog\Web;
 
 use Fc2blog\App;
 use Fc2blog\Model\BlogsModel;
+use Fc2blog\Service\TwigService;
 use Fc2blog\Util\StringCaseConverter;
 
 class Html
@@ -156,7 +157,7 @@ class Html
         $rvalue = $request->get($r_name, $default);
 
         // 属性作成
-        $attrs['name'] = ($type == 'checkbox' && count($options)) ? $name . '[]' : $name;
+        $attrs['name'] = ($type == 'checkbox' && count($options) > 0) ? $name . '[]' : $name;
         $attr = array();
         foreach ($attrs as $key => $value) {
             $attr[] = $key . '="' . $value . '"';
@@ -173,101 +174,82 @@ class Html
 
         // HTMLを作成
         $html = '';
+
+        $twig = TwigService::getTwigInstance();
+
         switch ($type) {
             default:
-                $html = '<span>[' . $type . ']は未実装です</span>';
+                $html = $twig->render('fragment/undefined.twig', ['type' => $type]);
                 break;
 
             case 'text':
-                $html = '<input type="text" ' . $attr . ' value="' . h((string)$rvalue) . '" />';
+                $html = $twig->render('fragment/text.twig', ['attr' => $attr, 'rvalue' => $rvalue]);
                 break;
 
             case 'password':
-                $html = '<input type="password" ' . $attr . ' value="' . h((string)$rvalue) . '" />';
+                $html = $twig->render('fragment/password.twig', ['attr' => $attr, 'rvalue' => $rvalue]);
                 break;
 
             case 'blank_password':
-                // 一方向に設定するので、表示しない
-                $html = '<input type="password" ' . $attr . ' />';
+                $html = $twig->render('fragment/password.twig', ['attr' => $attr, 'rvalue' => '']);
                 break;
 
             case 'file':
-                $html = '<input type="file" ' . $attr . ' />';
+                $html = $twig->render('fragment/file.twig', ['attr' => $attr]);
                 break;
 
             case 'hidden':
-                $html = '<input type="hidden" ' . $attr . ' value="' . h((string)$rvalue) . '" />';
+                $html = $twig->render('fragment/hidden.twig', ['attr' => $attr, 'rvalue' => $rvalue]);
                 break;
 
-            case 'token':
-                $html = '<input type="hidden" ' . $attr . ' value="' . h(Session::get($name)) . '" />';
+            case 'token': // TODO すでに使われていないのではないか？
+                $html = $twig->render('fragment/hidden.twig', ['attr' => $attr, 'rvalue' => Session::get($name)]);
                 break;
 
             case 'captcha':
-                $html = '<input type="text" ' . $attr . ' value="" />';
+                $html = $twig->render('fragment/text.twig', ['attr' => $attr, 'rvalue' => ""]);
                 break;
 
             case 'textarea':
-                $html = '<textarea ' . $attr . '>' . h((string)$rvalue) . '</textarea>';
+                $html = $twig->render('fragment/textarea.twig', ['attr' => $attr, 'rvalue' => $rvalue]);
                 break;
 
             case 'select':
-                $html = '<select ' . $attr . '>';
-                foreach ($options as $key => $option) {
-                    if (is_array($option)) {
-                        // オプショングループ付きSelect
-                        if (!isset($option['value'])) {
-                            $html .= '<optgroup label="' . $key . '">';
-                            foreach ($option as $k => $v) {
-                                $html .= '<option value="' . $k . '" ' . ($rvalue !== null && $k == $rvalue ? 'selected="selected"' : '') . '>' . h($v . $suffix) . '</option>';
-                            }
-                            $html .= '</optgroup>';
-                            continue;
-                        }
-                        // 属性付きオプション
-                        $optionAttr = ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '');
-                        if (!empty($option['disabled'])) {
-                            $optionAttr .= ' disabled="disabled" ';
-                        }
-                        $html .= '<option value="' . $key . '" ' . $optionAttr . '>' . str_repeat('&nbsp;&nbsp;&nbsp;', $option['level'] - 1) . h($option['value'] . $suffix) . '</option>';
-                    } else {
-                        // 通常のオプション
-                        $html .= '<option value="' . $key . '" ' . ($rvalue !== null && $key == $rvalue ? 'selected="selected"' : '') . '>' . h($option . $suffix) . '</option>';
-                    }
-                }
-                $html .= '</select>';
+                $html = $twig->render('fragment/select.twig', [
+                    'attr' => $attr,
+                    'rvalue' => $rvalue,
+                    'suffix' => $suffix,
+                    'option_list' => $options,
+                ]);
                 break;
 
             case 'radio':
-                $labelKey = 'sys-radio-' . str_replace(array('[', ']'), array('-', ''), $name) . '-';
-                $html .= '<ul class="form-radio-list">';
-                $li_attr = isset($option_attrs['li']) ? ' ' . $option_attrs['li'] : '';
-                $label_attr = isset($option_attrs['label']) ? ' ' . $option_attrs['label'] : '';
-                foreach ($options as $key => $option) {
-                    $html .= '<li' . $li_attr . '>';
-                    $html .= '  <input type="radio" value="' . $key . '" ' . ($key == $rvalue ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
-                    $html .= '  <label for="' . $labelKey . $key . '" ' . $label_attr . '>' . $option . '</label>';
-                    $html .= '</li>';
+                $labelKey = 'sys-radio-' . str_replace(['[', ']'], ['-', ''], $name) . '-';
+                $li_attr = $option_attrs['li'] ?? '';
+                $label_attr = $option_attrs['label'] ?? '';
+                $is_checked_key_list = [];
+                if (is_array($rvalue)) {
+                    foreach ($options as $key => $option) {
+                        if (in_array($key, $rvalue)) {
+                            $is_checked_key_list[] = $key;
+                        }
+                    }
                 }
-                $html .= '</ul>';
+                $html .= $twig->render('fragment/ul.twig', ['attr' => $attr, 'rvalue' => $rvalue, 'option_list' => $options, 'label_key' => $labelKey, 'li_attr' => $li_attr, 'label_attr' => $label_attr, 'is_checked_key_list' => $is_checked_key_list]);
                 break;
 
             case 'checkbox':
-                if (count($options)) {
-                    $labelKey = 'sys-checkbox-' . str_replace(array('[', ']'), array('-', ''), $name) . '-';
-                    $rvalue = is_array($rvalue) ? $rvalue : array();
+                $labelKey = 'sys-checkbox-' . str_replace(['[', ']'], ['-', ''], $name) . '-';
+                $rvalue = is_array($rvalue) ? $rvalue : [$rvalue];
+                $is_checked_key_list = [];
+                if (is_array($rvalue)) {
                     foreach ($options as $key => $option) {
-                        $html .= '<input type="checkbox" value="' . $key . '" ' . (in_array($key, $rvalue) ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . $key . '" />';
-                        $html .= '<label for="' . $labelKey . $key . '">' . $option . '</label>';
-                    }
-                } else {
-                    $labelKey = 'sys-checkbox-' . str_replace(array('[', ']'), array('-', ''), $name);
-                    $is_checked = $rvalue !== null && isset($attrs['value']) && $attrs['value'] == $rvalue;
-                    $html .= '<input type="checkbox" ' . ($is_checked ? 'checked="checked"' : '') . ' ' . $attr . ' id="' . $labelKey . '" />';
-                    if ($label) {
-                        $html .= '<label for="' . $labelKey . '">' . $label . '</label>';
+                        if (in_array($key, $rvalue)) {
+                            $is_checked_key_list[] = $key;
+                        }
                     }
                 }
+                $html = $twig->render('fragment/checkbox.twig', ['attr' => $attr, 'rvalue' => $rvalue, 'option_list' => $options, 'label_key' => $labelKey, 'is_checked_key_list' => $is_checked_key_list]);
                 break;
         }
 

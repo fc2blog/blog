@@ -17,19 +17,26 @@ class TwigService
         return static::TWIG_TEMPLATE_BASE_PATH;
     }
 
+    static $twigInstance = null;
+
     public static function getTwigInstance(): Environment
     {
-        $loader = new FilesystemLoader(static::getTwigBasePath());
-        $twig = new Environment($loader);
+        if (is_null(static::$twigInstance)) {
 
-        foreach (
-            array_merge(
-                (new GetTextHelper())->getFunctions(),
-                (new HtmlHelper())->getFunctions(),
-            ) as $function) {
-            $twig->addFunction($function);
+            $loader = new FilesystemLoader(static::getTwigBasePath());
+            $twig = new Environment($loader);
+
+            foreach (
+                array_merge(
+                    (new GetTextHelper())->getFunctions(),
+                    (new HtmlHelper())->getFunctions(),
+                ) as $function) {
+                $twig->addFunction($function);
+            }
+
+            static::$twigInstance = $twig;
         }
 
-        return $twig;
+        return static::$twigInstance;
     }
 }

@@ -1,0 +1,1 @@
+{% for key, option in option_list %}<input type="checkbox" value="{{ key }}" {% if key in is_checked_key_list %}checked="checked"{% endif %} {{ attr|raw }} id="{{ label_key }}{{ key }}" /><label for="{{ label_key }}{{ key }}">{{ option }}</label>{% endfor %}
