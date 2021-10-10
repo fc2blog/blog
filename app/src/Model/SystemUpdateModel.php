@@ -208,6 +208,8 @@ class SystemUpdateModel
 
         try {
             static::updateSystemByLocalZip($zip_path);
+            // TODO issue39 migrate db
+
         } finally {
             @unlink($zip_path);
         }
