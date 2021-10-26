@@ -11,7 +11,7 @@
   "dependencies": {
     "jquery": "^3.6.0",
     "jquery-toggles": "^4.0.0",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.0",
     "jquery-ui-timepicker-addon": "^1.6.3",
     "js-cookie": "^2.2.1"
   }
