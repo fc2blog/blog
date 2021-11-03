@@ -21,8 +21,6 @@ services:
       context: docker/apache
       dockerfile: Dockerfile
     container_name: fc2blog-apache
-    # for m1 mac. problem in e2e test. puppeteer
-    platform: linux/x86_64
     environment:
       FC2_APP_DEBUG: 1
       FC2_SQL_DEBUG: 1
