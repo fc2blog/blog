@@ -1,4 +1,4 @@
-FROM mysql:8.0
+FROM mariadb:latest
 
 ARG PUID=1000
 ARG PGID=1000
