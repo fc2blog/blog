@@ -34,11 +34,13 @@ trait ArrayIterableTrait
         return isset($this->{$offset});
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->offsetExists($offset) ? $this->{$offset} : null;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $r = new ReflectionClass(static::class);
@@ -62,6 +64,7 @@ trait ArrayIterableTrait
         }
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         throw new LogicException("un-settable.");
