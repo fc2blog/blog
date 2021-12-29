@@ -121,8 +121,10 @@ class Validate
      */
     public static function datetime(string $value, array $options)
     {
-        $format = $options['format'] ?? '%Y-%m-%d %H:%M:%S';
-        if (strptime($value, $format) === false || strtotime($value) === false) {
+        if (
+            preg_match("/\A[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}\z/u", $value) === false ||
+            strtotime($value) === false
+        ) {
             return $options['message'] ?? __('Please enter the date and time');
         }
         return true;
