@@ -125,7 +125,7 @@ class CaptchaImage
 
             imagettftext($im, $font_size, $angle, ($cur_x - $x1) + 1, (0 - $y1) + 5, $black, $font1, $char);
             $cur_x += $x2 + random_int(0, 8);
-            $tmp_pace = ($this->img_size_x / $length) * ($i + 1);
+            $tmp_pace = (int)(($this->img_size_x / $length) * ($i + 1));
             if ($tmp_pace > $cur_x) $cur_x += random_int(0, ($tmp_pace - $cur_x));
         }
 
@@ -165,8 +165,8 @@ class CaptchaImage
         // 歪み処理
         for ($x = 0; $x < $this->img_size_x; $x++) {
             for ($y = 0; $y < $this->img_size_y; $y++) {
-                $sx = $x + (sin($x * $rand1 + $rand5) + sin($y * $rand3 + $rand6)) * $rand9 - $this->img_size_x / 2 + $center + 1;
-                $sy = $y + (sin($x * $rand2 + $rand7) + sin($y * $rand4 + $rand8)) * $rand10;
+                $sx = (int)($x + (sin($x * $rand1 + $rand5) + sin($y * $rand3 + $rand6)) * $rand9 - $this->img_size_x / 2 + $center + 1);
+                $sy = (int)($y + (sin($x * $rand2 + $rand7) + sin($y * $rand4 + $rand8)) * $rand10);
 
                 if (($sx < 0) || ($sy < 0) || ($sx >= $this->img_size_x - 1) || ($sy >= $this->img_size_y - 1)) {
                     continue;
@@ -195,9 +195,9 @@ class CaptchaImage
                     $newcolor = $newcolor / 255;
                     $newcolor0 = 1 - $newcolor;
 
-                    $newred = $newcolor0 * $fg_r + $newcolor * $bg_r;
-                    $newgreen = $newcolor0 * $fg_g + $newcolor * $bg_g;
-                    $newblue = $newcolor0 * $fg_b + $newcolor * $bg_b;
+                    $newred = (int)($newcolor0 * $fg_r + $newcolor * $bg_r);
+                    $newgreen = (int)($newcolor0 * $fg_g + $newcolor * $bg_g);
+                    $newblue = (int)($newcolor0 * $fg_b + $newcolor * $bg_b);
                 }
 
                 imagesetpixel($im2, $x, $y, imagecolorallocate($im2, $newred, $newgreen, $newblue));
