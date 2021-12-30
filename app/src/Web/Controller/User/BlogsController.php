@@ -59,16 +59,16 @@ class BlogsController extends UserController
 
         // build feed
         $feed = new RSS2();
-        $feed->setTitle($blog["name"]);
+        $feed->setTitle((string)$blog["name"]);
         $feed->setLink(BlogsModel::getFullUrlByBlogId($blog['id']));
-        $feed->setDescription($blog['introduction']);
+        $feed->setDescription((string)$blog['introduction']);
         foreach ($entries as $entry) {
             $item = $feed->createNewItem();
-            $item->setTitle($entry['title']);
+            $item->setTitle((string)$entry['title']);
             $item->setLink(BlogsModel::getEntryFullUrlByBlogIdAndEntryId($blog['id'], $entry['id']));
-            $item->setDate($entry['updated_at']);
-            $item->setAuthor($blog['nickname']);
-            $item->setDescription($entry['body']);
+            $item->setDate((string)$entry['updated_at']);
+            $item->setAuthor((string)$blog['nickname']);
+            $item->setDescription((string)$entry['body']);
             $feed->addItem($item);
         }
 
