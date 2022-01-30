@@ -1,4 +1,4 @@
-FROM mariadb:latest
+FROM mariadb:10.5
 
 ARG PUID=1000
 ARG PGID=1000
