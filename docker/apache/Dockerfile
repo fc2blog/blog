@@ -3,7 +3,7 @@ FROM php:8.0-apache
 RUN set -eux \
  && apt-get update -y \
  && apt-get upgrade -y \
- && curl -fsSL https://deb.nodesource.com/setup_15.x | bash - \
+ && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
  && apt-get install -y git autoconf g++ libtool make mariadb-client wget vim inetutils-ping \
  && apt-get install -y libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libicu-dev locales ssl-cert libfreetype6-dev \
  && apt-get install -y nodejs \
