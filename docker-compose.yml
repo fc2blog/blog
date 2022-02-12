@@ -12,7 +12,7 @@ services:
       MYSQL_USER: docker
       MYSQL_PASSWORD: docker
     volumes:
-      - ./docker/mysqld/data:/var/lib/mysql
+      - fc2blog-mysql-data:/var/lib/mysql
     ports:
       - 3306:3306
 
@@ -56,3 +56,6 @@ services:
     ports:
       - 8080:80
       - 8480:443
+
+volumes:
+  fc2blog-mysql-data:

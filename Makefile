@@ -18,6 +18,11 @@ test: app/vendor e2e_test/node_modules tests/test_images/0.png
 	$(dexec) php composer.phar run test
 	$(dexec) bash -c "cd e2e_test && BASE_URL=http://localhost npm run test"
 
+.PHONY: phpunit
+phpunit: app/vendor
+	make reload-test-data
+	$(dexec) php composer.phar run test
+
 .PHONY: e2etest
 e2etest: app/vendor e2e_test/node_modules tests/test_images/0.png
 	make reload-test-data
@@ -47,6 +52,7 @@ docker-compose-build-no-cache:
 	$(eval UID := $(shell id -u))
 	$(eval GID := $(shell id -g))
 	@docker-compose build --no-cache --build-arg PUID=$(UID) --build-arg PGID=$(GID) php
+	@docker-compose build --no-cache --build-arg PUID=$(UID) --build-arg PGID=$(GID) db
 
 .PHONY:
 docker-compose-build:
@@ -54,6 +60,7 @@ docker-compose-build:
 	$(eval UID := $(shell id -u))
 	$(eval GID := $(shell id -g))
 	@docker-compose build --build-arg PUID=$(UID) --build-arg PGID=$(GID) php
+	@docker-compose build --build-arg PUID=$(UID) --build-arg PGID=$(GID) db
 
 .PHONY: mysql-shell
 mysql-shell:
