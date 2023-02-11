@@ -30,7 +30,7 @@
     "typescript": "^3.9.7"
   },
   "devDependencies": {
-    "npm-check-updates": "^7.1.1",
+    "npm-check-updates": "^16.7.4",
     "prettier": "2.0.5"
   }
 }
